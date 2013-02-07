@@ -8,13 +8,13 @@ Each Rule contains
  * (Loop Rules only) a set of Triggering Properties,
  * a precondition as a boolean expression using other property values, true by default,
  * an option indicating whether the values should be assigned in a given or a random (shuffled) order,
- * an option indicating whether all values must be used,
+ * an option indicating whether all values must be used (mandatory complete iteration),
  * a Rule Action.
 
 Rule Action assigns a set of property values to its Targeted Property
 It can use values of other properties for calculations 
 It can add another Rules to Rule Stacks
-The Rules added by a Rule remain in the Rule Stacks until iteration over the Target Property values is finished. 
+The Rules added by a particular Rule remain in the Rule Stacks until iteration over its Target Property values is finished. 
 
 Loop Rules containing the same Targeted Property and Triggering Properties belong to the same Rule Stack
 Default Rules containing the same Targeted Property belong to the same Rule Stack.
@@ -36,8 +36,9 @@ This assignment can trigger execution of another loop rules.
 When a set of values is assigned its order can be randomized if it is required by the rule definition.
 
 In the following steps the Rule Engine iterates over the assigned property values until all mandatory iterations are finished.
-Each property can be assigned the next value from the set if and only if all mandatory iterations over all directly or indirectly depending properties are finished.
-If 
+
+Each property can be assigned the next value from its value set 
+if and only if all mandatory iterations over all directly or indirectly depending properties are finished.
 
 Property B depends on property A directly if
 * property A is a triggering property of the loop rule which action defined the set of values of property B,
@@ -48,3 +49,8 @@ Property C depends on property A indirectly if there is a property B so that C d
 
 At each iteration after all possible rules are executed and all properties assigned it calls the script producer.
 The last can process the generated property values and also request execution of default rules for unassigned properties.
+
+If there is another rule which has the same triggering property and which mandatory iteration is not complete yet,
+iteration over property value set is restarted after it finishes.
+In this case it is not needed to iterate over all values again.
+If no triggering properties of some rule are iterating mandatory, iteration of its targeted property does not have to be complete too.
