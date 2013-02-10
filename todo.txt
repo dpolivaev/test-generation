@@ -4,7 +4,7 @@ Rule Engine generates property combinations based on current Rule Stacks.
 Script Producer translates each property combination into a test script containing one test case.
 
 Each Rule contains
- * the Targeted Property name,
+ * a Targeted Property name,
  * (Loop Rules only) a set of Triggering Properties,
  * a precondition as a boolean expression using other property values, true by default,
  * an option indicating whether the values should be assigned in a given or a random (shuffled) order,
