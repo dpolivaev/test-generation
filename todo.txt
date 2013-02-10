@@ -14,7 +14,9 @@ Each Rule contains
 Rule Action assigns a set of property values to its Targeted Property
 It can use values of other properties for calculations 
 It can add another Rules to Rule Stacks
-The Rules added by a particular Rule remain in the Rule Stacks until iteration over its Target Property values is finished. 
+The Rules added by a particular Rule remain in the Rule Stacks until iteration over its Target Property values is finished.
+It can add let another Rules be added to Rule Stacks for a subset of targeted property values 
+The Rules added by a particular Rule remain in the Rule Stacks until iteration over the subset values is finished.
 
 Loop Rules containing the same Targeted Property and Triggering Properties belong to the same Rule Stack
 Default Rules containing the same Targeted Property belong to the same Rule Stack.
