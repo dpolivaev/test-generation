@@ -1,11 +1,11 @@
-Mind Maps are translated into Loop Rules and Default Rules organized in Rule Stacks.
-Rule Engine generates property combinations based on current Rule Stacks.
-(Optional) test coverage increment is evaluated. If it is zero the combination may be ignored. 
-Script Producer translates each property combination into a test script containing one test case.
+(prio 2, complexity 3) Mind Maps are translated into Iteration Rules and Default Rules organized in Rule Stacks.
+(prio 1, complexity 10) Rule Engine generates property combinations based on current Rule Stacks.
+(prio 4, complexity 3) (Optional) test coverage increment is evaluated. If it is zero the combination may be ignored. 
+(prio 3, complexity 5) Script Producer translates each property combination into a test script containing one test case.
 
 Each Rule contains
  * a Targeted Property name,
- * (Loop Rules only) a set of Triggering Properties,
+ * (Iteration Rules only) a set of Triggering Properties,
  * a precondition as a boolean expression using other property values, true by default,
  * an option indicating whether the values should be assigned in a given or a random (shuffled) order,
  * an option indicating whether all values must be used (mandatory complete iteration),
@@ -15,25 +15,26 @@ Rule Action assigns a set of property values to its Targeted Property
 It can use values of other properties for calculations 
 It can add another Rules to Rule Stacks
 The Rules added by a particular Rule remain in the Rule Stacks until iteration over its Target Property values is finished.
-It can add let another Rules be added to Rule Stacks for a subset of targeted property values 
+It can add to Rule Stacks for a subset of targeted property values 
 The Rules added by a particular Rule remain in the Rule Stacks until iteration over the subset values is finished.
 
-Loop Rules containing the same Targeted Property and Triggering Properties belong to the same Rule Stack
+Execution of a Iteration Rule is triggered by assigning of a value to a triggering property (forward chaining),
+if there no triggering properties the rule is executed when the Rule Engine starts.
+
+Iteration Rules containing the same Targeted Property and set of Triggering Properties belong to the same Rule Stack
 Default Rules containing the same Targeted Property belong to the same Rule Stack.
  
-Execution of a Loop Rule is triggered by assigning of a value to a triggering property (forward chaining),
-if there no triggering properties empty the rule is executed when the Rule Engine starts.
-
 Execution of a Default Rule is triggered by requesting a value of a not already assigned property (backward chaining)
 Rule Engine iterates over all rules in a stack starting with the last added rule.
 The first rule which has no precondition or a satisfied precondition is executed, all other rules on the stack are ignored.
 
-If a Targeted Property of a Loop Rule is already assigned by another Rule there is contradiction in the Rule Set and the generation is canceled.
+If a Targeted Property of a Iteration Rule is already assigned by another Rule and should be assigned again 
+there is contradiction in the Rule Set and the generation is canceled.
 
 When the Rule Engine starts there are no properties already assigned a value sets.
-Therefore it starts by executing all Loop Rules with satisfied preconditions so that their targeted properties are assigned a set of values.
+Therefore it starts by executing all Iteration Rules with satisfied preconditions so that their targeted properties are assigned a set of values.
 Than it assigns to the targeted property a first value in the set. 
-This assignment can trigger execution of another loop rules.
+This assignment can trigger execution of another Iteration rules.
 
 When a set of values is assigned its order can be randomized if it is required by the rule definition.
 
@@ -43,7 +44,7 @@ Each property can be assigned the next value from its value set
 if and only if all mandatory iterations over all directly or indirectly depending properties are finished.
 
 Property B depends on property A directly if
-* property A is a triggering property of the loop rule which action defined the set of values of property B,
+* property A is a triggering property of the iteration rule which action defined the set of values of property B,
 * calculation of set of values by the applied rule for B uses value of A,
 * calculation of the checked preconditions of the applied rule or for the other rules on the same rule stack uses value of A.
 
@@ -56,3 +57,21 @@ If there is another rule which has the same triggering property and which mandat
 iteration over property value set is restarted after it finishes.
 In this case it is not needed to iterate over all values again.
 If no triggering properties of some rule are iterating mandatory, iteration of its targeted property does not have to be complete too.
+
+==Rule Engine Output== 
+private Map<String, Object> properties
+RuleEngine Object getProperty(String name)
+
+class RuleEngine
+{
+	void run()
+	{
+		do  {
+			generateNextPropertyCombination();
+			scriptProducer.makeScriptFor(this);
+			cleanUp();
+		} while (hasNextPropertyCombination());
+	}
+}
+
+
