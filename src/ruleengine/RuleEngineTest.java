@@ -22,6 +22,9 @@ package ruleengine;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
+import java.util.Collections;
+import java.util.Set;
+
 import org.junit.Test;
 
 /**
@@ -30,20 +33,41 @@ import org.junit.Test;
  */
 public class RuleEngineTest {
 	
+	private static final RuleAction DO_NOTHING_ACTION = new RuleAction() {
+	};
+	private RuleEngine ruleEngine = new RuleEngine();
+	private ScriptProducerMock scriptProducerMock = new ScriptProducerMock();
+
+	@SuppressWarnings("unchecked")
+	void addIterationRuleWithoutAction(String targetedPropertyName) {
+		ruleEngine.addRule(new Rule(targetedPropertyName, (Set<String>)Collections.EMPTY_SET, 
+				Condition.TRUE, IterationOrder.ORDERED, true, DO_NOTHING_ACTION));
+	}
+
+
+
+	private void addIterationRuleWithoutTriggeringProperties(
+			String targetedPropertyName, String[] values) {
+		ruleEngine.addRule(new Rule(targetedPropertyName, (Set<String>)Collections.EMPTY_SET, 
+				Condition.TRUE, IterationOrder.ORDERED, true, createSetValueAction(values)));
+	}
+	
+	private RuleAction createSetValueAction(String[] values) {
+		return null;
+	}
+
+
+
 	@Test
 	public void ruleEngineWithoutRules_callsScriptProducerOnce() {
-		RuleEngine ruleEngine = new RuleEngine();
-		ScriptProducerMock scriptProducerMock = new ScriptProducerMock(){};
 		ruleEngine.run(scriptProducerMock);
-		
 		assertThat(scriptProducerMock.callCount(), is(1));
 	}
 
 	@Test
 	public void ruleEngineWithOneIterationRule_hasRuleForItsTargetedProperty() {
-		RuleEngine ruleEngine = new RuleEngine();
 		String targetedPropertyName = "property";
-		ruleEngine.addRule(new Rule(targetedPropertyName)); 
+		addIterationRuleWithoutAction(targetedPropertyName); 
 		
 		assertThat(ruleEngine.hasRuleForProperty(targetedPropertyName), is(true));
 	}
@@ -51,14 +75,39 @@ public class RuleEngineTest {
 
 	@Test
 	public void ruleEngineWithTwoIterationRules_hasRulesForItsTargetedProperties() {
-		RuleEngine ruleEngine = new RuleEngine();
 		String firstTargetedPropertyName = "property1";
-		ruleEngine.addRule(new Rule(firstTargetedPropertyName)); 
+		addIterationRuleWithoutAction(firstTargetedPropertyName); 
 		String secondTargetedPropertyName = "property2";
-		ruleEngine.addRule(new Rule(secondTargetedPropertyName)); 
+		addIterationRuleWithoutAction(secondTargetedPropertyName); 
 		
 		assertThat(ruleEngine.hasRuleForProperty(firstTargetedPropertyName), is(true));
 		assertThat(ruleEngine.hasRuleForProperty(secondTargetedPropertyName), is(true));
+	}
+	
+
+	@Test
+	public void singleIterationRuleWithValueA_producesSingeIterationWithValueA() {
+		addIterationRuleWithoutTriggeringProperties("property", new String[] {"a"});
+		
+		ruleEngine.run(scriptProducerMock);
+		
+		String expectedScriptPropertyCombinations = "1 : property=a\n";
+		assertEquals(expectedScriptPropertyCombinations, 
+				scriptProducerMock.getScriptPropertyCombinations());
+		
+	}
+	
+
+	@Test
+	public void singleIterationRuleWithValueB_producesSingeIterationWithValueB() {
+		addIterationRuleWithoutTriggeringProperties("property", new String[] {"b"});
+		
+		ruleEngine.run(scriptProducerMock);
+		
+		String expectedScriptPropertyCombinations = "1 : property=b\n";
+		assertEquals(expectedScriptPropertyCombinations, 
+				scriptProducerMock.getScriptPropertyCombinations());
+		
 	}
 
 }

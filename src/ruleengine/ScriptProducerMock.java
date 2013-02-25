@@ -26,6 +26,8 @@ package ruleengine;
 public class ScriptProducerMock implements ScriptProducer {
 
 	private int callCount = 0;
+	
+	private StringBuilder scriptPropertyCombinations = new StringBuilder();
 
 	public int callCount() {
 	    return callCount;
@@ -34,5 +36,11 @@ public class ScriptProducerMock implements ScriptProducer {
 	@Override
     public void makeScriptFor(RuleEngine ruleEngine) {
 		callCount++;
+		AssignedProperties properties = ruleEngine.getAssignedProperties();
+		scriptPropertyCombinations.append(properties.format());
     }
+
+	public String getScriptPropertyCombinations() {
+		return scriptPropertyCombinations.toString();
+	}
 }
