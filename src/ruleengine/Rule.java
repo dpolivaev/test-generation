@@ -19,16 +19,44 @@
  */
 package ruleengine;
 
+import java.util.Collections;
+import java.util.Set;
+
+
+//Each Rule contains
+//* a Targeted Property name,
+//* (Iteration Rules only) a set of Triggering Properties,
+//* a precondition as a boolean expression using other property values, true by default,
+//* an option indicating whether the values should be assigned in a given or a random (shuffled) order,
+//* an option indicating whether all values must be used (mandatory complete iteration),
+//* a Rule Action.
+
+
 /**
  * @author Dimitry Polivaev
  * 18.02.2013
  */
 public class Rule {
 	
-	public final String targetedPropertyName; 
+	public final String targetedPropertyName;
+	private final Set<String> triggeringProperties;
+	private final Condition precondition;
+	private final IterationOrder iterationOrder;
+	private final boolean useAllValues;
+	private final RuleAction ruleAction; 
 	
-    Rule(String targetedPropertyName) {
+	public Rule(String targetedPropertyName, 
+    		final Set<String> triggeringProperties,
+    		Condition precondition,
+    		IterationOrder iterationOrder,
+    		boolean useAllValues,
+    		RuleAction ruleAction) {
     	this.targetedPropertyName = targetedPropertyName;
+		this.triggeringProperties = triggeringProperties;
+		this.precondition = precondition;
+		this.iterationOrder = iterationOrder;
+		this.useAllValues = useAllValues;
+		this.ruleAction = ruleAction;
 	}
 	
 }

@@ -32,7 +32,8 @@ If a Targeted Property of a Iteration Rule is already assigned by another Rule a
 there is contradiction in the Rule Set and the generation is canceled.
 
 When the Rule Engine starts there are no properties already assigned a value sets.
-Therefore it starts by executing all Iteration Rules with satisfied preconditions so that their targeted properties are assigned a set of values.
+Therefore it starts by executing all Iteration Rules without dedicated triggering properties 
+and with satisfied preconditions so that their targeted properties are assigned a set of values.
 Than it assigns to the targeted property a first value in the set. 
 This assignment can trigger execution of another Iteration rules.
 

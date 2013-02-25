@@ -29,6 +29,7 @@ import java.util.Map;
 public class RuleEngine {
 
 	private Map<String, Rule> rules = new HashMap<String, Rule>();
+	
 	public void run(ScriptProducer scriptProducer) {
 		scriptProducer.makeScriptFor(this);
     }
@@ -39,6 +40,10 @@ public class RuleEngine {
 	
 	public boolean hasRuleForProperty(String propertyName) {
 		return rules.containsKey(propertyName);
+	}
+
+	public AssignedProperties getAssignedProperties() {
+		return new AssignedPropertiesMap();
 	}
 	
 }
