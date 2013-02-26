@@ -32,31 +32,18 @@ import org.junit.Test;
  * 18.02.2013
  */
 public class RuleEngineTest {
-	
-	private static final RuleAction DO_NOTHING_ACTION = new RuleAction() {
-	};
+
 	private RuleEngine ruleEngine = new RuleEngine();
 	private ScriptProducerMock scriptProducerMock = new ScriptProducerMock();
 
-	@SuppressWarnings("unchecked")
 	void addIterationRuleWithoutAction(String targetedPropertyName) {
-		ruleEngine.addRule(new Rule(targetedPropertyName, (Set<String>)Collections.EMPTY_SET, 
-				Condition.TRUE, IterationOrder.ORDERED, true, DO_NOTHING_ACTION));
+		addIterationRuleWithoutTriggeringProperties(targetedPropertyName, new String[]{"value"});
 	}
-
-
 
 	private void addIterationRuleWithoutTriggeringProperties(
 			String targetedPropertyName, String[] values) {
-		ruleEngine.addRule(new Rule(targetedPropertyName, (Set<String>)Collections.EMPTY_SET, 
-				Condition.TRUE, IterationOrder.ORDERED, true, createSetValueAction(values)));
+		ruleEngine.addRule(new ConstantValuesRule(targetedPropertyName, values));
 	}
-	
-	private RuleAction createSetValueAction(String[] values) {
-		return null;
-	}
-
-
 
 	@Test
 	public void ruleEngineWithoutRules_callsScriptProducerOnce() {
@@ -83,7 +70,6 @@ public class RuleEngineTest {
 		assertThat(ruleEngine.hasRuleForProperty(firstTargetedPropertyName), is(true));
 		assertThat(ruleEngine.hasRuleForProperty(secondTargetedPropertyName), is(true));
 	}
-	
 
 	@Test
 	public void singleIterationRuleWithValueA_producesSingeIterationWithValueA() {

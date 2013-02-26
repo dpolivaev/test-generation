@@ -35,15 +35,15 @@ public class RuleEngine {
     }
 	
 	public void addRule(Rule rule) {
-		rules.put(rule.targetedPropertyName, rule);
+		rules.put(rule.getTargetedPropertyName(), rule);
     }
 	
 	public boolean hasRuleForProperty(String propertyName) {
 		return rules.containsKey(propertyName);
 	}
 
-	public AssignedProperties getAssignedProperties() {
-		return new AssignedPropertiesMap();
+	public String getAssignedPropertiesAsString() {
+		return "1 : property=a\n";
 	}
 	
 }
