@@ -23,23 +23,22 @@ package ruleengine;
  * @author Dimitry Polivaev
  * 18.02.2013
  */
-public class ScriptProducerMock implements ScriptProducer {
-
-	private int callCount = 0;
+public class ConstantValuesRule implements Rule {
 	
-	private StringBuilder scriptPropertyCombinations = new StringBuilder();
-
-	public int callCount() {
-	    return callCount;
-    }
-
-	@Override
-    public void makeScriptFor(RuleEngine ruleEngine) {
-		callCount++;
-		scriptPropertyCombinations.append(ruleEngine.getAssignedPropertiesAsString());
-    }
-
-	public String getScriptPropertyCombinations() {
-		return scriptPropertyCombinations.toString();
+	private final String targetedPropertyName;
+	private final String[] values;
+	
+	public ConstantValuesRule(String targetedPropertyName, String[] values) {
+    	this.targetedPropertyName = targetedPropertyName;
+		this.values = values;
 	}
+
+	/* (non-Javadoc)
+	 * @see ruleengine.Rule#getTargetedPropertyName()
+	 */
+	@Override
+	public String getTargetedPropertyName() {
+		return targetedPropertyName;
+	}
+	
 }
