@@ -39,7 +39,7 @@ public class ScriptProducerMock implements ScriptProducer {
 		scriptPropertyCombinations.append(ruleEngine.getAssignedPropertiesAsString());
     }
 
-	public String getScriptPropertyCombinations() {
+	public String getAllScriptPropertyCombinations() {
 		return scriptPropertyCombinations.toString();
 	}
 }
