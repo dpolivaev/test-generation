@@ -26,9 +26,9 @@ package ruleengine;
 public class ConstantValuesRule implements Rule {
 	
 	private final String targetedPropertyName;
-	private final String[] values;
+	private final Object[] values;
 	
-	public ConstantValuesRule(String targetedPropertyName, String[] values) {
+	public ConstantValuesRule(String targetedPropertyName, Object[] values) {
     	this.targetedPropertyName = targetedPropertyName;
 		this.values = values;
 	}
@@ -39,6 +39,11 @@ public class ConstantValuesRule implements Rule {
 	@Override
 	public String getTargetedPropertyName() {
 		return targetedPropertyName;
+	}
+
+	@Override
+	public Object[] getValues() {
+		return values;
 	}
 	
 }

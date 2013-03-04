@@ -37,12 +37,12 @@ public class RuleEngineTest {
 	private ScriptProducerMock scriptProducerMock = new ScriptProducerMock();
 
 	void addIterationRuleWithoutAction(String targetedPropertyName) {
-		addIterationRuleWithoutTriggeringProperties(targetedPropertyName, new String[]{"value"});
+		addIterationRuleWithoutTriggeringProperties(targetedPropertyName, "value");
 	}
 
 	private void addIterationRuleWithoutTriggeringProperties(
-			String targetedPropertyName, String[] values) {
-		ruleEngine.addRule(new ConstantValuesRule(targetedPropertyName, values));
+			String targetedPropertyName, String... value) {
+		ruleEngine.addRule(new ConstantValuesRule(targetedPropertyName, value));
 	}
 
 	@Test
@@ -72,28 +72,76 @@ public class RuleEngineTest {
 	}
 
 	@Test
-	public void singleIterationRuleWithValueA_producesSingeIterationWithValueA() {
-		addIterationRuleWithoutTriggeringProperties("property", new String[] {"a"});
+	public void singleRuleWithValueA_callsScriptProducerWithValueA() {
+		addIterationRuleWithoutTriggeringProperties("property", "a");
 		
 		ruleEngine.run(scriptProducerMock);
 		
 		String expectedScriptPropertyCombinations = "1 : property=a\n";
 		assertEquals(expectedScriptPropertyCombinations, 
-				scriptProducerMock.getScriptPropertyCombinations());
+				scriptProducerMock.getAllScriptPropertyCombinations());
 		
 	}
 	
 
 	@Test
-	public void singleIterationRuleWithValueB_producesSingeIterationWithValueB() {
-		addIterationRuleWithoutTriggeringProperties("property", new String[] {"b"});
+	public void singleRuleWithValueB_callsScriptProducerWithValueB() {
+		addIterationRuleWithoutTriggeringProperties("property", "b");
 		
 		ruleEngine.run(scriptProducerMock);
 		
 		String expectedScriptPropertyCombinations = "1 : property=b\n";
 		assertEquals(expectedScriptPropertyCombinations, 
-				scriptProducerMock.getScriptPropertyCombinations());
+				scriptProducerMock.getAllScriptPropertyCombinations());
+	}
+	
+
+	@Test
+	public void singleRuleWithValuesA_B_callsScriptProducerTwice() {
+		addIterationRuleWithoutTriggeringProperties("property", "a", "b");
+		ruleEngine.run(scriptProducerMock);
+		assertThat(scriptProducerMock.callCount(), is(2));
+	}
+
+	@Test
+	public void singleRuleWithValuesA_B_callsScriptProducerWithValuesA_B() {
+		addIterationRuleWithoutTriggeringProperties("property", "a", "b");
+		
+		ruleEngine.run(scriptProducerMock);
+		
+		String expectedScriptPropertyCombinations = "1 : property=a\n" +
+				"2 : property=b\n";
+		assertEquals(expectedScriptPropertyCombinations, 
+				scriptProducerMock.getAllScriptPropertyCombinations());
 		
 	}
+	
+	@Test
+	public void singleRuleWithPropertyNamedXValueA_callsScriptProducerWithValueA() {
+		addIterationRuleWithoutTriggeringProperties("x", "a");
+		
+		ruleEngine.run(scriptProducerMock);
+		
+		String expectedScriptPropertyCombinations = "1 : x=a\n";
+		assertEquals(expectedScriptPropertyCombinations, 
+				scriptProducerMock.getAllScriptPropertyCombinations());
+		
+	}
+	
+//	
+//	@Test
+//	public void twoRulesWithValuesAandB_callsScriptProducerWithTheirValues() {
+//		addIterationRuleWithoutTriggeringProperties("property1", "a");
+//		addIterationRuleWithoutTriggeringProperties("property2", "b");
+//		
+//		ruleEngine.run(scriptProducerMock);
+//		
+//		String expectedScriptPropertyCombinations = "1 : property1=a\tproperty2=b\n";
+//		assertEquals(expectedScriptPropertyCombinations, 
+//				scriptProducerMock.getAllScriptPropertyCombinations());
+//		
+//	}
+//
+//	
 
 }

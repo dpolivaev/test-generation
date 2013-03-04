@@ -20,31 +20,46 @@
 package ruleengine;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
- * @author Dimitry Polivaev
- * 18.02.2013
+ * @author Dimitry Polivaev 18.02.2013
  */
 public class RuleEngine {
 
 	private Map<String, Rule> rules = new HashMap<String, Rule>();
-	
+	private String assignedPropertiesAsString;
+
 	public void run(ScriptProducer scriptProducer) {
-		scriptProducer.makeScriptFor(this);
-    }
-	
+		Iterator<Rule> iterator = rules.values().iterator();
+		if (iterator.hasNext()) {
+			Rule rule = iterator.next();
+			int count = 1;
+			for (Object value : rule.getValues()) {
+				assignedPropertiesAsString = count + " : property="
+						+ value.toString() + "\n";
+				count++;
+				scriptProducer.makeScriptFor(this);
+			}
+		}
+		else {
+			assignedPropertiesAsString = "";
+			scriptProducer.makeScriptFor(this);
+		}
+	}
+
 	public void addRule(Rule rule) {
 		rules.put(rule.getTargetedPropertyName(), rule);
-    }
-	
+	}
+
 	public boolean hasRuleForProperty(String propertyName) {
 		return rules.containsKey(propertyName);
 	}
 
 	public String getAssignedPropertiesAsString() {
-		return "1 : property=a\n";
+		return assignedPropertiesAsString;
 	}
-	
-}
 
+}
