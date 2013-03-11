@@ -30,22 +30,20 @@ import java.util.Map.Entry;
 public class RuleEngine {
 
 	private Map<String, Rule> rules = new HashMap<String, Rule>();
-	private String assignedPropertiesAsString;
+
+	private State state = new State();
 
 	public void run(ScriptProducer scriptProducer) {
 		Iterator<Rule> iterator = rules.values().iterator();
 		if (iterator.hasNext()) {
 			Rule rule = iterator.next();
-			int count = 1;
-			for (Object value : rule.getValues()) {
-				assignedPropertiesAsString = count + " : property="
-						+ value.toString() + "\n";
-				count++;
+			for (Object value : rule.values()) {
+				state.nextIteration();
+				state.addProperty(rule.getTargetedPropertyName(), value);
 				scriptProducer.makeScriptFor(this);
 			}
 		}
 		else {
-			assignedPropertiesAsString = "";
 			scriptProducer.makeScriptFor(this);
 		}
 	}
@@ -59,7 +57,7 @@ public class RuleEngine {
 	}
 
 	public String getAssignedPropertiesAsString() {
-		return assignedPropertiesAsString;
+		return state.getAssignedPropertiesAsString();
 	}
 
 }

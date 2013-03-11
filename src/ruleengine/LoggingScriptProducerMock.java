@@ -19,33 +19,20 @@
  */
 package ruleengine;
 
-import java.util.Arrays;
-
 /**
  * @author Dimitry Polivaev
  * 18.02.2013
  */
-public class ConstantValuesRule implements Rule {
+public class LoggingScriptProducerMock implements ScriptProducer {
 	
-	private final String targetedPropertyName;
-	private final Object[] values;
-	
-	public ConstantValuesRule(String targetedPropertyName, Object... values) {
-    	this.targetedPropertyName = targetedPropertyName;
-		this.values = values;
-	}
-
-	/* (non-Javadoc)
-	 * @see ruleengine.Rule#getTargetedPropertyName()
-	 */
-	@Override
-	public String getTargetedPropertyName() {
-		return targetedPropertyName;
-	}
+	private StringBuilder log = new StringBuilder();
 
 	@Override
-	public Iterable<Object> values() {
-		return Arrays.asList(values);
+    public void makeScriptFor(RuleEngine ruleEngine) {
+		log.append(ruleEngine.getAssignedPropertiesAsString());
+    }
+
+	public String getAllScriptPropertyCombinations() {
+		return log.toString();
 	}
-	
 }

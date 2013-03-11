@@ -9,5 +9,6 @@ package ruleengine;
 public interface Rule {
 
 	String getTargetedPropertyName();
-	Object[] getValues();
+	Iterable<Object> values();
+	
 }
