@@ -23,12 +23,10 @@ package ruleengine;
  * @author Dimitry Polivaev
  * 18.02.2013
  */
-public class ScriptProducerMock implements ScriptProducer {
+public class CountingScriptProducerMock implements ScriptProducer {
 
 	private int callCount = 0;
 	
-	private StringBuilder scriptPropertyCombinations = new StringBuilder();
-
 	public int callCount() {
 	    return callCount;
     }
@@ -36,10 +34,6 @@ public class ScriptProducerMock implements ScriptProducer {
 	@Override
     public void makeScriptFor(RuleEngine ruleEngine) {
 		callCount++;
-		scriptPropertyCombinations.append(ruleEngine.getAssignedPropertiesAsString());
     }
 
-	public String getAllScriptPropertyCombinations() {
-		return scriptPropertyCombinations.toString();
-	}
 }
