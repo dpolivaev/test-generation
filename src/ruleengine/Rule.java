@@ -1,5 +1,6 @@
 package ruleengine;
 
+
 // triggered A <- default B
 // default B <- default A
 // => triggered A can not be assigned!
@@ -9,6 +10,6 @@ package ruleengine;
 public interface Rule {
 
 	String getTargetedPropertyName();
-	Iterable<Object> values();
+	ValueIterator iterator();
 	
 }

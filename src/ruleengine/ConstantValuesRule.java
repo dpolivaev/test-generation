@@ -20,6 +20,7 @@
 package ruleengine;
 
 import java.util.Arrays;
+import java.util.Iterator;
 
 /**
  * @author Dimitry Polivaev
@@ -29,6 +30,7 @@ public class ConstantValuesRule implements Rule {
 	
 	private final String targetedPropertyName;
 	private final Object[] values;
+	private ValueIterator iterator;
 	
 	public ConstantValuesRule(String targetedPropertyName, Object... values) {
     	this.targetedPropertyName = targetedPropertyName;
@@ -43,9 +45,27 @@ public class ConstantValuesRule implements Rule {
 		return targetedPropertyName;
 	}
 
-	@Override
-	public Iterable<Object> values() {
+	private Iterable<Object> values() {
 		return Arrays.asList(values);
+	}
+
+	@Override
+	public ValueIterator iterator() {
+		if(iterator == null){
+			iterator = new ValueIterator() {
+				final private Iterator<Object> valueIterator = values().iterator();
+
+				public boolean hasNext() {
+					return valueIterator.hasNext();
+				}
+
+				public Object next() {
+					return valueIterator.next();
+				}
+				
+			};
+		}
+		return iterator;
 	}
 	
 }
