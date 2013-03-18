@@ -19,27 +19,51 @@
  */
 package ruleengine;
 
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.List;
 
 /**
  * @author Dimitry Polivaev 18.02.2013
  */
 public class RuleEngine {
-
-	private Map<String, Rule> rules = new HashMap<String, Rule>();
-
+	private Rules rules = new Rules();
 	private State state = new State();
 
+	public void addRule(Rule rule) {
+		rules.addRule(rule);
+	}
+
+	public boolean hasRuleForProperty(String propertyName) {
+		return rules.hasRuleForProperty(propertyName);
+	}
+	
+	// while (combination.hasNext()) {
+	//    while(combilnation.nextRule().nextValue()) {
+	//          generate
+	//    }
+
 	public void run(ScriptProducer scriptProducer) {
-		Iterator<Rule> iterator = rules.values().iterator();
-		if (iterator.hasNext()) {
-			Rule rule = iterator.next();
-			for (Object value : rule.values()) {
+		List<Rule> ruleValues = rules.values();
+		if (!ruleValues.isEmpty()) {
+			Rule rule0 = ruleValues.get(0);
+			ValueIterator value0Iterator = rule0.iterator();
+			addPropertyToState(rule0, value0Iterator);
+			
+			if(ruleValues.size() == 2){
+				Rule rule1 = ruleValues.get(1);
+				ValueIterator value1Iterator = rule1.iterator();
+				addPropertyToState(rule1, value1Iterator);
+			}
+			
+			scriptProducer.makeScriptFor(this);
+			if(value0Iterator.hasNext()){
 				state.nextIteration();
-				state.addProperty(rule.getTargetedPropertyName(), value);
+				addPropertyToState(rule0, value0Iterator);
+				if(ruleValues.size() == 2){
+					Rule rule1 = ruleValues.get(1);
+					ValueIterator value1Iterator = rule1.iterator();
+					addPropertyToState(rule1, value1Iterator);
+				}
 				scriptProducer.makeScriptFor(this);
 			}
 		}
@@ -48,12 +72,11 @@ public class RuleEngine {
 		}
 	}
 
-	public void addRule(Rule rule) {
-		rules.put(rule.getTargetedPropertyName(), rule);
-	}
-
-	public boolean hasRuleForProperty(String propertyName) {
-		return rules.containsKey(propertyName);
+	private void addPropertyToState(Rule rule, ValueIterator valueIterator) {
+		{
+			Object value = valueIterator.next();
+			state.addProperty(rule.getTargetedPropertyName(), value);
+		}
 	}
 
 	public String getAssignedPropertiesAsString() {
