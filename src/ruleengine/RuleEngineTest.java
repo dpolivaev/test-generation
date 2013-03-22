@@ -108,7 +108,7 @@ public class RuleEngineTest {
 		ruleEngine.run(scriptProducerMock);
 		
 		String expectedScriptPropertyCombinations = "1 : x=a\ty=b\n";
-		assertEquals(expectedScriptPropertyCombinations, 
+		assertEquals(expectedScriptPropertyCombinations,
 				scriptProducerMock.getAllScriptPropertyCombinations());
 		
 	}
