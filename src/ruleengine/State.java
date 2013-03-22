@@ -1,8 +1,8 @@
 package ruleengine;
 
 class State {
-	private StringBuilder assignedPropertiesAsString; 
-	private int count = 0;	
+	private StringBuilder assignedPropertiesAsString = new StringBuilder(); 
+	private int count = 1;	
 	
 	
 	void addProperty(String name, Object value) {
@@ -13,14 +13,11 @@ class State {
 
 	public void nextIteration() {
 		this.count++;
-		assignedPropertiesAsString = new StringBuilder(); 
+		assignedPropertiesAsString.setLength(0); 
 		
 	}
 
 	String getAssignedPropertiesAsString() {
-		if(count == 0)
-			return "";
-		else
 			return count + " : " + assignedPropertiesAsString + '\n';
 	}
 	
