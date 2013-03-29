@@ -44,7 +44,7 @@ public class ConstantValuesRule implements Rule {
 		return targetedPropertyName;
 	}
 
-	public boolean isFinished() {
+	public boolean hasFinished() {
 		return finished;
 	}
 

@@ -45,16 +45,16 @@ public class RuleEngine {
 
 				scriptProducer.makeScriptFor(this);
 				state.nextIteration();
-			}while(! areAllRulesFinished());
+			}while(! allRulesHaveFinished());
 		}
 		else {
 			scriptProducer.makeScriptFor(this);
 		}
 	}
 
-	private boolean areAllRulesFinished() {
+	private boolean allRulesHaveFinished() {
 		for (Rule rule : rules())
-			if (!rule.isFinished())
+			if (!rule.hasFinished())
 				return false;
 		return true;
 	}

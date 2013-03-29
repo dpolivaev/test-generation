@@ -10,7 +10,7 @@ public class ConstantValuesRuleTest {
 	@Test
 	public void ruleWithOneValue_isNotFinishedUntilValueIsReturned() {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule("name", "value");
-		assertThat(constantValuesRule.isFinished(), is(false));
+		assertThat(constantValuesRule.hasFinished(), is(false));
 	}
 
 	@Test
@@ -23,14 +23,14 @@ public class ConstantValuesRuleTest {
 	public void ruleWithOneValue_isFinishedAfterValueIsReturned() {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule("name", "value");
 		constantValuesRule.nextValue();
-		assertThat(constantValuesRule.isFinished(), is(true));
+		assertThat(constantValuesRule.hasFinished(), is(true));
 	}
 
 	@Test
 	public void ruleWithTwoValues_isNotFinishedAfterFirstValueIsReturned() {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule("name", "1", "2");
 		constantValuesRule.nextValue();
-		assertThat(constantValuesRule.isFinished(), is(false));
+		assertThat(constantValuesRule.hasFinished(), is(false));
 	}
 
 	@Test
