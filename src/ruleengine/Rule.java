@@ -10,6 +10,7 @@ package ruleengine;
 public interface Rule {
 
 	String getTargetedPropertyName();
-	ValueIterator iterator();
+	boolean isFinished();
+	Object nextValue();
 	
 }

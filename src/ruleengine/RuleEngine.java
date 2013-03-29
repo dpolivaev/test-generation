@@ -19,7 +19,6 @@
  */
 package ruleengine;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -37,34 +36,18 @@ public class RuleEngine {
 		return rules.hasRuleForProperty(propertyName);
 	}
 	
-	// while (combination.hasNext()) {
-	//    while(combilnation.nextRule().nextValue()) {
-	//          generate
-	//    }
-
 	public void run(ScriptProducer scriptProducer) {
-		List<Rule> ruleValues = rules.values();
-		if (!ruleValues.isEmpty()) {
-			Rule rule0 = ruleValues.get(0);
-			ValueIterator value0Iterator = rule0.iterator();
-			addPropertyToState(rule0, value0Iterator);
-			
-			if(ruleValues.size() == 2){
-				Rule rule1 = ruleValues.get(1);
-				ValueIterator value1Iterator = rule1.iterator();
-				addPropertyToState(rule1, value1Iterator);
-			}
-			
-			scriptProducer.makeScriptFor(this);
-			if(value0Iterator.hasNext()){
-				state.nextIteration();
-				addPropertyToState(rule0, value0Iterator);
-				if(ruleValues.size() == 2){
-					Rule rule1 = ruleValues.get(1);
-					ValueIterator value1Iterator = rule1.iterator();
-					addPropertyToState(rule1, value1Iterator);
-				}
+		List<Rule> rules = rules();
+		if (!rules.isEmpty()) {
+			for(;;){
+				for (Rule rule : rules)
+					state.addProperty(rule.getTargetedPropertyName(), rule.nextValue());
+
 				scriptProducer.makeScriptFor(this);
+				state.nextIteration();
+				if(areAllRulesFinished(rules)){
+					break;
+				}
 			}
 		}
 		else {
@@ -72,11 +55,15 @@ public class RuleEngine {
 		}
 	}
 
-	private void addPropertyToState(Rule rule, ValueIterator valueIterator) {
-		{
-			Object value = valueIterator.next();
-			state.addProperty(rule.getTargetedPropertyName(), value);
-		}
+	private boolean areAllRulesFinished(List<Rule> rules) {
+		for (Rule rule : rules)
+			if (!rule.isFinished())
+				return false;
+		return true;
+	}
+
+	private List<Rule> rules() {
+		return rules.values();
 	}
 
 	public String getAssignedPropertiesAsString() {
