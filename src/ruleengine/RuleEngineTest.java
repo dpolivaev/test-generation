@@ -36,8 +36,8 @@ public class RuleEngineTest {
 		addIterationRuleWithoutTriggeringProperties(targetedPropertyName, "value");
 	}
 
-    private void addIterationRuleWithTriggeringProperties(String targetedPropertyName, String triggeringProperty, String... value) {
-
+    private void addIterationRuleWithTriggeringProperties(String triggeringProperty, String targetedPropertyName, String... value) {
+    	// TODO
     }
 
     private void addIterationRuleWithoutTriggeringProperties(
@@ -155,7 +155,7 @@ public class RuleEngineTest {
     public void triggeringAndTriggeredRulesWithSingleValues_callsScriptProducerWithTheirValues() {
         LoggingScriptProducerMock scriptProducerMock = new LoggingScriptProducerMock();
         addIterationRuleWithoutTriggeringProperties("x", "a");
-        addIterationRuleWithTriggeringProperties("y", "x", "b");
+        addIterationRuleWithTriggeringProperties("x", "y", "b");
 
         ruleEngine.run(scriptProducerMock);
 
@@ -169,11 +169,15 @@ public class RuleEngineTest {
     public void triggeringAndTriggeredRulesWithValuesAandB_callsScriptProducerWithTheirValues() {
         LoggingScriptProducerMock scriptProducerMock = new LoggingScriptProducerMock();
         addIterationRuleWithoutTriggeringProperties("x", "a", "b");
-        addIterationRuleWithTriggeringProperties("y", "x", "a", "b");
+        addIterationRuleWithTriggeringProperties("x", "y", "c", "d");
 
         ruleEngine.run(scriptProducerMock);
 
-        String expectedScriptPropertyCombinations = "1 : x=a\ty=b\n";
+        String expectedScriptPropertyCombinations = 
+        		"1 : x=a\ty=c\n" +
+        		"2 : x=a\ty=d\n" +
+        		"3 : x=b\ty=c\n" +
+        		"4 : x=b\ty=d\n";
         assertEquals(expectedScriptPropertyCombinations,
                 scriptProducerMock.getAllScriptPropertyCombinations());
 
