@@ -36,10 +36,14 @@ public class RuleEngineTest {
 		addIterationRuleWithoutTriggeringProperties(targetedPropertyName, "value");
 	}
 
-	private void addIterationRuleWithoutTriggeringProperties(
-			String targetedPropertyName, String... value) {
-		ruleEngine.addRule(new ConstantValuesRule(targetedPropertyName, (Object[])value));
-	}
+    private void addIterationRuleWithTriggeringProperties(String targetedPropertyName, String triggeringProperty, String... value) {
+
+    }
+
+    private void addIterationRuleWithoutTriggeringProperties(
+            String targetedPropertyName, String... value) {
+        ruleEngine.addRule(new ConstantValuesRule(targetedPropertyName, (Object[])value));
+    }
 
 	@Test
 	public void ruleEngineWithoutRules_callsScriptProducerOnce() {
@@ -48,22 +52,22 @@ public class RuleEngineTest {
 		assertThat(scriptProducerMock.callCount(), is(1));
 	}
 
+
 	@Test
 	public void ruleEngineWithOneIterationRule_hasRuleForItsTargetedProperty() {
 		String targetedPropertyName = "property";
-		addIterationRuleWithoutAction(targetedPropertyName); 
-		
+		addIterationRuleWithoutAction(targetedPropertyName);
+
 		assertThat(ruleEngine.hasRuleForProperty(targetedPropertyName), is(true));
 	}
-
 
 	@Test
 	public void ruleEngineWithTwoIterationRules_hasRulesForItsTargetedProperties() {
 		String firstTargetedPropertyName = "property1";
-		addIterationRuleWithoutAction(firstTargetedPropertyName); 
+		addIterationRuleWithoutAction(firstTargetedPropertyName);
 		String secondTargetedPropertyName = "property2";
-		addIterationRuleWithoutAction(secondTargetedPropertyName); 
-		
+		addIterationRuleWithoutAction(secondTargetedPropertyName);
+
 		assertThat(ruleEngine.hasRuleForProperty(firstTargetedPropertyName), is(true));
 		assertThat(ruleEngine.hasRuleForProperty(secondTargetedPropertyName), is(true));
 	}
@@ -72,61 +76,62 @@ public class RuleEngineTest {
 	public void singleRuleWithPropertyNamedXValueA_callsScriptProducerWithValueA() {
 		LoggingScriptProducerMock scriptProducerMock = new LoggingScriptProducerMock();
 		addIterationRuleWithoutTriggeringProperties("x", "a");
-		
+
 		ruleEngine.run(scriptProducerMock);
-		
+
 		String expectedScriptPropertyCombinations = "1 : x=a\n";
-		assertEquals(expectedScriptPropertyCombinations, 
+		assertEquals(expectedScriptPropertyCombinations,
 				scriptProducerMock.getAllScriptPropertyCombinations());
-		
+
 	}
-	
+
+
 	@Test
 	public void singleRuleWithValuesA_B_callsScriptProducerWithValuesA_B() {
 		LoggingScriptProducerMock loggingScriptProducerMock = new LoggingScriptProducerMock();
 		addIterationRuleWithoutTriggeringProperties("property", "a", "b");
-		
+
 		ruleEngine.run(loggingScriptProducerMock);
-		
-		String expectedScriptPropertyCombinations = 
+
+		String expectedScriptPropertyCombinations =
 				"1 : property=a\n" +
 				"2 : property=b\n";
-		assertEquals(expectedScriptPropertyCombinations, 
+		assertEquals(expectedScriptPropertyCombinations,
 				loggingScriptProducerMock.getAllScriptPropertyCombinations());
-		
+
 	}
-	
-	
+
 	@Test
 	public void twoRulesWithValuesAandB_callsScriptProducerWithTheirValues() {
 		LoggingScriptProducerMock scriptProducerMock = new LoggingScriptProducerMock();
 		addIterationRuleWithoutTriggeringProperties("x", "a");
 		addIterationRuleWithoutTriggeringProperties("y", "b");
-		
+
 		ruleEngine.run(scriptProducerMock);
-		
+
 		String expectedScriptPropertyCombinations = "1 : x=a\ty=b\n";
 		assertEquals(expectedScriptPropertyCombinations,
 				scriptProducerMock.getAllScriptPropertyCombinations());
-		
+
 	}
+
+
 
 	@Test
 	public void twoRulesWithValuesA1_A2andB1_B2_callsScriptProducerWithTheirValues() {
 		LoggingScriptProducerMock scriptProducerMock = new LoggingScriptProducerMock();
 		addIterationRuleWithoutTriggeringProperties("x", "a1", "a2");
 		addIterationRuleWithoutTriggeringProperties("y", "b1", "b2");
-	
+
 		ruleEngine.run(scriptProducerMock);
-		
-		String expectedScriptPropertyCombinations = 
+
+		String expectedScriptPropertyCombinations =
 				"1 : x=a1\ty=b1\n" +
 				"2 : x=a2\ty=b2\n";
-		assertEquals(expectedScriptPropertyCombinations, 
+		assertEquals(expectedScriptPropertyCombinations,
 				scriptProducerMock.getAllScriptPropertyCombinations());
-		
-	}
 
+	}
 
 
 	@Test
@@ -134,16 +139,44 @@ public class RuleEngineTest {
 		LoggingScriptProducerMock scriptProducerMock = new LoggingScriptProducerMock();
 		addIterationRuleWithoutTriggeringProperties("x", "a1", "a2", "a3");
 		addIterationRuleWithoutTriggeringProperties("y", "b1", "b2");
-		
+
 		ruleEngine.run(scriptProducerMock);
-		
-		String expectedScriptPropertyCombinations = 
+
+		String expectedScriptPropertyCombinations =
 				"1 : x=a1\ty=b1\n" +
 	            "2 : x=a2\ty=b2\n" +
 	            "3 : x=a3\ty=b1\n";
-		assertEquals(expectedScriptPropertyCombinations, 
+		assertEquals(expectedScriptPropertyCombinations,
 				scriptProducerMock.getAllScriptPropertyCombinations());
-		
+
 	}
+
+    @Test
+    public void triggeringAndTriggeredRulesWithSingleValues_callsScriptProducerWithTheirValues() {
+        LoggingScriptProducerMock scriptProducerMock = new LoggingScriptProducerMock();
+        addIterationRuleWithoutTriggeringProperties("x", "a");
+        addIterationRuleWithTriggeringProperties("y", "x", "b");
+
+        ruleEngine.run(scriptProducerMock);
+
+        String expectedScriptPropertyCombinations = "1 : x=a\ty=b\n";
+        assertEquals(expectedScriptPropertyCombinations,
+                scriptProducerMock.getAllScriptPropertyCombinations());
+
+    }
+
+    @Test
+    public void triggeringAndTriggeredRulesWithValuesAandB_callsScriptProducerWithTheirValues() {
+        LoggingScriptProducerMock scriptProducerMock = new LoggingScriptProducerMock();
+        addIterationRuleWithoutTriggeringProperties("x", "a", "b");
+        addIterationRuleWithTriggeringProperties("y", "x", "a", "b");
+
+        ruleEngine.run(scriptProducerMock);
+
+        String expectedScriptPropertyCombinations = "1 : x=a\ty=b\n";
+        assertEquals(expectedScriptPropertyCombinations,
+                scriptProducerMock.getAllScriptPropertyCombinations());
+
+    }
 
 }
