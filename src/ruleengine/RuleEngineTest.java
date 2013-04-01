@@ -19,11 +19,8 @@
  */
 package ruleengine;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
-
-import java.util.Collections;
-import java.util.Set;
 
 import org.junit.Test;
 
@@ -41,7 +38,7 @@ public class RuleEngineTest {
 
 	private void addIterationRuleWithoutTriggeringProperties(
 			String targetedPropertyName, String... value) {
-		ruleEngine.addRule(new ConstantValuesRule(targetedPropertyName, value));
+		ruleEngine.addRule(new ConstantValuesRule(targetedPropertyName, (Object[])value));
 	}
 
 	@Test
@@ -132,21 +129,21 @@ public class RuleEngineTest {
 
 
 
-//	@Test
-//	public void twoRulesWithValuesA1_A2_A3andB1_B2_callsScriptProducerWithTheirValues() {
-//		LoggingScriptProducerMock scriptProducerMock = new LoggingScriptProducerMock();
-//		addIterationRuleWithoutTriggeringProperties("x", "a1", "a2", "a3");
-//		addIterationRuleWithoutTriggeringProperties("y", "b1", "b2");
-//		
-//		ruleEngine.run(scriptProducerMock);
-//		
-//		String expectedScriptPropertyCombinations = 
-//				"1 : x=a1\ty=b1\n" +
-//	            "2 : x=a2\ty=b2\n";
-//	            "3 : x=a3\ty=b1\n";
-//		assertEquals(expectedScriptPropertyCombinations, 
-//				scriptProducerMock.getAllScriptPropertyCombinations());
-//		
-//	}
-//
+	@Test
+	public void twoRulesWithValuesA1_A2_A3andB1_B2_callsScriptProducerWithTheirValues() {
+		LoggingScriptProducerMock scriptProducerMock = new LoggingScriptProducerMock();
+		addIterationRuleWithoutTriggeringProperties("x", "a1", "a2", "a3");
+		addIterationRuleWithoutTriggeringProperties("y", "b1", "b2");
+		
+		ruleEngine.run(scriptProducerMock);
+		
+		String expectedScriptPropertyCombinations = 
+				"1 : x=a1\ty=b1\n" +
+	            "2 : x=a2\ty=b2\n" +
+	            "3 : x=a3\ty=b1\n";
+		assertEquals(expectedScriptPropertyCombinations, 
+				scriptProducerMock.getAllScriptPropertyCombinations());
+		
+	}
+
 }
