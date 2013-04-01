@@ -166,7 +166,7 @@ public class RuleEngineTest {
     }
 
     @Test
-    public void triggeringAndTriggeredRulesWithValuesAandB_callsScriptProducerWithTheirValues() {
+    public void triggeringAndTriggeredRulesWithValuesA_B_and_C_D_callsScriptProducerWithTheirValues() {
         LoggingScriptProducerMock scriptProducerMock = new LoggingScriptProducerMock();
         addIterationRuleWithoutTriggeringProperties("x", "a", "b");
         addIterationRuleWithTriggeringProperties("x", "y", "c", "d");
