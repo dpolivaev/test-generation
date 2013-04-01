@@ -2,7 +2,7 @@ package ruleengine;
 
 class State {
 	private StringBuilder assignedPropertiesAsString = new StringBuilder(); 
-	private int count = 1;	
+	private int count = 0;	
 	
 	
 	void addProperty(String name, Object value) {

@@ -40,11 +40,11 @@ public class RuleEngine {
 		List<Rule> rules = rules();
 		if (!rules.isEmpty()) {
 			do{
+				state.nextIteration();
 				for (Rule rule : rules)
 					state.addProperty(rule.getTargetedPropertyName(), rule.nextValue());
 
 				scriptProducer.makeScriptFor(this);
-				state.nextIteration();
 			}while(! allRulesHaveFinished());
 		}
 		else {
