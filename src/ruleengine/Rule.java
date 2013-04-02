@@ -13,5 +13,6 @@ public interface Rule {
 	boolean hasFinished();
 	Object nextValue();
 	void nextIteration(RuleEngine ruleEngine);
+	void propertyValueSet(PropertySet propertySet, String targetedPropertyName);
 	
 }

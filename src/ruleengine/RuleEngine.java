@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * @author Dimitry Polivaev 18.02.2013
  */
-public class RuleEngine {
+public class RuleEngine  implements PropertySet{
 	private Rules rules = new Rules();
 	private State state = new State();
 
@@ -47,8 +47,11 @@ public class RuleEngine {
 		}while(! allRulesHaveFinished());
 	}
 
-	public void addPropertyValue(String targetedPropertyName, Object nextValue) {
-		state.addProperty(targetedPropertyName, nextValue);
+	public void setPropertyValue(String targetedPropertyName, Object nextValue) {
+		state.setPropertyValue(targetedPropertyName, nextValue);
+		for (Rule rule : rules()){
+			rule.propertyValueSet(this, targetedPropertyName);
+		}
 	}
 
 	private boolean allRulesHaveFinished() {
