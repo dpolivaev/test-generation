@@ -1,6 +1,6 @@
 package ruleengine;
 
-class State implements PropertySet {
+class State implements PropertyHolder {
 	private StringBuilder assignedPropertiesAsString = new StringBuilder(); 
 	private int count = 0;	
 	

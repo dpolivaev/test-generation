@@ -1,6 +1,6 @@
 package ruleengine;
 
-class OnePropertyHolder implements PropertySet{
+class OnePropertyHolder implements PropertyHolder{
 	private String name;
 	public String getName() {
 		return name;
