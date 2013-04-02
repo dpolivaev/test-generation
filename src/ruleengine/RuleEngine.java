@@ -39,11 +39,16 @@ public class RuleEngine {
 	public void run(ScriptProducer scriptProducer) {
 		do{
 			state.nextIteration();
-			for (Rule rule : rules())
-				state.addProperty(rule.getTargetedPropertyName(), rule.nextValue());
+			for (Rule rule : rules()){
+				rule.nextIteration(this);
+			}
 
 			scriptProducer.makeScriptFor(this);
 		}while(! allRulesHaveFinished());
+	}
+
+	public void addPropertyValue(String targetedPropertyName, Object nextValue) {
+		state.addProperty(targetedPropertyName, nextValue);
 	}
 
 	private boolean allRulesHaveFinished() {
