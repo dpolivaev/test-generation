@@ -48,7 +48,7 @@ public class ConstantValuesRule implements Rule {
 		return finished;
 	}
 
-	public Object nextValue() {
+	private Object nextValue() {
 		Object value = values[valueIndex++];
 		finished = finished || valueIndex == values.length;
 		if(valueIndex == values.length)
