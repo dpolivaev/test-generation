@@ -12,5 +12,6 @@ public interface Rule {
 	String getTargetedPropertyName();
 	boolean hasFinished();
 	Object nextValue();
+	void nextIteration(RuleEngine ruleEngine);
 	
 }
