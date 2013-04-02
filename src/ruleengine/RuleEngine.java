@@ -37,19 +37,13 @@ public class RuleEngine {
 	}
 	
 	public void run(ScriptProducer scriptProducer) {
-		List<Rule> rules = rules();
-		if (!rules.isEmpty()) {
-			do{
-				state.nextIteration();
-				for (Rule rule : rules)
-					state.addProperty(rule.getTargetedPropertyName(), rule.nextValue());
+		do{
+			state.nextIteration();
+			for (Rule rule : rules())
+				state.addProperty(rule.getTargetedPropertyName(), rule.nextValue());
 
-				scriptProducer.makeScriptFor(this);
-			}while(! allRulesHaveFinished());
-		}
-		else {
 			scriptProducer.makeScriptFor(this);
-		}
+		}while(! allRulesHaveFinished());
 	}
 
 	private boolean allRulesHaveFinished() {
