@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * @author Dimitry Polivaev 18.02.2013
  */
-public class RuleEngine  implements PropertySet{
+public class RuleEngine  implements PropertyHolder{
 	private Rules rules = new Rules();
 	private State state = new State();
 

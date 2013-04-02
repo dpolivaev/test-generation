@@ -11,7 +11,7 @@ public interface Rule {
 
 	String getTargetedPropertyName();
 	boolean hasFinished();
-	void nextIteration(PropertySet propertySet);
-	void propertyValueSet(PropertySet propertySet, String targetedPropertyName);
+	void nextIteration(PropertyHolder propertyHolder);
+	void propertyValueSet(PropertyHolder propertyHolder, String targetedPropertyName);
 	
 }

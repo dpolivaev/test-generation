@@ -57,14 +57,14 @@ public class ConstantValuesRule implements Rule {
 	}
 
 	@Override
-	public void nextIteration(PropertySet propertySet) {
+	public void nextIteration(PropertyHolder propertyHolder) {
 			String targetedPropertyName = getTargetedPropertyName();
 			Object nextValue = nextValue();
-			propertySet.setPropertyValue(targetedPropertyName, nextValue);
+			propertyHolder.setPropertyValue(targetedPropertyName, nextValue);
 	}
 
 	@Override
-	public void propertyValueSet(PropertySet propertySet, String targetedPropertyName) {
+	public void propertyValueSet(PropertyHolder propertyHolder, String targetedPropertyName) {
 	}
 	
 }

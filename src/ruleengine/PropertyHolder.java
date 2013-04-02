@@ -1,6 +1,6 @@
 package ruleengine;
 
-interface PropertySet {
+interface PropertyHolder {
 
 	public abstract void setPropertyValue(String name, Object value);
 
