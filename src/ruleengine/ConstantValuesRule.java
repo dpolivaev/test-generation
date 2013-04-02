@@ -55,5 +55,16 @@ public class ConstantValuesRule implements Rule {
 			valueIndex = 0;
 		return value;
 	}
+
+	@Override
+	public void nextIteration(RuleEngine ruleEngine) {
+			String targetedPropertyName = getTargetedPropertyName();
+			Object nextValue = nextValue();
+			ruleEngine.setPropertyValue(targetedPropertyName, nextValue);
+	}
+
+	@Override
+	public void propertyValueSet(PropertySet propertySet, String targetedPropertyName) {
+	}
 	
 }
