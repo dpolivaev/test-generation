@@ -9,7 +9,7 @@ import org.junit.Test;
 public class ConstantValuesRuleTest {
 
 	@Test
-	public void ruleWithOneValue_hasNotFinishedUntilValueIsReturned() {
+	public void ruleWithOneValue_hasNotFinishedUntilIterationIsFinished() {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule("name",
 				"value");
 		assertThat(constantValuesRule.hasFinished(), is(false));
@@ -25,10 +25,12 @@ public class ConstantValuesRuleTest {
 	}
 
 	@Test
-	public void ruleWithOneValue_hasFinishedAfterValueIsReturned() {
+	public void ruleWithOneValue_hasFinishedAfterIterationIsFinished() {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule("name",
 				"value");
-		constantValuesRule.nextIteration(propertyHolder());
+		OnePropertyHolder propertyHolder = propertyHolder();
+		constantValuesRule.nextIteration(propertyHolder);
+		constantValuesRule.finishIteration(propertyHolder);
 		assertThat(constantValuesRule.hasFinished(), is(true));
 	}
 
@@ -37,7 +39,7 @@ public class ConstantValuesRuleTest {
 	}
 
 	@Test
-	public void ruleWithTwoValues_hasNotFinishedAfterFirstValueIsReturned() {
+	public void ruleWithTwoValues_hasNotFinishedAfterFirstIterationIsFinished() {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule("name",
 				"1", "2");
 		constantValuesRule.nextIteration(propertyHolder());
@@ -60,6 +62,7 @@ public class ConstantValuesRuleTest {
 				"value");
 		OnePropertyHolder propertyHolder = propertyHolder();
 		constantValuesRule.nextIteration(propertyHolder);
+		constantValuesRule.finishIteration(propertyHolder);
 		constantValuesRule.nextIteration(propertyHolder);
 		assertThat(propertyHolder.getValue(), is((Object) "value"));
 	}
@@ -79,7 +82,8 @@ public class ConstantValuesRuleTest {
 				set("triggeredBy"), "name", "value");
 		OnePropertyHolder propertyHolder = propertyHolder();
 		propertyHolder.setPropertyValue("triggeredBy", "triggeredByValue");
-		PropertyAssignedEvent event = new PropertyAssignedEvent(propertyHolder, "triggeredBy");
+		PropertyAssignedEvent event = new PropertyAssignedEvent(propertyHolder,
+				"triggeredBy");
 		constantValuesRule.propertyValueSet(event);
 		assertThat(propertyHolder.getValue(), is((Object) "value"));
 	}
@@ -90,8 +94,10 @@ public class ConstantValuesRuleTest {
 				set("triggeredBy"), "name", "value");
 		OnePropertyHolder propertyHolder = propertyHolder();
 		propertyHolder.setPropertyValue("triggeredBy", "triggeredByValue");
-		PropertyAssignedEvent event = new PropertyAssignedEvent(propertyHolder, "triggeredBy");
+		PropertyAssignedEvent event = new PropertyAssignedEvent(propertyHolder,
+				"triggeredBy");
 		constantValuesRule.propertyValueSet(event);
+		constantValuesRule.finishIteration(propertyHolder);
 		assertThat(constantValuesRule.hasFinished(), is(true));
 	}
 
@@ -101,8 +107,23 @@ public class ConstantValuesRuleTest {
 				"name", "value");
 		OnePropertyHolder propertyHolder = propertyHolder();
 		propertyHolder.setPropertyValue("triggeredBy", "triggeredByValue");
-		PropertyAssignedEvent event = new PropertyAssignedEvent(propertyHolder, "triggeredBy");
+		PropertyAssignedEvent event = new PropertyAssignedEvent(propertyHolder,
+				"triggeredBy");
 		constantValuesRule.propertyValueSet(event);
 		assertThat(constantValuesRule.hasFinished(), is(false));
 	}
+
+	// @Test
+	// public void ruleWithOneValueIsNotFinished_untilTriggeredRuleIsFinished()
+	// {
+	// ConstantValuesRule rule = new ConstantValuesRule("x", "a");
+	// ConstantValuesRule triggeredRule = new ConstantValuesRule(set("x"),
+	// "y", "a", "b");
+	// State state = new MapBasedState();
+	// rule.nextIteration(state);
+	//
+	// triggeredRule.propertyValueSet(new PropertyAssignedEvent(state, "x"));
+	//
+	// assertThat(rule.hasFinished(), is(false));
+	// }
 }
