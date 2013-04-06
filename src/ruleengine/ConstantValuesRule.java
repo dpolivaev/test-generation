@@ -43,6 +43,8 @@ public class ConstantValuesRule implements Rule {
 		this.triggeredBy = triggeredBy;
 		this.targetedPropertyName = targetedPropertyName;
 		this.values = values;
+		this.finished = false;
+		this.valueIndex = 0;
 	}
 
 	/*
@@ -62,9 +64,6 @@ public class ConstantValuesRule implements Rule {
 
 	private Object nextValue() {
 		Object value = values[valueIndex++];
-		finished = finished || valueIndex == values.length;
-		if (valueIndex == values.length)
-			valueIndex = 0;
 		return value;
 	}
 
@@ -86,5 +85,11 @@ public class ConstantValuesRule implements Rule {
 		if (triggeredBy.contains(event.getTargetedPropertyName())
 				&& event.getState().containsPropertyValues(triggeredBy))
 			iterate(event.getState());
+	}
+
+	public void finishIteration(State state) {
+		finished = finished || valueIndex == values.length;
+		if (valueIndex == values.length)
+			valueIndex = 0;
 	}
 }

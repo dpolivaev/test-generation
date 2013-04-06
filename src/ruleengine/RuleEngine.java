@@ -45,13 +45,18 @@ public class RuleEngine implements State {
 			}
 
 			scriptProducer.makeScriptFor(this);
+			for (Rule rule : rules()) {
+				rule.finishIteration(this);
+			}
+
 		} while (!allRulesHaveFinished());
 	}
 
 	@Override
 	public void setPropertyValue(String targetedPropertyName, Object nextValue) {
 		mapBasedState.setPropertyValue(targetedPropertyName, nextValue);
-		PropertyAssignedEvent event = new PropertyAssignedEvent(this, targetedPropertyName);
+		PropertyAssignedEvent event = new PropertyAssignedEvent(this,
+				targetedPropertyName);
 		for (Rule rule : rules()) {
 			rule.propertyValueSet(event);
 		}

@@ -1,6 +1,5 @@
 package ruleengine;
 
-
 // triggered A <- default B
 // default B <- default A
 // => triggered A can not be assigned!
@@ -10,8 +9,13 @@ package ruleengine;
 public interface Rule {
 
 	String getTargetedPropertyName();
+
 	boolean hasFinished();
+
 	void nextIteration(State state);
+
+	void finishIteration(State state);
+
 	void propertyValueSet(PropertyAssignedEvent event);
-	
+
 }
