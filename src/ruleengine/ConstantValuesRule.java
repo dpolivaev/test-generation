@@ -19,24 +19,35 @@
  */
 package ruleengine;
 
+import java.util.Collections;
+import java.util.Set;
 
 /**
- * @author Dimitry Polivaev
- * 18.02.2013
+ * @author Dimitry Polivaev 18.02.2013
  */
 public class ConstantValuesRule implements Rule {
-	
+
 	private final String targetedPropertyName;
 	private final Object[] values;
 	private boolean finished;
 	private int valueIndex;
-	
+	private final Set<String> triggeredBy;
+
+	@SuppressWarnings("unchecked")
 	public ConstantValuesRule(String targetedPropertyName, Object... values) {
-    	this.targetedPropertyName = targetedPropertyName;
+		this(Collections.EMPTY_SET, targetedPropertyName, values);
+	}
+
+	public ConstantValuesRule(Set<String> triggeredBy,
+			String targetedPropertyName, Object... values) {
+		this.triggeredBy = triggeredBy;
+		this.targetedPropertyName = targetedPropertyName;
 		this.values = values;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ruleengine.Rule#getTargetedPropertyName()
 	 */
 	@Override
@@ -44,6 +55,7 @@ public class ConstantValuesRule implements Rule {
 		return targetedPropertyName;
 	}
 
+	@Override
 	public boolean hasFinished() {
 		return finished;
 	}
@@ -51,20 +63,29 @@ public class ConstantValuesRule implements Rule {
 	private Object nextValue() {
 		Object value = values[valueIndex++];
 		finished = finished || valueIndex == values.length;
-		if(valueIndex == values.length)
+		if (valueIndex == values.length)
 			valueIndex = 0;
 		return value;
 	}
 
 	@Override
 	public void nextIteration(PropertyHolder propertyHolder) {
-			String targetedPropertyName = getTargetedPropertyName();
-			Object nextValue = nextValue();
-			propertyHolder.setPropertyValue(targetedPropertyName, nextValue);
+		if (triggeredBy.isEmpty()) {
+			iterate(propertyHolder);
+		}
+	}
+
+	private void iterate(PropertyHolder propertyHolder) {
+		String targetedPropertyName = getTargetedPropertyName();
+		Object nextValue = nextValue();
+		propertyHolder.setPropertyValue(targetedPropertyName, nextValue);
 	}
 
 	@Override
-	public void propertyValueSet(PropertyHolder propertyHolder, String targetedPropertyName) {
+	public void propertyValueSet(PropertyHolder propertyHolder,
+			String targetedPropertyName) {
+		if (triggeredBy.contains(targetedPropertyName)
+				&& propertyHolder.containsPropertyValues(triggeredBy))
+			iterate(propertyHolder);
 	}
-	
 }

@@ -1,7 +1,10 @@
 package ruleengine;
 
-class OnePropertyHolder implements PropertyHolder{
+import java.util.Set;
+
+class OnePropertyHolder implements PropertyHolder {
 	private String name;
+
 	public String getName() {
 		return name;
 	}
@@ -17,5 +20,16 @@ class OnePropertyHolder implements PropertyHolder{
 		this.name = name;
 		this.value = value;
 	}
-	
+
+	@Override
+	public boolean containsPropertyValue(String name) {
+		return name.equals(this.name);
+	}
+
+	@Override
+	public boolean containsPropertyValues(Set<String> names) {
+		return names.isEmpty()
+				|| containsPropertyValue(names.iterator().next());
+	}
+
 }
