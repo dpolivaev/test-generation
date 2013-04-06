@@ -79,7 +79,8 @@ public class ConstantValuesRuleTest {
 				set("triggeredBy"), "name", "value");
 		OnePropertyHolder propertyHolder = propertyHolder();
 		propertyHolder.setPropertyValue("triggeredBy", "triggeredByValue");
-		constantValuesRule.propertyValueSet(propertyHolder, "triggeredBy");
+		PropertyAssignedEvent event = new PropertyAssignedEvent(propertyHolder, "triggeredBy");
+		constantValuesRule.propertyValueSet(event);
 		assertThat(propertyHolder.getValue(), is((Object) "value"));
 	}
 
@@ -89,7 +90,8 @@ public class ConstantValuesRuleTest {
 				set("triggeredBy"), "name", "value");
 		OnePropertyHolder propertyHolder = propertyHolder();
 		propertyHolder.setPropertyValue("triggeredBy", "triggeredByValue");
-		constantValuesRule.propertyValueSet(propertyHolder, "triggeredBy");
+		PropertyAssignedEvent event = new PropertyAssignedEvent(propertyHolder, "triggeredBy");
+		constantValuesRule.propertyValueSet(event);
 		assertThat(constantValuesRule.hasFinished(), is(true));
 	}
 
@@ -99,7 +101,8 @@ public class ConstantValuesRuleTest {
 				"name", "value");
 		OnePropertyHolder propertyHolder = propertyHolder();
 		propertyHolder.setPropertyValue("triggeredBy", "triggeredByValue");
-		constantValuesRule.propertyValueSet(propertyHolder, "triggeredBy");
+		PropertyAssignedEvent event = new PropertyAssignedEvent(propertyHolder, "triggeredBy");
+		constantValuesRule.propertyValueSet(event);
 		assertThat(constantValuesRule.hasFinished(), is(false));
 	}
 }

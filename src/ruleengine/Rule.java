@@ -12,6 +12,6 @@ public interface Rule {
 	String getTargetedPropertyName();
 	boolean hasFinished();
 	void nextIteration(State state);
-	void propertyValueSet(State state, String targetedPropertyName);
+	void propertyValueSet(PropertyAssignedEvent event);
 	
 }

@@ -82,10 +82,9 @@ public class ConstantValuesRule implements Rule {
 	}
 
 	@Override
-	public void propertyValueSet(State state,
-			String targetedPropertyName) {
-		if (triggeredBy.contains(targetedPropertyName)
-				&& state.containsPropertyValues(triggeredBy))
-			iterate(state);
+	public void propertyValueSet(PropertyAssignedEvent event) {
+		if (triggeredBy.contains(event.getTargetedPropertyName())
+				&& event.getState().containsPropertyValues(triggeredBy))
+			iterate(event.getState());
 	}
 }
