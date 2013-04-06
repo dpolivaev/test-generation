@@ -80,8 +80,8 @@ public class ConstantValuesRuleTest {
 	public void triggeredRuleWithOneValue_whenTriggeredPropertyIsAssigned_assignsItsValue() {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule(
 				set("triggeredBy"), "name", "value");
-		OnePropertyHolder propertyHolder = propertyHolder();
-		propertyHolder.setPropertyValue("triggeredBy", "triggeredByValue");
+		OnePropertyHolder propertyHolder = propertyHolder("triggeredBy",
+				"triggeredByValue");
 		PropertyAssignedEvent event = new PropertyAssignedEvent(propertyHolder,
 				"triggeredBy");
 		constantValuesRule.propertyValueSet(event);
@@ -92,8 +92,8 @@ public class ConstantValuesRuleTest {
 	public void triggeredRuleWithOneValue_whenTriggeredPropertyIsAssigned_finishes() {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule(
 				set("triggeredBy"), "name", "value");
-		OnePropertyHolder propertyHolder = propertyHolder();
-		propertyHolder.setPropertyValue("triggeredBy", "triggeredByValue");
+		OnePropertyHolder propertyHolder = propertyHolder("triggeredBy",
+				"triggeredByValue");
 		PropertyAssignedEvent event = new PropertyAssignedEvent(propertyHolder,
 				"triggeredBy");
 		constantValuesRule.propertyValueSet(event);
@@ -101,12 +101,18 @@ public class ConstantValuesRuleTest {
 		assertThat(constantValuesRule.hasFinished(), is(true));
 	}
 
+	private OnePropertyHolder propertyHolder(String name, String value) {
+		OnePropertyHolder propertyHolder = propertyHolder();
+		propertyHolder.setPropertyValue(name, value);
+		return propertyHolder;
+	}
+
 	@Test
 	public void ruleIgnoresAssignmentsToNonTriggeringProperties() {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule(set(),
 				"name", "value");
-		OnePropertyHolder propertyHolder = propertyHolder();
-		propertyHolder.setPropertyValue("triggeredBy", "triggeredByValue");
+		OnePropertyHolder propertyHolder = propertyHolder("triggeredBy",
+				"triggeredByValue");
 		PropertyAssignedEvent event = new PropertyAssignedEvent(propertyHolder,
 				"triggeredBy");
 		constantValuesRule.propertyValueSet(event);
