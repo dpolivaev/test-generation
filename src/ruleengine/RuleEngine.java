@@ -25,9 +25,9 @@ import java.util.Set;
 /**
  * @author Dimitry Polivaev 18.02.2013
  */
-public class RuleEngine implements PropertyHolder {
+public class RuleEngine implements State {
 	private Rules rules = new Rules();
-	private State state = new State();
+	private MapBasedState mapBasedState = new MapBasedState();
 
 	public void addRule(Rule rule) {
 		rules.addRule(rule);
@@ -39,7 +39,7 @@ public class RuleEngine implements PropertyHolder {
 
 	public void run(ScriptProducer scriptProducer) {
 		do {
-			state.nextIteration();
+			mapBasedState.nextIteration();
 			for (Rule rule : rules()) {
 				rule.nextIteration(this);
 			}
@@ -50,7 +50,7 @@ public class RuleEngine implements PropertyHolder {
 
 	@Override
 	public void setPropertyValue(String targetedPropertyName, Object nextValue) {
-		state.setPropertyValue(targetedPropertyName, nextValue);
+		mapBasedState.setPropertyValue(targetedPropertyName, nextValue);
 		for (Rule rule : rules()) {
 			rule.propertyValueSet(this, targetedPropertyName);
 		}
@@ -68,17 +68,17 @@ public class RuleEngine implements PropertyHolder {
 	}
 
 	public String getAssignedPropertiesAsString() {
-		return state.getAssignedPropertiesAsString();
+		return mapBasedState.getAssignedPropertiesAsString();
 	}
 
 	@Override
 	public boolean containsPropertyValue(String name) {
-		return state.containsPropertyValue(name);
+		return mapBasedState.containsPropertyValue(name);
 	}
 
 	@Override
 	public boolean containsPropertyValues(Set<String> names) {
-		return state.containsPropertyValues(names);
+		return mapBasedState.containsPropertyValues(names);
 	}
 
 }

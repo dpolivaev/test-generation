@@ -2,7 +2,7 @@ package ruleengine;
 
 import java.util.Set;
 
-class OnePropertyHolder implements PropertyHolder {
+class OnePropertyHolder implements State {
 	private String name;
 
 	public String getName() {
