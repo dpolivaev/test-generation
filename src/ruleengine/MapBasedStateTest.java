@@ -8,40 +8,40 @@ import static ruleengine.TestUtils.set;
 import org.junit.Before;
 import org.junit.Test;
 
-public class StateTest {
+public class MapBasedStateTest {
 
-	State state;
+	MapBasedState mapBasedState;
 
 	@Before
 	public void setup() {
-		state = new State();
+		mapBasedState = new MapBasedState();
 	}
 
 	@Test
 	public void stateWithOnePropertySetAtFirstIteration() {
-		state.nextIteration();
-		state.setPropertyValue("x", "a");
+		mapBasedState.nextIteration();
+		mapBasedState.setPropertyValue("x", "a");
 		String expectedScriptPropertyCombinations = "1 : x=a\n";
 		assertEquals(expectedScriptPropertyCombinations,
-				state.getAssignedPropertiesAsString());
+				mapBasedState.getAssignedPropertiesAsString());
 	}
 
 	@Test
 	public void stateWithOneProperty_containsItsValue() {
-		state.nextIteration();
-		state.setPropertyValue("x", "a");
-		assertThat(state.containsPropertyValue("x"), is(true));
-		assertThat(state.containsPropertyValues(set("x")), is(true));
+		mapBasedState.nextIteration();
+		mapBasedState.setPropertyValue("x", "a");
+		assertThat(mapBasedState.containsPropertyValue("x"), is(true));
+		assertThat(mapBasedState.containsPropertyValues(set("x")), is(true));
 	}
 
 	@Test
 	public void stateWithTwoPropertiesSetAtFirstIteration() {
-		state.nextIteration();
-		state.setPropertyValue("x", "a");
-		state.setPropertyValue("y", "b");
+		mapBasedState.nextIteration();
+		mapBasedState.setPropertyValue("x", "a");
+		mapBasedState.setPropertyValue("y", "b");
 		String expectedScriptPropertyCombinations = "1 : x=a\ty=b\n";
 		assertEquals(expectedScriptPropertyCombinations,
-				state.getAssignedPropertiesAsString());
+				mapBasedState.getAssignedPropertiesAsString());
 	}
 
 }

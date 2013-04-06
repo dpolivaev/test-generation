@@ -69,23 +69,23 @@ public class ConstantValuesRule implements Rule {
 	}
 
 	@Override
-	public void nextIteration(PropertyHolder propertyHolder) {
+	public void nextIteration(State state) {
 		if (triggeredBy.isEmpty()) {
-			iterate(propertyHolder);
+			iterate(state);
 		}
 	}
 
-	private void iterate(PropertyHolder propertyHolder) {
+	private void iterate(State state) {
 		String targetedPropertyName = getTargetedPropertyName();
 		Object nextValue = nextValue();
-		propertyHolder.setPropertyValue(targetedPropertyName, nextValue);
+		state.setPropertyValue(targetedPropertyName, nextValue);
 	}
 
 	@Override
-	public void propertyValueSet(PropertyHolder propertyHolder,
+	public void propertyValueSet(State state,
 			String targetedPropertyName) {
 		if (triggeredBy.contains(targetedPropertyName)
-				&& propertyHolder.containsPropertyValues(triggeredBy))
-			iterate(propertyHolder);
+				&& state.containsPropertyValues(triggeredBy))
+			iterate(state);
 	}
 }
