@@ -2,6 +2,7 @@ package ruleengine;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static ruleengine.TestUtils.set;
 
 import org.junit.Test;
 
@@ -61,5 +62,44 @@ public class ConstantValuesRuleTest {
 		constantValuesRule.nextIteration(propertyHolder);
 		constantValuesRule.nextIteration(propertyHolder);
 		assertThat(propertyHolder.getValue(), is((Object) "value"));
+	}
+
+	@Test
+	public void triggeredRuleWithOneValue_ignoresIterationBegin() {
+		ConstantValuesRule constantValuesRule = new ConstantValuesRule(
+				set("triggeredBy"), "name", "value");
+		OnePropertyHolder propertyHolder = propertyHolder();
+		constantValuesRule.nextIteration(propertyHolder);
+		assertThat(constantValuesRule.hasFinished(), is(false));
+	}
+
+	@Test
+	public void triggeredRuleWithOneValue_whenTriggeredPropertyIsAssigned_assignsItsValue() {
+		ConstantValuesRule constantValuesRule = new ConstantValuesRule(
+				set("triggeredBy"), "name", "value");
+		OnePropertyHolder propertyHolder = propertyHolder();
+		propertyHolder.setPropertyValue("triggeredBy", "triggeredByValue");
+		constantValuesRule.propertyValueSet(propertyHolder, "triggeredBy");
+		assertThat(propertyHolder.getValue(), is((Object) "value"));
+	}
+
+	@Test
+	public void triggeredRuleWithOneValue_whenTriggeredPropertyIsAssigned_finishes() {
+		ConstantValuesRule constantValuesRule = new ConstantValuesRule(
+				set("triggeredBy"), "name", "value");
+		OnePropertyHolder propertyHolder = propertyHolder();
+		propertyHolder.setPropertyValue("triggeredBy", "triggeredByValue");
+		constantValuesRule.propertyValueSet(propertyHolder, "triggeredBy");
+		assertThat(constantValuesRule.hasFinished(), is(true));
+	}
+
+	@Test
+	public void ruleIgnoresAssignmentsToNonTriggeringProperties() {
+		ConstantValuesRule constantValuesRule = new ConstantValuesRule(set(),
+				"name", "value");
+		OnePropertyHolder propertyHolder = propertyHolder();
+		propertyHolder.setPropertyValue("triggeredBy", "triggeredByValue");
+		constantValuesRule.propertyValueSet(propertyHolder, "triggeredBy");
+		assertThat(constantValuesRule.hasFinished(), is(false));
 	}
 }

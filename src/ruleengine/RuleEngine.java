@@ -20,11 +20,12 @@
 package ruleengine;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Dimitry Polivaev 18.02.2013
  */
-public class RuleEngine  implements PropertyHolder{
+public class RuleEngine implements PropertyHolder {
 	private Rules rules = new Rules();
 	private State state = new State();
 
@@ -35,21 +36,22 @@ public class RuleEngine  implements PropertyHolder{
 	public boolean hasRuleForProperty(String propertyName) {
 		return rules.hasRuleForProperty(propertyName);
 	}
-	
+
 	public void run(ScriptProducer scriptProducer) {
-		do{
+		do {
 			state.nextIteration();
-			for (Rule rule : rules()){
+			for (Rule rule : rules()) {
 				rule.nextIteration(this);
 			}
 
 			scriptProducer.makeScriptFor(this);
-		}while(! allRulesHaveFinished());
+		} while (!allRulesHaveFinished());
 	}
 
+	@Override
 	public void setPropertyValue(String targetedPropertyName, Object nextValue) {
 		state.setPropertyValue(targetedPropertyName, nextValue);
-		for (Rule rule : rules()){
+		for (Rule rule : rules()) {
 			rule.propertyValueSet(this, targetedPropertyName);
 		}
 	}
@@ -67,6 +69,16 @@ public class RuleEngine  implements PropertyHolder{
 
 	public String getAssignedPropertiesAsString() {
 		return state.getAssignedPropertiesAsString();
+	}
+
+	@Override
+	public boolean containsPropertyValue(String name) {
+		return state.containsPropertyValue(name);
+	}
+
+	@Override
+	public boolean containsPropertyValues(Set<String> names) {
+		return state.containsPropertyValues(names);
 	}
 
 }
