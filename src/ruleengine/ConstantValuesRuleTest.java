@@ -14,7 +14,7 @@ public class ConstantValuesRuleTest {
 	}
 
 	@Test
-	public void ruleWithOneValue_hasNotFinishedUntilIterationIsFinished() {
+	public void ruleWithOneValue_hasNotFinishedUntilCombinationIsFinished() {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule("name",
 				"value");
 		assertThat(constantValuesRule.hasFinished(), is(false));
@@ -30,7 +30,7 @@ public class ConstantValuesRuleTest {
 	}
 
 	@Test
-	public void ruleWithOneValue_hasFinishedAfterIterationIsFinished() {
+	public void ruleWithOneValue_hasFinishedAfterCombinationIsFinished() {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule("name",
 				"value");
 		OnePropertyStateStub stateStub = stateStub();
@@ -43,7 +43,7 @@ public class ConstantValuesRuleTest {
 	}
 
 	@Test
-	public void ruleWithTwoValues_hasNotFinishedAfterFirstIterationIsFinished() {
+	public void ruleWithTwoValues_hasNotFinishedAfterFirstCombinationIsFinished() {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule("name",
 				"1", "2");
 		produceCombination(constantValuesRule, stateStub());
@@ -113,6 +113,17 @@ public class ConstantValuesRuleTest {
 		OnePropertyStateStub stateStub = stateStub("triggeredBy",
 				"triggeredByValue");
 		constantValuesRule.propertyValueSet(stateStub.event());
+		assertThat(constantValuesRule.hasFinished(), is(false));
+	}
+
+	@Test
+	public void secondCallOfFinishCombinationIsIgnored() {
+		ConstantValuesRule constantValuesRule = new ConstantValuesRule("name",
+				"1", "2");
+		OnePropertyStateStub stateStub = stateStub();
+		constantValuesRule.nextCombination(stateStub);
+		constantValuesRule.finishCombination(stateStub);
+		constantValuesRule.finishCombination(stateStub);
 		assertThat(constantValuesRule.hasFinished(), is(false));
 	}
 
