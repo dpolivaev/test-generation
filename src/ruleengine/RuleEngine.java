@@ -32,12 +32,12 @@ public class RuleEngine implements State {
 
 	private void fireNextCombinationFinishedEvent() {
 		for (Rule rule : rules())
-			rule.finishCombination(this);
+			rule.combinationFinished(this);
 	}
 
 	private void fireNextCombinationStartedEvent() {
 		for (Rule rule : rules())
-			rule.nextCombination(this);
+			rule.combinationStarted(this);
 	}
 
 	@Override
@@ -55,7 +55,11 @@ public class RuleEngine implements State {
 	}
 
 	private boolean allRulesHaveFinished() {
-		for (Rule rule : rules())
+		return allRulesHaveFinished(rules());
+	}
+
+	public static boolean allRulesHaveFinished(Iterable<Rule> rules) {
+		for (Rule rule : rules)
 			if (!rule.hasFinished())
 				return false;
 		return true;

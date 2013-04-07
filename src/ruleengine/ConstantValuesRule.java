@@ -1,6 +1,7 @@
 package ruleengine;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -12,7 +13,13 @@ public class ConstantValuesRule implements Rule {
 	private final Object[] values;
 	private boolean finished;
 	private int valueIndex;
-	private final Set<String> triggeredBy;
+	private final Set<String> triggeringProperties;
+	private final Set<Rule> dependencies;
+
+	public Set<String> getTriggeringProperties() {
+		return triggeringProperties;
+	}
+
 	private boolean valueAddedToCombination;
 
 	@SuppressWarnings("unchecked")
@@ -22,12 +29,13 @@ public class ConstantValuesRule implements Rule {
 
 	public ConstantValuesRule(Set<String> triggeredBy,
 			String targetedPropertyName, Object... values) {
-		this.triggeredBy = triggeredBy;
+		this.triggeringProperties = triggeredBy;
 		this.targetedPropertyName = targetedPropertyName;
 		this.values = values;
 		this.finished = false;
 		this.valueIndex = 0;
 		this.valueAddedToCombination = false;
+		dependencies = new HashSet<>();
 	}
 
 	@Override
@@ -46,8 +54,8 @@ public class ConstantValuesRule implements Rule {
 	}
 
 	@Override
-	public void nextCombination(State state) {
-		if (triggeredBy.isEmpty()) {
+	public void combinationStarted(State state) {
+		if (triggeringProperties.isEmpty()) {
 			addValue(state);
 		}
 	}
@@ -60,18 +68,25 @@ public class ConstantValuesRule implements Rule {
 
 	@Override
 	public void propertyValueSet(PropertyAssignedEvent event) {
-		if (triggeredBy.contains(event.getTargetedPropertyName())
-				&& event.getState().containsPropertyValues(triggeredBy))
+		if (triggeringProperties.contains(event.getTargetedPropertyName())
+				&& event.getState()
+						.containsPropertyValues(triggeringProperties))
 			addValue(event.getState());
+		if (event.getRequiredProperties().contains(targetedPropertyName)) {
+			dependencies.add(event.getWorkingRule());
+		}
 	}
 
 	@Override
-	public void finishCombination(State state) {
+	public void combinationFinished(State state) {
 		if (valueAddedToCombination) {
-			valueIndex++;
-			if (valueIndex == values.length) {
-				finished = true;
-				valueIndex = 0;
+			if (RuleEngine.allRulesHaveFinished(dependencies)) {
+				dependencies.clear();
+				valueIndex++;
+				if (valueIndex == values.length) {
+					finished = true;
+					valueIndex = 0;
+				}
 			}
 			valueAddedToCombination = false;
 		}
