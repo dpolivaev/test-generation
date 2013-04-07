@@ -12,9 +12,9 @@ public interface Rule {
 
 	boolean hasFinished();
 
-	void nextIteration(State state);
+	void nextCombination(State state);
 
-	void finishIteration(State state);
+	void finishCombination(State state);
 
 	void propertyValueSet(PropertyAssignedEvent event);
 

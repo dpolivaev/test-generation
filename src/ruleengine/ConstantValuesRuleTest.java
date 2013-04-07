@@ -2,7 +2,7 @@ package ruleengine;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static ruleengine.TestUtils.performIteration;
+import static ruleengine.TestUtils.performCombination;
 import static ruleengine.TestUtils.ruleStub;
 import static ruleengine.TestUtils.set;
 
@@ -22,7 +22,7 @@ public class ConstantValuesRuleTest {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule("name",
 				"value");
 		OnePropertyStateStub stateStub = stateStub();
-		constantValuesRule.nextIteration(stateStub);
+		constantValuesRule.nextCombination(stateStub);
 		assertThat(stateStub.getValue(), is((Object) "value"));
 	}
 
@@ -31,7 +31,7 @@ public class ConstantValuesRuleTest {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule("name",
 				"value");
 		OnePropertyStateStub stateStub = stateStub();
-		performIteration(constantValuesRule, stateStub);
+		performCombination(constantValuesRule, stateStub);
 		assertThat(constantValuesRule.hasFinished(), is(true));
 	}
 
@@ -43,7 +43,7 @@ public class ConstantValuesRuleTest {
 	public void ruleWithTwoValues_hasNotFinishedAfterFirstIterationIsFinished() {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule("name",
 				"1", "2");
-		constantValuesRule.nextIteration(stateStub());
+		constantValuesRule.nextCombination(stateStub());
 		assertThat(constantValuesRule.hasFinished(), is(false));
 	}
 
@@ -52,8 +52,8 @@ public class ConstantValuesRuleTest {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule("name",
 				"1", "2");
 		OnePropertyStateStub stateStub = stateStub();
-		performIteration(constantValuesRule, stateStub);
-		constantValuesRule.nextIteration(stateStub);
+		performCombination(constantValuesRule, stateStub);
+		constantValuesRule.nextCombination(stateStub);
 		assertThat(stateStub.getValue(), is((Object) "2"));
 	}
 
@@ -62,17 +62,17 @@ public class ConstantValuesRuleTest {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule("name",
 				"value");
 		OnePropertyStateStub stateStub = stateStub();
-		performIteration(constantValuesRule, stateStub);
-		constantValuesRule.nextIteration(stateStub);
+		performCombination(constantValuesRule, stateStub);
+		constantValuesRule.nextCombination(stateStub);
 		assertThat(stateStub.getValue(), is((Object) "value"));
 	}
 
 	@Test
-	public void triggeredRuleWithOneValue_ignoresIterationBegin() {
+	public void triggeredRuleWithOneValue_ignoresCombinationBegin() {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule(
 				set("triggeredBy"), "name", "value");
 		OnePropertyStateStub stateStub = stateStub();
-		constantValuesRule.nextIteration(stateStub);
+		constantValuesRule.nextCombination(stateStub);
 		assertThat(constantValuesRule.hasFinished(), is(false));
 	}
 
@@ -93,7 +93,7 @@ public class ConstantValuesRuleTest {
 		OnePropertyStateStub stateStub = stateStub("triggeredBy",
 				"triggeredByValue");
 		constantValuesRule.propertyValueSet(stateStub.event());
-		constantValuesRule.finishIteration(stateStub);
+		constantValuesRule.finishCombination(stateStub);
 		assertThat(constantValuesRule.hasFinished(), is(true));
 	}
 
@@ -120,7 +120,7 @@ public class ConstantValuesRuleTest {
 	// ConstantValuesRule triggeredRule = new ConstantValuesRule(set("x"),
 	// "y", "a", "b");
 	// State state = new MapBasedState();
-	// rule.nextIteration(state);
+	// rule.nextCombination(state);
 	//
 	// triggeredRule.propertyValueSet(new PropertyAssignedEvent(state, "x"));
 	//
