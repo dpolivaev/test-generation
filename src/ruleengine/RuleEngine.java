@@ -1,7 +1,5 @@
 package ruleengine;
 
-import static ruleengine.TestUtils.set;
-
 import java.util.List;
 import java.util.Set;
 
@@ -44,7 +42,7 @@ public class RuleEngine implements State {
 	public void setPropertyValue(Rule rule, Object nextValue) {
 		mapBasedState.setPropertyValue(rule, nextValue);
 		PropertyAssignedEvent event = new PropertyAssignedEvent(this, rule,
-				set());
+				rule.getTriggeringProperties());
 		firePropertyAssignedEvent(event);
 	}
 
@@ -55,7 +53,10 @@ public class RuleEngine implements State {
 	}
 
 	private boolean allRulesHaveFinished() {
-		return allRulesHaveFinished(rules());
+		for (Rule rule : rules())
+			if (rule.getTriggeringProperties().isEmpty() && !rule.hasFinished())
+				return false;
+		return true;
 	}
 
 	public static boolean allRulesHaveFinished(Iterable<Rule> rules) {

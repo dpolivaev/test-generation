@@ -147,25 +147,19 @@ public class RuleEngineTest {
 
 	}
 
-	// @Test
-	// public void
-	// triggeringAndTriggeredRulesWithValuesA_B_and_C_D_callsScriptProducerWithTheirValues()
-	// {
-	// LoggingScriptProducerMock scriptProducerMock = new
-	// LoggingScriptProducerMock();
-	// addIterationRuleWithoutTriggeringProperties("x", "a", "b");
-	// addIterationRuleWithTriggeringProperties("x", "y", "c", "d");
-	//
-	// ruleEngine.run(scriptProducerMock);
-	//
-	// String expectedScriptPropertyCombinations =
-	// "1 : x=a\ty=c\n" +
-	// "2 : x=a\ty=d\n" +
-	// "3 : x=b\ty=c\n" +
-	// "4 : x=b\ty=d\n";
-	// assertEquals(expectedScriptPropertyCombinations,
-	// scriptProducerMock.getAllScriptPropertyCombinations());
-	//
-	// }
+	@Test
+	public void triggeringAndTriggeredRulesWithValuesA_B_and_C_D_callsScriptProducerWithTheirValues() {
+		LoggingScriptProducerMock scriptProducerMock = new LoggingScriptProducerMock();
+		addIterationRuleWithoutTriggeringProperties("x", "a", "b");
+		addIterationRuleWithTriggeringProperties("x", "y", "c", "d");
+
+		ruleEngine.run(scriptProducerMock);
+
+		String expectedScriptPropertyCombinations = "1 : x=a\ty=c\n"
+				+ "2 : x=a\ty=d\n" + "3 : x=b\ty=c\n" + "4 : x=b\ty=d\n";
+		assertEquals(expectedScriptPropertyCombinations,
+				scriptProducerMock.getAllScriptPropertyCombinations());
+
+	}
 
 }

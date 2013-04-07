@@ -1,5 +1,7 @@
 package ruleengine;
 
+import java.util.Set;
+
 final class RuleStub implements Rule {
 	private final String targetedPropertyName;
 
@@ -27,5 +29,16 @@ final class RuleStub implements Rule {
 
 	@Override
 	public void propertyValueSet(PropertyAssignedEvent event) {
+	}
+
+	@Override
+	public Set<String> getTriggeringProperties() {
+		return TestUtils.set();
+	}
+
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
+		
 	}
 }
