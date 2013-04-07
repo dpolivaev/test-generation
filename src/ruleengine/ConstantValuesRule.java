@@ -10,7 +10,7 @@ public class ConstantValuesRule implements Rule {
 
 	private final String targetedPropertyName;
 	private final Object[] values;
-	private boolean finished;
+	private RuleState state;
 	private int valueIndex;
 	private final Set<String> triggeredBy;
 
@@ -24,7 +24,7 @@ public class ConstantValuesRule implements Rule {
 		this.triggeredBy = triggeredBy;
 		this.targetedPropertyName = targetedPropertyName;
 		this.values = values;
-		this.finished = false;
+		this.state = RuleState.ITERATING;
 		this.valueIndex = 0;
 	}
 
@@ -35,7 +35,7 @@ public class ConstantValuesRule implements Rule {
 
 	@Override
 	public boolean hasFinished() {
-		return finished;
+		return state.hasFinished();
 	}
 
 	private Object nextValue() {
@@ -64,8 +64,9 @@ public class ConstantValuesRule implements Rule {
 
 	@Override
 	public void finishIteration(State state) {
-		finished = finished || valueIndex == values.length;
-		if (valueIndex == values.length)
+		if (valueIndex == values.length) {
+			this.state = RuleState.FINISHED;
 			valueIndex = 0;
+		}
 	}
 }
