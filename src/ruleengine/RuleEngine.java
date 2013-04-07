@@ -25,7 +25,7 @@ public class RuleEngine implements State {
 			scriptProducer.makeScriptFor(this);
 			fireNextCombinationFinishedEvent();
 
-		} while (!allRulesHaveFinished());
+		} while (!topRulesHaveFinished());
 	}
 
 	private void fireNextCombinationFinishedEvent() {
@@ -52,7 +52,7 @@ public class RuleEngine implements State {
 		}
 	}
 
-	private boolean allRulesHaveFinished() {
+	private boolean topRulesHaveFinished() {
 		for (Rule rule : rules())
 			if (rule.getTriggeringProperties().isEmpty() && !rule.hasFinished())
 				return false;

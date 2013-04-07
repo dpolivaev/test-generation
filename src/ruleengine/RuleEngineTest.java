@@ -23,13 +23,13 @@ public class RuleEngineTest {
 			String triggeringProperty, String targetedPropertyName,
 			String... value) {
 
-		ruleEngine.addRule(new ConstantValuesRule(set(triggeringProperty),
+		ruleEngine.addRule(new StatefulRule(set(triggeringProperty),
 				targetedPropertyName, (Object[]) value));
 	}
 
 	private void addIterationRuleWithoutTriggeringProperties(
 			String targetedPropertyName, String... value) {
-		ruleEngine.addRule(new ConstantValuesRule(targetedPropertyName,
+		ruleEngine.addRule(new StatefulRule(targetedPropertyName,
 				(Object[]) value));
 	}
 
