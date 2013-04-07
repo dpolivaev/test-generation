@@ -56,7 +56,7 @@ public class RuleEngine implements State {
 	public void setPropertyValue(String targetedPropertyName, Object nextValue) {
 		mapBasedState.setPropertyValue(targetedPropertyName, nextValue);
 		PropertyAssignedEvent event = new PropertyAssignedEvent(this,
-				targetedPropertyName);
+				null, targetedPropertyName);
 		for (Rule rule : rules()) {
 			rule.propertyValueSet(event);
 		}
