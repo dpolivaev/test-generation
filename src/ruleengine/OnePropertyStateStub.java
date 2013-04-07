@@ -1,5 +1,7 @@
 package ruleengine;
 
+import static ruleengine.TestUtils.set;
+
 import java.util.Set;
 
 class OnePropertyStateStub implements State {
@@ -37,7 +39,7 @@ class OnePropertyStateStub implements State {
 	}
 
 	public PropertyAssignedEvent event() {
-		return new PropertyAssignedEvent(this, ruleStub());
+		return new PropertyAssignedEvent(this, ruleStub(), set());
 	}
 
 }
