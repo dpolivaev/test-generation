@@ -4,7 +4,7 @@ import java.util.Set;
 
 interface State {
 
-	void setPropertyValue(String name, Object value);
+	void setPropertyValue(Rule rule, Object value);
 
 	boolean containsPropertyValue(String name);
 

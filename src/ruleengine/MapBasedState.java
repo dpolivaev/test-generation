@@ -16,11 +16,12 @@ class MapBasedState implements State {
 	 * java.lang.Object)
 	 */
 	@Override
-	public void setPropertyValue(String name, Object value) {
-		properties.put(name, value);
+	public void setPropertyValue(Rule rule, Object value) {
+		properties.put(rule.getTargetedPropertyName(), value);
 		if (assignedPropertiesAsString.length() > 0)
 			assignedPropertiesAsString.append('\t');
-		this.assignedPropertiesAsString.append(name).append("=").append(value);
+		this.assignedPropertiesAsString.append(rule.getTargetedPropertyName())
+				.append("=").append(value);
 	}
 
 	public void nextIteration() {

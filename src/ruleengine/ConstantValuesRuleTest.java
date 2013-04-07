@@ -2,6 +2,7 @@ package ruleengine;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static ruleengine.TestUtils.ruleStub;
 import static ruleengine.TestUtils.set;
 
 import org.junit.Test;
@@ -103,7 +104,7 @@ public class ConstantValuesRuleTest {
 
 	private OnePropertyHolder propertyHolder(String name, String value) {
 		OnePropertyHolder propertyHolder = propertyHolder();
-		propertyHolder.setPropertyValue(name, value);
+		propertyHolder.setPropertyValue(ruleStub(name), value);
 		return propertyHolder;
 	}
 

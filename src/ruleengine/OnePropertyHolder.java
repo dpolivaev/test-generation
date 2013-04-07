@@ -16,8 +16,8 @@ class OnePropertyHolder implements State {
 	private Object value;
 
 	@Override
-	public void setPropertyValue(String name, Object value) {
-		this.name = name;
+	public void setPropertyValue(Rule rule, Object value) {
+		this.name = rule.getTargetedPropertyName();
 		this.value = value;
 	}
 

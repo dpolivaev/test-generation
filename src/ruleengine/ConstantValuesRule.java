@@ -56,9 +56,8 @@ public class ConstantValuesRule implements Rule {
 	}
 
 	private void iterate(State state) {
-		String targetedPropertyName = getTargetedPropertyName();
 		Object nextValue = nextValue();
-		state.setPropertyValue(targetedPropertyName, nextValue);
+		state.setPropertyValue(this, nextValue);
 	}
 
 	@Override
