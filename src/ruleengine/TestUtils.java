@@ -10,4 +10,8 @@ public class TestUtils {
 		set.addAll(Arrays.asList(names));
 		return set;
 	}
+
+	public static Rule ruleStub(final String targetedPropertyName) {
+		return new RuleStub(targetedPropertyName);
+	}
 }

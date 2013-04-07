@@ -39,10 +39,10 @@ public class RuleEngine implements State {
 	}
 
 	@Override
-	public void setPropertyValue(String targetedPropertyName, Object nextValue) {
-		mapBasedState.setPropertyValue(targetedPropertyName, nextValue);
-		PropertyAssignedEvent event = new PropertyAssignedEvent(this, null,
-				targetedPropertyName);
+	public void setPropertyValue(Rule rule, Object nextValue) {
+		mapBasedState.setPropertyValue(rule, nextValue);
+		PropertyAssignedEvent event = new PropertyAssignedEvent(this, rule,
+				rule.getTargetedPropertyName());
 		firePropertyAssignedEvent(event);
 	}
 
