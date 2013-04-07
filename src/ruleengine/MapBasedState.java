@@ -29,11 +29,6 @@ class MapBasedState implements State {
 	}
 
 	@Override
-	public boolean containsPropertyValue(String name) {
-		return properties.containsKey(name);
-	}
-
-	@Override
 	public boolean containsPropertyValues(Set<String> names) {
 		return properties.keySet().containsAll(names);
 	}

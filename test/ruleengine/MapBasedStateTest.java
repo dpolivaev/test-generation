@@ -31,7 +31,6 @@ public class MapBasedStateTest {
 	public void stateWithOneProperty_containsItsValue() {
 		mapBasedState.nextCombination();
 		mapBasedState.setPropertyValue(ruleStub("x"), "a");
-		assertThat(mapBasedState.containsPropertyValue("x"), is(true));
 		assertThat(mapBasedState.containsPropertyValues(set("x")), is(true));
 	}
 
