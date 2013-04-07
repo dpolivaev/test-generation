@@ -28,11 +28,6 @@ public class ConstantValuesRule implements Rule {
 		this.valueIndex = 0;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ruleengine.Rule#getTargetedPropertyName()
-	 */
 	@Override
 	public String getTargetedPropertyName() {
 		return targetedPropertyName;

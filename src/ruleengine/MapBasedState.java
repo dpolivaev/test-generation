@@ -9,12 +9,6 @@ class MapBasedState implements State {
 	private int count = 0;
 	private Map<String, Object> properties = new LinkedHashMap<String, Object>();
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ruleengine.PropertySet#setPropertyValue(java.lang.String,
-	 * java.lang.Object)
-	 */
 	@Override
 	public void setPropertyValue(Rule rule, Object value) {
 		properties.put(rule.getTargetedPropertyName(), value);
