@@ -14,4 +14,10 @@ public class TestUtils {
 	public static Rule ruleStub(final String targetedPropertyName) {
 		return new RuleStub(targetedPropertyName);
 	}
+
+	public static void performIteration(Rule rule, State state) {
+		rule.nextIteration(state);
+		rule.finishIteration(state);
+	}
+
 }

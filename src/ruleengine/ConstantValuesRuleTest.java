@@ -2,6 +2,7 @@ package ruleengine;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static ruleengine.TestUtils.performIteration;
 import static ruleengine.TestUtils.ruleStub;
 import static ruleengine.TestUtils.set;
 
@@ -30,8 +31,7 @@ public class ConstantValuesRuleTest {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule("name",
 				"value");
 		OnePropertyHolder propertyHolder = propertyHolder();
-		constantValuesRule.nextIteration(propertyHolder);
-		constantValuesRule.finishIteration(propertyHolder);
+		performIteration(constantValuesRule, propertyHolder);
 		assertThat(constantValuesRule.hasFinished(), is(true));
 	}
 
@@ -52,7 +52,7 @@ public class ConstantValuesRuleTest {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule("name",
 				"1", "2");
 		OnePropertyHolder propertyHolder = propertyHolder();
-		constantValuesRule.nextIteration(propertyHolder);
+		performIteration(constantValuesRule, propertyHolder);
 		constantValuesRule.nextIteration(propertyHolder);
 		assertThat(propertyHolder.getValue(), is((Object) "2"));
 	}
@@ -62,8 +62,7 @@ public class ConstantValuesRuleTest {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule("name",
 				"value");
 		OnePropertyHolder propertyHolder = propertyHolder();
-		constantValuesRule.nextIteration(propertyHolder);
-		constantValuesRule.finishIteration(propertyHolder);
+		performIteration(constantValuesRule, propertyHolder);
 		constantValuesRule.nextIteration(propertyHolder);
 		assertThat(propertyHolder.getValue(), is((Object) "value"));
 	}
