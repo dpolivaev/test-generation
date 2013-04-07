@@ -21,29 +21,29 @@ public class ConstantValuesRuleTest {
 	public void ruleWithOneValue_assignsItsValue() {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule("name",
 				"value");
-		OnePropertyHolder propertyHolder = propertyHolder();
-		constantValuesRule.nextIteration(propertyHolder);
-		assertThat(propertyHolder.getValue(), is((Object) "value"));
+		OnePropertyStateStub stateStub = stateStub();
+		constantValuesRule.nextIteration(stateStub);
+		assertThat(stateStub.getValue(), is((Object) "value"));
 	}
 
 	@Test
 	public void ruleWithOneValue_hasFinishedAfterIterationIsFinished() {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule("name",
 				"value");
-		OnePropertyHolder propertyHolder = propertyHolder();
-		performIteration(constantValuesRule, propertyHolder);
+		OnePropertyStateStub stateStub = stateStub();
+		performIteration(constantValuesRule, stateStub);
 		assertThat(constantValuesRule.hasFinished(), is(true));
 	}
 
-	private OnePropertyHolder propertyHolder() {
-		return new OnePropertyHolder();
+	private OnePropertyStateStub stateStub() {
+		return new OnePropertyStateStub();
 	}
 
 	@Test
 	public void ruleWithTwoValues_hasNotFinishedAfterFirstIterationIsFinished() {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule("name",
 				"1", "2");
-		constantValuesRule.nextIteration(propertyHolder());
+		constantValuesRule.nextIteration(stateStub());
 		assertThat(constantValuesRule.hasFinished(), is(false));
 	}
 
@@ -51,28 +51,28 @@ public class ConstantValuesRuleTest {
 	public void ruleWithTwoValues_assignsSecondValueOnSecondTime() {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule("name",
 				"1", "2");
-		OnePropertyHolder propertyHolder = propertyHolder();
-		performIteration(constantValuesRule, propertyHolder);
-		constantValuesRule.nextIteration(propertyHolder);
-		assertThat(propertyHolder.getValue(), is((Object) "2"));
+		OnePropertyStateStub stateStub = stateStub();
+		performIteration(constantValuesRule, stateStub);
+		constantValuesRule.nextIteration(stateStub);
+		assertThat(stateStub.getValue(), is((Object) "2"));
 	}
 
 	@Test
 	public void ruleWithOneValue_assignsItsValueOnSecondTime() {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule("name",
 				"value");
-		OnePropertyHolder propertyHolder = propertyHolder();
-		performIteration(constantValuesRule, propertyHolder);
-		constantValuesRule.nextIteration(propertyHolder);
-		assertThat(propertyHolder.getValue(), is((Object) "value"));
+		OnePropertyStateStub stateStub = stateStub();
+		performIteration(constantValuesRule, stateStub);
+		constantValuesRule.nextIteration(stateStub);
+		assertThat(stateStub.getValue(), is((Object) "value"));
 	}
 
 	@Test
 	public void triggeredRuleWithOneValue_ignoresIterationBegin() {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule(
 				set("triggeredBy"), "name", "value");
-		OnePropertyHolder propertyHolder = propertyHolder();
-		constantValuesRule.nextIteration(propertyHolder);
+		OnePropertyStateStub stateStub = stateStub();
+		constantValuesRule.nextIteration(stateStub);
 		assertThat(constantValuesRule.hasFinished(), is(false));
 	}
 
@@ -80,42 +80,36 @@ public class ConstantValuesRuleTest {
 	public void triggeredRuleWithOneValue_whenTriggeredPropertyIsAssigned_assignsItsValue() {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule(
 				set("triggeredBy"), "name", "value");
-		OnePropertyHolder propertyHolder = propertyHolder("triggeredBy",
+		OnePropertyStateStub stateStub = stateStub("triggeredBy",
 				"triggeredByValue");
-		PropertyAssignedEvent event = new PropertyAssignedEvent(propertyHolder,
-				propertyHolder.ruleStub());
-		constantValuesRule.propertyValueSet(event);
-		assertThat(propertyHolder.getValue(), is((Object) "value"));
+		constantValuesRule.propertyValueSet(stateStub.event());
+		assertThat(stateStub.getValue(), is((Object) "value"));
 	}
 
 	@Test
 	public void triggeredRuleWithOneValue_whenTriggeredPropertyIsAssigned_finishes() {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule(
 				set("triggeredBy"), "name", "value");
-		OnePropertyHolder propertyHolder = propertyHolder("triggeredBy",
+		OnePropertyStateStub stateStub = stateStub("triggeredBy",
 				"triggeredByValue");
-		PropertyAssignedEvent event = new PropertyAssignedEvent(propertyHolder,
-				propertyHolder.ruleStub());
-		constantValuesRule.propertyValueSet(event);
-		constantValuesRule.finishIteration(propertyHolder);
+		constantValuesRule.propertyValueSet(stateStub.event());
+		constantValuesRule.finishIteration(stateStub);
 		assertThat(constantValuesRule.hasFinished(), is(true));
 	}
 
-	private OnePropertyHolder propertyHolder(String name, String value) {
-		OnePropertyHolder propertyHolder = propertyHolder();
-		propertyHolder.setPropertyValue(ruleStub(name), value);
-		return propertyHolder;
+	private OnePropertyStateStub stateStub(String name, String value) {
+		OnePropertyStateStub stateStub = stateStub();
+		stateStub.setPropertyValue(ruleStub(name), value);
+		return stateStub;
 	}
 
 	@Test
 	public void ruleIgnoresAssignmentsToNonTriggeringProperties() {
 		ConstantValuesRule constantValuesRule = new ConstantValuesRule(set(),
 				"name", "value");
-		OnePropertyHolder propertyHolder = propertyHolder("triggeredBy",
+		OnePropertyStateStub stateStub = stateStub("triggeredBy",
 				"triggeredByValue");
-		PropertyAssignedEvent event = new PropertyAssignedEvent(propertyHolder,
-				propertyHolder.ruleStub());
-		constantValuesRule.propertyValueSet(event);
+		constantValuesRule.propertyValueSet(stateStub.event());
 		assertThat(constantValuesRule.hasFinished(), is(false));
 	}
 

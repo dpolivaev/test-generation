@@ -2,7 +2,7 @@ package ruleengine;
 
 import java.util.Set;
 
-class OnePropertyHolder implements State {
+class OnePropertyStateStub implements State {
 	private String name;
 
 	public String getName() {
@@ -34,6 +34,10 @@ class OnePropertyHolder implements State {
 
 	public Rule ruleStub() {
 		return TestUtils.ruleStub(name);
+	}
+
+	public PropertyAssignedEvent event() {
+		return new PropertyAssignedEvent(this, ruleStub());
 	}
 
 }
