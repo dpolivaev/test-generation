@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * @author Dimitry Polivaev 18.02.2013
  */
-public class ConstantValuesRule implements Rule {
+public class StatefulRule implements Rule {
 
 	private final String targetedPropertyName;
 	private final Object[] values;
@@ -24,11 +24,11 @@ public class ConstantValuesRule implements Rule {
 	private boolean valueAddedToCombination;
 
 	@SuppressWarnings("unchecked")
-	public ConstantValuesRule(String targetedPropertyName, Object... values) {
+	public StatefulRule(String targetedPropertyName, Object... values) {
 		this(Collections.EMPTY_SET, targetedPropertyName, values);
 	}
 
-	public ConstantValuesRule(Set<String> triggeredBy,
+	public StatefulRule(Set<String> triggeredBy,
 			String targetedPropertyName, Object... values) {
 		this.triggeringProperties = triggeredBy;
 		this.targetedPropertyName = targetedPropertyName;
