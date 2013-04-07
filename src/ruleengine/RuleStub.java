@@ -18,11 +18,11 @@ final class RuleStub implements Rule {
 	}
 
 	@Override
-	public void nextCombination(State state) {
+	public void combinationStarted(State state) {
 	}
 
 	@Override
-	public void finishCombination(State state) {
+	public void combinationFinished(State state) {
 	}
 
 	@Override
