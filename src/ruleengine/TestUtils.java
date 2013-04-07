@@ -15,9 +15,9 @@ public class TestUtils {
 		return new RuleStub(targetedPropertyName);
 	}
 
-	public static void performIteration(Rule rule, State state) {
-		rule.nextIteration(state);
-		rule.finishIteration(state);
+	public static void performCombination(Rule rule, State state) {
+		rule.nextCombination(state);
+		rule.finishCombination(state);
 	}
 
 }

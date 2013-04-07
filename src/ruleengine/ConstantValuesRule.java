@@ -35,7 +35,7 @@ public class ConstantValuesRule implements Rule {
 
 	@Override
 	public boolean hasFinished() {
-		return state.hasFinished();
+		return state.equals(RuleState.FINISHED);
 	}
 
 	private Object nextValue() {
@@ -44,7 +44,7 @@ public class ConstantValuesRule implements Rule {
 	}
 
 	@Override
-	public void nextIteration(State state) {
+	public void nextCombination(State state) {
 		if (triggeredBy.isEmpty()) {
 			iterate(state);
 		}
@@ -63,7 +63,7 @@ public class ConstantValuesRule implements Rule {
 	}
 
 	@Override
-	public void finishIteration(State state) {
+	public void finishCombination(State state) {
 		if (valueIndex == values.length) {
 			this.state = RuleState.FINISHED;
 			valueIndex = 0;

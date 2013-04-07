@@ -22,22 +22,22 @@ public class RuleEngine implements State {
 
 	public void run(ScriptProducer scriptProducer) {
 		do {
-			mapBasedState.nextIteration();
-			fireNextIterationStartedEvent();
+			mapBasedState.nextCombination();
+			fireNextCombinationStartedEvent();
 			scriptProducer.makeScriptFor(this);
-			fireNextIterationFinishedEvent();
+			fireNextCombinationFinishedEvent();
 
 		} while (!allRulesHaveFinished());
 	}
 
-	private void fireNextIterationFinishedEvent() {
+	private void fireNextCombinationFinishedEvent() {
 		for (Rule rule : rules())
-			rule.finishIteration(this);
+			rule.finishCombination(this);
 	}
 
-	private void fireNextIterationStartedEvent() {
+	private void fireNextCombinationStartedEvent() {
 		for (Rule rule : rules())
-			rule.nextIteration(this);
+			rule.nextCombination(this);
 	}
 
 	@Override

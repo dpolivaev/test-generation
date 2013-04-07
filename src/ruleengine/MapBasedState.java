@@ -18,7 +18,7 @@ class MapBasedState implements State {
 				.append("=").append(value);
 	}
 
-	public void nextIteration() {
+	public void nextCombination() {
 		this.count++;
 		assignedPropertiesAsString.setLength(0);
 

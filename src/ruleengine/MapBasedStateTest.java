@@ -19,8 +19,8 @@ public class MapBasedStateTest {
 	}
 
 	@Test
-	public void stateWithOnePropertySetAtFirstIteration() {
-		mapBasedState.nextIteration();
+	public void stateWithOnePropertySetAtFirstCombination() {
+		mapBasedState.nextCombination();
 		mapBasedState.setPropertyValue(ruleStub("x"), "a");
 		String expectedScriptPropertyCombinations = "1 : x=a\n";
 		assertEquals(expectedScriptPropertyCombinations,
@@ -29,15 +29,15 @@ public class MapBasedStateTest {
 
 	@Test
 	public void stateWithOneProperty_containsItsValue() {
-		mapBasedState.nextIteration();
+		mapBasedState.nextCombination();
 		mapBasedState.setPropertyValue(ruleStub("x"), "a");
 		assertThat(mapBasedState.containsPropertyValue("x"), is(true));
 		assertThat(mapBasedState.containsPropertyValues(set("x")), is(true));
 	}
 
 	@Test
-	public void stateWithTwoPropertiesSetAtFirstIteration() {
-		mapBasedState.nextIteration();
+	public void stateWithTwoPropertiesSetAtFirstCombination() {
+		mapBasedState.nextCombination();
 		mapBasedState.setPropertyValue(ruleStub("x"), "a");
 		mapBasedState.setPropertyValue(ruleStub("y"), "b");
 		String expectedScriptPropertyCombinations = "1 : x=a\ty=b\n";
