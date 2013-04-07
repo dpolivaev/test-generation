@@ -10,9 +10,9 @@ import java.util.Set;
 public class StatefulRule implements Rule {
 
 	private final String targetedPropertyName;
-	private final Object[] values;
+
+	final private Values values;
 	private boolean finished;
-	private int valueIndex;
 	private final Set<String> triggeringProperties;
 	private final Set<Rule> dependencies;
 
@@ -28,13 +28,12 @@ public class StatefulRule implements Rule {
 		this(Collections.EMPTY_SET, targetedPropertyName, values);
 	}
 
-	public StatefulRule(Set<String> triggeredBy,
-			String targetedPropertyName, Object... values) {
+	public StatefulRule(Set<String> triggeredBy, String targetedPropertyName,
+			Object... values) {
 		this.triggeringProperties = triggeredBy;
 		this.targetedPropertyName = targetedPropertyName;
-		this.values = values;
+		this.values = new ConstantValues(values);
 		this.finished = false;
-		this.valueIndex = 0;
 		this.valueAddedToCombination = false;
 		dependencies = new HashSet<>();
 	}
@@ -50,7 +49,7 @@ public class StatefulRule implements Rule {
 	}
 
 	private Object nextValue() {
-		Object value = values[valueIndex];
+		Object value = values.currentValue();
 		return value;
 	}
 
@@ -87,10 +86,9 @@ public class StatefulRule implements Rule {
 				for (Rule rule : dependencies)
 					rule.reset();
 				dependencies.clear();
-				valueIndex++;
-				if (valueIndex == values.length) {
+				values.next();
+				if (values.isNewIterationStarted()) {
 					finished = true;
-					valueIndex = 0;
 				}
 			}
 			valueAddedToCombination = false;
