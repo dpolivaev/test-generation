@@ -40,23 +40,32 @@ public class RuleEngine implements State {
 	public void run(ScriptProducer scriptProducer) {
 		do {
 			mapBasedState.nextIteration();
-			for (Rule rule : rules()) {
-				rule.nextIteration(this);
-			}
-
+			fireNextIterationStartedEvent();
 			scriptProducer.makeScriptFor(this);
-			for (Rule rule : rules()) {
-				rule.finishIteration(this);
-			}
+			fireNextIterationFinishedEvent();
 
 		} while (!allRulesHaveFinished());
+	}
+
+	private void fireNextIterationFinishedEvent() {
+		for (Rule rule : rules())
+			rule.finishIteration(this);
+	}
+
+	private void fireNextIterationStartedEvent() {
+		for (Rule rule : rules())
+			rule.nextIteration(this);
 	}
 
 	@Override
 	public void setPropertyValue(String targetedPropertyName, Object nextValue) {
 		mapBasedState.setPropertyValue(targetedPropertyName, nextValue);
-		PropertyAssignedEvent event = new PropertyAssignedEvent(this,
-				null, targetedPropertyName);
+		PropertyAssignedEvent event = new PropertyAssignedEvent(this, null,
+				targetedPropertyName);
+		firePropertyAssignedEvent(event);
+	}
+
+	private void firePropertyAssignedEvent(PropertyAssignedEvent event) {
 		for (Rule rule : rules()) {
 			rule.propertyValueSet(event);
 		}
