@@ -10,9 +10,10 @@ public class ConstantValuesRule implements Rule {
 
 	private final String targetedPropertyName;
 	private final Object[] values;
-	private RuleState state;
+	private boolean finished;
 	private int valueIndex;
 	private final Set<String> triggeredBy;
+	private boolean valueAddedToCombination;
 
 	@SuppressWarnings("unchecked")
 	public ConstantValuesRule(String targetedPropertyName, Object... values) {
@@ -24,8 +25,9 @@ public class ConstantValuesRule implements Rule {
 		this.triggeredBy = triggeredBy;
 		this.targetedPropertyName = targetedPropertyName;
 		this.values = values;
-		this.state = RuleState.ITERATING;
+		this.finished = false;
 		this.valueIndex = 0;
+		this.valueAddedToCombination = false;
 	}
 
 	@Override
@@ -35,11 +37,11 @@ public class ConstantValuesRule implements Rule {
 
 	@Override
 	public boolean hasFinished() {
-		return state.equals(RuleState.FINISHED);
+		return finished;
 	}
 
 	private Object nextValue() {
-		Object value = values[valueIndex++];
+		Object value = values[valueIndex];
 		return value;
 	}
 
@@ -53,6 +55,7 @@ public class ConstantValuesRule implements Rule {
 	private void addValue(State state) {
 		Object nextValue = nextValue();
 		state.setPropertyValue(this, nextValue);
+		valueAddedToCombination = true;
 	}
 
 	@Override
@@ -64,9 +67,13 @@ public class ConstantValuesRule implements Rule {
 
 	@Override
 	public void finishCombination(State state) {
-		if (valueIndex == values.length) {
-			this.state = RuleState.FINISHED;
-			valueIndex = 0;
+		if (valueAddedToCombination) {
+			valueIndex++;
+			if (valueIndex == values.length) {
+				finished = true;
+				valueIndex = 0;
+			}
+			valueAddedToCombination = false;
 		}
 	}
 }
