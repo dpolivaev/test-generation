@@ -38,7 +38,5 @@ final class RuleStub implements Rule {
 
 	@Override
 	public void reset() {
-		// TODO Auto-generated method stub
-		
 	}
 }
