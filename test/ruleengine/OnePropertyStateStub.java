@@ -24,14 +24,9 @@ class OnePropertyStateStub implements State {
 	}
 
 	@Override
-	public boolean containsPropertyValue(String name) {
-		return name.equals(this.name);
-	}
-
-	@Override
 	public boolean containsPropertyValues(Set<String> names) {
-		return names.isEmpty()
-				|| containsPropertyValue(names.iterator().next());
+		return names.isEmpty() || names.size() == 1
+				&& name.equals(names.iterator().next());
 	}
 
 	public Rule ruleStub() {

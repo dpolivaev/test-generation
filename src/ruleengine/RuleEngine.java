@@ -1,6 +1,6 @@
 package ruleengine;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -66,17 +66,12 @@ public class RuleEngine implements State {
 		return true;
 	}
 
-	private List<Rule> rules() {
+	private Collection<Rule> rules() {
 		return rules.values();
 	}
 
 	public String getAssignedPropertiesAsString() {
 		return mapBasedState.getAssignedPropertiesAsString();
-	}
-
-	@Override
-	public boolean containsPropertyValue(String name) {
-		return mapBasedState.containsPropertyValue(name);
 	}
 
 	@Override
