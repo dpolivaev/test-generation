@@ -1,5 +1,7 @@
 package ruleengine;
 
+import static ruleengine.TestUtils.set;
+
 import java.util.List;
 import java.util.Set;
 
@@ -41,7 +43,8 @@ public class RuleEngine implements State {
 	@Override
 	public void setPropertyValue(Rule rule, Object nextValue) {
 		mapBasedState.setPropertyValue(rule, nextValue);
-		PropertyAssignedEvent event = new PropertyAssignedEvent(this, rule);
+		PropertyAssignedEvent event = new PropertyAssignedEvent(this, rule,
+				set());
 		firePropertyAssignedEvent(event);
 	}
 
