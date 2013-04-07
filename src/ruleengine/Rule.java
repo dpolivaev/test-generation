@@ -1,5 +1,7 @@
 package ruleengine;
 
+import java.util.Set;
+
 // triggered A <- default B
 // default B <- default A
 // => triggered A can not be assigned!
@@ -10,6 +12,8 @@ public interface Rule {
 
 	String getTargetedPropertyName();
 
+	Set<String> getTriggeringProperties();
+
 	boolean hasFinished();
 
 	void combinationStarted(State state);
@@ -17,5 +21,7 @@ public interface Rule {
 	void combinationFinished(State state);
 
 	void propertyValueSet(PropertyAssignedEvent event);
+
+	void reset();
 
 }

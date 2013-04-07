@@ -16,6 +16,7 @@ public class ConstantValuesRule implements Rule {
 	private final Set<String> triggeringProperties;
 	private final Set<Rule> dependencies;
 
+	@Override
 	public Set<String> getTriggeringProperties() {
 		return triggeringProperties;
 	}
@@ -80,7 +81,11 @@ public class ConstantValuesRule implements Rule {
 	@Override
 	public void combinationFinished(State state) {
 		if (valueAddedToCombination) {
+			for (Rule rule : dependencies)
+				rule.combinationFinished(state);
 			if (RuleEngine.allRulesHaveFinished(dependencies)) {
+				for (Rule rule : dependencies)
+					rule.reset();
 				dependencies.clear();
 				valueIndex++;
 				if (valueIndex == values.length) {
@@ -90,5 +95,10 @@ public class ConstantValuesRule implements Rule {
 			}
 			valueAddedToCombination = false;
 		}
+	}
+
+	@Override
+	public void reset() {
+		finished = false;
 	}
 }

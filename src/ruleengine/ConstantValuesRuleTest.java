@@ -141,17 +141,4 @@ public class ConstantValuesRuleTest {
 		assertThat(topRule.hasFinished(), is(false));
 
 	}
-	// @Test
-	// public void ruleWithOneValueIsNotFinished_untilTriggeredRuleIsFinished()
-	// {
-	// ConstantValuesRule rule = new ConstantValuesRule("x", "a");
-	// ConstantValuesRule triggeredRule = new ConstantValuesRule(set("x"),
-	// "y", "a", "b");
-	// State state = new MapBasedState();
-	// rule.nextCombination(state);
-	//
-	// triggeredRule.propertyValueSet(new PropertyAssignedEvent(state, "x"));
-	//
-	// assertThat(rule.hasFinished(), is(false));
-	// }
 }
