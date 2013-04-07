@@ -46,11 +46,11 @@ public class ConstantValuesRule implements Rule {
 	@Override
 	public void nextCombination(State state) {
 		if (triggeredBy.isEmpty()) {
-			iterate(state);
+			addValue(state);
 		}
 	}
 
-	private void iterate(State state) {
+	private void addValue(State state) {
 		Object nextValue = nextValue();
 		state.setPropertyValue(this, nextValue);
 	}
@@ -59,7 +59,7 @@ public class ConstantValuesRule implements Rule {
 	public void propertyValueSet(PropertyAssignedEvent event) {
 		if (triggeredBy.contains(event.getTargetedPropertyName())
 				&& event.getState().containsPropertyValues(triggeredBy))
-			iterate(event.getState());
+			addValue(event.getState());
 	}
 
 	@Override
