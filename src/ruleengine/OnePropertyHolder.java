@@ -32,4 +32,8 @@ class OnePropertyHolder implements State {
 				|| containsPropertyValue(names.iterator().next());
 	}
 
+	public Rule ruleStub() {
+		return TestUtils.ruleStub(name);
+	}
+
 }
