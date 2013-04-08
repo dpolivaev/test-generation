@@ -72,7 +72,7 @@ public class StatefulRule implements Rule {
 				&& event.getState()
 						.containsPropertyValues(triggeringProperties))
 			addValue(event.getState());
-		if (event.getRequiredProperties().contains(targetedPropertyName)) {
+		else if (event.getRequiredProperties().contains(targetedPropertyName)) {
 			dependencies.add(event.getWorkingRule());
 		}
 	}
