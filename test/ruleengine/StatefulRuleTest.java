@@ -13,91 +13,8 @@ public class StatefulRuleTest {
 		rule.combinationFinished(state);
 	}
 
-	@Test
-	public void ruleWithOneValue_hasNotFinishedUntilCombinationIsFinished() {
-		StatefulRule statefulRule = new StatefulRule("name",
-				"value");
-		assertThat(statefulRule.hasFinished(), is(false));
-	}
-
-	@Test
-	public void ruleWithOneValue_assignsItsValue() {
-		StatefulRule statefulRule = new StatefulRule("name",
-				"value");
-		OnePropertyStateStub stateStub = stateStub();
-		statefulRule.combinationStarted(stateStub);
-		assertThat(stateStub.getValue(), is((Object) "value"));
-	}
-
-	@Test
-	public void ruleWithOneValue_hasFinishedAfterCombinationIsFinished() {
-		StatefulRule statefulRule = new StatefulRule("name",
-				"value");
-		OnePropertyStateStub stateStub = stateStub();
-		produceCombination(statefulRule, stateStub);
-		assertThat(statefulRule.hasFinished(), is(true));
-	}
-
 	private OnePropertyStateStub stateStub() {
 		return new OnePropertyStateStub();
-	}
-
-	@Test
-	public void ruleWithTwoValues_hasNotFinishedAfterFirstCombinationIsFinished() {
-		StatefulRule statefulRule = new StatefulRule("name",
-				"1", "2");
-		produceCombination(statefulRule, stateStub());
-		assertThat(statefulRule.hasFinished(), is(false));
-	}
-
-	@Test
-	public void ruleWithTwoValues_assignsSecondValueOnSecondTime() {
-		StatefulRule statefulRule = new StatefulRule("name",
-				"1", "2");
-		OnePropertyStateStub stateStub = stateStub();
-		produceCombination(statefulRule, stateStub);
-		statefulRule.combinationStarted(stateStub);
-		assertThat(stateStub.getValue(), is((Object) "2"));
-	}
-
-	@Test
-	public void ruleWithOneValue_assignsItsValueOnSecondTime() {
-		StatefulRule statefulRule = new StatefulRule("name",
-				"value");
-		OnePropertyStateStub stateStub = stateStub();
-		produceCombination(statefulRule, stateStub);
-		statefulRule.combinationStarted(stateStub);
-		assertThat(stateStub.getValue(), is((Object) "value"));
-	}
-
-	@Test
-	public void triggeredRuleWithOneValue_ignoresCombinationBegin() {
-		StatefulRule statefulRule = new StatefulRule(
-				set("triggeredBy"), "name", "value");
-		OnePropertyStateStub stateStub = stateStub();
-		statefulRule.combinationStarted(stateStub);
-		assertThat(statefulRule.hasFinished(), is(false));
-	}
-
-	@Test
-	public void triggeredRuleWithOneValue_whenTriggeredPropertyIsAssigned_assignsItsValue() {
-		StatefulRule statefulRule = new StatefulRule(
-				set("triggeredBy"), "name", "value");
-		OnePropertyStateStub stateStub = stateStub("triggeredBy",
-				"triggeredByValue");
-		statefulRule.propertyValueSet(stateStub.event());
-		assertThat(stateStub.getValue(), is((Object) "value"));
-	}
-
-	@Test
-	public void triggeredRuleWithOneValue_whenTriggeredPropertyIsAssigned_finishes() {
-		StatefulRule statefulRule = new StatefulRule(
-				set("triggeredBy"), "name", "value");
-		OnePropertyStateStub stateStub = stateStub("triggeredBy",
-				"triggeredByValue");
-		statefulRule.propertyValueSet(stateStub.event());
-		statefulRule.combinationFinished(stateStub);
-		assertThat(statefulRule.hasFinished(), is(true));
 	}
 
 	private OnePropertyStateStub stateStub(String name, String value) {
@@ -107,9 +24,85 @@ public class StatefulRuleTest {
 	}
 
 	@Test
-	public void ruleIgnoresAssignmentsToNonTriggeringProperties() {
-		StatefulRule statefulRule = new StatefulRule(set(),
+	public void ruleWithOneValue_hasNotFinishedUntilCombinationIsFinished() {
+		StatefulRule statefulRule = new StatefulRule("name", "value");
+		assertThat(statefulRule.hasFinished(), is(false));
+	}
+
+	@Test
+	public void ruleWithOneValue_assignsItsValue() {
+		StatefulRule statefulRule = new StatefulRule("name", "value");
+		OnePropertyStateStub stateStub = stateStub();
+		statefulRule.combinationStarted(stateStub);
+		assertThat(stateStub.getValue(), is((Object) "value"));
+	}
+
+	@Test
+	public void ruleWithOneValue_hasFinishedAfterCombinationIsFinished() {
+		StatefulRule statefulRule = new StatefulRule("name", "value");
+		OnePropertyStateStub stateStub = stateStub();
+		produceCombination(statefulRule, stateStub);
+		assertThat(statefulRule.hasFinished(), is(true));
+	}
+
+	@Test
+	public void ruleWithTwoValues_hasNotFinishedAfterFirstCombinationIsFinished() {
+		StatefulRule statefulRule = new StatefulRule("name", "1", "2");
+		produceCombination(statefulRule, stateStub());
+		assertThat(statefulRule.hasFinished(), is(false));
+	}
+
+	@Test
+	public void ruleWithTwoValues_assignsSecondValueOnSecondTime() {
+		StatefulRule statefulRule = new StatefulRule("name", "1", "2");
+		OnePropertyStateStub stateStub = stateStub();
+		produceCombination(statefulRule, stateStub);
+		statefulRule.combinationStarted(stateStub);
+		assertThat(stateStub.getValue(), is((Object) "2"));
+	}
+
+	@Test
+	public void ruleWithOneValue_assignsItsValueOnSecondTime() {
+		StatefulRule statefulRule = new StatefulRule("name", "value");
+		OnePropertyStateStub stateStub = stateStub();
+		produceCombination(statefulRule, stateStub);
+		statefulRule.combinationStarted(stateStub);
+		assertThat(stateStub.getValue(), is((Object) "value"));
+	}
+
+	@Test
+	public void triggeredRuleWithOneValue_ignoresCombinationWithoutItsTriggeringProperty() {
+		StatefulRule statefulRule = new StatefulRule(set("triggeredBy"),
 				"name", "value");
+		OnePropertyStateStub stateStub = stateStub();
+		produceCombination(statefulRule, stateStub);
+		assertThat(statefulRule.hasFinished(), is(false));
+	}
+
+	@Test
+	public void triggeredRuleWithOneValue_whenTriggeredPropertyIsAssigned_assignsItsValue() {
+		StatefulRule statefulRule = new StatefulRule(set("triggeredBy"),
+				"name", "value");
+		OnePropertyStateStub stateStub = stateStub("triggeredBy",
+				"triggeredByValue");
+		statefulRule.propertyValueSet(stateStub.event());
+		assertThat(stateStub.getValue(), is((Object) "value"));
+	}
+
+	@Test
+	public void triggeredRuleWithOneValue_whenTriggeredPropertyIsAssigned_finishes() {
+		StatefulRule statefulRule = new StatefulRule(set("triggeredBy"),
+				"name", "value");
+		OnePropertyStateStub stateStub = stateStub("triggeredBy",
+				"triggeredByValue");
+		statefulRule.propertyValueSet(stateStub.event());
+		statefulRule.combinationFinished(stateStub);
+		assertThat(statefulRule.hasFinished(), is(true));
+	}
+
+	@Test
+	public void ruleIgnoresAssignmentsToNonTriggeringProperties() {
+		StatefulRule statefulRule = new StatefulRule(set(), "name", "value");
 		OnePropertyStateStub stateStub = stateStub("triggeredBy",
 				"triggeredByValue");
 		statefulRule.propertyValueSet(stateStub.event());
@@ -118,8 +111,7 @@ public class StatefulRuleTest {
 
 	@Test
 	public void secondCallOfFinishCombinationIsIgnored() {
-		StatefulRule statefulRule = new StatefulRule("name",
-				"1", "2");
+		StatefulRule statefulRule = new StatefulRule("name", "1", "2");
 		OnePropertyStateStub stateStub = stateStub();
 		statefulRule.combinationStarted(stateStub);
 		statefulRule.combinationFinished(stateStub);
@@ -130,8 +122,7 @@ public class StatefulRuleTest {
 	@Test
 	public void givenTriggeredRuleIsNotFinished_ruleIsNotFinished() {
 		StatefulRule topRule = new StatefulRule("x", "1");
-		StatefulRule triggeredRule = new StatefulRule(set("x"),
-				"y", "3", "4");
+		StatefulRule triggeredRule = new StatefulRule(set("x"), "y", "3", "4");
 		MapBasedState state = new MapBasedState();
 		topRule.combinationStarted(state);
 		triggeredRule.combinationStarted(state);
