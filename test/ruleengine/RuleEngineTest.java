@@ -16,21 +16,27 @@ public class RuleEngineTest {
 
 	void addIterationRuleWithoutAction(String targetedPropertyName) {
 		addIterationRuleWithoutTriggeringProperties(targetedPropertyName,
-				"value");
-	}
-
-	private void addIterationRuleWithTriggeringProperties(
-			String triggeringProperty, String targetedPropertyName,
-			String... value) {
-
-		ruleEngine.addRule(new StatefulRule(set(triggeringProperty),
-				targetedPropertyName, (Object[]) value));
+			"value");
 	}
 
 	private void addIterationRuleWithoutTriggeringProperties(
-			String targetedPropertyName, String... value) {
+		String targetedPropertyName, String... values) {
 		ruleEngine.addRule(new StatefulRule(targetedPropertyName,
-				(Object[]) value));
+			(Object[]) values));
+	}
+
+	private void addIterationRuleWithTriggeringProperties(
+		String triggeringProperty, String targetedPropertyName,
+		String... values) {
+		ruleEngine.addRule(new StatefulRule(set(triggeringProperty),
+			targetedPropertyName, (Object[]) values));
+	}
+
+	private void addIterationRuleWithConditionallyTriggeredProperties(
+		String triggeringProperty, String targetedPropertyName,
+		Condition condition, String... values) {
+		ruleEngine.addRule(new StatefulRule(set(triggeringProperty), condition,
+			targetedPropertyName, values));
 	}
 
 	@Test
@@ -46,7 +52,7 @@ public class RuleEngineTest {
 		addIterationRuleWithoutAction(targetedPropertyName);
 
 		assertThat(ruleEngine.hasRuleForProperty(targetedPropertyName),
-				is(true));
+			is(true));
 	}
 
 	@Test
@@ -57,9 +63,9 @@ public class RuleEngineTest {
 		addIterationRuleWithoutAction(secondTargetedPropertyName);
 
 		assertThat(ruleEngine.hasRuleForProperty(firstTargetedPropertyName),
-				is(true));
+			is(true));
 		assertThat(ruleEngine.hasRuleForProperty(secondTargetedPropertyName),
-				is(true));
+			is(true));
 	}
 
 	@Test
@@ -71,7 +77,7 @@ public class RuleEngineTest {
 
 		String expectedScriptPropertyCombinations = "1 : x=a\n";
 		assertEquals(expectedScriptPropertyCombinations,
-				scriptProducerMock.getAllScriptPropertyCombinations());
+			scriptProducerMock.getAllScriptPropertyCombinations());
 
 	}
 
@@ -83,9 +89,9 @@ public class RuleEngineTest {
 		ruleEngine.run(loggingScriptProducerMock);
 
 		String expectedScriptPropertyCombinations = "1 : property=a\n"
-				+ "2 : property=b\n";
+			+ "2 : property=b\n";
 		assertEquals(expectedScriptPropertyCombinations,
-				loggingScriptProducerMock.getAllScriptPropertyCombinations());
+			loggingScriptProducerMock.getAllScriptPropertyCombinations());
 
 	}
 
@@ -99,7 +105,7 @@ public class RuleEngineTest {
 
 		String expectedScriptPropertyCombinations = "1 : x=a\ty=b\n";
 		assertEquals(expectedScriptPropertyCombinations,
-				scriptProducerMock.getAllScriptPropertyCombinations());
+			scriptProducerMock.getAllScriptPropertyCombinations());
 
 	}
 
@@ -112,9 +118,9 @@ public class RuleEngineTest {
 		ruleEngine.run(scriptProducerMock);
 
 		String expectedScriptPropertyCombinations = "1 : x=a1\ty=b1\n"
-				+ "2 : x=a2\ty=b2\n";
+			+ "2 : x=a2\ty=b2\n";
 		assertEquals(expectedScriptPropertyCombinations,
-				scriptProducerMock.getAllScriptPropertyCombinations());
+			scriptProducerMock.getAllScriptPropertyCombinations());
 
 	}
 
@@ -127,9 +133,9 @@ public class RuleEngineTest {
 		ruleEngine.run(scriptProducerMock);
 
 		String expectedScriptPropertyCombinations = "1 : x=a1\ty=b1\n"
-				+ "2 : x=a2\ty=b2\n" + "3 : x=a3\ty=b1\n";
+			+ "2 : x=a2\ty=b2\n" + "3 : x=a3\ty=b1\n";
 		assertEquals(expectedScriptPropertyCombinations,
-				scriptProducerMock.getAllScriptPropertyCombinations());
+			scriptProducerMock.getAllScriptPropertyCombinations());
 
 	}
 
@@ -143,7 +149,7 @@ public class RuleEngineTest {
 
 		String expectedScriptPropertyCombinations = "1 : x=a\ty=b\n";
 		assertEquals(expectedScriptPropertyCombinations,
-				scriptProducerMock.getAllScriptPropertyCombinations());
+			scriptProducerMock.getAllScriptPropertyCombinations());
 
 	}
 
@@ -156,10 +162,29 @@ public class RuleEngineTest {
 		ruleEngine.run(scriptProducerMock);
 
 		String expectedScriptPropertyCombinations = "1 : x=a\ty=c\n"
-				+ "2 : x=a\ty=d\n" + "3 : x=b\ty=c\n" + "4 : x=b\ty=d\n";
+			+ "2 : x=a\ty=d\n" + "3 : x=b\ty=c\n" + "4 : x=b\ty=d\n";
 		assertEquals(expectedScriptPropertyCombinations,
-				scriptProducerMock.getAllScriptPropertyCombinations());
+			scriptProducerMock.getAllScriptPropertyCombinations());
 
 	}
 
+	@Test
+	public void triggeringValueAndConditionallyTriggeredValues_callsScriptProducerWithTheirValues() {
+		LoggingScriptProducerMock scriptProducerMock = new LoggingScriptProducerMock();
+		addIterationRuleWithoutTriggeringProperties("x", "a", "b", "c");
+		addIterationRuleWithConditionallyTriggeredProperties("x", "y", // x=> y
+			new Condition() {
+				@Override
+				public boolean calculate() {
+					return ruleEngine.get("x").equals("c");
+				};
+			}, "A", "B");
+		ruleEngine.run(scriptProducerMock);
+
+		String expectedScriptPropertyCombinations = "1 : x=a\n" + "2 : x=b\n"
+			+ "3 : x=c\ty=A\n" + "4 : x=c\ty=B\n";
+		assertEquals(expectedScriptPropertyCombinations,
+			scriptProducerMock.getAllScriptPropertyCombinations());
+
+	}
 }

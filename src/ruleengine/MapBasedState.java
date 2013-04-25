@@ -15,7 +15,7 @@ class MapBasedState implements State {
 		if (assignedPropertiesAsString.length() > 0)
 			assignedPropertiesAsString.append('\t');
 		this.assignedPropertiesAsString.append(rule.getTargetedPropertyName())
-				.append("=").append(value);
+			.append("=").append(value);
 	}
 
 	public void nextCombination() {
@@ -31,6 +31,10 @@ class MapBasedState implements State {
 	@Override
 	public boolean containsPropertyValues(Set<String> names) {
 		return properties.keySet().containsAll(names);
+	}
+
+	public Object get(String name) {
+		return properties.get(name);
 	}
 
 }
