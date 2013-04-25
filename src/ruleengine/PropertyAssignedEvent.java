@@ -32,4 +32,8 @@ public class PropertyAssignedEvent {
 		return workingRule.getTargetedPropertyName();
 	}
 
+	public boolean containsPropertyValues(Set<String> triggeringProperties) {
+		return state.containsPropertyValues(triggeringProperties);
+	}
+
 }

@@ -23,6 +23,8 @@ public class StatefulRule implements Rule {
 
 	private boolean valueAddedToCombination;
 
+	private final Condition condition;
+
 	@SuppressWarnings("unchecked")
 	public StatefulRule(String targetedPropertyName, Object... values) {
 		this(Collections.EMPTY_SET, targetedPropertyName, values);
@@ -30,7 +32,13 @@ public class StatefulRule implements Rule {
 
 	public StatefulRule(Set<String> triggeredBy, String targetedPropertyName,
 			Object... values) {
+		this(triggeredBy, Condition.TRUE, targetedPropertyName, values);
+	}
+
+	public StatefulRule(Set<String> triggeredBy, Condition condition,
+		String targetedPropertyName, Object[] values) {
 		this.triggeringProperties = triggeredBy;
+		this.condition = condition;
 		this.targetedPropertyName = targetedPropertyName;
 		this.values = new ConstantValues(values);
 		this.finished = false;
@@ -69,8 +77,8 @@ public class StatefulRule implements Rule {
 	@Override
 	public void propertyValueSet(PropertyAssignedEvent event) {
 		if (triggeringProperties.contains(event.getTargetedPropertyName())
-				&& event.getState()
-						.containsPropertyValues(triggeringProperties))
+			&& event.containsPropertyValues(triggeringProperties)
+			&& condition.calculate())
 			addValue(event.getState());
 		else if (event.getRequiredProperties().contains(targetedPropertyName)) {
 			dependencies.add(event.getWorkingRule());

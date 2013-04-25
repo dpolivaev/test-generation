@@ -42,7 +42,7 @@ public class RuleEngine implements State {
 	public void setPropertyValue(Rule rule, Object nextValue) {
 		mapBasedState.setPropertyValue(rule, nextValue);
 		PropertyAssignedEvent event = new PropertyAssignedEvent(this, rule,
-				rule.getTriggeringProperties());
+			rule.getTriggeringProperties());
 		firePropertyAssignedEvent(event);
 	}
 
@@ -77,6 +77,10 @@ public class RuleEngine implements State {
 	@Override
 	public boolean containsPropertyValues(Set<String> names) {
 		return mapBasedState.containsPropertyValues(names);
+	}
+
+	public Object get(String name) {
+		return mapBasedState.get(name);
 	}
 
 }
