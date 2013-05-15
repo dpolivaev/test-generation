@@ -4,9 +4,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-
+import org.junit.Before;
 import org.junit.Test;
-
 
 /**
  * @author Dimitry Polivaev 18.02.2013
@@ -14,6 +13,15 @@ import org.junit.Test;
 public class RuleEngineTest {
 
     private RuleEngine ruleEngine = new RuleEngine();
+    private StateFormatter stateFormatter;
+
+    public RuleEngineTest() {
+    }
+
+    @Before
+    public void setup() {
+        stateFormatter = new StateFormatter();
+    }
 
     @Test
     public void ruleEngineWithoutRules_callsScriptProducerOnce() {
@@ -63,8 +71,7 @@ public class RuleEngineTest {
 
         ruleEngine.run(scriptProducerMock);
 
-        String expectedScriptPropertyCombinations = "1 : x=a\n";
-        assertEquals(expectedScriptPropertyCombinations,
+        assertEquals(stateFormatter.withState("x", "a").toString(),
             scriptProducerMock.getAllScriptPropertyCombinations());
 
     }
@@ -78,9 +85,9 @@ public class RuleEngineTest {
 
         ruleEngine.run(loggingScriptProducerMock);
 
-        String expectedScriptPropertyCombinations = "1 : property=a\n"
-            + "2 : property=b\n";
-        assertEquals(expectedScriptPropertyCombinations,
+        assertEquals(stateFormatter //
+            .withState("property", "a") //
+            .withState("property", "b").toString(),
             loggingScriptProducerMock.getAllScriptPropertyCombinations());
 
     }
@@ -97,8 +104,8 @@ public class RuleEngineTest {
 
         ruleEngine.run(scriptProducerMock);
 
-        String expectedScriptPropertyCombinations = "1 : x=a\ty=b\n";
-        assertEquals(expectedScriptPropertyCombinations,
+        assertEquals(stateFormatter //
+            .withState("x", "a", "y", "b").toString(),
             scriptProducerMock.getAllScriptPropertyCombinations());
 
     }
@@ -115,9 +122,9 @@ public class RuleEngineTest {
 
         ruleEngine.run(scriptProducerMock);
 
-        String expectedScriptPropertyCombinations = "1 : x=a1\ty=b1\n"
-            + "2 : x=a2\ty=b2\n";
-        assertEquals(expectedScriptPropertyCombinations,
+        assertEquals(stateFormatter //
+            .withState("x", "a1", "y", "b1") //
+            .withState("x", "a2", "y", "b2").toString(),
             scriptProducerMock.getAllScriptPropertyCombinations());
 
     }
@@ -134,9 +141,10 @@ public class RuleEngineTest {
 
         ruleEngine.run(scriptProducerMock);
 
-        String expectedScriptPropertyCombinations = "1 : x=a1\ty=b1\n"
-            + "2 : x=a2\ty=b2\n" + "3 : x=a3\ty=b1\n";
-        assertEquals(expectedScriptPropertyCombinations,
+        assertEquals(stateFormatter //
+            .withState("x", "a1", "y", "b1") //
+            .withState("x", "a2", "y", "b2") //
+            .withState("x", "a3", "y", "b1").toString(),
             scriptProducerMock.getAllScriptPropertyCombinations());
 
     }
@@ -154,8 +162,8 @@ public class RuleEngineTest {
 
         ruleEngine.run(scriptProducerMock);
 
-        String expectedScriptPropertyCombinations = "1 : x=a\ty=b\n";
-        assertEquals(expectedScriptPropertyCombinations,
+        assertEquals(stateFormatter //
+            .withState("x", "a", "y", "b").toString(),
             scriptProducerMock.getAllScriptPropertyCombinations());
 
     }
@@ -172,9 +180,11 @@ public class RuleEngineTest {
 
         ruleEngine.run(scriptProducerMock);
 
-        String expectedScriptPropertyCombinations = "1 : x=a\ty=c\n"
-            + "2 : x=a\ty=d\n" + "3 : x=b\ty=c\n" + "4 : x=b\ty=d\n";
-        assertEquals(expectedScriptPropertyCombinations,
+        assertEquals(stateFormatter //
+            .withState("x", "a", "y", "c") //
+            .withState("x", "a", "y", "d") //
+            .withState("x", "b", "y", "c") //
+            .withState("x", "b", "y", "d").toString(),
             scriptProducerMock.getAllScriptPropertyCombinations());
 
     }
@@ -198,10 +208,11 @@ public class RuleEngineTest {
                 }).build());
         ruleEngine.run(scriptProducerMock);
 
-        String expectedScriptPropertyCombinations = "1 : x=a\n" + "2 : x=b\n"
-            + "3 : x=c\ty=A\n" + "4 : x=c\ty=B\n";
-        assertEquals(expectedScriptPropertyCombinations,
+        assertEquals(stateFormatter //
+            .withState("x", "a") //
+            .withState("x", "b") //
+            .withState("x", "c", "y", "A") //
+            .withState("x", "c", "y", "B").toString(),
             scriptProducerMock.getAllScriptPropertyCombinations());
-
     }
 }
