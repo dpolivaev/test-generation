@@ -17,12 +17,12 @@ public class StatefulRuleBuilder {
         return this;
     }
 
-    public StatefulRuleBuilder with(String... values) {
+    public StatefulRuleBuilder over(String... values) {
         this.values = values;
         return this;
     }
 
-    public StatefulRuleBuilder targeting(
+    public StatefulRuleBuilder iterate(
         String targetedPropertyName) {
         this.targetedPropertyName = targetedPropertyName;
         return this;
@@ -43,8 +43,8 @@ public class StatefulRuleBuilder {
             return new StatefulRuleBuilder().when(triggeringProperties);
         }
 
-        static public StatefulRuleBuilder targeting(String property) {
-            return new StatefulRuleBuilder().targeting(property);
+        static public StatefulRuleBuilder iterate(String property) {
+            return new StatefulRuleBuilder().iterate(property);
         }
 
         static public StatefulRuleBuilder _if(Condition condition) {
