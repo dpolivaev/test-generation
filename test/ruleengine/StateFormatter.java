@@ -5,10 +5,10 @@ class StateFormatter {
     StringBuilder stringBuilder = new StringBuilder();
 
     static public StateFormatter combination(String... properties) {
-        return new StateFormatter().with(properties);
+        return new StateFormatter().followedBy(properties);
     }
 
-    public StateFormatter with(String... properties) {
+    public StateFormatter followedBy(String... properties) {
         stringBuilder.append(++iterationCounter).append(" : ");
         for (int i = 0; i < properties.length; i += 2) {
             if (i > 0)

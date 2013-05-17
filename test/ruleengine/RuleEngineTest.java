@@ -21,10 +21,9 @@ public class RuleEngineTest {
     public RuleEngineTest() {
     }
 
-    private void assertCombinations(StateFormatter expectedCombinations) {
+    private void expect(StateFormatter expectedCombinations) {
         assertEquals(expectedCombinations.toString(),
             scriptProducerMock.getAllScriptPropertyCombinations());
-
     }
 
     @Before
@@ -41,14 +40,14 @@ public class RuleEngineTest {
 
     @Test
     public void ruleEngineWithOneIterationRule_hasRuleForItsTargetedProperty() {
-        ruleEngine.addRule(targeting("property").with("value"));
+        ruleEngine.addRule(iterate("property").over("value"));
         assertThat(ruleEngine.hasRuleForProperty("property"), is(true));
     }
 
     @Test
     public void ruleEngineWithTwoIterationRules_hasRulesForItsTargetedProperties() {
-        ruleEngine.addRule(targeting("property1").with("value"));
-        ruleEngine.addRule(targeting("property2").with("value"));
+        ruleEngine.addRule(iterate("property1").over("value"));
+        ruleEngine.addRule(iterate("property2").over("value"));
 
         assertThat(ruleEngine.hasRuleForProperty("property1"), is(true));
         assertThat(ruleEngine.hasRuleForProperty("property2"), is(true));
@@ -56,84 +55,84 @@ public class RuleEngineTest {
 
     @Test
     public void singleRuleWithPropertyNamedXValueA_callsScriptProducerWithValueA() {
-        ruleEngine.addRule(targeting("x").with("a"));
+        ruleEngine.addRule(iterate("x").over("a"));
 
         generateCombinations();
 
-        assertCombinations(combination("x", "a"));
+        expect(combination("x", "a"));
     }
 
     @Test
     public void singleRuleWithValuesA_B_callsScriptProducerWithValuesA_B() {
-        ruleEngine.addRule(targeting("property").with("a", "b"));
+        ruleEngine.addRule(iterate("property").over("a", "b"));
 
         generateCombinations();
 
-        assertCombinations(combination("property", "a").with("property", "b"));
+        expect(combination("property", "a").followedBy("property", "b"));
     }
 
     @Test
     public void twoRulesWithValuesAandB_callsScriptProducerWithTheirValues() {
-        ruleEngine.addRule(targeting("x").with("a"));
-        ruleEngine.addRule(targeting("y").with("b"));
+        ruleEngine.addRule(iterate("x").over("a"));
+        ruleEngine.addRule(iterate("y").over("b"));
 
         generateCombinations();
 
-        assertCombinations(combination("x", "a", "y", "b"));
+        expect(combination("x", "a", "y", "b"));
     }
 
     @Test
     public void twoRulesWithValuesA1_A2andB1_B2_callsScriptProducerWithTheirValues() {
 
-        ruleEngine.addRule(targeting("x").with("a1", "a2"));
-        ruleEngine.addRule(targeting("y").with("b1", "b2"));
+        ruleEngine.addRule(iterate("x").over("a1", "a2"));
+        ruleEngine.addRule(iterate("y").over("b1", "b2"));
 
         generateCombinations();
 
-        assertCombinations(combination("x", "a1", "y", "b1") //
-            .with("x", "a2", "y", "b2"));
+        expect(combination("x", "a1", "y", "b1") //
+            .followedBy("x", "a2", "y", "b2"));
     }
 
     @Test
     public void twoRulesWithValuesA1_A2_A3andB1_B2_callsScriptProducerWithTheirValues() {
 
-        ruleEngine.addRule(targeting("x").with("a1", "a2", "a3"));
-        ruleEngine.addRule(targeting("y").with("b1", "b2"));
+        ruleEngine.addRule(iterate("x").over("a1", "a2", "a3"));
+        ruleEngine.addRule(iterate("y").over("b1", "b2"));
 
         generateCombinations();
 
-        assertCombinations(combination("x", "a1", "y", "b1") //
-            .with("x", "a2", "y", "b2").with("x", "a3", "y", "b1"));
+        expect(combination("x", "a1", "y", "b1") //
+            .followedBy("x", "a2", "y", "b2").followedBy("x", "a3", "y", "b1"));
     }
 
     @Test
     public void triggeringAndTriggeredRulesWithSingleValues_callsScriptProducerWithTheirValues() {
 
-        ruleEngine.addRule(targeting("x").with("a"));
-        ruleEngine.addRule(targeting("y").with("b").when("x"));
+        ruleEngine.addRule(iterate("x").over("a"));
+        ruleEngine.addRule(when("x").iterate("y").over("b"));
 
         generateCombinations();
 
-        assertCombinations(combination("x", "a", "y", "b"));
+        expect(combination("x", "a", "y", "b"));
     }
 
     @Test
     public void triggeringAndTriggeredRulesWithValuesA_B_and_C_D_callsScriptProducerWithTheirValues() {
-        ruleEngine.addRule(targeting("x").with("a", "b"));
-        ruleEngine.addRule(targeting("y").with("c", "d").when("x"));
+        ruleEngine.addRule(iterate("x").over("a", "b"));
+        ruleEngine.addRule(when("x").iterate("y").over("c", "d"));
 
         generateCombinations();
 
-        assertCombinations(combination("x", "a", "y", "c")
-            .with("x", "a", "y", "d").with("x", "b", "y", "c")
-            .with("x", "b", "y", "d"));
+        expect(combination("x", "a", "y", "c")
+            .followedBy("x", "a", "y", "d").followedBy("x", "b", "y", "c")
+            .followedBy("x", "b", "y", "d"));
 
     }
 
     @Test
     public void triggeringValueAndConditionallyTriggeredValues_callsScriptProducerWithTheirValues() {
-        ruleEngine.addRule(targeting("x").with("a", "b", "c"));
-        ruleEngine.addRule(when("x").targeting("y").with("A", "B")._if( //
+        ruleEngine.addRule(iterate("x").over("a", "b", "c"));
+        ruleEngine.addRule(when("x").iterate("y").over("A", "B")._if( //
             new Condition() {
                 @Override
                 public boolean calculate() {
@@ -142,24 +141,24 @@ public class RuleEngineTest {
             }));
         generateCombinations();
 
-        assertCombinations(combination("x", "a").with("x", "b")
-            .with("x", "c", "y", "A").with("x", "c", "y", "B"));
+        expect(combination("x", "a").followedBy("x", "b")
+            .followedBy("x", "c", "y", "A").followedBy("x", "c", "y", "B"));
     }
 
     @Test
     public void newRuleForTheSameProperty_HidesOldRule() {
-        ruleEngine.addRule(targeting("x").with("a"));
-        ruleEngine.addRule(targeting("x").with("b"));
+        ruleEngine.addRule(iterate("x").over("a"));
+        ruleEngine.addRule(iterate("x").over("b"));
 
         generateCombinations();
 
-        assertCombinations(combination("x", "b"));
+        expect(combination("x", "b"));
     }
 
     @Test
     public void topRuleWithNotFulfilledCondition_IsIgnored() {
 
-        ruleEngine.addRule(targeting("x").with("a")._if(new Condition() {
+        ruleEngine.addRule(iterate("x").over("a")._if(new Condition() {
             @Override
             public boolean calculate() {
                 return false;
@@ -168,7 +167,7 @@ public class RuleEngineTest {
 
         generateCombinations();
 
-        assertCombinations(combination());
+        expect(combination());
     }
 
     private void generateCombinations() {
@@ -178,8 +177,8 @@ public class RuleEngineTest {
     @Test
     public void newRuleForTheSamePropertyWithNotFulfilledCondition_IsIgnored() {
 
-        ruleEngine.addRule(targeting("x").with("a"));
-        ruleEngine.addRule(targeting("x").with("b")._if(new Condition() {
+        ruleEngine.addRule(iterate("x").over("a"));
+        ruleEngine.addRule(iterate("x").over("b")._if(new Condition() {
             @Override
             public boolean calculate() {
                 return false;
@@ -188,6 +187,6 @@ public class RuleEngineTest {
 
         generateCombinations();
 
-        assertCombinations(combination("x", "a"));
+        expect(combination("x", "a"));
     }
 }
