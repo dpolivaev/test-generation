@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-class Rules {
+class RuleContainer {
 	private Map<String, Rule> rules = new LinkedHashMap<String, Rule>();
 
 	public void addRule(Rule rule) {

@@ -7,7 +7,7 @@ import java.util.Set;
  * @author Dimitry Polivaev 18.02.2013
  */
 public class RuleEngine implements State {
-	private Rules rules = new Rules();
+	private RuleContainer rules = new RuleContainer();
 	private MapBasedState mapBasedState = new MapBasedState();
 
 	public void addRule(Rule rule) {
@@ -82,5 +82,9 @@ public class RuleEngine implements State {
 	public Object get(String name) {
 		return mapBasedState.get(name);
 	}
+
+    public void addRule(StatefulRuleBuilder builder) {
+        addRule(builder.build());
+    }
 
 }
