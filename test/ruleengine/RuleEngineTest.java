@@ -7,20 +7,29 @@ import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 
+import static ruleengine.StatefulRuleBuilder.Factory.*;
+import static ruleengine.StateFormatter.*;
+
 /**
  * @author Dimitry Polivaev 18.02.2013
  */
 public class RuleEngineTest {
 
     private RuleEngine ruleEngine = new RuleEngine();
-    private StateFormatter stateFormatter;
+    private LoggingScriptProducerMock scriptProducerMock;
 
     public RuleEngineTest() {
     }
 
+    private void assertCombinations(StateFormatter expectedCombinations) {
+        assertEquals(expectedCombinations.toString(),
+            scriptProducerMock.getAllScriptPropertyCombinations());
+
+    }
+
     @Before
     public void setup() {
-        stateFormatter = new StateFormatter();
+        scriptProducerMock = new LoggingScriptProducerMock();
     }
 
     @Test
@@ -32,187 +41,153 @@ public class RuleEngineTest {
 
     @Test
     public void ruleEngineWithOneIterationRule_hasRuleForItsTargetedProperty() {
-        String targetedPropertyName = "property";
-        ruleEngine.addRule(ruleBuilder() //
-            .withTargetedPropterty(targetedPropertyName) //
-            .withValues("value").build());
-
-        assertThat(ruleEngine.hasRuleForProperty(targetedPropertyName),
-            is(true));
-    }
-
-    public StatefulRuleBuilder ruleBuilder() {
-        return new StatefulRuleBuilder();
+        ruleEngine.addRule(targeting("property").with("value"));
+        assertThat(ruleEngine.hasRuleForProperty("property"), is(true));
     }
 
     @Test
     public void ruleEngineWithTwoIterationRules_hasRulesForItsTargetedProperties() {
-        String firstTargetedPropertyName = "property1";
-        ruleEngine.addRule(ruleBuilder() //
-            .withTargetedPropterty(firstTargetedPropertyName) //
-            .withValues("value").build());
-        String secondTargetedPropertyName = "property2";
-        ruleEngine.addRule(ruleBuilder() //
-            .withTargetedPropterty(secondTargetedPropertyName) //
-            .withValues("value").build());
+        ruleEngine.addRule(targeting("property1").with("value"));
+        ruleEngine.addRule(targeting("property2").with("value"));
 
-        assertThat(ruleEngine.hasRuleForProperty(firstTargetedPropertyName),
-            is(true));
-        assertThat(ruleEngine.hasRuleForProperty(secondTargetedPropertyName),
-            is(true));
+        assertThat(ruleEngine.hasRuleForProperty("property1"), is(true));
+        assertThat(ruleEngine.hasRuleForProperty("property2"), is(true));
     }
 
     @Test
     public void singleRuleWithPropertyNamedXValueA_callsScriptProducerWithValueA() {
-        LoggingScriptProducerMock scriptProducerMock = new LoggingScriptProducerMock();
-        ruleEngine.addRule(ruleBuilder() //
-            .withTargetedPropterty("x") //
-            .withValues("a").build());
+        ruleEngine.addRule(targeting("x").with("a"));
 
-        ruleEngine.run(scriptProducerMock);
+        generateCombinations();
 
-        assertEquals(stateFormatter.withState("x", "a").toString(),
-            scriptProducerMock.getAllScriptPropertyCombinations());
-
+        assertCombinations(combination("x", "a"));
     }
 
     @Test
     public void singleRuleWithValuesA_B_callsScriptProducerWithValuesA_B() {
-        LoggingScriptProducerMock loggingScriptProducerMock = new LoggingScriptProducerMock();
-        ruleEngine.addRule(ruleBuilder() //
-            .withTargetedPropterty("property") //
-            .withValues("a", "b").build());
+        ruleEngine.addRule(targeting("property").with("a", "b"));
 
-        ruleEngine.run(loggingScriptProducerMock);
+        generateCombinations();
 
-        assertEquals(stateFormatter //
-            .withState("property", "a") //
-            .withState("property", "b").toString(),
-            loggingScriptProducerMock.getAllScriptPropertyCombinations());
-
+        assertCombinations(combination("property", "a").with("property", "b"));
     }
 
     @Test
     public void twoRulesWithValuesAandB_callsScriptProducerWithTheirValues() {
-        LoggingScriptProducerMock scriptProducerMock = new LoggingScriptProducerMock();
-        ruleEngine.addRule(ruleBuilder() //
-            .withTargetedPropterty("x") //
-            .withValues("a").build());
-        ruleEngine.addRule(ruleBuilder() //
-            .withTargetedPropterty("y") //
-            .withValues("b").build());
+        ruleEngine.addRule(targeting("x").with("a"));
+        ruleEngine.addRule(targeting("y").with("b"));
 
-        ruleEngine.run(scriptProducerMock);
+        generateCombinations();
 
-        assertEquals(stateFormatter //
-            .withState("x", "a", "y", "b").toString(),
-            scriptProducerMock.getAllScriptPropertyCombinations());
-
+        assertCombinations(combination("x", "a", "y", "b"));
     }
 
     @Test
     public void twoRulesWithValuesA1_A2andB1_B2_callsScriptProducerWithTheirValues() {
-        LoggingScriptProducerMock scriptProducerMock = new LoggingScriptProducerMock();
-        ruleEngine.addRule(ruleBuilder() //
-            .withTargetedPropterty("x") //
-            .withValues("a1", "a2").build());
-        ruleEngine.addRule(ruleBuilder() //
-            .withTargetedPropterty("y") //
-            .withValues("b1", "b2").build());
 
-        ruleEngine.run(scriptProducerMock);
+        ruleEngine.addRule(targeting("x").with("a1", "a2"));
+        ruleEngine.addRule(targeting("y").with("b1", "b2"));
 
-        assertEquals(stateFormatter //
-            .withState("x", "a1", "y", "b1") //
-            .withState("x", "a2", "y", "b2").toString(),
-            scriptProducerMock.getAllScriptPropertyCombinations());
+        generateCombinations();
 
+        assertCombinations(combination("x", "a1", "y", "b1") //
+            .with("x", "a2", "y", "b2"));
     }
 
     @Test
     public void twoRulesWithValuesA1_A2_A3andB1_B2_callsScriptProducerWithTheirValues() {
-        LoggingScriptProducerMock scriptProducerMock = new LoggingScriptProducerMock();
-        ruleEngine.addRule(ruleBuilder() //
-            .withTargetedPropterty("x") //
-            .withValues("a1", "a2", "a3").build());
-        ruleEngine.addRule(ruleBuilder() //
-            .withTargetedPropterty("y") //
-            .withValues("b1", "b2").build());
 
-        ruleEngine.run(scriptProducerMock);
+        ruleEngine.addRule(targeting("x").with("a1", "a2", "a3"));
+        ruleEngine.addRule(targeting("y").with("b1", "b2"));
 
-        assertEquals(stateFormatter //
-            .withState("x", "a1", "y", "b1") //
-            .withState("x", "a2", "y", "b2") //
-            .withState("x", "a3", "y", "b1").toString(),
-            scriptProducerMock.getAllScriptPropertyCombinations());
+        generateCombinations();
 
+        assertCombinations(combination("x", "a1", "y", "b1") //
+            .with("x", "a2", "y", "b2").with("x", "a3", "y", "b1"));
     }
 
     @Test
     public void triggeringAndTriggeredRulesWithSingleValues_callsScriptProducerWithTheirValues() {
-        LoggingScriptProducerMock scriptProducerMock = new LoggingScriptProducerMock();
-        ruleEngine.addRule(ruleBuilder() //
-            .withTargetedPropterty("x") //
-            .withValues("a").build());
-        ruleEngine.addRule(ruleBuilder() //
-            .withTargetedPropterty("y") //
-            .withValues("b") //
-            .withTriggeringProperties("x").build());
 
-        ruleEngine.run(scriptProducerMock);
+        ruleEngine.addRule(targeting("x").with("a"));
+        ruleEngine.addRule(targeting("y").with("b").when("x"));
 
-        assertEquals(stateFormatter //
-            .withState("x", "a", "y", "b").toString(),
-            scriptProducerMock.getAllScriptPropertyCombinations());
+        generateCombinations();
 
+        assertCombinations(combination("x", "a", "y", "b"));
     }
 
     @Test
     public void triggeringAndTriggeredRulesWithValuesA_B_and_C_D_callsScriptProducerWithTheirValues() {
-        LoggingScriptProducerMock scriptProducerMock = new LoggingScriptProducerMock();
-        ruleEngine.addRule(ruleBuilder() //
-            .withTargetedPropterty("x") //
-            .withValues("a", "b").build());
-        ruleEngine.addRule(ruleBuilder() //
-            .withTargetedPropterty("y") //
-            .withValues("c", "d").withTriggeringProperties("x").build());
+        ruleEngine.addRule(targeting("x").with("a", "b"));
+        ruleEngine.addRule(targeting("y").with("c", "d").when("x"));
 
-        ruleEngine.run(scriptProducerMock);
+        generateCombinations();
 
-        assertEquals(stateFormatter //
-            .withState("x", "a", "y", "c") //
-            .withState("x", "a", "y", "d") //
-            .withState("x", "b", "y", "c") //
-            .withState("x", "b", "y", "d").toString(),
-            scriptProducerMock.getAllScriptPropertyCombinations());
+        assertCombinations(combination("x", "a", "y", "c")
+            .with("x", "a", "y", "d").with("x", "b", "y", "c")
+            .with("x", "b", "y", "d"));
 
     }
 
     @Test
     public void triggeringValueAndConditionallyTriggeredValues_callsScriptProducerWithTheirValues() {
-        LoggingScriptProducerMock scriptProducerMock = new LoggingScriptProducerMock();
-        ruleEngine.addRule(ruleBuilder() //
-            .withTargetedPropterty("x") //
-            .withValues("a", "b", "c").build());
-        ruleEngine.addRule(ruleBuilder() //
-            .withTargetedPropterty("y") //
-            .withValues("A", "B") //
-            .withTriggeringProperties("x") //
-            .withCondition( //
-                new Condition() {
-                    @Override
-                    public boolean calculate() {
-                        return ruleEngine.get("x").equals("c");
-                    };
-                }).build());
-        ruleEngine.run(scriptProducerMock);
+        ruleEngine.addRule(targeting("x").with("a", "b", "c"));
+        ruleEngine.addRule(when("x").targeting("y").with("A", "B")._if( //
+            new Condition() {
+                @Override
+                public boolean calculate() {
+                    return ruleEngine.get("x").equals("c");
+                };
+            }));
+        generateCombinations();
 
-        assertEquals(stateFormatter //
-            .withState("x", "a") //
-            .withState("x", "b") //
-            .withState("x", "c", "y", "A") //
-            .withState("x", "c", "y", "B").toString(),
-            scriptProducerMock.getAllScriptPropertyCombinations());
+        assertCombinations(combination("x", "a").with("x", "b")
+            .with("x", "c", "y", "A").with("x", "c", "y", "B"));
+    }
+
+    @Test
+    public void newRuleForTheSameProperty_HidesOldRule() {
+        ruleEngine.addRule(targeting("x").with("a"));
+        ruleEngine.addRule(targeting("x").with("b"));
+
+        generateCombinations();
+
+        assertCombinations(combination("x", "b"));
+    }
+
+    @Test
+    public void topRuleWithNotFulfilledCondition_IsIgnored() {
+
+        ruleEngine.addRule(targeting("x").with("a")._if(new Condition() {
+            @Override
+            public boolean calculate() {
+                return false;
+            }
+        }));
+
+        generateCombinations();
+
+        assertCombinations(combination());
+    }
+
+    private void generateCombinations() {
+        ruleEngine.run(scriptProducerMock);
+    }
+
+    @Test
+    public void newRuleForTheSamePropertyWithNotFulfilledCondition_IsIgnored() {
+
+        ruleEngine.addRule(targeting("x").with("a"));
+        ruleEngine.addRule(targeting("x").with("b")._if(new Condition() {
+            @Override
+            public boolean calculate() {
+                return false;
+            }
+        }));
+
+        generateCombinations();
+
+        assertCombinations(combination("x", "a"));
     }
 }

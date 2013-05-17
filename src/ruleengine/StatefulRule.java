@@ -63,9 +63,12 @@ public class StatefulRule implements Rule {
 
 	@Override
 	public void combinationStarted(State state) {
-		if (triggeringProperties.isEmpty()) {
-			addValue(state);
-		}
+        if (triggeringProperties.isEmpty()) {
+            if (condition.calculate())
+                addValue(state);
+            else
+                finished = true;
+        }
 	}
 
 	private void addValue(State state) {
@@ -76,11 +79,16 @@ public class StatefulRule implements Rule {
 
 	@Override
 	public void propertyValueSet(PropertyAssignedEvent event) {
-		if (triggeringProperties.contains(event.getTargetedPropertyName())
-			&& event.containsPropertyValues(triggeringProperties)
-			&& condition.calculate())
-			addValue(event.getState());
-		else if (event.getRequiredProperties().contains(targetedPropertyName)) {
+        if (triggeringProperties.contains(event.getTargetedPropertyName())
+            && event.containsPropertyValues(triggeringProperties)) {
+            if (condition.calculate())
+                addValue(event.getState());
+            else if (event.getRequiredProperties() //
+                .contains(targetedPropertyName)) {
+                dependencies.add(event.getWorkingRule());
+            }
+        }
+        else if (event.getRequiredProperties().contains(targetedPropertyName)) {
 			dependencies.add(event.getWorkingRule());
 		}
 	}

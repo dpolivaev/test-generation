@@ -5,24 +5,24 @@ import static ruleengine.TestUtils.set;
 import java.util.Collections;
 import java.util.Set;
 
-class StatefulRuleBuilder {
+public class StatefulRuleBuilder {
     private String targetedPropertyName = null;
     private Object[] values = null;
     private Set<String> triggeringProperties = Collections.emptySet();
     private Condition condition = Condition.TRUE;
 
-    public StatefulRuleBuilder withTriggeringProperties(
+    public StatefulRuleBuilder when(
         String... triggeringProperties) {
         this.triggeringProperties = set(triggeringProperties);
         return this;
     }
 
-    public StatefulRuleBuilder withValues(String... values) {
+    public StatefulRuleBuilder with(String... values) {
         this.values = values;
         return this;
     }
 
-    public StatefulRuleBuilder withTargetedPropterty(
+    public StatefulRuleBuilder targeting(
         String targetedPropertyName) {
         this.targetedPropertyName = targetedPropertyName;
         return this;
@@ -33,9 +33,23 @@ class StatefulRuleBuilder {
             this.targetedPropertyName, this.values);
     }
 
-    public StatefulRuleBuilder withCondition(Condition condition) {
+    public StatefulRuleBuilder _if(Condition condition) {
         this.condition = condition;
         return this;
+    }
+
+    public static class Factory {
+        static public StatefulRuleBuilder when(String... triggeringProperties) {
+            return new StatefulRuleBuilder().when(triggeringProperties);
+        }
+
+        static public StatefulRuleBuilder targeting(String property) {
+            return new StatefulRuleBuilder().targeting(property);
+        }
+
+        static public StatefulRuleBuilder _if(Condition condition) {
+            return new StatefulRuleBuilder()._if(condition);
+        }
     }
 
 }

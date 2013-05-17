@@ -4,7 +4,11 @@ class StateFormatter {
     private int iterationCounter = 0;
     StringBuilder stringBuilder = new StringBuilder();
 
-    public StateFormatter withState(String... properties) {
+    static public StateFormatter combination(String... properties) {
+        return new StateFormatter().with(properties);
+    }
+
+    public StateFormatter with(String... properties) {
         stringBuilder.append(++iterationCounter).append(" : ");
         for (int i = 0; i < properties.length; i += 2) {
             if (i > 0)
