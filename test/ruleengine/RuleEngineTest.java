@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static ruleengine.StatefulRuleBuilder.Factory.*;
-import static ruleengine.StateFormatter.*;
+import static ruleengine.Combinations.*;
 
 /**
  * @author Dimitry Polivaev 18.02.2013
@@ -21,7 +21,7 @@ public class RuleEngineTest {
     public RuleEngineTest() {
     }
 
-    private void expect(StateFormatter expectedCombinations) {
+    private void expect(Combinations expectedCombinations) {
         assertEquals(expectedCombinations.toString(),
             scriptProducerMock.getAllScriptPropertyCombinations());
     }
