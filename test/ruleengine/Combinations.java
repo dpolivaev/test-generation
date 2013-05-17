@@ -1,14 +1,14 @@
 package ruleengine;
 
-class StateFormatter {
+class Combinations {
     private int iterationCounter = 0;
     StringBuilder stringBuilder = new StringBuilder();
 
-    static public StateFormatter combination(String... properties) {
-        return new StateFormatter().followedBy(properties);
+    static public Combinations combination(String... properties) {
+        return new Combinations().followedBy(properties);
     }
 
-    public StateFormatter followedBy(String... properties) {
+    public Combinations followedBy(String... properties) {
         stringBuilder.append(++iterationCounter).append(" : ");
         for (int i = 0; i < properties.length; i += 2) {
             if (i > 0)
