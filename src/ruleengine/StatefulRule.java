@@ -25,16 +25,6 @@ public class StatefulRule implements Rule {
 
 	private final Condition condition;
 
-	@SuppressWarnings("unchecked")
-	public StatefulRule(String targetedPropertyName, Object... values) {
-		this(Collections.EMPTY_SET, targetedPropertyName, values);
-	}
-
-	public StatefulRule(Set<String> triggeredBy, String targetedPropertyName,
-			Object... values) {
-		this(triggeredBy, Condition.TRUE, targetedPropertyName, values);
-	}
-
 	public StatefulRule(Set<String> triggeredBy, Condition condition,
 		String targetedPropertyName, Object[] values) {
 		this.triggeringProperties = triggeredBy;
