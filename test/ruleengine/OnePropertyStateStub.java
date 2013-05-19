@@ -1,5 +1,6 @@
 package ruleengine;
 
+import static ruleengine.StatefulRuleBuilder.Factory.iterate;
 import static ruleengine.TestUtils.set;
 
 import java.util.Set;
@@ -29,12 +30,21 @@ class OnePropertyStateStub implements State {
 				&& name.equals(names.iterator().next());
 	}
 
-	public Rule ruleStub() {
-		return TestUtils.ruleStub(name);
+	public Rule rule() {
+		return iterate(name).asRule();
 	}
 
 	public PropertyAssignedEvent event() {
-		return new PropertyAssignedEvent(this, ruleStub(), set());
+		return new PropertyAssignedEvent(this, rule(), set());
 	}
+
+    @Override
+    public Object get(String name) {
+        return value;
+    }
+
+    static OnePropertyStateStub stateStub() {
+    	return new OnePropertyStateStub();
+    }
 
 }

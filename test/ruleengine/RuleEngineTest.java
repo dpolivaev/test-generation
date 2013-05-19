@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import static ruleengine.StatefulRuleBuilder.Factory.*;
 import static ruleengine.Combinations.*;
+import static ruleengine.TestUtils.*;
 
 /**
  * @author Dimitry Polivaev 18.02.2013

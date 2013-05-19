@@ -8,4 +8,6 @@ interface State {
 
 	boolean containsPropertyValues(Set<String> names);
 
+    Object get(String name);
+
 }
