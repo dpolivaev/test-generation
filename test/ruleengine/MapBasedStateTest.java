@@ -3,7 +3,7 @@ package ruleengine;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static ruleengine.TestUtils.ruleStub;
+import static ruleengine.StatefulRuleBuilder.Factory.iterate;
 import static ruleengine.TestUtils.set;
 
 import org.junit.Before;
@@ -13,6 +13,11 @@ public class MapBasedStateTest {
 
 	MapBasedState mapBasedState;
 
+    private StatefulRule ruleForProperty(String propertyName) {
+        return iterate(propertyName).asRule();
+    }
+
+
 	@Before
 	public void setup() {
 		mapBasedState = new MapBasedState();
@@ -21,7 +26,7 @@ public class MapBasedStateTest {
 	@Test
 	public void stateWithOnePropertySetAtFirstCombination() {
 		mapBasedState.nextCombination();
-		mapBasedState.setPropertyValue(ruleStub("x"), "a");
+		mapBasedState.setPropertyValue(ruleForProperty("x"), "a");
 		String expectedScriptPropertyCombinations = "1 : x=a\n";
 		assertEquals(expectedScriptPropertyCombinations,
 				mapBasedState.getAssignedPropertiesAsString());
@@ -30,18 +35,28 @@ public class MapBasedStateTest {
 	@Test
 	public void stateWithOneProperty_containsItsValue() {
 		mapBasedState.nextCombination();
-		mapBasedState.setPropertyValue(ruleStub("x"), "a");
+		mapBasedState.setPropertyValue(ruleForProperty("x"), "a");
 		assertThat(mapBasedState.containsPropertyValues(set("x")), is(true));
 	}
 
 	@Test
 	public void stateWithTwoPropertiesSetAtFirstCombination() {
 		mapBasedState.nextCombination();
-		mapBasedState.setPropertyValue(ruleStub("x"), "a");
-		mapBasedState.setPropertyValue(ruleStub("y"), "b");
+		mapBasedState.setPropertyValue(ruleForProperty("x"), "a");
+        mapBasedState.setPropertyValue(ruleForProperty("y"), "b");
 		String expectedScriptPropertyCombinations = "1 : x=a\ty=b\n";
 		assertEquals(expectedScriptPropertyCombinations,
 				mapBasedState.getAssignedPropertiesAsString());
 	}
+
+
+    @Test
+    public void oldPropertiesAreRemovedAfterIterationEnd() {
+        mapBasedState.nextCombination();
+        mapBasedState.setPropertyValue(ruleForProperty("x"), "a");
+        mapBasedState.nextCombination();
+        assertThat(mapBasedState.containsPropertyValues(set("x")), is(false));
+    }
+
 
 }

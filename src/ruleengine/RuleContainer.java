@@ -9,10 +9,15 @@ class RuleContainer {
 	private Map<String, Rule> rules = new LinkedHashMap<String, Rule>();
 
 	public void addRule(Rule rule) {
-		rules.put(rule.getTargetedPropertyName(), rule);
+        String targetedPropertyName = rule.getTargetedPropertyName();
+        Rule existingRule = rules.get(targetedPropertyName);
+        if (existingRule != null)
+            rules.put(targetedPropertyName, existingRule.combineWith(rule));
+        else
+            rules.put(rule.getTargetedPropertyName(), rule);
 	}
 
-	public Collection<Rule> values() {
+	public Collection<Rule> rules() {
 		ArrayList<Rule> arrayList = new ArrayList<Rule>();
 		arrayList.addAll(rules.values());
 		return arrayList;

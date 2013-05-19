@@ -11,8 +11,4 @@ public class TestUtils {
 		return set;
 	}
 
-	public static Rule ruleStub(final String targetedPropertyName) {
-		return new RuleStub(targetedPropertyName);
-	}
-
 }

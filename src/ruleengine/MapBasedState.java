@@ -20,6 +20,7 @@ class MapBasedState implements State {
 
 	public void nextCombination() {
 		this.count++;
+        properties.clear();
 		assignedPropertiesAsString.setLength(0);
 
 	}
@@ -33,7 +34,8 @@ class MapBasedState implements State {
 		return properties.keySet().containsAll(names);
 	}
 
-	public Object get(String name) {
+	@Override
+    public Object get(String name) {
 		return properties.get(name);
 	}
 

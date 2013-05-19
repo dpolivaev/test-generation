@@ -67,7 +67,7 @@ public class RuleEngine implements State {
 	}
 
 	private Collection<Rule> rules() {
-		return rules.values();
+		return rules.rules();
 	}
 
 	public String getAssignedPropertiesAsString() {
@@ -84,7 +84,7 @@ public class RuleEngine implements State {
 	}
 
     public void addRule(StatefulRuleBuilder builder) {
-        addRule(builder.build());
+        addRule(builder.asRule());
     }
 
 }

@@ -16,12 +16,16 @@ public interface Rule {
 
 	boolean hasFinished();
 
+    boolean isActive();
+
 	void combinationStarted(State state);
 
 	void combinationFinished(State state);
 
 	void propertyValueSet(PropertyAssignedEvent event);
 
-	void reset();
+    void reset();
+
+    Rule combineWith(Rule rule);
 
 }

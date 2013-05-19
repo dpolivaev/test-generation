@@ -28,7 +28,7 @@ public class StatefulRuleBuilder {
         return this;
     }
 
-    public StatefulRule build() {
+    public StatefulRule asRule() {
         return new StatefulRule(triggeringProperties, this.condition,
             this.targetedPropertyName, this.values);
     }

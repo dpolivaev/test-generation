@@ -115,4 +115,14 @@ public class StatefulRule implements Rule {
 	public void reset() {
 		finished = false;
 	}
+
+    @Override
+    public boolean isActive() {
+        return valueAddedToCombination;
+    }
+
+    @Override
+    public Rule combineWith(Rule rule) {
+        return new CombinedRule(this, rule);
+    }
 }
