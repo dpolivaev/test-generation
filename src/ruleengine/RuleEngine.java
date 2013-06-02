@@ -30,12 +30,12 @@ public class RuleEngine implements State {
 
 	private void fireNextCombinationFinishedEvent() {
 		for (Rule rule : rules())
-			rule.combinationFinished(this);
+			rule.propertyCombinationFinished(this);
 	}
 
 	private void fireNextCombinationStartedEvent() {
 		for (Rule rule : rules())
-			rule.combinationStarted(this);
+			rule.propertyCombinationStarted(this);
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package ruleengine;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -52,7 +51,7 @@ public class StatefulRule implements Rule {
 	}
 
 	@Override
-	public void combinationStarted(State state) {
+	public void propertyCombinationStarted(State state) {
         if (triggeringProperties.isEmpty()) {
             if (condition.calculate())
                 addValue(state);
@@ -84,10 +83,10 @@ public class StatefulRule implements Rule {
 	}
 
 	@Override
-	public void combinationFinished(State state) {
+	public void propertyCombinationFinished(State state) {
 		if (valueAddedToCombination) {
 			for (Rule rule : dependencies)
-				rule.combinationFinished(state);
+				rule.propertyCombinationFinished(state);
 			if (RuleEngine.allRulesHaveFinished(dependencies)) {
 				for (Rule rule : dependencies)
 					rule.reset();
