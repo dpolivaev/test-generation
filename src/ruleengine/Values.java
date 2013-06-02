@@ -2,7 +2,7 @@ package ruleengine;
 
 interface Values {
 
-	boolean isNewIterationStarted();
+	boolean isNewIterationFinished();
 
 	void next();
 

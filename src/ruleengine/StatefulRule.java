@@ -12,7 +12,7 @@ public class StatefulRule implements Rule {
 	final private Values values;
 	private boolean finished;
 	private final Set<String> triggeringProperties;
-	private final Set<Rule> dependencies;
+	private final Set<Rule> dependentRules;
 
 	@Override
 	public Set<String> getTriggeringProperties() {
@@ -31,7 +31,7 @@ public class StatefulRule implements Rule {
 		this.values = new ConstantValues(values);
 		this.finished = false;
 		this.valueAddedToCombination = false;
-		dependencies = new HashSet<>();
+		dependentRules = new HashSet<>();
 	}
 
 	@Override
@@ -45,6 +45,8 @@ public class StatefulRule implements Rule {
 	}
 
 	private Object nextValue() {
+        if (dependentRules.isEmpty())
+            values.next();
 		Object value = values.currentValue();
 		return value;
 	}
@@ -78,7 +80,7 @@ public class StatefulRule implements Rule {
         if (event.getRequiredProperties().contains(targetedPropertyName)) {
             Rule rule = event.getWorkingRule();
             rule.setNotFinished();
-            dependencies.add(rule);
+            dependentRules.add(rule);
         }
     }
 
@@ -92,14 +94,12 @@ public class StatefulRule implements Rule {
 	@Override
 	public void propertyCombinationFinished(State state) {
 		if (valueAddedToCombination) {
-			for (Rule rule : dependencies)
+			for (Rule rule : dependentRules)
 				rule.propertyCombinationFinished(state);
-            if (allRulesHaveFinished(dependencies)) {
-				dependencies.clear();
-				values.next();
-				if (values.isNewIterationStarted()) {
-					finished = true;
-				}
+            if (allRulesHaveFinished(dependentRules)) {
+				dependentRules.clear();
+                if (values.isNewIterationFinished())
+                    finished = true;
 			}
 			valueAddedToCombination = false;
 		}
