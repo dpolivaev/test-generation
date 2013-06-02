@@ -47,6 +47,11 @@ public class RuleEngine implements State {
 	@Override
 	public void setPropertyValue(Rule rule, Object nextValue) {
 		mapBasedState.setPropertyValue(rule, nextValue);
+        PropertyAssignedEvent event = new PropertyAssignedEvent(this, rule, requiredProperties(rule));
+		firePropertyAssignedEvent(event);
+	}
+
+    private Set<String> requiredProperties(Rule rule) {
         Set<String> requiredProperties;
         if (dependencies.isEmpty()) {
             requiredProperties = rule.getTriggeringProperties();
@@ -55,10 +60,8 @@ public class RuleEngine implements State {
             requiredProperties = new HashSet<>(rule.getTriggeringProperties());
             requiredProperties.addAll(dependencies);
         }
-        PropertyAssignedEvent event = new PropertyAssignedEvent(this, rule,
-			requiredProperties);
-		firePropertyAssignedEvent(event);
-	}
+        return requiredProperties;
+    }
 
 	private void firePropertyAssignedEvent(PropertyAssignedEvent event) {
         Set<String> oldDependencies = dependencies;
@@ -72,13 +75,6 @@ public class RuleEngine implements State {
 	private boolean topRulesHaveFinished() {
 		for (Rule rule : rules())
 			if (rule.getTriggeringProperties().isEmpty() && !rule.hasFinished())
-				return false;
-		return true;
-	}
-
-	public static boolean allRulesHaveFinished(Iterable<Rule> rules) {
-		for (Rule rule : rules)
-			if (!rule.hasFinished())
 				return false;
 		return true;
 	}
