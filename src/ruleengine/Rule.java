@@ -14,15 +14,15 @@ public interface Rule {
 
 	Set<String> getTriggeringProperties();
 
-	boolean hasFinished();
+	void propertyCombinationStarted(State state);
 
-    boolean isActive();
-
-	void combinationStarted(State state);
-
-	void combinationFinished(State state);
+	void propertyCombinationFinished(State state);
 
 	void propertyValueSet(PropertyAssignedEvent event);
+
+    boolean hasFinished();
+
+    boolean isActive();
 
     void reset();
 

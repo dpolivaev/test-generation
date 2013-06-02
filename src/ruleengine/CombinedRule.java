@@ -1,16 +1,19 @@
 package ruleengine;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 class CombinedRule implements Rule {
 
 
-    private final Rule oldRule;
+    private final List<Rule> rules = new ArrayList<>();
     private Rule activeRule;
 
     public CombinedRule(Rule oldRule, Rule newRule) {
-        this.oldRule = oldRule;
         this.activeRule = newRule;
+        rules.add(oldRule);
+        rules.add(newRule);
     }
 
     @Override
@@ -29,17 +32,19 @@ class CombinedRule implements Rule {
     }
 
     @Override
-    public void combinationStarted(State state) {
-        activeRule.combinationStarted(state);
-        if (!isActive()) {
-            activeRule = oldRule;
-            combinationStarted(state);
+    public void propertyCombinationStarted(State state) {
+        for(int i = rules.size() - 1; i >= 0; i--){
+            activeRule = rules.get(i);
+            activeRule.propertyCombinationStarted(state);
+            if (activeRule.isActive()) {
+                break;
+            }
         }
     }
 
     @Override
-    public void combinationFinished(State state) {
-        activeRule.combinationFinished(state);
+    public void propertyCombinationFinished(State state) {
+        activeRule.propertyCombinationFinished(state);
     }
 
     @Override
@@ -59,7 +64,8 @@ class CombinedRule implements Rule {
 
     @Override
     public Rule combineWith(Rule rule) {
-        return null;
+        rules.add(rule);
+        return this;
     }
     
 }

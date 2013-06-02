@@ -3,13 +3,12 @@ package ruleengine;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static ruleengine.Combinations.combination;
+import static ruleengine.StatefulRuleBuilder.Factory.iterate;
+import static ruleengine.StatefulRuleBuilder.Factory.when;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import static ruleengine.StatefulRuleBuilder.Factory.*;
-import static ruleengine.Combinations.*;
-import static ruleengine.TestUtils.*;
 
 /**
  * @author Dimitry Polivaev 18.02.2013
@@ -18,8 +17,18 @@ public class RuleEngineTest {
 
     private RuleEngine ruleEngine = new RuleEngine();
     private LoggingScriptProducerMock scriptProducerMock;
+    private static final Condition FALSE = new Condition() {
+        @Override
+        public boolean calculate() {
+            return false;
+        }
+    };
 
     public RuleEngineTest() {
+    }
+
+    private void generateCombinations() {
+        ruleEngine.run(scriptProducerMock);
     }
 
     private void expect(Combinations expectedCombinations) {
@@ -158,36 +167,43 @@ public class RuleEngineTest {
 
     @Test
     public void topRuleWithNotFulfilledCondition_IsIgnored() {
-
-        ruleEngine.addRule(iterate("x").over("a")._if(new Condition() {
-            @Override
-            public boolean calculate() {
-                return false;
-            }
-        }));
+        ruleEngine.addRule(iterate("x").over("a")._if(FALSE));
 
         generateCombinations();
 
         expect(combination());
     }
 
-    private void generateCombinations() {
-        ruleEngine.run(scriptProducerMock);
-    }
-
     @Test
     public void newRuleForTheSamePropertyWithNotFulfilledCondition_IsIgnored() {
-
         ruleEngine.addRule(iterate("x").over("a"));
-        ruleEngine.addRule(iterate("x").over("b")._if(new Condition() {
-            @Override
-            public boolean calculate() {
-                return false;
-            }
-        }));
+        ruleEngine.addRule(iterate("x").over("b")._if(FALSE));
 
         generateCombinations();
 
         expect(combination("x", "a"));
     }
+
+    @Test
+    public void thirdRuleForTheSameProperty_HidesOldRules() {
+        ruleEngine.addRule(iterate("x").over("a"));
+        ruleEngine.addRule(iterate("x").over("b"));
+        ruleEngine.addRule(iterate("x").over("c"));
+
+        generateCombinations();
+
+        expect(combination("x", "c"));
+    }
+
+    @Test
+    public void thirdRuleForTheSamePropertyWithNotFulfilledCondition_IsIgnored() {
+        ruleEngine.addRule(iterate("x").over("a"));
+        ruleEngine.addRule(iterate("x").over("b"));
+        ruleEngine.addRule(iterate("x").over("c")._if(FALSE));
+
+        generateCombinations();
+
+        expect(combination("x", "b"));
+    }
+
 }

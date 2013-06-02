@@ -11,8 +11,8 @@ public class StatefulRuleTest {
     private OnePropertyStateStub stateStub;
 
     private void produceCombination(Rule rule, State state) {
-		rule.combinationStarted(state);
-		rule.combinationFinished(state);
+		rule.propertyCombinationStarted(state);
+		rule.propertyCombinationFinished(state);
 	}
 
     private OnePropertyStateStub stateStub(String name, String value) {
@@ -35,22 +35,22 @@ public class StatefulRuleTest {
     @Test
     public void ruleWithOneValue_assignsItsValue() {
         StatefulRule statefulRule = iterate("name").over("value").asRule();
-        statefulRule.combinationStarted(stateStub);
+        statefulRule.propertyCombinationStarted(stateStub);
         assertThat(stateStub.getValue(), is((Object) "value"));
     }
 
     @Test
     public void ruleWithAssignedValue_isActive() {
         StatefulRule statefulRule = iterate("name").over("value").asRule();
-        statefulRule.combinationStarted(stateStub);
+        statefulRule.propertyCombinationStarted(stateStub);
         assertThat(statefulRule.isActive(), is(true));
     }
 
     @Test
     public void ruleIsNotActive_afterItHasFinished() {
         StatefulRule statefulRule = iterate("name").over("value").asRule();
-        statefulRule.combinationStarted(stateStub);
-        statefulRule.combinationFinished(stateStub);
+        statefulRule.propertyCombinationStarted(stateStub);
+        statefulRule.propertyCombinationFinished(stateStub);
         assertThat(statefulRule.isActive(), is(false));
     }
 
@@ -72,7 +72,7 @@ public class StatefulRuleTest {
 	public void ruleWithTwoValues_assignsSecondValueOnSecondTime() {
         StatefulRule statefulRule = iterate("name").over("1", "2").asRule();
 		produceCombination(statefulRule, stateStub);
-		statefulRule.combinationStarted(stateStub);
+		statefulRule.propertyCombinationStarted(stateStub);
 		assertThat(stateStub.getValue(), is((Object) "2"));
 	}
 
@@ -80,7 +80,7 @@ public class StatefulRuleTest {
 	public void ruleWithOneValue_assignsItsValueOnSecondTime() {
         StatefulRule statefulRule = iterate("name").over("value").asRule();
 		produceCombination(statefulRule, stateStub);
-		statefulRule.combinationStarted(stateStub);
+		statefulRule.propertyCombinationStarted(stateStub);
 		assertThat(stateStub.getValue(), is((Object) "value"));
 	}
 
@@ -109,7 +109,7 @@ public class StatefulRuleTest {
 		OnePropertyStateStub stateStub = stateStub("triggeredBy",
 				"triggeredByValue");
 		statefulRule.propertyValueSet(stateStub.event());
-		statefulRule.combinationFinished(stateStub);
+		statefulRule.propertyCombinationFinished(stateStub);
 		assertThat(statefulRule.hasFinished(), is(true));
 	}
 
@@ -125,9 +125,9 @@ public class StatefulRuleTest {
 	@Test
 	public void secondCallOfFinishCombinationIsIgnored() {
         StatefulRule statefulRule = iterate("name").over("1", "2").asRule();
-		statefulRule.combinationStarted(stateStub);
-		statefulRule.combinationFinished(stateStub);
-		statefulRule.combinationFinished(stateStub);
+		statefulRule.propertyCombinationStarted(stateStub);
+		statefulRule.propertyCombinationFinished(stateStub);
+		statefulRule.propertyCombinationFinished(stateStub);
 		assertThat(statefulRule.hasFinished(), is(false));
 	}
 
@@ -137,11 +137,11 @@ public class StatefulRuleTest {
         StatefulRule triggeredRule = when("x").iterate("y").over("3", "4")
             .asRule();
 		MapBasedState state = new MapBasedState();
-		topRule.combinationStarted(state);
-		triggeredRule.combinationStarted(state);
+		topRule.propertyCombinationStarted(state);
+		triggeredRule.propertyCombinationStarted(state);
 		topRule.propertyValueSet(new PropertyAssignedEvent(state,
 				triggeredRule, triggeredRule.getTriggeringProperties()));
-		topRule.combinationFinished(state);
+		topRule.propertyCombinationFinished(state);
 		assertThat(topRule.hasFinished(), is(false));
 
 	}
