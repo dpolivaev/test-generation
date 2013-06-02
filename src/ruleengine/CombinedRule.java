@@ -1,45 +1,48 @@
 package ruleengine;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 class CombinedRule implements Rule {
 
 
     private final List<Rule> rules = new ArrayList<>();
-    private Rule activeRule;
+    private Rule activeRule = null;
 
     public CombinedRule(Rule oldRule, Rule newRule) {
-        this.activeRule = newRule;
         rules.add(oldRule);
-        rules.add(newRule);
+        combineWith(newRule);
     }
 
     @Override
     public String getTargetedPropertyName() {
-        return activeRule.getTargetedPropertyName();
+        return rules.get(0).getTargetedPropertyName();
     }
 
     @Override
     public Set<String> getTriggeringProperties() {
-        return activeRule.getTriggeringProperties();
+        return rules.get(0).getTriggeringProperties();
     }
 
     @Override
     public boolean hasFinished() {
-        return activeRule.hasFinished();
+        return activeRule != null && activeRule.hasFinished();
     }
 
     @Override
     public void propertyCombinationStarted(State state) {
-        for(int i = rules.size() - 1; i >= 0; i--){
-            activeRule = rules.get(i);
-            activeRule.propertyCombinationStarted(state);
-            if (activeRule.isActive()) {
-                break;
+        if (getTriggeringProperties().isEmpty())
+            for (int i = rules.size() - 1; i >= 0; i--) {
+                Rule activeRule = rules.get(i);
+                activeRule.propertyCombinationStarted(state);
+                if (activeRule.isActive()) {
+                    setActiveRule(activeRule);
+                    break;
+                }
             }
-        }
+    }
+
+    private void setActiveRule(Rule activeRule) {
+        this.activeRule = activeRule;
     }
 
     @Override
@@ -49,7 +52,14 @@ class CombinedRule implements Rule {
 
     @Override
     public void propertyValueSet(PropertyAssignedEvent event) {
-        activeRule.propertyValueSet(event);
+        for (int i = rules.size() - 1; i >= 0; i--) {
+            Rule activeRule = rules.get(i);
+            activeRule.propertyValueSet(event);
+            if (activeRule.isActive()) {
+                setActiveRule(activeRule);
+                break;
+            }
+        }
     }
 
     @Override
@@ -64,8 +74,17 @@ class CombinedRule implements Rule {
 
     @Override
     public Rule combineWith(Rule rule) {
+        checkRuleCompatibility(rule);
         rules.add(rule);
         return this;
+    }
+
+    private void checkRuleCompatibility(Rule rule) {
+        if (!getTargetedPropertyName().equals(rule.getTargetedPropertyName()))
+            throw new IllegalArgumentException("different targeted property name " + rule.getTargetedPropertyName());
+        if (!getTriggeringProperties().equals(rule.getTriggeringProperties()))
+            throw new IllegalArgumentException("different targeted property name " + rule.getTargetedPropertyName());
+
     }
     
 }
