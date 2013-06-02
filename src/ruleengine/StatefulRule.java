@@ -7,21 +7,14 @@ import java.util.*;
  */
 public class StatefulRule implements Rule {
 
-	private final String targetedPropertyName;
-
+    final private String targetedPropertyName;
 	final private Values values;
-	private boolean finished;
-	private final Set<String> triggeringProperties;
-	private final Set<Rule> dependentRules;
+    final private Set<String> triggeringProperties;
+    final private Set<Rule> dependentRules;
+    final private Condition condition;
 
-	@Override
-	public Set<String> getTriggeringProperties() {
-		return triggeringProperties;
-	}
-
-	private boolean valueAddedToCombination;
-
-	private final Condition condition;
+	private boolean valueAlreadyAddedToCurrentCombination;
+    private boolean finished;
 
 	public StatefulRule(Set<String> triggeredBy, Condition condition,
 		String targetedPropertyName, Object[] values) {
@@ -30,7 +23,7 @@ public class StatefulRule implements Rule {
 		this.targetedPropertyName = targetedPropertyName;
 		this.values = new ConstantValues(values);
 		this.finished = false;
-		this.valueAddedToCombination = false;
+		this.valueAlreadyAddedToCurrentCombination = false;
 		dependentRules = new HashSet<>();
 	}
 
@@ -38,6 +31,11 @@ public class StatefulRule implements Rule {
 	public String getTargetedPropertyName() {
 		return targetedPropertyName;
 	}
+
+    @Override
+    public Set<String> getTriggeringProperties() {
+        return triggeringProperties;
+    }
 
 	@Override
 	public boolean hasFinished() {
@@ -63,13 +61,13 @@ public class StatefulRule implements Rule {
 
 	private void addValue(State state) {
 		Object nextValue = nextValue();
-        valueAddedToCombination = true;
+        valueAlreadyAddedToCurrentCombination = true;
 		state.setPropertyValue(this, nextValue);
 	}
 
 	@Override
 	public void propertyValueSet(PropertyAssignedEvent event) {
-        if (valueAddedToCombination)
+        if (valueAlreadyAddedToCurrentCombination)
             addDependencies(event);
         else if (triggeringProperties.contains(event.getTargetedPropertyName())
             && event.containsPropertyValues(triggeringProperties) && condition.isSatisfied())
@@ -93,7 +91,7 @@ public class StatefulRule implements Rule {
 
 	@Override
 	public void propertyCombinationFinished(State state) {
-		if (valueAddedToCombination) {
+		if (valueAlreadyAddedToCurrentCombination) {
 			for (Rule rule : dependentRules)
 				rule.propertyCombinationFinished(state);
             if (allRulesHaveFinished(dependentRules)) {
@@ -101,7 +99,7 @@ public class StatefulRule implements Rule {
                 if (values.isNewIterationFinished())
                     finished = true;
 			}
-			valueAddedToCombination = false;
+			valueAlreadyAddedToCurrentCombination = false;
 		}
 	}
 
@@ -112,7 +110,7 @@ public class StatefulRule implements Rule {
 
     @Override
     public boolean isActive() {
-        return valueAddedToCombination;
+        return valueAlreadyAddedToCurrentCombination;
     }
 
     @Override
