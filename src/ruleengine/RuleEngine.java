@@ -1,7 +1,6 @@
 package ruleengine;
 
-import java.util.Collection;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Dimitry Polivaev 18.02.2013
@@ -22,7 +21,9 @@ public class RuleEngine implements State {
 		do {
 			mapBasedState.nextCombination();
 			fireNextCombinationStartedEvent();
+            Set<String> oldDependencies = dependencies;
 			scriptProducer.makeScriptFor(this);
+            dependencies = oldDependencies;
 			fireNextCombinationFinishedEvent();
 
 		} while (!topRulesHaveFinished());
@@ -33,23 +34,39 @@ public class RuleEngine implements State {
 			rule.propertyCombinationFinished(this);
 	}
 
+    Set<String> dependencies;
 	private void fireNextCombinationStartedEvent() {
-		for (Rule rule : rules())
-			rule.propertyCombinationStarted(this);
+        Set<String> oldDependencies = dependencies;
+        for (Rule rule : rules()) {
+            dependencies = new HashSet<String>();
+            rule.propertyCombinationStarted(this);
+        }
+        dependencies = oldDependencies;
 	}
 
 	@Override
 	public void setPropertyValue(Rule rule, Object nextValue) {
 		mapBasedState.setPropertyValue(rule, nextValue);
-		PropertyAssignedEvent event = new PropertyAssignedEvent(this, rule,
-			rule.getTriggeringProperties());
+        Set<String> requiredProperties;
+        if (dependencies.isEmpty()) {
+            requiredProperties = rule.getTriggeringProperties();
+        }
+        else {
+            requiredProperties = new HashSet<>(rule.getTriggeringProperties());
+            requiredProperties.addAll(dependencies);
+        }
+        PropertyAssignedEvent event = new PropertyAssignedEvent(this, rule,
+			requiredProperties);
 		firePropertyAssignedEvent(event);
 	}
 
 	private void firePropertyAssignedEvent(PropertyAssignedEvent event) {
+        Set<String> oldDependencies = dependencies;
 		for (Rule rule : rules()) {
+            dependencies = new HashSet<String>();
 			rule.propertyValueSet(event);
 		}
+        dependencies = oldDependencies;
 	}
 
 	private boolean topRulesHaveFinished() {
@@ -79,7 +96,9 @@ public class RuleEngine implements State {
 		return mapBasedState.containsPropertyValues(names);
 	}
 
-	public Object get(String name) {
+	@Override
+    public Object get(String name) {
+        dependencies.add(name);
 		return mapBasedState.get(name);
 	}
 

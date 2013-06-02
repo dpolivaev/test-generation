@@ -24,7 +24,7 @@ public interface Rule {
 
     boolean isActive();
 
-    void reset();
+    void setNotFinished();
 
     Rule combineWith(Rule rule);
 
