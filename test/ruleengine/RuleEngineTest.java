@@ -1,14 +1,11 @@
 package ruleengine;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static ruleengine.Combinations.combination;
-import static ruleengine.StatefulRuleBuilder.Factory.iterate;
-import static ruleengine.StatefulRuleBuilder.Factory.when;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
+import static ruleengine.Combinations.*;
+import static ruleengine.StatefulRuleBuilder.Factory.*;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 /**
  * @author Dimitry Polivaev 18.02.2013
@@ -206,4 +203,16 @@ public class RuleEngineTest {
         expect(combination("x", "b"));
     }
 
+    @Test
+    public void triggeringAndOverwrittenTriggeredRulesWithSingleValues_callsScriptProducerWithTheirValues() {
+
+        ruleEngine.addRule(iterate("x").over("a"));
+        ruleEngine.addRule(when("x").iterate("y").over("b"));
+        ruleEngine.addRule(when("x").iterate("y").over("c"));
+        ruleEngine.addRule(when("x").iterate("y").over("d"));
+
+        generateCombinations();
+
+        expect(combination("x", "a", "y", "d"));
+    }
 }
