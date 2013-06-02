@@ -63,8 +63,8 @@ class CombinedRule implements Rule {
     }
 
     @Override
-    public void reset() {
-        activeRule.reset();
+    public void setNotFinished() {
+        activeRule.setNotFinished();
     }
 
     @Override

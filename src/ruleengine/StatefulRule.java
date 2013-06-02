@@ -1,7 +1,6 @@
 package ruleengine;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Dimitry Polivaev 18.02.2013
@@ -70,15 +69,15 @@ public class StatefulRule implements Rule {
 	public void propertyValueSet(PropertyAssignedEvent event) {
         if (triggeringProperties.contains(event.getTargetedPropertyName())
             && event.containsPropertyValues(triggeringProperties)) {
-            if (condition.calculate())
+            if (condition.calculate()) {
                 addValue(event.getState());
-            else if (event.getRequiredProperties() //
-                .contains(targetedPropertyName)) {
-                dependencies.add(event.getWorkingRule());
+                return;
             }
         }
-        else if (event.getRequiredProperties().contains(targetedPropertyName)) {
-			dependencies.add(event.getWorkingRule());
+        if (event.getRequiredProperties().contains(targetedPropertyName)) {
+            Rule rule = event.getWorkingRule();
+            rule.setNotFinished();
+            dependencies.add(rule);
 		}
 	}
 
@@ -88,8 +87,10 @@ public class StatefulRule implements Rule {
 			for (Rule rule : dependencies)
 				rule.propertyCombinationFinished(state);
 			if (RuleEngine.allRulesHaveFinished(dependencies)) {
-				for (Rule rule : dependencies)
-					rule.reset();
+                for (Rule rule : dependencies) {
+                    if (rule.getTriggeringProperties().contains(targetedPropertyName))
+                        rule.setNotFinished();
+                }
 				dependencies.clear();
 				values.next();
 				if (values.isNewIterationStarted()) {
@@ -101,7 +102,7 @@ public class StatefulRule implements Rule {
 	}
 
 	@Override
-	public void reset() {
+	public void setNotFinished() {
 		finished = false;
 	}
 
@@ -114,4 +115,10 @@ public class StatefulRule implements Rule {
     public Rule combineWith(Rule rule) {
         return new CombinedRule(this, rule);
     }
+
+    @Override
+    public String toString() {
+        return "StatefulRule [" + triggeringProperties + " -> " + targetedPropertyName + "]";
+    }
+
 }

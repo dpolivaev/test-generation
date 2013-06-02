@@ -70,7 +70,7 @@ public class RuleEngineTest {
     }
 
     @Test
-    public void singleRuleWithValuesA_B_callsScriptProducerWithValuesA_B() {
+    public void singleRuleWithValuesA_B() {
         ruleEngine.addRule(iterate("property").over("a", "b"));
 
         generateCombinations();
@@ -79,7 +79,7 @@ public class RuleEngineTest {
     }
 
     @Test
-    public void twoRulesWithValuesAandB_callsScriptProducerWithTheirValues() {
+    public void twoRulesWithValuesAandB() {
         ruleEngine.addRule(iterate("x").over("a"));
         ruleEngine.addRule(iterate("y").over("b"));
 
@@ -89,7 +89,7 @@ public class RuleEngineTest {
     }
 
     @Test
-    public void twoRulesWithValuesA1_A2andB1_B2_callsScriptProducerWithTheirValues() {
+    public void twoRulesWithValuesA1_A2andB1_B2() {
 
         ruleEngine.addRule(iterate("x").over("a1", "a2"));
         ruleEngine.addRule(iterate("y").over("b1", "b2"));
@@ -101,7 +101,7 @@ public class RuleEngineTest {
     }
 
     @Test
-    public void twoRulesWithValuesA1_A2_A3andB1_B2_callsScriptProducerWithTheirValues() {
+    public void twoRulesWithValuesA1_A2_A3andB1_B2() {
 
         ruleEngine.addRule(iterate("x").over("a1", "a2", "a3"));
         ruleEngine.addRule(iterate("y").over("b1", "b2"));
@@ -113,7 +113,7 @@ public class RuleEngineTest {
     }
 
     @Test
-    public void triggeringAndTriggeredRulesWithSingleValues_callsScriptProducerWithTheirValues() {
+    public void triggeringAndTriggeredRulesWithSingleValues() {
 
         ruleEngine.addRule(iterate("x").over("a"));
         ruleEngine.addRule(when("x").iterate("y").over("b"));
@@ -124,7 +124,7 @@ public class RuleEngineTest {
     }
 
     @Test
-    public void triggeringAndTriggeredRulesWithValuesA_B_and_C_D_callsScriptProducerWithTheirValues() {
+    public void triggeringAndTriggeredRulesWithValuesA_B_and_C_D() {
         ruleEngine.addRule(iterate("x").over("a", "b"));
         ruleEngine.addRule(when("x").iterate("y").over("c", "d"));
 
@@ -137,7 +137,7 @@ public class RuleEngineTest {
     }
 
     @Test
-    public void triggeringValueAndConditionallyTriggeredValues_callsScriptProducerWithTheirValues() {
+    public void triggeringValueAndConditionallyTriggeredValues() {
         ruleEngine.addRule(iterate("x").over("a", "b", "c"));
         ruleEngine.addRule(when("x").iterate("y").over("A", "B")._if( //
             new Condition() {
@@ -204,7 +204,7 @@ public class RuleEngineTest {
     }
 
     @Test
-    public void triggeringAndOverwrittenTriggeredRulesWithSingleValues_callsScriptProducerWithTheirValues() {
+    public void triggeringAndOverwrittenTriggeredRulesWithSingleValues() {
 
         ruleEngine.addRule(iterate("x").over("a"));
         ruleEngine.addRule(when("x").iterate("y").over("b"));
@@ -214,5 +214,24 @@ public class RuleEngineTest {
         generateCombinations();
 
         expect(combination("x", "a", "y", "d"));
+    }
+
+    @Test
+    public void ruleAndRuleWithDependentCondition() {
+
+        ruleEngine.addRule(iterate("x").over("a1", "a2"));
+        ruleEngine.addRule(iterate("y").over("b1", "b2")._if(new Condition() {
+
+            @Override
+            public boolean calculate() {
+                ruleEngine.get("x");
+                return true;
+            }
+        }));
+
+        generateCombinations();
+
+        expect(combination("x", "a1", "y", "b1") //
+            .followedBy("x", "a1", "y", "b2").followedBy("x", "a2", "y", "b1").followedBy("x", "a2", "y", "b2"));
     }
 }
