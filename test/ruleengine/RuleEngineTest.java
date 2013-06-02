@@ -16,7 +16,7 @@ public class RuleEngineTest {
     private LoggingScriptProducerMock scriptProducerMock;
     private static final Condition FALSE = new Condition() {
         @Override
-        public boolean calculate() {
+        public boolean isSatisfied() {
             return false;
         }
     };
@@ -142,7 +142,7 @@ public class RuleEngineTest {
         ruleEngine.addRule(when("x").iterate("y").over("A", "B")._if( //
             new Condition() {
                 @Override
-                public boolean calculate() {
+                public boolean isSatisfied() {
                     return ruleEngine.get("x").equals("c");
                 };
             }));
@@ -223,7 +223,7 @@ public class RuleEngineTest {
         ruleEngine.addRule(iterate("y").over("b1", "b2")._if(new Condition() {
 
             @Override
-            public boolean calculate() {
+            public boolean isSatisfied() {
                 ruleEngine.get("x");
                 return true;
             }

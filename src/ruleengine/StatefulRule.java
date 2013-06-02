@@ -52,7 +52,7 @@ public class StatefulRule implements Rule {
 	@Override
 	public void propertyCombinationStarted(State state) {
         if (triggeringProperties.isEmpty()) {
-            if (condition.calculate())
+            if (condition.isSatisfied())
                 addValue(state);
             else
                 finished = true;
@@ -61,36 +61,40 @@ public class StatefulRule implements Rule {
 
 	private void addValue(State state) {
 		Object nextValue = nextValue();
+        valueAddedToCombination = true;
 		state.setPropertyValue(this, nextValue);
-		valueAddedToCombination = true;
 	}
 
 	@Override
 	public void propertyValueSet(PropertyAssignedEvent event) {
-        if (triggeringProperties.contains(event.getTargetedPropertyName())
-            && event.containsPropertyValues(triggeringProperties)) {
-            if (condition.calculate()) {
-                addValue(event.getState());
-                return;
-            }
-        }
+        if (valueAddedToCombination)
+            addDependencies(event);
+        else if (triggeringProperties.contains(event.getTargetedPropertyName())
+            && event.containsPropertyValues(triggeringProperties) && condition.isSatisfied())
+            addValue(event.getState());
+	}
+
+    private void addDependencies(PropertyAssignedEvent event) {
         if (event.getRequiredProperties().contains(targetedPropertyName)) {
             Rule rule = event.getWorkingRule();
             rule.setNotFinished();
             dependencies.add(rule);
-		}
-	}
+        }
+    }
+
+    private boolean allRulesHaveFinished(Iterable<Rule> rules) {
+        for (Rule rule : rules)
+            if (!rule.hasFinished())
+                return false;
+        return true;
+    }
 
 	@Override
 	public void propertyCombinationFinished(State state) {
 		if (valueAddedToCombination) {
 			for (Rule rule : dependencies)
 				rule.propertyCombinationFinished(state);
-			if (RuleEngine.allRulesHaveFinished(dependencies)) {
-                for (Rule rule : dependencies) {
-                    if (rule.getTriggeringProperties().contains(targetedPropertyName))
-                        rule.setNotFinished();
-                }
+            if (allRulesHaveFinished(dependencies)) {
 				dependencies.clear();
 				values.next();
 				if (values.isNewIterationStarted()) {
@@ -118,7 +122,12 @@ public class StatefulRule implements Rule {
 
     @Override
     public String toString() {
-        return "StatefulRule [" + triggeringProperties + " -> " + targetedPropertyName + "]";
+        StringBuilder stringBuilder = new StringBuilder("StatefulRule [");
+        if (!triggeringProperties.isEmpty())
+            stringBuilder.append(triggeringProperties).append(" -> ");
+        stringBuilder.append(targetedPropertyName).append("]");
+        return stringBuilder.toString();
     }
+
 
 }
