@@ -1,6 +1,8 @@
 package ruleengine;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 class CombinedRule implements Rule {
 
@@ -41,15 +43,6 @@ class CombinedRule implements Rule {
             }
     }
 
-    private void setActiveRule(Rule activeRule) {
-        this.activeRule = activeRule;
-    }
-
-    @Override
-    public void propertyCombinationFinished(State state) {
-        activeRule.propertyCombinationFinished(state);
-    }
-
     @Override
     public void propertyValueSet(PropertyAssignedEvent event) {
         for (int i = rules.size() - 1; i >= 0; i--) {
@@ -62,6 +55,15 @@ class CombinedRule implements Rule {
         }
     }
 
+    private void setActiveRule(Rule activeRule) {
+        this.activeRule = activeRule;
+    }
+
+    @Override
+    public void propertyCombinationFinished(State state) {
+        activeRule.propertyCombinationFinished(state);
+    }
+
     @Override
     public void setNotFinished() {
         activeRule.setNotFinished();
@@ -69,7 +71,7 @@ class CombinedRule implements Rule {
 
     @Override
     public boolean isActive() {
-        return activeRule.isActive();
+        return activeRule != null && activeRule.isActive();
     }
 
     @Override
