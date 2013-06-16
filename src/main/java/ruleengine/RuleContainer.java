@@ -14,7 +14,7 @@ class RuleContainer {
         if (existingRule != null)
             rules.put(targetedPropertyName, existingRule.combineWith(rule));
         else
-            rules.put(rule.getTargetedPropertyName(), rule);
+            rules.put(targetedPropertyName, rule);
 	}
 
 	public Collection<Rule> rules() {
@@ -26,5 +26,14 @@ class RuleContainer {
 	public boolean hasRuleForProperty(String propertyName) {
 		return rules.containsKey(propertyName);
 	}
+
+    public void removeRule(Rule rule) {
+        String targetedPropertyName = rule.getTargetedPropertyName();
+        Rule reducedRule = rules.get(targetedPropertyName).without(rule);
+        if (reducedRule == null)
+            rules.remove(targetedPropertyName);
+        else
+            rules.put(targetedPropertyName, reducedRule);
+    }
 
 }

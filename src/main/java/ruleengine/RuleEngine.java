@@ -1,6 +1,8 @@
 package ruleengine;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Dimitry Polivaev 18.02.2013
@@ -12,6 +14,10 @@ public class RuleEngine implements State {
 	public void addRule(Rule rule) {
 		rules.addRule(rule);
 	}
+
+    public void removeRule(Rule rule) {
+        rules.removeRule(rule);
+    }
 
 	public boolean hasRuleForProperty(String propertyName) {
 		return rules.hasRuleForProperty(propertyName);
@@ -101,5 +107,4 @@ public class RuleEngine implements State {
     public void addRule(StatefulRuleBuilder builder) {
         addRule(builder.asRule());
     }
-
 }

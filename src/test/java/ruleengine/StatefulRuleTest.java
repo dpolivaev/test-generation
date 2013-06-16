@@ -2,7 +2,8 @@ package ruleengine;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static ruleengine.StatefulRuleBuilder.Factory.*;
+import static ruleengine.StatefulRuleBuilder.Factory.iterate;
+import static ruleengine.StatefulRuleBuilder.Factory.when;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -143,6 +144,5 @@ public class StatefulRuleTest {
 				triggeredRule, triggeredRule.getTriggeringProperties()));
 		topRule.propertyCombinationFinished(state);
 		assertThat(topRule.hasFinished(), is(false));
-
 	}
 }
