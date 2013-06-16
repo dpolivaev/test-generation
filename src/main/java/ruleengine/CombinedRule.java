@@ -88,5 +88,13 @@ class CombinedRule implements Rule {
             throw new IllegalArgumentException("different targeted property name " + rule.getTargetedPropertyName());
 
     }
+
+    @Override
+    public Rule without(Rule rule) {
+        rules.remove(rule);
+        if (rules.size() == 1)
+            return rules.get(0);
+        return this;
+    }
     
 }

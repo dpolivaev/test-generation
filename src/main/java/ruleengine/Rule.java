@@ -28,4 +28,6 @@ public interface Rule {
 
     Rule combineWith(Rule rule);
 
+    Rule without(Rule rule);
+
 }

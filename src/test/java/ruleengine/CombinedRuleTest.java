@@ -120,4 +120,26 @@ public class CombinedRuleTest {
     public void combinedRuleForDifferentTriggeringPropertiesAreNotAllowed() {
         new CombinedRule(iterate("y").asRule(), iterate("y").when("x").asRule());
     }
+
+    @Test
+    public void CombinedRuleWithSizeMoreThan2ReturnsItself_AfterContainedRuleIsDeleted() {
+        Rule first = ruleMock(true);
+        Rule second = ruleMock(true);
+        Rule third = ruleMock(true);
+
+        CombinedRule combinedRule = new CombinedRule(first, second);
+        combinedRule.combineWith(third);
+
+        assertThat(combinedRule.without(third), is((Rule) combinedRule));
+    }
+
+    @Test
+    public void CombinedRuleWithSizeEqual2ReturnsAnotherContainedRule_AfterContainedRuleIsDeleted() {
+        Rule first = ruleMock(true);
+        Rule second = ruleMock(true);
+
+        CombinedRule combinedRule = new CombinedRule(first, second);
+
+        assertThat(combinedRule.without(first), is(second));
+    }
 }

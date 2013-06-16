@@ -1,11 +1,14 @@
 package ruleengine;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
-import static ruleengine.Combinations.*;
-import static ruleengine.StatefulRuleBuilder.Factory.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static ruleengine.Combinations.combination;
+import static ruleengine.StatefulRuleBuilder.Factory.iterate;
+import static ruleengine.StatefulRuleBuilder.Factory.when;
 
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author Dimitry Polivaev 18.02.2013
@@ -43,6 +46,12 @@ public class RuleEngineTest {
         CountingScriptProducerMock scriptProducerMock = new CountingScriptProducerMock();
         ruleEngine.run(scriptProducerMock);
         assertThat(scriptProducerMock.callCount(), is(1));
+    }
+
+    @Test
+    public void ruleEngineWithoutRules_createsSingleCombinationWithoutValues() {
+        generateCombinations();
+        expect(combination());
     }
 
     @Test
@@ -233,5 +242,28 @@ public class RuleEngineTest {
 
         expect(combination("x", "a1", "y", "b1") //
             .followedBy("x", "a1", "y", "b2").followedBy("x", "a2", "y", "b1").followedBy("x", "a2", "y", "b2"));
+    }
+
+    @Test
+    public void removedRuleDoesIsNotConsidered() {
+        StatefulRule ruleToBeRemoved = iterate("x").over("b").asRule();
+        ruleEngine.addRule(ruleToBeRemoved);
+        ruleEngine.removeRule(ruleToBeRemoved);
+
+        generateCombinations();
+
+        expect(combination());
+    }
+
+    @Test
+    public void removedRuleDoesNotHideOtherRules() {
+        ruleEngine.addRule(iterate("x").over("a"));
+        StatefulRule ruleToBeRemoved = iterate("x").over("b").asRule();
+        ruleEngine.addRule(ruleToBeRemoved);
+        ruleEngine.removeRule(ruleToBeRemoved);
+
+        generateCombinations();
+
+        expect(combination("x", "a"));
     }
 }

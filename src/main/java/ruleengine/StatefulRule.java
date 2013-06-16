@@ -1,6 +1,7 @@
 package ruleengine;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Dimitry Polivaev 18.02.2013
@@ -127,5 +128,9 @@ public class StatefulRule implements Rule {
         return stringBuilder.toString();
     }
 
+    @Override
+    public Rule without(Rule rule) {
+        return null;
+    }
 
 }
