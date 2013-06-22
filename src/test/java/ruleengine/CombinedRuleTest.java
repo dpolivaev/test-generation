@@ -26,7 +26,7 @@ public class CombinedRuleTest {
     public void givenNoActiveRules_propagatesPropertyCombinationStartedEventToAllRules() {
         Rule first = ruleMock(false);
         Rule second = ruleMock(false);
-        State state = mock(State.class);
+        EngineState state = mock(EngineState.class);
 
         new CombinedRule(first, second).propertyCombinationStarted(state);
 
@@ -38,7 +38,7 @@ public class CombinedRuleTest {
     public void givenActiveRule_propagatesPropertyCombinationStartedUntilActiveRuleIsFound() {
         Rule first = ruleMock(false);
         Rule second = ruleMock(true);
-        State state = mock(State.class);
+        EngineState state = mock(EngineState.class);
 
         new CombinedRule(first, second).propertyCombinationStarted(state);
 
@@ -74,7 +74,7 @@ public class CombinedRuleTest {
     public void givenActiveRule_propagatesPropertyCombinationFinishedToTheActiveRule() {
         Rule first = ruleMock(true);
         Rule second = ruleMock(false);
-        State state = mock(State.class);
+        EngineState state = mock(EngineState.class);
 
         CombinedRule combinedRule = new CombinedRule(first, second);
         combinedRule.propertyCombinationStarted(state);
@@ -88,7 +88,7 @@ public class CombinedRuleTest {
     public void givenActiveRule_propagatesSetNotFinishedToTheActiveRule() {
         Rule first = ruleMock(true);
         Rule second = ruleMock(false);
-        State state = mock(State.class);
+        EngineState state = mock(EngineState.class);
 
         CombinedRule combinedRule = new CombinedRule(first, second);
         combinedRule.propertyCombinationStarted(state);

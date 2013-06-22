@@ -7,14 +7,16 @@ import java.util.Set;
 /**
  * @author Dimitry Polivaev 18.02.2013
  */
-public class RuleEngine implements State {
-	private RuleContainer rules = new RuleContainer();
+public class RuleEngine implements EngineState {
+	private RuleMap rules = new RuleMap();
 	private MapBasedState mapBasedState = new MapBasedState();
 
-	public void addRule(Rule rule) {
+	@Override
+    public void addRule(Rule rule) {
 		rules.addRule(rule);
 	}
 
+    @Override
     public void removeRule(Rule rule) {
         rules.removeRule(rule);
     }
@@ -37,7 +39,7 @@ public class RuleEngine implements State {
 
 	private void fireNextCombinationFinishedEvent() {
 		for (Rule rule : rules())
-			rule.propertyCombinationFinished(this);
+            rule.propertyCombinationFinished(this);
 	}
 
     Set<String> dependencies;
@@ -104,6 +106,7 @@ public class RuleEngine implements State {
 		return mapBasedState.get(name);
 	}
 
+    @Override
     public void addRule(StatefulRuleBuilder builder) {
         addRule(builder.asRule());
     }

@@ -14,9 +14,9 @@ public interface Rule {
 
 	Set<String> getTriggeringProperties();
 
-	void propertyCombinationStarted(State state);
+    void propertyCombinationStarted(EngineState engineState);
 
-	void propertyCombinationFinished(State state);
+    void propertyCombinationFinished(EngineState engineState);
 
 	void propertyValueSet(PropertyAssignedEvent event);
 

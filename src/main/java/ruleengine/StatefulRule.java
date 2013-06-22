@@ -50,20 +50,19 @@ public class StatefulRule implements Rule {
 		return value;
 	}
 
-	@Override
-	public void propertyCombinationStarted(State state) {
+	public void propertyCombinationStarted(PropertyMap propertyMap) {
         if (triggeringProperties.isEmpty()) {
             if (condition.isSatisfied())
-                addValue(state);
+                addValue(propertyMap);
             else
                 finished = true;
         }
 	}
 
-	private void addValue(State state) {
+	private void addValue(PropertyMap propertyMap) {
 		Object nextValue = nextValue();
         valueAlreadyAddedToCurrentCombination = true;
-		state.setPropertyValue(this, nextValue);
+		propertyMap.setPropertyValue(this, nextValue);
 	}
 
 	@Override
@@ -90,11 +89,11 @@ public class StatefulRule implements Rule {
         return true;
     }
 
-	@Override
-	public void propertyCombinationFinished(State state) {
+    @Override
+    public void propertyCombinationFinished(EngineState engineState) {
 		if (valueAlreadyAddedToCurrentCombination) {
 			for (Rule rule : dependentRules)
-				rule.propertyCombinationFinished(state);
+                rule.propertyCombinationFinished(engineState);
             if (allRulesHaveFinished(dependentRules)) {
 				dependentRules.clear();
                 if (values.isNewIterationFinished())
@@ -133,4 +132,13 @@ public class StatefulRule implements Rule {
         return null;
     }
 
+    @Override
+    public void propertyCombinationStarted(EngineState engineState) {
+        if (triggeringProperties.isEmpty()) {
+            if (condition.isSatisfied())
+                addValue(engineState);
+            else
+                finished = true;
+        }
+    }
 }

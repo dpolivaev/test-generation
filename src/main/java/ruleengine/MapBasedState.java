@@ -4,7 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-class MapBasedState implements State {
+class MapBasedState implements PropertyMap {
 	private StringBuilder assignedPropertiesAsString = new StringBuilder();
 	private int count = 0;
 	private Map<String, Object> properties = new LinkedHashMap<String, Object>();

@@ -2,7 +2,7 @@ package ruleengine;
 
 import java.util.Set;
 
-interface State {
+interface PropertyMap {
 
 	void setPropertyValue(Rule rule, Object value);
 
