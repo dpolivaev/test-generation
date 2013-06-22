@@ -2,29 +2,32 @@ package ruleengine;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static ruleengine.StatefulRuleBuilder.Factory.iterate;
 import static ruleengine.StatefulRuleBuilder.Factory.when;
+import static ruleengine.TestUtils.set;
+
+import java.util.Collections;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 public class StatefulRuleTest {
-    private OnePropertyStateStub stateStub;
+    private EngineState engineState;
+    private PropertyAssignedEvent propertyAssignedEvent;
 
-    private void produceCombination(Rule rule, State state) {
-		rule.propertyCombinationStarted(state);
-		rule.propertyCombinationFinished(state);
-	}
-
-    private OnePropertyStateStub stateStub(String name, String value) {
-
-		stateStub.setPropertyValue(iterate(name).asRule(), value);
-		return stateStub;
-	}
+    private void iterationWith(StatefulRule statefulRule) {
+        statefulRule.propertyCombinationStarted(engineState);
+        statefulRule.propertyCombinationFinished(engineState);
+    }
 
     @Before
     public void setup() {
-        stateStub = OnePropertyStateStub.stateStub();
+        engineState = mock(EngineState.class);
+        propertyAssignedEvent = mock(PropertyAssignedEvent.class);
+
     }
 
 	@Test
@@ -36,99 +39,105 @@ public class StatefulRuleTest {
     @Test
     public void ruleWithOneValue_assignsItsValue() {
         StatefulRule statefulRule = iterate("name").over("value").asRule();
-        statefulRule.propertyCombinationStarted(stateStub);
-        assertThat(stateStub.getValue(), is((Object) "value"));
+
+        statefulRule.propertyCombinationStarted(engineState);
+        verify(engineState).setPropertyValue(statefulRule, "value");
     }
 
     @Test
     public void ruleWithAssignedValue_isActive() {
         StatefulRule statefulRule = iterate("name").over("value").asRule();
-        statefulRule.propertyCombinationStarted(stateStub);
+        statefulRule.propertyCombinationStarted(engineState);
         assertThat(statefulRule.isActive(), is(true));
     }
 
     @Test
     public void ruleIsNotActive_afterItHasFinished() {
         StatefulRule statefulRule = iterate("name").over("value").asRule();
-        statefulRule.propertyCombinationStarted(stateStub);
-        statefulRule.propertyCombinationFinished(stateStub);
+        iterationWith(statefulRule);
         assertThat(statefulRule.isActive(), is(false));
     }
 
-	@Test
+    @Test
 	public void ruleWithOneValue_hasFinishedAfterCombinationIsFinished() {
         StatefulRule statefulRule = iterate("name").over("value").asRule();
-		produceCombination(statefulRule, stateStub);
+        iterationWith(statefulRule);
 		assertThat(statefulRule.hasFinished(), is(true));
 	}
 
 	@Test
 	public void ruleWithTwoValues_hasNotFinishedAfterFirstCombinationIsFinished() {
         StatefulRule statefulRule = iterate("name").over("1", "2").asRule();
-        produceCombination(statefulRule, stateStub);
+
+        iterationWith(statefulRule);
 		assertThat(statefulRule.hasFinished(), is(false));
 	}
 
 	@Test
 	public void ruleWithTwoValues_assignsSecondValueOnSecondTime() {
         StatefulRule statefulRule = iterate("name").over("1", "2").asRule();
-		produceCombination(statefulRule, stateStub);
-		statefulRule.propertyCombinationStarted(stateStub);
-		assertThat(stateStub.getValue(), is((Object) "2"));
+
+        iterationWith(statefulRule);
+        statefulRule.propertyCombinationStarted(engineState);
+        verify(engineState).setPropertyValue(statefulRule, "2");
 	}
 
 	@Test
 	public void ruleWithOneValue_assignsItsValueOnSecondTime() {
         StatefulRule statefulRule = iterate("name").over("value").asRule();
-		produceCombination(statefulRule, stateStub);
-		statefulRule.propertyCombinationStarted(stateStub);
-		assertThat(stateStub.getValue(), is((Object) "value"));
+        EngineState engineState1 = mock(EngineState.class);
+        statefulRule.propertyCombinationStarted(engineState1);
+        statefulRule.propertyCombinationFinished(engineState1);
+        EngineState engineState2 = mock(EngineState.class);
+        statefulRule.propertyCombinationStarted(engineState2);
+        verify(engineState2).setPropertyValue(statefulRule, "value");
 	}
 
 	@Test
 	public void triggeredRuleWithOneValue_ignoresCombinationWithoutItsTriggeringProperty() {
         StatefulRule statefulRule = when("triggeredBy").iterate("name")
             .over("value").asRule();
-		produceCombination(statefulRule, stateStub);
+
+        iterationWith(statefulRule);
 		assertThat(statefulRule.hasFinished(), is(false));
 	}
 
 	@Test
 	public void triggeredRuleWithOneValue_whenTriggeredPropertyIsAssigned_assignsItsValue() {
-        StatefulRule statefulRule = when("triggeredBy").iterate("name")
-            .over("value").asRule();
-		OnePropertyStateStub stateStub = stateStub("triggeredBy",
-				"triggeredByValue");
-		statefulRule.propertyValueSet(stateStub.event());
-		assertThat(stateStub.getValue(), is((Object) "value"));
+        Rule triggeringRule = iterate("triggeredBy").over("value1").asRule();
+        StatefulRule triggeredRule = when("triggeredBy").iterate("name").over("value2").asRule();
+        Mockito.when(engineState.containsPropertyValues(set("triggeredBy"))).thenReturn(true);
+        triggeredRule.propertyValueSet( //
+            new PropertyAssignedEvent(engineState, triggeringRule, Collections.<String> emptySet()));
+        verify(engineState).setPropertyValue(triggeredRule, "value2");
 	}
 
 	@Test
 	public void triggeredRuleWithOneValue_whenTriggeredPropertyIsAssigned_finishes() {
-        StatefulRule statefulRule = when("triggeredBy").iterate("name")
-            .over("value").asRule();
-		OnePropertyStateStub stateStub = stateStub("triggeredBy",
-				"triggeredByValue");
-		statefulRule.propertyValueSet(stateStub.event());
-		statefulRule.propertyCombinationFinished(stateStub);
-		assertThat(statefulRule.hasFinished(), is(true));
+        Rule triggeringRule = iterate("triggeredBy").over("value1").asRule();
+        StatefulRule triggeredRule = when("triggeredBy").iterate("name").over("value2").asRule();
+        Mockito.when(engineState.containsPropertyValues(set("triggeredBy"))).thenReturn(true);
+        triggeredRule.propertyValueSet(new PropertyAssignedEvent(engineState, triggeringRule, Collections
+            .<String> emptySet()));
+
+        triggeredRule.propertyCombinationFinished(engineState);
+
+        assertThat(triggeredRule.hasFinished(), is(true));
 	}
 
 	@Test
 	public void ruleIgnoresAssignmentsToNonTriggeringProperties() {
         StatefulRule statefulRule = iterate("name").over("value").asRule();
-		OnePropertyStateStub stateStub = stateStub("triggeredBy",
-				"triggeredByValue");
-		statefulRule.propertyValueSet(stateStub.event());
+        statefulRule.propertyValueSet(propertyAssignedEvent);
 		assertThat(statefulRule.hasFinished(), is(false));
 	}
 
 	@Test
 	public void secondCallOfFinishCombinationIsIgnored() {
         StatefulRule statefulRule = iterate("name").over("1", "2").asRule();
-		statefulRule.propertyCombinationStarted(stateStub);
-		statefulRule.propertyCombinationFinished(stateStub);
-		statefulRule.propertyCombinationFinished(stateStub);
+        iterationWith(statefulRule);
+        
+        statefulRule.propertyCombinationFinished(engineState);
 		assertThat(statefulRule.hasFinished(), is(false));
 	}
 
@@ -140,9 +149,18 @@ public class StatefulRuleTest {
 		MapBasedState state = new MapBasedState();
 		topRule.propertyCombinationStarted(state);
 		triggeredRule.propertyCombinationStarted(state);
-		topRule.propertyValueSet(new PropertyAssignedEvent(state,
+        topRule.propertyValueSet(new PropertyAssignedEvent(engineState,
 				triggeredRule, triggeredRule.getTriggeringProperties()));
-		topRule.propertyCombinationFinished(state);
+
+        topRule.propertyCombinationFinished(engineState);
 		assertThat(topRule.hasFinished(), is(false));
 	}
+
+    @Test
+    public void ruleWithTemporaryRule_addsItsRule() {
+        StatefulRule statefulRule = iterate("x").over("a", iterate("y").over("b")).asRule();
+
+        statefulRule.propertyCombinationStarted(engineState);
+    }
+
 }

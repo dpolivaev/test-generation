@@ -8,6 +8,7 @@ import static ruleengine.StatefulRuleBuilder.Factory.iterate;
 import static ruleengine.StatefulRuleBuilder.Factory.when;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -265,5 +266,16 @@ public class RuleEngineTest {
         generateCombinations();
 
         expect(combination("x", "a"));
+    }
+
+    @Ignore
+    @Test
+    public void ruleManagesValueSpecificTemporaryRules() {
+        StatefulRuleBuilder temporaryRule = iterate("y").over("b");
+        ruleEngine.addRule(iterate("x").over("a", temporaryRule));
+
+        generateCombinations();
+
+        expect(combination("x", "a", "y", "b"));
     }
 }

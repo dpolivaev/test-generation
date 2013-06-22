@@ -31,11 +31,11 @@ class CombinedRule implements Rule {
     }
 
     @Override
-    public void propertyCombinationStarted(State state) {
+    public void propertyCombinationStarted(EngineState engineState) {
         if (getTriggeringProperties().isEmpty())
             for (int i = rules.size() - 1; i >= 0; i--) {
                 Rule activeRule = rules.get(i);
-                activeRule.propertyCombinationStarted(state);
+                activeRule.propertyCombinationStarted(engineState);
                 if (activeRule.isActive()) {
                     setActiveRule(activeRule);
                     break;
@@ -60,8 +60,8 @@ class CombinedRule implements Rule {
     }
 
     @Override
-    public void propertyCombinationFinished(State state) {
-        activeRule.propertyCombinationFinished(state);
+    public void propertyCombinationFinished(EngineState engineState) {
+        activeRule.propertyCombinationFinished(engineState);
     }
 
     @Override

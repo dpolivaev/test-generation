@@ -4,14 +4,14 @@ import java.util.Set;
 
 public class PropertyAssignedEvent {
 
-	private final State state;
+    private final EngineState engineState;
 	private final Rule workingRule;
 	private final Set<String> requiredProperties;
 
-	public PropertyAssignedEvent(State state, Rule workingRule,
+    public PropertyAssignedEvent(EngineState engineState, Rule workingRule,
 			Set<String> requiredProperties) {
 		super();
-		this.state = state;
+		this.engineState = engineState;
 		this.workingRule = workingRule;
 		this.requiredProperties = requiredProperties;
 	}
@@ -24,8 +24,8 @@ public class PropertyAssignedEvent {
 		return workingRule;
 	}
 
-	public State getState() {
-		return state;
+    public EngineState getState() {
+		return engineState;
 	}
 
 	public String getTargetedPropertyName() {
@@ -33,7 +33,7 @@ public class PropertyAssignedEvent {
 	}
 
 	public boolean containsPropertyValues(Set<String> triggeringProperties) {
-		return state.containsPropertyValues(triggeringProperties);
+		return engineState.containsPropertyValues(triggeringProperties);
 	}
 
 }
