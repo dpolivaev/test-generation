@@ -1,5 +1,7 @@
 package ruleengine;
 
+import java.util.Collection;
+
 interface Values {
 
 	boolean isNewIterationFinished();
@@ -7,5 +9,7 @@ interface Values {
 	void next();
 
 	Object currentValue();
+
+    Collection<Rule> currentValueRelatedRules();
 
 }
