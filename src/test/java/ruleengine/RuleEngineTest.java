@@ -8,7 +8,6 @@ import static ruleengine.StatefulRuleBuilder.Factory.iterate;
 import static ruleengine.StatefulRuleBuilder.Factory.when;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -268,14 +267,23 @@ public class RuleEngineTest {
         expect(combination("x", "a"));
     }
 
-    @Ignore
     @Test
     public void ruleManagesValueSpecificTemporaryRules() {
-        StatefulRuleBuilder temporaryRule = iterate("y").over("b");
-        ruleEngine.addRule(iterate("x").over("a", temporaryRule));
+        StatefulRuleBuilder temporaryRule = iterate("y").over("1", "2").when("x");
+        ruleEngine.addRule(iterate("x").with("a", temporaryRule.asRule()));
 
         generateCombinations();
 
-        expect(combination("x", "a", "y", "b"));
+        expect(combination("x", "a", "y", "1").followedBy("x", "a", "y", "2"));
+    }
+
+    @Test
+    public void valueSpecificTemporaryRulesAreRemovedAfterTheRelatedValueIsFinished() {
+        StatefulRuleBuilder temporaryRule = iterate("y").over("1").when("x");
+        ruleEngine.addRule(iterate("x").with("a", temporaryRule.asRule()).with("b"));
+
+        generateCombinations();
+
+        expect(combination("x", "a", "y", "1").followedBy("x", "b"));
     }
 }

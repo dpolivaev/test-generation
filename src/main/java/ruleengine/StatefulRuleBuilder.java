@@ -25,8 +25,8 @@ public class StatefulRuleBuilder {
         return this;
     }
 
-    public StatefulRuleBuilder over(String value, StatefulRuleBuilder... ruleBuilders) {
-        this.values.add(value);
+    public StatefulRuleBuilder with(Object value, Rule... rules) {
+        this.values.add(new ConstantValues.ValueWithRules(value, Arrays.asList(rules)));
         return this;
     }
 

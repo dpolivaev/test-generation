@@ -146,9 +146,8 @@ public class StatefulRuleTest {
         StatefulRule topRule = iterate("x").over("1").asRule();
         StatefulRule triggeredRule = when("x").iterate("y").over("3", "4")
             .asRule();
-		MapBasedState state = new MapBasedState();
-		topRule.propertyCombinationStarted(state);
-		triggeredRule.propertyCombinationStarted(state);
+        topRule.propertyCombinationStarted(engineState);
+        triggeredRule.propertyCombinationStarted(engineState);
         topRule.propertyValueSet(new PropertyAssignedEvent(engineState,
 				triggeredRule, triggeredRule.getTriggeringProperties()));
 
@@ -158,9 +157,22 @@ public class StatefulRuleTest {
 
     @Test
     public void ruleWithTemporaryRule_addsItsRule() {
-        StatefulRule statefulRule = iterate("x").over("a", iterate("y").over("b")).asRule();
+        StatefulRule temporaryRule = iterate("y").over("b").asRule();
+        StatefulRule statefulRule = iterate("x").with("a", temporaryRule).asRule();
 
         statefulRule.propertyCombinationStarted(engineState);
+        verify(engineState).addRule(temporaryRule);
+    }
+
+    @Test
+    public void ruleWithTemporaryRule_removesItsRule() {
+        StatefulRule temporaryRule = iterate("y").over("b").asRule();
+        StatefulRule statefulRule = iterate("x").with("a", temporaryRule).asRule();
+
+        statefulRule.propertyCombinationStarted(engineState);
+        statefulRule.propertyCombinationFinished(engineState);
+
+        verify(engineState).removeRule(temporaryRule);
     }
 
 }

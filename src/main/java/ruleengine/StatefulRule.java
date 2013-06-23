@@ -1,5 +1,6 @@
 package ruleengine;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -43,27 +44,25 @@ public class StatefulRule implements Rule {
 		return finished;
 	}
 
-	private Object nextValue() {
-        if (dependentRules.isEmpty())
+    private void addValueWithRules(EngineState engineState) {
+        if (dependentRules.isEmpty()) {
             values.next();
-		Object value = values.currentValue();
-		return value;
-	}
-
-	public void propertyCombinationStarted(PropertyMap propertyMap) {
-        if (triggeringProperties.isEmpty()) {
-            if (condition.isSatisfied())
-                addValue(propertyMap);
-            else
-                finished = true;
+            addRules(engineState);
         }
+        setValue(engineState);
 	}
 
-	private void addValue(PropertyMap propertyMap) {
-		Object nextValue = nextValue();
+    private void setValue(EngineState engineState) {
+        Object value = values.currentValue();
         valueAlreadyAddedToCurrentCombination = true;
-		propertyMap.setPropertyValue(this, nextValue);
-	}
+		engineState.setPropertyValue(this, value);
+    }
+
+    private void addRules(EngineState engineState) {
+        Collection<Rule> rules = values.currentValueRelatedRules();
+        for (Rule rule : rules)
+            engineState.addRule(rule);
+    }
 
 	@Override
 	public void propertyValueSet(PropertyAssignedEvent event) {
@@ -71,7 +70,7 @@ public class StatefulRule implements Rule {
             addDependencies(event);
         else if (triggeringProperties.contains(event.getTargetedPropertyName())
             && event.containsPropertyValues(triggeringProperties) && condition.isSatisfied())
-            addValue(event.getState());
+            addValueWithRules(event.getState());
 	}
 
     private void addDependencies(PropertyAssignedEvent event) {
@@ -95,6 +94,7 @@ public class StatefulRule implements Rule {
 			for (Rule rule : dependentRules)
                 rule.propertyCombinationFinished(engineState);
             if (allRulesHaveFinished(dependentRules)) {
+                removeValueRelatedRules(engineState);
 				dependentRules.clear();
                 if (values.isNewIterationFinished())
                     finished = true;
@@ -102,6 +102,13 @@ public class StatefulRule implements Rule {
 			valueAlreadyAddedToCurrentCombination = false;
 		}
 	}
+
+    private void removeValueRelatedRules(EngineState engineState) {
+        Collection<Rule> relatedRules = values.currentValueRelatedRules();
+        for (Rule rule : relatedRules) {
+            engineState.removeRule(rule);
+        }
+    }
 
 	@Override
 	public void setNotFinished() {
@@ -136,7 +143,7 @@ public class StatefulRule implements Rule {
     public void propertyCombinationStarted(EngineState engineState) {
         if (triggeringProperties.isEmpty()) {
             if (condition.isSatisfied())
-                addValue(engineState);
+                addValueWithRules(engineState);
             else
                 finished = true;
         }
