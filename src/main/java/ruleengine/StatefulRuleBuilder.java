@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class StatefulRuleBuilder {
     private String targetedPropertyName = null;
-    final private Collection<Object> values = new ArrayList<>();
+    final private Collection<ValueWithRulesProvider> values = new ArrayList<>();
     private Set<String> triggeringProperties = Collections.emptySet();
     private Condition condition = Condition.TRUE;
 
@@ -21,13 +21,24 @@ public class StatefulRuleBuilder {
     }
 
     public StatefulRuleBuilder over(Object... values) {
-        this.values.addAll(Arrays.asList(values));
+        this.values.addAll(values(values));
         return this;
     }
 
+    private Collection<ValueWithRulesProvider> values(Object[] values) {
+        Collection<ValueWithRulesProvider> valueWithRulesProviders = new ArrayList<>(values.length);
+        for (Object value : values)
+            valueWithRulesProviders.add(new ConstantValue(value));
+        return valueWithRulesProviders;
+    }
+
     public StatefulRuleBuilder with(Object value, Rule... rules) {
-        this.values.add(new ConstantValues.ValueWithRules(value, Arrays.asList(rules)));
+        this.values.add(valueWithRules(value, rules));
         return this;
+    }
+
+    private ValueWithRulesProvider valueWithRules(Object value, Rule[] rules) {
+        return new ValueWithRules(new ConstantValue(value), Arrays.asList(rules));
     }
 
     public StatefulRuleBuilder iterate(
@@ -37,7 +48,8 @@ public class StatefulRuleBuilder {
     }
 
     public StatefulRule asRule() {
-        return new StatefulRule(triggeringProperties, this.condition, this.targetedPropertyName, this.values.toArray());
+        return new StatefulRule(triggeringProperties, this.condition, this.targetedPropertyName,
+            this.values.toArray(new ValueWithRulesProvider[values.size()]));
     }
 
     public StatefulRuleBuilder _if(Condition condition) {
