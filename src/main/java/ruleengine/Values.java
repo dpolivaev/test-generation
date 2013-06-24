@@ -11,5 +11,4 @@ interface Values {
 	Object currentValue();
 
     Collection<Rule> currentValueRelatedRules();
-
 }
