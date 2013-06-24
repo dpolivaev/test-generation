@@ -32,7 +32,7 @@ class ConstantValues implements Values {
     }
 
 	@Override
-	public boolean isNewIterationFinished() {
+	public boolean allValuesUsed() {
         return valueIndex == values.length - 1;
 	}
 
