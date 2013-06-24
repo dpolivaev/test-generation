@@ -96,7 +96,7 @@ public class StatefulRule implements Rule {
             if (allRulesHaveFinished(dependentRules)) {
                 removeValueRelatedRules(engineState);
 				dependentRules.clear();
-                if (values.isNewIterationFinished())
+                if (values.allValuesUsed())
                     finished = true;
 			}
 			valueAlreadyAddedToCurrentCombination = false;
