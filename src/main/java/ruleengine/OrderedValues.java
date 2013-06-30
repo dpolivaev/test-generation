@@ -39,4 +39,12 @@ class OrderedValues implements Values {
     public Collection<Rule> valueRelatedRules(int index) {
         return valueWithRulesProviders[index].rules();
     }
+
+    public int valueIndex() {
+        return valueIndex;
+    }
+
+    public int size() {
+        return valueWithRulesProviders.length;
+    }
 }

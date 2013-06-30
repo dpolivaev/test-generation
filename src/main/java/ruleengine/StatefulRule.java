@@ -18,12 +18,11 @@ public class StatefulRule implements Rule {
 	private boolean valueAlreadyAddedToCurrentCombination;
     private boolean finished;
 
-    public StatefulRule(Set<String> triggeredBy, Condition condition, String targetedPropertyName,
-        ValueWithRulesProvider[] values) {
+    public StatefulRule(Set<String> triggeredBy, Condition condition, String targetedPropertyName, Values ruleValues) {
 		this.triggeringProperties = triggeredBy;
 		this.condition = condition;
 		this.targetedPropertyName = targetedPropertyName;
-        this.values = new OrderedValues(values);
+        this.values = ruleValues;
 		this.finished = false;
 		this.valueAlreadyAddedToCurrentCombination = false;
 		dependentRules = new HashSet<>();
