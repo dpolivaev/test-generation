@@ -57,8 +57,10 @@ public class StatefulRuleBuilder {
         ValueWithRulesProvider[] valueProviders = this.values.toArray(new ValueWithRulesProvider[values.size()]);
         OrderedValues orderedValues = new OrderedValues(valueProviders);
         Values ruleValues = shuffled ? new ShuffledValues(orderedValues) : orderedValues;
-        return new StatefulRule(triggeringProperties, this.condition, this.targetedPropertyName, //
-            ruleValues);
+        return triggeringProperties.isEmpty() ? //
+        new TopStatefulRule(this.condition, this.targetedPropertyName, ruleValues)
+            : new TriggeredStatefulRule(triggeringProperties, this.condition, this.targetedPropertyName, //
+                ruleValues);
     }
 
     public StatefulRuleBuilder _if(Condition condition) {
