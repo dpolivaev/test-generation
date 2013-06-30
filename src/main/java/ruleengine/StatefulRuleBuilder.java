@@ -13,6 +13,7 @@ public class StatefulRuleBuilder {
     final private Collection<ValueWithRulesProvider> values = new ArrayList<>();
     private Set<String> triggeringProperties = Collections.emptySet();
     private Condition condition = Condition.TRUE;
+    private boolean shuffled = false;
 
     public StatefulRuleBuilder when(
         String... triggeringProperties) {
@@ -47,9 +48,17 @@ public class StatefulRuleBuilder {
         return this;
     }
 
+    public StatefulRuleBuilder shuffled() {
+        shuffled = true;
+        return this;
+    }
+
     public StatefulRule asRule() {
-        return new StatefulRule(triggeringProperties, this.condition, this.targetedPropertyName,
-            this.values.toArray(new ValueWithRulesProvider[values.size()]));
+        ValueWithRulesProvider[] valueProviders = this.values.toArray(new ValueWithRulesProvider[values.size()]);
+        OrderedValues orderedValues = new OrderedValues(valueProviders);
+        Values ruleValues = shuffled ? new ShuffledValues(orderedValues) : orderedValues;
+        return new StatefulRule(triggeringProperties, this.condition, this.targetedPropertyName, //
+            ruleValues);
     }
 
     public StatefulRuleBuilder _if(Condition condition) {
