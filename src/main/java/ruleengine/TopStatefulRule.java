@@ -12,5 +12,4 @@ public class TopStatefulRule extends StatefulRule {
         else
             setFinished(true);
     }
-
 }

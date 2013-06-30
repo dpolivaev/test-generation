@@ -23,9 +23,13 @@ class RuleMap {
 		return arrayList;
 	}
 
-	public boolean hasRuleForProperty(String propertyName) {
-		return rules.containsKey(propertyName);
-	}
+    public boolean hasRuleForProperty(String propertyName) {
+        return rules.containsKey(propertyName);
+    }
+
+    public Rule getRuleForProperty(String propertyName) {
+        return rules.get(propertyName);
+    }
 
     public void removeRule(Rule rule) {
         String targetedPropertyName = rule.getTargetedPropertyName();

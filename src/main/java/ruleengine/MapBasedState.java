@@ -29,10 +29,14 @@ class MapBasedState implements PropertyMap {
 		return count + " : " + assignedPropertiesAsString + '\n';
 	}
 
-	@Override
-	public boolean containsPropertyValues(Set<String> names) {
-		return properties.keySet().containsAll(names);
-	}
+    @Override
+    public boolean containsPropertyValues(Set<String> names) {
+        return properties.keySet().containsAll(names);
+    }
+
+    public boolean containsPropertyValue(String name) {
+        return properties.keySet().contains(name);
+    }
 
 	@Override
     public Object get(String name) {

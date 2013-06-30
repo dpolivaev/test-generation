@@ -140,6 +140,10 @@ abstract class StatefulRule implements Rule {
     public void propertyCombinationStarted(EngineState engineState) {
     }
 
+    @Override
+    public void propertyRequired(EngineState engineState) {
+    }
+
     protected boolean isValueAlreadyAddedToCurrentCombination() {
         return valueAlreadyAddedToCurrentCombination;
     }

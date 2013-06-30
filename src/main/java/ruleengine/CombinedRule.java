@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Set;
 
 class CombinedRule implements Rule {
-
-
     private final List<Rule> rules = new ArrayList<>();
     private Rule activeRule = null;
 
@@ -30,28 +28,33 @@ class CombinedRule implements Rule {
         return activeRule != null && activeRule.hasFinished();
     }
 
-    @Override
-    public void propertyCombinationStarted(EngineState engineState) {
-        if (getTriggeringProperties().isEmpty())
-            for (int i = rules.size() - 1; i >= 0; i--) {
-                Rule activeRule = rules.get(i);
-                activeRule.propertyCombinationStarted(engineState);
-                if (activeRule.isActive()) {
-                    setActiveRule(activeRule);
-                    break;
-                }
-            }
-    }
-
-    @Override
-    public void propertyValueSet(PropertyAssignedEvent event) {
+    private void propagateUntilActiveRuleFound(RuleEventPropagator propertyCombinationStarter) {
         for (int i = rules.size() - 1; i >= 0; i--) {
             Rule activeRule = rules.get(i);
-            activeRule.propertyValueSet(event);
+            propertyCombinationStarter.propagateEvent(activeRule);
             if (activeRule.isActive()) {
                 setActiveRule(activeRule);
                 break;
             }
+        }
+    }
+
+    @Override
+    public void propertyCombinationStarted(final EngineState engineState) {
+        if (getTriggeringProperties().isEmpty()) {
+            propagateUntilActiveRuleFound(new PropertyCombinationStartedPropagator(engineState));
+        }
+    }
+
+    @Override
+    public void propertyValueSet(final PropertyAssignedEvent event) {
+        propagateUntilActiveRuleFound(new PropertyValueSetPropagator(event));
+    }
+
+    @Override
+    public void propertyRequired(EngineState engineState) {
+        if (engineState.containsPropertyValues(getTriggeringProperties())) {
+            propagateUntilActiveRuleFound(new PropertyRequiredPropagator(engineState));
         }
     }
 
@@ -96,5 +99,5 @@ class CombinedRule implements Rule {
             return rules.get(0);
         return this;
     }
-    
+
 }
