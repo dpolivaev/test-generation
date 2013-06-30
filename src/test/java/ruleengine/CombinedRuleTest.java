@@ -2,6 +2,7 @@ package ruleengine;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.anySetOf;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -44,6 +45,19 @@ public class CombinedRuleTest {
 
         verify(second).propertyCombinationStarted(state);
         verify(first, never()).propertyCombinationStarted(state);
+    }
+
+    @Test
+    public void givenActiveRule_propagatesPropertyRequiredUntilActiveRuleIsFound() {
+        Rule first = ruleMock(false);
+        Rule second = ruleMock(true);
+        EngineState state = mock(EngineState.class);
+        when(state.containsPropertyValues(anySetOf(String.class))).thenReturn(true);
+
+        new CombinedRule(first, second).propertyRequired(state);
+
+        verify(second).propertyRequired(state);
+        verify(first, never()).propertyRequired(state);
     }
 
     @Test

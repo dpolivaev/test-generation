@@ -8,10 +8,20 @@ import java.util.Set;
  * @author Dimitry Polivaev 18.02.2013
  */
 public class RuleEngine implements EngineState {
-	private RuleMap rules = new RuleMap();
-	private MapBasedState mapBasedState = new MapBasedState();
+    final private RuleMap rules;
+    final private MapBasedState mapBasedState;
 
-	@Override
+    public RuleEngine() {
+        this(new RuleMap(), new MapBasedState());
+    }
+
+    public RuleEngine(RuleMap rules, MapBasedState mapBasedState) {
+        super();
+        this.rules = rules;
+        this.mapBasedState = mapBasedState;
+    }
+
+    @Override
     public void addRule(Rule rule) {
 		rules.addRule(rule);
 	}
@@ -30,6 +40,7 @@ public class RuleEngine implements EngineState {
 			mapBasedState.nextCombination();
 			fireNextCombinationStartedEvent();
             Set<String> oldDependencies = dependencies;
+            dependencies = new HashSet<>();
 			scriptProducer.makeScriptFor(this);
             dependencies = oldDependencies;
 			fireNextCombinationFinishedEvent();
@@ -42,11 +53,11 @@ public class RuleEngine implements EngineState {
             rule.propertyCombinationFinished(this);
 	}
 
-    Set<String> dependencies;
+    private Set<String> dependencies;
 	private void fireNextCombinationStartedEvent() {
         Set<String> oldDependencies = dependencies;
         for (Rule rule : rules()) {
-            dependencies = new HashSet<String>();
+            dependencies = new HashSet<>();
             rule.propertyCombinationStarted(this);
         }
         dependencies = oldDependencies;
@@ -74,7 +85,7 @@ public class RuleEngine implements EngineState {
 	private void firePropertyAssignedEvent(PropertyAssignedEvent event) {
         Set<String> oldDependencies = dependencies;
 		for (Rule rule : rules()) {
-            dependencies = new HashSet<String>();
+            dependencies = new HashSet<>();
 			rule.propertyValueSet(event);
 		}
         dependencies = oldDependencies;
@@ -82,7 +93,7 @@ public class RuleEngine implements EngineState {
 
 	private boolean topRulesHaveFinished() {
 		for (Rule rule : rules())
-			if (rule.getTriggeringProperties().isEmpty() && !rule.hasFinished())
+            if (rule.getTriggeringProperties().isEmpty() && !rule.hasFinished())
 				return false;
 		return true;
 	}
@@ -102,6 +113,12 @@ public class RuleEngine implements EngineState {
 
 	@Override
     public Object get(String name) {
+        if (!mapBasedState.containsPropertyValue(name)) {
+            Set<String> oldDependencies = dependencies;
+            dependencies = new HashSet<>();
+            rules.getRuleForProperty(name).propertyRequired(this);
+            dependencies = oldDependencies;
+        }
         dependencies.add(name);
 		return mapBasedState.get(name);
 	}

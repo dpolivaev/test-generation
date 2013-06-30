@@ -14,6 +14,7 @@ public class StatefulRuleBuilder {
     private Set<String> triggeringProperties = Collections.emptySet();
     private Condition condition = Condition.TRUE;
     private boolean shuffled = false;
+    private boolean asDefaultRule;
 
     public StatefulRuleBuilder when(
         String... triggeringProperties) {
@@ -57,10 +58,19 @@ public class StatefulRuleBuilder {
         ValueWithRulesProvider[] valueProviders = this.values.toArray(new ValueWithRulesProvider[values.size()]);
         OrderedValues orderedValues = new OrderedValues(valueProviders);
         Values ruleValues = shuffled ? new ShuffledValues(orderedValues) : orderedValues;
-        return triggeringProperties.isEmpty() ? //
-        new TopStatefulRule(this.condition, this.targetedPropertyName, ruleValues)
-            : new TriggeredStatefulRule(triggeringProperties, this.condition, this.targetedPropertyName, //
+        if (asDefaultRule)
+            return new DefaultStatefulRule(this.condition, this.targetedPropertyName, //
                 ruleValues);
+        else if (triggeringProperties.isEmpty())
+            return new TopStatefulRule(this.condition, this.targetedPropertyName, ruleValues);
+        else
+            return new TriggeredStatefulRule(triggeringProperties, this.condition, this.targetedPropertyName, //
+                ruleValues);
+    }
+
+    public StatefulRuleBuilder asDefault() {
+        asDefaultRule = true;
+        return this;
     }
 
     public StatefulRuleBuilder _if(Condition condition) {
@@ -81,6 +91,5 @@ public class StatefulRuleBuilder {
             return new StatefulRuleBuilder()._if(condition);
         }
     }
-
 
 }

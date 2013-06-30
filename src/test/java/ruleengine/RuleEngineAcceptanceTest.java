@@ -13,7 +13,7 @@ import org.junit.Test;
 /**
  * @author Dimitry Polivaev 18.02.2013
  */
-public class RuleEngineTest {
+public class RuleEngineAcceptanceTest {
 
     private RuleEngine ruleEngine = new RuleEngine();
     private LoggingScriptProducerMock scriptProducerMock;
@@ -24,7 +24,7 @@ public class RuleEngineTest {
         }
     };
 
-    public RuleEngineTest() {
+    public RuleEngineAcceptanceTest() {
     }
 
     private void generateCombinations() {
@@ -285,5 +285,36 @@ public class RuleEngineTest {
         generateCombinations();
 
         expect(combination("x", "a", "y", "1").followedBy("x", "b"));
+    }
+
+    @Test
+    public void ruleEngineWithOneDefaultRule_hasRuleForItsTargetedProperty() {
+        ruleEngine.addRule(iterate("property").over("value").asDefault());
+        assertThat(ruleEngine.hasRuleForProperty("property"), is(true));
+    }
+
+    @Test
+    public void ruleEngineWithOneDefaultRule_doesNotIterateOverItsValueIfPropertyIsNotRequested() {
+        ruleEngine.addRule(iterate("property").over("value").asDefault());
+        generateCombinations();
+
+        expect(combination());
+    }
+
+    @Test
+    public void ruleEngineWithOneDefaultRule_iteratesOverItsValueIfPropertyIsRequested() {
+        ruleEngine.addRule(iterate("x").over("1", "2").asDefault());
+        scriptProducerMock = new LoggingScriptProducerMock() {
+
+            @Override
+            public void makeScriptFor(RuleEngine ruleEngine) {
+                ruleEngine.get("x");
+                super.makeScriptFor(ruleEngine);
+            }
+
+        };
+        generateCombinations();
+
+        expect(combination("x", "1").followedBy("x", "2"));
     }
 }
