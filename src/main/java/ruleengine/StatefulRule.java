@@ -1,30 +1,29 @@
 package ruleengine;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
  * @author Dimitry Polivaev 18.02.2013
  */
-public class StatefulRule implements Rule {
+abstract class StatefulRule implements Rule {
 
     final private String targetedPropertyName;
 	final private Values values;
-    final private Set<String> triggeringProperties;
     final private Set<Rule> dependentRules;
     final private Condition condition;
 
 	private boolean valueAlreadyAddedToCurrentCombination;
     private boolean finished;
 
-    public StatefulRule(Set<String> triggeredBy, Condition condition, String targetedPropertyName, Values ruleValues) {
-		this.triggeringProperties = triggeredBy;
+    public StatefulRule(Condition condition, String targetedPropertyName, Values ruleValues) {
 		this.condition = condition;
 		this.targetedPropertyName = targetedPropertyName;
         this.values = ruleValues;
-		this.finished = false;
-		this.valueAlreadyAddedToCurrentCombination = false;
+		this.setFinished(false);
+        this.setValueAlreadyAddedToCurrentCombination(false);
 		dependentRules = new HashSet<>();
 	}
 
@@ -35,15 +34,15 @@ public class StatefulRule implements Rule {
 
     @Override
     public Set<String> getTriggeringProperties() {
-        return triggeringProperties;
+        return Collections.<String> emptySet();
     }
 
 	@Override
 	public boolean hasFinished() {
-		return finished;
+		return isFinished();
 	}
 
-    private void addValueWithRules(EngineState engineState) {
+    protected void addValueWithRules(EngineState engineState) {
         if (dependentRules.isEmpty()) {
             values.next();
             addRules(engineState);
@@ -53,7 +52,7 @@ public class StatefulRule implements Rule {
 
     private void setValue(EngineState engineState) {
         Object value = values.currentValue();
-        valueAlreadyAddedToCurrentCombination = true;
+        setValueAlreadyAddedToCurrentCombination(true);
 		engineState.setPropertyValue(this, value);
     }
 
@@ -65,14 +64,11 @@ public class StatefulRule implements Rule {
 
 	@Override
 	public void propertyValueSet(PropertyAssignedEvent event) {
-        if (valueAlreadyAddedToCurrentCombination)
+        if (isValueAlreadyAddedToCurrentCombination())
             addDependencies(event);
-        else if (triggeringProperties.contains(event.getTargetedPropertyName())
-            && event.containsPropertyValues(triggeringProperties) && condition.isSatisfied())
-            addValueWithRules(event.getState());
-	}
+    }
 
-    private void addDependencies(PropertyAssignedEvent event) {
+    protected void addDependencies(PropertyAssignedEvent event) {
         if (event.getRequiredProperties().contains(targetedPropertyName)) {
             Rule rule = event.getWorkingRule();
             rule.setNotFinished();
@@ -89,16 +85,16 @@ public class StatefulRule implements Rule {
 
     @Override
     public void propertyCombinationFinished(EngineState engineState) {
-		if (valueAlreadyAddedToCurrentCombination) {
+        if (isValueAlreadyAddedToCurrentCombination()) {
 			for (Rule rule : dependentRules)
                 rule.propertyCombinationFinished(engineState);
             if (allRulesHaveFinished(dependentRules)) {
                 removeValueRelatedRules(engineState);
 				dependentRules.clear();
                 if (values.allValuesUsed())
-                    finished = true;
+                    setFinished(true);
 			}
-			valueAlreadyAddedToCurrentCombination = false;
+            setValueAlreadyAddedToCurrentCombination(false);
 		}
 	}
 
@@ -111,12 +107,12 @@ public class StatefulRule implements Rule {
 
 	@Override
 	public void setNotFinished() {
-		finished = false;
+		setFinished(false);
 	}
 
     @Override
     public boolean isActive() {
-        return valueAlreadyAddedToCurrentCombination;
+        return isValueAlreadyAddedToCurrentCombination();
     }
 
     @Override
@@ -127,10 +123,12 @@ public class StatefulRule implements Rule {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder("StatefulRule [");
-        if (!triggeringProperties.isEmpty())
-            stringBuilder.append(triggeringProperties).append(" -> ");
+        appendTriggeringPropertyList(stringBuilder);
         stringBuilder.append(targetedPropertyName).append("]");
         return stringBuilder.toString();
+    }
+
+    protected void appendTriggeringPropertyList(StringBuilder stringBuilder) {
     }
 
     @Override
@@ -140,11 +138,25 @@ public class StatefulRule implements Rule {
 
     @Override
     public void propertyCombinationStarted(EngineState engineState) {
-        if (triggeringProperties.isEmpty()) {
-            if (condition.isSatisfied())
-                addValueWithRules(engineState);
-            else
-                finished = true;
-        }
+    }
+
+    protected boolean isValueAlreadyAddedToCurrentCombination() {
+        return valueAlreadyAddedToCurrentCombination;
+    }
+
+    private void setValueAlreadyAddedToCurrentCombination(boolean valueAlreadyAddedToCurrentCombination) {
+        this.valueAlreadyAddedToCurrentCombination = valueAlreadyAddedToCurrentCombination;
+    }
+
+    protected Condition getCondition() {
+        return condition;
+    }
+
+    private boolean isFinished() {
+        return finished;
+    }
+
+    protected void setFinished(boolean finished) {
+        this.finished = finished;
     }
 }
