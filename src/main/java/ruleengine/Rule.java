@@ -31,4 +31,6 @@ public interface Rule {
     Rule without(Rule rule);
 
     void propertyRequired(EngineState engineState);
+
+    boolean canTriggerOtherRules();
 }

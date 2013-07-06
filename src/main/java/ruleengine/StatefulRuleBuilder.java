@@ -68,7 +68,7 @@ public class StatefulRuleBuilder {
                 ruleValues);
     }
 
-    public StatefulRuleBuilder asDefault() {
+    public StatefulRuleBuilder byDefault() {
         asDefaultRule = true;
         return this;
     }

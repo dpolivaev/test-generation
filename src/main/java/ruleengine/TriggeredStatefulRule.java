@@ -29,4 +29,9 @@ public class TriggeredStatefulRule extends StatefulRule {
         if (!triggeringProperties.isEmpty())
             stringBuilder.append(triggeringProperties).append(" -> ");
     }
+
+    @Override
+    public boolean canTriggerOtherRules() {
+        return true;
+    }
 }

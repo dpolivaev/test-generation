@@ -14,7 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-public class StatefulRuleTest {
+public class TriggeredRuleTest {
     private EngineState engineState;
     private PropertyAssignedEvent propertyAssignedEvent;
 
@@ -175,4 +175,21 @@ public class StatefulRuleTest {
         verify(engineState).removeRule(temporaryRule);
     }
 
+    @Test
+    public void topRule_canTriggerOtherRules() {
+        StatefulRule topRule = iterate("x").over("1").asRule();
+        assertThat(topRule.canTriggerOtherRules(), is(true));
+    }
+
+    @Test
+    public void triggeredRule_canTriggerOtherRules() {
+        StatefulRule triggeredRule = iterate("x").over("1").when("y").asRule();
+        assertThat(triggeredRule.canTriggerOtherRules(), is(true));
+    }
+
+    @Test
+    public void defaultRule_canNotTriggerOtherRules() {
+        StatefulRule defaultRule = iterate("x").over("1").byDefault().asRule();
+        assertThat(defaultRule.canTriggerOtherRules(), is(false));
+    }
 }

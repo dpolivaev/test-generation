@@ -42,13 +42,6 @@ public class RuleEngineAcceptanceTest {
     }
 
     @Test
-    public void ruleEngineWithoutRules_callsScriptProducerOnce() {
-        CountingScriptProducerMock scriptProducerMock = new CountingScriptProducerMock();
-        ruleEngine.run(scriptProducerMock);
-        assertThat(scriptProducerMock.callCount(), is(1));
-    }
-
-    @Test
     public void ruleEngineWithoutRules_createsSingleCombinationWithoutValues() {
         generateCombinations();
         expect(combination());
@@ -289,21 +282,40 @@ public class RuleEngineAcceptanceTest {
 
     @Test
     public void ruleEngineWithOneDefaultRule_hasRuleForItsTargetedProperty() {
-        ruleEngine.addRule(iterate("property").over("value").asDefault());
+        ruleEngine.addRule(iterate("property").over("value").byDefault());
         assertThat(ruleEngine.hasRuleForProperty("property"), is(true));
     }
 
     @Test
     public void ruleEngineWithOneDefaultRule_doesNotIterateOverItsValueIfPropertyIsNotRequested() {
-        ruleEngine.addRule(iterate("property").over("value").asDefault());
+        ruleEngine.addRule(iterate("property").over("value").byDefault());
         generateCombinations();
 
         expect(combination());
     }
 
     @Test
-    public void ruleEngineWithOneDefaultRule_iteratesOverItsValueIfPropertyIsRequested() {
-        ruleEngine.addRule(iterate("x").over("1", "2").asDefault());
+    public void ruleEngineWithOneDefaultRule_iteratesOverItsValuesWhenPropertyIsRequested() {
+        ruleEngine.addRule(iterate("x").over("1", "2"));
+        ruleEngine.addRule(iterate("y").over("1", "2", "3").byDefault());
+        scriptProducerMock = new LoggingScriptProducerMock() {
+
+            @Override
+            public void makeScriptFor(RuleEngine ruleEngine) {
+                ruleEngine.get("y");
+                super.makeScriptFor(ruleEngine);
+            }
+
+        };
+        generateCombinations();
+
+        expect(combination("x", "1", "y", "1").followedBy("x", "2", "y", "2"));
+    }
+
+    @Test
+    public void defaultRule_doesNotTriggerOtherIterations() {
+        ruleEngine.addRule(iterate("x").over("1", "2").byDefault());
+        ruleEngine.addRule(iterate("y").over("1", "2").when("x"));
         scriptProducerMock = new LoggingScriptProducerMock() {
 
             @Override
@@ -315,6 +327,7 @@ public class RuleEngineAcceptanceTest {
         };
         generateCombinations();
 
-        expect(combination("x", "1").followedBy("x", "2"));
+        expect(combination("x", "1"));
     }
+
 }
