@@ -15,12 +15,16 @@ class CombinedRule implements Rule {
 
     @Override
     public String getTargetedPropertyName() {
-        return rules.get(0).getTargetedPropertyName();
+        return firstRule().getTargetedPropertyName();
+    }
+
+    private Rule firstRule() {
+        return rules.get(0);
     }
 
     @Override
     public Set<String> getTriggeringProperties() {
-        return rules.get(0).getTriggeringProperties();
+        return firstRule().getTriggeringProperties();
     }
 
     @Override
@@ -85,10 +89,12 @@ class CombinedRule implements Rule {
     }
 
     private void checkRuleCompatibility(Rule rule) {
+        if (canTriggerOtherRules() != rule.canTriggerOtherRules())
+            throw new IllegalArgumentException("triggering and not triggering rules can not be combined");
         if (!getTargetedPropertyName().equals(rule.getTargetedPropertyName()))
-            throw new IllegalArgumentException("different targeted property name " + rule.getTargetedPropertyName());
+            throw new IllegalArgumentException("rules with different targeted property names can not be combined");
         if (!getTriggeringProperties().equals(rule.getTriggeringProperties()))
-            throw new IllegalArgumentException("different targeted property name " + rule.getTargetedPropertyName());
+            throw new IllegalArgumentException("rules with different triggering property names can not be combined");
 
     }
 
@@ -96,8 +102,13 @@ class CombinedRule implements Rule {
     public Rule without(Rule rule) {
         rules.remove(rule);
         if (rules.size() == 1)
-            return rules.get(0);
+            return firstRule();
         return this;
+    }
+
+    @Override
+    public boolean canTriggerOtherRules() {
+        return firstRule().canTriggerOtherRules();
     }
 
 }

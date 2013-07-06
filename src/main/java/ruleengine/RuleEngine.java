@@ -66,8 +66,10 @@ public class RuleEngine implements EngineState {
 	@Override
 	public void setPropertyValue(Rule rule, Object nextValue) {
 		mapBasedState.setPropertyValue(rule, nextValue);
-        PropertyAssignedEvent event = new PropertyAssignedEvent(this, rule, requiredProperties(rule));
-		firePropertyAssignedEvent(event);
+        if (rule.canTriggerOtherRules()) {
+            PropertyAssignedEvent event = new PropertyAssignedEvent(this, rule, requiredProperties(rule));
+            firePropertyAssignedEvent(event);
+        }
 	}
 
     private Set<String> requiredProperties(Rule rule) {
@@ -116,12 +118,16 @@ public class RuleEngine implements EngineState {
         if (!mapBasedState.containsPropertyValue(name)) {
             Set<String> oldDependencies = dependencies;
             dependencies = new HashSet<>();
-            rules.getRuleForProperty(name).propertyRequired(this);
+            getPropertyValueFromDefaultRules(name);
             dependencies = oldDependencies;
         }
         dependencies.add(name);
 		return mapBasedState.get(name);
 	}
+
+    private void getPropertyValueFromDefaultRules(String name) {
+        rules.getRuleForProperty(name).propertyRequired(this);
+    }
 
     @Override
     public void addRule(StatefulRuleBuilder builder) {

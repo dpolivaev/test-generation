@@ -12,8 +12,12 @@ public class DefaultStatefulRule extends TopStatefulRule {
 
     @Override
     public void propertyRequired(EngineState engineState) {
-        setFinished(false);
         super.propertyCombinationStarted(engineState);
+    }
+
+    @Override
+    public boolean canTriggerOtherRules() {
+        return false;
     }
 
 }

@@ -12,4 +12,9 @@ public class TopStatefulRule extends StatefulRule {
         else
             setFinished(true);
     }
+
+    @Override
+    public boolean canTriggerOtherRules() {
+        return true;
+    }
 }

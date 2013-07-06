@@ -156,4 +156,10 @@ public class CombinedRuleTest {
 
         assertThat(combinedRule.without(first), is(second));
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void combinedRuleForDefaultRuleAndTriggeringRuleAreNotAllowed() {
+        new CombinedRule(iterate("a").asRule(), iterate("a").byDefault().asRule());
+    }
+
 }
