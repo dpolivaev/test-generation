@@ -37,6 +37,19 @@ abstract class StatefulRule implements Rule {
         return Collections.<String> emptySet();
     }
 
+    @Override
+    public Set<String> requiredProperties(Set<String> dependencies) {
+        Set<String> requiredProperties;
+        if (dependencies.isEmpty()) {
+            requiredProperties = getTriggeringProperties();
+        }
+        else {
+            requiredProperties = new HashSet<>(getTriggeringProperties());
+            requiredProperties.addAll(dependencies);
+        }
+        return requiredProperties;
+    }
+
 	@Override
 	public boolean hasFinished() {
 		return isFinished();
@@ -59,7 +72,7 @@ abstract class StatefulRule implements Rule {
     private void addRules(EngineState engineState) {
         Collection<Rule> rules = values.currentValueRelatedRules();
         for (Rule rule : rules)
-            engineState.addRule(rule);
+            engineState.currentStrategy().addRule(rule);
     }
 
 	@Override
@@ -101,7 +114,7 @@ abstract class StatefulRule implements Rule {
     private void removeValueRelatedRules(EngineState engineState) {
         Collection<Rule> relatedRules = values.currentValueRelatedRules();
         for (Rule rule : relatedRules) {
-            engineState.removeRule(rule);
+            engineState.currentStrategy().removeRule(rule);
         }
     }
 

@@ -1,4 +1,5 @@
 package ruleengine;
 
-public interface EngineState extends PropertyMap, RuleContainer {
+public interface EngineState extends PropertyMap {
+    Strategy currentStrategy();
 }

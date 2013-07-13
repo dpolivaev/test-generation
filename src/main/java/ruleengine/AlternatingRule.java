@@ -28,6 +28,11 @@ class AlternatingRule implements Rule {
     }
 
     @Override
+    public Set<String> requiredProperties(Set<String> dependencies) {
+        return firstRule().requiredProperties(dependencies);
+    }
+
+    @Override
     public boolean hasFinished() {
         return activeRule != null && activeRule.hasFinished();
     }

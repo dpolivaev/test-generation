@@ -14,6 +14,8 @@ public interface Rule {
 
 	Set<String> getTriggeringProperties();
 
+    public Set<String> requiredProperties(Set<String> dependencies);
+
     void propertyCombinationStarted(EngineState engineState);
 
     void propertyCombinationFinished(EngineState engineState);
