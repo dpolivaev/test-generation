@@ -8,44 +8,48 @@ import java.util.Set;
  * @author Dimitry Polivaev 18.02.2013
  */
 public class RuleEngine implements EngineState {
-    final private RuleMap rules;
+    private Strategy strategy;
     final private MapBasedState mapBasedState;
+    private final ScriptProducer scriptProducer;
 
-    public RuleEngine() {
-        this(new RuleMap(), new MapBasedState());
+    public RuleEngine(ScriptProducer scriptProducer) {
+        this(scriptProducer, new MapBasedState());
     }
 
-    public RuleEngine(RuleMap rules, MapBasedState mapBasedState) {
+    public RuleEngine(ScriptProducer scriptProducer, MapBasedState mapBasedState) {
         super();
-        this.rules = rules;
+        this.scriptProducer = scriptProducer;
         this.mapBasedState = mapBasedState;
+        strategy = null;
     }
 
     @Override
     public void addRule(Rule rule) {
-		rules.addRule(rule);
+		strategy.addRule(rule);
 	}
 
     @Override
     public void removeRule(Rule rule) {
-        rules.removeRule(rule);
+        strategy.removeRule(rule);
     }
 
-	public boolean hasRuleForProperty(String propertyName) {
-		return rules.hasRuleForProperty(propertyName);
-	}
+    public void run(Strategy strategy) {
+        this.strategy = strategy;
+        try {
+            do {
+            	mapBasedState.nextCombination();
+            	fireNextCombinationStartedEvent();
+                Set<String> oldDependencies = dependencies;
+                dependencies = new HashSet<>();
+            	scriptProducer.makeScriptFor(this);
+                dependencies = oldDependencies;
+            	fireNextCombinationFinishedEvent();
 
-	public void run(ScriptProducer scriptProducer) {
-		do {
-			mapBasedState.nextCombination();
-			fireNextCombinationStartedEvent();
-            Set<String> oldDependencies = dependencies;
-            dependencies = new HashSet<>();
-			scriptProducer.makeScriptFor(this);
-            dependencies = oldDependencies;
-			fireNextCombinationFinishedEvent();
-
-		} while (!topRulesHaveFinished());
+            } while (!topRulesHaveFinished());
+        }
+        finally {
+            this.strategy = null;
+        }
 	}
 
 	private void fireNextCombinationFinishedEvent() {
@@ -101,7 +105,7 @@ public class RuleEngine implements EngineState {
 	}
 
 	private Collection<Rule> rules() {
-		return rules.rules();
+		return strategy.rules();
 	}
 
 	public String getAssignedPropertiesAsString() {
@@ -126,11 +130,10 @@ public class RuleEngine implements EngineState {
 	}
 
     private void getPropertyValueFromDefaultRules(String name) {
-        rules.getRuleForProperty(name).propertyRequired(this);
+        strategy.getRuleForProperty(name).propertyRequired(this);
     }
 
-    @Override
     public void addRule(StatefulRuleBuilder builder) {
-        addRule(builder.asRule());
+        strategy.addRule(builder.asRule());
     }
 }

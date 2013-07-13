@@ -12,7 +12,7 @@ import static ruleengine.StatefulRuleBuilder.Factory.iterate;
 import java.util.Collections;
 
 import org.junit.Test;
-public class CombinedRuleTest {
+public class AlternatingRuleTest {
 
     @SuppressWarnings("unchecked")
     private Rule ruleMock(boolean active) {
@@ -29,7 +29,7 @@ public class CombinedRuleTest {
         Rule second = ruleMock(false);
         EngineState state = mock(EngineState.class);
 
-        new CombinedRule(first, second).propertyCombinationStarted(state);
+        new AlternatingRule(first, second).propertyCombinationStarted(state);
 
         verify(second).propertyCombinationStarted(state);
         verify(first).propertyCombinationStarted(state);
@@ -41,7 +41,7 @@ public class CombinedRuleTest {
         Rule second = ruleMock(true);
         EngineState state = mock(EngineState.class);
 
-        new CombinedRule(first, second).propertyCombinationStarted(state);
+        new AlternatingRule(first, second).propertyCombinationStarted(state);
 
         verify(second).propertyCombinationStarted(state);
         verify(first, never()).propertyCombinationStarted(state);
@@ -54,7 +54,7 @@ public class CombinedRuleTest {
         EngineState state = mock(EngineState.class);
         when(state.containsPropertyValues(anySetOf(String.class))).thenReturn(true);
 
-        new CombinedRule(first, second).propertyRequired(state);
+        new AlternatingRule(first, second).propertyRequired(state);
 
         verify(second).propertyRequired(state);
         verify(first, never()).propertyRequired(state);
@@ -66,7 +66,7 @@ public class CombinedRuleTest {
         Rule second = ruleMock(false);
         PropertyAssignedEvent event = mock(PropertyAssignedEvent.class);
 
-        new CombinedRule(first, second).propertyValueSet(event);
+        new AlternatingRule(first, second).propertyValueSet(event);
 
         verify(second).propertyValueSet(event);
         verify(first).propertyValueSet(event);
@@ -78,7 +78,7 @@ public class CombinedRuleTest {
         Rule second = ruleMock(true);
         PropertyAssignedEvent event = mock(PropertyAssignedEvent.class);
 
-        new CombinedRule(first, second).propertyValueSet(event);
+        new AlternatingRule(first, second).propertyValueSet(event);
 
         verify(second).propertyValueSet(event);
         verify(first, never()).propertyValueSet(event);
@@ -90,9 +90,9 @@ public class CombinedRuleTest {
         Rule second = ruleMock(false);
         EngineState state = mock(EngineState.class);
 
-        CombinedRule combinedRule = new CombinedRule(first, second);
-        combinedRule.propertyCombinationStarted(state);
-        combinedRule.propertyCombinationFinished(state);
+        AlternatingRule alternatingRule = new AlternatingRule(first, second);
+        alternatingRule.propertyCombinationStarted(state);
+        alternatingRule.propertyCombinationFinished(state);
 
         verify(first).propertyCombinationFinished(state);
         verify(second, never()).propertyCombinationFinished(state);
@@ -104,35 +104,35 @@ public class CombinedRuleTest {
         Rule second = ruleMock(false);
         EngineState state = mock(EngineState.class);
 
-        CombinedRule combinedRule = new CombinedRule(first, second);
-        combinedRule.propertyCombinationStarted(state);
-        combinedRule.setNotFinished();
+        AlternatingRule alternatingRule = new AlternatingRule(first, second);
+        alternatingRule.propertyCombinationStarted(state);
+        alternatingRule.setNotFinished();
 
         verify(first).setNotFinished();
         verify(second, never()).setNotFinished();
     }
     @Test
     public void targetedPropertyNameIsTakenFromTheFirstRules() {
-        CombinedRule combinedRule = new CombinedRule(iterate("a").asRule(), iterate("a").asRule());
-        assertThat(combinedRule.getTargetedPropertyName(), is("a"));
+        AlternatingRule alternatingRule = new AlternatingRule(iterate("a").asRule(), iterate("a").asRule());
+        assertThat(alternatingRule.getTargetedPropertyName(), is("a"));
     }
     
     @Test
     public void triggeringPropertiesAreTakenFromTheFirstRules() {
         StatefulRule first = iterate("a").when("b", "c").asRule();
         StatefulRule second = iterate("a").when("b", "c").asRule();
-        CombinedRule combinedRule = new CombinedRule(first, second);
-        assertThat(combinedRule.getTriggeringProperties(), is(first.getTriggeringProperties()));
+        AlternatingRule alternatingRule = new AlternatingRule(first, second);
+        assertThat(alternatingRule.getTriggeringProperties(), is(first.getTriggeringProperties()));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void combinedRuleForDifferentTargetedPropertiesAreNotAllowed() {
-        new CombinedRule(iterate("a").asRule(), iterate("b").asRule());
+        new AlternatingRule(iterate("a").asRule(), iterate("b").asRule());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void combinedRuleForDifferentTriggeringPropertiesAreNotAllowed() {
-        new CombinedRule(iterate("y").asRule(), iterate("y").when("x").asRule());
+        new AlternatingRule(iterate("y").asRule(), iterate("y").when("x").asRule());
     }
 
     @Test
@@ -141,10 +141,10 @@ public class CombinedRuleTest {
         Rule second = ruleMock(true);
         Rule third = ruleMock(true);
 
-        CombinedRule combinedRule = new CombinedRule(first, second);
-        combinedRule.combineWith(third);
+        AlternatingRule alternatingRule = new AlternatingRule(first, second);
+        alternatingRule.combineWith(third);
 
-        assertThat(combinedRule.without(third), is((Rule) combinedRule));
+        assertThat(alternatingRule.without(third), is((Rule) alternatingRule));
     }
 
     @Test
@@ -152,14 +152,14 @@ public class CombinedRuleTest {
         Rule first = ruleMock(true);
         Rule second = ruleMock(true);
 
-        CombinedRule combinedRule = new CombinedRule(first, second);
+        AlternatingRule alternatingRule = new AlternatingRule(first, second);
 
-        assertThat(combinedRule.without(first), is(second));
+        assertThat(alternatingRule.without(first), is(second));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void combinedRuleForDefaultRuleAndTriggeringRuleAreNotAllowed() {
-        new CombinedRule(iterate("a").asRule(), iterate("a").byDefault().asRule());
+        new AlternatingRule(iterate("a").asRule(), iterate("a").byDefault().asRule());
     }
 
 }

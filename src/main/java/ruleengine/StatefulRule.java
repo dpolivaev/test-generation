@@ -117,7 +117,7 @@ abstract class StatefulRule implements Rule {
 
     @Override
     public Rule combineWith(Rule rule) {
-        return new CombinedRule(this, rule);
+        return new AlternatingRule(this, rule);
     }
 
     @Override
