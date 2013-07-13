@@ -3,9 +3,9 @@ package ruleengine;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import static ruleengine.StatefulRuleBuilder.Factory.iterate;
-import static ruleengine.StatefulRuleBuilder.Factory.when;
 import static ruleengine.TestUtils.set;
 
 import java.util.Collections;
@@ -16,6 +16,7 @@ import org.mockito.Mockito;
 
 public class TriggeredRuleTest {
     private EngineState engineState;
+    private Strategy strategy;
     private PropertyAssignedEvent propertyAssignedEvent;
 
     private void iterationWith(StatefulRule statefulRule) {
@@ -26,6 +27,8 @@ public class TriggeredRuleTest {
     @Before
     public void setup() {
         engineState = mock(EngineState.class);
+        strategy = mock(Strategy.class);
+        when(engineState.currentStrategy()).thenReturn(strategy);
         propertyAssignedEvent = mock(PropertyAssignedEvent.class);
 
     }
@@ -95,7 +98,7 @@ public class TriggeredRuleTest {
 
 	@Test
 	public void triggeredRuleWithOneValue_ignoresCombinationWithoutItsTriggeringProperty() {
-        StatefulRule statefulRule = when("triggeredBy").iterate("name")
+        StatefulRule statefulRule = iterate("name").when("triggeredBy")
             .over("value").asRule();
 
         iterationWith(statefulRule);
@@ -105,7 +108,7 @@ public class TriggeredRuleTest {
 	@Test
 	public void triggeredRuleWithOneValue_whenTriggeredPropertyIsAssigned_assignsItsValue() {
         Rule triggeringRule = iterate("triggeredBy").over("value1").asRule();
-        StatefulRule triggeredRule = when("triggeredBy").iterate("name").over("value2").asRule();
+        StatefulRule triggeredRule = iterate("name").over("value2").when("triggeredBy").asRule();
         Mockito.when(engineState.containsPropertyValues(set("triggeredBy"))).thenReturn(true);
         triggeredRule.propertyValueSet( //
             new PropertyAssignedEvent(engineState, triggeringRule, Collections.<String> emptySet()));
@@ -115,7 +118,7 @@ public class TriggeredRuleTest {
 	@Test
 	public void triggeredRuleWithOneValue_whenTriggeredPropertyIsAssigned_finishes() {
         Rule triggeringRule = iterate("triggeredBy").over("value1").asRule();
-        StatefulRule triggeredRule = when("triggeredBy").iterate("name").over("value2").asRule();
+        StatefulRule triggeredRule = iterate("name").over("value2").when("triggeredBy").asRule();
         Mockito.when(engineState.containsPropertyValues(set("triggeredBy"))).thenReturn(true);
         triggeredRule.propertyValueSet(new PropertyAssignedEvent(engineState, triggeringRule, Collections
             .<String> emptySet()));
@@ -144,7 +147,7 @@ public class TriggeredRuleTest {
 	@Test
 	public void givenTriggeredRuleIsNotFinished_ruleIsNotFinished() {
         StatefulRule topRule = iterate("x").over("1").asRule();
-        StatefulRule triggeredRule = when("x").iterate("y").over("3", "4")
+        StatefulRule triggeredRule = iterate("y").over("3", "4").when("x")
             .asRule();
         topRule.propertyCombinationStarted(engineState);
         triggeredRule.propertyCombinationStarted(engineState);
@@ -161,7 +164,7 @@ public class TriggeredRuleTest {
         StatefulRule statefulRule = iterate("x").with("a", temporaryRule).asRule();
 
         statefulRule.propertyCombinationStarted(engineState);
-        verify(engineState).addRule(temporaryRule);
+        verify(strategy).addRule(temporaryRule);
     }
 
     @Test
@@ -172,7 +175,7 @@ public class TriggeredRuleTest {
         statefulRule.propertyCombinationStarted(engineState);
         statefulRule.propertyCombinationFinished(engineState);
 
-        verify(engineState).removeRule(temporaryRule);
+        verify(strategy).removeRule(temporaryRule);
     }
 
     @Test

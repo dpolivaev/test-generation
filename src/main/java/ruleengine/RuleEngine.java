@@ -13,24 +13,10 @@ public class RuleEngine implements EngineState {
     private final ScriptProducer scriptProducer;
 
     public RuleEngine(ScriptProducer scriptProducer) {
-        this(scriptProducer, new MapBasedState());
-    }
-
-    public RuleEngine(ScriptProducer scriptProducer, MapBasedState mapBasedState) {
         super();
+        this.mapBasedState = new MapBasedState();
         this.scriptProducer = scriptProducer;
-        this.mapBasedState = mapBasedState;
-        strategy = null;
-    }
-
-    @Override
-    public void addRule(Rule rule) {
-		strategy.addRule(rule);
-	}
-
-    @Override
-    public void removeRule(Rule rule) {
-        strategy.removeRule(rule);
+        this.strategy = null;
     }
 
     public void run(Strategy strategy) {
@@ -71,24 +57,12 @@ public class RuleEngine implements EngineState {
 	public void setPropertyValue(Rule rule, Object nextValue) {
 		mapBasedState.setPropertyValue(rule, nextValue);
         if (rule.canTriggerOtherRules()) {
-            PropertyAssignedEvent event = new PropertyAssignedEvent(this, rule, requiredProperties(rule));
+            PropertyAssignedEvent event = new PropertyAssignedEvent(this, rule, rule.requiredProperties(dependencies));
             firePropertyAssignedEvent(event);
         }
 	}
 
-    private Set<String> requiredProperties(Rule rule) {
-        Set<String> requiredProperties;
-        if (dependencies.isEmpty()) {
-            requiredProperties = rule.getTriggeringProperties();
-        }
-        else {
-            requiredProperties = new HashSet<>(rule.getTriggeringProperties());
-            requiredProperties.addAll(dependencies);
-        }
-        return requiredProperties;
-    }
-
-	private void firePropertyAssignedEvent(PropertyAssignedEvent event) {
+    private void firePropertyAssignedEvent(PropertyAssignedEvent event) {
         Set<String> oldDependencies = dependencies;
 		for (Rule rule : rules()) {
             dependencies = new HashSet<>();
@@ -105,7 +79,7 @@ public class RuleEngine implements EngineState {
 	}
 
 	private Collection<Rule> rules() {
-		return strategy.rules();
+		return currentStrategy().rules();
 	}
 
 	public String getAssignedPropertiesAsString() {
@@ -122,18 +96,19 @@ public class RuleEngine implements EngineState {
         if (!mapBasedState.containsPropertyValue(name)) {
             Set<String> oldDependencies = dependencies;
             dependencies = new HashSet<>();
-            getPropertyValueFromDefaultRules(name);
+            executeDefaultRulesForProperty(name);
             dependencies = oldDependencies;
         }
         dependencies.add(name);
 		return mapBasedState.get(name);
 	}
 
-    private void getPropertyValueFromDefaultRules(String name) {
-        strategy.getRuleForProperty(name).propertyRequired(this);
+    private void executeDefaultRulesForProperty(String name) {
+        currentStrategy().getRuleForProperty(name).propertyRequired(this);
     }
 
-    public void addRule(StatefulRuleBuilder builder) {
-        strategy.addRule(builder.asRule());
+    @Override
+    public Strategy currentStrategy() {
+        return strategy;
     }
 }
