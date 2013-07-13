@@ -5,8 +5,12 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-class RuleMap {
+public class Strategy {
 	private Map<String, Rule> rules = new LinkedHashMap<String, Rule>();
+
+    public void addRule(StatefulRuleBuilder builder) {
+        addRule(builder.asRule());
+    }
 
 	public void addRule(Rule rule) {
         String targetedPropertyName = rule.getTargetedPropertyName();

@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-class CombinedRule implements Rule {
+class AlternatingRule implements Rule {
     private final List<Rule> rules = new ArrayList<>();
     private Rule activeRule = null;
 
-    public CombinedRule(Rule oldRule, Rule newRule) {
+    public AlternatingRule(Rule oldRule, Rule newRule) {
         rules.add(oldRule);
         combineWith(newRule);
     }
