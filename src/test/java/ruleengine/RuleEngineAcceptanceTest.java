@@ -7,6 +7,8 @@ import static ruleengine.Combinations.combination;
 import static ruleengine.StatefulRuleBuilder.Factory.iterate;
 import static ruleengine.StatefulRuleBuilder.Factory.when;
 
+import static ruleengine.ConstantValue.Instruction.SKIP;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -314,6 +316,23 @@ public class RuleEngineAcceptanceTest {
         generateCombinationsForStrategy();
 
         expect(combination("x", "1"));
+    }
+
+    @Test
+    public void triggeredRuleWithSkippingValues() {
+
+        strategy.addRule(iterate("x").over("a1", "a2"));
+        strategy.addRule(when("x").iterate("y").over(SKIP)._if(new Condition() {
+
+            @Override
+            public boolean isSatisfied() {
+                return ruleEngine.get("x").equals("a1");
+            }
+        }));
+
+        generateCombinationsForStrategy();
+
+        expect(new Combinations().skip().followedBy("x", "a2"));
     }
 
 }
