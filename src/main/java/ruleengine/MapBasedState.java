@@ -4,12 +4,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-class MapBasedState implements PropertyMap {
+public class MapBasedState {
 	private StringBuilder assignedPropertiesAsString = new StringBuilder();
 	private int count = 0;
 	private Map<String, Object> properties = new LinkedHashMap<String, Object>();
 
-	@Override
 	public void setPropertyValue(Rule rule, Object value) {
 		properties.put(rule.getTargetedPropertyName(), value);
 		if (assignedPropertiesAsString.length() > 0)
@@ -29,7 +28,6 @@ class MapBasedState implements PropertyMap {
 		return count + " : " + assignedPropertiesAsString + '\n';
 	}
 
-    @Override
     public boolean containsPropertyValues(Set<String> names) {
         return properties.keySet().containsAll(names);
     }
@@ -38,7 +36,6 @@ class MapBasedState implements PropertyMap {
         return properties.keySet().contains(name);
     }
 
-	@Override
     public Object get(String name) {
 		return properties.get(name);
 	}
