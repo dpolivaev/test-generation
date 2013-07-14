@@ -4,6 +4,10 @@ import java.util.Collection;
 import java.util.Collections;
 
 public class ConstantValue implements ValueWithRulesProvider{
+    public enum Instruction {
+        SKIP;
+    }
+
     private final Object value;
 
     public ConstantValue(Object value) {
@@ -24,6 +28,8 @@ public class ConstantValue implements ValueWithRulesProvider{
      */
     @Override
     public Object value() {
+        if (value == Instruction.SKIP)
+            throw new InvalidCombinationException();
         return value;
     }
 

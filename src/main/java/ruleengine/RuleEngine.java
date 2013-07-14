@@ -23,11 +23,12 @@ public class RuleEngine implements EngineState {
         this.strategy = strategy;
         try {
             do {
-            	mapBasedState.nextCombination();
-            	fireNextCombinationStartedEvent();
                 Set<String> oldDependencies = dependencies;
-                dependencies = new HashSet<>();
-            	scriptProducer.makeScriptFor(this);
+                try {
+                    generateCombination();
+                }
+                catch (InvalidCombinationException e) {
+                }
                 dependencies = oldDependencies;
             	fireNextCombinationFinishedEvent();
 
@@ -37,6 +38,13 @@ public class RuleEngine implements EngineState {
             this.strategy = null;
         }
 	}
+
+    private void generateCombination() {
+        mapBasedState.nextCombination();
+        fireNextCombinationStartedEvent();
+        dependencies = new HashSet<>();
+        scriptProducer.makeScriptFor(this);
+    }
 
 	private void fireNextCombinationFinishedEvent() {
 		for (Rule rule : rules())

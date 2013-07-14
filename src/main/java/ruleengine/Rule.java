@@ -16,11 +16,11 @@ public interface Rule {
 
     public Set<String> requiredProperties(Set<String> dependencies);
 
-    void propertyCombinationStarted(EngineState engineState);
+    void propertyCombinationStarted(EngineState engineState) throws InvalidCombinationException;
 
     void propertyCombinationFinished(EngineState engineState);
 
-	void propertyValueSet(PropertyAssignedEvent event);
+    void propertyValueSet(PropertyAssignedEvent event) throws InvalidCombinationException;
 
     boolean hasFinished();
 

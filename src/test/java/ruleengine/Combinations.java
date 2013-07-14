@@ -8,6 +8,11 @@ class Combinations {
         return new Combinations().followedBy(properties);
     }
 
+    public Combinations skip() {
+        ++iterationCounter;
+        return this;
+    }
+
     public Combinations followedBy(String... properties) {
         stringBuilder.append(++iterationCounter).append(" : ");
         for (int i = 0; i < properties.length; i += 2) {
