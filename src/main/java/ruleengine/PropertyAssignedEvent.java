@@ -9,11 +9,11 @@ public class PropertyAssignedEvent {
 	private final Set<String> requiredProperties;
 
     public PropertyAssignedEvent(EngineState engineState, Rule workingRule,
-			Set<String> requiredProperties) {
+ Set<String> dependencies) {
 		super();
 		this.engineState = engineState;
 		this.workingRule = workingRule;
-		this.requiredProperties = requiredProperties;
+        this.requiredProperties = workingRule.requiredProperties(dependencies);
 	}
 
 	public Set<String> getRequiredProperties() {

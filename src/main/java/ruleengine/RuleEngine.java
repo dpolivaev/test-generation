@@ -57,7 +57,7 @@ public class RuleEngine implements EngineState {
 	public void setPropertyValue(Rule rule, Object nextValue) {
 		mapBasedState.setPropertyValue(rule, nextValue);
         if (rule.canTriggerOtherRules()) {
-            PropertyAssignedEvent event = new PropertyAssignedEvent(this, rule, rule.requiredProperties(dependencies));
+            PropertyAssignedEvent event = new PropertyAssignedEvent(this, rule, dependencies);
             firePropertyAssignedEvent(event);
         }
 	}
