@@ -64,7 +64,7 @@ public class RuleEngine implements EngineState {
 	@Override
 	public void setPropertyValue(Rule rule, Object nextValue) {
 		mapBasedState.setPropertyValue(rule, nextValue);
-        if (rule.canTriggerOtherRules()) {
+        if (!rule.isDefaultRule()) {
             PropertyAssignedEvent event = new PropertyAssignedEvent(this, rule, dependencies);
             firePropertyAssignedEvent(event);
         }
@@ -112,7 +112,7 @@ public class RuleEngine implements EngineState {
 	}
 
     private void executeDefaultRulesForProperty(String name) {
-        currentStrategy().getRuleForProperty(name).propertyRequired(this);
+        currentStrategy().getRulesForProperty(name).propertyRequired(this);
     }
 
     @Override

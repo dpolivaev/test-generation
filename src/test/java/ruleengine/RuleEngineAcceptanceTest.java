@@ -1,8 +1,6 @@
 package ruleengine;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 import static ruleengine.Combinations.combination;
 import static ruleengine.StatefulRuleBuilder.Factory.iterate;
 import static ruleengine.StatefulRuleBuilder.Factory.when;
@@ -334,5 +332,12 @@ public class RuleEngineAcceptanceTest {
 
         expect(new Combinations().skip().followedBy("x", "a2"));
     }
+
+    //    @Test(expected = PropertyAlreadyAssignedException.class)
+    //    public void assigningAlreadyAssignedProperty_throwsException() {
+    //        strategy.addRule(iterate("x").over("a1"));
+    //        strategy.addRule(when("x").iterate("x").over("a2"));
+    //        generateCombinationsForStrategy();
+    //    }
 
 }

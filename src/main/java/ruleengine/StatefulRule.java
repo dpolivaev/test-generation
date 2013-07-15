@@ -56,6 +56,7 @@ abstract class StatefulRule implements Rule {
 	}
 
     protected void addValueWithRules(EngineState engineState) {
+        setValueAlreadyAddedToCurrentCombination(true);
         if (dependentRules.isEmpty()) {
             values.next();
             addRules(engineState);
@@ -65,7 +66,6 @@ abstract class StatefulRule implements Rule {
 
     private void setValue(EngineState engineState) {
         Object value = values.currentValue();
-        setValueAlreadyAddedToCurrentCombination(true);
 		engineState.setPropertyValue(this, value);
     }
 
@@ -134,6 +134,13 @@ abstract class StatefulRule implements Rule {
     }
 
     @Override
+    public boolean canCombineWith(Rule rule) {
+        return (rule != null && isDefaultRule() == rule.isDefaultRule())
+            && getTargetedPropertyName().equals(rule.getTargetedPropertyName())
+            && getTriggeringProperties().equals(rule.getTriggeringProperties());
+    }
+
+    @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder("StatefulRule [");
         appendTriggeringPropertyList(stringBuilder);
@@ -176,4 +183,5 @@ abstract class StatefulRule implements Rule {
     protected void setFinished(boolean finished) {
         this.finished = finished;
     }
+
 }

@@ -16,8 +16,8 @@ public class DefaultStatefulRule extends TopStatefulRule {
     }
 
     @Override
-    public boolean canTriggerOtherRules() {
-        return false;
+    public boolean isDefaultRule() {
+        return true;
     }
 
 }
