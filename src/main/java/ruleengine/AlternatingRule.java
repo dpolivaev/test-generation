@@ -94,7 +94,7 @@ class AlternatingRule implements Rule {
     }
 
     private void checkRuleCompatibility(Rule rule) {
-        if (canTriggerOtherRules() != rule.canTriggerOtherRules())
+        if (isDefaultRule() != rule.isDefaultRule())
             throw new IllegalArgumentException("triggering and not triggering rules can not be combined");
         if (!getTargetedPropertyName().equals(rule.getTargetedPropertyName()))
             throw new IllegalArgumentException("rules with different targeted property names can not be combined");
@@ -112,8 +112,13 @@ class AlternatingRule implements Rule {
     }
 
     @Override
-    public boolean canTriggerOtherRules() {
-        return firstRule().canTriggerOtherRules();
+    public boolean isDefaultRule() {
+        return firstRule().isDefaultRule();
+    }
+
+    @Override
+    public boolean canCombineWith(Rule existingRule) {
+        return firstRule().canCombineWith(existingRule);
     }
 
 }

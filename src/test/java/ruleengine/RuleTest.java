@@ -14,7 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-public class TriggeredRuleTest {
+public class RuleTest {
     private EngineState engineState;
     private Strategy strategy;
     private PropertyAssignedEvent propertyAssignedEvent;
@@ -181,18 +181,40 @@ public class TriggeredRuleTest {
     @Test
     public void topRule_canTriggerOtherRules() {
         StatefulRule topRule = iterate("x").over("1").asRule();
-        assertThat(topRule.canTriggerOtherRules(), is(true));
+        assertThat(topRule.isDefaultRule(), is(false));
     }
 
     @Test
     public void triggeredRule_canTriggerOtherRules() {
         StatefulRule triggeredRule = iterate("x").over("1").when("y").asRule();
-        assertThat(triggeredRule.canTriggerOtherRules(), is(true));
+        assertThat(triggeredRule.isDefaultRule(), is(false));
     }
 
     @Test
     public void defaultRule_canNotTriggerOtherRules() {
         StatefulRule defaultRule = iterate("x").over("1").byDefault().asRule();
-        assertThat(defaultRule.canTriggerOtherRules(), is(false));
+        assertThat(defaultRule.isDefaultRule(), is(true));
     }
+
+    @Test
+    public void triggeredRulesWithDifferentTriggeringRules_canNotBeCombined() {
+        StatefulRule triggeredRule1 = iterate("x").over("1").when("y").asRule();
+        StatefulRule triggeredRule2 = iterate("x").over("1").when("y", "z").asRule();
+        assertThat(triggeredRule1.canCombineWith(triggeredRule2), is(false));
+    }
+
+    @Test
+    public void topAndDefaultRules_canNotBeCombined() {
+        StatefulRule topRule = iterate("x").over("1").asRule();
+        StatefulRule defaultRule = iterate("x").over("1").byDefault().asRule();
+        assertThat(topRule.canCombineWith(defaultRule), is(false));
+    }
+
+    @Test
+    public void topRulesWithDifferentTargetedProperties_canNotBeCombined() {
+        StatefulRule topRule1 = iterate("x").over("1").asRule();
+        StatefulRule topRule2 = iterate("y").over("1").asRule();
+        assertThat(topRule1.canCombineWith(topRule2), is(false));
+    }
+
 }

@@ -10,7 +10,10 @@ public class MapBasedState {
 	private Map<String, Object> properties = new LinkedHashMap<String, Object>();
 
 	public void setPropertyValue(Rule rule, Object value) {
-		properties.put(rule.getTargetedPropertyName(), value);
+		String targetedPropertyName = rule.getTargetedPropertyName();
+        if (properties.containsKey(targetedPropertyName))
+            throw new PropertyAlreadyAssignedException();
+        properties.put(targetedPropertyName, value);
 		if (assignedPropertiesAsString.length() > 0)
 			assignedPropertiesAsString.append('\t');
 		this.assignedPropertiesAsString.append(rule.getTargetedPropertyName())

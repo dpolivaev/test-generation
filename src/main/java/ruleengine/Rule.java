@@ -34,5 +34,7 @@ public interface Rule {
 
     void propertyRequired(EngineState engineState);
 
-    boolean canTriggerOtherRules();
+    boolean isDefaultRule();
+
+    boolean canCombineWith(Rule existingRule);
 }

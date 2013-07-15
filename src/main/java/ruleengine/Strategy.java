@@ -6,7 +6,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Strategy {
-	private Map<String, Rule> rules = new LinkedHashMap<String, Rule>();
+    private Map<String, Rule> rules = new LinkedHashMap<>();
+    private Map<String, Rule> defaultRules = new LinkedHashMap<>();
+    private Map<String, Rule> topRules = new LinkedHashMap<>();
+    private Map<String, Collection<Rule>> triggeredRules = new LinkedHashMap<>();
 
     public void addRule(StatefulRuleBuilder builder) {
         addRule(builder.asRule());
@@ -27,11 +30,7 @@ public class Strategy {
 		return arrayList;
 	}
 
-    public boolean hasRuleForProperty(String propertyName) {
-        return rules.containsKey(propertyName);
-    }
-
-    public Rule getRuleForProperty(String propertyName) {
+    public Rule getRulesForProperty(String propertyName) {
         return rules.get(propertyName);
     }
 
