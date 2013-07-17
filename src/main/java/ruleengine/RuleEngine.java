@@ -47,14 +47,14 @@ public class RuleEngine implements EngineState {
     }
 
 	private void fireNextCombinationFinishedEvent() {
-		for (Rule rule : rules())
+        for (Rule rule : strategy.topRules())
             rule.propertyCombinationFinished(this);
 	}
 
     private Set<String> dependencies;
 	private void fireNextCombinationStartedEvent() {
         Set<String> oldDependencies = dependencies;
-        for (Rule rule : rules()) {
+        for (Rule rule : strategy.topRules()) {
             dependencies = new HashSet<>();
             rule.propertyCombinationStarted(this);
         }
@@ -66,28 +66,26 @@ public class RuleEngine implements EngineState {
 		mapBasedState.setPropertyValue(rule, nextValue);
         if (!rule.isDefaultRule()) {
             PropertyAssignedEvent event = new PropertyAssignedEvent(this, rule, dependencies);
-            firePropertyAssignedEvent(event);
+            firePropertyAssignedEvent(mapBasedState.firedRules(), event);
+            firePropertyAssignedEvent(strategy.triggeredRules(), event);
         }
 	}
 
-    private void firePropertyAssignedEvent(PropertyAssignedEvent event) {
+    private void firePropertyAssignedEvent(Collection<Rule> rules, PropertyAssignedEvent event) {
         Set<String> oldDependencies = dependencies;
-		for (Rule rule : rules()) {
-            dependencies = new HashSet<>();
+        for (Rule rule : rules) {
+            if (!dependencies.isEmpty())
+                dependencies = new HashSet<>();
 			rule.propertyValueSet(event);
 		}
         dependencies = oldDependencies;
 	}
 
 	private boolean topRulesHaveFinished() {
-		for (Rule rule : rules())
-            if (rule.getTriggeringProperties().isEmpty() && !rule.hasFinished())
+        for (Rule rule : strategy.topRules())
+            if (!rule.hasFinished())
 				return false;
 		return true;
-	}
-
-	private Collection<Rule> rules() {
-		return currentStrategy().rules();
 	}
 
 	public String getAssignedPropertiesAsString() {
@@ -112,7 +110,7 @@ public class RuleEngine implements EngineState {
 	}
 
     private void executeDefaultRulesForProperty(String name) {
-        currentStrategy().getRulesForProperty(name).propertyRequired(this);
+        strategy.getDefaultRulesForProperty(name).propertyRequired(this);
     }
 
     @Override
