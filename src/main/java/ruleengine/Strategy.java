@@ -2,14 +2,13 @@ package ruleengine;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Strategy {
     private Map<String, Rule> defaultRules = new LinkedHashMap<>();
     private Map<String, Rule> topRules = new LinkedHashMap<>();
-    private Map<String, Rule> triggeredRules = new LinkedHashMap<>();
+    private Map<TriggeredRuleKey, Rule> triggeredRules = new LinkedHashMap<>();
 
     public void addRule(StatefulRuleBuilder builder) {
         addRule(builder.asRule());
@@ -17,27 +16,26 @@ public class Strategy {
 
 	public void addRule(Rule rule) {
         if (rule.isDefaultRule()) {
-            addRule(defaultRules, rule);
+            addRule(defaultRules, rule.getTargetedPropertyName(), rule);
         }
         else {
             if (rule.getTriggeringProperties().isEmpty())
-                addRule(topRules, rule);
+                addRule(topRules, rule.getTargetedPropertyName(), rule);
             else {
-                addRule(triggeredRules, rule);
+                addRule(triggeredRules, TriggeredRuleKey.from(rule), rule);
             }
         }
     }
 
-    private void addRule(Map<String, Rule> rules, Rule rule) {
-        String targetedPropertyName = rule.getTargetedPropertyName();
-        Rule existingRule = rules.get(targetedPropertyName);
+    private <T> void addRule(Map<T, Rule> rules, T key, Rule rule) {
+        Rule existingRule = rules.get(key);
         if (existingRule != null)
-            rules.put(targetedPropertyName, existingRule.combineWith(rule));
+            rules.put(key, existingRule.combineWith(rule));
         else
-            rules.put(targetedPropertyName, rule);
+            rules.put(key, rule);
     }
 
-    private Collection<Rule> copy(Map<String, Rule> original) {
+    private Collection<Rule> copy(Map<?, Rule> original) {
         ArrayList<Rule> arrayList = new ArrayList<Rule>();
         arrayList.addAll(original.values());
 		return arrayList;
@@ -49,24 +47,23 @@ public class Strategy {
 
     public void removeRule(Rule rule) {
         if (rule.isDefaultRule()) {
-            removeRule(defaultRules, rule);
+            removeRule(defaultRules, rule.getTargetedPropertyName(), rule);
         }
         else {
             if (rule.getTriggeringProperties().isEmpty())
-                removeRule(topRules, rule);
+                removeRule(topRules, rule.getTargetedPropertyName(), rule);
             else {
-                removeRule(triggeredRules, rule);
+                removeRule(triggeredRules, TriggeredRuleKey.from(rule), rule);
             }
         }
     }
 
-    public void removeRule(Map<String, Rule> rules, Rule rule) {
-        String targetedPropertyName = rule.getTargetedPropertyName();
-        Rule reducedRule = rules.get(targetedPropertyName).without(rule);
+    private <T> void removeRule(Map<T, Rule> rules, T key, Rule rule) {
+        Rule reducedRule = rules.get(key).without(rule);
         if (reducedRule == null)
-            rules.remove(targetedPropertyName);
+            rules.remove(key);
         else
-            rules.put(targetedPropertyName, reducedRule);
+            rules.put(key, reducedRule);
     }
 
     public Collection<Rule> topRules() {
