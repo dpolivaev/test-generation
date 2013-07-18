@@ -4,17 +4,17 @@ import java.util.Collection;
 
 public class ValueWithRules implements ValueWithRulesProvider {
     private final Collection<Rule> rules;
-    private final ValueWithRulesProvider value;
+    private final ValueProvider valueProvider;
 
-    public ValueWithRules(ValueWithRulesProvider value, Collection<Rule> rules) {
+    public ValueWithRules(ValueProvider valueProvider, Collection<Rule> rules) {
         super();
         this.rules = rules;
-        this.value = value;
+        this.valueProvider = valueProvider;
     }
 
     @Override
     public Object value() {
-        return value.value();
+        return valueProvider.value();
     }
 
     @Override
