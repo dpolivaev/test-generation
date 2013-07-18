@@ -134,13 +134,6 @@ abstract class StatefulRule implements Rule {
     }
 
     @Override
-    public boolean canCombineWith(Rule rule) {
-        return (rule != null && isDefaultRule() == rule.isDefaultRule())
-            && getTargetedPropertyName().equals(rule.getTargetedPropertyName())
-            && getTriggeringProperties().equals(rule.getTriggeringProperties());
-    }
-
-    @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder("StatefulRule [");
         appendTriggeringPropertyList(stringBuilder);

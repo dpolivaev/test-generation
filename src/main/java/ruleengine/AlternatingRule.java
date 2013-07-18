@@ -116,9 +116,4 @@ class AlternatingRule implements Rule {
         return firstRule().isDefaultRule();
     }
 
-    @Override
-    public boolean canCombineWith(Rule existingRule) {
-        return firstRule().canCombineWith(existingRule);
-    }
-
 }

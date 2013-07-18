@@ -196,25 +196,4 @@ public class RuleTest {
         assertThat(defaultRule.isDefaultRule(), is(true));
     }
 
-    @Test
-    public void triggeredRulesWithDifferentTriggeringRules_canNotBeCombined() {
-        StatefulRule triggeredRule1 = iterate("x").over("1").when("y").asRule();
-        StatefulRule triggeredRule2 = iterate("x").over("1").when("y", "z").asRule();
-        assertThat(triggeredRule1.canCombineWith(triggeredRule2), is(false));
-    }
-
-    @Test
-    public void topAndDefaultRules_canNotBeCombined() {
-        StatefulRule topRule = iterate("x").over("1").asRule();
-        StatefulRule defaultRule = iterate("x").over("1").byDefault().asRule();
-        assertThat(topRule.canCombineWith(defaultRule), is(false));
-    }
-
-    @Test
-    public void topRulesWithDifferentTargetedProperties_canNotBeCombined() {
-        StatefulRule topRule1 = iterate("x").over("1").asRule();
-        StatefulRule topRule2 = iterate("y").over("1").asRule();
-        assertThat(topRule1.canCombineWith(topRule2), is(false));
-    }
-
 }
