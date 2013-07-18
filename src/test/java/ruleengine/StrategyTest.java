@@ -1,9 +1,6 @@
 package ruleengine;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
@@ -63,5 +60,15 @@ public class StrategyTest {
         StatefulRule rule = iterate("x").over("a").byDefault().asRule();
         strategy.addRule(rule);
         assertThat(strategy.topRules(), not(hasItem(rule)));
+    }
+
+    @Test
+    public void afterAddingTriggeringRulesWithDifferentTriggeringProperties_returnsBothRules() throws Exception {
+        StatefulRule ruleP = iterate("x").over("a").when("p").asRule();
+        strategy.addRule(ruleP);
+        StatefulRule ruleQ = iterate("x").over("a").when("q").asRule();
+        strategy.addRule(ruleQ);
+        assertThat(strategy.triggeredRules(), hasItem(ruleP));
+        assertThat(strategy.triggeredRules(), hasItem(ruleQ));
     }
 }
