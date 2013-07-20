@@ -14,6 +14,10 @@ public class Strategy {
         addRule(builder.asRule());
     }
 
+    public void addDefaultRule(StatefulRuleBuilder builder) {
+        addRule(builder.asDefaultRule());
+    }
+
 	public void addRule(Rule rule) {
         if (rule.isDefaultRule()) {
             addRule(defaultRules, rule.getTargetedPropertyName(), rule);

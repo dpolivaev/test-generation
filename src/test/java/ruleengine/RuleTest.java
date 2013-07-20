@@ -196,7 +196,7 @@ public class RuleTest {
 
     @Test
     public void defaultRule_canNotTriggerOtherRules() {
-        StatefulRule defaultRule = iterate("x").over("1").byDefault().asRule();
+        StatefulRule defaultRule = iterate("x").over("1").asDefaultRule();
         assertThat(defaultRule.isDefaultRule(), is(true));
     }
 

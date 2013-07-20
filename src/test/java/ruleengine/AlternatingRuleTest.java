@@ -159,7 +159,7 @@ public class AlternatingRuleTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void combinedRuleForDefaultRuleAndTriggeringRuleAreNotAllowed() {
-        new AlternatingRule(iterate("a").asRule(), iterate("a").byDefault().asRule());
+        new AlternatingRule(iterate("a").asRule(), iterate("a").asDefaultRule());
     }
 
 }
