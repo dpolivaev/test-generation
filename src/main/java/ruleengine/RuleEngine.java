@@ -83,7 +83,7 @@ public class RuleEngine implements EngineState {
 
 	private boolean topRulesHaveFinished() {
         for (Rule rule : strategy.topRules())
-            if (!rule.hasFinished())
+            if (rule.blocksRequiredProperties())
 				return false;
 		return true;
 	}

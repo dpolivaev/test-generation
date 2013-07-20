@@ -10,7 +10,7 @@ public class TopStatefulRule extends StatefulRule {
         if (getCondition().isSatisfied())
             addValueWithRules(engineState);
         else
-            setFinished(true);
+            setBlocksRequiredProperties(false);
     }
 
     @Override
