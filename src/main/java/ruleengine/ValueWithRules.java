@@ -9,7 +9,14 @@ public class ValueWithRules implements ValueWithRulesProvider {
     public ValueWithRules(ValueProvider valueProvider, Collection<Rule> rules) {
         super();
         this.rules = rules;
-        this.valueProvider = valueProvider;
+        this.valueProvider = valueProvider(valueProvider);
+    }
+
+    private ValueProvider valueProvider(ValueProvider valueProvider) {
+        if (valueProvider instanceof ValueWithRules)
+            return ((ValueWithRules) valueProvider).valueProvider;
+        else
+            return valueProvider;
     }
 
     @Override
