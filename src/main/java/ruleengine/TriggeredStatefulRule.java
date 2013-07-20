@@ -20,8 +20,11 @@ public class TriggeredStatefulRule extends StatefulRule {
         if (isValueAlreadyAddedToCurrentCombination())
             addDependencies(event);
         else if (triggeringProperties.contains(event.getTargetedPropertyName())
-            && event.containsPropertyValues(triggeringProperties) && getCondition().isSatisfied())
+            && event.containsPropertyValues(triggeringProperties) && getCondition().isSatisfied()) {
             addValueWithRules(event.getState());
+            if (event.isValueChanged())
+                setBlocksRequiredProperties(true);
+        }
     }
 
     @Override

@@ -62,10 +62,10 @@ public class RuleEngine implements EngineState {
 	}
 
 	@Override
-	public void setPropertyValue(Rule rule, Object nextValue) {
-		mapBasedState.setPropertyValue(rule, nextValue);
+    public void setPropertyValue(Rule rule, Object value, boolean valueChanged) {
+		mapBasedState.setPropertyValue(rule, value);
         if (!rule.isDefaultRule()) {
-            PropertyAssignedEvent event = new PropertyAssignedEvent(this, rule, dependencies);
+            PropertyAssignedEvent event = new PropertyAssignedEvent(this, rule, dependencies, valueChanged);
             firePropertyAssignedEvent(mapBasedState.firedRules(), event);
             firePropertyAssignedEvent(strategy.triggeredRules(), event);
         }

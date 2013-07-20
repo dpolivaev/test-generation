@@ -107,6 +107,19 @@ public class RuleEngineAcceptanceTest {
     }
 
     @Test
+    public void twoTriggeredRulesWithValuesA1_A2_A3andB1_B2() {
+
+        strategy.addRule(iterate("x").over("1"));
+        strategy.addRule(iterate("y").over("a1", "a2", "a3").when("x"));
+        strategy.addRule(iterate("z").over("b1", "b2").when("x"));
+
+        generateCombinationsForStrategy();
+
+        expect(combination("x", "1", "y", "a1", "z", "b1") //
+            .followedBy("x", "1", "y", "a2", "z", "b2").followedBy("x", "1", "y", "a3", "z", "b1"));
+    }
+
+    @Test
     public void triggeringAndTriggeredRulesWithSingleValues() {
 
         strategy.addRule(iterate("x").over("a"));
@@ -214,7 +227,7 @@ public class RuleEngineAcceptanceTest {
     public void ruleAndRuleWithDependentCondition() {
 
         strategy.addRule(iterate("x").over("a1", "a2"));
-        strategy.addRule(iterate("y").over("b1", "b2")._if(new Condition() {
+        strategy.addRule(iterate("y").over("b1", "b2").when("x")._if(new Condition() {
 
             @Override
             public boolean isSatisfied() {
