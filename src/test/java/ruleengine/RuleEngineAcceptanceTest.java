@@ -267,12 +267,13 @@ public class RuleEngineAcceptanceTest {
 
     @Test
     public void ruleManagesValueSpecificTemporaryRules() {
-        StatefulRuleBuilder temporaryRule = iterate("y").over("1", "2").when("x");
-        strategy.addRule(iterate("x").over("a").with(temporaryRule.asRule()));
+        StatefulRuleBuilder temporaryRule = iterate("y").over("1", "2");
+        strategy.addRule(iterate("x").over("a", "b").with(temporaryRule));
 
         generateCombinationsForStrategy();
 
-        expect(combination("x", "a", "y", "1").followedBy("x", "a", "y", "2"));
+        expect(combination("x", "a", "y", "1").followedBy("x", "a", "y", "2") //
+            .followedBy("x", "b", "y", "1").followedBy("x", "b", "y", "2"));
     }
 
     @Test
@@ -346,11 +347,11 @@ public class RuleEngineAcceptanceTest {
         expect(new Combinations().skip().followedBy("x", "a2"));
     }
 
-    //    @Test(expected = PropertyAlreadyAssignedException.class)
-    //    public void assigningAlreadyAssignedProperty_throwsException() {
-    //        strategy.addRule(iterate("x").over("a1"));
-    //        strategy.addRule(when("x").iterate("x").over("a2"));
-    //        generateCombinationsForStrategy();
-    //    }
+    @Test(expected = PropertyAlreadyAssignedException.class)
+    public void assigningAlreadyAssignedProperty_throwsException() {
+        strategy.addRule(iterate("x").over("a1"));
+        strategy.addRule(when("x").iterate("x").over("a2"));
+        generateCombinationsForStrategy();
+    }
 
 }

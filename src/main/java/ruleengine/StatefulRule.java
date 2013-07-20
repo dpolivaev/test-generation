@@ -72,8 +72,11 @@ abstract class StatefulRule implements Rule {
 
     private void addRules(EngineState engineState) {
         Collection<Rule> rules = values.currentValueRelatedRules();
-        for (Rule rule : rules)
+        for (Rule rule : rules) {
+            if (!rule.isDefaultRule())
+                rule.getTriggeringProperties().add(targetedPropertyName);
             engineState.currentStrategy().addRule(rule);
+        }
     }
 
     @Override

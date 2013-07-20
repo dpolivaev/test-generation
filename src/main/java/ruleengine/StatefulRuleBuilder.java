@@ -60,10 +60,21 @@ public class StatefulRuleBuilder {
     }
 
     public StatefulRuleBuilder with(Rule... rules) {
+        return with(Arrays.asList(rules));
+    }
+
+    public StatefulRuleBuilder with(StatefulRuleBuilder... ruleBuilders) {
+        Collection<Rule> rules = new ArrayList<>(ruleBuilders.length);
+        for (StatefulRuleBuilder builder : ruleBuilders)
+            rules.add(builder.asDefaultRule ? builder.asRule() : builder.asTriggeredRule());
+        return with(rules);
+    }
+
+    private StatefulRuleBuilder with(Collection<Rule> rules) {
         ListIterator<ValueWithRulesProvider> listIterator = values.listIterator(previousValueCount);
         while (listIterator.hasNext()) {
             ValueWithRulesProvider valueProvider = listIterator.next();
-            listIterator.set(new ValueWithRules(valueProvider, Arrays.asList(rules)));
+            listIterator.set(new ValueWithRules(valueProvider, rules));
         }
         return this;
     }
@@ -80,9 +91,7 @@ public class StatefulRuleBuilder {
     }
 
     public StatefulRule asRule() {
-        ValueWithRulesProvider[] valueProviders = this.values.toArray(new ValueWithRulesProvider[values.size()]);
-        OrderedValues orderedValues = new OrderedValues(valueProviders);
-        Values ruleValues = shuffled ? new ShuffledValues(orderedValues) : orderedValues;
+        Values ruleValues = ruleValues();
         if (asDefaultRule)
             return new DefaultStatefulRule(this.condition, this.targetedPropertyName, //
                 ruleValues);
@@ -91,6 +100,13 @@ public class StatefulRuleBuilder {
         else
             return new TriggeredStatefulRule(triggeringProperties, this.condition, this.targetedPropertyName, //
                 ruleValues);
+    }
+
+    private Values ruleValues() {
+        ValueWithRulesProvider[] valueProviders = this.values.toArray(new ValueWithRulesProvider[values.size()]);
+        OrderedValues orderedValues = new OrderedValues(valueProviders);
+        Values ruleValues = shuffled ? new ShuffledValues(orderedValues) : orderedValues;
+        return ruleValues;
     }
 
     public StatefulRuleBuilder byDefault() {
@@ -115,6 +131,13 @@ public class StatefulRuleBuilder {
         static public StatefulRuleBuilder _if(Condition condition) {
             return new StatefulRuleBuilder()._if(condition);
         }
+    }
+
+    public StatefulRule asTriggeredRule() {
+        if (triggeringProperties.isEmpty())
+            this.triggeringProperties = set();
+        return new TriggeredStatefulRule(triggeringProperties, this.condition, this.targetedPropertyName, //
+            ruleValues());
     }
 
 }
