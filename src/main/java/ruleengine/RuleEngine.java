@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+
 /**
  * @author Dimitry Polivaev 18.02.2013
  */
@@ -11,16 +12,20 @@ public class RuleEngine implements EngineState {
     private Strategy strategy;
     final private MapBasedState mapBasedState;
     private final ScriptProducer scriptProducer;
+    private Set<String> dependencies;
+    private int count;
 
     public RuleEngine(ScriptProducer scriptProducer) {
         super();
         this.mapBasedState = new MapBasedState();
         this.scriptProducer = scriptProducer;
         this.strategy = null;
+        dependencies = new HashSet<>();
     }
 
     public void run(Strategy strategy) {
         this.strategy = strategy;
+        count = 0;
         try {
             do {
                 Set<String> oldDependencies = dependencies;
@@ -40,6 +45,7 @@ public class RuleEngine implements EngineState {
 	}
 
     private void generateCombination() {
+        count++;
         mapBasedState.nextCombination();
         fireNextCombinationStartedEvent();
         dependencies = new HashSet<>();
@@ -51,11 +57,11 @@ public class RuleEngine implements EngineState {
             rule.propertyCombinationFinished(this);
 	}
 
-    private Set<String> dependencies;
 	private void fireNextCombinationStartedEvent() {
         Set<String> oldDependencies = dependencies;
         for (Rule rule : strategy.topRules()) {
-            dependencies = new HashSet<>();
+            if (!dependencies.isEmpty())
+                dependencies = new HashSet<>();
             rule.propertyCombinationStarted(this);
         }
         dependencies = oldDependencies;
@@ -89,7 +95,7 @@ public class RuleEngine implements EngineState {
 	}
 
 	public String getAssignedPropertiesAsString() {
-		return mapBasedState.getAssignedPropertiesAsString();
+        return count + " : " + new StateFormatter().getAssignedPropertiesAsString(mapBasedState) + '\n';
 	}
 
 	@Override
