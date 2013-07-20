@@ -9,6 +9,7 @@ import static ruleengine.TestUtils.set;
 import org.junit.Before;
 import org.junit.Test;
 
+
 public class MapBasedStateTest {
 
 	MapBasedState mapBasedState;
@@ -27,9 +28,9 @@ public class MapBasedStateTest {
 	public void stateWithOnePropertySetAtFirstCombination() {
 		mapBasedState.nextCombination();
 		mapBasedState.setPropertyValue(ruleForProperty("x"), "a");
-		String expectedScriptPropertyCombinations = "1 : x=a\n";
+        String expectedScriptPropertyCombinations = "x=a";
 		assertEquals(expectedScriptPropertyCombinations,
-				mapBasedState.getAssignedPropertiesAsString());
+            new StateFormatter().getAssignedPropertiesAsString(mapBasedState));
 	}
 
 	@Test
@@ -44,9 +45,9 @@ public class MapBasedStateTest {
 		mapBasedState.nextCombination();
 		mapBasedState.setPropertyValue(ruleForProperty("x"), "a");
         mapBasedState.setPropertyValue(ruleForProperty("y"), "b");
-		String expectedScriptPropertyCombinations = "1 : x=a\ty=b\n";
+        String expectedScriptPropertyCombinations = "x=a\ty=b";
 		assertEquals(expectedScriptPropertyCombinations,
-				mapBasedState.getAssignedPropertiesAsString());
+            new StateFormatter().getAssignedPropertiesAsString(mapBasedState));
 	}
 
 
