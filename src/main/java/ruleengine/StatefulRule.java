@@ -22,7 +22,7 @@ abstract class StatefulRule implements Rule {
         this.condition = condition;
         this.targetedPropertyName = targetedPropertyName;
         this.values = ruleValues;
-        this.setBlocksRequiredProperties(true);
+        this.blocksRequiredProperties = false;
         this.setValueAlreadyAddedToCurrentCombination(false);
         dependentRules = new HashSet<>();
     }
@@ -57,16 +57,17 @@ abstract class StatefulRule implements Rule {
 
     protected void addValueWithRules(EngineState engineState) {
         setValueAlreadyAddedToCurrentCombination(true);
-        if (dependentRules.isEmpty()) {
+        boolean useNextValue = dependentRules.isEmpty();
+        if (useNextValue) {
             values.next();
             addRules(engineState);
         }
-        setValue(engineState);
+        setValue(engineState, useNextValue);
     }
 
-    private void setValue(EngineState engineState) {
+    private void setValue(EngineState engineState, boolean useNextValue) {
         Object value = values.currentValue();
-        engineState.setPropertyValue(this, value);
+        engineState.setPropertyValue(this, value, useNextValue);
     }
 
     private void addRules(EngineState engineState) {
@@ -84,7 +85,6 @@ abstract class StatefulRule implements Rule {
     protected void addDependencies(PropertyAssignedEvent event) {
         if (event.getRequiredProperties().contains(targetedPropertyName)) {
             Rule rule = event.getWorkingRule();
-            rule.setBlocksRequiredProperties();
             dependentRules.add(rule);
         }
     }

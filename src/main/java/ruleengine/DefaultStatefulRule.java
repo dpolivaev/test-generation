@@ -1,18 +1,15 @@
 package ruleengine;
 
-public class DefaultStatefulRule extends TopStatefulRule {
+public class DefaultStatefulRule extends StatefulRule {
     public DefaultStatefulRule(Condition condition, String targetedPropertyName, Values ruleValues) {
         super(condition, targetedPropertyName, ruleValues);
     }
 
     @Override
-    public void propertyCombinationStarted(EngineState engineState) {
-        setBlocksRequiredProperties(false);
-    }
-
-    @Override
     public void propertyRequired(EngineState engineState) {
-        super.propertyCombinationStarted(engineState);
+        if (getCondition().isSatisfied()) {
+            addValueWithRules(engineState);
+        }
     }
 
     @Override

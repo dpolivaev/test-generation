@@ -5,10 +5,12 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Matchers.any;
 import static ruleengine.StatefulRuleBuilder.Factory.iterate;
 import static ruleengine.TestUtils.set;
 
 import java.util.Collections;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +36,7 @@ public class RuleTest {
     }
 
 	@Test
-	public void ruleWithOneValue_hasNotFinishedUntilCombinationIsFinished() {
+    public void ruleWithOneValue_blocksRequiredPropertiesUntilCombinationIsFinished() {
         StatefulRule statefulRule = iterate("name").over("value").asRule();
         assertThat(statefulRule.blocksRequiredProperties(), is(true));
 	}
@@ -44,7 +46,7 @@ public class RuleTest {
         StatefulRule statefulRule = iterate("name").over("value").asRule();
 
         statefulRule.propertyCombinationStarted(engineState);
-        verify(engineState).setPropertyValue(statefulRule, "value");
+        verify(engineState).setPropertyValue(statefulRule, "value", true);
     }
 
     @Test
@@ -62,14 +64,14 @@ public class RuleTest {
     }
 
     @Test
-	public void ruleWithOneValue_hasFinishedAfterCombinationIsFinished() {
+    public void ruleWithOneValue_doesNotBlockRequiredPropertiesAfterCombinationIsFinished() {
         StatefulRule statefulRule = iterate("name").over("value").asRule();
         iterationWith(statefulRule);
         assertThat(statefulRule.blocksRequiredProperties(), is(false));
 	}
 
 	@Test
-	public void ruleWithTwoValues_hasNotFinishedAfterFirstCombinationIsFinished() {
+    public void ruleWithTwoValues_blocksRequiredPropertiesAfterFirstCombinationIsFinished() {
         StatefulRule statefulRule = iterate("name").over("1", "2").asRule();
 
         iterationWith(statefulRule);
@@ -82,7 +84,7 @@ public class RuleTest {
 
         iterationWith(statefulRule);
         statefulRule.propertyCombinationStarted(engineState);
-        verify(engineState).setPropertyValue(statefulRule, "2");
+        verify(engineState).setPropertyValue(statefulRule, "2", true);
 	}
 
 	@Test
@@ -93,7 +95,7 @@ public class RuleTest {
         statefulRule.propertyCombinationFinished(engineState1);
         EngineState engineState2 = mock(EngineState.class);
         statefulRule.propertyCombinationStarted(engineState2);
-        verify(engineState2).setPropertyValue(statefulRule, "value");
+        verify(engineState2).setPropertyValue(statefulRule, "value", true);
 	}
 
 	@Test
@@ -102,7 +104,7 @@ public class RuleTest {
             .over("value").asRule();
 
         iterationWith(statefulRule);
-        assertThat(statefulRule.blocksRequiredProperties(), is(true));
+        assertThat(statefulRule.blocksRequiredProperties(), is(false));
 	}
 
 	@Test
@@ -111,8 +113,8 @@ public class RuleTest {
         StatefulRule triggeredRule = iterate("name").over("value2").when("triggeredBy").asRule();
         Mockito.when(engineState.containsPropertyValues(set("triggeredBy"))).thenReturn(true);
         triggeredRule.propertyValueSet( //
-            new PropertyAssignedEvent(engineState, triggeringRule, Collections.<String> emptySet()));
-        verify(engineState).setPropertyValue(triggeredRule, "value2");
+            new PropertyAssignedEvent(engineState, triggeringRule, Collections.<String> emptySet(), true));
+        verify(engineState).setPropertyValue(triggeredRule, "value2", true);
 	}
 
 	@Test
@@ -121,7 +123,7 @@ public class RuleTest {
         StatefulRule triggeredRule = iterate("name").over("value2").when("triggeredBy").asRule();
         Mockito.when(engineState.containsPropertyValues(set("triggeredBy"))).thenReturn(true);
         triggeredRule.propertyValueSet(new PropertyAssignedEvent(engineState, triggeringRule, Collections
-            .<String> emptySet()));
+            .<String> emptySet(), true));
 
         triggeredRule.propertyCombinationFinished(engineState);
 
@@ -144,16 +146,18 @@ public class RuleTest {
         assertThat(statefulRule.blocksRequiredProperties(), is(true));
 	}
 
-	@Test
+    @SuppressWarnings("unchecked")
+    @Test
 	public void givenTriggeredRuleIsNotFinished_ruleIsNotFinished() {
         StatefulRule topRule = iterate("x").over("1").asRule();
-        StatefulRule triggeredRule = iterate("y").over("3", "4").when("x")
-            .asRule();
-        topRule.propertyCombinationStarted(engineState);
-        triggeredRule.propertyCombinationStarted(engineState);
-        topRule.propertyValueSet(new PropertyAssignedEvent(engineState,
-				triggeredRule, triggeredRule.getTriggeringProperties()));
 
+        StatefulRule triggeredRule = mock(StatefulRule.class);
+        when(triggeredRule.requiredProperties(any(Set.class))).thenReturn(set("x"));
+        when(triggeredRule.blocksRequiredProperties()).thenReturn(true);
+
+        topRule.propertyCombinationStarted(engineState);
+        topRule.propertyValueSet(new PropertyAssignedEvent(engineState, triggeredRule, Collections.<String> emptySet(),
+            true));
         topRule.propertyCombinationFinished(engineState);
         assertThat(topRule.blocksRequiredProperties(), is(true));
 	}
