@@ -69,7 +69,7 @@ public class RuleEngine implements EngineState {
 
 	@Override
     public void setPropertyValue(Rule rule, Object value, boolean valueChanged) {
-		mapBasedState.setPropertyValue(rule, value);
+        mapBasedState.setPropertyValue(new PropertyAssignment(rule, value, ""));
         if (!rule.isDefaultRule()) {
             PropertyAssignedEvent event = new PropertyAssignedEvent(this, rule, dependencies, valueChanged);
             firePropertyAssignedEvent(mapBasedState.firedRules(), event);
@@ -95,17 +95,17 @@ public class RuleEngine implements EngineState {
 	}
 
 	public String getAssignedPropertiesAsString() {
-        return count + " : " + new StateFormatter().getAssignedPropertiesAsString(mapBasedState) + '\n';
+        return count + " : " + new StateFormatter().format(mapBasedState) + '\n';
 	}
 
 	@Override
 	public boolean containsPropertyValues(Set<String> names) {
-		return mapBasedState.containsPropertyValues(names);
+		return mapBasedState.containsProperties(names);
 	}
 
 	@Override
     public Object get(String name) {
-        if (!mapBasedState.containsPropertyValue(name)) {
+        if (!mapBasedState.containsProperty(name)) {
             Set<String> oldDependencies = dependencies;
             dependencies = new HashSet<>();
             executeDefaultRulesForProperty(name);
