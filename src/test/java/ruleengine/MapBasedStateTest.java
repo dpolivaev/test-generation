@@ -27,36 +27,41 @@ public class MapBasedStateTest {
 	@Test
 	public void stateWithOnePropertySetAtFirstCombination() {
 		mapBasedState.nextCombination();
-		mapBasedState.setPropertyValue(ruleForProperty("x"), "a");
+        mapBasedState.setPropertyValue(new PropertyAssignment(ruleForProperty("x"), "a",
+            ""));
         String expectedScriptPropertyCombinations = "x=a";
 		assertEquals(expectedScriptPropertyCombinations,
-            new StateFormatter().getAssignedPropertiesAsString(mapBasedState));
+            new StateFormatter().format(mapBasedState));
 	}
 
 	@Test
 	public void stateWithOneProperty_containsItsValue() {
 		mapBasedState.nextCombination();
-		mapBasedState.setPropertyValue(ruleForProperty("x"), "a");
-		assertThat(mapBasedState.containsPropertyValues(set("x")), is(true));
+        mapBasedState.setPropertyValue(new PropertyAssignment(ruleForProperty("x"), "a",
+            ""));
+		assertThat(mapBasedState.containsProperties(set("x")), is(true));
 	}
 
 	@Test
 	public void stateWithTwoPropertiesSetAtFirstCombination() {
 		mapBasedState.nextCombination();
-		mapBasedState.setPropertyValue(ruleForProperty("x"), "a");
-        mapBasedState.setPropertyValue(ruleForProperty("y"), "b");
+        mapBasedState.setPropertyValue(new PropertyAssignment(ruleForProperty("x"), "a",
+            ""));
+        mapBasedState.setPropertyValue(new PropertyAssignment(ruleForProperty("y"), "b",
+            ""));
         String expectedScriptPropertyCombinations = "x=a\ty=b";
 		assertEquals(expectedScriptPropertyCombinations,
-            new StateFormatter().getAssignedPropertiesAsString(mapBasedState));
+            new StateFormatter().format(mapBasedState));
 	}
 
 
     @Test
     public void oldPropertiesAreRemovedAfterIterationEnd() {
         mapBasedState.nextCombination();
-        mapBasedState.setPropertyValue(ruleForProperty("x"), "a");
+        mapBasedState.setPropertyValue(new PropertyAssignment(ruleForProperty("x"), "a",
+            ""));
         mapBasedState.nextCombination();
-        assertThat(mapBasedState.containsPropertyValues(set("x")), is(false));
+        assertThat(mapBasedState.containsProperties(set("x")), is(false));
     }
 
 

@@ -1,48 +1,53 @@
 package ruleengine;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Maps;
+
 public class MapBasedState {
-	private Map<String, Object> properties = new LinkedHashMap<String, Object>();
+    private Map<String, PropertyAssignment> propertyAssignments = new LinkedHashMap<>();
 
-    public Map<String, Object> getProperties() {
-        return properties;
-    }
 
-    private Collection<Rule> firedRules = new ArrayList<>();
-
-	public void setPropertyValue(Rule rule, Object value) {
-		String targetedPropertyName = rule.getTargetedPropertyName();
-        if (properties.containsKey(targetedPropertyName))
+    public void setPropertyValue(PropertyAssignment propertyAssignment) {
+        String targetedPropertyName = propertyAssignment.getTargetedPropertyName();
+        if (propertyAssignments.containsKey(targetedPropertyName))
             throw new PropertyAlreadyAssignedException();
-        properties.put(targetedPropertyName, value);
-        firedRules.add(rule);
+        propertyAssignments.put(targetedPropertyName, propertyAssignment);
 	}
 
 	public void nextCombination() {
-        properties.clear();
-        firedRules.clear();
-
+        propertyAssignments.clear();
 	}
 
-    public boolean containsPropertyValues(Set<String> names) {
-        return properties.keySet().containsAll(names);
+    public boolean containsProperties(Set<String> names) {
+        return propertyAssignments.keySet().containsAll(names);
     }
 
-    public boolean containsPropertyValue(String name) {
-        return properties.keySet().contains(name);
+    public boolean containsProperty(String name) {
+        return propertyAssignments.keySet().contains(name);
     }
 
     public Object get(String name) {
-		return properties.get(name);
+        return propertyAssignments.get(name).value;
 	}
 
+    public Map<String, PropertyAssignment> getAssignments() {
+        return Collections.unmodifiableMap(propertyAssignments);
+    }
+
     public Collection<Rule> firedRules() {
-        return firedRules;
+        return Collections.unmodifiableCollection(Maps.transformValues(propertyAssignments,
+            new Function<PropertyAssignment, Rule>() {
+                @Override
+                public Rule apply(PropertyAssignment assignment) {
+                    return assignment.rule;
+                }
+            }).values());
     }
 
 }
