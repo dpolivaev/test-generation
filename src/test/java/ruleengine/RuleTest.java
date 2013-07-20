@@ -99,15 +99,14 @@ public class RuleTest {
 	}
 
 	@Test
-	public void triggeredRuleWithOneValue_ignoresCombinationWithoutItsTriggeringProperty() {
-        StatefulRule statefulRule = iterate("name").when("triggeredBy")
-            .over("value").asRule();
+    public void triggeredRuleWithOneValue_ignoresCombinationWithoutItsTriggeringProperty() {
+        StatefulRule statefulRule = iterate("name").when("triggeredBy").over("value").asRule();
 
         iterationWith(statefulRule);
         assertThat(statefulRule.blocksRequiredProperties(), is(false));
-	}
+    }
 
-	@Test
+    @Test
 	public void triggeredRuleWithOneValue_whenTriggeredPropertyIsAssigned_assignsItsValue() {
         Rule triggeringRule = iterate("triggeredBy").over("value1").asRule();
         StatefulRule triggeredRule = iterate("name").over("value2").when("triggeredBy").asRule();
@@ -164,7 +163,7 @@ public class RuleTest {
 
     @Test
     public void ruleWithTemporaryRule_addsItsRule() {
-        StatefulRule temporaryRule = iterate("y").over("b").asRule();
+        StatefulRule temporaryRule = iterate("y").over("b").asTriggeredRule();
         StatefulRule statefulRule = iterate("x").over("a").with(temporaryRule).asRule();
 
         statefulRule.propertyCombinationStarted(engineState);
@@ -173,9 +172,10 @@ public class RuleTest {
 
     @Test
     public void ruleWithTemporaryRule_removesItsRule() {
-        StatefulRule temporaryRule = iterate("y").over("b").asRule();
-        StatefulRule statefulRule = iterate("x").over("a").with(temporaryRule).asRule();
+        StatefulRule temporaryRule = mock(StatefulRule.class);
+        when(temporaryRule.blocksRequiredProperties()).thenReturn(false);
 
+        StatefulRule statefulRule = iterate("x").over("a").with(temporaryRule).asRule();
         statefulRule.propertyCombinationStarted(engineState);
         statefulRule.propertyCombinationFinished(engineState);
 
