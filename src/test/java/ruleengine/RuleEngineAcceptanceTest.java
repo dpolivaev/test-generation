@@ -288,7 +288,7 @@ public class RuleEngineAcceptanceTest {
 
     @Test
     public void ruleEngineWithOneDefaultRule_doesNotIterateOverItsValueIfPropertyIsNotRequested() {
-        strategy.addRule(iterate("property").over("value").byDefault());
+        strategy.addRule(iterate("property").over("value").asDefaultRule());
         generateCombinationsForStrategy();
 
         expect(combination());
@@ -297,7 +297,7 @@ public class RuleEngineAcceptanceTest {
     @Test
     public void ruleEngineWithOneDefaultRule_iteratesOverItsValuesWhenPropertyIsRequested() {
         strategy.addRule(iterate("x").over("1", "2"));
-        strategy.addRule(iterate("y").over("1", "2", "3").byDefault());
+        strategy.addRule(iterate("y").over("1", "2", "3").asDefaultRule());
         initializeRuleEngine(new LoggingScriptProducerMock() {
 
             @Override
@@ -314,7 +314,7 @@ public class RuleEngineAcceptanceTest {
 
     @Test
     public void defaultRule_doesNotTriggerOtherIterations() {
-        strategy.addRule(iterate("x").over("1", "2").byDefault());
+        strategy.addRule(iterate("x").over("1", "2").asDefaultRule());
         strategy.addRule(iterate("y").over("1", "2").when("x"));
         initializeRuleEngine(new LoggingScriptProducerMock() {
 

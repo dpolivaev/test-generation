@@ -16,7 +16,6 @@ public class StatefulRuleBuilder {
     private Set<String> triggeringProperties = Collections.emptySet();
     private Condition condition = Condition.TRUE;
     private boolean shuffled = false;
-    private boolean asDefaultRule;
     private int previousValueCount;
 
     public StatefulRuleBuilder when(
@@ -66,7 +65,7 @@ public class StatefulRuleBuilder {
     public StatefulRuleBuilder with(StatefulRuleBuilder... ruleBuilders) {
         Collection<Rule> rules = new ArrayList<>(ruleBuilders.length);
         for (StatefulRuleBuilder builder : ruleBuilders)
-            rules.add(builder.asDefaultRule ? builder.asRule() : builder.asTriggeredRule());
+            rules.add(builder.asTriggeredRule());
         return with(rules);
     }
 
@@ -92,14 +91,23 @@ public class StatefulRuleBuilder {
 
     public StatefulRule asRule() {
         Values ruleValues = ruleValues();
-        if (asDefaultRule)
-            return new DefaultStatefulRule(this.condition, this.targetedPropertyName, //
-                ruleValues);
-        else if (triggeringProperties.isEmpty())
+        if (triggeringProperties.isEmpty())
             return new TopStatefulRule(this.condition, this.targetedPropertyName, ruleValues);
         else
             return new TriggeredStatefulRule(triggeringProperties, this.condition, this.targetedPropertyName, //
                 ruleValues);
+    }
+
+    public StatefulRule asTriggeredRule() {
+        if (triggeringProperties.isEmpty())
+            this.triggeringProperties = set();
+        return new TriggeredStatefulRule(triggeringProperties, this.condition, this.targetedPropertyName, //
+            ruleValues());
+    }
+
+    public StatefulRule asDefaultRule() {
+        return new DefaultStatefulRule(this.condition, this.targetedPropertyName, //
+            ruleValues());
     }
 
     private Values ruleValues() {
@@ -109,10 +117,6 @@ public class StatefulRuleBuilder {
         return ruleValues;
     }
 
-    public StatefulRuleBuilder byDefault() {
-        asDefaultRule = true;
-        return this;
-    }
 
     public StatefulRuleBuilder _if(Condition condition) {
         this.condition = condition;
@@ -131,13 +135,6 @@ public class StatefulRuleBuilder {
         static public StatefulRuleBuilder _if(Condition condition) {
             return new StatefulRuleBuilder()._if(condition);
         }
-    }
-
-    public StatefulRule asTriggeredRule() {
-        if (triggeringProperties.isEmpty())
-            this.triggeringProperties = set();
-        return new TriggeredStatefulRule(triggeringProperties, this.condition, this.targetedPropertyName, //
-            ruleValues());
     }
 
 }

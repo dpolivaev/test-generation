@@ -50,14 +50,14 @@ public class StrategyTest {
 
     @Test
     public void afterAddingDefaultRule_returnsDefaultRule() throws Exception {
-        StatefulRule rule = iterate("x").over("a").byDefault().asRule();
+        StatefulRule rule = iterate("x").over("a").asDefaultRule();
         strategy.addRule(rule);
         assertThat(strategy.defaultRules(), hasItem(rule));
     }
 
     @Test
     public void afterAddingDefaultRule_doesNotReturnTopRule() throws Exception {
-        StatefulRule rule = iterate("x").over("a").byDefault().asRule();
+        StatefulRule rule = iterate("x").over("a").asDefaultRule();
         strategy.addRule(rule);
         assertThat(strategy.topRules(), not(hasItem(rule)));
     }
