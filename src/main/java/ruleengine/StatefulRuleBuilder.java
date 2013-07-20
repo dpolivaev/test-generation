@@ -6,15 +6,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Set;
 
 public class StatefulRuleBuilder {
     private String targetedPropertyName = null;
-    final private Collection<ValueWithRulesProvider> values = new ArrayList<>();
+    final private List<ValueWithRulesProvider> values = new ArrayList<>();
     private Set<String> triggeringProperties = Collections.emptySet();
     private Condition condition = Condition.TRUE;
     private boolean shuffled = false;
     private boolean asDefaultRule;
+    private int previousValueCount;
 
     public StatefulRuleBuilder when(
         String... triggeringProperties) {
@@ -22,25 +25,47 @@ public class StatefulRuleBuilder {
         return this;
     }
 
-    public StatefulRuleBuilder over(Object... values) {
-        this.values.addAll(values(values));
+    public StatefulRuleBuilder over(Object... valueObjects) {
+        previousValueCount = this.values.size();
+        this.values.addAll(Arrays.asList(valueProviders(valueObjects)));
         return this;
     }
 
-    private Collection<ValueWithRulesProvider> values(Object[] values) {
-        Collection<ValueWithRulesProvider> valueWithRulesProviders = new ArrayList<>(values.length);
+    public StatefulRuleBuilder over(ValueProvider... valueProviders) {
+        previousValueCount = this.values.size();
+        this.values.addAll(Arrays.asList(valueProviders(valueProviders)));
+        return this;
+    }
+
+    public StatefulRuleBuilder over(ValueWithRulesProvider... valueWithRulesProviders) {
+        this.values.addAll(Arrays.asList(valueWithRulesProviders));
+        previousValueCount = this.values.size();
+        return this;
+    }
+
+    private ValueWithRulesProvider[] valueProviders(Object[] values) {
+        ValueWithRulesProvider[] valueWithRulesProviders = new ValueWithRulesProvider[values.length];
+        int i = 0;
         for (Object value : values)
-            valueWithRulesProviders.add(new ConstantValue(value));
+            valueWithRulesProviders[i++] = new ConstantValue(value);
         return valueWithRulesProviders;
     }
 
-    public StatefulRuleBuilder with(Object value, Rule... rules) {
-        this.values.add(valueWithRules(value, rules));
-        return this;
+    private ValueWithRulesProvider[] valueProviders(ValueProvider[] values) {
+        ValueWithRulesProvider[] valueWithRulesProviders = new ValueWithRulesProvider[values.length];
+        int i = 0;
+        for (ValueProvider value : values)
+            valueWithRulesProviders[i++] = new ValueWithRules(value, Collections.<Rule> emptyList());
+        return valueWithRulesProviders;
     }
 
-    private ValueWithRulesProvider valueWithRules(Object value, Rule[] rules) {
-        return new ValueWithRules(new ConstantValue(value), Arrays.asList(rules));
+    public StatefulRuleBuilder with(Rule... rules) {
+        ListIterator<ValueWithRulesProvider> listIterator = values.listIterator(previousValueCount);
+        while (listIterator.hasNext()) {
+            ValueWithRulesProvider valueProvider = listIterator.next();
+            listIterator.set(new ValueWithRules(valueProvider, Arrays.asList(rules)));
+        }
+        return this;
     }
 
     public StatefulRuleBuilder iterate(

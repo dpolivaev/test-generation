@@ -161,7 +161,7 @@ public class RuleTest {
     @Test
     public void ruleWithTemporaryRule_addsItsRule() {
         StatefulRule temporaryRule = iterate("y").over("b").asRule();
-        StatefulRule statefulRule = iterate("x").with("a", temporaryRule).asRule();
+        StatefulRule statefulRule = iterate("x").over("a").with(temporaryRule).asRule();
 
         statefulRule.propertyCombinationStarted(engineState);
         verify(strategy).addRule(temporaryRule);
@@ -170,7 +170,7 @@ public class RuleTest {
     @Test
     public void ruleWithTemporaryRule_removesItsRule() {
         StatefulRule temporaryRule = iterate("y").over("b").asRule();
-        StatefulRule statefulRule = iterate("x").with("a", temporaryRule).asRule();
+        StatefulRule statefulRule = iterate("x").over("a").with(temporaryRule).asRule();
 
         statefulRule.propertyCombinationStarted(engineState);
         statefulRule.propertyCombinationFinished(engineState);

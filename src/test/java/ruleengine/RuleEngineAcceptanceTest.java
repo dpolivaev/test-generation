@@ -255,7 +255,7 @@ public class RuleEngineAcceptanceTest {
     @Test
     public void ruleManagesValueSpecificTemporaryRules() {
         StatefulRuleBuilder temporaryRule = iterate("y").over("1", "2").when("x");
-        strategy.addRule(iterate("x").with("a", temporaryRule.asRule()));
+        strategy.addRule(iterate("x").over("a").with(temporaryRule.asRule()));
 
         generateCombinationsForStrategy();
 
@@ -265,7 +265,7 @@ public class RuleEngineAcceptanceTest {
     @Test
     public void valueSpecificTemporaryRulesAreRemovedAfterTheRelatedValueIsFinished() {
         StatefulRuleBuilder temporaryRule = iterate("y").over("1").when("x");
-        strategy.addRule(iterate("x").with("a", temporaryRule.asRule()).with("b"));
+        strategy.addRule(iterate("x").over("a").with(temporaryRule.asRule()).over("b"));
 
         generateCombinationsForStrategy();
 
