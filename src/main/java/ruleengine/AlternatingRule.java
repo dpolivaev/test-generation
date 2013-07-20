@@ -33,8 +33,8 @@ class AlternatingRule implements Rule {
     }
 
     @Override
-    public boolean hasFinished() {
-        return activeRule != null && activeRule.hasFinished();
+    public boolean blocksRequiredProperties() {
+        return activeRule != null && activeRule.blocksRequiredProperties();
     }
 
     private void propagateUntilActiveRuleFound(RuleEventPropagator propertyCombinationStarter) {
@@ -77,8 +77,8 @@ class AlternatingRule implements Rule {
     }
 
     @Override
-    public void setNotFinished() {
-        activeRule.setNotFinished();
+    public void setBlocksRequiredProperties() {
+        activeRule.setBlocksRequiredProperties();
     }
 
     @Override

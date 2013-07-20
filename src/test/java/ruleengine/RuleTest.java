@@ -36,7 +36,7 @@ public class RuleTest {
 	@Test
 	public void ruleWithOneValue_hasNotFinishedUntilCombinationIsFinished() {
         StatefulRule statefulRule = iterate("name").over("value").asRule();
-		assertThat(statefulRule.hasFinished(), is(false));
+        assertThat(statefulRule.blocksRequiredProperties(), is(true));
 	}
 
     @Test
@@ -65,7 +65,7 @@ public class RuleTest {
 	public void ruleWithOneValue_hasFinishedAfterCombinationIsFinished() {
         StatefulRule statefulRule = iterate("name").over("value").asRule();
         iterationWith(statefulRule);
-		assertThat(statefulRule.hasFinished(), is(true));
+        assertThat(statefulRule.blocksRequiredProperties(), is(false));
 	}
 
 	@Test
@@ -73,7 +73,7 @@ public class RuleTest {
         StatefulRule statefulRule = iterate("name").over("1", "2").asRule();
 
         iterationWith(statefulRule);
-		assertThat(statefulRule.hasFinished(), is(false));
+        assertThat(statefulRule.blocksRequiredProperties(), is(true));
 	}
 
 	@Test
@@ -102,7 +102,7 @@ public class RuleTest {
             .over("value").asRule();
 
         iterationWith(statefulRule);
-		assertThat(statefulRule.hasFinished(), is(false));
+        assertThat(statefulRule.blocksRequiredProperties(), is(true));
 	}
 
 	@Test
@@ -125,14 +125,14 @@ public class RuleTest {
 
         triggeredRule.propertyCombinationFinished(engineState);
 
-        assertThat(triggeredRule.hasFinished(), is(true));
+        assertThat(triggeredRule.blocksRequiredProperties(), is(false));
 	}
 
 	@Test
 	public void ruleIgnoresAssignmentsToNonTriggeringProperties() {
         StatefulRule statefulRule = iterate("name").over("value").asRule();
         statefulRule.propertyValueSet(propertyAssignedEvent);
-		assertThat(statefulRule.hasFinished(), is(false));
+        assertThat(statefulRule.blocksRequiredProperties(), is(true));
 	}
 
 	@Test
@@ -141,7 +141,7 @@ public class RuleTest {
         iterationWith(statefulRule);
         
         statefulRule.propertyCombinationFinished(engineState);
-		assertThat(statefulRule.hasFinished(), is(false));
+        assertThat(statefulRule.blocksRequiredProperties(), is(true));
 	}
 
 	@Test
@@ -155,7 +155,7 @@ public class RuleTest {
 				triggeredRule, triggeredRule.getTriggeringProperties()));
 
         topRule.propertyCombinationFinished(engineState);
-		assertThat(topRule.hasFinished(), is(false));
+        assertThat(topRule.blocksRequiredProperties(), is(true));
 	}
 
     @Test

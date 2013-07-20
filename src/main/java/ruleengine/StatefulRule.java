@@ -11,26 +11,26 @@ import java.util.Set;
 abstract class StatefulRule implements Rule {
 
     final private String targetedPropertyName;
-	final private Values values;
+    final private Values values;
     final private Set<Rule> dependentRules;
     final private Condition condition;
 
-	private boolean valueAlreadyAddedToCurrentCombination;
-    private boolean finished;
+    private boolean valueAlreadyAddedToCurrentCombination;
+    private boolean blocksRequiredProperties;
 
     public StatefulRule(Condition condition, String targetedPropertyName, Values ruleValues) {
-		this.condition = condition;
-		this.targetedPropertyName = targetedPropertyName;
+        this.condition = condition;
+        this.targetedPropertyName = targetedPropertyName;
         this.values = ruleValues;
-		this.setFinished(false);
+        this.setBlocksRequiredProperties(true);
         this.setValueAlreadyAddedToCurrentCombination(false);
-		dependentRules = new HashSet<>();
-	}
+        dependentRules = new HashSet<>();
+    }
 
     @Override
-	public String getTargetedPropertyName() {
-		return targetedPropertyName;
-	}
+    public String getTargetedPropertyName() {
+        return targetedPropertyName;
+    }
 
     @Override
     public Set<String> getTriggeringProperties() {
@@ -50,10 +50,10 @@ abstract class StatefulRule implements Rule {
         return requiredProperties;
     }
 
-	@Override
-	public boolean hasFinished() {
-		return isFinished();
-	}
+    @Override
+    public boolean blocksRequiredProperties() {
+        return blocksRequiredProperties;
+    }
 
     protected void addValueWithRules(EngineState engineState) {
         setValueAlreadyAddedToCurrentCombination(true);
@@ -62,11 +62,11 @@ abstract class StatefulRule implements Rule {
             addRules(engineState);
         }
         setValue(engineState);
-	}
+    }
 
     private void setValue(EngineState engineState) {
         Object value = values.currentValue();
-		engineState.setPropertyValue(this, value);
+        engineState.setPropertyValue(this, value);
     }
 
     private void addRules(EngineState engineState) {
@@ -75,8 +75,8 @@ abstract class StatefulRule implements Rule {
             engineState.currentStrategy().addRule(rule);
     }
 
-	@Override
-	public void propertyValueSet(PropertyAssignedEvent event) {
+    @Override
+    public void propertyValueSet(PropertyAssignedEvent event) {
         if (isValueAlreadyAddedToCurrentCombination())
             addDependencies(event);
     }
@@ -84,32 +84,32 @@ abstract class StatefulRule implements Rule {
     protected void addDependencies(PropertyAssignedEvent event) {
         if (event.getRequiredProperties().contains(targetedPropertyName)) {
             Rule rule = event.getWorkingRule();
-            rule.setNotFinished();
+            rule.setBlocksRequiredProperties();
             dependentRules.add(rule);
         }
     }
 
-    private boolean allRulesHaveFinished(Iterable<Rule> rules) {
+    private boolean isBlockedBy(Iterable<Rule> rules) {
         for (Rule rule : rules)
-            if (!rule.hasFinished())
-                return false;
-        return true;
+            if (rule.blocksRequiredProperties())
+                return true;
+        return false;
     }
 
     @Override
     public void propertyCombinationFinished(EngineState engineState) {
         if (isValueAlreadyAddedToCurrentCombination()) {
-			for (Rule rule : dependentRules)
+            for (Rule rule : dependentRules)
                 rule.propertyCombinationFinished(engineState);
-            if (allRulesHaveFinished(dependentRules)) {
+            if (!isBlockedBy(dependentRules)) {
                 removeValueRelatedRules(engineState);
-				dependentRules.clear();
+                dependentRules.clear();
                 if (values.allValuesUsed())
-                    setFinished(true);
-			}
+                    setBlocksRequiredProperties(false);
+            }
             setValueAlreadyAddedToCurrentCombination(false);
-		}
-	}
+        }
+    }
 
     private void removeValueRelatedRules(EngineState engineState) {
         Collection<Rule> relatedRules = values.currentValueRelatedRules();
@@ -118,10 +118,10 @@ abstract class StatefulRule implements Rule {
         }
     }
 
-	@Override
-	public void setNotFinished() {
-		setFinished(false);
-	}
+    @Override
+    public void setBlocksRequiredProperties() {
+        setBlocksRequiredProperties(!false);
+    }
 
     @Override
     public boolean isActive() {
@@ -169,12 +169,8 @@ abstract class StatefulRule implements Rule {
         return condition;
     }
 
-    private boolean isFinished() {
-        return finished;
-    }
-
-    protected void setFinished(boolean finished) {
-        this.finished = finished;
+    protected void setBlocksRequiredProperties(boolean blocksRequiredProperties) {
+        this.blocksRequiredProperties = blocksRequiredProperties;
     }
 
 }

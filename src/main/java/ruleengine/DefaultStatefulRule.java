@@ -7,7 +7,7 @@ public class DefaultStatefulRule extends TopStatefulRule {
 
     @Override
     public void propertyCombinationStarted(EngineState engineState) {
-        setFinished(true);
+        setBlocksRequiredProperties(false);
     }
 
     @Override

@@ -106,10 +106,10 @@ public class AlternatingRuleTest {
 
         AlternatingRule alternatingRule = new AlternatingRule(first, second);
         alternatingRule.propertyCombinationStarted(state);
-        alternatingRule.setNotFinished();
+        alternatingRule.setBlocksRequiredProperties();
 
-        verify(first).setNotFinished();
-        verify(second, never()).setNotFinished();
+        verify(first).setBlocksRequiredProperties();
+        verify(second, never()).setBlocksRequiredProperties();
     }
     @Test
     public void targetedPropertyNameIsTakenFromTheFirstRules() {

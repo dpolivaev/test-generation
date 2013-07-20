@@ -22,11 +22,11 @@ public interface Rule {
 
     void propertyValueSet(PropertyAssignedEvent event) throws InvalidCombinationException;
 
-    boolean hasFinished();
+    boolean blocksRequiredProperties();
 
     boolean isActive();
 
-    void setNotFinished();
+    void setBlocksRequiredProperties();
 
     Rule combineWith(Rule rule);
 
