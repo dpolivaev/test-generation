@@ -9,21 +9,25 @@ class AssignmentFormatter {
         return propertySeparator;
     }
 
-    public void setPropertySeparator(String propertySeparator) {
+    public AssignmentFormatter setPropertySeparator(String propertySeparator) {
         this.propertySeparator = propertySeparator;
+        return this;
     }
 
     public String getNameValueSeparator() {
         return nameValueSeparator;
     }
 
-    public void setNameValueSeparator(String keyValueSeparator) {
+    public AssignmentFormatter setNameValueSeparator(String keyValueSeparator) {
         this.nameValueSeparator = keyValueSeparator;
+        return this;
     }
 
     private String nameValueSeparator;
+    private boolean appendReasons;
 
     AssignmentFormatter() {
+        appendReasons = true;
         propertySeparator = "\t";
         nameValueSeparator = "=";
     }
@@ -31,19 +35,32 @@ class AssignmentFormatter {
     public String format(Assignments assignments) {
         StringBuilder assignedPropertiesStringBuilder = new StringBuilder();
         for (Map.Entry<String, Assignment> assignment : assignments.entrySet()) {
-            if (assignedPropertiesStringBuilder.length() > 0) {
-                assignedPropertiesStringBuilder.append(propertySeparator);
-            }
             append(assignedPropertiesStringBuilder, assignment);
         }
         return assignedPropertiesStringBuilder.toString();
     }
 
-    public void append(StringBuilder assignedPropertiesStringBuilder, Map.Entry<String, Assignment> assignment) {
+    public AssignmentFormatter append(StringBuilder assignedPropertiesStringBuilder,
+        Map.Entry<String, Assignment> assignment) {
+        if (assignedPropertiesStringBuilder.length() > 0) {
+            assignedPropertiesStringBuilder.append(propertySeparator);
+        }
         String targetedPropertyName = assignment.getKey();
         Assignment assignmentProperties = assignment.getValue();
-        assignedPropertiesStringBuilder.append(targetedPropertyName).append(nameValueSeparator)
+        if (appendReasons)
+            assignedPropertiesStringBuilder.append(assignmentProperties.reason);
+        assignedPropertiesStringBuilder.append(targetedPropertyName)
+            .append(nameValueSeparator)
             .append(assignmentProperties.value);
+        return this;
+    }
+
+    public static AssignmentFormatter formatter(String propertySeparator, String nameValueSeparator) {
+        return new AssignmentFormatter().setPropertySeparator(propertySeparator).setNameValueSeparator(nameValueSeparator);
+    }
+
+    public void appendReasons(boolean appendReasons) {
+        this.appendReasons = appendReasons;
     }
 
 }

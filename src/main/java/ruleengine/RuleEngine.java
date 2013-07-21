@@ -13,7 +13,9 @@ public class RuleEngine implements EngineState {
     final private Assignments assignments;
     private final ScriptProducer scriptProducer;
     private Set<String> dependencies;
-    private int count;
+    private int combinationCount;
+    private String assignmentReason;
+    private String processedProperty;
 
     public RuleEngine(ScriptProducer scriptProducer) {
         super();
@@ -25,7 +27,7 @@ public class RuleEngine implements EngineState {
 
     public void run(Strategy strategy) {
         this.strategy = strategy;
-        count = 0;
+        combinationCount = 0;
         try {
             do {
                 Set<String> oldDependencies = dependencies;
@@ -45,10 +47,12 @@ public class RuleEngine implements EngineState {
 	}
 
     private void generateCombination() {
-        count++;
-        assignments.nextCombination();
+        combinationCount++;
+        assignments.clear();
+        assignmentReason = "->";
         fireNextCombinationStartedEvent();
         dependencies = new HashSet<>();
+        processedProperty = "";
         scriptProducer.makeScriptFor(this);
     }
 
@@ -62,6 +66,7 @@ public class RuleEngine implements EngineState {
         for (Rule rule : strategy.topRules()) {
             if (!dependencies.isEmpty())
                 dependencies = new HashSet<>();
+            processedProperty = rule.getTargetedPropertyName();
             rule.propertyCombinationStarted(this);
         }
         dependencies = oldDependencies;
@@ -69,7 +74,7 @@ public class RuleEngine implements EngineState {
 
 	@Override
     public void setPropertyValue(Rule rule, Object value, boolean valueChanged) {
-        assignments.setPropertyValue(new Assignment(rule, value, ""));
+        assignments.setPropertyValue(new Assignment(rule, value, assignmentReason));
         if (!rule.isDefaultRule()) {
             PropertyAssignedEvent event = new PropertyAssignedEvent(this, rule, dependencies, valueChanged);
             firePropertyAssignedEvent(assignments.firedRules(), event);
@@ -79,9 +84,11 @@ public class RuleEngine implements EngineState {
 
     private void firePropertyAssignedEvent(Collection<Rule> rules, PropertyAssignedEvent event) {
         Set<String> oldDependencies = dependencies;
+        assignmentReason = event.getTargetedPropertyName() + "->";
         for (Rule rule : rules) {
             if (!dependencies.isEmpty())
                 dependencies = new HashSet<>();
+            processedProperty = rule.getTargetedPropertyName();
 			rule.propertyValueSet(event);
 		}
         dependencies = oldDependencies;
@@ -95,7 +102,7 @@ public class RuleEngine implements EngineState {
 	}
 
     public int getCombinationCount() {
-        return count;
+        return combinationCount;
     }
 
     public Assignments getAssignments() {
@@ -112,7 +119,11 @@ public class RuleEngine implements EngineState {
         if (!assignments.containsProperty(name)) {
             Set<String> oldDependencies = dependencies;
             dependencies = new HashSet<>();
+            String oldAssignmentReason = assignmentReason;
+            assignmentReason = processedProperty + "<-";
+            processedProperty = name;
             executeDefaultRulesForProperty(name);
+            assignmentReason = oldAssignmentReason;
             dependencies = oldDependencies;
         }
         dependencies.add(name);

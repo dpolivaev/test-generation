@@ -26,7 +26,7 @@ public class MapBasedStateTest {
 
 	@Test
 	public void stateWithOnePropertySetAtFirstCombination() {
-		assignments.nextCombination();
+		assignments.clear();
         assignments.setPropertyValue(new Assignment(ruleForProperty("x"), "a",
             ""));
         String expectedScriptPropertyCombinations = "x=a";
@@ -36,7 +36,7 @@ public class MapBasedStateTest {
 
 	@Test
 	public void stateWithOneProperty_containsItsValue() {
-		assignments.nextCombination();
+		assignments.clear();
         assignments.setPropertyValue(new Assignment(ruleForProperty("x"), "a",
             ""));
 		assertThat(assignments.containsProperties(set("x")), is(true));
@@ -44,7 +44,7 @@ public class MapBasedStateTest {
 
 	@Test
 	public void stateWithTwoPropertiesSetAtFirstCombination() {
-		assignments.nextCombination();
+		assignments.clear();
         assignments.setPropertyValue(new Assignment(ruleForProperty("x"), "a",
             ""));
         assignments.setPropertyValue(new Assignment(ruleForProperty("y"), "b",
@@ -57,10 +57,10 @@ public class MapBasedStateTest {
 
     @Test
     public void oldPropertiesAreRemovedAfterIterationEnd() {
-        assignments.nextCombination();
+        assignments.clear();
         assignments.setPropertyValue(new Assignment(ruleForProperty("x"), "a",
             ""));
-        assignments.nextCombination();
+        assignments.clear();
         assertThat(assignments.containsProperties(set("x")), is(false));
     }
 

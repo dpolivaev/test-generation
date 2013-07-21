@@ -21,7 +21,7 @@ public class Assignments {
         assignments.put(targetedPropertyName, assignment);
 	}
 
-	public void nextCombination() {
+	public void clear() {
         assignments.clear();
 	}
 

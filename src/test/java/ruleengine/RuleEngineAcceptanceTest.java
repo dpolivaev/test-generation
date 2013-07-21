@@ -39,7 +39,8 @@ public class RuleEngineAcceptanceTest {
 
     @Before
     public void setup() {
-        initializeRuleEngine(new LoggingScriptProducerMock());
+        LoggingScriptProducerMock loggingScriptProducerMock = new LoggingScriptProducerMock();
+        initializeRuleEngine(loggingScriptProducerMock);
         strategy = new Strategy();
     }
 
@@ -354,4 +355,58 @@ public class RuleEngineAcceptanceTest {
         generateCombinationsForStrategy();
     }
 
+    @Test
+    public void singleRuleWithPropertyNamedXValueAWithReason() {
+        scriptProducerMock.appendReasons(true);
+        strategy.addRule(iterate("x").over("a"));
+
+        generateCombinationsForStrategy();
+
+        expect(combination("->x", "a"));
+    }
+
+    @Test
+    public void triggeringAndTriggeredRulesWithReasons() {
+        scriptProducerMock.appendReasons(true);
+        strategy.addRule(iterate("x").over("a"));
+        strategy.addRule(when("x").iterate("y").over("b"));
+
+        generateCombinationsForStrategy();
+
+        expect(combination("->x", "a", "x->y", "b"));
+    }
+
+    @Test
+    public void defaultRuleCalledFromScriptProducerWithReason() {
+        strategy.addRule(iterate("x").over("1").asDefaultRule());
+        LoggingScriptProducerMock loggingScriptProducerMock = new LoggingScriptProducerMock() {
+
+            @Override
+            public void makeScriptFor(RuleEngine ruleEngine) {
+                ruleEngine.get("x");
+                super.makeScriptFor(ruleEngine);
+            }
+
+        };
+        initializeRuleEngine(loggingScriptProducerMock);
+        loggingScriptProducerMock.appendReasons(true);
+        generateCombinationsForStrategy();
+
+        expect(combination("<-x", "1"));
+    }
+
+    @Test
+    public void defaultRuleCalledFromTriggeredRuleWithReason() {
+        scriptProducerMock.appendReasons(true);
+        strategy.addRule(iterate("x").over("1").asDefaultRule());
+        strategy.addRule(iterate("y").over(new ValueProvider() {
+            @Override
+            public Object value() {
+                return ruleEngine.get("x");
+            }
+        }).asRule());
+        generateCombinationsForStrategy();
+
+        expect(combination("y<-x", "1", "->y", "1"));
+    }
 }
