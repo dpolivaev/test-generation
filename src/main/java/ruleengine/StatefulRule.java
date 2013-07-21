@@ -23,7 +23,7 @@ abstract class StatefulRule implements Rule {
         this.targetedPropertyName = targetedPropertyName;
         this.values = ruleValues;
         this.blocksRequiredProperties = false;
-        this.setValueAlreadyAddedToCurrentCombination(false);
+        this.valueAlreadyAddedToCurrentCombination = false;
         dependentRules = new HashSet<>();
     }
 
@@ -56,7 +56,7 @@ abstract class StatefulRule implements Rule {
     }
 
     protected void addValueWithRules(EngineState engineState) {
-        setValueAlreadyAddedToCurrentCombination(true);
+        this.valueAlreadyAddedToCurrentCombination = true;
         boolean useNextValue = dependentRules.isEmpty();
         if (useNextValue) {
             values.next();
@@ -81,7 +81,7 @@ abstract class StatefulRule implements Rule {
 
     @Override
     public void propertyValueSet(PropertyAssignedEvent event) {
-        if (isValueAlreadyAddedToCurrentCombination())
+        if (isValueAddedToCurrentCombination())
             addDependencies(event);
     }
 
@@ -101,7 +101,7 @@ abstract class StatefulRule implements Rule {
 
     @Override
     public void propertyCombinationFinished(EngineState engineState) {
-        if (isValueAlreadyAddedToCurrentCombination()) {
+        if (isValueAddedToCurrentCombination()) {
             for (Rule rule : dependentRules)
                 rule.propertyCombinationFinished(engineState);
             if (!isBlockedBy(dependentRules)) {
@@ -110,7 +110,7 @@ abstract class StatefulRule implements Rule {
                 if (values.allValuesUsed())
                     setBlocksRequiredProperties(false);
             }
-            setValueAlreadyAddedToCurrentCombination(false);
+            this.valueAlreadyAddedToCurrentCombination = false;
         }
     }
 
@@ -127,8 +127,8 @@ abstract class StatefulRule implements Rule {
     }
 
     @Override
-    public boolean isActive() {
-        return isValueAlreadyAddedToCurrentCombination();
+    public boolean isValueAddedToCurrentCombination() {
+        return valueAlreadyAddedToCurrentCombination;
     }
 
     @Override
@@ -158,14 +158,6 @@ abstract class StatefulRule implements Rule {
 
     @Override
     public void propertyRequired(EngineState engineState) {
-    }
-
-    protected boolean isValueAlreadyAddedToCurrentCombination() {
-        return valueAlreadyAddedToCurrentCombination;
-    }
-
-    private void setValueAlreadyAddedToCurrentCombination(boolean valueAlreadyAddedToCurrentCombination) {
-        this.valueAlreadyAddedToCurrentCombination = valueAlreadyAddedToCurrentCombination;
     }
 
     protected Condition getCondition() {

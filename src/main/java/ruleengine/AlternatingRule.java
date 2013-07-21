@@ -41,8 +41,8 @@ class AlternatingRule implements Rule {
         for (int i = rules.size() - 1; i >= 0; i--) {
             Rule activeRule = rules.get(i);
             propertyCombinationStarter.propagateEvent(activeRule);
-            if (activeRule.isActive()) {
-                setActiveRule(activeRule);
+            if (activeRule.isValueAddedToCurrentCombination()) {
+                this.activeRule = activeRule;
                 break;
             }
         }
@@ -50,9 +50,7 @@ class AlternatingRule implements Rule {
 
     @Override
     public void propertyCombinationStarted(final EngineState engineState) {
-        if (getTriggeringProperties().isEmpty()) {
-            propagateUntilActiveRuleFound(new PropertyCombinationStartedPropagator(engineState));
-        }
+        propagateUntilActiveRuleFound(new PropertyCombinationStartedPropagator(engineState));
     }
 
     @Override
@@ -62,13 +60,7 @@ class AlternatingRule implements Rule {
 
     @Override
     public void propertyRequired(EngineState engineState) {
-        if (engineState.containsPropertyValues(getTriggeringProperties())) {
-            propagateUntilActiveRuleFound(new PropertyRequiredPropagator(engineState));
-        }
-    }
-
-    private void setActiveRule(Rule activeRule) {
-        this.activeRule = activeRule;
+        propagateUntilActiveRuleFound(new PropertyRequiredPropagator(engineState));
     }
 
     @Override
@@ -82,8 +74,8 @@ class AlternatingRule implements Rule {
     }
 
     @Override
-    public boolean isActive() {
-        return activeRule != null && activeRule.isActive();
+    public boolean isValueAddedToCurrentCombination() {
+        return activeRule != null && activeRule.isValueAddedToCurrentCombination();
     }
 
     @Override

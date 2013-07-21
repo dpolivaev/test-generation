@@ -17,7 +17,7 @@ public class AlternatingRuleTest {
     @SuppressWarnings("unchecked")
     private Rule ruleMock(boolean active) {
         Rule ruleMock = mock(Rule.class);
-        when(ruleMock.isActive()).thenReturn(active);
+        when(ruleMock.isValueAddedToCurrentCombination()).thenReturn(active);
         when(ruleMock.getTargetedPropertyName()).thenReturn("x");
         when(ruleMock.getTriggeringProperties()).thenReturn(Collections.EMPTY_SET);
         return ruleMock;

@@ -53,14 +53,14 @@ public class RuleTest {
     public void ruleWithAssignedValue_isActive() {
         StatefulRule statefulRule = iterate("name").over("value").asRule();
         statefulRule.propertyCombinationStarted(engineState);
-        assertThat(statefulRule.isActive(), is(true));
+        assertThat(statefulRule.isValueAddedToCurrentCombination(), is(true));
     }
 
     @Test
     public void ruleIsNotActive_afterItHasFinished() {
         StatefulRule statefulRule = iterate("name").over("value").asRule();
         iterationWith(statefulRule);
-        assertThat(statefulRule.isActive(), is(false));
+        assertThat(statefulRule.isValueAddedToCurrentCombination(), is(false));
     }
 
     @Test
