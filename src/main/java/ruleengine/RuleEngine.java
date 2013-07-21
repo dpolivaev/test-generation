@@ -62,14 +62,9 @@ public class RuleEngine implements EngineState {
 	}
 
 	private void fireNextCombinationStartedEvent() {
-        Set<String> oldDependencies = dependencies;
-        for (Rule rule : strategy.topRules()) {
-            if (!dependencies.isEmpty())
-                dependencies = new HashSet<>();
-            processedProperty = rule.getTargetedPropertyName();
-            rule.propertyCombinationStarted(this);
-        }
-        dependencies = oldDependencies;
+        Collection<Rule> topRules = strategy.topRules();
+        RuleEventPropagator propagator = new PropertyCombinationStartedPropagator(this);
+        fireEvent(propagator, topRules);
 	}
 
 	@Override
@@ -83,16 +78,21 @@ public class RuleEngine implements EngineState {
 	}
 
     private void firePropertyAssignedEvent(Collection<Rule> rules, PropertyAssignedEvent event) {
-        Set<String> oldDependencies = dependencies;
         assignmentReason = event.getTargetedPropertyName() + "->";
+        RuleEventPropagator propagator = new PropertyValueSetPropagator(event);
+        fireEvent(propagator, rules);
+    }
+
+    private void fireEvent(RuleEventPropagator propagator, Collection<Rule> rules) {
+        Set<String> oldDependencies = dependencies;
         for (Rule rule : rules) {
             if (!dependencies.isEmpty())
                 dependencies = new HashSet<>();
             processedProperty = rule.getTargetedPropertyName();
-			rule.propertyValueSet(event);
-		}
+            propagator.propagateEvent(rule);
+        }
         dependencies = oldDependencies;
-	}
+    }
 
 	private boolean topRulesHaveFinished() {
         for (Rule rule : strategy.topRules())
@@ -117,21 +117,21 @@ public class RuleEngine implements EngineState {
 	@Override
     public Object get(String name) {
         if (!assignments.containsProperty(name)) {
-            Set<String> oldDependencies = dependencies;
-            dependencies = new HashSet<>();
-            String oldAssignmentReason = assignmentReason;
-            assignmentReason = processedProperty + "<-";
-            processedProperty = name;
             executeDefaultRulesForProperty(name);
-            assignmentReason = oldAssignmentReason;
-            dependencies = oldDependencies;
         }
         dependencies.add(name);
 		return assignments.get(name);
 	}
 
     private void executeDefaultRulesForProperty(String name) {
+        Set<String> oldDependencies = dependencies;
+        dependencies = new HashSet<>();
+        String oldAssignmentReason = assignmentReason;
+        assignmentReason = processedProperty + "<-";
+        processedProperty = name;
         strategy.getDefaultRulesForProperty(name).propertyRequired(this);
+        assignmentReason = oldAssignmentReason;
+        dependencies = oldDependencies;
     }
 
     @Override
