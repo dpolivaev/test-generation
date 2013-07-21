@@ -9,7 +9,7 @@ public class LoggingScriptProducerMock implements ScriptProducer {
 
 	@Override
 	public void makeScriptFor(RuleEngine ruleEngine) {
-		log.append(ruleEngine.getAssignedPropertiesAsString());
+		log.append(ruleEngine.getCombinationCount() + " : " + new AssignmentFormatter().format(ruleEngine.getAssignments()) + '\n');
 	}
 
 	public String getAllScriptPropertyCombinations() {

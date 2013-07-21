@@ -12,7 +12,7 @@ import org.junit.Test;
 
 public class MapBasedStateTest {
 
-	MapBasedState mapBasedState;
+	Assignments assignments;
 
     private StatefulRule ruleForProperty(String propertyName) {
         return iterate(propertyName).asRule();
@@ -21,47 +21,47 @@ public class MapBasedStateTest {
 
 	@Before
 	public void setup() {
-		mapBasedState = new MapBasedState();
+		assignments = new Assignments();
 	}
 
 	@Test
 	public void stateWithOnePropertySetAtFirstCombination() {
-		mapBasedState.nextCombination();
-        mapBasedState.setPropertyValue(new PropertyAssignment(ruleForProperty("x"), "a",
+		assignments.nextCombination();
+        assignments.setPropertyValue(new Assignment(ruleForProperty("x"), "a",
             ""));
         String expectedScriptPropertyCombinations = "x=a";
 		assertEquals(expectedScriptPropertyCombinations,
-            new StateFormatter().format(mapBasedState));
+            new AssignmentFormatter().format(assignments));
 	}
 
 	@Test
 	public void stateWithOneProperty_containsItsValue() {
-		mapBasedState.nextCombination();
-        mapBasedState.setPropertyValue(new PropertyAssignment(ruleForProperty("x"), "a",
+		assignments.nextCombination();
+        assignments.setPropertyValue(new Assignment(ruleForProperty("x"), "a",
             ""));
-		assertThat(mapBasedState.containsProperties(set("x")), is(true));
+		assertThat(assignments.containsProperties(set("x")), is(true));
 	}
 
 	@Test
 	public void stateWithTwoPropertiesSetAtFirstCombination() {
-		mapBasedState.nextCombination();
-        mapBasedState.setPropertyValue(new PropertyAssignment(ruleForProperty("x"), "a",
+		assignments.nextCombination();
+        assignments.setPropertyValue(new Assignment(ruleForProperty("x"), "a",
             ""));
-        mapBasedState.setPropertyValue(new PropertyAssignment(ruleForProperty("y"), "b",
+        assignments.setPropertyValue(new Assignment(ruleForProperty("y"), "b",
             ""));
         String expectedScriptPropertyCombinations = "x=a\ty=b";
 		assertEquals(expectedScriptPropertyCombinations,
-            new StateFormatter().format(mapBasedState));
+            new AssignmentFormatter().format(assignments));
 	}
 
 
     @Test
     public void oldPropertiesAreRemovedAfterIterationEnd() {
-        mapBasedState.nextCombination();
-        mapBasedState.setPropertyValue(new PropertyAssignment(ruleForProperty("x"), "a",
+        assignments.nextCombination();
+        assignments.setPropertyValue(new Assignment(ruleForProperty("x"), "a",
             ""));
-        mapBasedState.nextCombination();
-        assertThat(mapBasedState.containsProperties(set("x")), is(false));
+        assignments.nextCombination();
+        assertThat(assignments.containsProperties(set("x")), is(false));
     }
 
 
