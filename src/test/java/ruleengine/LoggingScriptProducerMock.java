@@ -5,14 +5,26 @@ package ruleengine;
  */
 public class LoggingScriptProducerMock implements ScriptProducer {
 
-	private StringBuilder log = new StringBuilder();
+    private StringBuilder log;
+    private AssignmentFormatter assignmentFormatter;
 
-	@Override
+	public LoggingScriptProducerMock() {
+        log = new StringBuilder();
+        assignmentFormatter = new AssignmentFormatter();
+        assignmentFormatter.appendReasons(false);
+    }
+
+    @Override
 	public void makeScriptFor(RuleEngine ruleEngine) {
-		log.append(ruleEngine.getCombinationCount() + " : " + new AssignmentFormatter().format(ruleEngine.getAssignments()) + '\n');
+		log.append(ruleEngine.getCombinationCount() + " : " + assignmentFormatter.format(ruleEngine.getAssignments()) + '\n');
 	}
 
 	public String getAllScriptPropertyCombinations() {
 		return log.toString();
 	}
+
+    public void appendReasons(boolean appendReasons) {
+        assignmentFormatter.appendReasons(appendReasons);
+    }
+
 }
