@@ -24,7 +24,7 @@ public interface Rule {
 
     boolean blocksRequiredProperties();
 
-    boolean isActive();
+    boolean isValueAddedToCurrentCombination();
 
     void setBlocksRequiredProperties();
 

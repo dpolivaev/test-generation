@@ -17,7 +17,7 @@ public class TriggeredStatefulRule extends StatefulRule {
 
     @Override
     public void propertyValueSet(PropertyAssignedEvent event) {
-        if (isValueAlreadyAddedToCurrentCombination())
+        if (isValueAddedToCurrentCombination())
             addDependencies(event);
         else if (triggeringProperties.contains(event.getTargetedPropertyName())
             && event.containsPropertyValues(triggeringProperties) && getCondition().isSatisfied()) {
