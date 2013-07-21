@@ -10,14 +10,14 @@ import java.util.Set;
  */
 public class RuleEngine implements EngineState {
     private Strategy strategy;
-    final private MapBasedState mapBasedState;
+    final private Assignments assignments;
     private final ScriptProducer scriptProducer;
     private Set<String> dependencies;
     private int count;
 
     public RuleEngine(ScriptProducer scriptProducer) {
         super();
-        this.mapBasedState = new MapBasedState();
+        this.assignments = new Assignments();
         this.scriptProducer = scriptProducer;
         this.strategy = null;
         dependencies = new HashSet<>();
@@ -46,7 +46,7 @@ public class RuleEngine implements EngineState {
 
     private void generateCombination() {
         count++;
-        mapBasedState.nextCombination();
+        assignments.nextCombination();
         fireNextCombinationStartedEvent();
         dependencies = new HashSet<>();
         scriptProducer.makeScriptFor(this);
@@ -69,10 +69,10 @@ public class RuleEngine implements EngineState {
 
 	@Override
     public void setPropertyValue(Rule rule, Object value, boolean valueChanged) {
-        mapBasedState.setPropertyValue(new PropertyAssignment(rule, value, ""));
+        assignments.setPropertyValue(new Assignment(rule, value, ""));
         if (!rule.isDefaultRule()) {
             PropertyAssignedEvent event = new PropertyAssignedEvent(this, rule, dependencies, valueChanged);
-            firePropertyAssignedEvent(mapBasedState.firedRules(), event);
+            firePropertyAssignedEvent(assignments.firedRules(), event);
             firePropertyAssignedEvent(strategy.triggeredRules(), event);
         }
 	}
@@ -94,25 +94,29 @@ public class RuleEngine implements EngineState {
 		return true;
 	}
 
-	public String getAssignedPropertiesAsString() {
-        return count + " : " + new StateFormatter().format(mapBasedState) + '\n';
-	}
+    public int getCombinationCount() {
+        return count;
+    }
 
-	@Override
+    public Assignments getAssignments() {
+        return assignments;
+    }
+
+    @Override
 	public boolean containsPropertyValues(Set<String> names) {
-		return mapBasedState.containsProperties(names);
+		return assignments.containsProperties(names);
 	}
 
 	@Override
     public Object get(String name) {
-        if (!mapBasedState.containsProperty(name)) {
+        if (!assignments.containsProperty(name)) {
             Set<String> oldDependencies = dependencies;
             dependencies = new HashSet<>();
             executeDefaultRulesForProperty(name);
             dependencies = oldDependencies;
         }
         dependencies.add(name);
-		return mapBasedState.get(name);
+		return assignments.get(name);
 	}
 
     private void executeDefaultRulesForProperty(String name) {
