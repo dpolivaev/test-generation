@@ -37,15 +37,27 @@ class AlternatingRule implements Rule {
         return activeRule != null && activeRule.blocksRequiredProperties();
     }
 
-    private void propagateUntilActiveRuleFound(RuleEventPropagator propertyCombinationStarter) {
+    private Rule activeRule(RuleEventPropagator propertyCombinationStarter) {
         for (int i = rules.size() - 1; i >= 0; i--) {
-            Rule activeRule = rules.get(i);
-            propertyCombinationStarter.propagateEvent(activeRule);
-            if (activeRule.isValueAddedToCurrentCombination()) {
-                this.activeRule = activeRule;
-                break;
+            Rule rule = rules.get(i);
+            propertyCombinationStarter.propagateEvent(rule);
+            if (rule.isValueAddedToCurrentCombination()) {
+                return rule;
             }
         }
+        return null;
+    }
+
+    private void propagateUntilActiveRuleFound(RuleEventPropagator propertyCombinationStarter) {
+        Rule newActiveRule = activeRule(propertyCombinationStarter);
+        if (activeRule != null) {
+            if (activeRule.blocksRequiredProperties()) {
+                if (!activeRule.equals(newActiveRule)) {
+                    throw new InconsistentRuleException("Inconsistent rules for property " + getTargetedPropertyName());
+                }
+            }
+        }
+        activeRule = newActiveRule;
     }
 
     @Override
@@ -66,6 +78,8 @@ class AlternatingRule implements Rule {
     @Override
     public void propertyCombinationFinished(EngineState engineState) {
         activeRule.propertyCombinationFinished(engineState);
+        if (!activeRule.blocksRequiredProperties())
+            activeRule = null;
     }
 
     @Override
