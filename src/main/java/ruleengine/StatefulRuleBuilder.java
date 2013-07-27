@@ -90,7 +90,7 @@ public class StatefulRuleBuilder {
     }
 
     public StatefulRule asRule() {
-        Values ruleValues = ruleValues();
+        ValueProviders ruleValues = ruleValues();
         if (triggeringProperties.isEmpty())
             return new TopStatefulRule(this.condition, this.targetedPropertyName, ruleValues);
         else
@@ -110,10 +110,10 @@ public class StatefulRuleBuilder {
             ruleValues());
     }
 
-    private Values ruleValues() {
+    private ValueProviders ruleValues() {
         ValueWithRulesProvider[] valueProviders = this.values.toArray(new ValueWithRulesProvider[values.size()]);
-        OrderedValues orderedValues = new OrderedValues(valueProviders);
-        Values ruleValues = shuffled ? new ShuffledValues(orderedValues) : orderedValues;
+        OrderedValueProviders orderedValueProviders = new OrderedValueProviders(valueProviders);
+        ValueProviders ruleValues = shuffled ? new ShuffledValueProviders(orderedValueProviders) : orderedValueProviders;
         return ruleValues;
     }
 

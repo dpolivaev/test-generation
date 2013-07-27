@@ -20,12 +20,12 @@ public class ValueWithRules implements ValueWithRulesProvider {
     }
 
     @Override
-    public Object value() {
-        return valueProvider.value();
+    public Object value(PropertyContainer propertyContainer) {
+        return valueProvider.value(propertyContainer);
     }
 
     @Override
-    public Collection<Rule> rules() {
+    public Collection<Rule> rules(PropertyContainer propertyContainer) {
         return rules;
     }
 

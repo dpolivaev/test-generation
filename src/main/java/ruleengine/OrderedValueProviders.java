@@ -2,11 +2,11 @@ package ruleengine;
 
 import java.util.Collection;
 
-class OrderedValues implements Values {
+class OrderedValueProviders implements ValueProviders {
     private ValueWithRulesProvider[] valueWithRulesProviders;
     private int valueIndex = -1;
 
-    public OrderedValues(ValueWithRulesProvider[] values) {
+    public OrderedValueProviders(ValueWithRulesProvider[] values) {
         this.valueWithRulesProviders = values;
     }
 
@@ -22,22 +22,13 @@ class OrderedValues implements Values {
             valueIndex = 0;
 	}
 
-	@Override
-	public Object currentValue() {
-        return value(valueIndex);
-	}
-
-    public Object value(int index) {
-        return valueWithRulesProviders[index].value();
-    }
-
     @Override
-    public Collection<Rule> currentValueRelatedRules() {
-        return valueRelatedRules(valueIndex);
+    public ValueWithRulesProvider currentProvider() {
+        return provider(valueIndex);
     }
 
-    public Collection<Rule> valueRelatedRules(int index) {
-        return valueWithRulesProviders[index].rules();
+    public ValueWithRulesProvider provider(int index) {
+        return valueWithRulesProviders[index];
     }
 
     public int valueIndex() {

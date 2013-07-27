@@ -5,7 +5,7 @@ import java.util.Set;
 public class TriggeredStatefulRule extends StatefulRule {
     final private Set<String> triggeringProperties;
     public TriggeredStatefulRule(Set<String> triggeredBy, Condition condition, String targetedPropertyName,
-        Values ruleValues) {
+        ValueProviders ruleValues) {
         super(condition, targetedPropertyName, ruleValues);
         this.triggeringProperties = triggeredBy;
     }
@@ -19,11 +19,13 @@ public class TriggeredStatefulRule extends StatefulRule {
     public void propertyValueSet(PropertyAssignedEvent event) {
         if (isValueAddedToCurrentCombination())
             addDependencies(event);
-        else if (triggeringProperties.contains(event.getTargetedPropertyName())
-            && event.containsPropertyValues(triggeringProperties) && getCondition().isSatisfied()) {
-            addValueWithRules(event.getState());
+        else if (triggeringProperties.contains(event.getTargetedPropertyName()) && event.containsPropertyValues(triggeringProperties)) {
+            EngineState engineState = event.getState();
+            if (getCondition().isSatisfied(engineState)) {
+            addValueWithRules(engineState);
             if (event.isValueChanged())
                 setBlocksRequiredProperties(true);
+        }
         }
     }
 

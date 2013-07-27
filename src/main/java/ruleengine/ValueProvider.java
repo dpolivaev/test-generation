@@ -1,5 +1,5 @@
 package ruleengine;
 
 public interface ValueProvider {
-    Object value();
+    Object value(PropertyContainer propertyContainer);
 }

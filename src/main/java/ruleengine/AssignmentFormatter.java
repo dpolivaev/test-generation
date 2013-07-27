@@ -35,6 +35,7 @@ class AssignmentFormatter {
     public String format(Assignments assignments) {
         StringBuilder assignedPropertiesStringBuilder = new StringBuilder();
         for (Map.Entry<String, Assignment> assignment : assignments.entrySet()) {
+            appendSeparator(assignedPropertiesStringBuilder);
             append(assignedPropertiesStringBuilder, assignment);
         }
         return assignedPropertiesStringBuilder.toString();
@@ -42,9 +43,6 @@ class AssignmentFormatter {
 
     public AssignmentFormatter append(StringBuilder assignedPropertiesStringBuilder,
         Map.Entry<String, Assignment> assignment) {
-        if (assignedPropertiesStringBuilder.length() > 0) {
-            assignedPropertiesStringBuilder.append(propertySeparator);
-        }
         String targetedPropertyName = assignment.getKey();
         Assignment assignmentProperties = assignment.getValue();
         if (appendReasons)
@@ -53,6 +51,12 @@ class AssignmentFormatter {
             .append(nameValueSeparator)
             .append(assignmentProperties.value);
         return this;
+    }
+
+    private void appendSeparator(StringBuilder assignedPropertiesStringBuilder) {
+        if (assignedPropertiesStringBuilder.length() > 0) {
+            assignedPropertiesStringBuilder.append(propertySeparator);
+        }
     }
 
     public static AssignmentFormatter formatter(String propertySeparator, String nameValueSeparator) {

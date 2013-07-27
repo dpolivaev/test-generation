@@ -2,13 +2,14 @@ package ruleengine;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 import static ruleengine.AssignmentFormatter.formatter;
 
 import java.util.AbstractMap;
-import java.util.Map.Entry;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 public class AssignmentFormatterTest {
 
@@ -33,11 +34,14 @@ public class AssignmentFormatterTest {
 
     @Test
     public void formatsTwoEntries() {
-        formatter.append(assignedPropertiesStringBuilder, //
-            new AbstractMap.SimpleEntry<String, Assignment>("name", new Assignment(null, "value", "")));
-        formatter.append(assignedPropertiesStringBuilder, //
-            new AbstractMap.SimpleEntry<String, Assignment>("name2", new Assignment(null, "value2", "")));
-        assertThat(assignedPropertiesStringBuilder.toString(), equalTo("name=value,name2=value2"));
+        Rule rule1 = mock(Rule.class);
+        Mockito.when(rule1.getTargetedPropertyName()).thenReturn("name");
+        Rule rule2 = mock(Rule.class);
+        Mockito.when(rule2.getTargetedPropertyName()).thenReturn("name2");
+        Assignments assignments = new Assignments();
+        assignments.setPropertyValue(new Assignment(rule1, "value", ""));
+        assignments.setPropertyValue(new Assignment(rule2, "value2", ""));
+        assertThat(formatter.format(assignments), equalTo("name=value,name2=value2"));
     }
 
     @Test
