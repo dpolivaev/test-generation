@@ -11,17 +11,17 @@ import java.util.Set;
 abstract class StatefulRule implements Rule {
 
     final private String targetedPropertyName;
-    final private Values values;
+    final private ValueProviders valueProviders;
     final private Set<Rule> dependentRules;
     final private Condition condition;
 
     private boolean valueAlreadyAddedToCurrentCombination;
     private boolean blocksRequiredProperties;
 
-    public StatefulRule(Condition condition, String targetedPropertyName, Values ruleValues) {
+    public StatefulRule(Condition condition, String targetedPropertyName, ValueProviders ruleValues) {
         this.condition = condition;
         this.targetedPropertyName = targetedPropertyName;
-        this.values = ruleValues;
+        this.valueProviders = ruleValues;
         this.blocksRequiredProperties = false;
         this.valueAlreadyAddedToCurrentCombination = false;
         dependentRules = new HashSet<>();
@@ -59,19 +59,19 @@ abstract class StatefulRule implements Rule {
         this.valueAlreadyAddedToCurrentCombination = true;
         boolean useNextValue = dependentRules.isEmpty();
         if (useNextValue) {
-            values.next();
+            valueProviders.next();
             addRules(engineState);
         }
         setValue(engineState, useNextValue);
     }
 
     private void setValue(EngineState engineState, boolean useNextValue) {
-        Object value = values.currentValue();
+        Object value = valueProviders.currentProvider().value(engineState);
         engineState.setPropertyValue(this, value, useNextValue);
     }
 
     private void addRules(EngineState engineState) {
-        Collection<Rule> rules = values.currentValueRelatedRules();
+        Collection<Rule> rules = valueProviders.currentProvider().rules(engineState);
         for (Rule rule : rules) {
             if (!rule.isDefaultRule())
                 rule.getTriggeringProperties().add(targetedPropertyName);
@@ -107,7 +107,7 @@ abstract class StatefulRule implements Rule {
             if (!isBlockedBy(dependentRules)) {
                 removeValueRelatedRules(engineState);
                 dependentRules.clear();
-                if (values.allValuesUsed())
+                if (valueProviders.allValuesUsed())
                     setBlocksRequiredProperties(false);
             }
             this.valueAlreadyAddedToCurrentCombination = false;
@@ -115,7 +115,7 @@ abstract class StatefulRule implements Rule {
     }
 
     private void removeValueRelatedRules(EngineState engineState) {
-        Collection<Rule> relatedRules = values.currentValueRelatedRules();
+        Collection<Rule> relatedRules = valueProviders.currentProvider().rules(engineState);
         for (Rule rule : relatedRules) {
             engineState.currentStrategy().removeRule(rule);
         }

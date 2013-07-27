@@ -46,7 +46,10 @@ public class Strategy {
     }
 
     public Rule getDefaultRulesForProperty(String propertyName) {
-        return defaultRules.get(propertyName);
+        Rule rule = defaultRules.get(propertyName);
+        if(rule == null)
+            throw new UnknownPropertyException(propertyName);
+        return rule;
     }
 
     public void removeRule(Rule rule) {

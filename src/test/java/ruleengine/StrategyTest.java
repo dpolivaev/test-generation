@@ -71,4 +71,9 @@ public class StrategyTest {
         assertThat(strategy.triggeredRules(), hasItem(ruleP));
         assertThat(strategy.triggeredRules(), hasItem(ruleQ));
     }
+    
+    @Test(expected=UnknownPropertyException.class)
+    public void requestedUnknownDefaultProperty_throwsException() throws Exception {
+        strategy.getDefaultRulesForProperty("unknownProperty");
+    }
 }

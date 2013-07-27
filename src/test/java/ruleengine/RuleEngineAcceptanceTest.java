@@ -20,13 +20,10 @@ public class RuleEngineAcceptanceTest {
     private LoggingScriptProducerMock scriptProducerMock;
     private static final Condition FALSE = new Condition() {
         @Override
-        public boolean isSatisfied() {
+        public boolean isSatisfied(PropertyContainer propertyContainer) {
             return false;
         }
     };
-
-    public RuleEngineAcceptanceTest() {
-    }
 
     private void generateCombinationsForStrategy() {
         ruleEngine.run(strategy);
@@ -37,16 +34,16 @@ public class RuleEngineAcceptanceTest {
             scriptProducerMock.getAllScriptPropertyCombinations());
     }
 
+    private void initializeRuleEngine(LoggingScriptProducerMock loggingScriptProducerMock) {
+        scriptProducerMock = loggingScriptProducerMock;
+        ruleEngine = new RuleEngine(scriptProducerMock);
+    }
+    
     @Before
     public void setup() {
         LoggingScriptProducerMock loggingScriptProducerMock = new LoggingScriptProducerMock();
         initializeRuleEngine(loggingScriptProducerMock);
         strategy = new Strategy();
-    }
-
-    private void initializeRuleEngine(LoggingScriptProducerMock loggingScriptProducerMock) {
-        scriptProducerMock = loggingScriptProducerMock;
-        ruleEngine = new RuleEngine(scriptProducerMock);
     }
 
     @Test
@@ -150,8 +147,8 @@ public class RuleEngineAcceptanceTest {
         strategy.addRule(when("x").iterate("y").over("A", "B")._if( //
             new Condition() {
                 @Override
-                public boolean isSatisfied() {
-                    return ruleEngine.get("x").equals("c");
+                public boolean isSatisfied(PropertyContainer propertyContainer) {
+                    return propertyContainer.get("x").equals("c");
                 };
             }));
         generateCombinationsForStrategy();
@@ -231,8 +228,8 @@ public class RuleEngineAcceptanceTest {
         strategy.addRule(iterate("y").over("b1", "b2").when("x")._if(new Condition() {
 
             @Override
-            public boolean isSatisfied() {
-                ruleEngine.get("x");
+            public boolean isSatisfied(PropertyContainer propertyContainer) {
+                propertyContainer.get("x");
                 return true;
             }
         }));
@@ -338,8 +335,8 @@ public class RuleEngineAcceptanceTest {
         strategy.addRule(when("x").iterate("y").over(SKIP)._if(new Condition() {
 
             @Override
-            public boolean isSatisfied() {
-                return ruleEngine.get("x").equals("a1");
+            public boolean isSatisfied(PropertyContainer propertyContainer) {
+                return propertyContainer.get("x").equals("a1");
             }
         }));
 
@@ -401,8 +398,8 @@ public class RuleEngineAcceptanceTest {
         strategy.addRule(iterate("x").over("1").asDefaultRule());
         strategy.addRule(iterate("y").over(new ValueProvider() {
             @Override
-            public Object value() {
-                return ruleEngine.get("x");
+            public Object value(PropertyContainer propertyContainer) {
+                return propertyContainer.get("x");
             }
         }).asRule());
         generateCombinationsForStrategy();

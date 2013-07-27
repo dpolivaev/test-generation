@@ -19,7 +19,7 @@ public class ConstantValue implements ValueWithRulesProvider{
      * @see ruleengine.Value#rules()
      */
     @Override
-    public Collection<Rule> rules() {
+    public Collection<Rule> rules(PropertyContainer propertyContainer) {
         return Collections.<Rule> emptyList();
     }
 
@@ -27,7 +27,7 @@ public class ConstantValue implements ValueWithRulesProvider{
      * @see ruleengine.Value#value()
      */
     @Override
-    public Object value() {
+    public Object value(PropertyContainer propertyContainer) {
         if (value == Instruction.SKIP)
             throw new InvalidCombinationException();
         return value;

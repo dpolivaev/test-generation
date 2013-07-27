@@ -34,6 +34,8 @@ public class Assignments {
     }
 
     public Object get(String name) {
+        if(! assignments.containsKey(name))
+            throw new UnknownPropertyException(name);
         return assignments.get(name).value;
 	}
 
