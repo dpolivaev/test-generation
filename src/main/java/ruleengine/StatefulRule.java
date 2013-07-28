@@ -56,17 +56,15 @@ abstract class StatefulRule implements Rule {
     }
 
     protected void addValueWithRules(EngineState engineState) {
-        this.valueAlreadyAddedToCurrentCombination = true;
         boolean useNextValue = dependentRules.isEmpty();
         if (useNextValue) {
             valueProviders.next();
+        }
+        Object value = valueProviders.currentProvider().value(engineState);
+        this.valueAlreadyAddedToCurrentCombination = true;
+        if (useNextValue) {
             addRules(engineState);
         }
-        setValue(engineState, useNextValue);
-    }
-
-    private void setValue(EngineState engineState, boolean useNextValue) {
-        Object value = valueProviders.currentProvider().value(engineState);
         engineState.setPropertyValue(this, value, useNextValue);
     }
 
