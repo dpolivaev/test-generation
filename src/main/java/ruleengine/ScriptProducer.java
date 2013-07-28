@@ -5,5 +5,5 @@ package ruleengine;
  */
 public interface ScriptProducer {
 
-	void makeScriptFor(RuleEngine ruleEngine);
+	void makeScriptFor(PropertyContainer propertyContainer);
 }

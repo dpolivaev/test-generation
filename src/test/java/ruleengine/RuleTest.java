@@ -68,7 +68,17 @@ public class RuleTest {
         StatefulRule statefulRule = iterate("name").over("value").asRule();
         iterationWith(statefulRule);
         assertThat(statefulRule.blocksRequiredProperties(), is(false));
-	}
+    }
+
+    @Test
+    public void ruleWithOneValue_blocksRequiredProperties_afterRuleEngineCombinationCounterIsReset() {
+        StatefulRule statefulRule = iterate("name").over("value").asRule();
+        when(engineState.getCombinationCounter()).thenReturn(1);
+        statefulRule.propertyCombinationStarted(engineState);
+        statefulRule.propertyCombinationFinished(engineState);
+        statefulRule.propertyCombinationStarted(engineState);
+        assertThat(statefulRule.blocksRequiredProperties(), is(true));
+    }
 
 	@Test
     public void ruleWithTwoValues_blocksRequiredPropertiesAfterFirstCombinationIsFinished() {

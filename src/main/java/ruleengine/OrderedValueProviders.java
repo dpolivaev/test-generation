@@ -1,7 +1,5 @@
 package ruleengine;
 
-import java.util.Collection;
-
 class OrderedValueProviders implements ValueProviders {
     private ValueWithRulesProvider[] valueWithRulesProviders;
     private int valueIndex = -1;
