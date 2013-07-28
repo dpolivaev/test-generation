@@ -13,7 +13,7 @@ public class RuleEngine implements EngineState {
     final private Assignments assignments;
     private final ScriptProducer scriptProducer;
     private Set<String> dependencies;
-    private int combinationCount;
+    private int combinationCounter;
     private String assignmentReason;
     private String processedProperty;
 
@@ -27,7 +27,7 @@ public class RuleEngine implements EngineState {
 
     public void run(Strategy strategy) {
         this.strategy = strategy;
-        combinationCount = 0;
+        combinationCounter = 0;
         try {
             do {
                 Set<String> oldDependencies = dependencies;
@@ -47,7 +47,7 @@ public class RuleEngine implements EngineState {
 	}
 
     private void generateCombination() {
-        combinationCount++;
+        combinationCounter++;
         assignments.clear();
         assignmentReason = "->";
         fireNextCombinationStartedEvent();
@@ -101,10 +101,12 @@ public class RuleEngine implements EngineState {
 		return true;
 	}
 
-    public int getCombinationCount() {
-        return combinationCount;
+    @Override
+    public int getCombinationCounter() {
+        return combinationCounter;
     }
 
+    @Override
     public Assignments getAssignments() {
         return assignments;
     }

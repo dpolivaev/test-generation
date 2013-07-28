@@ -299,9 +299,9 @@ public class RuleEngineAcceptanceTest {
         initializeRuleEngine(new LoggingScriptProducerMock() {
 
             @Override
-            public void makeScriptFor(RuleEngine ruleEngine) {
-                ruleEngine.get("y");
-                super.makeScriptFor(ruleEngine);
+            public void makeScriptFor(PropertyContainer propertyContainer) {
+                propertyContainer.get("y");
+                super.makeScriptFor(propertyContainer);
             }
 
         });
@@ -317,9 +317,9 @@ public class RuleEngineAcceptanceTest {
         initializeRuleEngine(new LoggingScriptProducerMock() {
 
             @Override
-            public void makeScriptFor(RuleEngine ruleEngine) {
-                ruleEngine.get("x");
-                super.makeScriptFor(ruleEngine);
+            public void makeScriptFor(PropertyContainer propertyContainer) {
+                propertyContainer.get("x");
+                super.makeScriptFor(propertyContainer);
             }
 
         });
@@ -379,9 +379,9 @@ public class RuleEngineAcceptanceTest {
         LoggingScriptProducerMock loggingScriptProducerMock = new LoggingScriptProducerMock() {
 
             @Override
-            public void makeScriptFor(RuleEngine ruleEngine) {
-                ruleEngine.get("x");
-                super.makeScriptFor(ruleEngine);
+            public void makeScriptFor(PropertyContainer propertyContainer) {
+                propertyContainer.get("x");
+                super.makeScriptFor(propertyContainer);
             }
 
         };

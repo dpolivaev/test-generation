@@ -8,6 +8,8 @@ public class TopStatefulRule extends StatefulRule {
 
     @Override
     public void propertyCombinationStarted(EngineState engineState) {
+        if(engineState.getCombinationCounter() == 1)
+            setBlocksRequiredProperties(true);
         if (getCondition().isSatisfied(engineState)) {
             addValueWithRules(engineState);
         }

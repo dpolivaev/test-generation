@@ -15,8 +15,8 @@ public class LoggingScriptProducerMock implements ScriptProducer {
     }
 
     @Override
-	public void makeScriptFor(RuleEngine ruleEngine) {
-		log.append(ruleEngine.getCombinationCount() + " : " + assignmentFormatter.format(ruleEngine.getAssignments()) + '\n');
+	public void makeScriptFor(PropertyContainer propertyContainer) {
+		log.append(propertyContainer.getCombinationCounter() + " : " + assignmentFormatter.format(propertyContainer.getAssignments()) + '\n');
 	}
 
 	public String getAllScriptPropertyCombinations() {
