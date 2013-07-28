@@ -76,4 +76,20 @@ public class StrategyTest {
     public void requestedUnknownDefaultProperty_throwsException() throws Exception {
         strategy.getDefaultRulesForProperty("unknownProperty");
     }
+    
+    @Test
+    public void stategyCombination(){
+        Strategy strategy2 = new Strategy();
+        StatefulRule ruleP = iterate("p").over("a").asRule();
+        strategy.addRule(ruleP);
+        StatefulRule defaultRuleP = iterate("p").over("a").asDefaultRule();
+        strategy2.addRule(defaultRuleP);
+        StatefulRule ruleQ = iterate("x").over("a").when("q").asRule();
+        strategy2.addRule(ruleQ);
+        
+        Strategy combinedStrategy = strategy.with(strategy2);
+        assertThat(combinedStrategy.topRules(), hasItem(ruleP));
+        assertThat(combinedStrategy.triggeredRules(), hasItem(ruleQ));
+        assertThat(combinedStrategy.defaultRules(), hasItem(defaultRuleP));
+    }
 }
