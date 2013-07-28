@@ -84,4 +84,18 @@ public class Strategy {
     public Collection<Rule> triggeredRules() {
         return copy(triggeredRules);
     }
+
+    public Strategy with(Strategy anotherStrategy) {
+        Strategy combinedStrategy = new Strategy();
+        combinedStrategy.topRules.putAll(topRules);
+        combinedStrategy.defaultRules.putAll(defaultRules);
+        combinedStrategy.triggeredRules.putAll(triggeredRules);
+        for(Rule rule : anotherStrategy.topRules.values())
+            combinedStrategy.addRule(rule);
+        for(Rule rule : anotherStrategy.defaultRules.values())
+            combinedStrategy.addRule(rule);
+        for(Rule rule : anotherStrategy.triggeredRules.values())
+            combinedStrategy.addRule(rule);
+        return combinedStrategy;
+    }
 }
