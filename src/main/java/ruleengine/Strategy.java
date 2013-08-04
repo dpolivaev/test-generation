@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class Strategy {
     private Map<String, Rule> defaultRules = new LinkedHashMap<>();
@@ -48,7 +49,7 @@ public class Strategy {
     public Rule getDefaultRulesForProperty(String propertyName) {
         Rule rule = defaultRules.get(propertyName);
         if(rule == null)
-            throw new UnknownPropertyException(propertyName);
+            return StatefulRuleBuilder.Factory.iterate(propertyName).over(SpecialValues.UNDEFINED).asDefaultRule();
         return rule;
     }
 
@@ -87,15 +88,22 @@ public class Strategy {
 
     public Strategy with(Strategy anotherStrategy) {
         Strategy combinedStrategy = new Strategy();
-        combinedStrategy.topRules.putAll(topRules);
-        combinedStrategy.defaultRules.putAll(defaultRules);
-        combinedStrategy.triggeredRules.putAll(triggeredRules);
-        for(Rule rule : anotherStrategy.topRules.values())
-            combinedStrategy.addRule(rule);
-        for(Rule rule : anotherStrategy.defaultRules.values())
-            combinedStrategy.addRule(rule);
-        for(Rule rule : anotherStrategy.triggeredRules.values())
-            combinedStrategy.addRule(rule);
+        combineRules(combinedStrategy, this.topRules, anotherStrategy.topRules, combinedStrategy.topRules);
+        combineRules(combinedStrategy, this.defaultRules, anotherStrategy.defaultRules, combinedStrategy.defaultRules);
+        combineRules(combinedStrategy, this.triggeredRules, anotherStrategy.triggeredRules, combinedStrategy.triggeredRules);
         return combinedStrategy;
     }
+
+    private <T> void combineRules(Strategy combinedStrategy, Map<T, Rule> rules, Map<T, Rule> anotherRules,
+        Map<T, Rule> combinedRules) {
+        combinedRules.putAll(rules);
+        for(Rule rule : anotherRules.values())
+            combinedStrategy.addRule(rule);
+    }
+
+    public Set<String> availableDefaultProperties() {
+        return defaultRules.keySet();
+    }
+    
+    
 }
