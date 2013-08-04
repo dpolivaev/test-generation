@@ -34,11 +34,15 @@ public class XmlScriptProducerTest {
         propertyContainer = new Assignments();
     }
 
+    private void givenProperty(String name, Object value) {
+        propertyContainer.add(assignmentMock(name, value));
+    }
+
     private void createScript() throws SAXException {
         producer.makeScriptFor(propertyContainer);
         handler.endDocument();
     }
-    
+
     private void checkOutput(String xml) {
         Assert.assertThat(the(dom.getNode()), isEquivalentTo(the(xml)));
     }
@@ -51,12 +55,12 @@ public class XmlScriptProducerTest {
 
     @Test
     public void createsTestCaseElementWithContent() throws Exception{
-        propertyContainer.add(assignmentMock("testcase", "content"));
+        givenProperty("testcase", "content");
         createScript();
         checkOutput("<TestCase content='content'/>");
     }
 
-    @Test
+     @Test
     public void createsTestCaseElementWithArbitraryAttribute() throws Exception{
         propertyContainer.add(assignmentMock("testcase.attribute", "attribute"));
         createScript();
@@ -65,7 +69,7 @@ public class XmlScriptProducerTest {
     
     @Test
     public void ignoresUndefinedProperties() throws Exception{
-        propertyContainer.add(assignmentMock("testcase.attribute", SpecialValues.UNDEFINED));
+        givenProperty("testcase.attribute", SpecialValues.UNDEFINED);
         createScript();
         checkOutput("<TestCase/>");
     }
