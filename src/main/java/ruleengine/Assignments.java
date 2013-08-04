@@ -35,7 +35,7 @@ public class Assignments implements PropertyContainer {
 
     public Object get(String name) {
         if(! assignments.containsKey(name))
-            throw new UnknownPropertyException(name);
+            return SpecialValues.UNDEFINED;
         return assignments.get(name).value;
 	}
 
