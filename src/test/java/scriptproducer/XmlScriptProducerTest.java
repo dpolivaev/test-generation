@@ -15,9 +15,7 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 
 import ruleengine.Assignments;
-import ruleengine.PropertyContainer;
 import ruleengine.ScriptProducer;
-import ruleengine.TestUtils;
 
 public class XmlScriptProducerTest {
 
