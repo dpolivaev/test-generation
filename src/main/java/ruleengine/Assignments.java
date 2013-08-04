@@ -53,10 +53,6 @@ public class Assignments implements PropertyContainer {
             }).values());
     }
 
-    public Set<Entry<String, Assignment>> entrySet() {
-        return assignments.entrySet();
-    }
-
     public Set<String> assignedProperties() {
         return assignments.keySet();
     }
@@ -86,10 +82,5 @@ public class Assignments implements PropertyContainer {
 
     void resetCounter() {
         this.combinationCounter = 0;
-    }
-
-    @Override
-    public Assignments getAssignments() {
-        return this;
     }
 }

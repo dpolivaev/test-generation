@@ -2,6 +2,7 @@ package ruleengine;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import utils.Utils;
@@ -107,11 +108,6 @@ public class RuleEngine implements EngineState {
     }
 
     @Override
-    public Assignments getAssignments() {
-        return assignments;
-    }
-
-    @Override
 	public boolean containsPropertyValues(Set<String> names) {
 		return assignments.containsPropertyValues(names);
 	}
@@ -155,5 +151,10 @@ public class RuleEngine implements EngineState {
         Set<String> availableProperties = assignments.availableProperties(startWith); 
         Utils.addMatchingStrings(availableProperties, startWith, strategy.availableDefaultProperties());
         return availableProperties;
+    }
+
+    @Override
+    public Map<String, Assignment> getAssignmentsAsMap() {
+        return assignments.getAssignmentsAsMap();
     }
 }
