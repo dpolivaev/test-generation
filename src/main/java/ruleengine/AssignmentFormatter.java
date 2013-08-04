@@ -32,9 +32,10 @@ class AssignmentFormatter {
         nameValueSeparator = "=";
     }
 
-    public String format(Assignments assignments) {
+    public String format(PropertyContainer assignments) {
         StringBuilder assignedPropertiesStringBuilder = new StringBuilder();
-        for (Map.Entry<String, Assignment> assignment : assignments.entrySet()) {
+        Map<String, Assignment> assignmentsAsMap = assignments.getAssignmentsAsMap();
+        for (Map.Entry<String, Assignment> assignment : assignmentsAsMap.entrySet()) {
             appendSeparator(assignedPropertiesStringBuilder);
             append(assignedPropertiesStringBuilder, assignment);
         }
