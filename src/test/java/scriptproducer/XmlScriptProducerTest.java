@@ -16,6 +16,7 @@ import org.xml.sax.SAXException;
 
 import ruleengine.Assignments;
 import ruleengine.ScriptProducer;
+import ruleengine.SpecialValues;
 
 public class XmlScriptProducerTest {
 
@@ -60,6 +61,13 @@ public class XmlScriptProducerTest {
         propertyContainer.add(assignmentMock("testcase.attribute", "attribute"));
         createScript();
         checkOutput("<TestCase attribute='attribute'/>");
+    }
+    
+    @Test
+    public void ignoresUndefinedProperties() throws Exception{
+        propertyContainer.add(assignmentMock("testcase.attribute", SpecialValues.UNDEFINED));
+        createScript();
+        checkOutput("<TestCase/>");
     }
 }
 

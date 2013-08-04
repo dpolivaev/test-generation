@@ -33,8 +33,10 @@ public class XmlScriptProducer implements ScriptProducer {
         Set<String> availableProperties = propertyContainer.availableProperties(prefix);
         for(String attributeProperty : availableProperties){
             Object attributeValue = propertyContainer.get(attributeProperty);
-            String attributeName = attributeProperty.substring(prefix.length());
-            xmlWriter.setAttribute(attributeName, attributeValue.toString());
+            if(attributeValue != SpecialValues.UNDEFINED){
+                String attributeName = attributeProperty.substring(prefix.length());
+                xmlWriter.setAttribute(attributeName, attributeValue.toString());
+            }
         }
     }
 
