@@ -9,16 +9,10 @@ import static ruleengine.StatefulRuleBuilder.Factory.iterate;
 import static ruleengine.StatefulRuleBuilder.Factory.when;
 import static ruleengine.TestUtils.set;
 
-import java.util.regex.Pattern;
-
 import static ruleengine.ConstantValue.Instruction.SKIP;
 
-import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import utils.Utils;
 
 /**
  * @author Dimitry Polivaev 18.02.2013

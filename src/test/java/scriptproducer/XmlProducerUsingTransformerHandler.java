@@ -2,7 +2,6 @@ package scriptproducer;
 
 import javax.xml.transform.sax.TransformerHandler;
 
-import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
 
 import utils.Utils;
