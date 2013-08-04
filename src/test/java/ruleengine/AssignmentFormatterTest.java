@@ -39,8 +39,8 @@ public class AssignmentFormatterTest {
         Rule rule2 = mock(Rule.class);
         Mockito.when(rule2.getTargetedPropertyName()).thenReturn("name2");
         Assignments assignments = new Assignments();
-        assignments.setPropertyValue(new Assignment(rule1, "value", ""));
-        assignments.setPropertyValue(new Assignment(rule2, "value2", ""));
+        assignments.add(new Assignment(rule1, "value", ""));
+        assignments.add(new Assignment(rule2, "value2", ""));
         assertThat(formatter.format(assignments), equalTo("name=value,name2=value2"));
     }
 

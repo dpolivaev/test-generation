@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import utils.Utils;
+
 
 /**
  * @author Dimitry Polivaev 18.02.2013
@@ -13,7 +15,6 @@ public class RuleEngine implements EngineState {
     final private Assignments assignments;
     private final ScriptProducer scriptProducer;
     private Set<String> dependencies;
-    private int combinationCounter;
     private String assignmentReason;
     private String processedProperty;
 
@@ -27,7 +28,7 @@ public class RuleEngine implements EngineState {
 
     public void run(Strategy strategy) {
         this.strategy = strategy;
-        combinationCounter = 0;
+        assignments.resetCounter();
         try {
             do {
                 Set<String> oldDependencies = dependencies;
@@ -47,8 +48,7 @@ public class RuleEngine implements EngineState {
 	}
 
     private void generateCombination() {
-        combinationCounter++;
-        assignments.clear();
+        assignments.startNewCombination();
         assignmentReason = "->";
         fireNextCombinationStartedEvent();
         dependencies = new HashSet<>();
@@ -56,7 +56,7 @@ public class RuleEngine implements EngineState {
         scriptProducer.makeScriptFor(this);
     }
 
-	private void fireNextCombinationFinishedEvent() {
+    private void fireNextCombinationFinishedEvent() {
         for (Rule rule : strategy.topRules())
             rule.propertyCombinationFinished(this);
 	}
@@ -69,7 +69,7 @@ public class RuleEngine implements EngineState {
 
 	@Override
     public void setPropertyValue(Rule rule, Object value, boolean valueChanged) {
-        assignments.setPropertyValue(new Assignment(rule, value, assignmentReason));
+        assignments.add(new Assignment(rule, value, assignmentReason));
         PropertyAssignedEvent event = new PropertyAssignedEvent(this, rule, dependencies, valueChanged);
         firePropertyAssignedEvent(assignments.firedRules(), event);
         if (!rule.isDefaultRule()) {
@@ -103,7 +103,7 @@ public class RuleEngine implements EngineState {
 
     @Override
     public int getCombinationCounter() {
-        return combinationCounter;
+        return assignments.getCombinationCounter();
     }
 
     @Override
@@ -113,7 +113,7 @@ public class RuleEngine implements EngineState {
 
     @Override
 	public boolean containsPropertyValues(Set<String> names) {
-		return assignments.containsProperties(names);
+		return assignments.containsPropertyValues(names);
 	}
 
 	@Override
@@ -147,20 +147,13 @@ public class RuleEngine implements EngineState {
 
     @Override
     public boolean containsPropertyValue(String name) {
-        return assignments.containsProperty(name);
+        return assignments.containsPropertyValue(name);
     }
 
     @Override
     public Set<String> availableProperties(String startWith) {
-        HashSet<String> availableProperties = new HashSet<>(); 
-        addMatchingStrings(availableProperties, startWith, assignments.assignedProperties());
-        addMatchingStrings(availableProperties, startWith, strategy.availableDefaultProperties());
+        Set<String> availableProperties = assignments.availableProperties(startWith); 
+        Utils.addMatchingStrings(availableProperties, startWith, strategy.availableDefaultProperties());
         return availableProperties;
-    }
-
-    private void addMatchingStrings(HashSet<String> availableProperties, String startWith, Set<String> strings) {
-        for(String string : strings)
-            if(string.startsWith(startWith))
-                availableProperties.add(string);
     }
 }
