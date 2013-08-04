@@ -1,13 +1,16 @@
 package ruleengine;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
+
 import org.junit.Test;
 
 public class AssignmentsTest {
 
-    @Test(expected=UnknownPropertyException.class)
-    public void test() {
+    @Test
+    public void returnsUndefinedForNotAssignedProperty() {
         Assignments assignments = new Assignments();
-        assignments.get("unknown");
+        assertThat(assignments.get("unknown"), equalTo((Object)SpecialValues.UNDEFINED));
     }
 
 }
