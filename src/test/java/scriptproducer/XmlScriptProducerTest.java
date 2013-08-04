@@ -62,7 +62,7 @@ public class XmlScriptProducerTest {
 
      @Test
     public void createsTestCaseElementWithArbitraryAttribute() throws Exception{
-        propertyContainer.add(assignmentMock("testcase.attribute", "attribute"));
+         givenProperty("testcase.attribute", "attribute");
         createScript();
         checkOutput("<TestCase attribute='attribute'/>");
     }
