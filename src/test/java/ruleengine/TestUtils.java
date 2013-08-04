@@ -16,13 +16,13 @@ public class TestUtils {
 		return set;
 	}
 
-    static Rule ruleMock(String targetedPropertyName) {
+    public static Rule ruleMock(String targetedPropertyName) {
         Rule rule = mock(Rule.class);
         Mockito.when(rule.getTargetedPropertyName()).thenReturn(targetedPropertyName);
         return rule;
     }
     
-    static Assignment assignmentMock(String name, String value){
+    public static Assignment assignmentMock(String name, String value){
         return new Assignment(ruleMock(name), value, "");
     }
 

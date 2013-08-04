@@ -1,8 +1,5 @@
 package scriptproducer;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.xmlmatchers.XmlMatchers.isEquivalentTo;
 import static org.xmlmatchers.transform.XmlConverters.the;
 
@@ -10,14 +7,12 @@ import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.TransformerHandler;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
-import org.xmlmatchers.XmlMatchers;
 
+import ruleengine.Assignments;
 import ruleengine.PropertyContainer;
 import ruleengine.ScriptProducer;
-import ruleengine.SpecialValues;
+import ruleengine.TestUtils;
 
 public class XmlScriptProducerTest {
 
@@ -27,8 +22,7 @@ public class XmlScriptProducerTest {
         TransformerHandler handler = new HandlerFactory().newHandler(dom);
         XmlWriter xmlWriter = new XmlProducerUsingTransformerHandler(handler);
         ScriptProducer producer = new XmlScriptProducer(xmlWriter);
-        PropertyContainer propertyContainer = mock(PropertyContainer.class);
-        when(propertyContainer.get(Mockito.anyString())).thenReturn(SpecialValues.UNDEFINED);
+        PropertyContainer propertyContainer = new Assignments();
         producer.makeScriptFor(propertyContainer);
         
         handler.endDocument();
@@ -41,8 +35,8 @@ public class XmlScriptProducerTest {
         TransformerHandler handler = new HandlerFactory().newHandler(dom);
         XmlWriter xmlWriter = new XmlProducerUsingTransformerHandler(handler);
         XmlScriptProducer producer = new XmlScriptProducer(xmlWriter);
-        PropertyContainer propertyContainer = mock(PropertyContainer.class);
-        when(propertyContainer.get("testcase")).thenReturn("content");
+        Assignments propertyContainer = new Assignments();
+        propertyContainer.add(TestUtils.assignmentMock("testcase", "content"));
         
         producer.makeScriptFor(propertyContainer);
         
