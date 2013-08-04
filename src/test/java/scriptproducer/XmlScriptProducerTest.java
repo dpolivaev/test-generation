@@ -38,18 +38,21 @@ public class XmlScriptProducerTest {
         handler.endDocument();
     }
     
+    private void checkOutput(String xml) {
+        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the(xml)));
+    }
+
     @Test
     public void createsTestCaseElement() throws Exception{
         createScript();
-        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<TestCase/>")));
+        checkOutput("<TestCase/>");
     }
 
     @Test
     public void createsTestCaseElementWithContent() throws Exception{
         propertyContainer.add(assignmentMock("testcase", "content"));
         createScript();
-        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<TestCase content='content'/>")));
+        checkOutput("<TestCase content='content'/>");
     }
-
 }
 
