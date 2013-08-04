@@ -1,14 +1,24 @@
 package ruleengine;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static ruleengine.Combinations.combination;
+import static ruleengine.SpecialValues.UNDEFINED;
 import static ruleengine.StatefulRuleBuilder.Factory.iterate;
 import static ruleengine.StatefulRuleBuilder.Factory.when;
+import static ruleengine.TestUtils.set;
+
+import java.util.regex.Pattern;
 
 import static ruleengine.ConstantValue.Instruction.SKIP;
 
+import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import utils.Utils;
 
 /**
  * @author Dimitry Polivaev 18.02.2013
@@ -405,5 +415,31 @@ public class RuleEngineAcceptanceTest {
         generateCombinationsForStrategy();
 
         expect(combination("y<-x", "1", "->y", "1"));
+    }
+    
+    @Test
+    public void returnsUndefined_ifNoRuleIsSatisfied(){
+        final RuleEngine ruleEngine = new RuleEngine(new ScriptProducer() {
+            @Override
+            public void makeScriptFor(PropertyContainer propertyContainer) {
+                assertThat(propertyContainer.get("name"), equalTo((Object)UNDEFINED));
+            }
+        });
+        ruleEngine.run(strategy);
+    }
+    
+    @Test
+    public void returnsNamesOfAssignedAndDefaultProperties(){
+        strategy.addRule(iterate("x1").over("1"));
+        strategy.addRule(iterate("x2").over("2").asDefaultRule());
+        strategy.addRule(iterate("y").over("2").asDefaultRule());
+        final RuleEngine ruleEngine = new RuleEngine(new ScriptProducer() {
+            @Override
+            public void makeScriptFor(PropertyContainer propertyContainer) {
+                assertThat(propertyContainer.availableProperties("x"), equalTo(set("x1", "x2")));
+            }
+        });
+        ruleEngine.run(strategy);
+        
     }
 }

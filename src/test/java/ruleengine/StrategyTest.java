@@ -2,6 +2,7 @@ package ruleengine;
 
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.isA;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
 import static ruleengine.StatefulRuleBuilder.Factory.iterate;
@@ -72,9 +73,9 @@ public class StrategyTest {
         assertThat(strategy.triggeredRules(), hasItem(ruleQ));
     }
     
-    @Test(expected=UnknownPropertyException.class)
-    public void requestedUnknownDefaultProperty_throwsException() throws Exception {
-        strategy.getDefaultRulesForProperty("unknownProperty");
+    @Test
+    public void requestedUnknownDefaultProperty_returnsSpecialRule() throws Exception {
+        assertThat(strategy.getDefaultRulesForProperty("unknownProperty"), notNullValue());
     }
     
     @Test

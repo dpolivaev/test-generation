@@ -57,4 +57,8 @@ public class Assignments {
         return assignments.entrySet();
     }
 
+    public Set<String> assignedProperties() {
+        return assignments.keySet();
+    }
+
 }

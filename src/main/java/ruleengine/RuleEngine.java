@@ -120,18 +120,22 @@ public class RuleEngine implements EngineState {
     public Object get(String name) {
         if (!assignments.containsProperty(name)) {
             executeDefaultRulesForProperty(name);
+            
         }
         dependencies.add(name);
 		return assignments.get(name);
 	}
 
     private void executeDefaultRulesForProperty(String name) {
+        Rule defaultRule = strategy.getDefaultRulesForProperty(name);
+        if(defaultRule == null)
+            return;
         Set<String> oldDependencies = dependencies;
         dependencies = new HashSet<>();
         String oldAssignmentReason = assignmentReason;
         assignmentReason = processedProperty + "<-";
         processedProperty = name;
-        strategy.getDefaultRulesForProperty(name).propertyRequired(this);
+        defaultRule.propertyRequired(this);
         assignmentReason = oldAssignmentReason;
         dependencies = oldDependencies;
     }
@@ -139,5 +143,24 @@ public class RuleEngine implements EngineState {
     @Override
     public Strategy currentStrategy() {
         return strategy;
+    }
+
+    @Override
+    public boolean containsPropertyValue(String name) {
+        return assignments.containsProperty(name);
+    }
+
+    @Override
+    public Set<String> availableProperties(String startWith) {
+        HashSet<String> availableProperties = new HashSet<>(); 
+        addMatchingStrings(availableProperties, startWith, assignments.assignedProperties());
+        addMatchingStrings(availableProperties, startWith, strategy.availableDefaultProperties());
+        return availableProperties;
+    }
+
+    private void addMatchingStrings(HashSet<String> availableProperties, String startWith, Set<String> strings) {
+        for(String string : strings)
+            if(string.startsWith(startWith))
+                availableProperties.add(string);
     }
 }
