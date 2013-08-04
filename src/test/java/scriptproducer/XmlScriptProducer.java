@@ -1,12 +1,15 @@
 package scriptproducer;
 
+import java.util.Set;
+
 import ruleengine.PropertyContainer;
 import ruleengine.ScriptProducer;
 import ruleengine.SpecialValues;
 
 public class XmlScriptProducer implements ScriptProducer {
 
-    private static final String TEST_CASE = "TestCase";
+    private static final String TESTCASE_PROPERTY = "testcase";
+    private static final String TESTCASE_ELEMENT = "TestCase";
     private final XmlWriter xmlWriter;
 
     public XmlScriptProducer(XmlWriter xmlWriter) {
@@ -16,19 +19,31 @@ public class XmlScriptProducer implements ScriptProducer {
     @Override
     public void makeScriptFor(PropertyContainer propertyContainer) {
         startTestCase();
-        Object testcaseContent = propertyContainer.get("testcase");
-        if(!testcaseContent.equals(SpecialValues.UNDEFINED))
-            xmlWriter.setAttribute("content", testcaseContent.toString());
+        String property = TESTCASE_PROPERTY;
+        addElementContent(propertyContainer, property);
         endTestCase();
 
     }
 
+    public void addElementContent(PropertyContainer propertyContainer, String property) {
+        Object testcaseContent = propertyContainer.get(property);
+        if(!testcaseContent.equals(SpecialValues.UNDEFINED))
+            xmlWriter.setAttribute("content", testcaseContent.toString());
+        String prefix = property + '.';
+        Set<String> availableProperties = propertyContainer.availableProperties(prefix);
+        for(String attributeProperty : availableProperties){
+            Object attributeValue = propertyContainer.get(attributeProperty);
+            String attributeName = attributeProperty.substring(prefix.length());
+            xmlWriter.setAttribute(attributeName, attributeValue.toString());
+        }
+    }
+
     private void endTestCase() {
-        xmlWriter.endElement(TEST_CASE);
+        xmlWriter.endElement(TESTCASE_ELEMENT);
     }
 
     private XmlWriter startTestCase() {
-        return xmlWriter.beginElement(TEST_CASE);
+        return xmlWriter.beginElement(TESTCASE_ELEMENT);
     }
 
 }

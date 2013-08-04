@@ -22,7 +22,7 @@ public class TestUtils {
         return rule;
     }
     
-    public static Assignment assignmentMock(String name, String value){
+    public static Assignment assignmentMock(String name, Object value){
         return new Assignment(ruleMock(name), value, "");
     }
 
