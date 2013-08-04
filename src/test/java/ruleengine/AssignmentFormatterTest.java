@@ -2,14 +2,13 @@ package ruleengine;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
 import static ruleengine.AssignmentFormatter.formatter;
+import static ruleengine.TestUtils.ruleMock;
 
 import java.util.AbstractMap;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 public class AssignmentFormatterTest {
 
@@ -34,10 +33,8 @@ public class AssignmentFormatterTest {
 
     @Test
     public void formatsTwoEntries() {
-        Rule rule1 = mock(Rule.class);
-        Mockito.when(rule1.getTargetedPropertyName()).thenReturn("name");
-        Rule rule2 = mock(Rule.class);
-        Mockito.when(rule2.getTargetedPropertyName()).thenReturn("name2");
+        Rule rule1 = ruleMock("name");
+        Rule rule2 = ruleMock("name2");
         Assignments assignments = new Assignments();
         assignments.add(new Assignment(rule1, "value", ""));
         assignments.add(new Assignment(rule2, "value2", ""));
