@@ -9,6 +9,7 @@ import java.util.AbstractMap;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 public class AssignmentFormatterTest {
 
@@ -49,4 +50,19 @@ public class AssignmentFormatterTest {
         assertThat(assignedPropertiesStringBuilder.toString(), equalTo("name=value"));
     }
 
+
+    @Test
+    public void formatsOnlyIteratingRules() {
+        Rule rule1 = ruleMock("name");
+        Mockito.when(rule1.forcesIteration()).thenReturn(true);
+        Rule rule2 = ruleMock("name2");
+        Mockito.when(rule2.forcesIteration()).thenReturn(false);
+        
+        Assignments assignments = new Assignments();
+        assignments.add(new Assignment(rule1, "value", ""));
+        assignments.add(new Assignment(rule2, "value2", ""));
+        
+        formatter.shouldFormatIteratingRulesOnly(true);
+        assertThat(formatter.format(assignments), equalTo("name=value"));
+    }
 }
