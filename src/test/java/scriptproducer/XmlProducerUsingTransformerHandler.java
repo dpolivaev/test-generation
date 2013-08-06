@@ -2,6 +2,7 @@ package scriptproducer;
 
 import javax.xml.transform.sax.TransformerHandler;
 
+import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 import utils.Utils;
@@ -19,6 +20,7 @@ class XmlProducerUsingTransformerHandler implements XmlWriter {
 
     private final TransformerHandler handler;
     private AttributesImpl attrs;
+    private String element;
 
     public XmlProducerUsingTransformerHandler(TransformerHandler handler) {
         super();
@@ -54,9 +56,11 @@ class XmlProducerUsingTransformerHandler implements XmlWriter {
         }
     }
 
-    public XmlWriter beginElement(String element) {
-        this.attrs = new AttributesImpl();
+    public XmlWriter beginElement(String element){
         try {
+            outputElementOpeningTag();
+            this.element = element;
+            this.attrs = new AttributesImpl();
             return this;
         }
         catch (Exception e) {
@@ -66,12 +70,20 @@ class XmlProducerUsingTransformerHandler implements XmlWriter {
 
     public XmlWriter endElement(String element) {
         try {
-            handler.startElement(uri, element, element, attrs);
+            outputElementOpeningTag();
             handler.endElement(uri, element, element);
+            element = null;
             return this;
         }
         catch (Exception e) {
             throw Utils.runtimeException(e);
+        }
+    }
+
+    private void outputElementOpeningTag() throws SAXException {
+        if(element != null){
+            handler.startElement(uri, element, element, attrs);
+            element = null;
         }
     }
 

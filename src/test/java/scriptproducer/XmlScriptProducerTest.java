@@ -62,7 +62,7 @@ public class XmlScriptProducerTest {
 
      @Test
     public void createsTestCaseElementWithArbitraryAttribute() throws Exception{
-         givenProperty("testcase.attribute", "attribute");
+        givenProperty("testcase.attribute", "attribute");
         createScript();
         checkOutput("<TestCase attribute='attribute'/>");
     }
@@ -72,6 +72,58 @@ public class XmlScriptProducerTest {
         givenProperty("testcase.attribute", SpecialValues.UNDEFINED);
         createScript();
         checkOutput("<TestCase/>");
+    }
+    
+    @Test
+    public void createsTestCaseElementWithFocusPartAndContent() throws Exception{
+        givenProperty("testcase", "testcase");
+        givenProperty("foc", "focus");
+        createScript();
+        checkOutput("<TestCase content='testcase'><Focus content='focus'/></TestCase>");
+    }
+
+    @Test
+    public void createsTestCaseElementWithTwoFocusPartsAndContent() throws Exception{
+        givenProperty("testcase", "testcase");
+        givenProperty("foc", "focus");
+        givenProperty("foc1", "focus1");
+        createScript();
+        checkOutput("<TestCase content='testcase'><Focus content='focus'/><Focus content='focus1'/></TestCase>");
+    }
+
+    @Test
+    public void createsTestCaseElementWithThreeFocusPartsAndContent() throws Exception{
+        givenProperty("testcase", "testcase");
+        givenProperty("foc", "focus");
+        givenProperty("foc1", "focus1");
+        givenProperty("foc3", "focus3");
+        createScript();
+        checkOutput("<TestCase content='testcase'><Focus content='focus'/><Focus content='focus1'/><Focus content='focus3'/></TestCase>");
+    }
+
+
+    @Test
+    public void createsTestCaseElementWithAllPartsAndContent() throws Exception{
+        givenProperty("testcase", "testcase");
+        givenProperty("pre", "precondition");
+        givenProperty("state", "State");
+        givenProperty("preInState", "precondition in state");
+        givenProperty("foc", "focus");
+        givenProperty("veriInState", "verification in state");
+        givenProperty("stateAfter", "state after");
+        givenProperty("veri", "verification");
+        givenProperty("post", "postprocessing");
+        createScript();
+        checkOutput("<TestCase content='testcase'>" +
+                "<Precondition content='precondition'/>" +
+                "<State content='State'/>" +
+                "<PreconditionInState content='precondition in state'/>" +
+                "<Focus content='focus'/>" +
+                "<VerificationInState content='verification in state'/>" +
+                "<StateAfter content='state after'/>" +
+                "<Verification content='verification'/>" +
+                "<Postprocessing content='postprocessing'/>" +
+        	"</TestCase>");
     }
 }
 

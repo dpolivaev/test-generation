@@ -10,6 +10,17 @@ public class XmlScriptProducer implements ScriptProducer {
 
     private static final String TESTCASE_PROPERTY = "testcase";
     private static final String TESTCASE_ELEMENT = "TestCase";
+    
+    private static final String[] optionalElements = {
+        "pre", "Precondition",
+        "state", "State",
+        "preInState", "PreconditionInState",
+        "foc", "Focus",
+        "veriInState", "VerificationInState",
+        "stateAfter", "StateAfter",
+        "veri", "Verification",
+        "post", "Postprocessing",
+    };
     private final XmlWriter xmlWriter;
 
     public XmlScriptProducer(XmlWriter xmlWriter) {
@@ -18,14 +29,29 @@ public class XmlScriptProducer implements ScriptProducer {
 
     @Override
     public void makeScriptFor(PropertyContainer propertyContainer) {
-        startTestCase();
-        String property = TESTCASE_PROPERTY;
-        addElementContent(propertyContainer, property);
-        endTestCase();
+        xmlWriter.beginElement(TESTCASE_ELEMENT);
+        addAttributes(propertyContainer, TESTCASE_PROPERTY);
+        for(int i = 0; i < optionalElements.length; i+=2)
+            addOptionalElement(propertyContainer, optionalElements[i], optionalElements[i+1]);
+        xmlWriter.endElement(TESTCASE_ELEMENT);
 
     }
 
-    public void addElementContent(PropertyContainer propertyContainer, String property) {
+    private void addOptionalElement(PropertyContainer propertyContainer, String property, String element) {
+        if(propertyContainer.containsPropertyValue(property))
+            addElement(propertyContainer, property, element);
+        for(int i = 1; i <= 9; i++)
+            if(propertyContainer.containsPropertyValue(property + i))
+                addElement(propertyContainer, property + i, element);
+    }
+
+    private void addElement(PropertyContainer propertyContainer, String property, String element) {
+        xmlWriter.beginElement(element);
+        addAttributes(propertyContainer, property);
+        xmlWriter.endElement(element);
+    }
+
+    private void addAttributes(PropertyContainer propertyContainer, String property) {
         Object testcaseContent = propertyContainer.get(property);
         if(!testcaseContent.equals(SpecialValues.UNDEFINED))
             xmlWriter.setAttribute("content", testcaseContent.toString());
@@ -39,13 +65,4 @@ public class XmlScriptProducer implements ScriptProducer {
             }
         }
     }
-
-    private void endTestCase() {
-        xmlWriter.endElement(TESTCASE_ELEMENT);
-    }
-
-    private XmlWriter startTestCase() {
-        return xmlWriter.beginElement(TESTCASE_ELEMENT);
-    }
-
 }
