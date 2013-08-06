@@ -166,4 +166,9 @@ abstract class StatefulRule implements Rule {
         this.blocksRequiredProperties = blocksRequiredProperties;
     }
 
+    
+    @Override
+    public boolean forcesIteration() {
+        return valueProviders.containsMultipleValues();
+    }
 }

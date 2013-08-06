@@ -7,4 +7,6 @@ interface ValueProviders {
 	void next();
 
     ValueWithRulesProvider currentProvider();
+
+    boolean containsMultipleValues();
 }

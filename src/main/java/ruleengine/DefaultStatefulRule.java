@@ -17,4 +17,9 @@ public class DefaultStatefulRule extends StatefulRule {
         return true;
     }
 
+    @Override
+    public boolean forcesIteration() {
+        return false;
+    }
+
 }

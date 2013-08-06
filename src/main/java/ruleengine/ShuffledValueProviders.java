@@ -34,4 +34,9 @@ public class ShuffledValueProviders implements ValueProviders {
         if (orderedValueProviders.valueIndex() == 0)
             permutation.shuffle();
     }
+
+    @Override
+    public boolean containsMultipleValues() {
+        return orderedValueProviders.containsMultipleValues();
+    }
 }

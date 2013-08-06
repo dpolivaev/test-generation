@@ -111,6 +111,7 @@ public class AlternatingRuleTest {
         verify(first).setBlocksRequiredProperties();
         verify(second, never()).setBlocksRequiredProperties();
     }
+
     @Test
     public void targetedPropertyNameIsTakenFromTheFirstRules() {
         AlternatingRule alternatingRule = new AlternatingRule(iterate("a").asRule(), iterate("a").asRule());
@@ -182,4 +183,18 @@ public class AlternatingRuleTest {
 
     }
 
+
+    @Test
+    public void givenActiveRule_propagatesForcesIterationToTheActiveRule() {
+        Rule first = ruleMock(true);
+        Rule second = ruleMock(false);
+        EngineState state = mock(EngineState.class);
+
+        AlternatingRule alternatingRule = new AlternatingRule(first, second);
+        alternatingRule.propertyCombinationStarted(state);
+        alternatingRule.forcesIteration();
+
+        verify(first).forcesIteration();
+        verify(second, never()).forcesIteration();
+    }
 }

@@ -122,4 +122,9 @@ class AlternatingRule implements Rule {
         return firstRule().isDefaultRule();
     }
 
+    @Override
+    public boolean forcesIteration() {
+        return activeRule.forcesIteration();
+    }
+
 }
