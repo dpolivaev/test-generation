@@ -35,4 +35,6 @@ public interface Rule {
     void propertyRequired(EngineState engineState);
 
     boolean isDefaultRule();
+
+    boolean forcesIteration();
 }

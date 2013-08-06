@@ -1,5 +1,6 @@
 package ruleengine;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
@@ -12,6 +13,7 @@ import static ruleengine.TestUtils.set;
 import java.util.Collections;
 import java.util.Set;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -97,6 +99,30 @@ public class RuleTest {
         verify(engineState).setPropertyValue(statefulRule, "2", true);
 	}
 
+    @Test
+    public void topRuleWithTwoValues_forcesIteration() {
+        Rule rule = iterate("name").over("1", "2").asRule();
+        assertThat(rule.forcesIteration(), equalTo(true));
+    }
+    
+    @Test
+    public void topRuleWithOneValues_forcesNoIteration() {
+        Rule rule = iterate("name").over("1").asRule();
+        assertThat(rule.forcesIteration(), equalTo(false));
+    }
+    
+    @Test
+    public void triggeredRuleWithTwoValues_forcesIteration() {
+        Rule rule = iterate("name").over("1", "2").when("otherProptery").asRule();
+        assertThat(rule.forcesIteration(), equalTo(true));
+    }
+    
+    @Test
+    public void defaultRuleWithTwoValues_forcesIteration() {
+        Rule rule = iterate("name").over("1", "2").asDefaultRule();
+        assertThat(rule.forcesIteration(), equalTo(false));
+    }
+    
 	@Test
 	public void ruleWithOneValue_assignsItsValueOnSecondTime() {
         StatefulRule statefulRule = iterate("name").over("value").asRule();

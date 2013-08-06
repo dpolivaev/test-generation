@@ -36,4 +36,11 @@ class OrderedValueProviders implements ValueProviders {
     public int size() {
         return valueWithRulesProviders.length;
     }
+
+    @Override
+    public boolean containsMultipleValues() {
+        return size() > 1;
+    }
+    
+    
 }
