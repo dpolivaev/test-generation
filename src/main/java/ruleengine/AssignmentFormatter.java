@@ -25,6 +25,7 @@ class AssignmentFormatter {
 
     private String nameValueSeparator;
     private boolean appendReasons;
+    private boolean shouldFormatIteratingRulesOnly;
 
     AssignmentFormatter() {
         appendReasons = true;
@@ -36,8 +37,10 @@ class AssignmentFormatter {
         StringBuilder assignedPropertiesStringBuilder = new StringBuilder();
         Map<String, Assignment> assignmentsAsMap = assignments.getAssignmentsAsMap();
         for (Map.Entry<String, Assignment> assignment : assignmentsAsMap.entrySet()) {
-            appendSeparator(assignedPropertiesStringBuilder);
-            append(assignedPropertiesStringBuilder, assignment);
+            if(! shouldFormatIteratingRulesOnly || assignment.getValue().rule.forcesIteration()){
+                appendSeparator(assignedPropertiesStringBuilder);
+                append(assignedPropertiesStringBuilder, assignment);
+            }
         }
         return assignedPropertiesStringBuilder.toString();
     }
@@ -66,6 +69,10 @@ class AssignmentFormatter {
 
     public void appendReasons(boolean appendReasons) {
         this.appendReasons = appendReasons;
+    }
+
+    public void shouldFormatIteratingRulesOnly(boolean shouldFormatIteratingRulesOnly) {
+        this.shouldFormatIteratingRulesOnly = shouldFormatIteratingRulesOnly;
     }
 
 }
