@@ -1,5 +1,7 @@
 package scriptproducer;
 
+import org.xml.sax.SAXException;
+
 public interface XmlWriter {
 
     XmlWriter beginElement(String name);
