@@ -30,7 +30,7 @@ public class XmlScriptProducerTest {
         dom = new DOMResult();
         handler = new HandlerFactory().newHandler(dom);
         XmlWriter xmlWriter = new XmlProducerUsingTransformerHandler(handler);
-        producer = new XmlScriptProducer(xmlWriter);
+        producer = new XmlTestCaseProducer(xmlWriter);
         propertyContainer = new Assignments();
     }
 
