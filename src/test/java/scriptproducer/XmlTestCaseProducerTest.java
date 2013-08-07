@@ -18,7 +18,7 @@ import ruleengine.Assignments;
 import ruleengine.ScriptProducer;
 import ruleengine.SpecialValues;
 
-public class XmlScriptProducerTest {
+public class XmlTestCaseProducerTest {
 
     private DOMResult dom;
     private TransformerHandler handler;
