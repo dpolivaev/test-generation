@@ -56,24 +56,22 @@ class XmlProducerUsingTransformerHandler implements XmlWriter {
         }
     }
 
-    public XmlWriter beginElement(String element){
+    public void beginElement(String element){
         try {
             outputElementOpeningTag();
             this.element = element;
             this.attrs = new AttributesImpl();
-            return this;
         }
         catch (Exception e) {
             throw Utils.runtimeException(e);
         }
     }
 
-    public XmlWriter endElement(String element) {
+    public void endElement(String element) {
         try {
             outputElementOpeningTag();
             handler.endElement(uri, element, element);
             element = null;
-            return this;
         }
         catch (Exception e) {
             throw Utils.runtimeException(e);
@@ -87,9 +85,8 @@ class XmlProducerUsingTransformerHandler implements XmlWriter {
         }
     }
 
-    public XmlWriter setAttribute(String name, String value) {
+    public void setAttribute(String name, String value) {
         attrs.addAttribute(uri, name, name, "CDATA", value);
-        return this;
     }    
     
 }

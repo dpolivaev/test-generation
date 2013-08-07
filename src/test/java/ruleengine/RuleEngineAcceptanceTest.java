@@ -3,6 +3,8 @@ package ruleengine;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
 import static ruleengine.Combinations.combination;
 import static ruleengine.SpecialValues.UNDEFINED;
 import static ruleengine.StatefulRuleBuilder.Factory.iterate;
@@ -13,6 +15,8 @@ import static ruleengine.ConstantValue.Instruction.SKIP;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 /**
  * @author Dimitry Polivaev 18.02.2013
@@ -413,12 +417,16 @@ public class RuleEngineAcceptanceTest {
     
     @Test
     public void returnsUndefined_ifNoRuleIsSatisfied(){
-        final RuleEngine ruleEngine = new RuleEngine(new ScriptProducer() {
+        ScriptProducer scriptProducer = mock(ScriptProducer.class);
+        final RuleEngine ruleEngine = new RuleEngine(scriptProducer);
+        doAnswer(new Answer<Object>() {
             @Override
-            public void makeScriptFor(PropertyContainer propertyContainer) {
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                PropertyContainer propertyContainer = (PropertyContainer) invocation.getArguments()[0];
                 assertThat(propertyContainer.get("name"), equalTo((Object)UNDEFINED));
+                return null;
             }
-        });
+        }).when(scriptProducer).makeScriptFor(ruleEngine);
         ruleEngine.run(strategy);
     }
     
@@ -427,13 +435,16 @@ public class RuleEngineAcceptanceTest {
         strategy.addRule(iterate("x1").over("1"));
         strategy.addRule(iterate("x2").over("2").asDefaultRule());
         strategy.addRule(iterate("y").over("2").asDefaultRule());
-        final RuleEngine ruleEngine = new RuleEngine(new ScriptProducer() {
+        ScriptProducer scriptProducer = mock(ScriptProducer.class);
+        final RuleEngine ruleEngine = new RuleEngine(scriptProducer);
+        doAnswer(new Answer<Object>() {
             @Override
-            public void makeScriptFor(PropertyContainer propertyContainer) {
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                PropertyContainer propertyContainer = (PropertyContainer) invocation.getArguments()[0];
                 assertThat(propertyContainer.availableProperties("x"), equalTo(set("x1", "x2")));
+                return null;
             }
-        });
+        }).when(scriptProducer).makeScriptFor(ruleEngine);
         ruleEngine.run(strategy);
-        
     }
 }

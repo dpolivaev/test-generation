@@ -26,5 +26,4 @@ public class LoggingScriptProducerMock implements ScriptProducer {
     public void appendReasons(boolean appendReasons) {
         assignmentFormatter.appendReasons(appendReasons);
     }
-
 }

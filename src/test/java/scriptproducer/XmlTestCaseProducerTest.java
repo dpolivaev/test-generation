@@ -22,7 +22,7 @@ public class XmlTestCaseProducerTest {
 
     private DOMResult dom;
     private TransformerHandler handler;
-    private ScriptProducer producer;
+    private XmlTestCaseProducer producer;
     private Assignments propertyContainer;
 
     @Before
@@ -39,8 +39,9 @@ public class XmlTestCaseProducerTest {
     }
 
     private void createScript() throws SAXException {
+        producer.beginScript();
         producer.makeScriptFor(propertyContainer);
-        handler.endDocument();
+        producer.finalizeScript();
     }
 
     private void checkOutput(String xml) {

@@ -65,4 +65,12 @@ public class XmlTestCaseProducer implements ScriptProducer {
             }
         }
     }
+
+    public void finalizeScript() {
+        xmlWriter.endDocument();
+    }
+
+    public void beginScript() {
+        xmlWriter.startDocument();
+    }
 }
