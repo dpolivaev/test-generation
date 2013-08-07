@@ -1,11 +1,14 @@
 package scriptproducer;
 
 public interface XmlWriter {
+    void startDocument();
 
-    XmlWriter beginElement(String name);
+    void beginElement(String name);
 
-    XmlWriter endElement(String name);
+    void endElement(String name);
 
-    XmlWriter setAttribute(String name, String value);
+    void setAttribute(String name, String value);
+
+    void endDocument();
 
 }
