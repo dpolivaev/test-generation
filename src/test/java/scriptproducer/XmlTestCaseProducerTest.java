@@ -21,14 +21,13 @@ import ruleengine.SpecialValues;
 public class XmlTestCaseProducerTest {
 
     private DOMResult dom;
-    private TransformerHandler handler;
     private XmlTestCaseProducer producer;
     private Assignments propertyContainer;
 
     @Before
     public void setup() throws TransformerFactoryConfigurationError, TransformerConfigurationException, SAXException {
         dom = new DOMResult();
-        handler = new HandlerFactory().newHandler(dom);
+        TransformerHandler handler = new HandlerFactory().newHandler(dom);
         XmlWriter xmlWriter = new XmlProducerUsingTransformerHandler(handler);
         producer = new XmlTestCaseProducer(xmlWriter);
         propertyContainer = new Assignments();
@@ -56,9 +55,9 @@ public class XmlTestCaseProducerTest {
 
     @Test
     public void createsTestCaseElementWithContent() throws Exception{
-        givenProperty("testcase", "content");
+        givenProperty("testcase", "self");
         createScript();
-        checkOutput("<TestCase content='content'/>");
+        checkOutput("<TestCase self='self'/>");
     }
 
      @Test
@@ -80,7 +79,7 @@ public class XmlTestCaseProducerTest {
         givenProperty("testcase", "testcase");
         givenProperty("foc", "focus");
         createScript();
-        checkOutput("<TestCase content='testcase'><Focus content='focus'/></TestCase>");
+        checkOutput("<TestCase self='testcase'><Focus self='focus'/></TestCase>");
     }
 
     @Test
@@ -89,7 +88,7 @@ public class XmlTestCaseProducerTest {
         givenProperty("foc", "focus");
         givenProperty("foc1", "focus1");
         createScript();
-        checkOutput("<TestCase content='testcase'><Focus content='focus'/><Focus content='focus1'/></TestCase>");
+        checkOutput("<TestCase self='testcase'><Focus self='focus'/><Focus self='focus1'/></TestCase>");
     }
 
     @Test
@@ -99,7 +98,7 @@ public class XmlTestCaseProducerTest {
         givenProperty("foc1", "focus1");
         givenProperty("foc3", "focus3");
         createScript();
-        checkOutput("<TestCase content='testcase'><Focus content='focus'/><Focus content='focus1'/><Focus content='focus3'/></TestCase>");
+        checkOutput("<TestCase self='testcase'><Focus self='focus'/><Focus self='focus1'/><Focus self='focus3'/></TestCase>");
     }
 
 
@@ -115,15 +114,15 @@ public class XmlTestCaseProducerTest {
         givenProperty("veri", "verification");
         givenProperty("post", "postprocessing");
         createScript();
-        checkOutput("<TestCase content='testcase'>" +
-                "<Precondition content='precondition'/>" +
-                "<State content='State'/>" +
-                "<PreconditionInState content='precondition in state'/>" +
-                "<Focus content='focus'/>" +
-                "<VerificationInState content='verification in state'/>" +
-                "<StateAfter content='state after'/>" +
-                "<Verification content='verification'/>" +
-                "<Postprocessing content='postprocessing'/>" +
+        checkOutput("<TestCase self='testcase'>" +
+                "<Precondition self='precondition'/>" +
+                "<State self='State'/>" +
+                "<PreconditionInState self='precondition in state'/>" +
+                "<Focus self='focus'/>" +
+                "<VerificationInState self='verification in state'/>" +
+                "<StateAfter self='state after'/>" +
+                "<Verification self='verification'/>" +
+                "<Postprocessing self='postprocessing'/>" +
         	"</TestCase>");
     }
 }

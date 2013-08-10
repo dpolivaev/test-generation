@@ -52,9 +52,9 @@ public class XmlTestCaseProducer implements ScriptProducer {
     }
 
     private void addAttributes(PropertyContainer propertyContainer, String property) {
-        Object testcaseContent = propertyContainer.get(property);
-        if(!testcaseContent.equals(SpecialValues.UNDEFINED))
-            xmlWriter.setAttribute("content", testcaseContent.toString());
+        Object value = propertyContainer.get(property);
+        if(!value.equals(SpecialValues.UNDEFINED))
+            xmlWriter.setAttribute("self", value.toString());
         String prefix = property + '.';
         Set<String> availableProperties = propertyContainer.availableProperties(prefix);
         for(String attributeProperty : availableProperties){

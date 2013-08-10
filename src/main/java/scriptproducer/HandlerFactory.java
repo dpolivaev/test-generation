@@ -10,18 +10,24 @@ import javax.xml.transform.sax.TransformerHandler;
 
 import org.xml.sax.SAXException;
 
+import utils.Utils;
+
 public class HandlerFactory {
 
-    public TransformerHandler newHandler(Result result) throws TransformerFactoryConfigurationError,
-        TransformerConfigurationException, SAXException {
-        TransformerHandler handler;
-        SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
-        handler = tf.newTransformerHandler();
-        Transformer transformer = handler.getTransformer();
-        transformer.setOutputProperty(OutputKeys.INDENT,"yes");
-        handler.setResult(result);
-        handler.startDocument();
-        return handler;
+    public TransformerHandler newHandler(Result result){
+        try {
+            TransformerHandler handler;
+            SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+            handler = tf.newTransformerHandler();
+            Transformer transformer = handler.getTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT,"yes");
+            handler.setResult(result);
+            handler.startDocument();
+            return handler;
+        }
+        catch (Exception e) {
+            throw Utils.runtimeException(e);
+        }
     }
 
 }
