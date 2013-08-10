@@ -112,14 +112,15 @@ public class RuleEngine implements EngineState {
 		return assignments.containsPropertyValues(names);
 	}
 
-	@Override
-    public Object get(String name) {
+	@SuppressWarnings("unchecked")
+    @Override
+    public <T> T get(String name) {
         if (!assignments.containsProperty(name)) {
             executeDefaultRulesForProperty(name);
             
         }
         dependencies.add(name);
-		return assignments.get(name);
+		return (T) assignments.get(name);
 	}
 
     private void executeDefaultRulesForProperty(String name) {
