@@ -51,7 +51,7 @@ public class XmlTestCaseProducer implements ScriptProducer {
         xmlWriter.endElement(element);
     }
 
-    private void addAttributes(PropertyContainer propertyContainer, String property) {
+    public void addAttributes(PropertyContainer propertyContainer, String property) {
         Object value = propertyContainer.get(property);
         if(!value.equals(SpecialValues.UNDEFINED))
             xmlWriter.setAttribute("self", value.toString());
@@ -64,13 +64,5 @@ public class XmlTestCaseProducer implements ScriptProducer {
                 xmlWriter.setAttribute(attributeName, attributeValue.toString());
             }
         }
-    }
-
-    public void finalizeScript() {
-        xmlWriter.endDocument();
-    }
-
-    public void beginScript() {
-        xmlWriter.startDocument();
     }
 }

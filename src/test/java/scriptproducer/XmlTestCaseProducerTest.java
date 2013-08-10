@@ -15,7 +15,6 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 
 import ruleengine.Assignments;
-import ruleengine.ScriptProducer;
 import ruleengine.SpecialValues;
 
 public class XmlTestCaseProducerTest {
@@ -23,12 +22,13 @@ public class XmlTestCaseProducerTest {
     private DOMResult dom;
     private XmlTestCaseProducer producer;
     private Assignments propertyContainer;
+    private XmlWriter xmlWriter;
 
     @Before
     public void setup() throws TransformerFactoryConfigurationError, TransformerConfigurationException, SAXException {
         dom = new DOMResult();
         TransformerHandler handler = new HandlerFactory().newHandler(dom);
-        XmlWriter xmlWriter = new XmlProducerUsingTransformerHandler(handler);
+        xmlWriter = new XmlProducerUsingTransformerHandler(handler);
         producer = new XmlTestCaseProducer(xmlWriter);
         propertyContainer = new Assignments();
     }
@@ -38,9 +38,9 @@ public class XmlTestCaseProducerTest {
     }
 
     private void createScript() throws SAXException {
-        producer.beginScript();
+        xmlWriter.startDocument();
         producer.makeScriptFor(propertyContainer);
-        producer.finalizeScript();
+        xmlWriter.endDocument();
     }
 
     private void checkOutput(String xml) {

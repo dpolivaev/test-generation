@@ -10,7 +10,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import ruleengine.Assignments;
-import ruleengine.ScriptProducer;
 
 public class XmlScriptProducerTest {
     private Assignments propertyContainer = new Assignments();
@@ -19,12 +18,36 @@ public class XmlScriptProducerTest {
     }
 
     @Test
-    public void test() {
+    public void scriptWithOneTestcase() {
+        DOMResult dom = new DOMResult();
         givenProperty("script", "scriptName");
-        XmlScriptProducer producer = new XmlScriptProducer();
+        givenProperty("testcase", "testcase 1");
+        XmlSingleScriptProducer producer = new XmlSingleScriptProducer(propertyContainer, dom);
         producer.makeScriptFor(propertyContainer);
-        DOMResult dom = producer.getResult("scriptName");
-        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script/>")));
+        producer.endScript();
+        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script self='scriptName'>" +
+                "<TestCase self='testcase 1'/>" +
+        "</Script>")));
+    }
+
+    @Test
+    public void scriptWithTwoTestcases() {
+        DOMResult dom = new DOMResult();
+        givenProperty("script", "scriptName");
+        givenProperty("testcase", "testcase 1");
+        XmlSingleScriptProducer producer = new XmlSingleScriptProducer(propertyContainer, dom);
+        producer.makeScriptFor(propertyContainer);
+        
+        propertyContainer.startNewCombination();
+        givenProperty("script", "scriptName");
+        givenProperty("testcase", "testcase 2");
+        producer.makeScriptFor(propertyContainer);
+        producer.endScript();
+        
+        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script self='scriptName'>" +
+            "<TestCase self='testcase 1'/>" +
+            "<TestCase self='testcase 2'/>" +
+        "</Script>")));
     }
 
 }
