@@ -32,10 +32,11 @@ public class Assignments implements PropertyContainer {
         return assignments.keySet().contains(name);
     }
 
-    public Object get(String name) {
+    @SuppressWarnings("unchecked")
+    public <T> T get(String name) {
         if(! assignments.containsKey(name))
-            return SpecialValues.UNDEFINED;
-        return assignments.get(name).value;
+            return (T)SpecialValues.UNDEFINED;
+        return (T)assignments.get(name).value;
 	}
 
     public Map<String, Assignment> getAssignmentsAsMap() {
