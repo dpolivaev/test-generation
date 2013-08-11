@@ -12,8 +12,12 @@ import utils.Utils;
 public class HandlerFactory {
     private Source xsltSource;
     
+    public HandlerFactory(Source xsltSource) {
+        this.xsltSource = xsltSource;
+    }
+
     public HandlerFactory() {
-        this.xsltSource = null;
+        this(null);
     }
     
     public TransformerHandler newHandler(Result result){

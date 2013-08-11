@@ -1,6 +1,7 @@
 package scriptproducer;
 
 import javax.xml.transform.Result;
+import javax.xml.transform.Source;
 import javax.xml.transform.sax.TransformerHandler;
 
 import ruleengine.PropertyContainer;
@@ -17,14 +18,18 @@ public class XmlSingleScriptProducer implements ScriptProducer {
         testCaseProducer.makeScriptFor(propertyContainer);
     }
 
-    public XmlSingleScriptProducer(PropertyContainer propertyContainer, Result result) {
+    public XmlSingleScriptProducer(PropertyContainer propertyContainer, Source xsltSource, Result result) {
         this.result = result;
-        TransformerHandler handler = new HandlerFactory().newHandler(result);
+        TransformerHandler handler = new HandlerFactory(xsltSource).newHandler(result);
         xmlWriter = new XmlProducerUsingTransformerHandler(handler);
         xmlWriter.startDocument();
         testCaseProducer = new XmlTestCaseProducer(xmlWriter);
         xmlWriter.beginElement("Script");
         testCaseProducer.addAttributes(propertyContainer, "script");
+    }
+    
+    public XmlSingleScriptProducer(PropertyContainer propertyContainer, Result result) {
+        this(propertyContainer, null, result);
     }
 
     public void endScript() {
