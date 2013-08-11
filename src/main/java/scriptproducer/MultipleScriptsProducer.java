@@ -10,14 +10,14 @@ import ruleengine.PropertyContainer;
 import ruleengine.ScriptProducer;
 import ruleengine.SpecialValues;
 
-public class XmlScriptProducer implements ScriptProducer{
+public class MultipleScriptsProducer implements ScriptProducer{
     private Source xsltSource;    
-    private final Map<String, XmlSingleScriptProducer> singleScriptProducers;
+    private final Map<String, SingleScriptProducer> singleScriptProducers;
     private final ResultFactory resultFactory;
 
-    public XmlScriptProducer(ResultFactory resultFactory) {
+    public MultipleScriptsProducer(ResultFactory resultFactory) {
         this.resultFactory = resultFactory;
-        singleScriptProducers = new HashMap<String, XmlSingleScriptProducer>();
+        singleScriptProducers = new HashMap<String, SingleScriptProducer>();
     }
 
      @Override
@@ -32,12 +32,12 @@ public class XmlScriptProducer implements ScriptProducer{
         getSingleScriptProducer(scriptName).makeScriptFor(propertyContainer);
     }
 
-    private XmlSingleScriptProducer newSingleScriptProducer(PropertyContainer propertyContainer) {
-        return new XmlSingleScriptProducer(propertyContainer, xsltSource, resultFactory.newResult(propertyContainer.<String>get("script")));
+    private SingleScriptProducer newSingleScriptProducer(PropertyContainer propertyContainer) {
+        return new SingleScriptProducer(propertyContainer, xsltSource, resultFactory.newResult(propertyContainer.<String>get("script")));
     }
 
     public void endScripts() {
-        for(XmlSingleScriptProducer singleScriptProducer:singleScriptProducers.values())
+        for(SingleScriptProducer singleScriptProducer:singleScriptProducers.values())
             singleScriptProducer.endScript();
         
     }
@@ -46,11 +46,11 @@ public class XmlScriptProducer implements ScriptProducer{
         return getSingleScriptProducer(scriptName).result();
     }
 
-    private XmlSingleScriptProducer getSingleScriptProducer(String scriptName) {
+    private SingleScriptProducer getSingleScriptProducer(String scriptName) {
         return singleScriptProducers.get(scriptName);
     }
 
-    private void setSingleScriptProducer(String scriptName, XmlSingleScriptProducer singleScriptProducer) {
+    private void setSingleScriptProducer(String scriptName, SingleScriptProducer singleScriptProducer) {
         singleScriptProducers.put(scriptName, singleScriptProducer);
     }
 

@@ -7,7 +7,7 @@ import org.xml.sax.helpers.AttributesImpl;
 
 import utils.Utils;
 
-class XmlProducerUsingTransformerHandler implements XmlWriter {
+class XmlWriterUsingTransformerHandler implements XmlWriter {
 
     private String uri = "";
     public String getURI() {
@@ -22,7 +22,7 @@ class XmlProducerUsingTransformerHandler implements XmlWriter {
     private AttributesImpl attrs;
     private String element;
 
-    public XmlProducerUsingTransformerHandler(TransformerHandler handler) {
+    public XmlWriterUsingTransformerHandler(TransformerHandler handler) {
         super();
         this.handler = handler;
     }
