@@ -10,14 +10,16 @@ public class XmlSingleScriptProducer implements ScriptProducer {
 
     private XmlWriter xmlWriter;
     private XmlTestCaseProducer testCaseProducer;
+    private final Result result;
 
     @Override
     public void makeScriptFor(PropertyContainer propertyContainer) {
         testCaseProducer.makeScriptFor(propertyContainer);
     }
 
-    public XmlSingleScriptProducer(PropertyContainer propertyContainer, Result dom) {
-        TransformerHandler handler = new HandlerFactory().newHandler(dom);
+    public XmlSingleScriptProducer(PropertyContainer propertyContainer, Result result) {
+        this.result = result;
+        TransformerHandler handler = new HandlerFactory().newHandler(result);
         xmlWriter = new XmlProducerUsingTransformerHandler(handler);
         xmlWriter.startDocument();
         testCaseProducer = new XmlTestCaseProducer(xmlWriter);
@@ -28,6 +30,10 @@ public class XmlSingleScriptProducer implements ScriptProducer {
     public void endScript() {
         xmlWriter.endElement("Script");
         xmlWriter.endDocument();
+    }
+
+    public Result result() {
+        return result;
     }
 
 }
