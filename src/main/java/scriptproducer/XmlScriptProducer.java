@@ -4,14 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.transform.Result;
+import javax.xml.transform.Source;
 
 import ruleengine.PropertyContainer;
 import ruleengine.ScriptProducer;
+import ruleengine.SpecialValues;
 
 public class XmlScriptProducer implements ScriptProducer{
-
-
-    private Map<String, XmlSingleScriptProducer> singleScriptProducers;
+    private Source xsltSource;    
+    private final Map<String, XmlSingleScriptProducer> singleScriptProducers;
     private final ResultFactory resultFactory;
 
     public XmlScriptProducer(ResultFactory resultFactory) {
@@ -21,7 +22,10 @@ public class XmlScriptProducer implements ScriptProducer{
 
      @Override
     public void makeScriptFor(PropertyContainer propertyContainer) {
-        String scriptName = propertyContainer.<String>get("script");
+        Object scriptValue = propertyContainer.get("script");
+        if(scriptValue == SpecialValues.UNDEFINED)
+            return;
+        String scriptName = (String) scriptValue;
         if(! singleScriptProducers.containsKey(scriptName)) {
             setSingleScriptProducer(scriptName, newSingleScriptProducer(propertyContainer));
         }
@@ -29,7 +33,7 @@ public class XmlScriptProducer implements ScriptProducer{
     }
 
     private XmlSingleScriptProducer newSingleScriptProducer(PropertyContainer propertyContainer) {
-        return new XmlSingleScriptProducer(propertyContainer, resultFactory.newResult(propertyContainer.<String>get("script")));
+        return new XmlSingleScriptProducer(propertyContainer, xsltSource, resultFactory.newResult(propertyContainer.<String>get("script")));
     }
 
     public void endScripts() {
@@ -48,6 +52,14 @@ public class XmlScriptProducer implements ScriptProducer{
 
     private void setSingleScriptProducer(String scriptName, XmlSingleScriptProducer singleScriptProducer) {
         singleScriptProducers.put(scriptName, singleScriptProducer);
+    }
+
+    public Source getXsltSource() {
+        return xsltSource;
+    }
+
+    public void setXsltSource(Source xsltSource) {
+        this.xsltSource = xsltSource;
     }
 
 }
