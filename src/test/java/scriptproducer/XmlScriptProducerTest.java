@@ -18,7 +18,7 @@ public class XmlScriptProducerTest {
     }
 
     @Test
-    public void scriptWithOneTestcase() {
+    public void oneTestcase() {
         DOMResult dom = new DOMResult();
         givenProperty("script", "scriptName");
         givenProperty("testcase", "testcase 1");
@@ -31,7 +31,7 @@ public class XmlScriptProducerTest {
     }
 
     @Test
-    public void scriptWithTwoTestcases() {
+    public void twoTestcases() {
         DOMResult dom = new DOMResult();
         givenProperty("script", "scriptName");
         givenProperty("testcase", "testcase 1");
@@ -50,4 +50,35 @@ public class XmlScriptProducerTest {
         "</Script>")));
     }
 
+    @Test
+    public void scriptWithOneTestcase() {
+        givenProperty("script", "scriptName1");
+        givenProperty("testcase", "testcase 1");
+        XmlScriptProducer producer = new XmlScriptProducer(new DomResultFactory());
+        producer.makeScriptFor(propertyContainer);
+        producer.endScripts();
+        DOMResult dom = (DOMResult) producer.getResult("scriptName1");
+        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script self='scriptName1'>" +
+                "<TestCase self='testcase 1'/>" +
+        "</Script>")));
+    }
+
+
+    @Test
+    public void twoScriptsWithOneTestcase() {
+        XmlScriptProducer producer = new XmlScriptProducer(new DomResultFactory());
+        givenProperty("script", "scriptName1");
+        givenProperty("testcase", "testcase 1");
+        producer.makeScriptFor(propertyContainer);
+        propertyContainer.startNewCombination();
+        givenProperty("script", "scriptName2");
+        givenProperty("testcase", "testcase 1");
+        producer.makeScriptFor(propertyContainer);
+        producer.endScripts();
+        
+        DOMResult dom = (DOMResult) producer.getResult("scriptName2");
+        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script self='scriptName2'>" +
+                "<TestCase self='testcase 1'/>" +
+        "</Script>")));
+    }
 }
