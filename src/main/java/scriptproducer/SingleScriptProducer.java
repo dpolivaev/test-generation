@@ -1,16 +1,21 @@
 package scriptproducer;
 
+import static utils.Utils.runtimeException;
+
+import java.io.IOException;
+
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.sax.TransformerHandler;
+import javax.xml.transform.stream.StreamResult;
 
 import ruleengine.PropertyContainer;
 import ruleengine.ScriptProducer;
 
-public class XmlSingleScriptProducer implements ScriptProducer {
+public class SingleScriptProducer implements ScriptProducer {
 
     private XmlWriter xmlWriter;
-    private XmlTestCaseProducer testCaseProducer;
+    private TestCaseProducer testCaseProducer;
     private final Result result;
 
     @Override
@@ -18,23 +23,35 @@ public class XmlSingleScriptProducer implements ScriptProducer {
         testCaseProducer.makeScriptFor(propertyContainer);
     }
 
-    public XmlSingleScriptProducer(PropertyContainer propertyContainer, Source xsltSource, Result result) {
+    public SingleScriptProducer(PropertyContainer propertyContainer, Source xsltSource, Result result) {
         this.result = result;
         TransformerHandler handler = new HandlerFactory(xsltSource).newHandler(result);
-        xmlWriter = new XmlProducerUsingTransformerHandler(handler);
+        xmlWriter = new XmlWriterUsingTransformerHandler(handler);
         xmlWriter.startDocument();
-        testCaseProducer = new XmlTestCaseProducer(xmlWriter);
+        testCaseProducer = new TestCaseProducer(xmlWriter);
         xmlWriter.beginElement("Script");
         testCaseProducer.addAttributes(propertyContainer, "script");
     }
     
-    public XmlSingleScriptProducer(PropertyContainer propertyContainer, Result result) {
+    public SingleScriptProducer(PropertyContainer propertyContainer, Result result) {
         this(propertyContainer, null, result);
     }
 
     public void endScript() {
         xmlWriter.endElement("Script");
         xmlWriter.endDocument();
+        closeResult();
+    }
+
+    private void closeResult() {
+        if(result instanceof StreamResult){
+            try {
+                ((StreamResult)result).getOutputStream().close();
+            }
+            catch (IOException e) {
+                throw runtimeException(e);
+            }
+        }
     }
 
     public Result result() {

@@ -6,7 +6,7 @@ import ruleengine.PropertyContainer;
 import ruleengine.ScriptProducer;
 import ruleengine.SpecialValues;
 
-public class XmlTestCaseProducer implements ScriptProducer {
+public class TestCaseProducer implements ScriptProducer {
 
     private static final String TESTCASE_PROPERTY = "testcase";
     private static final String TESTCASE_ELEMENT = "TestCase";
@@ -23,7 +23,7 @@ public class XmlTestCaseProducer implements ScriptProducer {
     };
     private final XmlWriter xmlWriter;
 
-    public XmlTestCaseProducer(XmlWriter xmlWriter) {
+    public TestCaseProducer(XmlWriter xmlWriter) {
         this.xmlWriter = xmlWriter;
     }
 

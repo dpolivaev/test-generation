@@ -20,7 +20,7 @@ import ruleengine.SpecialValues;
 public class XmlTestCaseProducerTest {
 
     private DOMResult dom;
-    private XmlTestCaseProducer producer;
+    private TestCaseProducer producer;
     private Assignments propertyContainer;
     private XmlWriter xmlWriter;
 
@@ -28,8 +28,8 @@ public class XmlTestCaseProducerTest {
     public void setup() throws TransformerFactoryConfigurationError, TransformerConfigurationException, SAXException {
         dom = new DOMResult();
         TransformerHandler handler = new HandlerFactory().newHandler(dom);
-        xmlWriter = new XmlProducerUsingTransformerHandler(handler);
-        producer = new XmlTestCaseProducer(xmlWriter);
+        xmlWriter = new XmlWriterUsingTransformerHandler(handler);
+        producer = new TestCaseProducer(xmlWriter);
         propertyContainer = new Assignments();
     }
 
