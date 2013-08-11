@@ -1,13 +1,8 @@
 package scriptproducer;
 
-import static utils.Utils.runtimeException;
-
-import java.io.IOException;
-
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.sax.TransformerHandler;
-import javax.xml.transform.stream.StreamResult;
 
 import ruleengine.PropertyContainer;
 import ruleengine.ScriptProducer;
@@ -40,18 +35,6 @@ public class SingleScriptProducer implements ScriptProducer {
     public void endScript() {
         xmlWriter.endElement("Script");
         xmlWriter.endDocument();
-        closeResult();
-    }
-
-    private void closeResult() {
-        if(result instanceof StreamResult){
-            try {
-                ((StreamResult)result).getOutputStream().close();
-            }
-            catch (IOException e) {
-                throw runtimeException(e);
-            }
-        }
     }
 
     public Result result() {
