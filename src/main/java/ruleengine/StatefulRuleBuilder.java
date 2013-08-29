@@ -93,7 +93,7 @@ public class StatefulRuleBuilder {
     }
 
     public StatefulRule asDefaultRule() {
-        return new DefaultStatefulRule(this.condition, this.targetedPropertyName, //
+        return new DefaultStatefulRule(triggeringProperties, this.condition, this.targetedPropertyName, //
             ruleValues());
     }
 

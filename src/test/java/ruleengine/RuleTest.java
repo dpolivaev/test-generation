@@ -116,9 +116,25 @@ public class RuleTest {
     }
     
     @Test
-    public void defaultRuleWithTwoValues_forcesIteration() {
+    public void defaultRuleWithTwoValues_doesNotforceIteration() {
         Rule rule = iterate("name").over("1", "2").asDefaultRule();
         assertThat(rule.forcesIteration(), equalTo(false));
+    }
+    
+    @Test
+    public void ifTriggeringPropertiesAreNotSet_triggeredDefaultRuleIsNotFired() {
+        Rule rule = iterate("name").over("1", "2").when("x").asDefaultRule();
+        when(engineState.containsTriggeringPropertyValue("x")).thenReturn(false);
+        rule.propertyRequired(engineState);
+        verify(engineState, Mockito.never()).setPropertyValue(Mockito.<Rule>any(), Mockito.any(), Mockito.anyBoolean());
+    }
+    
+    @Test
+    public void ifTriggeringPropertiesAreSet_triggeredDefaultRuleIsFired() {
+        Rule rule = iterate("name").over("1", "2").when("x").asDefaultRule();
+        when(engineState.containsTriggeringPropertyValue("x")).thenReturn(true);
+        rule.propertyRequired(engineState);
+        verify(engineState).setPropertyValue(Mockito.eq(rule), Mockito.any(), Mockito.anyBoolean());
     }
     
 	@Test

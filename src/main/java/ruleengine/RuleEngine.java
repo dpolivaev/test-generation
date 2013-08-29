@@ -148,6 +148,11 @@ public class RuleEngine implements EngineState {
     }
 
     @Override
+    public boolean containsTriggeringPropertyValue(String name) {
+        return assignments.containsTriggeringPropertyValue(name);
+    }
+
+    @Override
     public Set<String> availableProperties(String startWith) {
         Set<String> availableProperties = assignments.availableProperties(startWith); 
         Utils.addMatchingStrings(availableProperties, startWith, strategy.availableDefaultProperties());
