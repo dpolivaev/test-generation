@@ -147,16 +147,8 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 	def private void appendRuleGroup(ITreeAppendable it, RuleGroup ruleGroup) {
 		val rule = ruleGroup.rule
 		if(rule != null){
-			append('strategy.')
-			if(rule.isDefault)
-				append('addDefaultRule')
-			else
-				append('addRule')
-			append('(')
-			append(ruleFactoryType)
-			appendTriggers(it, ruleGroup)
-			appendConditions(it, ruleGroup)
-			appendRuleValues(it, rule)
+			append('strategy.addRule(')
+			appendRule(it, ruleGroup)
 			append(');')
 			newLine
 		}
@@ -164,6 +156,18 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 			for(innerRuleGroup : ruleGroup.ruleGroups)
 				appendRuleGroup(it, innerRuleGroup)
 		}
+	}
+
+	def private void appendRule(ITreeAppendable it, RuleGroup ruleGroup) {
+		val rule = ruleGroup.rule
+		append(ruleFactoryType)
+		appendTriggers(it, ruleGroup)
+		appendConditions(it, ruleGroup)
+		appendRuleValues(it, rule)
+		if(rule.isDefault)
+			append('.asDefaultRule()')
+		else
+			append('.asRule()')
 	}
 
 	private def appendTriggers(ITreeAppendable it, RuleGroup ruleGroup) {
@@ -227,23 +231,59 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 	private def appendRuleValues(ITreeAppendable it, Rule rule) {
 		append('''.iterate("«rule.name»")''')
 		for(action:rule.actions){
-			append('.over(')
-			var firstValue = true
-			for (expr: (action as ValueAction).valueProvider){
-				if(firstValue)
-					firstValue = false
-				else
-					append(', ')
-				val methodName = methods.get(expr)
-				if(methodName == null)
-					xbaseCompiler.compileAsJavaExpression(expr, it, rule.newTypeRef(Object))
-				else{
-					appendImplementationObject(it, rule.newTypeRef(ValueProvider).type, "Object value", methodName)
-				}
-					
-			}
-			append(')')
+			val valueAction = action as ValueAction
+			apppendValueAction(it, valueAction)
+			appendActionRuleGroups(it, valueAction)
 		}
+	}
+	
+	 def private appendActionRuleGroups(ITreeAppendable it, ValueAction valueAction){
+				val innerGroups =  valueAction.ruleGroups
+			if(! innerGroups.empty){
+				append('.with(')
+				var first = true
+				increaseIndentation
+				newLine
+				appendInnerGroups(it, innerGroups, first)
+				decreaseIndentation
+				newLine
+				append(')')
+				
+			}
+	}
+
+		def private void appendInnerGroups(ITreeAppendable it, Collection<RuleGroup> innerGroups, boolean first) {
+			var firstLine = first
+			for(group:innerGroups){
+				if(group.rule != null){	
+					if(firstLine)
+						firstLine = false
+					else{
+						append(',')
+						newLine
+					}
+					appendRule(it, group)
+				}
+				appendInnerGroups(it, group.ruleGroups, firstLine)
+			}
+		}
+
+	def private apppendValueAction(ITreeAppendable it, ValueAction valueAction) {
+		append('.over(')
+		var firstValue = true
+		for (expr: valueAction.valueProvider){
+			if(firstValue)
+				firstValue = false
+			else
+				append(', ')
+			val methodName = methods.get(expr)
+			if(methodName == null)
+				xbaseCompiler.compileAsJavaExpression(expr, it, valueAction.newTypeRef(Object))
+			else{
+				appendImplementationObject(it, valueAction.newTypeRef(ValueProvider).type, "Object value", methodName)
+			}
+		}
+		append(')')
 	}
 
 	private def appendImplementationObject(ITreeAppendable it, JvmType interfaceName, String interfaceMethodName, String... calledMethodNames) {

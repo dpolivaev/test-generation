@@ -68,7 +68,7 @@ public class MyFile {
 		  
 		  private Strategy defineStrategyFirst() {
 		    Strategy strategy = new Strategy();
-		    strategy.addRule(Factory.iterate("x").over(1, 2, 3));
+		    strategy.addRule(Factory.iterate("x").over(1, 2, 3).asRule());
 		    return strategy;
 		  }
 		}
@@ -89,7 +89,7 @@ public class MyFile {
 		  
 		  private Strategy defineStrategyFirst() {
 		    Strategy strategy = new Strategy();
-		    strategy.addRule(Factory.when("x1", "x2").iterate("y").over(1, 2, 3));
+		    strategy.addRule(Factory.when("x1", "x2").iterate("y").over(1, 2, 3).asRule());
 		    return strategy;
 		  }
 		}
@@ -118,7 +118,7 @@ public class MyFile {
 			    Strategy strategy = new Strategy();
 			    strategy.addRule(Factory.iterate("y").over(new ValueProvider(){
 			      @Override public Object value(PropertyContainer propertyContainer) { return valueProvider1(propertyContainer); }
-			    }));
+			    }).asRule());
 			    return strategy;
 			  }
 			}
@@ -148,7 +148,7 @@ public class MyFile {
 			    Strategy strategy = new Strategy();
 			    strategy.addRule(Factory._if(new Condition(){
 			      @Override public boolean isSatisfied(PropertyContainer propertyContainer) { return condition1(propertyContainer); }
-			    }).iterate("y").over(3));
+			    }).iterate("y").over(3).asRule());
 			    return strategy;
 			  }
 			}
@@ -179,7 +179,7 @@ public class MyFile {
 			    Strategy strategy = new Strategy();
 			    strategy.addRule(Factory._if(new Condition(){
 			      @Override public boolean isSatisfied(PropertyContainer propertyContainer) { return condition1(propertyContainer); }
-			    }).iterate("y").over(3));
+			    }).iterate("y").over(3).asRule());
 			    return strategy;
 			  }
 			}
@@ -215,7 +215,7 @@ public class MyFile {
 			    Strategy strategy = new Strategy();
 			    strategy.addRule(Factory._if(new Condition(){
 			      @Override public boolean isSatisfied(PropertyContainer propertyContainer) { return condition1(propertyContainer) && condition2(propertyContainer); }
-			    }).iterate("y").over(5));
+			    }).iterate("y").over(5).asRule());
 			    return strategy;
 			  }
 			}
@@ -235,7 +235,7 @@ public class MyFile {
 		  
 		  private Strategy defineStrategyFirst() {
 		    Strategy strategy = new Strategy();
-		    strategy.addDefaultRule(Factory.iterate("x").over(1, 2, 3));
+		    strategy.addRule(Factory.iterate("x").over(1, 2, 3).asDefaultRule());
 		    return strategy;
 		  }
 		}
@@ -258,10 +258,89 @@ public class MyFile {
 		  
 		  private Strategy defineStrategyFirst() {
 		    Strategy strategy = new Strategy();
-		    strategy.addRule(Factory.when("x1", "x2").iterate("y").over(1, 2, 3));
+		    strategy.addRule(Factory.when("x1", "x2").iterate("y").over(1, 2, 3).asRule());
 		    return strategy;
 		  }
 		}
+		''')
+	}	
+	
+	@Test def withOneRuleForValue() {
+		'''
+			strategy first
+				let x be 1 {
+					let y be 2
+				}
+		'''.assertCompilesTo('''
+			import ruleengine.StatefulRuleBuilder.Factory;
+			import ruleengine.Strategy;
+			
+			@SuppressWarnings("all")
+			public class MyFile {
+			  Strategy first = defineStrategyFirst();
+			  
+			  private Strategy defineStrategyFirst() {
+			    Strategy strategy = new Strategy();
+			    strategy.addRule(Factory.iterate("x").over(1).with(
+			      Factory.iterate("y").over(2).asRule()
+			    ).asRule());
+			    return strategy;
+			  }
+			}
+		''')
+	}	
+	
+	@Test def withTwoRuleForValue() {
+		'''
+			strategy first
+				let x be 1 {
+					let y be 2
+					let z be 3
+				}
+		'''.assertCompilesTo('''
+			import ruleengine.StatefulRuleBuilder.Factory;
+			import ruleengine.Strategy;
+			
+			@SuppressWarnings("all")
+			public class MyFile {
+			  Strategy first = defineStrategyFirst();
+			  
+			  private Strategy defineStrategyFirst() {
+			    Strategy strategy = new Strategy();
+			    strategy.addRule(Factory.iterate("x").over(1).with(
+			      Factory.iterate("y").over(2).asRule(),
+			      Factory.iterate("z").over(3).asRule()
+			    ).asRule());
+			    return strategy;
+			  }
+			}
+		''')
+	}
+		
+	@Test def withOneRuleGroupForValue() {
+		'''
+			strategy first
+				let x be 1 {
+					for each x {
+						let y be 2
+					}
+				}
+		'''.assertCompilesTo('''
+			import ruleengine.StatefulRuleBuilder.Factory;
+			import ruleengine.Strategy;
+			
+			@SuppressWarnings("all")
+			public class MyFile {
+			  Strategy first = defineStrategyFirst();
+			  
+			  private Strategy defineStrategyFirst() {
+			    Strategy strategy = new Strategy();
+			    strategy.addRule(Factory.iterate("x").over(1).with(
+			      Factory.when("x").iterate("y").over(2).asRule()
+			    ).asRule());
+			    return strategy;
+			  }
+			}
 		''')
 	}	
 	
