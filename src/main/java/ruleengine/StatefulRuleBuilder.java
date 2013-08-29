@@ -26,36 +26,23 @@ public class StatefulRuleBuilder {
 
     public StatefulRuleBuilder over(Object... valueObjects) {
         previousValueCount = this.values.size();
-        this.values.addAll(Arrays.asList(valueProviders(valueObjects)));
+        for(Object valueObject : valueObjects)
+        	if(valueObject instanceof ValueWithRulesProvider)
+        		values.add((ValueWithRulesProvider) valueObject);
+        	else if(valueObject instanceof ValueProvider)
+        		values.add(valueProvider((ValueProvider)valueObject));
+        	else
+        		values.add(valueProvider(valueObject));
         return this;
     }
 
-    public StatefulRuleBuilder over(ValueProvider... valueProviders) {
-        previousValueCount = this.values.size();
-        this.values.addAll(Arrays.asList(valueProviders(valueProviders)));
-        return this;
+
+    private ValueWithRulesProvider valueProvider(Object value) {
+        return new ConstantValue(value);
     }
 
-    public StatefulRuleBuilder over(ValueWithRulesProvider... valueWithRulesProviders) {
-        this.values.addAll(Arrays.asList(valueWithRulesProviders));
-        previousValueCount = this.values.size();
-        return this;
-    }
-
-    private ValueWithRulesProvider[] valueProviders(Object[] values) {
-        ValueWithRulesProvider[] valueWithRulesProviders = new ValueWithRulesProvider[values.length];
-        int i = 0;
-        for (Object value : values)
-            valueWithRulesProviders[i++] = new ConstantValue(value);
-        return valueWithRulesProviders;
-    }
-
-    private ValueWithRulesProvider[] valueProviders(ValueProvider[] values) {
-        ValueWithRulesProvider[] valueWithRulesProviders = new ValueWithRulesProvider[values.length];
-        int i = 0;
-        for (ValueProvider value : values)
-            valueWithRulesProviders[i++] = new ValueWithRules(value, Collections.<Rule> emptyList());
-        return valueWithRulesProviders;
+    private ValueWithRulesProvider valueProvider(ValueProvider value) {
+    	return new ValueWithRules(value, Collections.<Rule> emptyList());
     }
 
     public StatefulRuleBuilder with(Rule... rules) {
