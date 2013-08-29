@@ -20,7 +20,9 @@ public class StatefulRuleBuilder {
 
     public StatefulRuleBuilder when(
         String... triggeringProperties) {
-        this.triggeringProperties = set(triggeringProperties);
+    	if(! this.triggeringProperties.isEmpty())
+    		throw new IllegalStateException("triggering properties already set to" + triggeringProperties);
+    	this.triggeringProperties = set(triggeringProperties);
         return this;
     }
 
@@ -106,6 +108,8 @@ public class StatefulRuleBuilder {
 
 
     public StatefulRuleBuilder _if(Condition condition) {
+    	if(this.condition != Condition.TRUE)
+    		throw new IllegalStateException("condition already set");
         this.condition = condition;
         return this;
     }
