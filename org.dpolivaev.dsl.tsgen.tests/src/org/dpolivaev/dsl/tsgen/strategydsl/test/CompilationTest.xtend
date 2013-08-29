@@ -242,4 +242,27 @@ public class MyFile {
 		''')
 	}	
 	
+	@Test def withTriggeringGroupAndTriggerRules() {
+		'''
+			strategy first
+				for each x1 {
+					for each x2 let y be 1, 2, 3
+				}
+		'''.assertCompilesTo('''
+		import ruleengine.StatefulRuleBuilder.Factory;
+		import ruleengine.Strategy;
+		
+		@SuppressWarnings("all")
+		public class MyFile {
+		  Strategy first = defineStrategyFirst();
+		  
+		  private Strategy defineStrategyFirst() {
+		    Strategy strategy = new Strategy();
+		    strategy.addRule(Factory.when("x1", "x2").iterate("y").over(1, 2, 3));
+		    return strategy;
+		  }
+		}
+		''')
+	}	
+	
 }

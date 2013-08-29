@@ -28,6 +28,7 @@ import org.eclipse.xtext.xbase.XNullLiteral
 import ruleengine.ValueProvider
 import org.dpolivaev.dsl.tsgen.strategydsl.RuleGroup
 import java.util.ArrayList
+import java.util.Collection
 
 /**
  * <p>Infers a JVM model from the source model.</p> 
@@ -166,11 +167,11 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 	}
 
 	private def appendTriggers(ITreeAppendable it, RuleGroup ruleGroup) {
-		val trigger = ruleGroup.trigger
-		if(trigger != null){ 
+		val triggers = triggers(ruleGroup)
+		if(! triggers.empty){ 
 			append('.when(')
 			var firstValue = true
-			for(name : trigger.properties){
+			for(name : triggers){
 				if(firstValue){
 					firstValue = false
 				}
@@ -180,6 +181,19 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 			}
 			append(')')
 		}
+	}
+	
+	private  def Collection<String> triggers(RuleGroup ruleGroup){
+		val triggers =  new ArrayList<String>()
+		var group = ruleGroup
+		val container = group.eContainer
+		if(container instanceof RuleGroup)
+			triggers.addAll(triggers(container as RuleGroup))
+		val trigger = group.trigger
+		if(trigger != null){
+			triggers.addAll(trigger.properties)
+		} 
+		return triggers
 	}
 	
 	private def appendConditions(ITreeAppendable it, RuleGroup ruleGroup) {
