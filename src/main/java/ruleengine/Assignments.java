@@ -83,4 +83,10 @@ public class Assignments implements PropertyContainer {
     void resetCounter() {
         this.combinationCounter = 0;
     }
+
+	@Override
+	public boolean containsTriggeringPropertyValue(String name) {
+		Assignment assignment = assignments.get(name);
+		return assignment != null && assignment.rule.isDefaultRule() == false;
+	}
 }
