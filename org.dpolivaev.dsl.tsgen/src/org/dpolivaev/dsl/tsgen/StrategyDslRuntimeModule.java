@@ -10,8 +10,6 @@ import org.dpolivaev.dsl.tsgen.validation.StrategyDslValidator;
 import org.eclipse.xtext.service.SingletonBinding;
 import org.eclipse.xtext.xbase.compiler.XbaseCompiler;
 import org.eclipse.xtext.xbase.typesystem.computation.ITypeComputer;
-import org.xtext.scripting.validation.AbstractScriptingValidator;
-import org.xtext.scripting.validation.ScriptingValidator;
 
 /**
  * Use this class to register components to be used at runtime / without the Equinox extension registry.
