@@ -1,0 +1,75 @@
+grammar org.dpolivaev.dsl.tsgen.StrategyDsl with org.eclipse.xtext.xbase.Xbase
+
+import 'http://www.eclipse.org/xtext/xbase/Xbase' as xbase
+
+generate strategydsl "http://www.dpolivaev.org/dsl/tsgen/strategydsl"
+
+Model: {Model}
+	('package' package = QualifiedName)?
+	importSection=XImportSection?
+	strategy+=Strategy*
+	runs += Run*
+;
+	
+Strategy:
+	'strategy' name=ID 
+		ruleGroups += RuleGroup* 
+	;
+
+RuleGroup : {RuleGroup}
+	(trigger = Trigger condition = Condition? | condition = Condition) (rule = Rule | '{' ruleGroups += RuleGroup* '}') 
+	| rule = Rule
+;
+
+Rule: {Rule}
+	'let' default ?= 'default'? name=PROPERTY_ID 'be' actions += Action  ((',' actions += Action)+ (order = 'ordered' | order = 'shuffled')? )?
+;
+
+Trigger:
+	'for' 'each' properties += PROPERTY_ID (',' properties += PROPERTY_ID)*
+;
+
+Condition:
+	'if' expr = XExpression 'then'
+;
+
+Action: ValueAction | SkipAction;
+
+SkipAction : {SkipAction}
+	'skip'
+;
+
+ValueAction :
+	valueProvider += XExpression (=>',' valueProvider += XExpression)* 
+	('{' ruleGroups += RuleGroup* '}')?
+;
+
+Run:
+	'run' strategies += [Strategy] ( 'with' strategies += [Strategy]) *
+;
+
+XPrimaryExpression returns xbase::XExpression:
+	XConstructorCall |
+	XBlockExpression |
+	XSwitchExpression |
+	XFeatureCall |
+	XLiteral |
+	XIfExpression |
+	XForLoopExpression |
+	XWhileExpression |
+	XDoWhileExpression |
+	XThrowExpression |
+	XReturnExpression |
+	XTryCatchFinallyExpression |
+	XParenthesizedExpression |
+	PropertyCall
+	;
+	
+PropertyCall returns xbase::XExpression hidden():
+	{PropertyCall}
+	':' name = PROPERTY_ID 
+;	
+
+PROPERTY_ID hidden():
+	ID (=> '.' ID)*
+;
