@@ -17,7 +17,7 @@ import org.dpolivaev.dsl.tsgen.StrategyDslInjectorProvider
 
 @RunWith(XtextRunner)
 @InjectWith(StrategyDslInjectorProvider)
-class CompilationTest {
+class StrategyCompilationTest {
 
 	@Inject extension CompilationTestHelper
 	
