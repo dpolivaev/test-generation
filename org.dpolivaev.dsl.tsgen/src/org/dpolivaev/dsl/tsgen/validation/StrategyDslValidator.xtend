@@ -3,7 +3,6 @@
  */
 package org.dpolivaev.dsl.tsgen.validation
 
-import org.eclipse.xtext.xbase.validation.XbaseJavaValidator
 
 //import org.eclipse.xtext.validation.Check
 
