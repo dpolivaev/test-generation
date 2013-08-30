@@ -2,12 +2,22 @@ package ruleengine;
 
 public class ShuffledValueProviders implements ValueProviders {
 
-    final OrderedValueProviders orderedValueProviders;
-    final Permutation permutation;
+	final private OrderedValueProviders orderedValueProviders;
+    final private Permutation permutation;
+    private Order order;
 
-    public ShuffledValueProviders(OrderedValueProviders orderedValueProviders, Permutation permutation) {
+    public ShuffledValueProviders(OrderedValueProviders orderedValueProviders, Permutation permutation, Order order) {
         this.orderedValueProviders = orderedValueProviders;
         this.permutation = permutation;
+		this.order = order;
+    }
+    
+    public ShuffledValueProviders(OrderedValueProviders orderedValueProviders, Permutation permutation) {
+    	this(orderedValueProviders, permutation, Order.ORDERED_THEN_SHUFFLED);
+    }
+
+    public ShuffledValueProviders(OrderedValueProviders orderedValueProviders, Order order) {
+        this(orderedValueProviders, new Permutation(orderedValueProviders.size()), order);
     }
 
     public ShuffledValueProviders(OrderedValueProviders orderedValueProviders) {
@@ -31,8 +41,12 @@ public class ShuffledValueProviders implements ValueProviders {
     @Override
     public void next() {
         orderedValueProviders.next();
-        if (orderedValueProviders.valueIndex() == 0)
-            permutation.shuffle();
+        if (orderedValueProviders.valueIndex() == 0) {
+			if (order == Order.SHUFFLED)
+				permutation.shuffle();
+			else if(order == Order.ORDERED_THEN_SHUFFLED)
+				order = Order.SHUFFLED;
+		}
     }
 
     @Override
