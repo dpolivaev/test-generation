@@ -15,7 +15,7 @@ public class StatefulRuleBuilder {
     final private List<ValueWithRulesProvider> values = new ArrayList<>();
     private Set<String> triggeringProperties = Collections.emptySet();
     private Condition condition = Condition.TRUE;
-    private boolean shuffled = false;
+    private Order order = Order.defaultOrder;
     private int previousValueCount;
 
     public StatefulRuleBuilder when(
@@ -73,8 +73,18 @@ public class StatefulRuleBuilder {
         return this;
     }
 
+    public StatefulRuleBuilder ordered() {
+        order = Order.ORDERED;
+        return this;
+    }
+
+    public StatefulRuleBuilder orderedThenShuffled() {
+        order = Order.ORDERED_THEN_SHUFFLED;
+        return this;
+    }
+
     public StatefulRuleBuilder shuffled() {
-        shuffled = true;
+        order = Order.SHUFFLED;
         return this;
     }
 
@@ -102,7 +112,7 @@ public class StatefulRuleBuilder {
     private ValueProviders ruleValues() {
         ValueWithRulesProvider[] valueProviders = this.values.toArray(new ValueWithRulesProvider[values.size()]);
         OrderedValueProviders orderedValueProviders = new OrderedValueProviders(valueProviders);
-        ValueProviders ruleValues = shuffled ? new ShuffledValueProviders(orderedValueProviders) : orderedValueProviders;
+        ValueProviders ruleValues = order == Order.ORDERED ? new ShuffledValueProviders(orderedValueProviders) : orderedValueProviders;
         return ruleValues;
     }
 
