@@ -282,7 +282,7 @@ public class MyFile {
 			  private Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
 			    strategy.addRule(Factory.iterate("x").over(1).with(
-			      Factory.iterate("y").over(2).asRule()
+			      Factory.iterate("y").over(2).asTriggeredRule()
 			    ).asRule());
 			    return strategy;
 			  }
@@ -308,8 +308,8 @@ public class MyFile {
 			  private Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
 			    strategy.addRule(Factory.iterate("x").over(1).with(
-			      Factory.iterate("y").over(2).asRule(),
-			      Factory.iterate("z").over(3).asRule()
+			      Factory.iterate("y").over(2).asTriggeredRule(),
+			      Factory.iterate("z").over(3).asTriggeredRule()
 			    ).asRule());
 			    return strategy;
 			  }
@@ -336,7 +336,7 @@ public class MyFile {
 			  private Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
 			    strategy.addRule(Factory.iterate("x").over(1).with(
-			      Factory.when("x").iterate("y").over(2).asRule()
+			      Factory.when("x").iterate("y").over(2).asTriggeredRule()
 			    ).asRule());
 			    return strategy;
 			  }

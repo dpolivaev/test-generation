@@ -152,7 +152,7 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 		val rule = ruleGroup.rule
 		if(rule != null){
 			append('strategy.addRule(')
-			appendRule(it, ruleGroup)
+			appendRule(it, ruleGroup, false)
 			append(');')
 			newLine
 		}
@@ -162,7 +162,7 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 		}
 	}
 
-	def private void appendRule(ITreeAppendable it, RuleGroup ruleGroup) {
+	def private void appendRule(ITreeAppendable it, RuleGroup ruleGroup, boolean temporaryRule) {
 		val rule = ruleGroup.rule
 		append(ruleFactoryType)
 		appendTriggers(it, ruleGroup)
@@ -171,6 +171,8 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 		appendRuleOrder(it, rule)
 		if(rule.isDefault)
 			append('.asDefaultRule()')
+		else if(temporaryRule)
+			append('.asTriggeredRule()')
 		else
 			append('.asRule()')
 	}
@@ -279,7 +281,7 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 						append(',')
 						newLine
 					}
-					appendRule(it, group)
+					appendRule(it, group, true)
 				}
 				appendInnerGroups(it, group.ruleGroups, firstLine)
 			}
