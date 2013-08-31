@@ -2,11 +2,9 @@ package ruleengine;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 public class ShuffledValueProvidersTest {
 	private ShuffledValueProviders shuffledProviders(Order order) {
