@@ -8,7 +8,8 @@ var grammarURI = "classpath:/org/dpolivaev/dsl/tsgen/Strategy.xtext"
 var fileExtensions = "tsgen"
 var projectName = "org.dpolivaev.dsl.tsgen"
 var runtimeProject = "../${projectName}"
-var generateStub = false
+var generateStub = true
+var generateXtendStub = true
 
 Workflow {
     bean = StandaloneSetup {
@@ -45,7 +46,6 @@ Workflow {
     
     		// generates Java API for the generated EPackages
     		fragment = ecore.EcoreGeneratorFragment auto-inject {
-			emfRuntimeVersion = "2.5"
     		// referencedGenModels = "
     		//  platform:/resource/org.eclipse.xtext.xbase/model/Xbase.genmodel,
     		//  platform:/resource/org.eclipse.xtext.common.types/model/JavaVMTypes.genmodel
@@ -89,7 +89,7 @@ Workflow {
     		fragment = generator.GeneratorFragment auto-inject {}
     
     		// formatter API
-    		// fragment = formatting.FormatterFragment auto-inject {}
+    		fragment = formatting.FormatterFragment auto-inject {}
     
     		// labeling API
     		fragment = labeling.LabelProviderFragment auto-inject {}

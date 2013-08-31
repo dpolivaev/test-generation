@@ -5,9 +5,6 @@ package org.dpolivaev.dsl.tsgen;
 
 import org.dpolivaev.dsl.tsgen.jvmmodel.StrategyCompiler;
 import org.dpolivaev.dsl.tsgen.typesystem.StrategyTypeComputer;
-import org.dpolivaev.dsl.tsgen.validation.AbstractStrategyDslValidator;
-import org.dpolivaev.dsl.tsgen.validation.StrategyDslValidator;
-import org.eclipse.xtext.service.SingletonBinding;
 import org.eclipse.xtext.xbase.compiler.XbaseCompiler;
 import org.eclipse.xtext.xbase.typesystem.computation.ITypeComputer;
 
@@ -27,11 +24,5 @@ public class StrategyDslRuntimeModule extends org.dpolivaev.dsl.tsgen.AbstractSt
 	@Override
 	public Class<? extends org.eclipse.xtext.formatting.IFormatter> bindIFormatter() {
 		return org.dpolivaev.dsl.tsgen.formatting.StrategyDslFormatter.class;
-	}
-
-	@Override
-	@SingletonBinding(eager=true)	
-	public Class<? extends AbstractStrategyDslValidator> bindAbstractStrategyDslValidator() {
-		return StrategyDslValidator.class;
 	}
 }
