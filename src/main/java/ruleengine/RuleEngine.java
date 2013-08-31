@@ -1,5 +1,6 @@
 package ruleengine;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -14,18 +15,31 @@ import utils.Utils;
 public class RuleEngine implements EngineState {
     private Strategy strategy;
     final private Assignments assignments;
-    private final ScriptProducer scriptProducer;
+    private final Collection<ScriptProducer> scriptProducers;
     private Set<String> dependencies;
     private String assignmentReason;
     private String processedProperty;
 
     public RuleEngine(ScriptProducer scriptProducer) {
+    	this();
+        add(scriptProducer);
+    }
+
+    public RuleEngine() {
         super();
         this.assignments = new Assignments();
-        this.scriptProducer = scriptProducer;
         this.strategy = null;
         dependencies = new HashSet<>();
+        scriptProducers = new ArrayList<>();
     }
+
+    public void add(ScriptProducer scriptProducer) {
+		scriptProducers.add(scriptProducer);
+	}
+
+    public void remove(ScriptProducer scriptProducer) {
+		scriptProducers.remove(scriptProducer);
+	}
 
     public void run(Strategy strategy) {
         this.strategy = strategy;
@@ -54,7 +68,8 @@ public class RuleEngine implements EngineState {
         fireNextCombinationStartedEvent();
         dependencies = new HashSet<>();
         processedProperty = "";
-        scriptProducer.makeScriptFor(this);
+        for(ScriptProducer scriptProducer :scriptProducers)
+        	scriptProducer.makeScriptFor(this);
     }
 
     private void fireNextCombinationFinishedEvent() {
