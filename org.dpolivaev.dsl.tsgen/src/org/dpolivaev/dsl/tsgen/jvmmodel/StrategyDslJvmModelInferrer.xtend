@@ -30,6 +30,8 @@ import org.dpolivaev.dsl.tsgen.strategydsl.RuleGroup
 import java.util.ArrayList
 import java.util.Collection
 import org.dpolivaev.dsl.tsgen.strategydsl.SkipAction
+import scriptproducer.StrategyRunner
+import org.dpolivaev.dsl.tsgen.strategydsl.Run
 
 /**
  * <p>Infers a JVM model from the source model.</p> 
@@ -81,6 +83,7 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 				inferExpressions(it, script)
 				inferStrategyFields(it, script)
 				inferStrategyMethods(it, script)
+				inferRunMethods(it, script)
 			])
 	}
 	
@@ -332,8 +335,69 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 				setInitializer [
 					append('''«methodName»()''')
 				]
-				visibility = JvmVisibility::DEFAULT
+				final = true
+				visibility = JvmVisibility::PUBLIC
 			]
 		}
 	}
+	
+	private def inferRunMethods(JvmGenericType it, Model script){
+		inferRunMethodImplementations(it, script);
+		inferMainMethod(it, script);
+	}
+	
+	private def inferRunMethodImplementations(JvmGenericType it, Model script){
+		var counter = 0
+		for (run : script.runs) {
+			counter = counter + 1
+			val methodName = "run" + counter
+			members += run.toMethod(methodName, run.newTypeRef(void)) [
+				body = [
+					
+					append('new ')
+					append(run.newTypeRef(StrategyRunner).type)
+					append('''().run(«combinedStrategy(run)»);''')
+				]
+				visibility = JvmVisibility::PUBLIC
+			]
+		}
+	}
+	
+	private def combinedStrategy(Run run){
+		val strategyBuilder = new StringBuilder
+		var first = true
+		for(strategy : run.strategies){
+			val strategyFieldName = strategy.name.toFirstLower
+			if(first){
+				first = false
+				strategyBuilder.append(strategyFieldName)
+			}
+			else{
+				strategyBuilder.append(".with(").append(strategyFieldName).append(")")
+			}
+		}
+		return strategyBuilder.toString
+	}
+	
+	private def inferMainMethod(JvmGenericType it, Model script){
+		if(! script.runs.empty){
+			val className = it.simpleName
+			members += script.toMethod("main", script.newTypeRef(Void::TYPE)) [
+				parameters += script.toParameter("args", script.newTypeRef(typeof(String)).addArrayTypeDimension)
+				body = [
+					append('''«className» instance = new «className»();''')
+					var counter = 0
+					for (run : script.runs) {
+						counter = counter + 1
+						val methodName = "run" + counter
+						newLine
+						append('''instance.«methodName»();''')
+						}
+				]
+				visibility = JvmVisibility::PUBLIC
+				static = true
+			]
+		}
+	}
+	
 }
