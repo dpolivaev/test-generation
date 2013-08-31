@@ -21,8 +21,15 @@ RuleGroup : {RuleGroup}
 	| rule = Rule
 ;
 
+
 Rule: {Rule}
-	'let' default ?= 'default'? name=PROPERTY_ID 'be' actions += Action  ((',' actions += Action)+ (order = 'ordered' | order = 'shuffled')? )?
+	'let'  
+	(
+		default ?= 'default'? name=PROPERTY_ID
+		'be' actions += ValueAction (',' actions += ValueAction)* 
+		(ordered ?= 'ordered' | shuffled ?= 'shuffled')? 
+		| actions += SkipAction name=PROPERTY_ID
+	)
 ;
 
 Trigger:

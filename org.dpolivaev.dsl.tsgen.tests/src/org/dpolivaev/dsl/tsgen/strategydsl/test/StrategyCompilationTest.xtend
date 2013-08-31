@@ -344,4 +344,46 @@ public class MyFile {
 		''')
 	}	
 	
+	@Test def ordered() {
+		'''
+			strategy first
+				let x be 2, 3 ordered 		
+		'''.assertCompilesTo('''
+			import ruleengine.StatefulRuleBuilder.Factory;
+			import ruleengine.Strategy;
+			
+			@SuppressWarnings("all")
+			public class MyFile {
+			  Strategy first = defineStrategyFirst();
+			  
+			  private Strategy defineStrategyFirst() {
+			    Strategy strategy = new Strategy();
+			    strategy.addRule(Factory.iterate("x").over(2, 3).ordered().asRule());
+			    return strategy;
+			  }
+			}
+		''')
+	}	
+	
+	@Test def shuffled() {
+		'''
+			strategy first
+				let x be 2, 3 shuffled 		
+		'''.assertCompilesTo('''
+			import ruleengine.StatefulRuleBuilder.Factory;
+			import ruleengine.Strategy;
+			
+			@SuppressWarnings("all")
+			public class MyFile {
+			  Strategy first = defineStrategyFirst();
+			  
+			  private Strategy defineStrategyFirst() {
+			    Strategy strategy = new Strategy();
+			    strategy.addRule(Factory.iterate("x").over(2, 3).shuffled().asRule());
+			    return strategy;
+			  }
+			}
+		''')
+	}	
+	
 }
