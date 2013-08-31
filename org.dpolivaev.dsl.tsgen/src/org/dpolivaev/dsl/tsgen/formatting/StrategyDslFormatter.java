@@ -3,10 +3,20 @@
  */
 package org.dpolivaev.dsl.tsgen.formatting;
 
+import java.util.List;
+
 import com.google.inject.Inject;
+
+import org.eclipse.xtext.Keyword;
 import org.eclipse.xtext.formatting.impl.AbstractDeclarativeFormatter;
 import org.eclipse.xtext.formatting.impl.FormattingConfig;
+import org.eclipse.xtext.xbase.formatting.XbaseFormatter;
+import org.eclipse.xtext.xbase.formatting.XbaseFormatter2;
 import org.dpolivaev.dsl.tsgen.services.StrategyDslGrammarAccess;
+import org.dpolivaev.dsl.tsgen.services.StrategyDslGrammarAccess.RuleElements;
+import org.dpolivaev.dsl.tsgen.services.StrategyDslGrammarAccess.RuleGroupElements;
+import org.dpolivaev.dsl.tsgen.services.StrategyDslGrammarAccess.StrategyElements;
+import org.dpolivaev.dsl.tsgen.services.StrategyDslGrammarAccess.ValueActionElements;
 
 /**
  * This class contains custom formatting description.
@@ -23,10 +33,47 @@ public class StrategyDslFormatter extends AbstractDeclarativeFormatter {
 	
 	@Override
 	protected void configureFormatting(FormattingConfig c) {
-// It's usually a good idea to activate the following three statements.
-// They will add and preserve newlines around comments
-//		c.setLinewrap(0, 1, 2).before(grammarAccess.getSL_COMMENTRule());
-//		c.setLinewrap(0, 1, 2).before(grammarAccess.getML_COMMENTRule());
-//		c.setLinewrap(0, 1, 1).after(grammarAccess.getML_COMMENTRule());
+		final List<Keyword> noSpaceBeforeKeywords = grammarAccess.findKeywords(",");
+		for(Keyword keyword : noSpaceBeforeKeywords){
+			c.setNoSpace().before(keyword);
+			c.setLinewrap(0, 0, 1).after(keyword);
+		}
+		configureFormatting(c, grammarAccess.getStrategyAccess());
+		configureFormatting(c, grammarAccess.getRuleGroupAccess());
+		configureFormatting(c, grammarAccess.getRuleAccess());
+		configureFormatting(c, grammarAccess.getValueActionAccess());
+	}
+
+	private void configureFormatting(FormattingConfig c,
+			final StrategyElements strategyAccess) {
+		c.setLinewrap().after(strategyAccess.getNameIDTerminalRuleCall_1_0());
+		c.setIndentationIncrement().after(strategyAccess.getNameIDTerminalRuleCall_1_0());
+		c.setIndentationDecrement().after(strategyAccess.getRule());
+		c.setLinewrap().after(strategyAccess.getRule());
+	}
+
+	private void configureFormatting(FormattingConfig c,
+			final RuleElements ruleAccess) {
+		c.setLinewrap().before(ruleAccess.getLetKeyword_1());
+	}
+
+	private void configureFormatting(FormattingConfig c,
+			ValueActionElements valueActionAccess) {
+		final Keyword leftCurlyBracket = valueActionAccess.getLeftCurlyBracketKeyword_2_0();
+		c.setLinewrap().after(leftCurlyBracket);
+		c.setIndentationIncrement().after(leftCurlyBracket);
+		final Keyword rightCurlyBracket = valueActionAccess.getRightCurlyBracketKeyword_2_2();
+		c.setIndentationDecrement().before(rightCurlyBracket);
+		c.setLinewrap().before(rightCurlyBracket);
+	}
+
+	private void configureFormatting(FormattingConfig c,
+			RuleGroupElements ruleGroupAccess) {
+		final Keyword leftCurlyBracketKeyword = ruleGroupAccess.getLeftCurlyBracketKeyword_0_2_1_0();
+		c.setLinewrap().after(leftCurlyBracketKeyword);
+		c.setIndentationIncrement().after(leftCurlyBracketKeyword);
+		final Keyword rightCurlyBracket = ruleGroupAccess.getRightCurlyBracketKeyword_0_2_1_2();
+		c.setIndentationDecrement().before(rightCurlyBracket);
+		c.setLinewrap().before(rightCurlyBracket);
 	}
 }

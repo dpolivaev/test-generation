@@ -29,6 +29,7 @@ import ruleengine.ValueProvider
 import org.dpolivaev.dsl.tsgen.strategydsl.RuleGroup
 import java.util.ArrayList
 import java.util.Collection
+import org.dpolivaev.dsl.tsgen.strategydsl.SkipAction
 
 /**
  * <p>Infers a JVM model from the source model.</p> 
@@ -164,6 +165,7 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 		appendTriggers(it, ruleGroup)
 		appendConditions(it, ruleGroup)
 		appendRuleValues(it, rule)
+		appendRuleOrder(it, rule)
 		if(rule.isDefault)
 			append('.asDefaultRule()')
 		else
@@ -231,10 +233,22 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 	private def appendRuleValues(ITreeAppendable it, Rule rule) {
 		append('''.iterate("«rule.name»")''')
 		for(action:rule.actions){
-			val valueAction = action as ValueAction
-			apppendValueAction(it, valueAction)
-			appendActionRuleGroups(it, valueAction)
+			if(action instanceof ValueAction){
+				val valueAction = action as ValueAction
+				apppendValueAction(it, valueAction)
+				appendActionRuleGroups(it, valueAction)
+			}
+			else if(action instanceof SkipAction){
+				apppendSkip(it)
+			}
 		}
+	}
+	
+	private def appendRuleOrder(ITreeAppendable it, Rule rule) {
+		if(rule.ordered)
+				append('.ordered()')
+		else if(rule.shuffled)
+				append('.shuffled()')
 	}
 	
 	 def private appendActionRuleGroups(ITreeAppendable it, ValueAction valueAction){
@@ -284,6 +298,10 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 			}
 		}
 		append(')')
+	}
+	
+	def private apppendSkip(ITreeAppendable it){
+		append('.skip()')
 	}
 
 	private def appendImplementationObject(ITreeAppendable it, JvmType interfaceName, String interfaceMethodName, String... calledMethodNames) {
