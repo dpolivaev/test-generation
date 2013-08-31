@@ -44,7 +44,7 @@ public class MyFile {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  Strategy first = defineStrategyFirst();
+			  public final Strategy first = defineStrategyFirst();
 			  
 			  private Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
@@ -64,7 +64,7 @@ public class MyFile {
 		
 		@SuppressWarnings("all")
 		public class MyFile {
-		  Strategy first = defineStrategyFirst();
+		  public final Strategy first = defineStrategyFirst();
 		  
 		  private Strategy defineStrategyFirst() {
 		    Strategy strategy = new Strategy();
@@ -85,7 +85,7 @@ public class MyFile {
 		
 		@SuppressWarnings("all")
 		public class MyFile {
-		  Strategy first = defineStrategyFirst();
+		  public final Strategy first = defineStrategyFirst();
 		  
 		  private Strategy defineStrategyFirst() {
 		    Strategy strategy = new Strategy();
@@ -112,7 +112,7 @@ public class MyFile {
 			    return propertyContainer.get("x");
 			  }
 			  
-			  Strategy first = defineStrategyFirst();
+			  public final Strategy first = defineStrategyFirst();
 			  
 			  private Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
@@ -142,7 +142,7 @@ public class MyFile {
 			    return Boolean.valueOf(_lessThan);
 			  }
 			  
-			  Strategy first = defineStrategyFirst();
+			  public final Strategy first = defineStrategyFirst();
 			  
 			  private Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
@@ -173,7 +173,7 @@ public class MyFile {
 			    return Boolean.valueOf(_lessThan);
 			  }
 			  
-			  Strategy first = defineStrategyFirst();
+			  public final Strategy first = defineStrategyFirst();
 			  
 			  private Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
@@ -209,7 +209,7 @@ public class MyFile {
 			    return Boolean.valueOf(_lessThan);
 			  }
 			  
-			  Strategy first = defineStrategyFirst();
+			  public final Strategy first = defineStrategyFirst();
 			  
 			  private Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
@@ -231,7 +231,7 @@ public class MyFile {
 		
 		@SuppressWarnings("all")
 		public class MyFile {
-		  Strategy first = defineStrategyFirst();
+		  public final Strategy first = defineStrategyFirst();
 		  
 		  private Strategy defineStrategyFirst() {
 		    Strategy strategy = new Strategy();
@@ -254,7 +254,7 @@ public class MyFile {
 		
 		@SuppressWarnings("all")
 		public class MyFile {
-		  Strategy first = defineStrategyFirst();
+		  public final Strategy first = defineStrategyFirst();
 		  
 		  private Strategy defineStrategyFirst() {
 		    Strategy strategy = new Strategy();
@@ -277,7 +277,7 @@ public class MyFile {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  Strategy first = defineStrategyFirst();
+			  public final Strategy first = defineStrategyFirst();
 			  
 			  private Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
@@ -303,7 +303,7 @@ public class MyFile {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  Strategy first = defineStrategyFirst();
+			  public final Strategy first = defineStrategyFirst();
 			  
 			  private Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
@@ -331,7 +331,7 @@ public class MyFile {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  Strategy first = defineStrategyFirst();
+			  public final Strategy first = defineStrategyFirst();
 			  
 			  private Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
@@ -354,7 +354,7 @@ public class MyFile {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  Strategy first = defineStrategyFirst();
+			  public final Strategy first = defineStrategyFirst();
 			  
 			  private Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
@@ -375,12 +375,78 @@ public class MyFile {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  Strategy first = defineStrategyFirst();
+			  public final Strategy first = defineStrategyFirst();
 			  
 			  private Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
 			    strategy.addRule(Factory.iterate("x").over(2, 3).shuffled().asRule());
 			    return strategy;
+			  }
+			}
+		''')
+	}
+	
+	@Test def oneStrategyRun() {
+		'''
+			strategy first
+			run first
+		'''.assertCompilesTo('''
+			import ruleengine.Strategy;
+			import scriptproducer.StrategyRunner;
+			
+			@SuppressWarnings("all")
+			public class MyFile {
+			  public final Strategy first = defineStrategyFirst();
+			  
+			  private Strategy defineStrategyFirst() {
+			    Strategy strategy = new Strategy();
+			    return strategy;
+			  }
+			  
+			  public void run1() {
+			    new StrategyRunner().run(first);
+			  }
+			  
+			  public static void main(final String[] args) {
+			    MyFile instance = new MyFile();
+			    instance.run1();
+			  }
+			}
+		''')
+	}	
+	
+	@Test def twoStrategiesRun() {
+		'''
+			strategy first
+			strategy second
+			run first with second
+		'''.assertCompilesTo('''
+			import ruleengine.Strategy;
+			import scriptproducer.StrategyRunner;
+			
+			@SuppressWarnings("all")
+			public class MyFile {
+			  public final Strategy first = defineStrategyFirst();
+			  
+			  public final Strategy second = defineStrategySecond();
+			  
+			  private Strategy defineStrategyFirst() {
+			    Strategy strategy = new Strategy();
+			    return strategy;
+			  }
+			  
+			  private Strategy defineStrategySecond() {
+			    Strategy strategy = new Strategy();
+			    return strategy;
+			  }
+			  
+			  public void run1() {
+			    new StrategyRunner().run(first.with(second));
+			  }
+			  
+			  public static void main(final String[] args) {
+			    MyFile instance = new MyFile();
+			    instance.run1();
 			  }
 			}
 		''')
