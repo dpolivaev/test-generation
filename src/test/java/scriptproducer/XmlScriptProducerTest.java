@@ -81,4 +81,16 @@ public class XmlScriptProducerTest {
                 "<TestCase self='testcase 1'/>" +
         "</Script>")));
     }
+    @Test
+    public void implicitScriptName() {
+        DOMResult dom = new DOMResult();
+        givenProperty("testcase", "testcase 1");
+        SingleScriptProducer producer = new SingleScriptProducer(propertyContainer, dom);
+        producer.makeScriptFor(propertyContainer);
+        producer.endScript();
+        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script self='script'>" +
+                "<TestCase self='testcase 1'/>" +
+        "</Script>")));
+    }
+
 }
