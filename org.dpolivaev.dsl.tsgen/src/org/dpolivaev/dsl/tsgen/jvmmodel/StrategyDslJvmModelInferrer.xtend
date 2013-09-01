@@ -27,7 +27,7 @@ import org.eclipse.xtext.xbase.jvmmodel.AbstractModelInferrer
 import org.eclipse.xtext.xbase.jvmmodel.IJvmDeclaredTypeAcceptor
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 import ruleengine.PropertyContainer
-import ruleengine.StatefulRuleBuilder.Factory
+import ruleengine.RuleBuilder.Factory
 import ruleengine.ValueProvider
 import scriptproducer.StrategyRunner
 import org.dpolivaev.dsl.tsgen.strategydsl.StrategyReference
