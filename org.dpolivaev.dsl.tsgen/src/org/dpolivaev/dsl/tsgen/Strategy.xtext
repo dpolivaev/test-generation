@@ -7,7 +7,7 @@ generate strategydsl "http://www.dpolivaev.org/dsl/tsgen/strategydsl"
 Model: {Model}
 	('package' package = QualifiedName)?
 	importSection=XImportSection?
-	strategy+=Strategy*
+	strategies+=Strategy*
 	runs += Run*
 ;
 	
@@ -47,12 +47,12 @@ SkipAction : {SkipAction}
 ;
 
 ValueAction :
-	valueProvider += XExpression (=>',' valueProvider += XExpression)* 
+	valueProviders += XExpression (=>',' valueProviders += XExpression)* 
 	('{' ruleGroups += RuleGroup* '}')?
 ;
 
 Run:
-	'run' strategies += [Strategy] ( 'with' strategies += [Strategy]) *
+	'run' strategies += [Strategy]  ('with' strategies += [Strategy])*
 ;
 
 XPrimaryExpression returns xbase::XExpression:

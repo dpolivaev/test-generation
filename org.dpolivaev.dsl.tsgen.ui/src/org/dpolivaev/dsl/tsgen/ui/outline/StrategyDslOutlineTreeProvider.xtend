@@ -33,7 +33,7 @@ public class StrategyDslOutlineTreeProvider extends DefaultOutlineTreeProvider {
 		+ rule.name 
 		+ (if (rule.ordered) "(ordered)" else if (rule.shuffled) "(shuffled)" else "")
 	}
-	protected def _text(ValueAction values) { return values.valueProvider.map[text].toString}
+	protected def _text(ValueAction values) { return values.valueProviders.map[text].toString}
 	protected def _isLeaf(ValueAction values) { return values.ruleGroups.empty}
 	
 	protected def _createChildren(IOutlineNode parentNode, ValueAction valueAction){

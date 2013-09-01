@@ -98,7 +98,7 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 	}
 	
 	private def appendValueProviders(JvmGenericType it, ValueAction action){
-		for(expr:action.valueProvider){
+		for(expr:action.valueProviders){
 			if(shouldCreateMethodFor(expr)){
 				createMethod(it, expr, "valueProvider", expr.newTypeRef(Object))
 			}
@@ -131,7 +131,7 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 	}
 	
 	private def inferStrategyMethods(JvmGenericType it, Model script){
-		for (strategy : script.strategy) {
+		for (strategy : script.strategies) {
 			val methodName = "defineStrategy" + strategy.name.toFirstUpper
 			members += strategy.toMethod(methodName, strategy.newTypeRef(Strategy)) [
 				body = [
@@ -290,7 +290,7 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 	def private apppendValueAction(ITreeAppendable it, ValueAction valueAction) {
 		append('.over(')
 		var firstValue = true
-		for (expr: valueAction.valueProvider){
+		for (expr: valueAction.valueProviders){
 			if(firstValue)
 				firstValue = false
 			else
@@ -331,7 +331,7 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 	}
 	
 	private def inferStrategyFields(JvmGenericType it, Model script){
-		for (strategy : script.strategy) {
+		for (strategy : script.strategies) {
 			val methodName = "defineStrategy" + strategy.name.toFirstUpper
 			members += strategy.toField(strategy.name.toFirstLower, strategy.newTypeRef(Strategy)) [
 				setInitializer [
