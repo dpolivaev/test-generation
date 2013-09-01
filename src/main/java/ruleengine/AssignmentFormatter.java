@@ -29,10 +29,8 @@ public class AssignmentFormatter {
     private boolean appendsReasons;
 	private boolean shouldFormatIteratingRulesOnly;
 
-    public AssignmentFormatter() {
+    private AssignmentFormatter() {
         appendsReasons = true;
-        propertySeparator = "\t";
-        nameValueSeparator = "=";
     }
 
     public String format(PropertyContainer assignments) {
@@ -65,7 +63,7 @@ public class AssignmentFormatter {
         }
     }
 
-    public static AssignmentFormatter formatter(String propertySeparator, String nameValueSeparator) {
+    public static AssignmentFormatter create(String nameValueSeparator, String propertySeparator) {
         return new AssignmentFormatter().setPropertySeparator(propertySeparator).setNameValueSeparator(nameValueSeparator);
     }
 
