@@ -5,7 +5,6 @@ import java.util.Collection;
 import ruleengine.PropertyContainer;
 import ruleengine.Rule;
 import ruleengine.ValueProvider;
-import ruleengine.ValueWithRulesProvider;
 
 public class ValueWithRules implements ValueWithRulesProvider {
     private final Collection<Rule> rules;

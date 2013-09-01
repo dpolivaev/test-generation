@@ -7,7 +7,6 @@ import ruleengine.InvalidCombinationException;
 import ruleengine.PropertyContainer;
 import ruleengine.Rule;
 import ruleengine.SpecialValue;
-import ruleengine.ValueWithRulesProvider;
 
 public class ConstantValue implements ValueWithRulesProvider{
     private final Object value;
