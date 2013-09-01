@@ -1,4 +1,6 @@
-package ruleengine;
+package ruleengine.impl;
+
+import ruleengine.Rule;
 
 public class Assignment {
     public final Object value;

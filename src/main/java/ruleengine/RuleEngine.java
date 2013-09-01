@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import ruleengine.impl.Assignment;
 import ruleengine.impl.Assignments;
 import ruleengine.impl.PropertyAssignedEvent;
 import ruleengine.impl.PropertyCombinationStartedPropagator;
