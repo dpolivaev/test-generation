@@ -1,37 +1,36 @@
 package org.dpolivaev.dsl.tsgen.jvmmodel
 
 import com.google.inject.Inject
+import java.util.ArrayList
+import java.util.Collection
+import java.util.HashMap
+import org.dpolivaev.dsl.tsgen.strategydsl.Condition
+import org.dpolivaev.dsl.tsgen.strategydsl.Model
+import org.dpolivaev.dsl.tsgen.strategydsl.Rule
+import org.dpolivaev.dsl.tsgen.strategydsl.RuleGroup
+import org.dpolivaev.dsl.tsgen.strategydsl.SkipAction
+import org.dpolivaev.dsl.tsgen.strategydsl.Strategy
+import org.dpolivaev.dsl.tsgen.strategydsl.ValueAction
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.xtext.EcoreUtil2
+import org.eclipse.xtext.common.types.JvmGenericType
+import org.eclipse.xtext.common.types.JvmType
+import org.eclipse.xtext.common.types.JvmTypeReference
+import org.eclipse.xtext.common.types.JvmVisibility
+import org.eclipse.xtext.xbase.XBooleanLiteral
+import org.eclipse.xtext.xbase.XExpression
+import org.eclipse.xtext.xbase.XNullLiteral
+import org.eclipse.xtext.xbase.XNumberLiteral
+import org.eclipse.xtext.xbase.XStringLiteral
+import org.eclipse.xtext.xbase.compiler.XbaseCompiler
+import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
 import org.eclipse.xtext.xbase.jvmmodel.AbstractModelInferrer
 import org.eclipse.xtext.xbase.jvmmodel.IJvmDeclaredTypeAcceptor
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
-import org.dpolivaev.dsl.tsgen.strategydsl.Model
-import ruleengine.Strategy
-import org.eclipse.xtext.common.types.JvmVisibility
-import ruleengine.StatefulRuleBuilder.Factory
-import org.eclipse.xtext.common.types.JvmGenericType
-import org.dpolivaev.dsl.tsgen.strategydsl.ValueAction
-import org.eclipse.xtext.xbase.compiler.XbaseCompiler
-import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
-import org.dpolivaev.dsl.tsgen.strategydsl.Rule
-import org.eclipse.xtext.common.types.JvmType
-import org.eclipse.emf.ecore.EObject
-import java.util.HashMap
-import org.eclipse.xtext.EcoreUtil2
-import org.dpolivaev.dsl.tsgen.strategydsl.Condition
-import org.eclipse.xtext.xbase.XExpression
 import ruleengine.PropertyContainer
-import org.eclipse.xtext.common.types.JvmTypeReference
-import org.eclipse.xtext.xbase.XNumberLiteral
-import org.eclipse.xtext.xbase.XStringLiteral
-import org.eclipse.xtext.xbase.XBooleanLiteral
-import org.eclipse.xtext.xbase.XNullLiteral
+import ruleengine.StatefulRuleBuilder.Factory
 import ruleengine.ValueProvider
-import org.dpolivaev.dsl.tsgen.strategydsl.RuleGroup
-import java.util.ArrayList
-import java.util.Collection
-import org.dpolivaev.dsl.tsgen.strategydsl.SkipAction
 import scriptproducer.StrategyRunner
-import org.dpolivaev.dsl.tsgen.strategydsl.Run
 
 /**
  * <p>Infers a JVM model from the source model.</p> 
@@ -133,10 +132,10 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 	private def inferStrategyMethods(JvmGenericType it, Model script){
 		for (strategy : script.strategies) {
 			val methodName = "defineStrategy" + strategy.name.toFirstUpper
-			members += strategy.toMethod(methodName, strategy.newTypeRef(Strategy)) [
+			members += strategy.toMethod(methodName, strategy.newTypeRef(ruleengine.Strategy)) [
 				body = [
 					
-					append('''Strategy strategy = new Strategy();''')
+					append('''Strategy strategy = new Strategy()«combinedStrategy(strategy.baseStrategies, false)»;''')
 					newLine
 					for(ruleGroup:strategy.ruleGroups){
 						appendRuleGroup(it, ruleGroup)
@@ -333,7 +332,7 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 	private def inferStrategyFields(JvmGenericType it, Model script){
 		for (strategy : script.strategies) {
 			val methodName = "defineStrategy" + strategy.name.toFirstUpper
-			members += strategy.toField(strategy.name.toFirstLower, strategy.newTypeRef(Strategy)) [
+			members += strategy.toField(strategy.name.toFirstLower, strategy.newTypeRef(ruleengine.Strategy)) [
 				setInitializer [
 					append('''«methodName»()''')
 				]
@@ -358,17 +357,17 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 					
 					append('new ')
 					append(run.newTypeRef(StrategyRunner).type)
-					append('''().run(«combinedStrategy(run)»);''')
+					append('''().run(«combinedStrategy(run.strategies, true)»);''')
 				]
 				visibility = JvmVisibility::PUBLIC
 			]
 		}
 	}
 	
-	private def combinedStrategy(Run run){
+	private def combinedStrategy(Collection<Strategy> strategies, boolean startWithStrategyName){
 		val strategyBuilder = new StringBuilder
-		var first = true
-		for(strategy : run.strategies){
+		var first = startWithStrategyName
+		for(strategy : strategies){
 			val strategyFieldName = strategy.name.toFirstLower
 			if(first){
 				first = false

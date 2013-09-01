@@ -452,4 +452,30 @@ public class MyFile {
 		''')
 	}	
 	
+	@Test def extendStrategies() {
+		'''
+			strategy first
+			strategy second extends first with first
+		'''.assertCompilesTo('''
+			import ruleengine.Strategy;
+			
+			@SuppressWarnings("all")
+			public class MyFile {
+			  public final Strategy first = defineStrategyFirst();
+			  
+			  public final Strategy second = defineStrategySecond();
+			  
+			  private Strategy defineStrategyFirst() {
+			    Strategy strategy = new Strategy();
+			    return strategy;
+			  }
+			  
+			  private Strategy defineStrategySecond() {
+			    Strategy strategy = new Strategy().with(first).with(first);
+			    return strategy;
+			  }
+			}
+		''')
+	}	
+	
 }
