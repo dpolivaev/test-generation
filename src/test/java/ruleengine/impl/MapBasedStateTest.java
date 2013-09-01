@@ -9,7 +9,6 @@ import static testutils.TestUtils.set;
 import org.junit.Before;
 import org.junit.Test;
 
-import ruleengine.Assignment;
 import ruleengine.AssignmentFormatter;
 import ruleengine.impl.Assignments;
 import ruleengine.impl.StatefulRule;

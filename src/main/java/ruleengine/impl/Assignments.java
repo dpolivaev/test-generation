@@ -7,7 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import ruleengine.Assignment;
 import ruleengine.PropertyAlreadyAssignedException;
 import ruleengine.PropertyContainer;
 import ruleengine.Rule;

@@ -2,6 +2,8 @@ package ruleengine;
 
 import java.util.Map;
 
+import ruleengine.impl.Assignment;
+
 public class AssignmentFormatter {
     private String propertySeparator;
 
@@ -45,7 +47,7 @@ public class AssignmentFormatter {
         return assignedPropertiesStringBuilder.toString();
     }
 
-    public AssignmentFormatter append(StringBuilder assignedPropertiesStringBuilder,
+    AssignmentFormatter append(StringBuilder assignedPropertiesStringBuilder,
         Map.Entry<String, Assignment> assignment) {
         String targetedPropertyName = assignment.getKey();
         Assignment assignmentProperties = assignment.getValue();

@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import ruleengine.impl.Assignment;
 import ruleengine.impl.Assignments;
 
 public class AssignmentFormatterTest {

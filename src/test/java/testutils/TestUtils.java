@@ -8,8 +8,8 @@ import java.util.Set;
 
 import org.mockito.Mockito;
 
-import ruleengine.Assignment;
 import ruleengine.Rule;
+import ruleengine.impl.Assignment;
 
 public class TestUtils {
     @SafeVarargs
