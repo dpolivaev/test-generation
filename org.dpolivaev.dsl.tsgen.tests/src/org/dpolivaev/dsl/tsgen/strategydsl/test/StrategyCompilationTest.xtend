@@ -23,13 +23,13 @@ class StrategyCompilationTest {
 	
 	@Test def singlePackageDeclaration() {
 		'''
-package packagename
+			package packagename
 		'''.assertCompilesTo('''
-package packagename;
-
-@SuppressWarnings("all")
-public class MyFile {
-}
+			package packagename;
+			
+			@SuppressWarnings("all")
+			public class MyFile {
+			}
 		''')
 	}	
 	
