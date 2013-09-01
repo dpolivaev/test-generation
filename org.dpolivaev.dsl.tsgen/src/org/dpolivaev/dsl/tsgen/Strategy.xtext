@@ -12,7 +12,7 @@ Model: {Model}
 ;
 	
 Strategy:
-	'strategy' name=ID 
+	'strategy' name=ID ('extends' baseStrategies += [Strategy] ('with' baseStrategies += [Strategy])* )?
 		ruleGroups += RuleGroup* 
 	;
 
@@ -52,7 +52,7 @@ ValueAction :
 ;
 
 Run:
-	'run' strategies += [Strategy]  ('with' strategies += [Strategy])*
+	'run' strategies += [Strategy] ('with' strategies += [Strategy])*
 ;
 
 XPrimaryExpression returns xbase::XExpression:
