@@ -15,9 +15,8 @@ public class LoggingScriptProducer implements ScriptProducer, ErrorHandler {
 
 	public LoggingScriptProducer(Writer writer) {
 		log = writer;
-		assignmentFormatter = new AssignmentFormatter();
+		assignmentFormatter = AssignmentFormatter.create("=", ", ");
 		assignmentFormatter.appendReasons(false);
-		assignmentFormatter.setPropertySeparator(", ");
 	}
 
 	@Override

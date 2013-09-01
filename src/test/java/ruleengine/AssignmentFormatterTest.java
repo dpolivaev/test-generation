@@ -2,7 +2,7 @@ package ruleengine;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
-import static ruleengine.AssignmentFormatter.formatter;
+import static ruleengine.AssignmentFormatter.create;
 import static testutils.TestUtils.ruleMock;
 
 import java.util.AbstractMap;
@@ -24,7 +24,7 @@ public class AssignmentFormatterTest {
 
     @Before
     public void setup() {
-        formatter = formatter(",", "=");
+        formatter = create("=", ",");
         assignedPropertiesStringBuilder = new StringBuilder();
     }
 

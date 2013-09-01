@@ -35,7 +35,7 @@ public class MapBasedStateTest {
             ""));
         String expectedScriptPropertyCombinations = "x=a";
 		assertEquals(expectedScriptPropertyCombinations,
-            new AssignmentFormatter().format(assignments));
+            AssignmentFormatter.create("=", ", ").format(assignments));
 	}
 
 
@@ -58,9 +58,9 @@ public class MapBasedStateTest {
             ""));
         assignments.add(new Assignment(ruleForProperty("y"), "b",
             ""));
-        String expectedScriptPropertyCombinations = "x=a\ty=b";
+        String expectedScriptPropertyCombinations = "x=a, y=b";
 		assertEquals(expectedScriptPropertyCombinations,
-            new AssignmentFormatter().format(assignments));
+		AssignmentFormatter.create("=", ", ").format(assignments));
 	}
 
 
