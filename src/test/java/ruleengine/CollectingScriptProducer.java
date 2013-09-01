@@ -3,6 +3,8 @@ package ruleengine;
 import java.io.StringWriter;
 import java.io.Writer;
 
+import scriptproducer.LoggingScriptProducer;
+
 /**
  * @author Dimitry Polivaev 18.02.2013
  */

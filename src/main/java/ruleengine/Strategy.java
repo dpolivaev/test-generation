@@ -11,11 +11,11 @@ public class Strategy {
     private Map<String, Rule> topRules = new LinkedHashMap<>();
     private Map<TriggeredRuleKey, Rule> triggeredRules = new LinkedHashMap<>();
 
-    public void addRule(StatefulRuleBuilder builder) {
+    public void addRule(RuleBuilder builder) {
         addRule(builder.asRule());
     }
 
-    public void addDefaultRule(StatefulRuleBuilder builder) {
+    public void addDefaultRule(RuleBuilder builder) {
         addRule(builder.asDefaultRule());
     }
 
@@ -49,7 +49,7 @@ public class Strategy {
     public Rule getDefaultRulesForProperty(String propertyName) {
         Rule rule = defaultRules.get(propertyName);
         if(rule == null)
-            return StatefulRuleBuilder.Factory.iterate(propertyName).over(SpecialValues.UNDEFINED).asDefaultRule();
+            return RuleBuilder.Factory.iterate(propertyName).over(SpecialValues.UNDEFINED).asDefaultRule();
         return rule;
     }
 

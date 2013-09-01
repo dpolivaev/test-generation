@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 
-public class StatefulRuleBuilder {
+public class RuleBuilder {
     private String targetedPropertyName = null;
     final private List<ValueWithRulesProvider> values = new ArrayList<>();
     private Set<String> triggeringProperties = Collections.emptySet();
@@ -18,7 +18,7 @@ public class StatefulRuleBuilder {
     private Order order = Order.defaultOrder;
     private int previousValueCount;
 
-    public StatefulRuleBuilder when(
+    public RuleBuilder when(
         String... triggeringProperties) {
     	if(! this.triggeringProperties.isEmpty())
     		throw new IllegalStateException("triggering properties already set to" + triggeringProperties);
@@ -26,7 +26,7 @@ public class StatefulRuleBuilder {
         return this;
     }
 
-    public StatefulRuleBuilder over(Object... valueObjects) {
+    public RuleBuilder over(Object... valueObjects) {
         previousValueCount = this.values.size();
         for(Object valueObject : valueObjects)
         	if(valueObject instanceof ValueWithRulesProvider)
@@ -47,18 +47,18 @@ public class StatefulRuleBuilder {
     	return new ValueWithRules(value, Collections.<Rule> emptyList());
     }
 
-    public StatefulRuleBuilder with(Rule... rules) {
+    public RuleBuilder with(Rule... rules) {
         return with(Arrays.asList(rules));
     }
 
-    public StatefulRuleBuilder with(StatefulRuleBuilder... ruleBuilders) {
+    public RuleBuilder with(RuleBuilder... ruleBuilders) {
         Collection<Rule> rules = new ArrayList<>(ruleBuilders.length);
-        for (StatefulRuleBuilder builder : ruleBuilders)
+        for (RuleBuilder builder : ruleBuilders)
             rules.add(builder.asTriggeredRule());
         return with(rules);
     }
 
-    private StatefulRuleBuilder with(Collection<Rule> rules) {
+    private RuleBuilder with(Collection<Rule> rules) {
         ListIterator<ValueWithRulesProvider> listIterator = values.listIterator(previousValueCount);
         while (listIterator.hasNext()) {
             ValueWithRulesProvider valueProvider = listIterator.next();
@@ -67,23 +67,23 @@ public class StatefulRuleBuilder {
         return this;
     }
 
-    public StatefulRuleBuilder iterate(
+    public RuleBuilder iterate(
         String targetedPropertyName) {
         this.targetedPropertyName = targetedPropertyName;
         return this;
     }
 
-    public StatefulRuleBuilder ordered() {
+    public RuleBuilder ordered() {
         order = Order.ORDERED;
         return this;
     }
 
-    public StatefulRuleBuilder orderedThenShuffled() {
+    public RuleBuilder orderedThenShuffled() {
         order = Order.ORDERED_THEN_SHUFFLED;
         return this;
     }
 
-    public StatefulRuleBuilder shuffled() {
+    public RuleBuilder shuffled() {
         order = Order.SHUFFLED;
         return this;
     }
@@ -117,7 +117,7 @@ public class StatefulRuleBuilder {
     }
 
 
-    public StatefulRuleBuilder _if(Condition condition) {
+    public RuleBuilder _if(Condition condition) {
     	if(this.condition != Condition.TRUE)
     		throw new IllegalStateException("condition already set");
         this.condition = condition;
@@ -125,16 +125,16 @@ public class StatefulRuleBuilder {
     }
 
     public static class Factory {
-        static public StatefulRuleBuilder when(String... triggeringProperties) {
-            return new StatefulRuleBuilder().when(triggeringProperties);
+        static public RuleBuilder when(String... triggeringProperties) {
+            return new RuleBuilder().when(triggeringProperties);
         }
 
-        static public StatefulRuleBuilder iterate(String property) {
-            return new StatefulRuleBuilder().iterate(property);
+        static public RuleBuilder iterate(String property) {
+            return new RuleBuilder().iterate(property);
         }
 
-        static public StatefulRuleBuilder _if(Condition condition) {
-            return new StatefulRuleBuilder()._if(condition);
+        static public RuleBuilder _if(Condition condition) {
+            return new RuleBuilder()._if(condition);
         }
     }
 

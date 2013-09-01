@@ -7,7 +7,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static ruleengine.StatefulRuleBuilder.Factory.iterate;
+import static ruleengine.RuleBuilder.Factory.iterate;
 
 import java.util.Collections;
 

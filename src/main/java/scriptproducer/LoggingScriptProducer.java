@@ -1,8 +1,12 @@
-package ruleengine;
+package scriptproducer;
 
 import java.io.IOException;
 import java.io.Writer;
 
+import ruleengine.AssignmentFormatter;
+import ruleengine.ErrorHandler;
+import ruleengine.PropertyContainer;
+import ruleengine.ScriptProducer;
 import utils.Utils;
 
 public class LoggingScriptProducer implements ScriptProducer, ErrorHandler {

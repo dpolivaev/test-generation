@@ -6,7 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Matchers.any;
-import static ruleengine.StatefulRuleBuilder.Factory.iterate;
+import static ruleengine.RuleBuilder.Factory.iterate;
 import static ruleengine.TestUtils.set;
 
 import java.util.Collections;

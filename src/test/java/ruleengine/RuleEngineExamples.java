@@ -2,7 +2,7 @@ package ruleengine;
 
 import static org.junit.Assert.assertEquals;
 import static ruleengine.Combinations.combination;
-import static ruleengine.StatefulRuleBuilder.Factory.iterate;
+import static ruleengine.RuleBuilder.Factory.iterate;
 import static ruleengine.ConstantValue.Instruction.SKIP;
 
 import org.junit.Before;

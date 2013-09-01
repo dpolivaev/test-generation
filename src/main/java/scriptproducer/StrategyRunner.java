@@ -3,7 +3,6 @@ package scriptproducer;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
-import ruleengine.LoggingScriptProducer;
 import ruleengine.RuleEngine;
 import ruleengine.Strategy;
 import utils.Utils;

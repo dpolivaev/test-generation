@@ -2,7 +2,7 @@ package ruleengine;
 
 import java.util.Map;
 
-class AssignmentFormatter {
+public class AssignmentFormatter {
     private String propertySeparator;
 
     public String getPropertySeparator() {
@@ -27,7 +27,7 @@ class AssignmentFormatter {
     private boolean appendsReasons;
 	private boolean shouldFormatIteratingRulesOnly;
 
-    AssignmentFormatter() {
+    public AssignmentFormatter() {
         appendsReasons = true;
         propertySeparator = "\t";
         nameValueSeparator = "=";
