@@ -15,7 +15,7 @@ public class RuleEngineExamples {
 
     private RuleEngine ruleEngine;
     private Strategy strategy;
-    private LoggingScriptProducerMock scriptProducerMock;
+    private CollectingScriptProducer scriptProducerMock;
     private void generateCombinationsForStrategy() {
         ruleEngine.run(strategy);
     }
@@ -25,14 +25,14 @@ public class RuleEngineExamples {
             scriptProducerMock.getAllScriptPropertyCombinations());
     }
 
-    private void initializeRuleEngine(LoggingScriptProducerMock loggingScriptProducerMock) {
+    private void initializeRuleEngine(CollectingScriptProducer loggingScriptProducerMock) {
         scriptProducerMock = loggingScriptProducerMock;
         ruleEngine = new RuleEngine(scriptProducerMock);
     }
     
     @Before
     public void setup() {
-        LoggingScriptProducerMock loggingScriptProducerMock = new LoggingScriptProducerMock();
+        CollectingScriptProducer loggingScriptProducerMock = new CollectingScriptProducer();
         initializeRuleEngine(loggingScriptProducerMock);
         strategy = new Strategy();
     }

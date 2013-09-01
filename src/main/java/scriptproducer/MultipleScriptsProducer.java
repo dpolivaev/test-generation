@@ -23,17 +23,19 @@ public class MultipleScriptsProducer implements ScriptProducer{
      @Override
     public void makeScriptFor(PropertyContainer propertyContainer) {
         Object scriptValue = propertyContainer.get("script");
+        String scriptName;
         if(scriptValue == SpecialValues.UNDEFINED)
-            return;
-        String scriptName = (String) scriptValue;
+        	scriptName = "script";
+        else
+        	scriptName =(String) scriptValue;
         if(! singleScriptProducers.containsKey(scriptName)) {
-            setSingleScriptProducer(scriptName, newSingleScriptProducer(propertyContainer));
+            setSingleScriptProducer(scriptName, newSingleScriptProducer(scriptName, propertyContainer));
         }
         getSingleScriptProducer(scriptName).makeScriptFor(propertyContainer);
     }
 
-    private SingleScriptProducer newSingleScriptProducer(PropertyContainer propertyContainer) {
-        return new SingleScriptProducer(propertyContainer, xsltSource, resultFactory.newResult(propertyContainer.<String>get("script")));
+    private SingleScriptProducer newSingleScriptProducer(String scriptName, PropertyContainer propertyContainer) {
+        return new SingleScriptProducer(propertyContainer, xsltSource, resultFactory.newResult(scriptName));
     }
 
     public void endScripts() {

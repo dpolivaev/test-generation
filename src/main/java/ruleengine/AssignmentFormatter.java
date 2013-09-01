@@ -24,11 +24,11 @@ class AssignmentFormatter {
     }
 
     private String nameValueSeparator;
-    private boolean appendReasons;
-    private boolean shouldFormatIteratingRulesOnly;
+    private boolean appendsReasons;
+	private boolean shouldFormatIteratingRulesOnly;
 
     AssignmentFormatter() {
-        appendReasons = true;
+        appendsReasons = true;
         propertySeparator = "\t";
         nameValueSeparator = "=";
     }
@@ -49,7 +49,7 @@ class AssignmentFormatter {
         Map.Entry<String, Assignment> assignment) {
         String targetedPropertyName = assignment.getKey();
         Assignment assignmentProperties = assignment.getValue();
-        if (appendReasons)
+        if (appendsReasons)
             assignedPropertiesStringBuilder.append(assignmentProperties.reason);
         assignedPropertiesStringBuilder.append(targetedPropertyName)
             .append(nameValueSeparator)
@@ -68,11 +68,14 @@ class AssignmentFormatter {
     }
 
     public void appendReasons(boolean appendReasons) {
-        this.appendReasons = appendReasons;
+        this.appendsReasons = appendReasons;
     }
 
     public void shouldFormatIteratingRulesOnly(boolean shouldFormatIteratingRulesOnly) {
         this.shouldFormatIteratingRulesOnly = shouldFormatIteratingRulesOnly;
     }
 
+    public boolean appendsReasons() {
+		return appendsReasons;
+	}
 }
