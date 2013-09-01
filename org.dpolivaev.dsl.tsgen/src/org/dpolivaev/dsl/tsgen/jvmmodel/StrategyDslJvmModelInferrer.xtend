@@ -9,7 +9,6 @@ import org.dpolivaev.dsl.tsgen.strategydsl.Model
 import org.dpolivaev.dsl.tsgen.strategydsl.Rule
 import org.dpolivaev.dsl.tsgen.strategydsl.RuleGroup
 import org.dpolivaev.dsl.tsgen.strategydsl.SkipAction
-import org.dpolivaev.dsl.tsgen.strategydsl.Strategy
 import org.dpolivaev.dsl.tsgen.strategydsl.ValueAction
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.EcoreUtil2
@@ -31,6 +30,9 @@ import ruleengine.PropertyContainer
 import ruleengine.StatefulRuleBuilder.Factory
 import ruleengine.ValueProvider
 import scriptproducer.StrategyRunner
+import org.dpolivaev.dsl.tsgen.strategydsl.StrategyReference
+import java.util.Set
+import java.util.HashSet
 
 /**
  * <p>Infers a JVM model from the source model.</p> 
@@ -42,10 +44,8 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 	/**
      * convenience API to build and initialize JVM types and their members.
      */
-	@Inject extension JvmTypesBuilder
+	@Inject extension JvmTypesBuilder jvmTypesBuilder
 	@Inject XbaseCompiler xbaseCompiler
-	JvmType ruleFactoryType
-	val methods = new HashMap<EObject, String>
 
 	/**
 	 * The dispatch method {@code infer} is called for each instance of the
@@ -75,43 +75,74 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 	def dispatch void infer(Model script, IJvmDeclaredTypeAcceptor acceptor, boolean isPreIndexingPhase) {
 		val className = script.eResource.URI.trimFileExtension.lastSegment.toFirstUpper
 		val qualifiedClassName = if(script.package != null) script.package + '.' + className else className
+		acceptor.accept(script.toClass(qualifiedClassName)).initializeLater([
+			new ScriptInitializer(jvmTypesBuilder, xbaseCompiler, it, script).initializeClass()
+		])
+	}
+}
+
+class ScriptInitializer{
+	val extension JvmTypesBuilder jvmTypesBuilder
+	val XbaseCompiler xbaseCompiler
+	val HashMap<EObject, String> methods
+	val Set<String> declaredStrategies
+	val JvmGenericType jvmType
+	val Model script
+	val JvmType ruleFactoryType
+
+	new(extension JvmTypesBuilder jvmTypesBuilder, XbaseCompiler xbaseCompiler, JvmGenericType jvmType, Model script){
+		this.jvmTypesBuilder = jvmTypesBuilder
+		this.xbaseCompiler = xbaseCompiler
+		this.methods = new HashMap<EObject, String>
+		this.declaredStrategies = new HashSet<String>
+		this.script = script
+		this.jvmType = jvmType
 		ruleFactoryType = script.newTypeRef(Factory).type 
-		acceptor.accept(script.toClass(qualifiedClassName)).initializeLater(
-			[
-				methods.clear
-				inferExpressions(it, script)
-				inferStrategyFields(it, script)
-				inferStrategyMethods(it, script)
-				inferRunMethods(it, script)
-			])
 	}
 	
-	private def inferExpressions(JvmGenericType it, Model script){
+	
+	def initializeClass(){
+		inferExpressions()
+		inferStrategyFields()
+		inferStrategyMethods()
+		inferRunMethods()
+	}
+	
+	private def inferExpressions(){
+		for(strategy : script.strategies)
+			declaredStrategies += strategy.name
 		val contents = EcoreUtil2.eAllContents(script)
 		for(obj : contents){
 			if (obj instanceof ValueAction) 
-				appendValueProviders(it, obj as ValueAction)
+				appendValueProviders(obj as ValueAction)
 			else if (obj instanceof Condition) 
-				appendConditions(it, obj as Condition)
+				appendConditions(obj as Condition)
+			else if (obj instanceof StrategyReference) 
+				appendStrategyReferences(obj as StrategyReference)
 		}
 	}
 	
-	private def appendValueProviders(JvmGenericType it, ValueAction action){
+	private def appendStrategyReferences(StrategyReference ref){
+		if(ref.expr != null && ! declaredStrategies.contains(ref.expr.toString))
+			createMethod(ref.expr, "externalStrategy", ref.expr.newTypeRef(ruleengine.Strategy), false)
+	}
+	
+	private def appendValueProviders(ValueAction action){
 		for(expr:action.valueProviders){
 			if(shouldCreateMethodFor(expr)){
-				createMethod(it, expr, "valueProvider", expr.newTypeRef(Object))
+				createMethod(expr, "valueProvider", expr.newTypeRef(Object), true)
 			}
 		}
 	}
 	
-	private def createMethod(JvmGenericType it, XExpression expr, String prefix, JvmTypeReference typeRef){
+	private def createMethod(XExpression expr, String prefix, JvmTypeReference resultTypeRef, boolean useParameters){
 				val valueProviderCounter = methods.size + 1
 				val name = prefix + valueProviderCounter
 				methods.put(expr, name)
-				members += expr.toMethod(name, typeRef)[
-					parameters += expr.toParameter("propertyContainer", expr.newTypeRef(PropertyContainer))
+				jvmType.members += expr.toMethod(name, resultTypeRef)[
+					if(useParameters)
+						parameters += expr.toParameter("propertyContainer", expr.newTypeRef(PropertyContainer))
 					body = expr
-					static = true
 					visibility = JvmVisibility::PRIVATE
 				]
 	}
@@ -120,22 +151,24 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 		return !(expr instanceof XStringLiteral || expr instanceof XNumberLiteral || expr instanceof XBooleanLiteral || expr instanceof XNullLiteral)
 	}
 	
-	private def appendConditions(JvmGenericType it, Condition condition){
+	private def appendConditions(Condition condition){
 		if(condition != null){
 			val expr = condition.expr
 			if(expr != null){
-				createMethod(it, expr, "condition", expr.newTypeRef(Boolean))
+				createMethod(expr, "condition", expr.newTypeRef(Boolean), true)
 			}
 		}
 	}
 	
-	private def inferStrategyMethods(JvmGenericType it, Model script){
+	private def inferStrategyMethods(){
 		for (strategy : script.strategies) {
 			val methodName = "defineStrategy" + strategy.name.toFirstUpper
-			members += strategy.toMethod(methodName, strategy.newTypeRef(ruleengine.Strategy)) [
+			jvmType.members += strategy.toMethod(methodName, strategy.newTypeRef(ruleengine.Strategy)) [
 				body = [
 					
-					append('''Strategy strategy = new Strategy()«combinedStrategy(strategy.baseStrategies, false)»;''')
+					append('Strategy strategy = new Strategy()')
+					combinedStrategy(it, strategy.baseStrategies, false)
+					append(';')
 					newLine
 					for(ruleGroup:strategy.ruleGroups){
 						appendRuleGroup(it, ruleGroup)
@@ -329,10 +362,10 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 		append('}')
 	}
 	
-	private def inferStrategyFields(JvmGenericType it, Model script){
+	private def inferStrategyFields(){
 		for (strategy : script.strategies) {
 			val methodName = "defineStrategy" + strategy.name.toFirstUpper
-			members += strategy.toField(strategy.name.toFirstLower, strategy.newTypeRef(ruleengine.Strategy)) [
+			jvmType.members += strategy.toField(strategy.name.toFirstLower, strategy.newTypeRef(ruleengine.Strategy)) [
 				setInitializer [
 					append('''«methodName»()''')
 				]
@@ -342,48 +375,60 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 		}
 	}
 	
-	private def inferRunMethods(JvmGenericType it, Model script){
-		inferRunMethodImplementations(it, script);
-		inferMainMethod(it, script);
+	private def inferRunMethods(){
+		inferRunMethodImplementations();
+		inferMainMethod();
 	}
 	
-	private def inferRunMethodImplementations(JvmGenericType it, Model script){
+	private def inferRunMethodImplementations(){
 		var counter = 0
 		for (run : script.runs) {
 			counter = counter + 1
 			val methodName = "run" + counter
-			members += run.toMethod(methodName, run.newTypeRef(void)) [
+			jvmType.members += run.toMethod(methodName, run.newTypeRef(void)) [
 				body = [
 					
 					append('new ')
 					append(run.newTypeRef(StrategyRunner).type)
-					append('''().run(«combinedStrategy(run.strategies, true)»);''')
+					append('().run(')
+					combinedStrategy(it, run.strategies, true)
+					append(');')
 				]
 				visibility = JvmVisibility::PUBLIC
 			]
 		}
 	}
 	
-	private def combinedStrategy(Collection<Strategy> strategies, boolean startWithStrategyName){
-		val strategyBuilder = new StringBuilder
+	private def combinedStrategy(ITreeAppendable it, Collection<StrategyReference> strategies, boolean startWithStrategyName){
 		var first = startWithStrategyName
 		for(strategy : strategies){
-			val strategyFieldName = strategy.name.toFirstLower
 			if(first){
 				first = false
-				strategyBuilder.append(strategyFieldName)
+				appendStrategyReference(it, strategy)
 			}
 			else{
-				strategyBuilder.append(".with(").append(strategyFieldName).append(")")
+				append(".with(")
+				appendStrategyReference(it, strategy)
+				append(")")
 			}
 		}
-		return strategyBuilder.toString
+		return it.toString
+	}
+
+	def private appendStrategyReference(ITreeAppendable it, StrategyReference ref) {
+		val methodName = methods.get(ref.expr)
+		if(methodName != null){
+			append(methodName)
+			append('()')
+		}
+		else
+			append(ref.expr.toString)
 	}
 	
-	private def inferMainMethod(JvmGenericType it, Model script){
+	private def inferMainMethod(){
 		if(! script.runs.empty){
-			val className = it.simpleName
-			members += script.toMethod("main", script.newTypeRef(Void::TYPE)) [
+			val className = jvmType.simpleName
+			jvmType.members += script.toMethod("main", script.newTypeRef(Void::TYPE)) [
 				parameters += script.toParameter("args", script.newTypeRef(typeof(String)).addArrayTypeDimension)
 				body = [
 					append('''«className» instance = new «className»();''')
