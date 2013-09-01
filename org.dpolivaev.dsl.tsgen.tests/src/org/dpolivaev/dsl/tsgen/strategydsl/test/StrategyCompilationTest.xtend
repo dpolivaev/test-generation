@@ -108,7 +108,7 @@ public class MyFile {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  private static Object valueProvider1(final PropertyContainer propertyContainer) {
+			  private Object valueProvider1(final PropertyContainer propertyContainer) {
 			    return propertyContainer.get("x");
 			  }
 			  
@@ -137,7 +137,7 @@ public class MyFile {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  private static Boolean condition1(final PropertyContainer propertyContainer) {
+			  private Boolean condition1(final PropertyContainer propertyContainer) {
 			    boolean _lessThan = (1 < 2);
 			    return Boolean.valueOf(_lessThan);
 			  }
@@ -168,7 +168,7 @@ public class MyFile {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  private static Boolean condition1(final PropertyContainer propertyContainer) {
+			  private Boolean condition1(final PropertyContainer propertyContainer) {
 			    boolean _lessThan = (1 < 2);
 			    return Boolean.valueOf(_lessThan);
 			  }
@@ -199,12 +199,12 @@ public class MyFile {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  private static Boolean condition1(final PropertyContainer propertyContainer) {
+			  private Boolean condition1(final PropertyContainer propertyContainer) {
 			    boolean _lessThan = (1 < 2);
 			    return Boolean.valueOf(_lessThan);
 			  }
 			  
-			  private static Boolean condition2(final PropertyContainer propertyContainer) {
+			  private Boolean condition2(final PropertyContainer propertyContainer) {
 			    boolean _lessThan = (3 < 4);
 			    return Boolean.valueOf(_lessThan);
 			  }
@@ -478,4 +478,28 @@ public class MyFile {
 		''')
 	}	
 	
+	
+	@Test def extendExternalStrategies() {
+		'''
+			import ruleengine.Strategy
+			strategy first extends new Strategy()
+		'''.assertCompilesTo('''
+			import ruleengine.Strategy;
+			
+			@SuppressWarnings("all")
+			public class MyFile {
+			  private Strategy externalStrategy1() {
+			    Strategy _strategy = new Strategy();
+			    return _strategy;
+			  }
+			  
+			  public final Strategy first = defineStrategyFirst();
+			  
+			  private Strategy defineStrategyFirst() {
+			    Strategy strategy = new Strategy().with(externalStrategy1());
+			    return strategy;
+			  }
+			}
+		''')
+	}	
 }

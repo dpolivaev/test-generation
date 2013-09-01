@@ -12,7 +12,7 @@ Model: {Model}
 ;
 	
 Strategy:
-	'strategy' name=ID ('extends' baseStrategies += [Strategy] ('with' baseStrategies += [Strategy])* )?
+	'strategy' name=ID ('extends' baseStrategies += StrategyReference ('with' baseStrategies += StrategyReference)* )?
 		ruleGroups += RuleGroup* 
 	;
 
@@ -52,8 +52,11 @@ ValueAction :
 ;
 
 Run:
-	'run' strategies += [Strategy] ('with' strategies += [Strategy])*
+	'run' strategies += StrategyReference ('with' strategies += StrategyReference)*
 ;
+
+StrategyReference : expr = XExpression;
+
 
 XPrimaryExpression returns xbase::XExpression:
 	XConstructorCall |
