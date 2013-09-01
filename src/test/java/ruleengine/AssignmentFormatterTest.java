@@ -3,13 +3,15 @@ package ruleengine;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 import static ruleengine.AssignmentFormatter.formatter;
-import static ruleengine.TestUtils.ruleMock;
+import static testutils.TestUtils.ruleMock;
 
 import java.util.AbstractMap;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+
+import ruleengine.impl.Assignments;
 
 public class AssignmentFormatterTest {
 

@@ -1,6 +1,6 @@
-package ruleengine;
+package testutils;
 
-class Combinations {
+public class Combinations {
     private int iterationCounter = 0;
     StringBuilder stringBuilder = new StringBuilder();
 

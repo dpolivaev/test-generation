@@ -2,7 +2,7 @@ package scriptproducer;
 
 import static org.xmlmatchers.XmlMatchers.isEquivalentTo;
 import static org.xmlmatchers.transform.XmlConverters.the;
-import static ruleengine.TestUtils.assignmentMock;
+import static testutils.TestUtils.assignmentMock;
 
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
@@ -14,8 +14,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
-import ruleengine.Assignments;
-import ruleengine.SpecialValues;
+import ruleengine.SpecialValue;
+import ruleengine.impl.Assignments;
 
 public class XmlTestCaseProducerTest {
 
@@ -69,7 +69,7 @@ public class XmlTestCaseProducerTest {
     
     @Test
     public void ignoresUndefinedProperties() throws Exception{
-        givenProperty("testcase.attribute", SpecialValues.UNDEFINED);
+        givenProperty("testcase.attribute", SpecialValue.UNDEFINED);
         createScript();
         checkOutput("<TestCase/>");
     }

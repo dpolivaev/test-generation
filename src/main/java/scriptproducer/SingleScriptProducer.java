@@ -6,7 +6,7 @@ import javax.xml.transform.sax.TransformerHandler;
 
 import ruleengine.PropertyContainer;
 import ruleengine.ScriptProducer;
-import ruleengine.SpecialValues;
+import ruleengine.SpecialValue;
 
 public class SingleScriptProducer implements ScriptProducer {
 
@@ -27,7 +27,7 @@ public class SingleScriptProducer implements ScriptProducer {
         testCaseProducer = new TestCaseProducer(xmlWriter);
         xmlWriter.beginElement("Script");
         Object scriptValue = propertyContainer.get("script");
-        if(scriptValue.equals(SpecialValues.UNDEFINED))
+        if(scriptValue.equals(SpecialValue.UNDEFINED))
         	xmlWriter.setAttribute("self", "script");
         testCaseProducer.addAttributes(propertyContainer, "script");
     }

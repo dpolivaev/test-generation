@@ -8,7 +8,7 @@ import javax.xml.transform.Source;
 
 import ruleengine.PropertyContainer;
 import ruleengine.ScriptProducer;
-import ruleengine.SpecialValues;
+import ruleengine.SpecialValue;
 
 public class MultipleScriptsProducer implements ScriptProducer{
     private Source xsltSource;    
@@ -24,7 +24,7 @@ public class MultipleScriptsProducer implements ScriptProducer{
     public void makeScriptFor(PropertyContainer propertyContainer) {
         Object scriptValue = propertyContainer.get("script");
         String scriptName;
-        if(scriptValue == SpecialValues.UNDEFINED)
+        if(scriptValue == SpecialValue.UNDEFINED)
         	scriptName = "script";
         else
         	scriptName =(String) scriptValue;

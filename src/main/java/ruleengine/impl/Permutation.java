@@ -1,4 +1,4 @@
-package ruleengine;
+package ruleengine.impl;
 
 import java.util.Random;
 

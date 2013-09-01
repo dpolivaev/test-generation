@@ -6,6 +6,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+import ruleengine.impl.TriggeredRuleKey;
+
 public class Strategy {
     private Map<String, Rule> defaultRules = new LinkedHashMap<>();
     private Map<String, Rule> topRules = new LinkedHashMap<>();
@@ -49,7 +51,7 @@ public class Strategy {
     public Rule getDefaultRulesForProperty(String propertyName) {
         Rule rule = defaultRules.get(propertyName);
         if(rule == null)
-            return RuleBuilder.Factory.iterate(propertyName).over(SpecialValues.UNDEFINED).asDefaultRule();
+            return RuleBuilder.Factory.iterate(propertyName).over(SpecialValue.UNDEFINED).asDefaultRule();
         return rule;
     }
 

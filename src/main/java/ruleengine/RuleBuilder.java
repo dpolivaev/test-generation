@@ -1,6 +1,6 @@
 package ruleengine;
 
-import static ruleengine.TestUtils.set;
+import static testutils.TestUtils.set;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,6 +9,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
+
+import ruleengine.impl.ConstantValue;
+import ruleengine.impl.DefaultStatefulRule;
+import ruleengine.impl.OrderedValueProviders;
+import ruleengine.impl.ShuffledValueProviders;
+import ruleengine.impl.StatefulRule;
+import ruleengine.impl.TopStatefulRule;
+import ruleengine.impl.TriggeredStatefulRule;
+import ruleengine.impl.ValueWithRules;
 
 public class RuleBuilder {
     private String targetedPropertyName = null;

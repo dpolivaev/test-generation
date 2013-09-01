@@ -1,6 +1,8 @@
-package ruleengine;
+package ruleengine.impl;
 
 import java.util.Set;
+
+import ruleengine.Rule;
 
 public class TriggeredRuleKey{
     final public Set<String> triggeringProperties;

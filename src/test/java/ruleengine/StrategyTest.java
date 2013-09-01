@@ -10,6 +10,9 @@ import static ruleengine.RuleBuilder.Factory.iterate;
 import org.junit.Before;
 import org.junit.Test;
 
+import ruleengine.impl.AlternatingRule;
+import ruleengine.impl.StatefulRule;
+
 public class StrategyTest {
     private Strategy strategy;
 

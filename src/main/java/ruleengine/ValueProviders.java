@@ -1,6 +1,6 @@
 package ruleengine;
 
-interface ValueProviders {
+public interface ValueProviders {
 
 	boolean allValuesUsed();
 

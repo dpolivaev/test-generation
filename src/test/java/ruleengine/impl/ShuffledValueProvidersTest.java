@@ -1,10 +1,15 @@
-package ruleengine;
+package ruleengine.impl;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
+
+import ruleengine.Order;
+import ruleengine.impl.ConstantValue;
+import ruleengine.impl.OrderedValueProviders;
+import ruleengine.impl.ShuffledValueProviders;
 
 public class ShuffledValueProvidersTest {
 	private ShuffledValueProviders shuffledProviders(Order order) {

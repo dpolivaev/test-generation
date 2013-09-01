@@ -2,6 +2,8 @@ package ruleengine;
 
 import java.util.Set;
 
+import ruleengine.impl.PropertyAssignedEvent;
+
 // triggered A <- default B
 // default B <- default A
 // => triggered A can not be assigned!

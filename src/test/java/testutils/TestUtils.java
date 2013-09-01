@@ -1,4 +1,4 @@
-package ruleengine;
+package testutils;
 
 import static org.mockito.Mockito.mock;
 
@@ -7,6 +7,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.mockito.Mockito;
+
+import ruleengine.Assignment;
+import ruleengine.Rule;
 
 public class TestUtils {
     @SafeVarargs

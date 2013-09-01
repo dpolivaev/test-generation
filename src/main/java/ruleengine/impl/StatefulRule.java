@@ -1,14 +1,19 @@
-package ruleengine;
+package ruleengine.impl;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import ruleengine.Condition;
+import ruleengine.EngineState;
+import ruleengine.Rule;
+import ruleengine.ValueProviders;
+
 /**
  * @author Dimitry Polivaev 18.02.2013
  */
-abstract class StatefulRule implements Rule {
+public abstract class StatefulRule implements Rule {
 
     final private String targetedPropertyName;
     final private ValueProviders valueProviders;

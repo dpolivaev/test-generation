@@ -1,4 +1,4 @@
-package ruleengine;
+package ruleengine.impl;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -7,7 +7,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Matchers.any;
 import static ruleengine.RuleBuilder.Factory.iterate;
-import static ruleengine.TestUtils.set;
+import static testutils.TestUtils.set;
 
 import java.util.Collections;
 import java.util.Set;
@@ -15,6 +15,12 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+
+import ruleengine.EngineState;
+import ruleengine.Rule;
+import ruleengine.Strategy;
+import ruleengine.impl.PropertyAssignedEvent;
+import ruleengine.impl.StatefulRule;
 
 public class RuleTest {
     private EngineState engineState;
