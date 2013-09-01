@@ -17,7 +17,7 @@ class Combinations {
         stringBuilder.append(++iterationCounter).append(" : ");
         for (int i = 0; i < properties.length; i += 2) {
             if (i > 0)
-                stringBuilder.append("\t");
+                stringBuilder.append(", ");
             stringBuilder.append(properties[i + 0]).append("=")
                 .append(properties[i + 1]);
         }

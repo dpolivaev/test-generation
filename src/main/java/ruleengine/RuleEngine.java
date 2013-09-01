@@ -19,10 +19,11 @@ public class RuleEngine implements EngineState {
     private Set<String> dependencies;
     private String assignmentReason;
     private String processedProperty;
+	private final Collection<ErrorHandler> errorHandlers;
 
     public RuleEngine(ScriptProducer scriptProducer) {
     	this();
-        add(scriptProducer);
+        addScriptProducer(scriptProducer);
     }
 
     public RuleEngine() {
@@ -31,14 +32,23 @@ public class RuleEngine implements EngineState {
         this.strategy = null;
         dependencies = new HashSet<>();
         scriptProducers = new ArrayList<>();
+        errorHandlers = new ArrayList<>();
     }
 
-    public void add(ScriptProducer scriptProducer) {
+    public void addScriptProducer(ScriptProducer scriptProducer) {
 		scriptProducers.add(scriptProducer);
 	}
 
-    public void remove(ScriptProducer scriptProducer) {
+    public void removeScriptProducer(ScriptProducer scriptProducer) {
 		scriptProducers.remove(scriptProducer);
+	}
+
+    public void addErrorHandler(ErrorHandler errorHandler) {
+    	errorHandlers.add(errorHandler);
+	}
+
+    public void removeErrorHandler(ErrorHandler errorHandler) {
+    	errorHandlers.remove(errorHandler);
 	}
 
     public void run(Strategy strategy) {
@@ -52,6 +62,10 @@ public class RuleEngine implements EngineState {
                 }
                 catch (InvalidCombinationException e) {
                 }
+                catch (RuntimeException e) {
+                	handle(e);
+                	throw e;
+                }
                 dependencies = oldDependencies;
             	fireNextCombinationFinishedEvent();
 
@@ -62,7 +76,18 @@ public class RuleEngine implements EngineState {
         }
 	}
 
-    private void generateCombination() {
+    private void handle(Exception e) {
+    	for (ErrorHandler errorHandler : errorHandlers){
+    		try{
+    			errorHandler.handleError(e, this);
+    		}
+    		catch(Exception producerException){
+    			
+    		}
+    	}
+	}
+
+	private void generateCombination() {
         assignments.startNewCombination();
         assignmentReason = "->";
         fireNextCombinationStartedEvent();
@@ -159,7 +184,7 @@ public class RuleEngine implements EngineState {
 
     @Override
     public boolean containsPropertyValue(String name) {
-        return assignments.containsPropertyValue(name);
+        return assignments.containsPropertyValue(name) || strategy.availableDefaultProperties().contains(name);
     }
 
     @Override

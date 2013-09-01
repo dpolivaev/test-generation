@@ -14,6 +14,6 @@ public class StreamResultFactory implements ResultFactory{
         this.baseDirectory = baseDir;
     }
     public Result newResult(String scriptName) {
-        return new StreamResult(new File(baseDirectory, scriptName));
+        return new StreamResult(new File(baseDirectory, scriptName + ".xml"));
     }
 }

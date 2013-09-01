@@ -25,7 +25,7 @@ public class RuleEngineAcceptanceTest {
 
     private RuleEngine ruleEngine;
     private Strategy strategy;
-    private LoggingScriptProducerMock scriptProducerMock;
+    private CollectingScriptProducer scriptProducerMock;
     private static final Condition FALSE = new Condition() {
         @Override
         public boolean isSatisfied(PropertyContainer propertyContainer) {
@@ -42,14 +42,14 @@ public class RuleEngineAcceptanceTest {
             scriptProducerMock.getAllScriptPropertyCombinations());
     }
 
-    private void initializeRuleEngine(LoggingScriptProducerMock loggingScriptProducerMock) {
+    private void initializeRuleEngine(CollectingScriptProducer loggingScriptProducerMock) {
         scriptProducerMock = loggingScriptProducerMock;
         ruleEngine = new RuleEngine(scriptProducerMock);
     }
     
     @Before
     public void setup() {
-        LoggingScriptProducerMock loggingScriptProducerMock = new LoggingScriptProducerMock();
+        CollectingScriptProducer loggingScriptProducerMock = new CollectingScriptProducer();
         initializeRuleEngine(loggingScriptProducerMock);
         strategy = new Strategy();
     }
@@ -304,7 +304,7 @@ public class RuleEngineAcceptanceTest {
     public void ruleEngineWithOneDefaultRule_iteratesOverItsValuesWhenPropertyIsRequested() {
         strategy.addRule(iterate("x").over("1", "2"));
         strategy.addRule(iterate("y").over("1", "2", "3").asDefaultRule());
-        initializeRuleEngine(new LoggingScriptProducerMock() {
+        initializeRuleEngine(new CollectingScriptProducer() {
 
             @Override
             public void makeScriptFor(PropertyContainer propertyContainer) {
@@ -322,7 +322,7 @@ public class RuleEngineAcceptanceTest {
     public void defaultRule_doesNotTriggerOtherIterations() {
         strategy.addRule(iterate("x").over("1", "2").asDefaultRule());
         strategy.addRule(iterate("y").over("1", "2").when("x"));
-        initializeRuleEngine(new LoggingScriptProducerMock() {
+        initializeRuleEngine(new CollectingScriptProducer() {
 
             @Override
             public void makeScriptFor(PropertyContainer propertyContainer) {
@@ -384,7 +384,7 @@ public class RuleEngineAcceptanceTest {
     @Test
     public void defaultRuleCalledFromScriptProducerWithReason() {
         strategy.addRule(iterate("x").over("1").asDefaultRule());
-        LoggingScriptProducerMock loggingScriptProducerMock = new LoggingScriptProducerMock() {
+        CollectingScriptProducer loggingScriptProducerMock = new CollectingScriptProducer() {
 
             @Override
             public void makeScriptFor(PropertyContainer propertyContainer) {
