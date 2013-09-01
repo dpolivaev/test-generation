@@ -4,7 +4,6 @@ import java.util.Set;
 
 import ruleengine.Condition;
 import ruleengine.EngineState;
-import ruleengine.ValueProviders;
 
 public class TriggeredStatefulRule extends StatefulRule {
     final private Set<String> triggeringProperties;

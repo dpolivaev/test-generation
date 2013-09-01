@@ -8,7 +8,6 @@ import java.util.Set;
 import ruleengine.Condition;
 import ruleengine.EngineState;
 import ruleengine.Rule;
-import ruleengine.ValueProviders;
 
 /**
  * @author Dimitry Polivaev 18.02.2013

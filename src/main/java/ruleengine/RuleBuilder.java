@@ -17,7 +17,9 @@ import ruleengine.impl.ShuffledValueProviders;
 import ruleengine.impl.StatefulRule;
 import ruleengine.impl.TopStatefulRule;
 import ruleengine.impl.TriggeredStatefulRule;
+import ruleengine.impl.ValueProviders;
 import ruleengine.impl.ValueWithRules;
+import ruleengine.impl.ValueWithRulesProvider;
 
 public class RuleBuilder {
     private String targetedPropertyName = null;
