@@ -6,7 +6,7 @@ public class StatefulRuleBuilderTest {
 
 	@Test(expected=IllegalStateException.class)
 	public void trigggeringPropertiesSetTwice() {
-		StatefulRuleBuilder.Factory.when("x").when("y");
+		RuleBuilder.Factory.when("x").when("y");
 	}
 	
 	@Test(expected=IllegalStateException.class)
@@ -17,7 +17,7 @@ public class StatefulRuleBuilderTest {
 				return false;
 			}
 		};
-		StatefulRuleBuilder.Factory._if(falseCondition)._if(falseCondition);
+		RuleBuilder.Factory._if(falseCondition)._if(falseCondition);
 	}
 
 }

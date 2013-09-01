@@ -3,7 +3,7 @@ package ruleengine;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static ruleengine.StatefulRuleBuilder.Factory.iterate;
+import static ruleengine.RuleBuilder.Factory.iterate;
 import static ruleengine.TestUtils.set;
 
 import org.junit.Before;

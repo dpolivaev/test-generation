@@ -7,8 +7,8 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static ruleengine.Combinations.combination;
 import static ruleengine.SpecialValues.UNDEFINED;
-import static ruleengine.StatefulRuleBuilder.Factory.iterate;
-import static ruleengine.StatefulRuleBuilder.Factory.when;
+import static ruleengine.RuleBuilder.Factory.iterate;
+import static ruleengine.RuleBuilder.Factory.when;
 import static ruleengine.TestUtils.set;
 
 import static ruleengine.ConstantValue.Instruction.SKIP;
@@ -273,7 +273,7 @@ public class RuleEngineAcceptanceTest {
 
     @Test
     public void ruleManagesValueSpecificTemporaryRules() {
-        StatefulRuleBuilder temporaryRule = iterate("y").over("1", "2");
+        RuleBuilder temporaryRule = iterate("y").over("1", "2");
         strategy.addRule(iterate("x").over("a", "b").with(temporaryRule));
 
         generateCombinationsForStrategy();
@@ -284,7 +284,7 @@ public class RuleEngineAcceptanceTest {
 
     @Test
     public void valueSpecificTemporaryRulesAreRemovedAfterTheRelatedValueIsFinished() {
-        StatefulRuleBuilder temporaryRule = iterate("y").over("1").when("x");
+        RuleBuilder temporaryRule = iterate("y").over("1").when("x");
         strategy.addRule(iterate("x").over("a").with(temporaryRule.asRule()).over("b"));
 
         generateCombinationsForStrategy();
