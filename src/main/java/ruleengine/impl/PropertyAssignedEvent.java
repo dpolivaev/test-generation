@@ -1,6 +1,9 @@
-package ruleengine;
+package ruleengine.impl;
 
 import java.util.Set;
+
+import ruleengine.EngineState;
+import ruleengine.Rule;
 
 public class PropertyAssignedEvent {
 

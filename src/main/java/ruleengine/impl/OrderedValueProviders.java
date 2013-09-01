@@ -1,6 +1,9 @@
-package ruleengine;
+package ruleengine.impl;
 
-class OrderedValueProviders implements ValueProviders {
+import ruleengine.ValueProviders;
+import ruleengine.ValueWithRulesProvider;
+
+public class OrderedValueProviders implements ValueProviders {
     private ValueWithRulesProvider[] valueWithRulesProviders;
     private int valueIndex = -1;
 

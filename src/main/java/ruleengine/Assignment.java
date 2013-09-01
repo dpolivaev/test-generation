@@ -5,7 +5,7 @@ public class Assignment {
     public final Rule rule;
     public final String reason;
 
-    Assignment(Rule rule, Object value, String reason) {
+    public Assignment(Rule rule, Object value, String reason) {
         super();
         this.value = value;
         this.rule = rule;

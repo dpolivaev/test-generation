@@ -1,8 +1,10 @@
-package ruleengine;
+package testutils;
 
 import java.io.StringWriter;
 import java.io.Writer;
 
+import ruleengine.PropertyContainer;
+import ruleengine.ScriptProducer;
 import scriptproducer.LoggingScriptProducer;
 
 /**

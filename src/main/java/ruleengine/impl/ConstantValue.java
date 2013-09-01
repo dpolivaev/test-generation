@@ -1,13 +1,15 @@
-package ruleengine;
+package ruleengine.impl;
 
 import java.util.Collection;
 import java.util.Collections;
 
-public class ConstantValue implements ValueWithRulesProvider{
-    public enum Instruction {
-        SKIP;
-    }
+import ruleengine.InvalidCombinationException;
+import ruleengine.PropertyContainer;
+import ruleengine.Rule;
+import ruleengine.SpecialValue;
+import ruleengine.ValueWithRulesProvider;
 
+public class ConstantValue implements ValueWithRulesProvider{
     private final Object value;
 
     public ConstantValue(Object value) {
@@ -28,7 +30,7 @@ public class ConstantValue implements ValueWithRulesProvider{
      */
     @Override
     public Object value(PropertyContainer propertyContainer) {
-        if (value == Instruction.SKIP)
+        if (value == SpecialValue.SKIP)
             throw new InvalidCombinationException();
         return value;
     }

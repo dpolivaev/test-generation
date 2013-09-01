@@ -2,14 +2,14 @@ package scriptproducer;
 
 import static org.xmlmatchers.XmlMatchers.isEquivalentTo;
 import static org.xmlmatchers.transform.XmlConverters.the;
-import static ruleengine.TestUtils.assignmentMock;
+import static testutils.TestUtils.assignmentMock;
 
 import javax.xml.transform.dom.DOMResult;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import ruleengine.Assignments;
+import ruleengine.impl.Assignments;
 
 public class XmlScriptProducerTest {
     private Assignments propertyContainer = new Assignments();

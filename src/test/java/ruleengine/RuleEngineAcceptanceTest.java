@@ -5,18 +5,21 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
-import static ruleengine.Combinations.combination;
-import static ruleengine.SpecialValues.UNDEFINED;
+import static ruleengine.SpecialValue.SKIP;
+import static ruleengine.SpecialValue.UNDEFINED;
 import static ruleengine.RuleBuilder.Factory.iterate;
 import static ruleengine.RuleBuilder.Factory.when;
-import static ruleengine.TestUtils.set;
-
-import static ruleengine.ConstantValue.Instruction.SKIP;
+import static testutils.Combinations.combination;
+import static testutils.TestUtils.set;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+
+import ruleengine.impl.StatefulRule;
+import testutils.CollectingScriptProducer;
+import testutils.Combinations;
 
 /**
  * @author Dimitry Polivaev 18.02.2013

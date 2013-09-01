@@ -1,10 +1,14 @@
-package ruleengine;
+package ruleengine.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-class AlternatingRule implements Rule {
+import ruleengine.EngineState;
+import ruleengine.InconsistentRuleException;
+import ruleengine.Rule;
+
+public class AlternatingRule implements Rule {
     private final List<Rule> rules = new ArrayList<>();
     private Rule activeRule = null;
 

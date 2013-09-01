@@ -1,4 +1,4 @@
-package ruleengine;
+package ruleengine.impl;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -7,6 +7,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+import ruleengine.Assignment;
+import ruleengine.PropertyAlreadyAssignedException;
+import ruleengine.PropertyContainer;
+import ruleengine.Rule;
+import ruleengine.SpecialValue;
 import utils.Utils;
 
 import com.google.common.base.Function;
@@ -35,7 +40,7 @@ public class Assignments implements PropertyContainer {
     @SuppressWarnings("unchecked")
     public <T> T get(String name) {
         if(! assignments.containsKey(name))
-            return (T)SpecialValues.UNDEFINED;
+            return (T)SpecialValue.UNDEFINED;
         return (T)assignments.get(name).value;
 	}
 
@@ -80,7 +85,7 @@ public class Assignments implements PropertyContainer {
         assignments.clear();
     }
 
-    void resetCounter() {
+    public void resetCounter() {
         this.combinationCounter = 0;
     }
 

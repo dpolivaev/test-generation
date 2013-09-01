@@ -1,4 +1,8 @@
-package ruleengine;
+package ruleengine.impl;
+
+import ruleengine.Order;
+import ruleengine.ValueProviders;
+import ruleengine.ValueWithRulesProvider;
 
 public class ShuffledValueProviders implements ValueProviders {
 

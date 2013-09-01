@@ -1,12 +1,15 @@
 package ruleengine;
 
 import static org.junit.Assert.assertEquals;
-import static ruleengine.Combinations.combination;
 import static ruleengine.RuleBuilder.Factory.iterate;
-import static ruleengine.ConstantValue.Instruction.SKIP;
+import static ruleengine.SpecialValue.SKIP;
+import static testutils.Combinations.combination;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import testutils.CollectingScriptProducer;
+import testutils.Combinations;
 
 /**
  * @author Dimitry Polivaev 18.02.2013

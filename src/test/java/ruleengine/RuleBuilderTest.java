@@ -2,7 +2,7 @@ package ruleengine;
 
 import org.junit.Test;
 
-public class StatefulRuleBuilderTest {
+public class RuleBuilderTest {
 
 	@Test(expected=IllegalStateException.class)
 	public void trigggeringPropertiesSetTwice() {

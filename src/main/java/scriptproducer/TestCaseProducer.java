@@ -4,7 +4,7 @@ import java.util.Set;
 
 import ruleengine.PropertyContainer;
 import ruleengine.ScriptProducer;
-import ruleengine.SpecialValues;
+import ruleengine.SpecialValue;
 
 public class TestCaseProducer implements ScriptProducer {
 
@@ -53,13 +53,13 @@ public class TestCaseProducer implements ScriptProducer {
 
     public void addAttributes(PropertyContainer propertyContainer, String property) {
         Object value = propertyContainer.get(property);
-        if(!value.equals(SpecialValues.UNDEFINED))
+        if(!value.equals(SpecialValue.UNDEFINED))
             xmlWriter.setAttribute("self", value.toString());
         String prefix = property + '.';
         Set<String> availableProperties = propertyContainer.availableProperties(prefix);
         for(String attributeProperty : availableProperties){
             Object attributeValue = propertyContainer.get(attributeProperty);
-            if(attributeValue != SpecialValues.UNDEFINED){
+            if(attributeValue != SpecialValue.UNDEFINED){
                 String attributeName = attributeProperty.substring(prefix.length());
                 xmlWriter.setAttribute(attributeName, attributeValue.toString());
             }

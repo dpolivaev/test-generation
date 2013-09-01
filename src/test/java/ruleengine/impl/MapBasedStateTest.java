@@ -1,13 +1,18 @@
-package ruleengine;
+package ruleengine.impl;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static ruleengine.RuleBuilder.Factory.iterate;
-import static ruleengine.TestUtils.set;
+import static testutils.TestUtils.set;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import ruleengine.Assignment;
+import ruleengine.AssignmentFormatter;
+import ruleengine.impl.Assignments;
+import ruleengine.impl.StatefulRule;
 
 
 public class MapBasedStateTest {
@@ -44,7 +49,7 @@ public class MapBasedStateTest {
 		clearAssignments();
         assignments.add(new Assignment(ruleForProperty("x"), "a",
             ""));
-		assertThat(assignments.containsProperties(set("x")), is(true));
+		assertThat(assignments.containsProperties(set("x")), equalTo(true));
 	}
 
 	@Test
@@ -66,7 +71,7 @@ public class MapBasedStateTest {
         assignments.add(new Assignment(ruleForProperty("x"), "a",
             ""));
         clearAssignments();
-        assertThat(assignments.containsProperties(set("x")), is(false));
+        assertThat(assignments.containsProperties(set("x")), equalTo(false));
     }
 
 

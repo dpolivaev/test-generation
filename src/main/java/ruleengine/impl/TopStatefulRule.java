@@ -1,4 +1,8 @@
-package ruleengine;
+package ruleengine.impl;
+
+import ruleengine.Condition;
+import ruleengine.EngineState;
+import ruleengine.ValueProviders;
 
 public class TopStatefulRule extends StatefulRule {
     public TopStatefulRule(Condition condition, String targetedPropertyName, ValueProviders ruleValues) {

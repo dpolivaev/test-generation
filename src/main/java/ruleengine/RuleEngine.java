@@ -6,6 +6,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import ruleengine.impl.Assignments;
+import ruleengine.impl.PropertyAssignedEvent;
+import ruleengine.impl.PropertyCombinationStartedPropagator;
+import ruleengine.impl.PropertyValueSetPropagator;
+import ruleengine.impl.RuleEventPropagator;
 import utils.Utils;
 
 

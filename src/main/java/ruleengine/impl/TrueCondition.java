@@ -1,4 +1,7 @@
-package ruleengine;
+package ruleengine.impl;
+
+import ruleengine.Condition;
+import ruleengine.PropertyContainer;
 
 public class TrueCondition implements Condition {
 	@Override
