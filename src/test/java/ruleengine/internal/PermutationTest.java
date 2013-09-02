@@ -1,10 +1,12 @@
-package ruleengine.impl;
+package ruleengine.internal;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
+
+import ruleengine.impl.Permutation;
 
 public class PermutationTest {
 

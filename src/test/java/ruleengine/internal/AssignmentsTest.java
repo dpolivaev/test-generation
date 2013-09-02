@@ -1,4 +1,4 @@
-package ruleengine.impl;
+package ruleengine.internal;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
@@ -11,7 +11,9 @@ import org.junit.Test;
 
 import ruleengine.AssignmentFormatter;
 import ruleengine.SpecialValue;
+import ruleengine.impl.Assignment;
 import ruleengine.impl.Assignments;
+import ruleengine.impl.StatefulRule;
 
 public class AssignmentsTest {
 

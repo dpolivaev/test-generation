@@ -5,7 +5,7 @@ import java.io.Writer;
 
 import ruleengine.PropertyContainer;
 import ruleengine.ScriptProducer;
-import scriptproducer.impl.LoggingScriptProducer;
+import scriptproducer.internal.LoggingScriptProducer;
 
 /**
  * @author Dimitry Polivaev 18.02.2013

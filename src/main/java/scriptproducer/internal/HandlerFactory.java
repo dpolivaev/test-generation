@@ -1,4 +1,4 @@
-package scriptproducer.impl;
+package scriptproducer.internal;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
