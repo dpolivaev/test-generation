@@ -422,7 +422,7 @@ class ScriptInitializer{
 			append('()')
 		}
 		else
-			append(ref.expr.toString)
+			append(ref.expr.toString.toFirstLower)
 	}
 	
 	private def inferMainMethod(){

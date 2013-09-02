@@ -59,7 +59,7 @@ class StrategyCompilationTest {
 			strategy first
 				let x be 1, 2, 3
 		'''.assertCompilesTo('''
-		import ruleengine.StatefulRuleBuilder.Factory;
+		import ruleengine.RuleBuilder.Factory;
 		import ruleengine.Strategy;
 		
 		@SuppressWarnings("all")
@@ -80,7 +80,7 @@ class StrategyCompilationTest {
 			strategy first
 				for each x1, x2 let y be 1, 2, 3
 		'''.assertCompilesTo('''
-		import ruleengine.StatefulRuleBuilder.Factory;
+		import ruleengine.RuleBuilder.Factory;
 		import ruleengine.Strategy;
 		
 		@SuppressWarnings("all")
@@ -102,7 +102,7 @@ class StrategyCompilationTest {
 				let y be :x
 		'''.assertCompilesTo('''
 			import ruleengine.PropertyContainer;
-			import ruleengine.StatefulRuleBuilder.Factory;
+			import ruleengine.RuleBuilder.Factory;
 			import ruleengine.Strategy;
 			import ruleengine.ValueProvider;
 			
@@ -132,7 +132,7 @@ class StrategyCompilationTest {
 		'''.assertCompilesTo('''
 			import ruleengine.Condition;
 			import ruleengine.PropertyContainer;
-			import ruleengine.StatefulRuleBuilder.Factory;
+			import ruleengine.RuleBuilder.Factory;
 			import ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
@@ -163,7 +163,7 @@ class StrategyCompilationTest {
 		'''.assertCompilesTo('''
 			import ruleengine.Condition;
 			import ruleengine.PropertyContainer;
-			import ruleengine.StatefulRuleBuilder.Factory;
+			import ruleengine.RuleBuilder.Factory;
 			import ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
@@ -194,7 +194,7 @@ class StrategyCompilationTest {
 			'''.assertCompilesTo('''
 			import ruleengine.Condition;
 			import ruleengine.PropertyContainer;
-			import ruleengine.StatefulRuleBuilder.Factory;
+			import ruleengine.RuleBuilder.Factory;
 			import ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
@@ -226,7 +226,7 @@ class StrategyCompilationTest {
 			strategy first
 				let default x be 1, 2, 3
 		'''.assertCompilesTo('''
-		import ruleengine.StatefulRuleBuilder.Factory;
+		import ruleengine.RuleBuilder.Factory;
 		import ruleengine.Strategy;
 		
 		@SuppressWarnings("all")
@@ -249,7 +249,7 @@ class StrategyCompilationTest {
 					for each x2 let y be 1, 2, 3
 				}
 		'''.assertCompilesTo('''
-		import ruleengine.StatefulRuleBuilder.Factory;
+		import ruleengine.RuleBuilder.Factory;
 		import ruleengine.Strategy;
 		
 		@SuppressWarnings("all")
@@ -272,7 +272,7 @@ class StrategyCompilationTest {
 					let y be 2
 				}
 		'''.assertCompilesTo('''
-			import ruleengine.StatefulRuleBuilder.Factory;
+			import ruleengine.RuleBuilder.Factory;
 			import ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
@@ -298,7 +298,7 @@ class StrategyCompilationTest {
 					let z be 3
 				}
 		'''.assertCompilesTo('''
-			import ruleengine.StatefulRuleBuilder.Factory;
+			import ruleengine.RuleBuilder.Factory;
 			import ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
@@ -326,7 +326,7 @@ class StrategyCompilationTest {
 					}
 				}
 		'''.assertCompilesTo('''
-			import ruleengine.StatefulRuleBuilder.Factory;
+			import ruleengine.RuleBuilder.Factory;
 			import ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
@@ -349,7 +349,7 @@ class StrategyCompilationTest {
 			strategy first
 				let x be 2, 3 ordered 		
 		'''.assertCompilesTo('''
-			import ruleengine.StatefulRuleBuilder.Factory;
+			import ruleengine.RuleBuilder.Factory;
 			import ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
@@ -370,7 +370,7 @@ class StrategyCompilationTest {
 			strategy first
 				let x be 2, 3 shuffled 		
 		'''.assertCompilesTo('''
-			import ruleengine.StatefulRuleBuilder.Factory;
+			import ruleengine.RuleBuilder.Factory;
 			import ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
@@ -388,8 +388,8 @@ class StrategyCompilationTest {
 	
 	@Test def oneStrategyRun() {
 		'''
-			strategy first
-			run first
+			strategy First
+			run First
 		'''.assertCompilesTo('''
 			import ruleengine.Strategy;
 			import scriptproducer.StrategyRunner;
