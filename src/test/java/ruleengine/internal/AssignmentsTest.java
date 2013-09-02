@@ -11,9 +11,9 @@ import org.junit.Test;
 
 import ruleengine.AssignmentFormatter;
 import ruleengine.SpecialValue;
-import ruleengine.impl.Assignment;
-import ruleengine.impl.Assignments;
-import ruleengine.impl.StatefulRule;
+import ruleengine.internal.Assignment;
+import ruleengine.internal.Assignments;
+import ruleengine.internal.StatefulRule;
 
 public class AssignmentsTest {
 

@@ -2,7 +2,7 @@ package ruleengine;
 
 import java.util.Map;
 
-import ruleengine.impl.Assignment;
+import ruleengine.internal.Assignment;
 
 public class AssignmentFormatter {
     private String propertySeparator;

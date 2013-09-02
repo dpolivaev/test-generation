@@ -17,7 +17,7 @@ import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import ruleengine.impl.StatefulRule;
+import ruleengine.internal.StatefulRule;
 import testutils.CollectingScriptProducer;
 import testutils.Combinations;
 

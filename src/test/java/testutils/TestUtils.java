@@ -9,7 +9,7 @@ import java.util.Set;
 import org.mockito.Mockito;
 
 import ruleengine.Rule;
-import ruleengine.impl.Assignment;
+import ruleengine.internal.Assignment;
 
 public class TestUtils {
     @SafeVarargs

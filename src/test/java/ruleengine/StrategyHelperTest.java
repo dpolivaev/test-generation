@@ -6,9 +6,9 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import ruleengine.impl.Assignments;
-import ruleengine.impl.IdConverter;
-import ruleengine.impl.TestIdProvider;
+import ruleengine.internal.Assignments;
+import ruleengine.internal.IdConverter;
+import ruleengine.internal.TestIdProvider;
 import testutils.TestUtils;
 
 public class StrategyHelperTest {

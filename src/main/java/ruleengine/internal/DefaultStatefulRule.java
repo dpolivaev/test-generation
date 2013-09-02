@@ -1,4 +1,4 @@
-package ruleengine.impl;
+package ruleengine.internal;
 
 import java.util.Collections;
 import java.util.Set;

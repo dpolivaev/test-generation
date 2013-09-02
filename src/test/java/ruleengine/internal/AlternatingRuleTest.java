@@ -16,9 +16,9 @@ import org.junit.Test;
 import ruleengine.EngineState;
 import ruleengine.InconsistentRuleException;
 import ruleengine.Rule;
-import ruleengine.impl.AlternatingRule;
-import ruleengine.impl.PropertyAssignedEvent;
-import ruleengine.impl.StatefulRule;
+import ruleengine.internal.AlternatingRule;
+import ruleengine.internal.PropertyAssignedEvent;
+import ruleengine.internal.StatefulRule;
 public class AlternatingRuleTest {
 
     @SuppressWarnings("unchecked")

@@ -10,16 +10,16 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 
-import ruleengine.impl.ConstantValue;
-import ruleengine.impl.DefaultStatefulRule;
-import ruleengine.impl.OrderedValueProviders;
-import ruleengine.impl.ShuffledValueProviders;
-import ruleengine.impl.StatefulRule;
-import ruleengine.impl.TopStatefulRule;
-import ruleengine.impl.TriggeredStatefulRule;
-import ruleengine.impl.ValueProviders;
-import ruleengine.impl.ValueWithRules;
-import ruleengine.impl.ValueWithRulesProvider;
+import ruleengine.internal.ConstantValue;
+import ruleengine.internal.DefaultStatefulRule;
+import ruleengine.internal.OrderedValueProviders;
+import ruleengine.internal.ShuffledValueProviders;
+import ruleengine.internal.StatefulRule;
+import ruleengine.internal.TopStatefulRule;
+import ruleengine.internal.TriggeredStatefulRule;
+import ruleengine.internal.ValueProviders;
+import ruleengine.internal.ValueWithRules;
+import ruleengine.internal.ValueWithRulesProvider;
 
 public class RuleBuilder {
     private String targetedPropertyName = null;

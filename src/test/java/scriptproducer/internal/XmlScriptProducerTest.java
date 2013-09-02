@@ -9,7 +9,7 @@ import javax.xml.transform.dom.DOMResult;
 import org.junit.Assert;
 import org.junit.Test;
 
-import ruleengine.impl.Assignments;
+import ruleengine.internal.Assignments;
 import scriptproducer.internal.DomResultFactory;
 import scriptproducer.internal.MultipleScriptsProducer;
 import scriptproducer.internal.SingleScriptProducer;

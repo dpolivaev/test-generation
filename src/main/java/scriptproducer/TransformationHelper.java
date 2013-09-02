@@ -1,6 +1,6 @@
 package scriptproducer;
 
-import ruleengine.impl.IdConverter;
+import ruleengine.internal.IdConverter;
 
 public class TransformationHelper {
 	public static String javaId(String input){

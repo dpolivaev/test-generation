@@ -1,6 +1,6 @@
 package ruleengine;
 
-import ruleengine.impl.TestIdProvider;
+import ruleengine.internal.TestIdProvider;
 
 public class StrategyHelper {
 

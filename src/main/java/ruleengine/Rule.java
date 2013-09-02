@@ -2,7 +2,7 @@ package ruleengine;
 
 import java.util.Set;
 
-import ruleengine.impl.PropertyAssignedEvent;
+import ruleengine.internal.PropertyAssignedEvent;
 
 // triggered A <- default B
 // default B <- default A

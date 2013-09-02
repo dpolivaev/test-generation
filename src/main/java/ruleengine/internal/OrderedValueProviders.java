@@ -1,4 +1,4 @@
-package ruleengine.impl;
+package ruleengine.internal;
 
 
 public class OrderedValueProviders implements ValueProviders {
