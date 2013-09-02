@@ -16,6 +16,10 @@ import org.xml.sax.SAXException;
 
 import ruleengine.SpecialValue;
 import ruleengine.impl.Assignments;
+import scriptproducer.impl.HandlerFactory;
+import scriptproducer.impl.TestCaseProducer;
+import scriptproducer.impl.XmlWriter;
+import scriptproducer.impl.XmlWriterUsingTransformerHandler;
 
 public class XmlTestCaseProducerTest {
 

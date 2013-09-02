@@ -10,6 +10,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import ruleengine.impl.Assignments;
+import scriptproducer.impl.DomResultFactory;
+import scriptproducer.impl.MultipleScriptsProducer;
+import scriptproducer.impl.SingleScriptProducer;
 
 public class XmlScriptProducerTest {
     private Assignments propertyContainer = new Assignments();

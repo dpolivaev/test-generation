@@ -1,4 +1,4 @@
-package scriptproducer;
+package scriptproducer.impl;
 
 import javax.xml.transform.sax.TransformerHandler;
 
@@ -7,7 +7,7 @@ import org.xml.sax.helpers.AttributesImpl;
 
 import utils.Utils;
 
-class XmlWriterUsingTransformerHandler implements XmlWriter {
+public class XmlWriterUsingTransformerHandler implements XmlWriter {
 
     private String uri = "";
     public String getURI() {
