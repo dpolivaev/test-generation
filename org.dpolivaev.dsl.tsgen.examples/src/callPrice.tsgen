@@ -1,56 +1,58 @@
 import ruleengine.StrategyHelper
 
 strategy CallPrice extends StrategyHelper.id("testcase")
+	let script be 'CallPrice'
 	let isCallValid be
 		true { 
 			let destination be
-				'National' {
-					let foc.country be 'Motherland', 'missing'
-					let foc.callDuration be '0:00:01', '0:00:59', '0:01:00', '0:01:01', '24:00:00'
+				'"National"' {
+					let foc.country be '"Motherland"', '"missing"'
+					let foc.callDuration be '"0:00:01"', '"0:00:59"', '"0:01:00"', '"0:01:01"', '"24:00:00"'
 				},
 				'International 1' {
-					let foc.country be 'Greenland', 'Blueland', 'Neverland'
-					let foc.callDuration be '0:00:01', '0:00:19', '0:00:20', '0:00:21', '0:00:29', '0:01:40', '0:01:41',  '23:59:59'
+					let foc.country be '"Greenland"', '"Blueland"', '"Neverland"'
+					let foc.callDuration be '"0:00:01"', '"0:00:19"', '"0:00:20"', '"0:00:21"', '"0:00:29"', '"0:01:40"', '"0:01:41"',  '"23:59:59"'
 				},
 				'International 2' {
-					let foc.country be 'Yellowland', 'Redland'
-					let foc.callDuration be '0:00:01', '0:00:59', '0:01:00', '0:01:01', '24:00:00'
+					let foc.country be '"Yellowland"', '"Redland"'
+					let foc.callDuration be '""0:00:01""', '"0:00:59"', '"0:01:00"', '"0:01:01"', '"24:00:00"'
 				} 
 			for each foc.country let tariff be
-				'Standard' {
-					let dayOfTheWeek be 'Monday',  'Tuesday', 'Wednesday', 'Thursday', 'Friday'
+				'"Standard"' {
+					let dayOfTheWeek be '"Monday"',  '"Tuesday"', '"Wednesday"', '"Thursday"', '"Friday"'
 				},
-				'CheapCall' {
+				'"CheapCall"' {
 				let foc.cheapCallActiveForCall be true
 				},
-				'At night' {},
-				'OnTheWeekend'{
-					let foc.dayOfWeek be 'Saturday', 'Sunday'
+				'"At night"' {},
+				'"OnTheWeekend"'{
+					let foc.dayOfWeek be '"Saturday"', '"Sunday"'
 				}
 			for each tariff {
-				let foc.callBeginTime be '0:00:00', '0:00:01', '5:59:59', '6:00:00', '6:00:01',  '19:59:59', '20:00:00', '20:00:01', '23:59:59'
-				if :tariff == 'OnTheWeekend' then let foc.callBeginTime be '0:00:00', '0:00:01', '19:59:59'
-				if :tariff == 'At night' then let foc.callBeginTime be '20:00:00', '20:00:01', '23:59:59', '00:00:00', '05:59:59'
+				let foc.callBeginTime be '"0:00:00"', '"0:00:01"', '"5:59:59"', '"6:00:00"', '"6:00:01"',  '"19:59:59"', '"20:00:00"', '"20:00:01"', '"23:59:59"'
+				if :tariff == '"OnTheWeekend"' then let foc.callBeginTime be '"0:00:00"', '"0:00:01"', '"19:59:59"'
+				if :tariff == '"At night"' then let foc.callBeginTime be '"20:00:00"', '"20:00:01"', '"23:59:59"', '"00:00:00"', '"05:59:59"'
 			}
 		},
 		false {
 			let failureReason be 
 				'wrong foc.country code' {
-					let foc.country be 'invalid'
+					let foc.country be '"invalid"'
 				},
 				'wrong phone number' {
-					let foc.phoneNumber be 'invalid'
+					let foc.phoneNumber be '"invalid"'
 				}
-			let foc.callBeginTime be :y , '0:00:00', '20:00:01'
-			let foc.callDuration be '0:00:01', '0:00:59', '0:01:00', '0:01:01', '0:01:21', '0:01:31', '0:01:41',  '23:59:59'
+			let foc.callBeginTime be :y , '"0:00:00"', '"20:00:01"'
+			let foc.callDuration be '"0:00:01"', '"0:00:59"', '"0:01:00"', '"0:01:01"', '"0:01:21"', '"0:01:31"', '"0:01:41"',  '"23:59:59"'
 		}
 	
-	let default foc be "calculate"	
-	let default foc.dayOfWeek be 'Monday',  'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
-	let default foc.phoneNumber be 'valid' 
-	let default foc.country be 'Greenland', 'Blueland', 'Neverland', 'Yellowland', 'Redland', 'National', 'missing'
+	let default foc be 'calculate'	
+	let default foc.dayOfWeek be '"Monday"',  '"Tuesday"', '"Wednesday"', '"Thursday"', '"Friday"', '"Saturday"', '"Sunday"'
+	let default foc.phoneNumber be '"valid"' 
+	let default foc.country be '"Greenland"', '"Blueland"', '"Neverland"', '"Yellowland"', '"Redland"', '"National"', '"missing"'
 	let default foc.customerID be 12345
 	let default foc.cheapCallActiveForCall be false
 
 	
 run CallPrice
+run CallPrice apply "/java.xslt" output "java"
