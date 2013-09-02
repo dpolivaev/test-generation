@@ -9,8 +9,8 @@ import ruleengine.Strategy;
 import ruleengine.ValueProvider;
 
 public class TestIdProvider implements ValueProvider{
-	final static private String RS = "\u001E";
-	final static private String US = "\u001F";
+	final static private String VALUE_NAME_SEPARATOR_CHAR = "\u001F"; // Unicode unit separator char
+	final static private String PROPERTY_SEPARATOR_CHAR = "\u001E";	// Unicode record separator char
 	final static private AssignmentFormatter assignmentFormatter;
 	
 	public static Strategy strategy(String propertyName){
@@ -21,15 +21,15 @@ public class TestIdProvider implements ValueProvider{
 
 	}; 
 	static {
-		assignmentFormatter = AssignmentFormatter.create(US, RS);
+		assignmentFormatter = AssignmentFormatter.create(VALUE_NAME_SEPARATOR_CHAR, PROPERTY_SEPARATOR_CHAR);
 		assignmentFormatter.shouldFormatIteratingRulesOnly(true);
 		assignmentFormatter.appendReasons(false);
 	}
 	
-	final static private Pattern truePattern = Pattern.compile("([^" + RS + US + "]+" + ")" + US + "true(" +RS + "|$)", Pattern.CASE_INSENSITIVE); 
-	final static private Pattern falsePattern = Pattern.compile("(?:[^" + RS + US + "]+" + ")" + US + "false(?:" +RS + "|$)", Pattern.CASE_INSENSITIVE); 
-	final static private Pattern recordSeparatorPattern = Pattern.compile(RS); 
-	final static private Pattern unitSeparatorPattern = Pattern.compile(US);
+	final static private Pattern truePattern = Pattern.compile("([^" + PROPERTY_SEPARATOR_CHAR + VALUE_NAME_SEPARATOR_CHAR + "]+" + ")" + VALUE_NAME_SEPARATOR_CHAR + "true(" +PROPERTY_SEPARATOR_CHAR + "|$)", Pattern.CASE_INSENSITIVE); 
+	final static private Pattern falsePattern = Pattern.compile("(?:[^" + PROPERTY_SEPARATOR_CHAR + VALUE_NAME_SEPARATOR_CHAR + "]+" + ")" + VALUE_NAME_SEPARATOR_CHAR + "false(?:" +PROPERTY_SEPARATOR_CHAR + "|$)", Pattern.CASE_INSENSITIVE); 
+	final static private Pattern recordSeparatorPattern = Pattern.compile(PROPERTY_SEPARATOR_CHAR); 
+	final static private Pattern unitSeparatorPattern = Pattern.compile(VALUE_NAME_SEPARATOR_CHAR);
 	
 	final String propertySeparator;
 	final String valueNameSeparator;
