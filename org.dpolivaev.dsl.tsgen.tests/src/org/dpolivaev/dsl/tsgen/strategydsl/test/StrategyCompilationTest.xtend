@@ -505,10 +505,8 @@ class StrategyCompilationTest {
 	@Test def runWithXslt() {
 		'''
 			strategy First
-			run First apply "my.xslt"
+			run First apply "my.xslt" output "java"
 		'''.assertCompilesTo('''
-			import java.io.File;
-			import javax.xml.transform.stream.StreamSource;
 			import ruleengine.Strategy;
 			import scriptproducer.StrategyRunner;
 			
@@ -522,7 +520,7 @@ class StrategyCompilationTest {
 			  }
 			  
 			  public void run1() {
-			    new StrategyRunner().apply(new StreamSource(new File("my.xslt"))).run(first);
+			    new StrategyRunner().apply("my.xslt", "java").run(first);
 			  }
 			  
 			  public static void main(final String[] args) {
