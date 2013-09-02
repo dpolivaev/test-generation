@@ -1,4 +1,4 @@
-package scriptproducer.impl;
+package scriptproducer.internal;
 
 import java.io.IOException;
 import java.io.Writer;

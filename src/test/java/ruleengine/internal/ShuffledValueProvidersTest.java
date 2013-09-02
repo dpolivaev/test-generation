@@ -1,4 +1,4 @@
-package ruleengine.impl;
+package ruleengine.internal;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;

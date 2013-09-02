@@ -1,4 +1,4 @@
-package scriptproducer;
+package scriptproducer.internal;
 
 import static org.xmlmatchers.XmlMatchers.isEquivalentTo;
 import static org.xmlmatchers.transform.XmlConverters.the;
@@ -10,9 +10,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import ruleengine.impl.Assignments;
-import scriptproducer.impl.DomResultFactory;
-import scriptproducer.impl.MultipleScriptsProducer;
-import scriptproducer.impl.SingleScriptProducer;
+import scriptproducer.internal.DomResultFactory;
+import scriptproducer.internal.MultipleScriptsProducer;
+import scriptproducer.internal.SingleScriptProducer;
 
 public class XmlScriptProducerTest {
     private Assignments propertyContainer = new Assignments();

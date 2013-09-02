@@ -1,4 +1,4 @@
-package scriptproducer.impl;
+package scriptproducer.internal;
 
 public interface XmlWriter {
     void startDocument();

@@ -7,9 +7,9 @@ import javax.xml.transform.Source;
 
 import ruleengine.RuleEngine;
 import ruleengine.Strategy;
-import scriptproducer.impl.LoggingScriptProducer;
-import scriptproducer.impl.MultipleScriptsProducer;
-import scriptproducer.impl.StreamResultFactory;
+import scriptproducer.internal.LoggingScriptProducer;
+import scriptproducer.internal.MultipleScriptsProducer;
+import scriptproducer.internal.StreamResultFactory;
 import utils.Utils;
 
 public class StrategyRunner {
