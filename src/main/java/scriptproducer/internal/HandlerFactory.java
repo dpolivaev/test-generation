@@ -23,12 +23,14 @@ public class HandlerFactory {
     public TransformerHandler newHandler(Result result){
         try {
             TransformerHandler handler;
-            SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+            SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", null);
             handler = xsltSource != null ? tf.newTransformerHandler(xsltSource) :  tf.newTransformerHandler();
             Transformer transformer = handler.getTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT,"yes");
+            if(xsltSource == null){
+            	transformer.setOutputProperty(OutputKeys.INDENT,"yes");
+            	transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+            }
             handler.setResult(result);
-            handler.startDocument();
             return handler;
         }
         catch (Exception e) {
