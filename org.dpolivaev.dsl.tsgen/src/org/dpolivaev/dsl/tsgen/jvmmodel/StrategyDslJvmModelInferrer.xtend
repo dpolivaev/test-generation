@@ -394,13 +394,11 @@ class ScriptInitializer{
 					append(run.newTypeRef(StrategyRunner).type)
 					append('()')
 					if(run.xslt != null){
-						append('.apply(new ')
-						append(run.newTypeRef(StreamSource).type)
-						append('(new ')
-						append(run.newTypeRef(File).type)
-						append('("')
+						append('.apply("')
 						append(run.xslt)
-						append('")))')
+						append('", "')
+						append(run.fileExtension)
+						append('")')
 					}
 					append('.run(')
 					combinedStrategy(it, run.strategies, true)

@@ -53,7 +53,7 @@ ValueAction :
 
 Run:
 	'run' strategies += StrategyReference ('with' strategies += StrategyReference)*
-	('apply' xslt=STRING)?
+	('apply' xslt=STRING 'output' fileExtension = STRING )?
 ;
 
 StrategyReference : expr = XExpression;
