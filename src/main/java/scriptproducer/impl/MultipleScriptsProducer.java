@@ -1,4 +1,4 @@
-package scriptproducer;
+package scriptproducer.impl;
 
 import java.util.HashMap;
 import java.util.Map;
