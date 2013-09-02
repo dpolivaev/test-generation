@@ -33,6 +33,8 @@ import scriptproducer.StrategyRunner
 import org.dpolivaev.dsl.tsgen.strategydsl.StrategyReference
 import java.util.Set
 import java.util.HashSet
+import java.io.File
+import javax.xml.transform.stream.StreamSource
 
 /**
  * <p>Infers a JVM model from the source model.</p> 
@@ -390,7 +392,17 @@ class ScriptInitializer{
 					
 					append('new ')
 					append(run.newTypeRef(StrategyRunner).type)
-					append('().run(')
+					append('()')
+					if(run.xslt != null){
+						append('.apply(new ')
+						append(run.newTypeRef(StreamSource).type)
+						append('(new ')
+						append(run.newTypeRef(File).type)
+						append('("')
+						append(run.xslt)
+						append('")))')
+					}
+					append('.run(')
 					combinedStrategy(it, run.strategies, true)
 					append(');')
 				]

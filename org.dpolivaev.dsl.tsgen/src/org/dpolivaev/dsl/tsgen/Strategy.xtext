@@ -53,6 +53,7 @@ ValueAction :
 
 Run:
 	'run' strategies += StrategyReference ('with' strategies += StrategyReference)*
+	('apply' xslt=STRING)?
 ;
 
 StrategyReference : expr = XExpression;

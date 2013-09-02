@@ -502,4 +502,34 @@ class StrategyCompilationTest {
 			}
 		''')
 	}	
+	@Test def runWithXslt() {
+		'''
+			strategy First
+			run First apply "my.xslt"
+		'''.assertCompilesTo('''
+			import java.io.File;
+			import javax.xml.transform.stream.StreamSource;
+			import ruleengine.Strategy;
+			import scriptproducer.StrategyRunner;
+			
+			@SuppressWarnings("all")
+			public class MyFile {
+			  public final Strategy first = defineStrategyFirst();
+			  
+			  private Strategy defineStrategyFirst() {
+			    Strategy strategy = new Strategy();
+			    return strategy;
+			  }
+			  
+			  public void run1() {
+			    new StrategyRunner().apply(new StreamSource(new File("my.xslt"))).run(first);
+			  }
+			  
+			  public static void main(final String[] args) {
+			    MyFile instance = new MyFile();
+			    instance.run1();
+			  }
+			}
+		''')
+	}	
 }
