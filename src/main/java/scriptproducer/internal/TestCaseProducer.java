@@ -1,5 +1,8 @@
 package scriptproducer.internal;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import ruleengine.PropertyContainer;
@@ -13,11 +16,11 @@ public class TestCaseProducer implements ScriptProducer {
     
     private static final String[] optionalElements = {
         "pre", "Precondition",
-        "state", "State",
+        "state", "EnterState",
         "preInState", "PreconditionInState",
         "foc", "Focus",
         "veriInState", "VerificationInState",
-        "stateAfter", "StateAfter",
+        "stateAfter", "CheckState",
         "veri", "Verification",
         "post", "Postprocessing",
     };
@@ -57,11 +60,20 @@ public class TestCaseProducer implements ScriptProducer {
             xmlWriter.setAttribute("self", value.toString());
         String prefix = property + '.';
         Set<String> availableProperties = propertyContainer.availableProperties(prefix);
-        for(String attributeProperty : availableProperties){
+        List<String> sortedProperties = new ArrayList<>(availableProperties);
+        Collections.sort(sortedProperties);
+        for(String attributeProperty : sortedProperties){
             Object attributeValue = propertyContainer.get(attributeProperty);
             if(attributeValue != SpecialValue.UNDEFINED){
                 String attributeName = attributeProperty.substring(prefix.length());
-                xmlWriter.setAttribute(attributeName, attributeValue.toString());
+                if(attributeName.equals("self"))
+                	xmlWriter.setAttribute("self", attributeValue.toString());
+                else{
+                	xmlWriter.beginElement("Parameter");
+                	xmlWriter.setAttribute("name", attributeName);
+                	xmlWriter.setAttribute("value", attributeValue.toString());
+                	xmlWriter.endElement("Parameter");
+                }
             }
         }
     }

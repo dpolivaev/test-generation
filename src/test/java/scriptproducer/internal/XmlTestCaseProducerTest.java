@@ -68,7 +68,9 @@ public class XmlTestCaseProducerTest {
     public void createsTestCaseElementWithArbitraryAttribute() throws Exception{
         givenProperty("testcase.attribute", "attribute");
         createScript();
-        checkOutput("<TestCase attribute='attribute'/>");
+        checkOutput("<TestCase>"
+        		+ "<Parameter name='attribute' value='attribute'/>"
+        		+ "</TestCase>");
     }
     
     @Test
@@ -120,11 +122,11 @@ public class XmlTestCaseProducerTest {
         createScript();
         checkOutput("<TestCase self='testcase'>" +
                 "<Precondition self='precondition'/>" +
-                "<State self='State'/>" +
+                "<EnterState self='State'/>" +
                 "<PreconditionInState self='precondition in state'/>" +
                 "<Focus self='focus'/>" +
                 "<VerificationInState self='verification in state'/>" +
-                "<StateAfter self='state after'/>" +
+                "<CheckState self='state after'/>" +
                 "<Verification self='verification'/>" +
                 "<Postprocessing self='postprocessing'/>" +
         	"</TestCase>");
