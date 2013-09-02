@@ -3,12 +3,15 @@ package scriptproducer;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
+import javax.xml.transform.Source;
+
 import ruleengine.RuleEngine;
 import ruleengine.Strategy;
 import utils.Utils;
 
 public class StrategyRunner {
-	  public void run(Strategy strategy){
+	private Source xsltSource = null;
+	public void run(Strategy strategy){
 		RuleEngine ruleEngine = new RuleEngine();
 		OutputStreamWriter writer = new OutputStreamWriter(System.out);
 		LoggingScriptProducer logger = new LoggingScriptProducer(writer);
@@ -24,7 +27,15 @@ public class StrategyRunner {
 		} catch (IOException e) {
 			throw Utils.runtimeException(e);
 		}
-	  }
+	}
+	
+	public Source getXsltSource() {
+		return xsltSource;
+	}
+	public StrategyRunner apply(Source xsltSource) {
+		this.xsltSource = xsltSource;
+		return this;
+	}
 	
 }
 
