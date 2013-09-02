@@ -1,4 +1,4 @@
-package ruleengine.impl;
+package ruleengine.internal;
 
 import ruleengine.Rule;
 

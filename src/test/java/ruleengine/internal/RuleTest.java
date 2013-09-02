@@ -19,8 +19,8 @@ import org.mockito.Mockito;
 import ruleengine.EngineState;
 import ruleengine.Rule;
 import ruleengine.Strategy;
-import ruleengine.impl.PropertyAssignedEvent;
-import ruleengine.impl.StatefulRule;
+import ruleengine.internal.PropertyAssignedEvent;
+import ruleengine.internal.StatefulRule;
 
 public class RuleTest {
     private EngineState engineState;

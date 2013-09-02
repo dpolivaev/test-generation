@@ -1,4 +1,4 @@
-package ruleengine.impl;
+package ruleengine.internal;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

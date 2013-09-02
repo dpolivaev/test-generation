@@ -6,7 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import ruleengine.impl.TriggeredRuleKey;
+import ruleengine.internal.TriggeredRuleKey;
 
 public class Strategy {
     private Map<String, Rule> defaultRules = new LinkedHashMap<>();

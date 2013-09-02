@@ -7,9 +7,9 @@ import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 import ruleengine.Order;
-import ruleengine.impl.ConstantValue;
-import ruleengine.impl.OrderedValueProviders;
-import ruleengine.impl.ShuffledValueProviders;
+import ruleengine.internal.ConstantValue;
+import ruleengine.internal.OrderedValueProviders;
+import ruleengine.internal.ShuffledValueProviders;
 
 public class ShuffledValueProvidersTest {
 	private ShuffledValueProviders shuffledProviders(Order order) {

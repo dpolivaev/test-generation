@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 
 import ruleengine.SpecialValue;
-import ruleengine.impl.Assignments;
+import ruleengine.internal.Assignments;
 import scriptproducer.internal.HandlerFactory;
 import scriptproducer.internal.TestCaseProducer;
 import scriptproducer.internal.XmlWriter;

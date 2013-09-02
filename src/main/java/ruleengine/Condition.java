@@ -1,6 +1,6 @@
 package ruleengine;
 
-import ruleengine.impl.TrueCondition;
+import ruleengine.internal.TrueCondition;
 
 public interface Condition {
 
