@@ -4,3 +4,6 @@ target
 .project
 out.xml
 scratch
+.settings/
+debuglog.txt
+
