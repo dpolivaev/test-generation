@@ -1,0 +1,134 @@
+package org.dpolivaev.tsgen.scriptproducer.internal;
+
+import static org.dpolivaev.tsgen.testutils.TestUtils.assignmentMock;
+import static org.xmlmatchers.XmlMatchers.isEquivalentTo;
+import static org.xmlmatchers.transform.XmlConverters.the;
+
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.sax.TransformerHandler;
+
+import org.dpolivaev.tsgen.ruleengine.SpecialValue;
+import org.dpolivaev.tsgen.ruleengine.internal.Assignments;
+import org.dpolivaev.tsgen.scriptproducer.internal.HandlerFactory;
+import org.dpolivaev.tsgen.scriptproducer.internal.TestCaseProducer;
+import org.dpolivaev.tsgen.scriptproducer.internal.XmlWriter;
+import org.dpolivaev.tsgen.scriptproducer.internal.XmlWriterUsingTransformerHandler;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.xml.sax.SAXException;
+
+public class XmlTestCaseProducerTest {
+
+    private DOMResult dom;
+    private TestCaseProducer producer;
+    private Assignments propertyContainer;
+    private XmlWriter xmlWriter;
+
+    @Before
+    public void setup() throws TransformerFactoryConfigurationError, TransformerConfigurationException, SAXException {
+        dom = new DOMResult();
+        TransformerHandler handler = new HandlerFactory().newHandler(dom);
+        xmlWriter = new XmlWriterUsingTransformerHandler(handler);
+        producer = new TestCaseProducer(xmlWriter);
+        propertyContainer = new Assignments();
+    }
+
+    private void givenProperty(String name, Object value) {
+        propertyContainer.add(assignmentMock(name, value));
+    }
+
+    private void createScript() throws SAXException {
+        xmlWriter.startDocument();
+        producer.makeScriptFor(propertyContainer);
+        xmlWriter.endDocument();
+    }
+
+    private void checkOutput(String xml) {
+        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the(xml)));
+    }
+
+    @Test
+    public void createsTestCaseElement() throws Exception{
+        createScript();
+        checkOutput("<TestCase/>");
+    }
+
+    @Test
+    public void createsTestCaseElementWithContent() throws Exception{
+        givenProperty("testcase", "self");
+        createScript();
+        checkOutput("<TestCase self='self'/>");
+    }
+
+     @Test
+    public void createsTestCaseElementWithArbitraryAttribute() throws Exception{
+        givenProperty("testcase.attribute", "attribute");
+        createScript();
+        checkOutput("<TestCase>"
+        		+ "<Parameter name='attribute' value='attribute'/>"
+        		+ "</TestCase>");
+    }
+    
+    @Test
+    public void ignoresUndefinedProperties() throws Exception{
+        givenProperty("testcase.attribute", SpecialValue.UNDEFINED);
+        createScript();
+        checkOutput("<TestCase/>");
+    }
+    
+    @Test
+    public void createsTestCaseElementWithFocusPartAndContent() throws Exception{
+        givenProperty("testcase", "testcase");
+        givenProperty("foc", "focus");
+        createScript();
+        checkOutput("<TestCase self='testcase'><Focus self='focus'/></TestCase>");
+    }
+
+    @Test
+    public void createsTestCaseElementWithTwoFocusPartsAndContent() throws Exception{
+        givenProperty("testcase", "testcase");
+        givenProperty("foc", "focus");
+        givenProperty("foc1", "focus1");
+        createScript();
+        checkOutput("<TestCase self='testcase'><Focus self='focus'/><Focus self='focus1'/></TestCase>");
+    }
+
+    @Test
+    public void createsTestCaseElementWithThreeFocusPartsAndContent() throws Exception{
+        givenProperty("testcase", "testcase");
+        givenProperty("foc", "focus");
+        givenProperty("foc1", "focus1");
+        givenProperty("foc3", "focus3");
+        createScript();
+        checkOutput("<TestCase self='testcase'><Focus self='focus'/><Focus self='focus1'/><Focus self='focus3'/></TestCase>");
+    }
+
+
+    @Test
+    public void createsTestCaseElementWithAllPartsAndContent() throws Exception{
+        givenProperty("testcase", "testcase");
+        givenProperty("pre", "precondition");
+        givenProperty("state", "State");
+        givenProperty("preInState", "precondition in state");
+        givenProperty("foc", "focus");
+        givenProperty("veriInState", "verification in state");
+        givenProperty("stateAfter", "state after");
+        givenProperty("veri", "verification");
+        givenProperty("post", "postprocessing");
+        createScript();
+        checkOutput("<TestCase self='testcase'>" +
+                "<Precondition self='precondition'/>" +
+                "<EnterState self='State'/>" +
+                "<PreconditionInState self='precondition in state'/>" +
+                "<Focus self='focus'/>" +
+                "<VerificationInState self='verification in state'/>" +
+                "<CheckState self='state after'/>" +
+                "<Verification self='verification'/>" +
+                "<Postprocessing self='postprocessing'/>" +
+        	"</TestCase>");
+    }
+}
+
