@@ -40,7 +40,7 @@ class StrategyCompilationTest {
 		'''.assertCompilesTo('''
 			package packagename;
 			
-			import ruleengine.Strategy;
+			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
@@ -59,8 +59,8 @@ class StrategyCompilationTest {
 			strategy first
 				let x be 1, 2, 3
 		'''.assertCompilesTo('''
-		import ruleengine.RuleBuilder.Factory;
-		import ruleengine.Strategy;
+		import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+		import org.dpolivaev.tsgen.ruleengine.Strategy;
 		
 		@SuppressWarnings("all")
 		public class MyFile {
@@ -80,8 +80,8 @@ class StrategyCompilationTest {
 			strategy first
 				for each x1, x2 let y be 1, 2, 3
 		'''.assertCompilesTo('''
-		import ruleengine.RuleBuilder.Factory;
-		import ruleengine.Strategy;
+		import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+		import org.dpolivaev.tsgen.ruleengine.Strategy;
 		
 		@SuppressWarnings("all")
 		public class MyFile {
@@ -101,10 +101,10 @@ class StrategyCompilationTest {
 			strategy first
 				let y be :x
 		'''.assertCompilesTo('''
-			import ruleengine.PropertyContainer;
-			import ruleengine.RuleBuilder.Factory;
-			import ruleengine.Strategy;
-			import ruleengine.ValueProvider;
+			import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+			import org.dpolivaev.tsgen.ruleengine.Strategy;
+			import org.dpolivaev.tsgen.ruleengine.ValueProvider;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
@@ -130,10 +130,10 @@ class StrategyCompilationTest {
 			strategy first
 				if 1 < 2 then let y be 3
 		'''.assertCompilesTo('''
-			import ruleengine.Condition;
-			import ruleengine.PropertyContainer;
-			import ruleengine.RuleBuilder.Factory;
-			import ruleengine.Strategy;
+			import org.dpolivaev.tsgen.ruleengine.Condition;
+			import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
@@ -161,10 +161,10 @@ class StrategyCompilationTest {
 					let y be 3
 				}
 		'''.assertCompilesTo('''
-			import ruleengine.Condition;
-			import ruleengine.PropertyContainer;
-			import ruleengine.RuleBuilder.Factory;
-			import ruleengine.Strategy;
+			import org.dpolivaev.tsgen.ruleengine.Condition;
+			import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
@@ -192,10 +192,10 @@ class StrategyCompilationTest {
 					if 3 < 4 then let y be 5
 				}
 			'''.assertCompilesTo('''
-			import ruleengine.Condition;
-			import ruleengine.PropertyContainer;
-			import ruleengine.RuleBuilder.Factory;
-			import ruleengine.Strategy;
+			import org.dpolivaev.tsgen.ruleengine.Condition;
+			import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
@@ -226,8 +226,8 @@ class StrategyCompilationTest {
 			strategy first
 				let default x be 1, 2, 3
 		'''.assertCompilesTo('''
-		import ruleengine.RuleBuilder.Factory;
-		import ruleengine.Strategy;
+		import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+		import org.dpolivaev.tsgen.ruleengine.Strategy;
 		
 		@SuppressWarnings("all")
 		public class MyFile {
@@ -249,8 +249,8 @@ class StrategyCompilationTest {
 					for each x2 let y be 1, 2, 3
 				}
 		'''.assertCompilesTo('''
-		import ruleengine.RuleBuilder.Factory;
-		import ruleengine.Strategy;
+		import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+		import org.dpolivaev.tsgen.ruleengine.Strategy;
 		
 		@SuppressWarnings("all")
 		public class MyFile {
@@ -272,8 +272,8 @@ class StrategyCompilationTest {
 					let y be 2
 				}
 		'''.assertCompilesTo('''
-			import ruleengine.RuleBuilder.Factory;
-			import ruleengine.Strategy;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
@@ -298,8 +298,8 @@ class StrategyCompilationTest {
 					let z be 3
 				}
 		'''.assertCompilesTo('''
-			import ruleengine.RuleBuilder.Factory;
-			import ruleengine.Strategy;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
@@ -326,8 +326,8 @@ class StrategyCompilationTest {
 					}
 				}
 		'''.assertCompilesTo('''
-			import ruleengine.RuleBuilder.Factory;
-			import ruleengine.Strategy;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
@@ -349,8 +349,8 @@ class StrategyCompilationTest {
 			strategy first
 				let x be 2, 3 ordered 		
 		'''.assertCompilesTo('''
-			import ruleengine.RuleBuilder.Factory;
-			import ruleengine.Strategy;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
@@ -370,8 +370,8 @@ class StrategyCompilationTest {
 			strategy first
 				let x be 2, 3 shuffled 		
 		'''.assertCompilesTo('''
-			import ruleengine.RuleBuilder.Factory;
-			import ruleengine.Strategy;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
@@ -391,8 +391,8 @@ class StrategyCompilationTest {
 			strategy First
 			run First
 		'''.assertCompilesTo('''
-			import ruleengine.Strategy;
-			import scriptproducer.StrategyRunner;
+			import org.dpolivaev.tsgen.ruleengine.Strategy;
+			import org.dpolivaev.tsgen.scriptproducer.StrategyRunner;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
@@ -421,8 +421,8 @@ class StrategyCompilationTest {
 			strategy second
 			run first with second
 		'''.assertCompilesTo('''
-			import ruleengine.Strategy;
-			import scriptproducer.StrategyRunner;
+			import org.dpolivaev.tsgen.ruleengine.Strategy;
+			import org.dpolivaev.tsgen.scriptproducer.StrategyRunner;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
@@ -457,7 +457,7 @@ class StrategyCompilationTest {
 			strategy first
 			strategy second extends first with first
 		'''.assertCompilesTo('''
-			import ruleengine.Strategy;
+			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
@@ -481,10 +481,10 @@ class StrategyCompilationTest {
 	
 	@Test def extendExternalStrategies() {
 		'''
-			import ruleengine.Strategy
+			import org.dpolivaev.tsgen.ruleengine.Strategy
 			strategy first extends new Strategy()
 		'''.assertCompilesTo('''
-			import ruleengine.Strategy;
+			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
@@ -507,8 +507,8 @@ class StrategyCompilationTest {
 			strategy First
 			run First apply "my.xslt" output "java"
 		'''.assertCompilesTo('''
-			import ruleengine.Strategy;
-			import scriptproducer.StrategyRunner;
+			import org.dpolivaev.tsgen.ruleengine.Strategy;
+			import org.dpolivaev.tsgen.scriptproducer.StrategyRunner;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
