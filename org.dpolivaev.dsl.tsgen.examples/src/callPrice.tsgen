@@ -1,4 +1,4 @@
-import ruleengine.StrategyHelper
+import org.dpolivaev.tsgen.ruleengine.StrategyHelper
 
 strategy CallPrice extends StrategyHelper.id("testcase")
 	let script be 'CallPrice'
