@@ -35,7 +35,7 @@
 		<link>
 			<name>lib/ruleengine</name>
 			<type>2</type>
-			<locationURI>M2_REPO/testgeneration/testgeneration.ruleengine/1.0-SNAPSHOT</locationURI>
+			<locationURI>M2_REPO/org/dpolivaev/tsgen/org.dpolivaev.tsgen.ruleengine/1.0-SNAPSHOT</locationURI>
 		</link>
 	</linkedResources>
 	<variableList>

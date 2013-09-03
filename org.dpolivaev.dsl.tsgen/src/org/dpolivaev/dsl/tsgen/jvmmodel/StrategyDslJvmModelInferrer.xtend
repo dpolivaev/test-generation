@@ -26,10 +26,10 @@ import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
 import org.eclipse.xtext.xbase.jvmmodel.AbstractModelInferrer
 import org.eclipse.xtext.xbase.jvmmodel.IJvmDeclaredTypeAcceptor
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
-import ruleengine.PropertyContainer
-import ruleengine.RuleBuilder.Factory
-import ruleengine.ValueProvider
-import scriptproducer.StrategyRunner
+import org.dpolivaev.tsgen.ruleengine.PropertyContainer
+import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory
+import org.dpolivaev.tsgen.ruleengine.ValueProvider
+import org.dpolivaev.tsgen.scriptproducer.StrategyRunner
 import org.dpolivaev.dsl.tsgen.strategydsl.StrategyReference
 import java.util.Set
 import java.util.HashSet
@@ -124,7 +124,7 @@ class ScriptInitializer{
 	
 	private def appendStrategyReferences(StrategyReference ref){
 		if(ref.expr != null && ! declaredStrategies.contains(ref.expr.toString))
-			createMethod(ref.expr, "externalStrategy", ref.expr.newTypeRef(ruleengine.Strategy), false)
+			createMethod(ref.expr, "externalStrategy", ref.expr.newTypeRef(org.dpolivaev.tsgen.ruleengine.Strategy), false)
 	}
 	
 	private def appendValueProviders(ValueAction action){
@@ -163,7 +163,7 @@ class ScriptInitializer{
 	private def inferStrategyMethods(){
 		for (strategy : script.strategies) {
 			val methodName = "defineStrategy" + strategy.name.toFirstUpper
-			jvmType.members += strategy.toMethod(methodName, strategy.newTypeRef(ruleengine.Strategy)) [
+			jvmType.members += strategy.toMethod(methodName, strategy.newTypeRef(org.dpolivaev.tsgen.ruleengine.Strategy)) [
 				body = [
 					
 					append('Strategy strategy = new Strategy()')
@@ -244,7 +244,7 @@ class ScriptInitializer{
 		if(! conditions.isEmpty){
 			conditions.reverse
 			append('._if(')
-			appendImplementationObject(it, ruleGroup.newTypeRef(ruleengine.Condition).type, "boolean isSatisfied", conditions)
+			appendImplementationObject(it, ruleGroup.newTypeRef(org.dpolivaev.tsgen.ruleengine.Condition).type, "boolean isSatisfied", conditions)
 			append(')')
 		}
 	}
@@ -365,7 +365,7 @@ class ScriptInitializer{
 	private def inferStrategyFields(){
 		for (strategy : script.strategies) {
 			val methodName = "defineStrategy" + strategy.name.toFirstUpper
-			jvmType.members += strategy.toField(strategy.name.toFirstLower, strategy.newTypeRef(ruleengine.Strategy)) [
+			jvmType.members += strategy.toField(strategy.name.toFirstLower, strategy.newTypeRef(org.dpolivaev.tsgen.ruleengine.Strategy)) [
 				setInitializer [
 					append('''«methodName»()''')
 				]
