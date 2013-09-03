@@ -33,8 +33,6 @@ import scriptproducer.StrategyRunner
 import org.dpolivaev.dsl.tsgen.strategydsl.StrategyReference
 import java.util.Set
 import java.util.HashSet
-import java.io.File
-import javax.xml.transform.stream.StreamSource
 
 /**
  * <p>Infers a JVM model from the source model.</p> 
