@@ -31,4 +31,17 @@
 		<nature>org.eclipse.pde.PluginNature</nature>
 		<nature>org.eclipse.xtext.ui.shared.xtextNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>lib/ruleengine</name>
+			<type>2</type>
+			<locationURI>M2_REPO/testgeneration/testgeneration.ruleengine/1.0-SNAPSHOT</locationURI>
+		</link>
+	</linkedResources>
+	<variableList>
+		<variable>
+			<name>M2_REPO</name>
+			<value>file:/C:/Users/Dimitry/.m2/repository</value>
+		</variable>
+	</variableList>
 </projectDescription>
