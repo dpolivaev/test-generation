@@ -19,7 +19,7 @@ class StrategyCompiler extends XbaseCompiler {
 	override protected internalToConvertedExpression(XExpression expr, ITreeAppendable it) {
 		switch expr {
 			PropertyCall:{
-				append('''propertyContainer.get("«expr.name»")''');
+				append('''propertyContainer.get("«expr.name.escapeQuotes»")''');
 			}
 			default :
 				super.internalToConvertedExpression(expr, it)
@@ -29,4 +29,15 @@ class StrategyCompiler extends XbaseCompiler {
 	override protected internalCanCompileToJavaExpression(XExpression expr, ITreeAppendable it) {
 		return expr instanceof PropertyCall || super.internalCanCompileToJavaExpression(expr, it);
 	}
+
+	def public static escapeQuotes(String input) {
+		var output = input
+		if(output.startsWith("\""))
+			output = output.substring(1)
+		if(output.endsWith("\""))
+			output = output.substring(0, output.length - 1)
+		output = output.replaceAll("\"", "\\\\\\\"")
+		return output
+	}
+	
 }

@@ -21,15 +21,20 @@ RuleGroup : {RuleGroup}
 	| rule = Rule
 ;
 
+Rule : PropertyRule|RequirementRule;
 
-Rule: {Rule}
-	'let'  
+PropertyRule returns Rule:
+	'let'
 	(
 		default ?= 'default'? name=PROPERTY_ID
-		'be' actions += ValueAction (',' actions += ValueAction)* 
+		'be' actions += ValueAction (',' actions += ValueAction)*
 		(ordered ?= 'ordered' | shuffled ?= 'shuffled')? 
 		| actions += SkipAction name=PROPERTY_ID
 	)
+;
+
+RequirementRule returns Rule:
+	requirement ?= 'cover' name=PROPERTY_ID 'by' actions += ItemAction
 ;
 
 Trigger:
@@ -46,9 +51,13 @@ SkipAction : {SkipAction}
 	'skip'
 ;
 
-ValueAction :
-	valueProviders += XExpression (=>',' valueProviders += XExpression)* 
+ValueAction:{ValueAction}
+	valueProviders += XExpression (=>',' valueProviders += XExpression)*
 	('{' ruleGroups += RuleGroup* '}')?
+;
+
+ItemAction:{ValueAction}
+	valueProviders += XExpression (=>',' valueProviders += XExpression)*
 ;
 
 Run:
@@ -82,5 +91,5 @@ PropertyCall returns xbase::XExpression hidden():
 ;	
 
 PROPERTY_ID hidden():
-	ID (=> '.' ID)*
+	ID (=> '.' ID)* | STRING
 ;
