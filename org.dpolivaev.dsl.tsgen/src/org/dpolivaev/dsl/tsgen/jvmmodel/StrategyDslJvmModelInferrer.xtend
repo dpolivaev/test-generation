@@ -31,8 +31,12 @@ import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory
 import org.dpolivaev.tsgen.ruleengine.ValueProvider
 import org.dpolivaev.tsgen.scriptproducer.StrategyRunner
 import org.dpolivaev.dsl.tsgen.strategydsl.StrategyReference
+
+import static extension org.dpolivaev.dsl.tsgen.jvmmodel.StrategyCompiler.*
+
 import java.util.Set
 import java.util.HashSet
+import java.util.Arrays
 
 /**
  * <p>Infers a JVM model from the source model.</p> 
@@ -268,11 +272,16 @@ class ScriptInitializer{
 	}
 	
 	private def appendRuleValues(ITreeAppendable it, Rule rule) {
-		append('''.iterate("«rule.name»")''')
+		val name = rule.name.escapeQuotes;
+		append('.iterate("')
+		if(rule.requirement)
+			append('requirement.')
+		append(name)
+		append('")')
 		for(action:rule.actions){
 			if(action instanceof ValueAction){
 				val valueAction = action as ValueAction
-				apppendValueAction(it, valueAction)
+				apppendValueAction(it, valueAction, rule.requirement)
 				appendActionRuleGroups(it, valueAction)
 			}
 			else if(action instanceof SkipAction){
@@ -280,7 +289,7 @@ class ScriptInitializer{
 			}
 		}
 	}
-	
+
 	private def appendRuleOrder(ITreeAppendable it, Rule rule) {
 		if(rule.ordered)
 				append('.ordered()')
@@ -318,9 +327,12 @@ class ScriptInitializer{
 				appendInnerGroups(it, group.ruleGroups, firstLine)
 			}
 		}
-
-	def private apppendValueAction(ITreeAppendable it, ValueAction valueAction) {
+	def private apppendValueAction(ITreeAppendable it, ValueAction valueAction, boolean requirement) {
 		append('.over(')
+		if(requirement){
+			append(valueAction.newTypeRef(Arrays).type)
+			append('.asList(')
+		}
 		var firstValue = true
 		for (expr: valueAction.valueProviders){
 			if(firstValue)
@@ -333,6 +345,9 @@ class ScriptInitializer{
 			else{
 				appendImplementationObject(it, valueAction.newTypeRef(ValueProvider).type, "Object value", methodName)
 			}
+		}
+		if(requirement){
+			append(')')
 		}
 		append(')')
 	}

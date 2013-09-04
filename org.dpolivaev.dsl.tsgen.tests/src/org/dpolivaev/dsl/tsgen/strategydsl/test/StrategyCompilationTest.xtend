@@ -57,7 +57,7 @@ class StrategyCompilationTest {
 	@Test def withOneTopRule() {
 		'''
 			strategy first
-				let x be 1, 2, 3
+				let "x y" be 1, 2, 3
 		'''.assertCompilesTo('''
 		import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
 		import org.dpolivaev.tsgen.ruleengine.Strategy;
@@ -68,7 +68,7 @@ class StrategyCompilationTest {
 		  
 		  private Strategy defineStrategyFirst() {
 		    Strategy strategy = new Strategy();
-		    strategy.addRule(Factory.iterate("x").over(1, 2, 3).asRule());
+		    strategy.addRule(Factory.iterate("x y").over(1, 2, 3).asRule());
 		    return strategy;
 		  }
 		}
@@ -530,4 +530,27 @@ class StrategyCompilationTest {
 			}
 		''')
 	}	
+
+	@Test def coverage() {
+		'''
+			strategy First
+				cover req1 by 123, 456
+		'''.assertCompilesTo('''
+			import java.util.Arrays;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+			import org.dpolivaev.tsgen.ruleengine.Strategy;
+			
+			@SuppressWarnings("all")
+			public class MyFile {
+			  public final Strategy first = defineStrategyFirst();
+			  
+			  private Strategy defineStrategyFirst() {
+			    Strategy strategy = new Strategy();
+			    strategy.addRule(Factory.iterate("requirement.req1").over(Arrays.asList(123, 456)).asRule());
+			    return strategy;
+			  }
+			}
+		''')
+	}	
+	
 }
