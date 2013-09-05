@@ -8,6 +8,7 @@ import java.io.OutputStreamWriter;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 
+import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.scriptproducer.internal.LoggingScriptProducer;
@@ -34,7 +35,8 @@ public class StrategyRunner {
 		ruleEngine.addErrorHandler(logger);
 		StreamResultFactory resultFactory = new StreamResultFactory();
 		resultFactory.setFileExtension(fileExtension);
-		MultipleScriptsProducer scriptProducer = new MultipleScriptsProducer(resultFactory);
+		final CoverageTracker coverageTracker = new CoverageTracker();
+		MultipleScriptsProducer scriptProducer = new MultipleScriptsProducer(resultFactory, coverageTracker);
 		scriptProducer.setXsltSource(xsltSource);
 		ruleEngine.addScriptProducer(scriptProducer);
 		ruleEngine.run(strategy);

@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 
+import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.ScriptProducer;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
@@ -14,10 +15,13 @@ public class MultipleScriptsProducer implements ScriptProducer{
     private Source xsltSource;    
     private final Map<String, SingleScriptProducer> singleScriptProducers;
     private final ResultFactory resultFactory;
+	private final CoverageTracker coverageTracker;
 
-    public MultipleScriptsProducer(ResultFactory resultFactory) {
+    public MultipleScriptsProducer(ResultFactory resultFactory, CoverageTracker coverageTracker) {
         this.resultFactory = resultFactory;
+		this.coverageTracker = coverageTracker;
         singleScriptProducers = new HashMap<String, SingleScriptProducer>();
+        
     }
 
      @Override
@@ -35,7 +39,7 @@ public class MultipleScriptsProducer implements ScriptProducer{
     }
 
     private SingleScriptProducer newSingleScriptProducer(String scriptName, PropertyContainer propertyContainer) {
-        return new SingleScriptProducer(propertyContainer, xsltSource, resultFactory.newResult(scriptName));
+        return new SingleScriptProducer(propertyContainer, xsltSource, resultFactory.newResult(scriptName), coverageTracker);
     }
 
     public void endScripts() {

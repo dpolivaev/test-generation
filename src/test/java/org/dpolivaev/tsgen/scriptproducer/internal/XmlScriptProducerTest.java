@@ -56,7 +56,7 @@ public class XmlScriptProducerTest {
     public void scriptWithOneTestcase() {
         givenProperty("script", "scriptName1");
         givenProperty("testcase", "testcase 1");
-        MultipleScriptsProducer producer = new MultipleScriptsProducer(new DomResultFactory());
+        MultipleScriptsProducer producer = new MultipleScriptsProducer(new DomResultFactory(), null);
         producer.makeScriptFor(propertyContainer);
         producer.endScripts();
         DOMResult dom = (DOMResult) producer.getResult("scriptName1");
@@ -68,7 +68,7 @@ public class XmlScriptProducerTest {
 
     @Test
     public void twoScriptsWithOneTestcase() {
-        MultipleScriptsProducer producer = new MultipleScriptsProducer(new DomResultFactory());
+        MultipleScriptsProducer producer = new MultipleScriptsProducer(new DomResultFactory(), null);
         givenProperty("script", "scriptName1");
         givenProperty("testcase", "testcase 1");
         producer.makeScriptFor(propertyContainer);
