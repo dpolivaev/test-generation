@@ -4,6 +4,7 @@ import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.sax.TransformerHandler;
 
+import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.ScriptProducer;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
@@ -19,12 +20,12 @@ public class SingleScriptProducer implements ScriptProducer {
         testCaseProducer.makeScriptFor(propertyContainer);
     }
 
-    public SingleScriptProducer(PropertyContainer propertyContainer, Source xsltSource, Result result) {
+    public SingleScriptProducer(PropertyContainer propertyContainer, Source xsltSource, Result result, CoverageTracker coverageTracker) {
         this.result = result;
         TransformerHandler handler = new HandlerFactory(xsltSource).newHandler(result);
         xmlWriter = new XmlWriterUsingTransformerHandler(handler);
         xmlWriter.startDocument();
-        testCaseProducer = new TestCaseProducer(xmlWriter);
+        testCaseProducer = new TestCaseProducer(xmlWriter, coverageTracker);
         xmlWriter.beginElement("Script");
         Object scriptValue = propertyContainer.get("script");
         if(scriptValue.equals(SpecialValue.UNDEFINED))
@@ -33,7 +34,7 @@ public class SingleScriptProducer implements ScriptProducer {
     }
     
     public SingleScriptProducer(PropertyContainer propertyContainer, Result result) {
-        this(propertyContainer, null, result);
+        this(propertyContainer, null, result, null);
     }
 
     public void endScript() {

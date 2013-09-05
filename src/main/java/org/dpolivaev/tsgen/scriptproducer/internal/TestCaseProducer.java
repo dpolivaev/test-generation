@@ -5,13 +5,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.ScriptProducer;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 
 public class TestCaseProducer implements ScriptProducer {
 
-    private static final String TESTCASE_PROPERTY = "testcase";
+    private static final String REQUIREMENT_PREFIX = "requirement.";
+	private static final String TESTCASE_PROPERTY = "testcase";
     private static final String TESTCASE_ELEMENT = "TestCase";
     
     private static final String[] optionalElements = {
@@ -25,22 +28,46 @@ public class TestCaseProducer implements ScriptProducer {
         "post", "Postprocessing",
     };
     private final XmlWriter xmlWriter;
+	final private CoverageTracker coverageTracker;
 
-    public TestCaseProducer(XmlWriter xmlWriter) {
-        this.xmlWriter = xmlWriter;
-    }
+    public TestCaseProducer(XmlWriter xmlWriter,
+			CoverageTracker coverageTracker) {
+    	this.xmlWriter = xmlWriter;
+		this.coverageTracker = coverageTracker;
+	}
 
-    @Override
+	@Override
     public void makeScriptFor(PropertyContainer propertyContainer) {
         xmlWriter.beginElement(TESTCASE_ELEMENT);
         addAttributes(propertyContainer, TESTCASE_PROPERTY);
+        addCoverage(propertyContainer);
         for(int i = 0; i < optionalElements.length; i+=2)
             addOptionalElement(propertyContainer, optionalElements[i], optionalElements[i+1]);
         xmlWriter.endElement(TESTCASE_ELEMENT);
 
     }
 
-    private void addOptionalElement(PropertyContainer propertyContainer, String property, String element) {
+    private void addCoverage(PropertyContainer propertyContainer) {
+    	List<String> sortedRequirementProperties = sortedPropertiesForPrefix(REQUIREMENT_PREFIX, propertyContainer);
+    	for(String propertyName :  sortedRequirementProperties){
+    		final Object value = propertyContainer.get(propertyName);
+    		if(value == SpecialValue.UNDEFINED)
+    			continue;
+    		String requirementId = propertyName.substring(REQUIREMENT_PREFIX.length());
+    		String description = value.toString();
+    		final CoverageEntry coverageEntry = new CoverageEntry(requirementId, description);
+    		coverageTracker.add(coverageEntry);
+    		final int count = coverageTracker.count(coverageEntry);
+    		xmlWriter.beginElement("Requirement");
+    		xmlWriter.setAttribute("id", requirementId);
+    		xmlWriter.setAttribute("description", description);
+    		xmlWriter.setAttribute("count", Integer.toString(count));
+    		xmlWriter.endElement("Requirement");
+    	}
+		
+	}
+
+	private void addOptionalElement(PropertyContainer propertyContainer, String property, String element) {
         if(propertyContainer.containsPropertyValue(property))
             addElement(propertyContainer, property, element);
         for(int i = 1; i <= 9; i++)
@@ -59,9 +86,7 @@ public class TestCaseProducer implements ScriptProducer {
         if(!value.equals(SpecialValue.UNDEFINED))
             xmlWriter.setAttribute("self", value.toString());
         String prefix = property + '.';
-        Set<String> availableProperties = propertyContainer.availableProperties(prefix);
-        List<String> sortedProperties = new ArrayList<>(availableProperties);
-        Collections.sort(sortedProperties);
+        List<String> sortedProperties = sortedPropertiesForPrefix(prefix, propertyContainer);
         for(String attributeProperty : sortedProperties){
             Object attributeValue = propertyContainer.get(attributeProperty);
             if(attributeValue != SpecialValue.UNDEFINED){
@@ -77,4 +102,12 @@ public class TestCaseProducer implements ScriptProducer {
             }
         }
     }
+
+	private List<String> sortedPropertiesForPrefix(String prefix,
+			PropertyContainer propertyContainer) {
+		Set<String> availableProperties = propertyContainer.availableProperties(prefix);
+        List<String> sortedProperties = new ArrayList<>(availableProperties);
+        Collections.sort(sortedProperties);
+		return sortedProperties;
+	}
 }

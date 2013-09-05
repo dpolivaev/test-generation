@@ -9,6 +9,8 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.TransformerHandler;
 
+import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 import org.dpolivaev.tsgen.ruleengine.internal.Assignments;
 import org.dpolivaev.tsgen.scriptproducer.internal.HandlerFactory;
@@ -26,13 +28,15 @@ public class XmlTestCaseProducerTest {
     private TestCaseProducer producer;
     private Assignments propertyContainer;
     private XmlWriter xmlWriter;
+	private CoverageTracker coverageTracker;
 
     @Before
     public void setup() throws TransformerFactoryConfigurationError, TransformerConfigurationException, SAXException {
         dom = new DOMResult();
         TransformerHandler handler = new HandlerFactory().newHandler(dom);
         xmlWriter = new XmlWriterUsingTransformerHandler(handler);
-        producer = new TestCaseProducer(xmlWriter);
+        coverageTracker = new CoverageTracker();
+        producer = new TestCaseProducer(xmlWriter, coverageTracker);
         propertyContainer = new Assignments();
     }
 
@@ -130,5 +134,29 @@ public class XmlTestCaseProducerTest {
                 "<Postprocessing self='postprocessing'/>" +
         	"</TestCase>");
     }
+    @Test
+    public void createsTestCaseElementWithFirstHitCoverage() throws Exception{
+        givenProperty("requirement.requirement id", "description");
+        createScript();
+        checkOutput("<TestCase>"
+        		+ "<Requirement id='requirement id' description = 'description' count='1'/>"
+        		+ "</TestCase>");
+    }
+
+    @Test
+    public void createsTestCaseElementWithSecondHitCoverage() throws Exception{
+        givenProperty("requirement.requirement id", "description");
+        givenCoverage("requirement id", "description");
+        createScript();
+        checkOutput("<TestCase>"
+        		+ "<Requirement id='requirement id' description = 'description' count='2'/>"
+        		+ "</TestCase>");
+    }
+
+	private void givenCoverage(String requirementId, String description) {
+		coverageTracker.add(new CoverageEntry(requirementId, description));
+		
+	}
+
 }
 
