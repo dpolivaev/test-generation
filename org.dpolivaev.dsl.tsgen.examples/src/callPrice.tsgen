@@ -33,6 +33,7 @@ strategy CallPrice extends StrategyHelper.id("testcase")
 				if :tariff == '"OnTheWeekend"' then let foc.callBeginTime be '"0:00:00"', '"0:00:01"', '"19:59:59"'
 				if :tariff == '"At night"' then let foc.callBeginTime be '"20:00:00"', '"20:00:01"', '"23:59:59"', '"00:00:00"', '"05:59:59"'
 			}
+			for each destination cover req123 by :destination
 		},
 		false {
 			let failureReason be 
