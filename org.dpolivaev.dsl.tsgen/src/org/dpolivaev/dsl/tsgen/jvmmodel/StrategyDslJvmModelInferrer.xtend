@@ -37,6 +37,7 @@ import static extension org.dpolivaev.dsl.tsgen.jvmmodel.StrategyCompiler.*
 import java.util.Set
 import java.util.HashSet
 import java.util.Arrays
+import org.eclipse.xtext.xbase.compiler.Later
 
 /**
  * <p>Infers a JVM model from the source model.</p> 
@@ -248,7 +249,9 @@ class ScriptInitializer{
 		if(! conditions.isEmpty){
 			conditions.reverse
 			append('._if(')
-			appendImplementationObject(it, ruleGroup.newTypeRef(org.dpolivaev.tsgen.ruleengine.Condition).type, "boolean isSatisfied", conditions)
+			appendImplementationObject(it, ruleGroup.newTypeRef(org.dpolivaev.tsgen.ruleengine.Condition).type, "boolean isSatisfied", 
+				[appendCalledMethods(conditions, it)]
+			)
 			append(')')
 		}
 	}
@@ -328,11 +331,14 @@ class ScriptInitializer{
 			}
 		}
 	def private apppendValueAction(ITreeAppendable it, ValueAction valueAction, boolean requirement) {
+		if(requirement)
+			apppendRequirementValueAction(it, valueAction)
+		else
+			appendValueAction(it, valueAction)	
+	}
+	
+	def private appendValueAction(ITreeAppendable it, ValueAction valueAction) {	
 		append('.over(')
-		if(requirement){
-			append(valueAction.newTypeRef(Arrays).type)
-			append('.asList(')
-		}
 		var firstValue = true
 		for (expr: valueAction.valueProviders){
 			if(firstValue)
@@ -343,12 +349,35 @@ class ScriptInitializer{
 			if(methodName == null)
 				xbaseCompiler.compileAsJavaExpression(expr, it, valueAction.newTypeRef(Object))
 			else{
-				appendImplementationObject(it, valueAction.newTypeRef(ValueProvider).type, "Object value", methodName)
+				appendImplementationObject(it, valueAction.newTypeRef(ValueProvider).type, "Object value", 
+					[append('''«methodName»(propertyContainer)''')]
+				)
 			}
 		}
-		if(requirement){
-			append(')')
-		}
+		append(')')
+	}
+	
+	def private apppendRequirementValueAction(ITreeAppendable it, ValueAction valueAction) {
+		append('.over(')
+		appendImplementationObject(it, valueAction.newTypeRef(ValueProvider).type, "Object value",
+			[
+				append(valueAction.newTypeRef(Arrays).type)
+				append('.asList(')
+				var firstValue = true
+				for (expr: valueAction.valueProviders){
+					if(firstValue)
+						firstValue = false
+					else
+						append(', ')
+					val methodName = methods.get(expr)
+					if(methodName == null)
+						xbaseCompiler.compileAsJavaExpression(expr, it, valueAction.newTypeRef(Object))
+					else
+						append('''«methodName»(propertyContainer)''')
+				}
+				append(')')
+			]
+		) 
 		append(')')
 	}
 	
@@ -356,13 +385,23 @@ class ScriptInitializer{
 		append('.skip()')
 	}
 
-	private def appendImplementationObject(ITreeAppendable it, JvmType interfaceName, String interfaceMethodName, String... calledMethodNames) {
+	private def appendImplementationObject(ITreeAppendable it, JvmType interfaceName, String interfaceMethodName, Later expression) {
 		append('new ')
 		append(interfaceName)
 		append('(){')
 		increaseIndentation
 		newLine
-		append('''@Override public «interfaceMethodName»(PropertyContainer propertyContainer) { return ''')
+		append('''@Override public «interfaceMethodName»(''')
+		.append(script.newTypeRef(PropertyContainer).type)
+		.append(''' propertyContainer) { return ''')
+		expression.exec(it)
+		append('; }')
+		decreaseIndentation
+		newLine
+		append('}')
+	}
+
+	def private appendCalledMethods(String[] calledMethodNames, ITreeAppendable it) {
 		var first = true
 		for(calledMethodName:calledMethodNames){
 			if(first)
@@ -371,10 +410,6 @@ class ScriptInitializer{
 				append(' && ')
 			append('''«calledMethodName»(propertyContainer)''')
 		}
-		append('; }')
-		decreaseIndentation
-		newLine
-		append('}')
 	}
 	
 	private def inferStrategyFields(){

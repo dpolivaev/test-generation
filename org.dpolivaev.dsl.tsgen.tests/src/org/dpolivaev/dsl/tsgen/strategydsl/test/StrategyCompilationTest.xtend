@@ -537,8 +537,10 @@ class StrategyCompilationTest {
 				cover req1 by 123, 456
 		'''.assertCompilesTo('''
 			import java.util.Arrays;
+			import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 			import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
+			import org.dpolivaev.tsgen.ruleengine.ValueProvider;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
@@ -546,10 +548,44 @@ class StrategyCompilationTest {
 			  
 			  private Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
-			    strategy.addRule(Factory.iterate("requirement.req1").over(Arrays.asList(123, 456)).asRule());
+			    strategy.addRule(Factory.iterate("requirement.req1").over(new ValueProvider(){
+			      @Override public Object value(PropertyContainer propertyContainer) { return Arrays.asList(123, 456); }
+			    }).asRule());
 			    return strategy;
 			  }
 			}
+		''')
+	}	
+	
+	@Test def coverageWithReference() {
+		'''
+			strategy First
+				let default a be 123
+				cover req1 by :a
+		'''.assertCompilesTo('''
+				import java.util.Arrays;
+				import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
+				import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+				import org.dpolivaev.tsgen.ruleengine.Strategy;
+				import org.dpolivaev.tsgen.ruleengine.ValueProvider;
+				
+				@SuppressWarnings("all")
+				public class MyFile {
+				  private Object valueProvider1(final PropertyContainer propertyContainer) {
+				    return propertyContainer.get("a");
+				  }
+				  
+				  public final Strategy first = defineStrategyFirst();
+				  
+				  private Strategy defineStrategyFirst() {
+				    Strategy strategy = new Strategy();
+				    strategy.addRule(Factory.iterate("a").over(123).asDefaultRule());
+				    strategy.addRule(Factory.iterate("requirement.req1").over(new ValueProvider(){
+				      @Override public Object value(PropertyContainer propertyContainer) { return Arrays.asList(valueProvider1(propertyContainer)); }
+				    }).asRule());
+				    return strategy;
+				  }
+				}
 		''')
 	}	
 	
