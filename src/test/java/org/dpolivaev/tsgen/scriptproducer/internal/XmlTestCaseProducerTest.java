@@ -4,6 +4,8 @@ import static org.dpolivaev.tsgen.testutils.TestUtils.assignmentMock;
 import static org.xmlmatchers.XmlMatchers.isEquivalentTo;
 import static org.xmlmatchers.transform.XmlConverters.the;
 
+import java.util.Arrays;
+
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMResult;
@@ -136,7 +138,7 @@ public class XmlTestCaseProducerTest {
     }
     @Test
     public void createsTestCaseElementWithFirstHitCoverage() throws Exception{
-        givenProperty("requirement.requirement id", "description");
+        givenProperty("requirement.requirement id", Arrays.asList("description"));
         createScript();
         checkOutput("<TestCase>"
         		+ "<Requirement id='requirement id' description = 'description' count='1'/>"
@@ -145,7 +147,7 @@ public class XmlTestCaseProducerTest {
 
     @Test
     public void createsTestCaseElementWithSecondHitCoverage() throws Exception{
-        givenProperty("requirement.requirement id", "description");
+        givenProperty("requirement.requirement id", Arrays.asList("description"));
         givenCoverage("requirement id", "description");
         createScript();
         checkOutput("<TestCase>"
