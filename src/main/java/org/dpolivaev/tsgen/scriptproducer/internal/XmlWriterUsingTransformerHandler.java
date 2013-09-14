@@ -86,6 +86,17 @@ public class XmlWriterUsingTransformerHandler implements XmlWriter {
 
     public void setAttribute(String name, String value) {
         attrs.addAttribute(uri, name, name, "CDATA", value);
-    }    
+    }
+
+	@Override
+	public void addTextContent(String content) {
+		try {
+			outputElementOpeningTag();
+			handler.characters(content.toCharArray(), 0, content.length());
+		} catch (SAXException e) {
+            throw Utils.runtimeException(e);
+		}
+		
+	}    
     
 }

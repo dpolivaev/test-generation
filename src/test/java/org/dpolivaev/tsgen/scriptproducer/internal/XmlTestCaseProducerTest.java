@@ -74,7 +74,7 @@ public class XmlTestCaseProducerTest {
         givenProperty("testcase.attribute", "attribute");
         createScript();
         checkOutput("<TestCase>"
-        		+ "<Parameter name='attribute' value='attribute'/>"
+        		+ "<Parameter name='attribute'>attribute</Parameter>"
         		+ "</TestCase>");
     }
     
@@ -141,7 +141,7 @@ public class XmlTestCaseProducerTest {
         givenProperty("requirement.requirement id", Arrays.asList("description"));
         createScript();
         checkOutput("<TestCase>"
-        		+ "<Requirement id='requirement id' description = 'description' count='1'/>"
+        		+ "<Requirement id='requirement id' count='1'>description</Requirement>"
         		+ "</TestCase>");
     }
 
@@ -151,7 +151,7 @@ public class XmlTestCaseProducerTest {
         givenCoverage("requirement id", "description");
         createScript();
         checkOutput("<TestCase>"
-        		+ "<Requirement id='requirement id' description = 'description' count='2'/>"
+        		+ "<Requirement id='requirement id' count='2'>description</Requirement>"
         		+ "</TestCase>");
     }
 

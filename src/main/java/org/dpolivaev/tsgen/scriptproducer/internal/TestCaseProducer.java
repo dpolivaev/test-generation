@@ -10,7 +10,6 @@ import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.ScriptProducer;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
-import org.dpolivaev.tsgen.ruleengine.ValueProvider;
 
 public class TestCaseProducer implements ScriptProducer {
 
@@ -64,8 +63,8 @@ public class TestCaseProducer implements ScriptProducer {
     			final int count = coverageTracker.count(coverageEntry);
     			xmlWriter.beginElement("Requirement");
     			xmlWriter.setAttribute("id", requirementId);
-    			xmlWriter.setAttribute("description", description);
     			xmlWriter.setAttribute("count", Integer.toString(count));
+    			xmlWriter.addTextContent(description);
     			xmlWriter.endElement("Requirement");
     		}
     	}
@@ -101,7 +100,7 @@ public class TestCaseProducer implements ScriptProducer {
                 else{
                 	xmlWriter.beginElement("Parameter");
                 	xmlWriter.setAttribute("name", attributeName);
-                	xmlWriter.setAttribute("value", attributeValue.toString());
+                	xmlWriter.addTextContent(attributeValue.toString());
                 	xmlWriter.endElement("Parameter");
                 }
             }
