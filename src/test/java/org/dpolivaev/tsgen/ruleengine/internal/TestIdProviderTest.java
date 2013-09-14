@@ -1,4 +1,4 @@
-package org.dpolivaev.tsgen.ruleengine;
+package org.dpolivaev.tsgen.ruleengine.internal;
 
 import static org.junit.Assert.*;
 
@@ -7,7 +7,7 @@ import org.dpolivaev.tsgen.ruleengine.internal.TestIdProvider;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
-public class StrategyHelperTest {
+public class TestIdProviderTest {
 	final static String VALUE_NAME_SEPARATOR_CHAR = "\u001F";
 	final static String PROPERTY_SEPARATOR_CHAR = "\u001E";
 	
