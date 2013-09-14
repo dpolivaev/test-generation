@@ -69,4 +69,29 @@ public class AssignmentFormatterTest {
         formatter.shouldFormatIteratingRulesOnly(true);
         assertThat(formatter.format(assignments), equalTo("name=value"));
     }
+
+    @Test
+    public void formatsOnlyIncludedRules() {
+        Rule rule1 = ruleMock("name");
+        Rule rule2 = ruleMock("name2");
+        
+        Assignments assignments = new Assignments();
+        assignments.add(new Assignment(rule1, "value", ""));
+        assignments.add(new Assignment(rule2, "value2", ""));
+        
+        formatter.include("name");
+        assertThat(formatter.format(assignments), equalTo("name=value"));
+    }
+    @Test
+    public void omitsExcludedRules() {
+        Rule rule1 = ruleMock("name");
+        Rule rule2 = ruleMock("name2");
+        
+        Assignments assignments = new Assignments();
+        assignments.add(new Assignment(rule1, "value", ""));
+        assignments.add(new Assignment(rule2, "value2", ""));
+        
+        formatter.exclude("name2");
+        assertThat(formatter.format(assignments), equalTo("name=value"));
+    }
 }
