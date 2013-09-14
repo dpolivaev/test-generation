@@ -11,4 +11,6 @@ public interface XmlWriter {
 
     void endDocument();
 
+	void addTextContent(String string);
+
 }
