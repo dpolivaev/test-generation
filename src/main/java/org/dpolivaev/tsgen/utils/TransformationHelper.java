@@ -1,6 +1,7 @@
-package org.dpolivaev.tsgen.scriptproducer;
+package org.dpolivaev.tsgen.utils;
 
-import org.dpolivaev.tsgen.strategies.internal.IdConverter;
+import org.dpolivaev.tsgen.utils.internal.IdConverter;
+import org.dpolivaev.tsgen.utils.internal.StringConverter;
 
 public class TransformationHelper {
 	public static String javaId(String input){
@@ -13,6 +14,10 @@ public class TransformationHelper {
 	
 	public static String upperCaseJavaId(String input){
 		return new IdConverter().upperCaseJavaId(input);
+	}
+	
+	public static String javaString(String input){
+		return new StringConverter().javaString(input);
 	}
 
 }

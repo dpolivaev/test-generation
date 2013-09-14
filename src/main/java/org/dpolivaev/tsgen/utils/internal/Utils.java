@@ -1,4 +1,4 @@
-package org.dpolivaev.tsgen.utils;
+package org.dpolivaev.tsgen.utils.internal;
 
 import java.util.Arrays;
 import java.util.Collection;

@@ -2,8 +2,8 @@ package org.dpolivaev.tsgen.strategies.internal;
 
 import static org.junit.Assert.*;
 
-import org.dpolivaev.tsgen.strategies.internal.IdConverter;
 import org.dpolivaev.tsgen.strategies.internal.TestIdProvider;
+import org.dpolivaev.tsgen.utils.internal.IdConverter;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
