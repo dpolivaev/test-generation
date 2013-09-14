@@ -24,7 +24,7 @@ public class RuleEngine implements EngineState {
     private final Collection<ScriptProducer> scriptProducers;
     private Set<String> dependencies;
     private String assignmentReason;
-    private String processedProperty;
+	private String processedProperty;
 	private final Collection<ErrorHandler> errorHandlers;
 
     public RuleEngine(ScriptProducer scriptProducer) {
@@ -125,9 +125,11 @@ public class RuleEngine implements EngineState {
 	}
 
     private void firePropertyAssignedEvent(Collection<Rule> rules, PropertyAssignedEvent event) {
+    	String oldAssignmentReason = assignmentReason;
         assignmentReason = event.getTargetedPropertyName() + "->";
         RuleEventPropagator propagator = new PropertyValueSetPropagator(event);
         fireEvent(propagator, rules);
+        assignmentReason = oldAssignmentReason;
     }
 
     private void fireEvent(RuleEventPropagator propagator, Collection<Rule> rules) {
@@ -209,4 +211,8 @@ public class RuleEngine implements EngineState {
     public Map<String, Assignment> getAssignmentsAsMap() {
         return assignments.getAssignmentsAsMap();
     }
+    
+    public String getAssignmentReason() {
+		return assignmentReason;
+	}
 }
