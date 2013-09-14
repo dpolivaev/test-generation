@@ -86,10 +86,14 @@ public class TestCaseProducer implements ScriptProducer {
     }
 
     public void addAttributes(PropertyContainer propertyContainer, String property) {
-        Object value = propertyContainer.get(property);
-        if(!value.equals(SpecialValue.UNDEFINED))
-            xmlWriter.setAttribute("self", value.toString());
-        String prefix = property + '.';
+        addSelf(propertyContainer, property);
+        addDescription(propertyContainer, property);
+        addParameters(propertyContainer, property);
+    }
+
+	private void addParameters(PropertyContainer propertyContainer,
+			String property) {
+		final String prefix = property + '.';
         List<String> sortedProperties = sortedPropertiesForPrefix(prefix, propertyContainer);
         for(String attributeProperty : sortedProperties){
             Object attributeValue = propertyContainer.get(attributeProperty);
@@ -97,7 +101,7 @@ public class TestCaseProducer implements ScriptProducer {
                 String attributeName = attributeProperty.substring(prefix.length());
                 if(attributeName.equals("self"))
                 	xmlWriter.setAttribute("self", attributeValue.toString());
-                else{
+                else if(! attributeName.equals("description")){
                 	xmlWriter.beginElement("Parameter");
                 	xmlWriter.setAttribute("name", attributeName);
                 	xmlWriter.addTextContent(attributeValue.toString());
@@ -105,7 +109,28 @@ public class TestCaseProducer implements ScriptProducer {
                 }
             }
         }
-    }
+	}
+
+	private void addDescription(PropertyContainer propertyContainer,
+			String property) {
+		Object value = propertyContainer.get(property+".description");
+        if(!value.equals(SpecialValue.UNDEFINED)) {
+        	xmlWriter.beginElement("Description");
+        	xmlWriter.addTextContent(value.toString());
+        	xmlWriter.endElement("Description");
+		}
+	}
+
+	private void addSelf(PropertyContainer propertyContainer, String property) {
+		Object value = propertyContainer.get(property);
+        if(!value.equals(SpecialValue.UNDEFINED))
+            xmlWriter.setAttribute("self", value.toString());
+        else {
+            value = propertyContainer.get(property+".self");
+            if(!value.equals(SpecialValue.UNDEFINED))
+                xmlWriter.setAttribute("self", value.toString());
+        }
+	}
 
 	private List<String> sortedPropertiesForPrefix(String prefix,
 			PropertyContainer propertyContainer) {

@@ -78,6 +78,15 @@ public class XmlTestCaseProducerTest {
         		+ "</TestCase>");
     }
     
+     @Test
+    public void createsTestCaseElementWithDescription() throws Exception{
+        givenProperty("testcase.description", "attribute");
+        createScript();
+        checkOutput("<TestCase>"
+        		+ "<Description>attribute</Description>"
+        		+ "</TestCase>");
+    }
+     
     @Test
     public void ignoresUndefinedProperties() throws Exception{
         givenProperty("testcase.attribute", SpecialValue.UNDEFINED);
