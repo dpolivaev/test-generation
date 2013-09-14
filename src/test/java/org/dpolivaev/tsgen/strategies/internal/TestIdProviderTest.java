@@ -1,9 +1,9 @@
-package org.dpolivaev.tsgen.ruleengine.internal;
+package org.dpolivaev.tsgen.strategies.internal;
 
 import static org.junit.Assert.*;
 
-import org.dpolivaev.tsgen.ruleengine.internal.IdConverter;
-import org.dpolivaev.tsgen.ruleengine.internal.TestIdProvider;
+import org.dpolivaev.tsgen.strategies.internal.IdConverter;
+import org.dpolivaev.tsgen.strategies.internal.TestIdProvider;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 

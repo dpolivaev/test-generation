@@ -1,7 +1,8 @@
-package org.dpolivaev.tsgen.ruleengine;
+package org.dpolivaev.tsgen.strategies;
 
-import org.dpolivaev.tsgen.ruleengine.internal.DescriptionProvider;
-import org.dpolivaev.tsgen.ruleengine.internal.TestIdProvider;
+import org.dpolivaev.tsgen.ruleengine.Strategy;
+import org.dpolivaev.tsgen.strategies.internal.DescriptionProvider;
+import org.dpolivaev.tsgen.strategies.internal.TestIdProvider;
 
 public class StrategyHelper {
 

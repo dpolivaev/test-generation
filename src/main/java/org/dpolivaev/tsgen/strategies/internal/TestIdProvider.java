@@ -1,4 +1,4 @@
-package org.dpolivaev.tsgen.ruleengine.internal;
+package org.dpolivaev.tsgen.strategies.internal;
 
 import java.util.regex.Pattern;
 

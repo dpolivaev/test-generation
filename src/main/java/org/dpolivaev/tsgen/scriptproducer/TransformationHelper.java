@@ -1,6 +1,6 @@
 package org.dpolivaev.tsgen.scriptproducer;
 
-import org.dpolivaev.tsgen.ruleengine.internal.IdConverter;
+import org.dpolivaev.tsgen.strategies.internal.IdConverter;
 
 public class TransformationHelper {
 	public static String javaId(String input){

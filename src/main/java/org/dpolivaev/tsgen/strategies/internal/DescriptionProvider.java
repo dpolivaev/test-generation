@@ -1,4 +1,4 @@
-package org.dpolivaev.tsgen.ruleengine.internal;
+package org.dpolivaev.tsgen.strategies.internal;
 
 import org.dpolivaev.tsgen.ruleengine.AssignmentFormatter;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
