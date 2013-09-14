@@ -1,6 +1,8 @@
-import org.dpolivaev.tsgen.ruleengine.StrategyHelper
+import org.dpolivaev.tsgen.strategies.StrategyHelper
 
-strategy CallPrice extends StrategyHelper.id("testcase")
+strategy CallPrice 
+	extends StrategyHelper.id("testcase") 
+	with StrategyHelper.description("testcase.description") 
 	let script be 'CallPrice'
 	let isCallValid be
 		true { 
