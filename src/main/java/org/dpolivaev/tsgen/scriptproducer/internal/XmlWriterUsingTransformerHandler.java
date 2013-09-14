@@ -2,7 +2,7 @@ package org.dpolivaev.tsgen.scriptproducer.internal;
 
 import javax.xml.transform.sax.TransformerHandler;
 
-import org.dpolivaev.tsgen.utils.Utils;
+import org.dpolivaev.tsgen.utils.internal.Utils;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 

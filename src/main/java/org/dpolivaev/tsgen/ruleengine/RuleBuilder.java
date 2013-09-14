@@ -18,7 +18,7 @@ import org.dpolivaev.tsgen.ruleengine.internal.TriggeredStatefulRule;
 import org.dpolivaev.tsgen.ruleengine.internal.ValueProviders;
 import org.dpolivaev.tsgen.ruleengine.internal.ValueWithRules;
 import org.dpolivaev.tsgen.ruleengine.internal.ValueWithRulesProvider;
-import org.dpolivaev.tsgen.utils.Utils;
+import org.dpolivaev.tsgen.utils.internal.Utils;
 
 public class RuleBuilder {
     private String targetedPropertyName = null;

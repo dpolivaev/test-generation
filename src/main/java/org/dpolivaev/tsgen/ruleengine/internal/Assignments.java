@@ -11,7 +11,7 @@ import org.dpolivaev.tsgen.ruleengine.PropertyAlreadyAssignedException;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.Rule;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
-import org.dpolivaev.tsgen.utils.Utils;
+import org.dpolivaev.tsgen.utils.internal.Utils;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;

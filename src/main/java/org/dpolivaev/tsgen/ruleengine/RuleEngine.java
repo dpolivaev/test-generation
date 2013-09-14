@@ -12,7 +12,7 @@ import org.dpolivaev.tsgen.ruleengine.internal.PropertyAssignedEvent;
 import org.dpolivaev.tsgen.ruleengine.internal.PropertyCombinationStartedPropagator;
 import org.dpolivaev.tsgen.ruleengine.internal.PropertyValueSetPropagator;
 import org.dpolivaev.tsgen.ruleengine.internal.RuleEventPropagator;
-import org.dpolivaev.tsgen.utils.Utils;
+import org.dpolivaev.tsgen.utils.internal.Utils;
 
 
 /**

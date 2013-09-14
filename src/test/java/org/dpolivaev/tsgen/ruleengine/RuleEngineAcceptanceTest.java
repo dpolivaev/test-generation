@@ -22,7 +22,7 @@ import org.dpolivaev.tsgen.ruleengine.ValueProvider;
 import org.dpolivaev.tsgen.ruleengine.internal.StatefulRule;
 import org.dpolivaev.tsgen.testutils.CollectingScriptProducer;
 import org.dpolivaev.tsgen.testutils.Combinations;
-import org.dpolivaev.tsgen.utils.Utils;
+import org.dpolivaev.tsgen.utils.internal.Utils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;

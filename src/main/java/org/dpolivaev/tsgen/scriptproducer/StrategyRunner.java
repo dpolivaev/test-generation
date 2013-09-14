@@ -14,7 +14,7 @@ import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.scriptproducer.internal.LoggingScriptProducer;
 import org.dpolivaev.tsgen.scriptproducer.internal.MultipleScriptsProducer;
 import org.dpolivaev.tsgen.scriptproducer.internal.StreamResultFactory;
-import org.dpolivaev.tsgen.utils.Utils;
+import org.dpolivaev.tsgen.utils.internal.Utils;
 
 public class StrategyRunner {
 	private Source xsltSource = null;

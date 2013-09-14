@@ -10,7 +10,7 @@ import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 import org.dpolivaev.tsgen.ruleengine.internal.Assignment;
 import org.dpolivaev.tsgen.ruleengine.internal.Assignments;
 import org.dpolivaev.tsgen.ruleengine.internal.StatefulRule;
-import org.dpolivaev.tsgen.utils.Utils;
+import org.dpolivaev.tsgen.utils.internal.Utils;
 import org.junit.Before;
 import org.junit.Test;
 
