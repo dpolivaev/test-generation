@@ -17,16 +17,67 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.java.Tr
 		<xsl:text>
 			</xsl:text>
 	</xsl:template>
-
+	
+	<xsl:template name="Coverage">
+		<xsl:if test="Requirement">
+			<xsl:call-template name="eol1"/>
+			<xsl:text>@Coverage(</xsl:text>
+			<xsl:if test="Requirement[@count=1]">
+				<xsl:call-template name="eol2"/>
+				<xsl:text>first = {</xsl:text>
+				<xsl:for-each select="Requirement[@count=1]">
+					<xsl:call-template name="Requirement"/>
+				</xsl:for-each>
+				<xsl:call-template name="eol2"/>
+				<xsl:text>}</xsl:text>
+			</xsl:if>
+			<xsl:if test="Requirement[@count=1] and Requirement[@count>1]">
+				<xsl:text>,</xsl:text>
+			</xsl:if>
+			<xsl:if test="Requirement[@count>1]">
+				<xsl:call-template name="eol2"/>
+				<xsl:text>next = {</xsl:text>
+				<xsl:for-each select="Requirement[@count>1]">
+					<xsl:call-template name="Requirement"/>
+				</xsl:for-each>
+				<xsl:call-template name="eol2"/>
+				<xsl:text>}</xsl:text>
+			</xsl:if>
+			<xsl:call-template name="eol1"/>
+			<xsl:text>)</xsl:text>
+		</xsl:if>
+	</xsl:template>
+	
+	<xsl:template name="Requirement">
+		<xsl:variable name="id" select="@id"/>
+		<xsl:if test="not (preceding-sibling::Requirement[@id=$id])">
+			<xsl:call-template name="eol3"/>
+			<xsl:text>@RequirementCoverage(id = </xsl:text>
+			<xsl:value-of select="java:java-string($id)"/>
+			<xsl:text>, reasons={</xsl:text>
+		</xsl:if>
+		<xsl:value-of select="java:java-string(text())"/>
+		<xsl:if test="following-sibling::Requirement[@id=$id]">
+			<xsl:text>, </xsl:text>
+		</xsl:if>
+		<xsl:if test="not (following-sibling::Requirement[@id=$id])">
+			<xsl:text>})</xsl:text>
+			<xsl:if test="following-sibling::Requirement">
+				<xsl:text>,</xsl:text>
+			</xsl:if>
+		</xsl:if>
+	</xsl:template>
+	
 	<xsl:template match="/">
 		<xsl:apply-templates/>
 	</xsl:template>
 	
 	<xsl:template match="Script">
 		<xsl:text>import static org.junit.Assert.*;
-
 import org.junit.Test;
-
+import org.dpolivaev.tsgen.java.Description;
+import org.dpolivaev.tsgen.java.Coverage;
+import org.dpolivaev.tsgen.java.RequirementCoverage;
 
 public class </xsl:text>
 	<xsl:variable name="class" select="java:upper-case-java-id(@id)"/>
@@ -48,7 +99,7 @@ public class </xsl:text>
 	<xsl:template match="TestCase[@id]">
 	<xsl:variable name="method" select="java:lower-case-java-id(@id)"/>
 	<xsl:apply-templates select="Description"/>
-	
+	<xsl:call-template name="Coverage"/>	
 	<xsl:call-template name="eol1"/>
 	<xsl:text>@Test
 	public void test</xsl:text>
@@ -90,10 +141,10 @@ public class </xsl:text>
 	</xsl:template>
 	
 	<xsl:template match="Description">
-	<xsl:call-template name="eol1"/>
-	<xsl:text>@Description(</xsl:text>
-	<xsl:value-of select="java:java-string(text())"></xsl:value-of>
-	<xsl:text>)</xsl:text>
+		<xsl:call-template name="eol1"/>
+		<xsl:text>@Description(</xsl:text>
+		<xsl:value-of select="java:java-string(text())"></xsl:value-of>
+		<xsl:text>)</xsl:text>
 	</xsl:template>
 	
 </xsl:stylesheet>
