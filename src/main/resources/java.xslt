@@ -57,7 +57,7 @@ public class </xsl:text>
 	<xsl:value-of select="$method"/>
 	<xsl:text>() {</xsl:text>
 	<xsl:call-template name="eol2"/>
-	<xsl:apply-templates select="child::*[name() != 'Description' and name != 'Requirement']"/>
+	<xsl:apply-templates select="child::*[name() != 'Description' and name() != 'Requirement']"/>
 	<xsl:call-template name="eol1"/>
 	<xsl:text>}</xsl:text>
 	<xsl:call-template name="eol2"/>
