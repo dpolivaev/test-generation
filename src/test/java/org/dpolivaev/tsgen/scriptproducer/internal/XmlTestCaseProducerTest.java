@@ -64,9 +64,9 @@ public class XmlTestCaseProducerTest {
 
     @Test
     public void createsTestCaseElementWithContent() throws Exception{
-        givenProperty("testcase", "self");
+        givenProperty("testcase", "id");
         createScript();
-        checkOutput("<TestCase self='self'/>");
+        checkOutput("<TestCase id='id'/>");
     }
 
      @Test
@@ -80,7 +80,7 @@ public class XmlTestCaseProducerTest {
     
      @Test
     public void createsTestCaseElementWithDescription() throws Exception{
-        givenProperty("testcase.description", "attribute");
+        givenProperty("testcaseDescription", "attribute");
         createScript();
         checkOutput("<TestCase>"
         		+ "<Description>attribute</Description>"
@@ -99,7 +99,7 @@ public class XmlTestCaseProducerTest {
         givenProperty("testcase", "testcase");
         givenProperty("foc", "focus");
         createScript();
-        checkOutput("<TestCase self='testcase'><Focus self='focus'/></TestCase>");
+        checkOutput("<TestCase id='testcase'><Focus id='focus'/></TestCase>");
     }
 
     @Test
@@ -108,7 +108,7 @@ public class XmlTestCaseProducerTest {
         givenProperty("foc", "focus");
         givenProperty("foc1", "focus1");
         createScript();
-        checkOutput("<TestCase self='testcase'><Focus self='focus'/><Focus self='focus1'/></TestCase>");
+        checkOutput("<TestCase id='testcase'><Focus id='focus'/><Focus id='focus1'/></TestCase>");
     }
 
     @Test
@@ -118,7 +118,7 @@ public class XmlTestCaseProducerTest {
         givenProperty("foc1", "focus1");
         givenProperty("foc3", "focus3");
         createScript();
-        checkOutput("<TestCase self='testcase'><Focus self='focus'/><Focus self='focus1'/><Focus self='focus3'/></TestCase>");
+        checkOutput("<TestCase id='testcase'><Focus id='focus'/><Focus id='focus1'/><Focus id='focus3'/></TestCase>");
     }
 
 
@@ -134,15 +134,15 @@ public class XmlTestCaseProducerTest {
         givenProperty("veri", "verification");
         givenProperty("post", "postprocessing");
         createScript();
-        checkOutput("<TestCase self='testcase'>" +
-                "<Precondition self='precondition'/>" +
-                "<EnterState self='State'/>" +
-                "<PreconditionInState self='precondition in state'/>" +
-                "<Focus self='focus'/>" +
-                "<VerificationInState self='verification in state'/>" +
-                "<CheckState self='state after'/>" +
-                "<Verification self='verification'/>" +
-                "<Postprocessing self='postprocessing'/>" +
+        checkOutput("<TestCase id='testcase'>" +
+                "<Precondition id='precondition'/>" +
+                "<EnterState id='State'/>" +
+                "<PreconditionInState id='precondition in state'/>" +
+                "<Focus id='focus'/>" +
+                "<VerificationInState id='verification in state'/>" +
+                "<CheckState id='state after'/>" +
+                "<Verification id='verification'/>" +
+                "<Postprocessing id='postprocessing'/>" +
         	"</TestCase>");
     }
     @Test

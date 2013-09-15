@@ -27,8 +27,8 @@ public class XmlScriptProducerTest {
         SingleScriptProducer producer = new SingleScriptProducer(propertyContainer, dom);
         producer.makeScriptFor(propertyContainer);
         producer.endScript();
-        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script self='scriptName'>" +
-                "<TestCase self='testcase 1'/>" +
+        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script id='scriptName'>" +
+                "<TestCase id='testcase 1'/>" +
         "</Script>")));
     }
 
@@ -46,9 +46,9 @@ public class XmlScriptProducerTest {
         producer.makeScriptFor(propertyContainer);
         producer.endScript();
         
-        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script self='scriptName'>" +
-            "<TestCase self='testcase 1'/>" +
-            "<TestCase self='testcase 2'/>" +
+        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script id='scriptName'>" +
+            "<TestCase id='testcase 1'/>" +
+            "<TestCase id='testcase 2'/>" +
         "</Script>")));
     }
 
@@ -60,8 +60,8 @@ public class XmlScriptProducerTest {
         producer.makeScriptFor(propertyContainer);
         producer.endScripts();
         DOMResult dom = (DOMResult) producer.getResult("scriptName1");
-        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script self='scriptName1'>" +
-                "<TestCase self='testcase 1'/>" +
+        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script id='scriptName1'>" +
+                "<TestCase id='testcase 1'/>" +
         "</Script>")));
     }
 
@@ -79,8 +79,8 @@ public class XmlScriptProducerTest {
         producer.endScripts();
         
         DOMResult dom = (DOMResult) producer.getResult("scriptName2");
-        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script self='scriptName2'>" +
-                "<TestCase self='testcase 1'/>" +
+        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script id='scriptName2'>" +
+                "<TestCase id='testcase 1'/>" +
         "</Script>")));
     }
     @Test
@@ -90,8 +90,8 @@ public class XmlScriptProducerTest {
         SingleScriptProducer producer = new SingleScriptProducer(propertyContainer, dom);
         producer.makeScriptFor(propertyContainer);
         producer.endScript();
-        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script self='script'>" +
-                "<TestCase self='testcase 1'/>" +
+        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script id='script'>" +
+                "<TestCase id='testcase 1'/>" +
         "</Script>")));
     }
 
