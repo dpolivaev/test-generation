@@ -505,7 +505,7 @@ class StrategyCompilationTest {
 	@Test def runWithXslt() {
 		'''
 			strategy First
-			run First apply "my.xslt" output "java"
+			run First output "xml", apply "my.xslt" output "java"
 		'''.assertCompilesTo('''
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			import org.dpolivaev.tsgen.scriptproducer.StrategyRunner;
@@ -520,7 +520,7 @@ class StrategyCompilationTest {
 			  }
 			  
 			  public void run1() {
-			    new StrategyRunner().apply("my.xslt", "java").run(first);
+			    new StrategyRunner().addOutput("xml").addOutput("my.xslt", "java").run(first);
 			  }
 			  
 			  public static void main(final String[] args) {
