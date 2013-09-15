@@ -134,6 +134,7 @@ public class RuleEngine implements EngineState {
 
     private void fireEvent(RuleEventPropagator propagator, Collection<Rule> rules) {
         Set<String> oldDependencies = dependencies;
+        String oldProcessedProperty = processedProperty;
         for (Rule rule : rules) {
             if (!dependencies.isEmpty())
                 dependencies = new HashSet<>();
@@ -141,6 +142,7 @@ public class RuleEngine implements EngineState {
             propagator.propagateEvent(rule);
         }
         dependencies = oldDependencies;
+        processedProperty = oldProcessedProperty;
     }
 
 	private boolean topRulesHaveFinished() {
@@ -178,10 +180,12 @@ public class RuleEngine implements EngineState {
         Set<String> oldDependencies = dependencies;
         dependencies = new HashSet<>();
         String oldAssignmentReason = assignmentReason;
+        String oldProcessedProperty = processedProperty;
         assignmentReason = processedProperty + "<-";
         processedProperty = name;
         defaultRule.propertyRequired(this);
         assignmentReason = oldAssignmentReason;
+        processedProperty = oldProcessedProperty;
         dependencies = oldDependencies;
     }
 

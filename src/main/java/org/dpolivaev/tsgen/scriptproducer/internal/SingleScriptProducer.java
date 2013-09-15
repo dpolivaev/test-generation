@@ -29,7 +29,7 @@ public class SingleScriptProducer implements ScriptProducer {
         xmlWriter.beginElement("Script");
         Object scriptValue = propertyContainer.get("script");
         if(scriptValue.equals(SpecialValue.UNDEFINED))
-        	xmlWriter.setAttribute("self", "script");
+        	xmlWriter.setAttribute("id", "script");
         testCaseProducer.addAttributes(propertyContainer, "script");
     }
     

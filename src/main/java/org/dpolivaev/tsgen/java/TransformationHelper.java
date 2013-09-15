@@ -1,4 +1,4 @@
-package org.dpolivaev.tsgen.utils;
+package org.dpolivaev.tsgen.java;
 
 import org.dpolivaev.tsgen.utils.internal.IdConverter;
 import org.dpolivaev.tsgen.utils.internal.StringConverter;
