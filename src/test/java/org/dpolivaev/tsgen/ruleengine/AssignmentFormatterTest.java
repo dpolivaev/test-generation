@@ -82,8 +82,9 @@ public class AssignmentFormatterTest {
         formatter.include("name");
         assertThat(formatter.format(assignments), equalTo("name=value"));
     }
+    
     @Test
-    public void omitsExcludedRules() {
+    public void excludesRules() {
         Rule rule1 = ruleMock("name");
         Rule rule2 = ruleMock("name2");
         
