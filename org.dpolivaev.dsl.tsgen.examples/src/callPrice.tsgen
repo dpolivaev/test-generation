@@ -2,7 +2,7 @@ import org.dpolivaev.tsgen.strategies.StrategyHelper
 
 strategy CallPrice 
 	extends StrategyHelper.id("testcase") 
-	with StrategyHelper.description("testcase.description") 
+	with StrategyHelper.description("testcaseDescription") 
 	let script be 'CallPrice'
 	let isCallValid be
 		true { 
