@@ -441,11 +441,13 @@ class ScriptInitializer{
 					append('new ')
 					append(run.newTypeRef(StrategyRunner).type)
 					append('()')
-					if(run.xslt != null){
-						append('.apply("')
-						append(run.xslt)
-						append('", "')
-						append(run.fileExtension)
+					for(outputConfiguration : run.outputConfiguration){
+							append('.addOutput("')
+							if(outputConfiguration.xslt != null){
+							append(outputConfiguration.xslt)
+							append('", "')
+						}
+						append(outputConfiguration.fileExtension)
 						append('")')
 					}
 					append('.run(')
