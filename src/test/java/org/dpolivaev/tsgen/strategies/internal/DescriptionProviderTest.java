@@ -4,6 +4,7 @@ import static org.dpolivaev.tsgen.testutils.TestUtils.ruleMock;
 
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.Rule;
+import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 import org.dpolivaev.tsgen.ruleengine.internal.Assignment;
 import org.dpolivaev.tsgen.ruleengine.internal.Assignments;
 import org.dpolivaev.tsgen.strategies.internal.DescriptionProvider;
@@ -34,6 +35,28 @@ public class DescriptionProviderTest {
         
         Assignments assignments = new Assignments();
         assignments.add(new Assignment(ruleRequirement, "reason", ""));
+        
+		String description = new DescriptionProvider().describe((PropertyContainer)assignments);
+		Assert.assertEquals("", description);
+	}
+
+	@Test
+	public void excludesUndefinedValues() {
+        Rule ruleRequirement = ruleMock("name");
+        
+        Assignments assignments = new Assignments();
+        assignments.add(new Assignment(ruleRequirement, SpecialValue.UNDEFINED, ""));
+        
+		String description = new DescriptionProvider().describe((PropertyContainer)assignments);
+		Assert.assertEquals("", description);
+	}
+
+	@Test
+	public void excludesDescriptions() {
+        Rule ruleRequirement = ruleMock("xxxDescription");
+        
+        Assignments assignments = new Assignments();
+        assignments.add(new Assignment(ruleRequirement, "value", ""));
         
 		String description = new DescriptionProvider().describe((PropertyContainer)assignments);
 		Assert.assertEquals("", description);

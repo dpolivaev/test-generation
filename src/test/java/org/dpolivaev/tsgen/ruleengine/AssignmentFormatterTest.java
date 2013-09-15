@@ -95,4 +95,18 @@ public class AssignmentFormatterTest {
         formatter.exclude("name2");
         assertThat(formatter.format(assignments), equalTo("name=value"));
     }
+
+    
+    @Test
+    public void excludesUndefinedValues() {
+        Rule rule1 = ruleMock("name");
+        Rule rule2 = ruleMock("name2");
+        
+        Assignments assignments = new Assignments();
+        assignments.add(new Assignment(rule1, "value", ""));
+        assignments.add(new Assignment(rule2, SpecialValue.UNDEFINED, ""));
+        
+        formatter.excludeUndefined(true);
+        assertThat(formatter.format(assignments), equalTo("name=value"));
+    }
 }

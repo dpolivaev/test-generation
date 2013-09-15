@@ -3,6 +3,7 @@ package org.dpolivaev.tsgen.ruleengine;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import org.dpolivaev.tsgen.ruleengine.internal.Assignment;
@@ -33,6 +34,7 @@ public class AssignmentFormatter {
 	private boolean shouldFormatIteratingRulesOnly;
 	final private List<Pattern> includePatterns;
 	final private List<Pattern> excludePatterns;
+	private boolean excludeUndefined;
 
     private AssignmentFormatter() {
         appendsReasons = true;
@@ -53,10 +55,14 @@ public class AssignmentFormatter {
     }
 
 	private boolean includesAssignment(Map.Entry<String, Assignment> assignment) {
-		return  !(shouldFormatIteratingRulesOnly && !assignment.getValue().rule.forcesIteration())
+		return  !(shouldFormatIteratingRulesOnly && !assignment.getValue().rule.forcesIteration() || excludedByValue(assignment))
 				&& isIncludedByExcludePatterns(assignment) && isIncludedByIncludePatterns(assignment);
 	}
 	
+	private boolean excludedByValue(Entry<String, Assignment> assignment) {
+		return excludeUndefined && SpecialValue.UNDEFINED.equals(assignment.getValue().value);
+	}
+
 	private boolean isIncludedByExcludePatterns(Map.Entry<String, Assignment> assignment) {
 		for(Pattern pattern:excludePatterns){
 			if(pattern.matcher(assignment.getKey()).matches())
@@ -127,5 +133,10 @@ public class AssignmentFormatter {
 
 	public void exclude(final Pattern pattern) {
 		excludePatterns.add(pattern);
+	}
+
+	public void excludeUndefined(boolean exclude) {
+		this.excludeUndefined = exclude;
+		
 	}
 }
