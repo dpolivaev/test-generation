@@ -6,8 +6,6 @@ import static org.xmlmatchers.transform.XmlConverters.the;
 
 import java.util.Arrays;
 
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMResult;
