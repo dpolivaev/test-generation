@@ -25,9 +25,9 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.java.Tr
 			<xsl:if test="Requirement[@count=1]">
 				<xsl:call-template name="eol2"/>
 				<xsl:text>first = {</xsl:text>
-				<xsl:for-each select="Requirement[@count=1]">
-					<xsl:call-template name="Requirement"/>
-				</xsl:for-each>
+				<xsl:apply-templates select="Requirement[@count=1]">
+					<xsl:sort select="@id"/>
+				</xsl:apply-templates>
 				<xsl:call-template name="eol2"/>
 				<xsl:text>}</xsl:text>
 			</xsl:if>
@@ -37,9 +37,9 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.java.Tr
 			<xsl:if test="Requirement[@count>1]">
 				<xsl:call-template name="eol2"/>
 				<xsl:text>next = {</xsl:text>
-				<xsl:for-each select="Requirement[@count>1]">
-					<xsl:call-template name="Requirement"/>
-				</xsl:for-each>
+				<xsl:apply-templates select="Requirement[@count>1]">
+					<xsl:sort select="@id"/>
+				</xsl:apply-templates>
 				<xsl:call-template name="eol2"/>
 				<xsl:text>}</xsl:text>
 			</xsl:if>
@@ -48,7 +48,7 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.java.Tr
 		</xsl:if>
 	</xsl:template>
 	
-	<xsl:template name="Requirement">
+	<xsl:template match="Requirement">
 		<xsl:variable name="id" select="@id"/>
 		<xsl:if test="not (preceding-sibling::Requirement[@id=$id])">
 			<xsl:call-template name="eol3"/>
@@ -75,6 +75,7 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.java.Tr
 	<xsl:template match="Script">
 		<xsl:text>import static org.junit.Assert.*;
 import org.junit.Test;
+
 import org.dpolivaev.tsgen.java.Description;
 import org.dpolivaev.tsgen.java.Coverage;
 import org.dpolivaev.tsgen.java.RequirementCoverage;
