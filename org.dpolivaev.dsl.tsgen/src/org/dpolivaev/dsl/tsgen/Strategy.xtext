@@ -4,7 +4,7 @@ import 'http://www.eclipse.org/xtext/xbase/Xbase' as xbase
 
 generate strategydsl "http://www.dpolivaev.org/dsl/tsgen/strategydsl"
 
-Model: {Model}
+Generation: {Generation}
 	('package' package = QualifiedName)?
 	importSection=XImportSection?
 	strategies+=Strategy*

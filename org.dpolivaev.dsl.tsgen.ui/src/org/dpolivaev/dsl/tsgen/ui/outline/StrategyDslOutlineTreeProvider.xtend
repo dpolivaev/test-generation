@@ -16,7 +16,6 @@ import org.eclipse.xtext.ui.editor.outline.IOutlineNode
 import org.dpolivaev.dsl.tsgen.strategydsl.Rule
 import org.dpolivaev.dsl.tsgen.strategydsl.ValueAction
 import org.dpolivaev.dsl.tsgen.strategydsl.SkipAction
-import org.dpolivaev.dsl.tsgen.strategydsl.Model
 import org.dpolivaev.dsl.tsgen.strategydsl.Run
 
 /**
