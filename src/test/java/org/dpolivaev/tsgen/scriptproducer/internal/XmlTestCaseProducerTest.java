@@ -6,6 +6,8 @@ import static org.xmlmatchers.transform.XmlConverters.the;
 
 import java.util.Arrays;
 
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMResult;
@@ -15,6 +17,7 @@ import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 import org.dpolivaev.tsgen.ruleengine.internal.Assignments;
+import org.dpolivaev.tsgen.scriptproducer.OutputConfiguration;
 import org.dpolivaev.tsgen.scriptproducer.internal.HandlerFactory;
 import org.dpolivaev.tsgen.scriptproducer.internal.TestCaseProducer;
 import org.dpolivaev.tsgen.scriptproducer.internal.XmlWriter;
@@ -22,6 +25,7 @@ import org.dpolivaev.tsgen.scriptproducer.internal.XmlWriterUsingTransformerHand
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.xml.sax.SAXException;
 
 public class XmlTestCaseProducerTest {
@@ -35,7 +39,9 @@ public class XmlTestCaseProducerTest {
     @Before
     public void setup() throws TransformerFactoryConfigurationError, TransformerConfigurationException, SAXException {
         dom = new DOMResult();
-        TransformerHandler handler = new HandlerFactory().newHandler(dom);
+        ResultFactory resultFactory = Mockito.mock(ResultFactory.class);
+        Mockito.when(resultFactory.newResult("result", "xml")).thenReturn(dom);
+        TransformerHandler handler = new HandlerFactory(resultFactory).newHandler(OutputConfiguration.OUTPUT_XML.forScript("result"));
         xmlWriter = new XmlWriterUsingTransformerHandler(handler);
         coverageTracker = new CoverageTracker();
         producer = new TestCaseProducer(xmlWriter, coverageTracker);

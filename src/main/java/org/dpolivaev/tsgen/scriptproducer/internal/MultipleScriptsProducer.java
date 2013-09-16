@@ -10,17 +10,28 @@ import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.ScriptProducer;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
+import org.dpolivaev.tsgen.scriptproducer.OutputConfiguration;
+import org.dpolivaev.tsgen.scriptproducer.ScriptConfiguration;
 
 public class MultipleScriptsProducer implements ScriptProducer{
-    private Source xsltSource;    
     private final Map<String, SingleScriptProducer> singleScriptProducers;
     private final ResultFactory resultFactory;
 	private final CoverageTracker coverageTracker;
+	private OutputConfiguration outputConfiguration;
 
-    public MultipleScriptsProducer(ResultFactory resultFactory, CoverageTracker coverageTracker) {
+    public OutputConfiguration getOutputConfiguration() {
+		return outputConfiguration;
+	}
+
+	public void setOutputConfiguration(OutputConfiguration outputConfiguration) {
+		this.outputConfiguration = outputConfiguration;
+	}
+
+	public MultipleScriptsProducer(ResultFactory resultFactory, CoverageTracker coverageTracker) {
         this.resultFactory = resultFactory;
 		this.coverageTracker = coverageTracker;
         singleScriptProducers = new HashMap<String, SingleScriptProducer>();
+        outputConfiguration = OutputConfiguration.OUTPUT_XML;
         
     }
 
@@ -39,17 +50,14 @@ public class MultipleScriptsProducer implements ScriptProducer{
     }
 
     private SingleScriptProducer newSingleScriptProducer(String scriptName, PropertyContainer propertyContainer) {
-        return new SingleScriptProducer(propertyContainer, xsltSource, resultFactory.newResult(scriptName), coverageTracker);
+        return new SingleScriptProducer(propertyContainer, outputConfiguration.forScript(scriptName), 
+        		resultFactory, coverageTracker);
     }
 
     public void endScripts() {
         for(SingleScriptProducer singleScriptProducer:singleScriptProducers.values())
             singleScriptProducer.endScript();
         
-    }
-
-    public Result getResult(String scriptName) {
-        return getSingleScriptProducer(scriptName).result();
     }
 
     private SingleScriptProducer getSingleScriptProducer(String scriptName) {
@@ -59,13 +67,4 @@ public class MultipleScriptsProducer implements ScriptProducer{
     private void setSingleScriptProducer(String scriptName, SingleScriptProducer singleScriptProducer) {
         singleScriptProducers.put(scriptName, singleScriptProducer);
     }
-
-    public Source getXsltSource() {
-        return xsltSource;
-    }
-
-    public void setXsltSource(Source xsltSource) {
-        this.xsltSource = xsltSource;
-    }
-
 }

@@ -3,5 +3,5 @@ package org.dpolivaev.tsgen.scriptproducer.internal;
 import javax.xml.transform.Result;
 
 interface ResultFactory{
-    Result newResult(String scriptName);
+    Result newResult(String scriptName, String FileExtension);
 }
