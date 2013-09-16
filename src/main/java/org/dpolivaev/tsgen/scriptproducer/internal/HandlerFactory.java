@@ -7,24 +7,22 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 
+import org.dpolivaev.tsgen.scriptproducer.ScriptConfiguration;
 import org.dpolivaev.tsgen.utils.internal.Utils;
 
 public class HandlerFactory {
-    private Source xsltSource;
+	private ResultFactory resultFactory;
     
-    public HandlerFactory(Source xsltSource) {
-        this.xsltSource = xsltSource;
-    }
+    public HandlerFactory(ResultFactory resultFactory) {
+		this.resultFactory = resultFactory;
+	}
 
-    public HandlerFactory() {
-        this(null);
-    }
-    
-    public TransformerHandler newHandler(Result result){
+	public TransformerHandler newHandler(ScriptConfiguration scriptConfiguration) {
+		Result result = resultFactory.newResult(scriptConfiguration.scriptName, scriptConfiguration.outputConfiguration.fileExtension);
         try {
-            TransformerHandler handler;
             SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", null);
-            handler = xsltSource != null ? tf.newTransformerHandler(xsltSource) :  tf.newTransformerHandler();
+            Source xsltSource = scriptConfiguration.outputConfiguration.xsltSource;
+            final TransformerHandler handler = xsltSource != null ? tf.newTransformerHandler(xsltSource) :  tf.newTransformerHandler();
             Transformer transformer = handler.getTransformer();
             if(xsltSource == null){
             	transformer.setOutputProperty(OutputKeys.INDENT,"yes");
@@ -36,6 +34,6 @@ public class HandlerFactory {
         catch (Exception e) {
             throw Utils.runtimeException(e);
         }
-    }
+	}
 
 }

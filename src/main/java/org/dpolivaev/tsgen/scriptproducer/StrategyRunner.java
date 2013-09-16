@@ -17,14 +17,11 @@ import org.dpolivaev.tsgen.scriptproducer.internal.StreamResultFactory;
 import org.dpolivaev.tsgen.utils.internal.Utils;
 
 public class StrategyRunner {
-	private Source xsltSource = null;
-	private String fileExtension = "xml";
-	public String getFileExtension() {
-		return fileExtension;
-	}
+	private OutputConfiguration outputConfiguration;
 
-	public void setFileExtension(String fileExtension) {
-		this.fileExtension = fileExtension;
+	public StrategyRunner() {
+		super();
+		this.outputConfiguration = OutputConfiguration.OUTPUT_XML;
 	}
 
 	public void run(Strategy strategy){
@@ -34,10 +31,9 @@ public class StrategyRunner {
 		ruleEngine.addScriptProducer(logger);
 		ruleEngine.addErrorHandler(logger);
 		StreamResultFactory resultFactory = new StreamResultFactory();
-		resultFactory.setFileExtension(fileExtension);
 		final CoverageTracker coverageTracker = new CoverageTracker();
 		MultipleScriptsProducer scriptProducer = new MultipleScriptsProducer(resultFactory, coverageTracker);
-		scriptProducer.setXsltSource(xsltSource);
+		scriptProducer.setOutputConfiguration(outputConfiguration);
 		ruleEngine.addScriptProducer(scriptProducer);
 		ruleEngine.run(strategy);
 		try {
@@ -48,12 +44,8 @@ public class StrategyRunner {
 		}
 	}
 	
-	public Source getXsltSource() {
-		return xsltSource;
-	}
 	public StrategyRunner addOutput(Source xsltSource, String fileExtension) {
-		this.xsltSource = xsltSource;
-		this.fileExtension = fileExtension;
+		this.outputConfiguration = new OutputConfiguration(xsltSource, fileExtension);
 		return this;
 	}
 
