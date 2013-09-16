@@ -3,15 +3,11 @@ package org.dpolivaev.tsgen.scriptproducer.internal;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-
 import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.ScriptProducer;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 import org.dpolivaev.tsgen.scriptproducer.OutputConfiguration;
-import org.dpolivaev.tsgen.scriptproducer.ScriptConfiguration;
 
 public class MultipleScriptsProducer implements ScriptProducer{
     private final Map<String, SingleScriptProducer> singleScriptProducers;

@@ -2,15 +2,10 @@ package org.dpolivaev.tsgen.ruleengine;
 import static org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory.iterate;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.verify;
-
-import java.util.Collections;
-
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.ScriptProducer;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
-import org.dpolivaev.tsgen.ruleengine.internal.PropertyAssignedEvent;
 import org.dpolivaev.tsgen.ruleengine.internal.StatefulRule;
 import org.dpolivaev.tsgen.utils.internal.Utils;
 import org.junit.Test;

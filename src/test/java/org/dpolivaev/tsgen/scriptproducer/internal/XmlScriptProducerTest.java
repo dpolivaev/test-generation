@@ -8,8 +8,6 @@ import javax.xml.transform.dom.DOMResult;
 
 import org.dpolivaev.tsgen.ruleengine.internal.Assignments;
 import org.dpolivaev.tsgen.scriptproducer.OutputConfiguration;
-import org.dpolivaev.tsgen.scriptproducer.ScriptConfiguration;
-import org.dpolivaev.tsgen.scriptproducer.internal.DomResultFactory;
 import org.dpolivaev.tsgen.scriptproducer.internal.MultipleScriptsProducer;
 import org.dpolivaev.tsgen.scriptproducer.internal.SingleScriptProducer;
 import org.junit.Assert;

@@ -1,7 +1,5 @@
 package org.dpolivaev.tsgen.scriptproducer.internal;
 
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
 import javax.xml.transform.sax.TransformerHandler;
 
 import org.dpolivaev.tsgen.coverage.CoverageTracker;
