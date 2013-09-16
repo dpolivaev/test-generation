@@ -5,7 +5,7 @@ import java.util.ArrayList
 import java.util.Collection
 import java.util.HashMap
 import org.dpolivaev.dsl.tsgen.strategydsl.Condition
-import org.dpolivaev.dsl.tsgen.strategydsl.Model
+import org.dpolivaev.dsl.tsgen.strategydsl.Generation
 import org.dpolivaev.dsl.tsgen.strategydsl.Rule
 import org.dpolivaev.dsl.tsgen.strategydsl.RuleGroup
 import org.dpolivaev.dsl.tsgen.strategydsl.SkipAction
@@ -77,7 +77,7 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 	 *            rely on linking using the index if isPreIndexingPhase is
 	 *            <code>true</code>.
 	 */
-	def dispatch void infer(Model script, IJvmDeclaredTypeAcceptor acceptor, boolean isPreIndexingPhase) {
+	def dispatch void infer(Generation script, IJvmDeclaredTypeAcceptor acceptor, boolean isPreIndexingPhase) {
 		val className = script.eResource.URI.trimFileExtension.lastSegment.toFirstUpper
 		val qualifiedClassName = if(script.package != null) script.package + '.' + className else className
 		acceptor.accept(script.toClass(qualifiedClassName)).initializeLater([
@@ -92,10 +92,10 @@ class ScriptInitializer{
 	val HashMap<EObject, String> methods
 	val Set<String> declaredStrategies
 	val JvmGenericType jvmType
-	val Model script
+	val Generation script
 	val JvmType ruleFactoryType
 
-	new(extension JvmTypesBuilder jvmTypesBuilder, XbaseCompiler xbaseCompiler, JvmGenericType jvmType, Model script){
+	new(extension JvmTypesBuilder jvmTypesBuilder, XbaseCompiler xbaseCompiler, JvmGenericType jvmType, Generation script){
 		this.jvmTypesBuilder = jvmTypesBuilder
 		this.xbaseCompiler = xbaseCompiler
 		this.methods = new HashMap<EObject, String>
