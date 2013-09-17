@@ -35,7 +35,7 @@ strategy CallPrice
 				if :tariff == '"OnTheWeekend"' then let foc.callBeginTime be '"0:00:00"', '"0:00:01"', '"19:59:59"'
 				if :tariff == '"At night"' then let foc.callBeginTime be '"20:00:00"', '"20:00:01"', '"23:59:59"', '"00:00:00"', '"05:59:59"'
 			}
-			for each destination cover req123 by :destination
+			for each destination cover req123 by :destination, "bla"
 		},
 		false {
 			let failureReason be 
@@ -57,5 +57,5 @@ strategy CallPrice
 	let default foc.cheapCallActiveForCall be false
 
 	
-run CallPrice
-run CallPrice apply "/java.xslt" output "java"
+run strategy CallPrice
+run strategy CallPrice apply "/java.xslt" output "java"
