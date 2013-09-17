@@ -7,12 +7,11 @@ generate strategydsl "http://www.dpolivaev.org/dsl/tsgen/strategydsl"
 Generation: {Generation}
 	('package' package = QualifiedName)?
 	importSection=XImportSection?
-	strategies+=Strategy*
-	runs += Run*
+	(strategies+=Strategy | models += Model | goals += Goal | vars += XVariableDeclaration | subs += MethodDefinition | runs += Run)*
 ;
 	
 Strategy:
-	'strategy' name=ID ('extends' baseStrategies += StrategyReference ('with' baseStrategies += StrategyReference)* )?
+	'strategy' name=ID ('extends' baseStrategies += ShortFormStrategyReference ('with' baseStrategies += ShortFormStrategyReference)* )?
 		ruleGroups += RuleGroup* 
 	;
 
@@ -61,7 +60,8 @@ ItemAction:{ValueAction}
 ;
 
 Run:
-	'run' strategies += StrategyReference ('with' strategies += StrategyReference)*
+	'run' strategies += StrategyReference 
+	('with' strategies += StrategyReference (',' (strategies += StrategyReference | goals += GoalReference) ))?
 	outputConfiguration += OutputConfiguration? (',' outputConfiguration += OutputConfiguration)*
 	
 ;
@@ -70,8 +70,36 @@ OutputConfiguration:
 	('apply' xslt=STRING)? 'output' fileExtension = STRING
 ;
 
-StrategyReference : expr = XExpression;
+StrategyReference returns StrategyReference: {StrategyReference} 'strategy' expr = XExpression;
+ShortFormStrategyReference returns StrategyReference: {StrategyReference} expr = XExpression;
+GoalReference : 'goal' expr = XExpression;
 
+Model:'model' name = ValidID
+	'{'
+		(vars += XVariableDeclaration | subs += MethodDefinition)*
+	'}'
+;
+
+Goal: CheckList|OpenGoal;
+
+CheckList:
+'goal' name = ValidID  expr = XExpression 'matches' item += XExpression (',' item += XExpression)*
+;
+
+OpenGoal: 
+'open' 'goal' name = ValidID  expr = XExpression
+;
+
+MethodDefinition:
+'def' returnType=JvmTypeReference? name=ValidID 
+('(' 
+	(parameters+=FullJvmFormalParameter 
+		(',' parameters+=FullJvmFormalParameter)*
+	)? 
+')')? 
+
+(body=XBlockExpression | '=' body = XExpression);
+	
 
 XPrimaryExpression returns xbase::XExpression:
 	XConstructorCall |
