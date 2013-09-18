@@ -3,7 +3,6 @@ package org.dpolivaev.tsgen.scriptwriter.internal;
 import javax.xml.transform.sax.TransformerHandler;
 
 import org.dpolivaev.tsgen.coverage.CoverageTracker;
-import org.dpolivaev.tsgen.coverage.internal.CoverageProducer;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.ScriptWriter;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
@@ -29,10 +28,7 @@ public class SingleScriptWriter implements ScriptWriter {
         if(scriptValue.equals(SpecialValue.UNDEFINED))
         	xmlWriter.setAttribute("id", "script");
         testCaseProducer.addAttributes(propertyContainer, "script");
-        if(coverageTracker != null)
-        	scriptProducer =  new CoverageProducer(testCaseProducer, coverageTracker);
-        else
-        	scriptProducer = testCaseProducer;
+        scriptProducer = testCaseProducer;
     }
     
     public SingleScriptWriter(PropertyContainer propertyContainer, ScriptConfiguration scriptConfiguration, ResultFactory resultFactory) {
