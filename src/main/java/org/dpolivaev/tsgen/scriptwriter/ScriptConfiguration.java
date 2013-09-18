@@ -1,4 +1,4 @@
-package org.dpolivaev.tsgen.scriptproducer;
+package org.dpolivaev.tsgen.scriptwriter;
 
 
 public class ScriptConfiguration {

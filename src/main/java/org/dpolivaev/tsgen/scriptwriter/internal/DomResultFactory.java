@@ -1,4 +1,4 @@
-package org.dpolivaev.tsgen.scriptproducer.internal;
+package org.dpolivaev.tsgen.scriptwriter.internal;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.dom.DOMResult;

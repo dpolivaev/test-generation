@@ -36,7 +36,6 @@ public class RuleBuilder {
         return this;
     }
 
-    @SuppressWarnings("unchecked")
 	public RuleBuilder over(Object... valueObjects) {
         previousValueCount = this.values.size();
         for(Object valueObject : valueObjects)

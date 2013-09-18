@@ -1,4 +1,4 @@
-package org.dpolivaev.tsgen.scriptproducer.internal;
+package org.dpolivaev.tsgen.scriptwriter.internal;
 
 import static org.dpolivaev.tsgen.testutils.TestUtils.assignmentMock;
 import static org.xmlmatchers.XmlMatchers.isEquivalentTo;
@@ -15,14 +15,15 @@ import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.coverage.internal.CoverageProducer;
 import org.dpolivaev.tsgen.coverage.internal.RequirementCoverage;
-import org.dpolivaev.tsgen.ruleengine.ScriptProducer;
+import org.dpolivaev.tsgen.ruleengine.ScriptWriter;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 import org.dpolivaev.tsgen.ruleengine.internal.Assignments;
-import org.dpolivaev.tsgen.scriptproducer.OutputConfiguration;
-import org.dpolivaev.tsgen.scriptproducer.internal.HandlerFactory;
-import org.dpolivaev.tsgen.scriptproducer.internal.TestCaseProducer;
-import org.dpolivaev.tsgen.scriptproducer.internal.XmlWriter;
-import org.dpolivaev.tsgen.scriptproducer.internal.XmlWriterUsingTransformerHandler;
+import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
+import org.dpolivaev.tsgen.scriptwriter.internal.HandlerFactory;
+import org.dpolivaev.tsgen.scriptwriter.internal.ResultFactory;
+import org.dpolivaev.tsgen.scriptwriter.internal.XmlTestCaseWriter;
+import org.dpolivaev.tsgen.scriptwriter.internal.XmlWriter;
+import org.dpolivaev.tsgen.scriptwriter.internal.XmlWriterUsingTransformerHandler;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,7 +33,7 @@ import org.xml.sax.SAXException;
 public class XmlTestCaseProducerTest {
 
     private DOMResult dom;
-    private ScriptProducer producer;
+    private ScriptWriter producer;
     private Assignments propertyContainer;
     private XmlWriter xmlWriter;
 	private CoverageTracker coverageTracker;
@@ -46,7 +47,7 @@ public class XmlTestCaseProducerTest {
         xmlWriter = new XmlWriterUsingTransformerHandler(handler);
         coverageTracker = new CoverageTracker();
         coverageTracker.add(new RequirementCoverage());
-        TestCaseProducer testCaseProducer = new TestCaseProducer(xmlWriter, coverageTracker);
+        XmlTestCaseWriter testCaseProducer = new XmlTestCaseWriter(xmlWriter, coverageTracker);
 		producer = new CoverageProducer(testCaseProducer, coverageTracker);
         propertyContainer = new Assignments();
     }
@@ -57,7 +58,7 @@ public class XmlTestCaseProducerTest {
 
     private void createScript() throws SAXException {
         xmlWriter.startDocument();
-        producer.makeScriptFor(propertyContainer);
+        producer.createScriptFor(propertyContainer);
         xmlWriter.endDocument();
     }
 

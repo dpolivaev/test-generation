@@ -1,29 +1,29 @@
-package org.dpolivaev.tsgen.scriptproducer.internal;
+package org.dpolivaev.tsgen.scriptwriter.internal;
 
 import javax.xml.transform.sax.TransformerHandler;
 
 import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.coverage.internal.CoverageProducer;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-import org.dpolivaev.tsgen.ruleengine.ScriptProducer;
+import org.dpolivaev.tsgen.ruleengine.ScriptWriter;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
-import org.dpolivaev.tsgen.scriptproducer.ScriptConfiguration;
+import org.dpolivaev.tsgen.scriptwriter.ScriptConfiguration;
 
-public class SingleScriptProducer implements ScriptProducer {
+public class SingleScriptWriter implements ScriptWriter {
 
     private XmlWriter xmlWriter;
-    private ScriptProducer scriptProducer;
+    private ScriptWriter scriptProducer;
 
     @Override
-    public void makeScriptFor(PropertyContainer propertyContainer) {
-        scriptProducer.makeScriptFor(propertyContainer);
+    public void createScriptFor(PropertyContainer propertyContainer) {
+        scriptProducer.createScriptFor(propertyContainer);
     }
 
-    public SingleScriptProducer(PropertyContainer propertyContainer, ScriptConfiguration scriptConfiguration, ResultFactory resultFactory, CoverageTracker coverageTracker) {
+    public SingleScriptWriter(PropertyContainer propertyContainer, ScriptConfiguration scriptConfiguration, ResultFactory resultFactory, CoverageTracker coverageTracker) {
         TransformerHandler handler = new HandlerFactory(resultFactory).newHandler(scriptConfiguration);
         xmlWriter = new XmlWriterUsingTransformerHandler(handler);
         xmlWriter.startDocument();
-        TestCaseProducer testCaseProducer = new TestCaseProducer(xmlWriter, coverageTracker);
+        XmlTestCaseWriter testCaseProducer = new XmlTestCaseWriter(xmlWriter, coverageTracker);
         xmlWriter.beginElement("Script");
         Object scriptValue = propertyContainer.get("script");
         if(scriptValue.equals(SpecialValue.UNDEFINED))
@@ -35,7 +35,7 @@ public class SingleScriptProducer implements ScriptProducer {
         	scriptProducer = testCaseProducer;
     }
     
-    public SingleScriptProducer(PropertyContainer propertyContainer, ScriptConfiguration scriptConfiguration, ResultFactory resultFactory) {
+    public SingleScriptWriter(PropertyContainer propertyContainer, ScriptConfiguration scriptConfiguration, ResultFactory resultFactory) {
         this(propertyContainer, scriptConfiguration, resultFactory, null);
     }
 
