@@ -4,14 +4,20 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-import org.dpolivaev.tsgen.ruleengine.internal.ConstantValue;
 import org.dpolivaev.tsgen.utils.internal.Utils;
 import org.junit.Before;
 import org.junit.Test;
 
 public class CoverageTest {
 
-	private static final Goal GOAL = new Goal("goal", new ConstantValue("value"));
+	private static final Goal GOAL = new Goal(){
+
+		@Override
+		public void check(PropertyContainer propertyContainer,
+				CoverageTracker coverageTracker) {
+			coverageTracker.add(COVERAGE_ENTRY);
+			
+		}};
 	private static final CoverageEntry COVERAGE_ENTRY = new CoverageEntry("goal", "value");
 	private CoverageTracker coverageTracker;
 	
