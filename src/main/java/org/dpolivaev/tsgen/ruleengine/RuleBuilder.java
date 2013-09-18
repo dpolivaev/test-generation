@@ -36,7 +36,8 @@ public class RuleBuilder {
         return this;
     }
 
-    public RuleBuilder over(Object... valueObjects) {
+    @SuppressWarnings("unchecked")
+	public RuleBuilder over(Object... valueObjects) {
         previousValueCount = this.values.size();
         for(Object valueObject : valueObjects)
         	if(valueObject instanceof ValueWithRulesProvider)
