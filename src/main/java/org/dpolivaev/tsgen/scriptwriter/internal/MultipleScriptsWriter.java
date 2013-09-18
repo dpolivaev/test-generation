@@ -1,16 +1,16 @@
-package org.dpolivaev.tsgen.scriptproducer.internal;
+package org.dpolivaev.tsgen.scriptwriter.internal;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-import org.dpolivaev.tsgen.ruleengine.ScriptProducer;
+import org.dpolivaev.tsgen.ruleengine.ScriptWriter;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
-import org.dpolivaev.tsgen.scriptproducer.OutputConfiguration;
+import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 
-public class MultipleScriptsProducer implements ScriptProducer{
-    private final Map<String, SingleScriptProducer> singleScriptProducers;
+public class MultipleScriptsWriter implements ScriptWriter{
+    private final Map<String, SingleScriptWriter> singleScriptProducers;
     private final ResultFactory resultFactory;
 	private final CoverageTracker coverageTracker;
 	private OutputConfiguration outputConfiguration;
@@ -23,16 +23,16 @@ public class MultipleScriptsProducer implements ScriptProducer{
 		this.outputConfiguration = outputConfiguration;
 	}
 
-	public MultipleScriptsProducer(ResultFactory resultFactory, CoverageTracker coverageTracker) {
+	public MultipleScriptsWriter(ResultFactory resultFactory, CoverageTracker coverageTracker) {
         this.resultFactory = resultFactory;
 		this.coverageTracker = coverageTracker;
-        singleScriptProducers = new HashMap<String, SingleScriptProducer>();
+        singleScriptProducers = new HashMap<String, SingleScriptWriter>();
         outputConfiguration = OutputConfiguration.OUTPUT_XML;
         
     }
 
      @Override
-    public void makeScriptFor(PropertyContainer propertyContainer) {
+    public void createScriptFor(PropertyContainer propertyContainer) {
         Object scriptValue = propertyContainer.get("script");
         String scriptName;
         if(scriptValue == SpecialValue.UNDEFINED)
@@ -42,25 +42,25 @@ public class MultipleScriptsProducer implements ScriptProducer{
         if(! singleScriptProducers.containsKey(scriptName)) {
             setSingleScriptProducer(scriptName, newSingleScriptProducer(scriptName, propertyContainer));
         }
-        getSingleScriptProducer(scriptName).makeScriptFor(propertyContainer);
+        getSingleScriptProducer(scriptName).createScriptFor(propertyContainer);
     }
 
-    private SingleScriptProducer newSingleScriptProducer(String scriptName, PropertyContainer propertyContainer) {
-        return new SingleScriptProducer(propertyContainer, outputConfiguration.forScript(scriptName), 
+    private SingleScriptWriter newSingleScriptProducer(String scriptName, PropertyContainer propertyContainer) {
+        return new SingleScriptWriter(propertyContainer, outputConfiguration.forScript(scriptName), 
         		resultFactory, coverageTracker);
     }
 
     public void endScripts() {
-        for(SingleScriptProducer singleScriptProducer:singleScriptProducers.values())
+        for(SingleScriptWriter singleScriptProducer:singleScriptProducers.values())
             singleScriptProducer.endScript();
         
     }
 
-    private SingleScriptProducer getSingleScriptProducer(String scriptName) {
+    private SingleScriptWriter getSingleScriptProducer(String scriptName) {
         return singleScriptProducers.get(scriptName);
     }
 
-    private void setSingleScriptProducer(String scriptName, SingleScriptProducer singleScriptProducer) {
+    private void setSingleScriptProducer(String scriptName, SingleScriptWriter singleScriptProducer) {
         singleScriptProducers.put(scriptName, singleScriptProducer);
     }
 }

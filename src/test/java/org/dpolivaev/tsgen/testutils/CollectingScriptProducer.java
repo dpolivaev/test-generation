@@ -4,25 +4,25 @@ import java.io.StringWriter;
 import java.io.Writer;
 
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-import org.dpolivaev.tsgen.ruleengine.ScriptProducer;
-import org.dpolivaev.tsgen.scriptproducer.internal.LoggingScriptProducer;
+import org.dpolivaev.tsgen.ruleengine.ScriptWriter;
+import org.dpolivaev.tsgen.scriptwriter.internal.ScriptLogger;
 
 /**
  * @author Dimitry Polivaev 18.02.2013
  */
-public class CollectingScriptProducer implements ScriptProducer {
+public class CollectingScriptProducer implements ScriptWriter {
 
-	private final LoggingScriptProducer loggingScriptProducer;
+	private final ScriptLogger loggingScriptProducer;
 	private Writer log;
 
 	public CollectingScriptProducer() {
 		log = new StringWriter();
-		loggingScriptProducer = new LoggingScriptProducer(log);
+		loggingScriptProducer = new ScriptLogger(log);
 	}
 
 	@Override
-	public void makeScriptFor(PropertyContainer propertyContainer) {
-		loggingScriptProducer.makeScriptFor(propertyContainer);
+	public void createScriptFor(PropertyContainer propertyContainer) {
+		loggingScriptProducer.createScriptFor(propertyContainer);
 	}
 
 	public String getAllScriptPropertyCombinations() {

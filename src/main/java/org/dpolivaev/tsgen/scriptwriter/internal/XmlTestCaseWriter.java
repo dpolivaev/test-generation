@@ -1,15 +1,15 @@
-package org.dpolivaev.tsgen.scriptproducer.internal;
+package org.dpolivaev.tsgen.scriptwriter.internal;
 
 import java.util.List;
 
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-import org.dpolivaev.tsgen.ruleengine.ScriptProducer;
+import org.dpolivaev.tsgen.ruleengine.ScriptWriter;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 import org.dpolivaev.tsgen.ruleengine.internal.PropertyAccessor;
 
-public class TestCaseProducer implements ScriptProducer {
+public class XmlTestCaseWriter implements ScriptWriter {
 
 	private static final String TESTCASE_PROPERTY = "testcase";
     private static final String TESTCASE_ELEMENT = "TestCase";
@@ -27,14 +27,14 @@ public class TestCaseProducer implements ScriptProducer {
     private final XmlWriter xmlWriter;
 	final private CoverageTracker coverageTracker;
 
-    public TestCaseProducer(XmlWriter xmlWriter,
+    public XmlTestCaseWriter(XmlWriter xmlWriter,
 			CoverageTracker coverageTracker) {
     	this.xmlWriter = xmlWriter;
 		this.coverageTracker = coverageTracker;
 	}
 
 	@Override
-    public void makeScriptFor(PropertyContainer propertyContainer) {
+    public void createScriptFor(PropertyContainer propertyContainer) {
         xmlWriter.beginElement(TESTCASE_ELEMENT);
         addAttributes(propertyContainer, TESTCASE_PROPERTY);
         addCoverage(propertyContainer);

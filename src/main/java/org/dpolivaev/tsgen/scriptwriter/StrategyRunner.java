@@ -1,4 +1,4 @@
-package org.dpolivaev.tsgen.scriptproducer;
+package org.dpolivaev.tsgen.scriptwriter;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,9 +11,9 @@ import javax.xml.transform.stream.StreamSource;
 import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
-import org.dpolivaev.tsgen.scriptproducer.internal.LoggingScriptProducer;
-import org.dpolivaev.tsgen.scriptproducer.internal.MultipleScriptsProducer;
-import org.dpolivaev.tsgen.scriptproducer.internal.StreamResultFactory;
+import org.dpolivaev.tsgen.scriptwriter.internal.ScriptLogger;
+import org.dpolivaev.tsgen.scriptwriter.internal.MultipleScriptsWriter;
+import org.dpolivaev.tsgen.scriptwriter.internal.StreamResultFactory;
 import org.dpolivaev.tsgen.utils.internal.Utils;
 
 public class StrategyRunner {
@@ -27,12 +27,12 @@ public class StrategyRunner {
 	public void run(Strategy strategy){
 		RuleEngine ruleEngine = new RuleEngine();
 		OutputStreamWriter writer = new OutputStreamWriter(System.out);
-		LoggingScriptProducer logger = new LoggingScriptProducer(writer);
+		ScriptLogger logger = new ScriptLogger(writer);
 		ruleEngine.addScriptProducer(logger);
 		ruleEngine.addErrorHandler(logger);
 		StreamResultFactory resultFactory = new StreamResultFactory();
 		final CoverageTracker coverageTracker = new CoverageTracker();
-		MultipleScriptsProducer scriptProducer = new MultipleScriptsProducer(resultFactory, coverageTracker);
+		MultipleScriptsWriter scriptProducer = new MultipleScriptsWriter(resultFactory, coverageTracker);
 		scriptProducer.setOutputConfiguration(outputConfiguration);
 		ruleEngine.addScriptProducer(scriptProducer);
 		ruleEngine.run(strategy);

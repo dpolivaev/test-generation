@@ -1,4 +1,4 @@
-package org.dpolivaev.tsgen.scriptproducer.internal;
+package org.dpolivaev.tsgen.scriptwriter.internal;
 
 public interface XmlWriter {
     void startDocument();

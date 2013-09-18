@@ -16,7 +16,7 @@ import org.dpolivaev.tsgen.ruleengine.PropertyAlreadyAssignedException;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
-import org.dpolivaev.tsgen.ruleengine.ScriptProducer;
+import org.dpolivaev.tsgen.ruleengine.ScriptWriter;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.ruleengine.ValueProvider;
 import org.dpolivaev.tsgen.ruleengine.internal.StatefulRule;
@@ -317,9 +317,9 @@ public class RuleEngineAcceptanceTest {
         initializeRuleEngine(new CollectingScriptProducer() {
 
             @Override
-            public void makeScriptFor(PropertyContainer propertyContainer) {
+            public void createScriptFor(PropertyContainer propertyContainer) {
                 propertyContainer.get("y");
-                super.makeScriptFor(propertyContainer);
+                super.createScriptFor(propertyContainer);
             }
 
         });
@@ -335,9 +335,9 @@ public class RuleEngineAcceptanceTest {
         initializeRuleEngine(new CollectingScriptProducer() {
 
             @Override
-            public void makeScriptFor(PropertyContainer propertyContainer) {
+            public void createScriptFor(PropertyContainer propertyContainer) {
                 propertyContainer.get("x");
-                super.makeScriptFor(propertyContainer);
+                super.createScriptFor(propertyContainer);
             }
 
         });
@@ -397,9 +397,9 @@ public class RuleEngineAcceptanceTest {
         CollectingScriptProducer loggingScriptProducerMock = new CollectingScriptProducer() {
 
             @Override
-            public void makeScriptFor(PropertyContainer propertyContainer) {
+            public void createScriptFor(PropertyContainer propertyContainer) {
                 propertyContainer.get("x");
-                super.makeScriptFor(propertyContainer);
+                super.createScriptFor(propertyContainer);
             }
 
         };
@@ -427,7 +427,7 @@ public class RuleEngineAcceptanceTest {
     
     @Test
     public void returnsUndefined_ifNoRuleIsSatisfied(){
-        ScriptProducer scriptProducer = mock(ScriptProducer.class);
+        ScriptWriter scriptProducer = mock(ScriptWriter.class);
         final RuleEngine ruleEngine = new RuleEngine(scriptProducer);
         doAnswer(new Answer<Object>() {
             @Override
@@ -436,7 +436,7 @@ public class RuleEngineAcceptanceTest {
                 assertThat(propertyContainer.get("name"), equalTo((Object)UNDEFINED));
                 return null;
             }
-        }).when(scriptProducer).makeScriptFor(ruleEngine);
+        }).when(scriptProducer).createScriptFor(ruleEngine);
         ruleEngine.run(strategy);
     }
     
@@ -445,7 +445,7 @@ public class RuleEngineAcceptanceTest {
         strategy.addRule(iterate("x1").over("1"));
         strategy.addRule(iterate("x2").over("2").asDefaultRule());
         strategy.addRule(iterate("y").over("2").asDefaultRule());
-        ScriptProducer scriptProducer = mock(ScriptProducer.class);
+        ScriptWriter scriptProducer = mock(ScriptWriter.class);
         final RuleEngine ruleEngine = new RuleEngine(scriptProducer);
         doAnswer(new Answer<Object>() {
             @Override
@@ -454,7 +454,7 @@ public class RuleEngineAcceptanceTest {
                 assertThat(propertyContainer.availableProperties("x"), equalTo(Utils.set("x1", "x2")));
                 return null;
             }
-        }).when(scriptProducer).makeScriptFor(ruleEngine);
+        }).when(scriptProducer).createScriptFor(ruleEngine);
         ruleEngine.run(strategy);
     }
 }

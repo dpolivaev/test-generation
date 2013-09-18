@@ -1,4 +1,4 @@
-package org.dpolivaev.tsgen.scriptproducer.internal;
+package org.dpolivaev.tsgen.scriptwriter.internal;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
@@ -7,7 +7,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 
-import org.dpolivaev.tsgen.scriptproducer.ScriptConfiguration;
+import org.dpolivaev.tsgen.scriptwriter.ScriptConfiguration;
 import org.dpolivaev.tsgen.utils.internal.Utils;
 
 public class HandlerFactory {

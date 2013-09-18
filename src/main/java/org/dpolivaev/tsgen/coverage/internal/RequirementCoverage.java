@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.CoverageTracker;
-import org.dpolivaev.tsgen.coverage.Goal;
 import org.dpolivaev.tsgen.coverage.OpenGoal;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;

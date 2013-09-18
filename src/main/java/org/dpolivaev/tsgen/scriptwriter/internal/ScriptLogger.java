@@ -1,4 +1,4 @@
-package org.dpolivaev.tsgen.scriptproducer.internal;
+package org.dpolivaev.tsgen.scriptwriter.internal;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -6,21 +6,21 @@ import java.io.Writer;
 import org.dpolivaev.tsgen.ruleengine.AssignmentFormatter;
 import org.dpolivaev.tsgen.ruleengine.ErrorHandler;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-import org.dpolivaev.tsgen.ruleengine.ScriptProducer;
+import org.dpolivaev.tsgen.ruleengine.ScriptWriter;
 import org.dpolivaev.tsgen.utils.internal.Utils;
 
-public class LoggingScriptProducer implements ScriptProducer, ErrorHandler {
+public class ScriptLogger implements ScriptWriter, ErrorHandler {
 	final private Writer log;
 	final private AssignmentFormatter assignmentFormatter;
 
-	public LoggingScriptProducer(Writer writer) {
+	public ScriptLogger(Writer writer) {
 		log = writer;
 		assignmentFormatter = AssignmentFormatter.create("=", ", ");
 		assignmentFormatter.appendReasons(false);
 	}
 
 	@Override
-	public void makeScriptFor(PropertyContainer propertyContainer) {
+	public void createScriptFor(PropertyContainer propertyContainer) {
 		try {
 			log.append(propertyContainer.getCombinationCounter() + " : "
 					+ assignmentFormatter.format(propertyContainer) + '\n');

@@ -21,13 +21,13 @@ import org.dpolivaev.tsgen.utils.internal.Utils;
 public class RuleEngine implements EngineState {
     private Strategy strategy;
     final private Assignments assignments;
-    private final Collection<ScriptProducer> scriptProducers;
+    private final Collection<ScriptWriter> scriptProducers;
     private Set<String> dependencies;
     private String assignmentReason;
 	private String processedProperty;
 	private final Collection<ErrorHandler> errorHandlers;
 
-    public RuleEngine(ScriptProducer scriptProducer) {
+    public RuleEngine(ScriptWriter scriptProducer) {
     	this();
         addScriptProducer(scriptProducer);
     }
@@ -41,11 +41,11 @@ public class RuleEngine implements EngineState {
         errorHandlers = new ArrayList<>();
     }
 
-    public void addScriptProducer(ScriptProducer scriptProducer) {
+    public void addScriptProducer(ScriptWriter scriptProducer) {
 		scriptProducers.add(scriptProducer);
 	}
 
-    public void removeScriptProducer(ScriptProducer scriptProducer) {
+    public void removeScriptProducer(ScriptWriter scriptProducer) {
 		scriptProducers.remove(scriptProducer);
 	}
 
@@ -99,8 +99,8 @@ public class RuleEngine implements EngineState {
         fireNextCombinationStartedEvent();
         dependencies = new HashSet<>();
         processedProperty = "";
-        for(ScriptProducer scriptProducer :scriptProducers)
-        	scriptProducer.makeScriptFor(this);
+        for(ScriptWriter scriptProducer :scriptProducers)
+        	scriptProducer.createScriptFor(this);
     }
 
     private void fireNextCombinationFinishedEvent() {
