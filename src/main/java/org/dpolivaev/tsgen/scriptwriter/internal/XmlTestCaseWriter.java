@@ -46,6 +46,7 @@ public class XmlTestCaseWriter implements ScriptWriter {
 
     private void addCoverage(PropertyContainer propertyContainer) {
     	if(coverageTracker != null){
+    		coverageTracker.checkGoals(propertyContainer);
     		for(final CoverageEntry coverageEntry : coverageTracker.firstTimeCoveredGoals()){
     			addCoverageEntry(coverageEntry, true);
     		}

@@ -13,7 +13,6 @@ import javax.xml.transform.sax.TransformerHandler;
 
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.CoverageTracker;
-import org.dpolivaev.tsgen.coverage.internal.CoverageProducer;
 import org.dpolivaev.tsgen.coverage.internal.RequirementCoverage;
 import org.dpolivaev.tsgen.ruleengine.ScriptWriter;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
@@ -47,8 +46,7 @@ public class XmlTestCaseProducerTest {
         xmlWriter = new XmlWriterUsingTransformerHandler(handler);
         coverageTracker = new CoverageTracker();
         coverageTracker.add(new RequirementCoverage());
-        XmlTestCaseWriter testCaseProducer = new XmlTestCaseWriter(xmlWriter, coverageTracker);
-		producer = new CoverageProducer(testCaseProducer, coverageTracker);
+        producer = new XmlTestCaseWriter(xmlWriter, coverageTracker);
         propertyContainer = new Assignments();
     }
 
