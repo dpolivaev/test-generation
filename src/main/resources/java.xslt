@@ -19,26 +19,26 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.java.Tr
 	</xsl:template>
 	
 	<xsl:template name="Coverage">
-		<xsl:if test="Requirement">
+		<xsl:if test="Goal">
 			<xsl:call-template name="eol1"/>
 			<xsl:text>@Coverage(</xsl:text>
-			<xsl:if test="Requirement[@count=1]">
+			<xsl:if test="Goal[@count=1]">
 				<xsl:call-template name="eol2"/>
 				<xsl:text>first = {</xsl:text>
-				<xsl:apply-templates select="Requirement[@count=1]">
-					<xsl:sort select="@id"/>
+				<xsl:apply-templates select="Goal[@count=1]">
+					<xsl:sort select="@name"/>
 				</xsl:apply-templates>
 				<xsl:call-template name="eol2"/>
 				<xsl:text>}</xsl:text>
 			</xsl:if>
-			<xsl:if test="Requirement[@count=1] and Requirement[@count>1]">
+			<xsl:if test="Goal[@count=1] and Goal[@count>1]">
 				<xsl:text>,</xsl:text>
 			</xsl:if>
-			<xsl:if test="Requirement[@count>1]">
+			<xsl:if test="Goal[@count>1]">
 				<xsl:call-template name="eol2"/>
 				<xsl:text>next = {</xsl:text>
-				<xsl:apply-templates select="Requirement[@count>1]">
-					<xsl:sort select="@id"/>
+				<xsl:apply-templates select="Goal[@count>1]">
+					<xsl:sort select="@name"/>
 				</xsl:apply-templates>
 				<xsl:call-template name="eol2"/>
 				<xsl:text>}</xsl:text>
@@ -48,21 +48,21 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.java.Tr
 		</xsl:if>
 	</xsl:template>
 	
-	<xsl:template match="Requirement">
-		<xsl:variable name="id" select="@id"/>
-		<xsl:if test="not (preceding-sibling::Requirement[@id=$id])">
+	<xsl:template match="Goal">
+		<xsl:variable name="id" select="@name"/>
+		<xsl:if test="not (preceding-sibling::Goal[@name=$id])">
 			<xsl:call-template name="eol3"/>
-			<xsl:text>@RequirementCoverage(id = </xsl:text>
+			<xsl:text>@GoalCoverage(goal = </xsl:text>
 			<xsl:value-of select="java:java-string($id)"/>
-			<xsl:text>, reasons={</xsl:text>
+			<xsl:text>, coverage={</xsl:text>
 		</xsl:if>
 		<xsl:value-of select="java:java-string(text())"/>
-		<xsl:if test="following-sibling::Requirement[@id=$id]">
+		<xsl:if test="following-sibling::Goal[@name=$id]">
 			<xsl:text>, </xsl:text>
 		</xsl:if>
-		<xsl:if test="not (following-sibling::Requirement[@id=$id])">
+		<xsl:if test="not (following-sibling::Goal[@name=$id])">
 			<xsl:text>})</xsl:text>
-			<xsl:if test="following-sibling::Requirement">
+			<xsl:if test="following-sibling::Goal">
 				<xsl:text>,</xsl:text>
 			</xsl:if>
 		</xsl:if>
@@ -78,7 +78,7 @@ import org.junit.Test;
 
 import org.dpolivaev.tsgen.java.Description;
 import org.dpolivaev.tsgen.java.Coverage;
-import org.dpolivaev.tsgen.java.RequirementCoverage;
+import org.dpolivaev.tsgen.java.GoalCoverage;
 
 public class </xsl:text>
 	<xsl:variable name="class" select="java:upper-case-java-id(@id)"/>
@@ -109,7 +109,7 @@ public class </xsl:text>
 	<xsl:value-of select="$method"/>
 	<xsl:text>() {</xsl:text>
 	<xsl:call-template name="eol2"/>
-	<xsl:apply-templates select="child::*[name() != 'Description' and name() != 'Requirement']"/>
+	<xsl:apply-templates select="child::*[name() != 'Description' and name() != 'Goal']"/>
 	<xsl:call-template name="eol1"/>
 	<xsl:text>}</xsl:text>
 	<xsl:call-template name="eol2"/>

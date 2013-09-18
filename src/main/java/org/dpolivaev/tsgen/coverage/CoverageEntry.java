@@ -2,20 +2,20 @@ package org.dpolivaev.tsgen.coverage;
 
 public class CoverageEntry {
 
-	final private String requirementId;
-	final private String description;
+	final private String goal;
+	final private Object reason;
 
-	public CoverageEntry(String requirementId, String description) {
-		this.requirementId = requirementId;
-		this.description = description;
+	public CoverageEntry(String goal, Object reason) {
+		this.goal = goal;
+		this.reason = reason;
 	}
 
-	public String getRequirementId() {
-		return requirementId;
+	public String getGoal() {
+		return goal;
 	}
 
-	public String getDescription() {
-		return description;
+	public Object getReason() {
+		return reason;
 	}
 
 	@Override
@@ -23,9 +23,9 @@ public class CoverageEntry {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((description == null) ? 0 : description.hashCode());
+				+ ((reason == null) ? 0 : reason.hashCode());
 		result = prime * result
-				+ ((requirementId == null) ? 0 : requirementId.hashCode());
+				+ ((goal == null) ? 0 : goal.hashCode());
 		return result;
 	}
 
@@ -38,15 +38,15 @@ public class CoverageEntry {
 		if (getClass() != obj.getClass())
 			return false;
 		CoverageEntry other = (CoverageEntry) obj;
-		if (description == null) {
-			if (other.description != null)
+		if (reason == null) {
+			if (other.reason != null)
 				return false;
-		} else if (!description.equals(other.description))
+		} else if (!reason.equals(other.reason))
 			return false;
-		if (requirementId == null) {
-			if (other.requirementId != null)
+		if (goal == null) {
+			if (other.goal != null)
 				return false;
-		} else if (!requirementId.equals(other.requirementId))
+		} else if (!goal.equals(other.goal))
 			return false;
 		return true;
 	}
