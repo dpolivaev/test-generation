@@ -1,19 +1,16 @@
 package org.dpolivaev.tsgen.scriptproducer.internal;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.ScriptProducer;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
+import org.dpolivaev.tsgen.ruleengine.internal.PropertyAccessor;
 
 public class TestCaseProducer implements ScriptProducer {
 
-    private static final String REQUIREMENT_PREFIX = "requirement.";
 	private static final String TESTCASE_PROPERTY = "testcase";
     private static final String TESTCASE_ELEMENT = "TestCase";
     
@@ -48,27 +45,24 @@ public class TestCaseProducer implements ScriptProducer {
     }
 
     private void addCoverage(PropertyContainer propertyContainer) {
-    	List<String> sortedRequirementProperties = sortedPropertiesForPrefix(REQUIREMENT_PREFIX, propertyContainer);
-    	for(String propertyName :  sortedRequirementProperties){
-    		final Object value = propertyContainer.get(propertyName);
-    		if(value == SpecialValue.UNDEFINED)
-    			continue;
-    		@SuppressWarnings("unchecked")
-			List<Object> coverageItems = (List<Object>) value;
-    		String requirementId = propertyName.substring(REQUIREMENT_PREFIX.length());
-    		for(Object item : coverageItems){
-    			String description = item.toString();
-    			final CoverageEntry coverageEntry = new CoverageEntry(requirementId, description);
-    			coverageTracker.add(coverageEntry);
-    			final int count = coverageTracker.count(coverageEntry);
-    			xmlWriter.beginElement("Requirement");
-    			xmlWriter.setAttribute("id", requirementId);
-    			xmlWriter.setAttribute("count", Integer.toString(count));
-    			xmlWriter.addTextContent(description);
-    			xmlWriter.endElement("Requirement");
+    	if(coverageTracker != null){
+    		for(final CoverageEntry coverageEntry : coverageTracker.firstTimeCoveredGoals()){
+    			addCoverageEntry(coverageEntry, true);
+    		}
+    		for(final CoverageEntry coverageEntry : coverageTracker.repeatedlyCoveredGoals()){
+    			addCoverageEntry(coverageEntry, false);
     		}
     	}
-		
+	}
+
+	private void addCoverageEntry(final CoverageEntry coverageEntry, boolean firstTime) {
+		final int count = coverageTracker.count(coverageEntry);
+		xmlWriter.beginElement("Goal");
+		xmlWriter.setAttribute("name", coverageEntry.getGoal());
+		xmlWriter.setAttribute("count", Integer.toString(count));
+		xmlWriter.setAttribute("firstTime", Boolean.toString(firstTime));
+		xmlWriter.addTextContent(coverageEntry.getReason().toString());
+		xmlWriter.endElement("Goal");
 	}
 
 	private void addOptionalElement(PropertyContainer propertyContainer, String property, String element) {
@@ -94,7 +88,7 @@ public class TestCaseProducer implements ScriptProducer {
 	private void addParameters(PropertyContainer propertyContainer,
 			String property) {
 		final String prefix = property + '.';
-        List<String> sortedProperties = sortedPropertiesForPrefix(prefix, propertyContainer);
+        List<String> sortedProperties = new PropertyAccessor(propertyContainer).sortedPropertiesForPrefix(prefix);
         for(String attributeProperty : sortedProperties){
             Object attributeValue = propertyContainer.get(attributeProperty);
             if(attributeValue != SpecialValue.UNDEFINED){
@@ -123,11 +117,4 @@ public class TestCaseProducer implements ScriptProducer {
             xmlWriter.setAttribute(attributeName, value.toString());
 	}
 
-	private List<String> sortedPropertiesForPrefix(String prefix,
-			PropertyContainer propertyContainer) {
-		Set<String> availableProperties = propertyContainer.availableProperties(prefix);
-        List<String> sortedProperties = new ArrayList<>(availableProperties);
-        Collections.sort(sortedProperties);
-		return sortedProperties;
-	}
 }

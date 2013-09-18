@@ -13,6 +13,8 @@ import javax.xml.transform.sax.TransformerHandler;
 
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.CoverageTracker;
+import org.dpolivaev.tsgen.coverage.internal.CoverageProducer;
+import org.dpolivaev.tsgen.ruleengine.ScriptProducer;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 import org.dpolivaev.tsgen.ruleengine.internal.Assignments;
 import org.dpolivaev.tsgen.scriptproducer.OutputConfiguration;
@@ -29,7 +31,7 @@ import org.xml.sax.SAXException;
 public class XmlTestCaseProducerTest {
 
     private DOMResult dom;
-    private TestCaseProducer producer;
+    private ScriptProducer producer;
     private Assignments propertyContainer;
     private XmlWriter xmlWriter;
 	private CoverageTracker coverageTracker;
@@ -42,7 +44,8 @@ public class XmlTestCaseProducerTest {
         TransformerHandler handler = new HandlerFactory(resultFactory).newHandler(OutputConfiguration.OUTPUT_XML.forScript("result"));
         xmlWriter = new XmlWriterUsingTransformerHandler(handler);
         coverageTracker = new CoverageTracker();
-        producer = new TestCaseProducer(xmlWriter, coverageTracker);
+        TestCaseProducer testCaseProducer = new TestCaseProducer(xmlWriter, coverageTracker);
+		producer = new CoverageProducer(testCaseProducer, coverageTracker);
         propertyContainer = new Assignments();
     }
 
@@ -154,7 +157,7 @@ public class XmlTestCaseProducerTest {
         givenProperty("requirement.requirement id", Arrays.asList("description"));
         createScript();
         checkOutput("<TestCase>"
-        		+ "<Requirement id='requirement id' count='1'>description</Requirement>"
+        		+ "<Goal name='requirement id' count='1' firstTime = 'true'>description</Goal>"
         		+ "</TestCase>");
     }
 
@@ -164,7 +167,7 @@ public class XmlTestCaseProducerTest {
         givenCoverage("requirement id", "description");
         createScript();
         checkOutput("<TestCase>"
-        		+ "<Requirement id='requirement id' count='2'>description</Requirement>"
+        		+ "<Goal name='requirement id' count='2' firstTime = 'false'>description</Goal>"
         		+ "</TestCase>");
     }
 

@@ -5,6 +5,6 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Coverage {
-	RequirementCoverage[] first() default {};
-	RequirementCoverage[] again() default {};
+	GoalCoverage[] first() default {};
+	GoalCoverage[] again() default {};
 }

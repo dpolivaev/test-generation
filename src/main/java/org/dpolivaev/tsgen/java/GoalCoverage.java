@@ -4,7 +4,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RequirementCoverage {
-	String id(); 
-	String[] reasons();
+public @interface GoalCoverage {
+	String goal(); 
+	String[] coverage();
 }
