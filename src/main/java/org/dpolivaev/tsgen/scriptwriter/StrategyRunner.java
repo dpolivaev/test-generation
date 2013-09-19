@@ -28,13 +28,13 @@ public class StrategyRunner {
 		RuleEngine ruleEngine = new RuleEngine();
 		OutputStreamWriter writer = new OutputStreamWriter(System.out);
 		ScriptLogger logger = new ScriptLogger(writer);
-		ruleEngine.addScriptProducer(logger);
+		ruleEngine.addScriptWriter(logger);
 		ruleEngine.addErrorHandler(logger);
 		StreamResultFactory resultFactory = new StreamResultFactory();
 		final CoverageTracker coverageTracker = new CoverageTracker();
 		MultipleScriptsWriter scriptProducer = new MultipleScriptsWriter(resultFactory, coverageTracker);
 		scriptProducer.setOutputConfiguration(outputConfiguration);
-		ruleEngine.addScriptProducer(scriptProducer);
+		ruleEngine.addScriptWriter(scriptProducer);
 		ruleEngine.run(strategy);
 		try {
 			scriptProducer.endScripts();
