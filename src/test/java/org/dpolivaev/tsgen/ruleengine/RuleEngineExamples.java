@@ -34,7 +34,7 @@ public class RuleEngineExamples {
 
     private void initializeRuleEngine(CollectingScriptProducer loggingScriptProducerMock) {
         scriptProducerMock = loggingScriptProducerMock;
-        ruleEngine = new RuleEngine(scriptProducerMock);
+        ruleEngine = new RuleEngine().addScriptWriter(scriptProducerMock);
     }
     
     @Before
