@@ -27,11 +27,6 @@ public class RuleEngine implements EngineState {
 	private String processedProperty;
 	private final Collection<ErrorHandler> errorHandlers;
 
-    public RuleEngine(ScriptWriter scriptWriter) {
-    	this();
-        addScriptWriter(scriptWriter);
-    }
-
     public RuleEngine() {
         super();
         this.assignments = new Assignments();
@@ -41,8 +36,9 @@ public class RuleEngine implements EngineState {
         errorHandlers = new ArrayList<>();
     }
 
-    public void addScriptWriter(ScriptWriter scriptWriter) {
+    public RuleEngine addScriptWriter(ScriptWriter scriptWriter) {
 		scriptWriters.add(scriptWriter);
+		return this;
 	}
 
     public void removeScriptWriter(ScriptWriter scriptWriter) {

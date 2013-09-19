@@ -18,7 +18,7 @@ public class RuleEngineTest {
 	public void containsAllDefaultProperties() {
 		Strategy strategy = Mockito.mock(Strategy.class);
 		Mockito.when(strategy.availableDefaultProperties()).thenReturn(Utils.set("name"));
-		final RuleEngine ruleEngine = new RuleEngine(new ScriptWriter() {
+		final RuleEngine ruleEngine = new RuleEngine().addScriptWriter(new ScriptWriter() {
 			
 			@Override
 			public void createScriptFor(PropertyContainer propertyContainer) {
@@ -32,7 +32,7 @@ public class RuleEngineTest {
     @Test
 	public void ruleEngineResetsAssignmentReasonAfterPropertySetEventIsFired() {
 		Strategy strategy = Mockito.mock(Strategy.class);
-		final RuleEngine ruleEngine = new RuleEngine(new ScriptWriter() {
+		final RuleEngine ruleEngine = new RuleEngine().addScriptWriter(new ScriptWriter() {
 			
 			@Override
 			public void createScriptFor(PropertyContainer propertyContainer) {
