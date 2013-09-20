@@ -2,6 +2,8 @@ package org.dpolivaev.tsgen.ruleengine;
 import static org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory.iterate;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
+
+import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.ScriptWriter;
@@ -21,7 +23,7 @@ public class RuleEngineTest {
 		final RuleEngine ruleEngine = new RuleEngine().addScriptWriter(new ScriptWriter() {
 			
 			@Override
-			public void createScriptFor(PropertyContainer propertyContainer) {
+			public void createScriptFor(PropertyContainer propertyContainer, CoverageTracker coverage) {
 				assertThat(propertyContainer.containsPropertyValue("name"), equalTo(true));
 				
 			}
@@ -35,7 +37,7 @@ public class RuleEngineTest {
 		final RuleEngine ruleEngine = new RuleEngine().addScriptWriter(new ScriptWriter() {
 			
 			@Override
-			public void createScriptFor(PropertyContainer propertyContainer) {
+			public void createScriptFor(PropertyContainer propertyContainer, CoverageTracker coverage) {
 				StatefulRule triggeredRule = iterate("name").over("value2").when("triggeredBy").asRule();
 				RuleEngine ruleEngine = (RuleEngine) propertyContainer;
 				ruleEngine.setPropertyValue(triggeredRule, "value2", true);

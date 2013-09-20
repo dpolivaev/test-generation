@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.ruleengine.internal.Assignment;
 import org.dpolivaev.tsgen.ruleengine.internal.Assignments;
 import org.dpolivaev.tsgen.ruleengine.internal.PropertyAssignedEvent;
@@ -26,6 +27,7 @@ public class RuleEngine implements EngineState {
     private String assignmentReason;
 	private String processedProperty;
 	private final Collection<ErrorHandler> errorHandlers;
+	private final CoverageTracker coverageTracker;
 
     public RuleEngine() {
         super();
@@ -34,6 +36,7 @@ public class RuleEngine implements EngineState {
         dependencies = new HashSet<>();
         scriptWriters = new ArrayList<>();
         errorHandlers = new ArrayList<>();
+        coverageTracker = new CoverageTracker();
     }
 
     public RuleEngine addScriptWriter(ScriptWriter scriptWriter) {
@@ -95,8 +98,9 @@ public class RuleEngine implements EngineState {
         fireNextCombinationStartedEvent();
         dependencies = new HashSet<>();
         processedProperty = "";
+		coverageTracker.checkGoals(this);
         for(ScriptWriter scriptWriter :scriptWriters)
-        	scriptWriter.createScriptFor(this);
+        	scriptWriter.createScriptFor(this, coverageTracker);
     }
 
     private void fireNextCombinationFinishedEvent() {
@@ -214,5 +218,10 @@ public class RuleEngine implements EngineState {
     
     public String getAssignmentReason() {
 		return assignmentReason;
+	}
+
+	@Override
+	public CoverageTracker coverage() {
+		return coverageTracker;
 	}
 }

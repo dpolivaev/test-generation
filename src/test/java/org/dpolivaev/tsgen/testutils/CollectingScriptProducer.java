@@ -3,6 +3,7 @@ package org.dpolivaev.tsgen.testutils;
 import java.io.StringWriter;
 import java.io.Writer;
 
+import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.ScriptWriter;
 import org.dpolivaev.tsgen.scriptwriter.internal.ScriptLogger;
@@ -21,8 +22,8 @@ public class CollectingScriptProducer implements ScriptWriter {
 	}
 
 	@Override
-	public void createScriptFor(PropertyContainer propertyContainer) {
-		loggingScriptProducer.createScriptFor(propertyContainer);
+	public void createScriptFor(PropertyContainer propertyContainer, CoverageTracker coverage) {
+		loggingScriptProducer.createScriptFor(propertyContainer, null);
 	}
 
 	public String getAllScriptPropertyCombinations() {

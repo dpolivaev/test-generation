@@ -3,6 +3,7 @@ package org.dpolivaev.tsgen.scriptwriter.internal;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.ruleengine.AssignmentFormatter;
 import org.dpolivaev.tsgen.ruleengine.ErrorHandler;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
@@ -20,7 +21,7 @@ public class ScriptLogger implements ScriptWriter, ErrorHandler {
 	}
 
 	@Override
-	public void createScriptFor(PropertyContainer propertyContainer) {
+	public void createScriptFor(PropertyContainer propertyContainer, CoverageTracker coverage) {
 		try {
 			log.append(propertyContainer.getCombinationCounter() + " : "
 					+ assignmentFormatter.format(propertyContainer) + '\n');

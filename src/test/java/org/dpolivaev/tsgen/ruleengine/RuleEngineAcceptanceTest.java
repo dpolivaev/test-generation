@@ -11,6 +11,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 
+import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.ruleengine.Condition;
 import org.dpolivaev.tsgen.ruleengine.PropertyAlreadyAssignedException;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
@@ -317,9 +318,9 @@ public class RuleEngineAcceptanceTest {
         initializeRuleEngine(new CollectingScriptProducer() {
 
             @Override
-            public void createScriptFor(PropertyContainer propertyContainer) {
+            public void createScriptFor(PropertyContainer propertyContainer, CoverageTracker coverage) {
                 propertyContainer.get("y");
-                super.createScriptFor(propertyContainer);
+                super.createScriptFor(propertyContainer, coverage);
             }
 
         });
@@ -335,9 +336,9 @@ public class RuleEngineAcceptanceTest {
         initializeRuleEngine(new CollectingScriptProducer() {
 
             @Override
-            public void createScriptFor(PropertyContainer propertyContainer) {
+            public void createScriptFor(PropertyContainer propertyContainer, CoverageTracker coverage) {
                 propertyContainer.get("x");
-                super.createScriptFor(propertyContainer);
+                super.createScriptFor(propertyContainer, coverage);
             }
 
         });
@@ -397,9 +398,9 @@ public class RuleEngineAcceptanceTest {
         CollectingScriptProducer loggingScriptProducerMock = new CollectingScriptProducer() {
 
             @Override
-            public void createScriptFor(PropertyContainer propertyContainer) {
+            public void createScriptFor(PropertyContainer propertyContainer, CoverageTracker coverage) {
                 propertyContainer.get("x");
-                super.createScriptFor(propertyContainer);
+                super.createScriptFor(propertyContainer, coverage);
             }
 
         };
@@ -436,7 +437,7 @@ public class RuleEngineAcceptanceTest {
                 assertThat(propertyContainer.get("name"), equalTo((Object)UNDEFINED));
                 return null;
             }
-        }).when(scriptProducer).createScriptFor(ruleEngine);
+        }).when(scriptProducer).createScriptFor(ruleEngine, null);
         ruleEngine.run(strategy);
     }
     
@@ -454,7 +455,7 @@ public class RuleEngineAcceptanceTest {
                 assertThat(propertyContainer.availableProperties("x"), equalTo(Utils.set("x1", "x2")));
                 return null;
             }
-        }).when(scriptProducer).createScriptFor(ruleEngine);
+        }).when(scriptProducer).createScriptFor(ruleEngine, null);
         ruleEngine.run(strategy);
     }
 }
