@@ -12,7 +12,6 @@ import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 public class MultipleScriptsWriter implements ScriptWriter{
     private final Map<String, SingleScriptWriter> singleScriptProducers;
     private final ResultFactory resultFactory;
-	private final CoverageTracker coverageTracker;
 	private OutputConfiguration outputConfiguration;
 
     public OutputConfiguration getOutputConfiguration() {
@@ -23,16 +22,15 @@ public class MultipleScriptsWriter implements ScriptWriter{
 		this.outputConfiguration = outputConfiguration;
 	}
 
-	public MultipleScriptsWriter(ResultFactory resultFactory, CoverageTracker coverageTracker) {
+	public MultipleScriptsWriter(ResultFactory resultFactory) {
         this.resultFactory = resultFactory;
-		this.coverageTracker = coverageTracker;
         singleScriptProducers = new HashMap<String, SingleScriptWriter>();
         outputConfiguration = OutputConfiguration.OUTPUT_XML;
         
     }
 
      @Override
-    public void createScriptFor(PropertyContainer propertyContainer) {
+    public void createScriptFor(PropertyContainer propertyContainer, CoverageTracker coverage) {
         Object scriptValue = propertyContainer.get("script");
         String scriptName;
         if(scriptValue == SpecialValue.UNDEFINED)
@@ -42,12 +40,12 @@ public class MultipleScriptsWriter implements ScriptWriter{
         if(! singleScriptProducers.containsKey(scriptName)) {
             setSingleScriptProducer(scriptName, newSingleScriptProducer(scriptName, propertyContainer));
         }
-        getSingleScriptProducer(scriptName).createScriptFor(propertyContainer);
+        getSingleScriptProducer(scriptName).createScriptFor(propertyContainer, null);
     }
 
     private SingleScriptWriter newSingleScriptProducer(String scriptName, PropertyContainer propertyContainer) {
         return new SingleScriptWriter(propertyContainer, outputConfiguration.forScript(scriptName), 
-        		resultFactory, coverageTracker);
+        		resultFactory);
     }
 
     public void endScripts() {

@@ -14,15 +14,15 @@ public class SingleScriptWriter implements ScriptWriter {
     private ScriptWriter scriptProducer;
 
     @Override
-    public void createScriptFor(PropertyContainer propertyContainer) {
-        scriptProducer.createScriptFor(propertyContainer);
+    public void createScriptFor(PropertyContainer propertyContainer, CoverageTracker coverage) {
+        scriptProducer.createScriptFor(propertyContainer, null);
     }
 
-    public SingleScriptWriter(PropertyContainer propertyContainer, ScriptConfiguration scriptConfiguration, ResultFactory resultFactory, CoverageTracker coverageTracker) {
+    public SingleScriptWriter(PropertyContainer propertyContainer, ScriptConfiguration scriptConfiguration, ResultFactory resultFactory) {
         TransformerHandler handler = new HandlerFactory(resultFactory).newHandler(scriptConfiguration);
         xmlWriter = new XmlWriterUsingTransformerHandler(handler);
         xmlWriter.startDocument();
-        XmlTestCaseWriter testCaseProducer = new XmlTestCaseWriter(xmlWriter, coverageTracker);
+        XmlTestCaseWriter testCaseProducer = new XmlTestCaseWriter(xmlWriter);
         xmlWriter.beginElement("Script");
         Object scriptValue = propertyContainer.get("script");
         if(scriptValue.equals(SpecialValue.UNDEFINED))
@@ -31,11 +31,7 @@ public class SingleScriptWriter implements ScriptWriter {
         scriptProducer = testCaseProducer;
     }
     
-    public SingleScriptWriter(PropertyContainer propertyContainer, ScriptConfiguration scriptConfiguration, ResultFactory resultFactory) {
-        this(propertyContainer, scriptConfiguration, resultFactory, null);
-    }
-
-    public void endScript() {
+     public void endScript() {
         xmlWriter.endElement("Script");
         xmlWriter.endDocument();
     }

@@ -25,39 +25,36 @@ public class XmlTestCaseWriter implements ScriptWriter {
         "post", "Postprocessing",
     };
     private final XmlWriter xmlWriter;
-	final private CoverageTracker coverageTracker;
 
-    public XmlTestCaseWriter(XmlWriter xmlWriter,
-			CoverageTracker coverageTracker) {
+    public XmlTestCaseWriter(XmlWriter xmlWriter) {
     	this.xmlWriter = xmlWriter;
-		this.coverageTracker = coverageTracker;
 	}
 
 	@Override
-    public void createScriptFor(PropertyContainer propertyContainer) {
+    public void createScriptFor(PropertyContainer propertyContainer, CoverageTracker coverage) {
         xmlWriter.beginElement(TESTCASE_ELEMENT);
         addAttributes(propertyContainer, TESTCASE_PROPERTY);
-        addCoverage(propertyContainer);
+        addCoverage(propertyContainer, coverage);
         for(int i = 0; i < optionalElements.length; i+=2)
             addOptionalElement(propertyContainer, optionalElements[i], optionalElements[i+1]);
         xmlWriter.endElement(TESTCASE_ELEMENT);
 
     }
 
-    private void addCoverage(PropertyContainer propertyContainer) {
+    private void addCoverage(PropertyContainer propertyContainer, CoverageTracker coverageTracker) {
     	if(coverageTracker != null){
-    		coverageTracker.checkGoals(propertyContainer);
     		for(final CoverageEntry coverageEntry : coverageTracker.firstTimeCoveredGoals()){
-    			addCoverageEntry(coverageEntry, true);
+    			final int count = coverageTracker.count(coverageEntry);
+    			addCoverageEntry(coverageEntry, count, true);
     		}
     		for(final CoverageEntry coverageEntry : coverageTracker.repeatedlyCoveredGoals()){
-    			addCoverageEntry(coverageEntry, false);
+    			final int count = coverageTracker.count(coverageEntry);
+    			addCoverageEntry(coverageEntry, count, false);
     		}
     	}
 	}
 
-	private void addCoverageEntry(final CoverageEntry coverageEntry, boolean firstTime) {
-		final int count = coverageTracker.count(coverageEntry);
+	private void addCoverageEntry(final CoverageEntry coverageEntry, int count, boolean firstTime) {
 		xmlWriter.beginElement("Goal");
 		xmlWriter.setAttribute("name", coverageEntry.getGoal());
 		xmlWriter.setAttribute("count", Integer.toString(count));

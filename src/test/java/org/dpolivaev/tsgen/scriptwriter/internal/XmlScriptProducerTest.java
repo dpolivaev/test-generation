@@ -29,7 +29,7 @@ public class XmlScriptProducerTest {
         final DOMResult dom = new DOMResult();
 		Mockito.when(resultFactory.newResult("scriptName", "xml")).thenReturn(dom);
         SingleScriptWriter producer = new SingleScriptWriter(propertyContainer, OutputConfiguration.OUTPUT_XML.forScript("scriptName"), resultFactory);
-        producer.createScriptFor(propertyContainer);
+        producer.createScriptFor(propertyContainer, null);
         producer.endScript();
         Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script id='scriptName'>" +
                 "<TestCase id='testcase 1'/>" +
@@ -46,12 +46,12 @@ public class XmlScriptProducerTest {
         SingleScriptWriter producer = new SingleScriptWriter(propertyContainer, 
         		OutputConfiguration.OUTPUT_XML.forScript("scriptName"), 
         		resultFactory);
-        producer.createScriptFor(propertyContainer);
+        producer.createScriptFor(propertyContainer, null);
         
         propertyContainer.startNewCombination();
         givenProperty("script", "scriptName");
         givenProperty("testcase", "testcase 2");
-        producer.createScriptFor(propertyContainer);
+        producer.createScriptFor(propertyContainer, null);
         producer.endScript();
         
         Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script id='scriptName'>" +
@@ -67,8 +67,8 @@ public class XmlScriptProducerTest {
         ResultFactory resultFactory = Mockito.mock(ResultFactory.class);
         final DOMResult dom = new DOMResult();
 		Mockito.when(resultFactory.newResult("scriptName1", "xml")).thenReturn(dom);
-        MultipleScriptsWriter producer = new MultipleScriptsWriter(resultFactory, null);
-        producer.createScriptFor(propertyContainer);
+        MultipleScriptsWriter producer = new MultipleScriptsWriter(resultFactory);
+        producer.createScriptFor(propertyContainer, null);
         producer.endScripts();
         Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script id='scriptName1'>" +
                 "<TestCase id='testcase 1'/>" +
@@ -83,14 +83,14 @@ public class XmlScriptProducerTest {
         Mockito.when(resultFactory.newResult("scriptName1", "xml")).thenReturn(dom1);
         final DOMResult dom2 = new DOMResult();
 		Mockito.when(resultFactory.newResult("scriptName2", "xml")).thenReturn(dom2);
-        MultipleScriptsWriter producer = new MultipleScriptsWriter(resultFactory, null);
+        MultipleScriptsWriter producer = new MultipleScriptsWriter(resultFactory);
         givenProperty("script", "scriptName1");
         givenProperty("testcase", "testcase 1");
-        producer.createScriptFor(propertyContainer);
+        producer.createScriptFor(propertyContainer, null);
         propertyContainer.startNewCombination();
         givenProperty("script", "scriptName2");
         givenProperty("testcase", "testcase 1");
-        producer.createScriptFor(propertyContainer);
+        producer.createScriptFor(propertyContainer, null);
         producer.endScripts();
         
         Assert.assertThat(the(dom2.getNode()), isEquivalentTo(the("<Script id='scriptName2'>" +
@@ -105,7 +105,7 @@ public class XmlScriptProducerTest {
         givenProperty("testcase", "testcase 1");
         SingleScriptWriter producer = new SingleScriptWriter(propertyContainer, 
         		OutputConfiguration.OUTPUT_XML.forScript("scriptName1"),resultFactory);
-        producer.createScriptFor(propertyContainer);
+        producer.createScriptFor(propertyContainer, null);
         producer.endScript();
         Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script id='script'>" +
                 "<TestCase id='testcase 1'/>" +

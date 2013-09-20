@@ -46,7 +46,7 @@ public class XmlTestCaseProducerTest {
         xmlWriter = new XmlWriterUsingTransformerHandler(handler);
         coverageTracker = new CoverageTracker();
         coverageTracker.add(new RequirementCoverage());
-        producer = new XmlTestCaseWriter(xmlWriter, coverageTracker);
+        producer = new XmlTestCaseWriter(xmlWriter);
         propertyContainer = new Assignments();
     }
 
@@ -56,7 +56,8 @@ public class XmlTestCaseProducerTest {
 
     private void createScript() throws SAXException {
         xmlWriter.startDocument();
-        producer.createScriptFor(propertyContainer);
+        coverageTracker.checkGoals(propertyContainer);
+        producer.createScriptFor(propertyContainer, coverageTracker);
         xmlWriter.endDocument();
     }
 
