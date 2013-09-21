@@ -25,7 +25,7 @@ public class GoalTest {
 
 	@Before
 	public void setup(){
-		goal = new Goal(GOAL_FUNCTION);
+		goal = new Goal("goal", GOAL_FUNCTION);
 	}
 	
 

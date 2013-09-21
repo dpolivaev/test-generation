@@ -43,6 +43,7 @@ public class XmlTestCaseProducerTest {
         TransformerHandler handler = new HandlerFactory(resultFactory).newHandler(OutputConfiguration.OUTPUT_XML.forScript("result"));
         xmlWriter = new XmlWriterUsingTransformerHandler(handler);
 		goal = Mockito.mock(Goal.class);
+		Mockito.when(goal.name()).thenReturn("name");
 		coverageTracker = new CoverageTracker();
 		Mockito.when(goal.coverageTracker()).thenReturn(coverageTracker);
 		goals = Arrays.asList(goal);
@@ -158,7 +159,7 @@ public class XmlTestCaseProducerTest {
         givenCoverage("requirement id", "description");
         createScript();
         checkOutput("<TestCase>"
-        		+ "<Goal name='requirement id' count='1' firstTime = 'true'>description</Goal>"
+        		+ "<Goal name='name' item='requirement id' count='1' firstTime = 'true'>description</Goal>"
         		+ "</TestCase>");
     }
 
@@ -169,7 +170,7 @@ public class XmlTestCaseProducerTest {
         givenCoverage("requirement id", "description");
         createScript();
         checkOutput("<TestCase>"
-        		+ "<Goal name='requirement id' count='2' firstTime = 'false'>description</Goal>"
+        		+ "<Goal name='name' item='requirement id' count='2' firstTime = 'false'>description</Goal>"
         		+ "</TestCase>");
     }
 

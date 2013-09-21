@@ -37,29 +37,30 @@ public class XmlTestCaseWriter implements PropertyHandler {
         xmlWriter.beginElement(TESTCASE_ELEMENT);
         addAttributes(propertyContainer, TESTCASE_PROPERTY);
         for(Goal goal : goals)
-        addCoverage(propertyContainer, goal.coverageTracker());
+        	addCoverage(goal.name(), goal.coverageTracker());
         for(int i = 0; i < optionalElements.length; i+=2)
             addOptionalElement(propertyContainer, optionalElements[i], optionalElements[i+1]);
         xmlWriter.endElement(TESTCASE_ELEMENT);
 
     }
 
-    private void addCoverage(PropertyContainer propertyContainer, CoverageTracker coverageTracker) {
+    private void addCoverage(String name, CoverageTracker coverageTracker) {
     	if(coverageTracker != null){
     		for(final CoverageEntry coverageEntry : coverageTracker.firstTimeCoveredGoals()){
     			final int count = coverageTracker.count(coverageEntry);
-    			addCoverageEntry(coverageEntry, count, true);
+    			addCoverageEntry(name, coverageEntry, count, true);
     		}
     		for(final CoverageEntry coverageEntry : coverageTracker.repeatedlyCoveredGoals()){
     			final int count = coverageTracker.count(coverageEntry);
-    			addCoverageEntry(coverageEntry, count, false);
+    			addCoverageEntry(name, coverageEntry, count, false);
     		}
     	}
 	}
 
-	private void addCoverageEntry(final CoverageEntry coverageEntry, int count, boolean firstTime) {
+	private void addCoverageEntry(String name, final CoverageEntry coverageEntry, int count, boolean firstTime) {
 		xmlWriter.beginElement("Goal");
-		xmlWriter.setAttribute("name", coverageEntry.getGoal());
+		xmlWriter.setAttribute("name", name);
+		xmlWriter.setAttribute("item", coverageEntry.getGoal());
 		xmlWriter.setAttribute("count", Integer.toString(count));
 		xmlWriter.setAttribute("firstTime", Boolean.toString(firstTime));
 		xmlWriter.addTextContent(coverageEntry.getReason().toString());
