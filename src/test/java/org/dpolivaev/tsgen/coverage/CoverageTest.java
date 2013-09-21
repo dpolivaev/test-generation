@@ -3,22 +3,13 @@ package org.dpolivaev.tsgen.coverage;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 
-import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-import org.dpolivaev.tsgen.utils.internal.Utils;
 import org.junit.Before;
 import org.junit.Test;
 
 public class CoverageTest {
 
-	private static final Goal GOAL = new Goal(){
-
-		@Override
-		public void check(PropertyContainer propertyContainer,
-				CoverageTracker coverageTracker) {
-			coverageTracker.add(COVERAGE_ENTRY);
-			
-		}};
 	private static final CoverageEntry COVERAGE_ENTRY = new CoverageEntry("goal", "value");
+
 	private CoverageTracker coverageTracker;
 	
 	@Before
@@ -41,40 +32,4 @@ public class CoverageTest {
 		assertThat(coverageTracker.count(COVERAGE_ENTRY), equalTo(1));
 	}
 	
-	@Test
-	public void afterCheckingRegisteredGoals_returnedValuesAreAdded() throws Exception {
-		coverageTracker.add(GOAL);
-		coverageTracker.checkGoals((PropertyContainer) null);
-		assertThat(coverageTracker.count(COVERAGE_ENTRY), equalTo(1));
-	}
-	
-	@Test
-	public void afterCheckingGoal_returnedValueIsAdded() throws Exception {
-		GOAL.check(null, coverageTracker);
-		assertThat(coverageTracker.count(COVERAGE_ENTRY), equalTo(1));
-	}
-
-	@Test
-	public void afterCheckingRegisteredGoals_firstTimeAddedCoverageEntriesAreAvailable() throws Exception {
-		coverageTracker.add(GOAL);
-		coverageTracker.checkGoals((PropertyContainer) null);
-		assertThat(coverageTracker.firstTimeCoveredGoals(), equalTo(Utils.set(COVERAGE_ENTRY)));
-	}
-
-	@Test
-	public void afterCheckingRegisteredGoalsAgain_firstTimeAddedCoverageEntriesAreEmpty() throws Exception {
-		coverageTracker.add(GOAL);
-		coverageTracker.checkGoals((PropertyContainer) null);
-		coverageTracker.checkGoals((PropertyContainer) null);
-		assertThat(coverageTracker.firstTimeCoveredGoals(), equalTo(Utils.<CoverageEntry>set()));
-	}
-	
-
-	@Test
-	public void afterCheckingRegisteredGoalsAgain_nextTimeAddedCoverageEntriesAreEmpty() throws Exception {
-		coverageTracker.add(GOAL);
-		coverageTracker.checkGoals((PropertyContainer) null);
-		coverageTracker.checkGoals((PropertyContainer) null);
-		assertThat(coverageTracker.repeatedlyCoveredGoals(), equalTo(Utils.<CoverageEntry>set(COVERAGE_ENTRY)));
-	}
 }

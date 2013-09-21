@@ -12,7 +12,8 @@ import org.junit.Test;
 
 public class ShuffledValueProvidersTest {
 	private ShuffledValueProviders shuffledProviders(Order order) {
-		ConstantValue[] values = new ConstantValue[]{new ConstantValue(1), new ConstantValue(2), new ConstantValue(3), new ConstantValue(4), new ConstantValue(5)};
+		ConstantValue[] values = new ConstantValue[]{new ConstantValue(1), new ConstantValue(2), new ConstantValue(3), new ConstantValue(4), new ConstantValue(5),
+				new ConstantValue(6), new ConstantValue(7), new ConstantValue(8), new ConstantValue(9), new ConstantValue(10)};
 		OrderedValueProviders orderedValueProviders = new OrderedValueProviders(values);
 		ShuffledValueProviders shuffledValueProviders = new ShuffledValueProviders(orderedValueProviders, order);
 		return shuffledValueProviders;
@@ -20,7 +21,7 @@ public class ShuffledValueProvidersTest {
 
 	private void checkShuffled(ShuffledValueProviders shuffledValueProviders) {
 		int movedNumberCounter = 0;
-		for(int i = 1; i <= 5; i++){
+		for(int i = 1; i <= 10; i++){
 			shuffledValueProviders.next();
 			if(i != (Integer)shuffledValueProviders.currentProvider().value(null))
 				movedNumberCounter++;
@@ -29,7 +30,7 @@ public class ShuffledValueProvidersTest {
 	}
 
 	private void checkOrdered(ShuffledValueProviders shuffledValueProviders) {
-		for(int i = 1; i <= 5; i++){
+		for(int i = 1; i <= 10; i++){
 			shuffledValueProviders.next();
 			assertThat((Integer)shuffledValueProviders.currentProvider().value(null), equalTo(i));
 		}

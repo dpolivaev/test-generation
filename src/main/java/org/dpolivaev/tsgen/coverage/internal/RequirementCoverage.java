@@ -1,21 +1,22 @@
 package org.dpolivaev.tsgen.coverage.internal;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
-import org.dpolivaev.tsgen.coverage.CoverageTracker;
-import org.dpolivaev.tsgen.coverage.OpenGoal;
+import org.dpolivaev.tsgen.coverage.GoalFunction;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 import org.dpolivaev.tsgen.ruleengine.internal.PropertyAccessor;
 
-public class RequirementCoverage implements OpenGoal{
+public class RequirementCoverage implements GoalFunction{
 	private static final String REQUIREMENT_PREFIX = "requirement.";
 
 	@Override
-	public void check(PropertyContainer propertyContainer,
-			CoverageTracker coverageTracker) {
+	public Collection<CoverageEntry> check(PropertyContainer propertyContainer) {
     	List<String> sortedRequirementProperties = new PropertyAccessor(propertyContainer).sortedPropertiesForPrefix(REQUIREMENT_PREFIX);
+    	Collection<CoverageEntry> coverageEntries = new ArrayList<>();
     	for(String propertyName :  sortedRequirementProperties){
     		final Object value = propertyContainer.get(propertyName);
     		if(value == SpecialValue.UNDEFINED)
@@ -26,8 +27,9 @@ public class RequirementCoverage implements OpenGoal{
     		for(Object item : coverageItems){
     			String description = item.toString();
     			final CoverageEntry coverageEntry = new CoverageEntry(requirementId, description);
-				coverageTracker.add(coverageEntry);
+				coverageEntries.add(coverageEntry);
     		}
     	}
+    	return coverageEntries;
     }
 }

@@ -1,10 +1,12 @@
 package org.dpolivaev.tsgen.ruleengine;
 
-import org.dpolivaev.tsgen.coverage.CoverageTracker;
+import java.util.Collection;
+
+import org.dpolivaev.tsgen.coverage.Goal;
 
 
 public interface EngineState extends PropertyContainer{
     Strategy currentStrategy();
-    CoverageTracker coverage();
+    Collection<Goal> goals();
     void setPropertyValue(Rule rule, Object value, boolean useNextValue);
 }
