@@ -29,7 +29,6 @@ import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory
 import org.dpolivaev.tsgen.ruleengine.ValueProvider
-import org.dpolivaev.tsgen.scriptproducer.StrategyRunner
 import org.dpolivaev.dsl.tsgen.strategydsl.StrategyReference
 
 import static extension org.dpolivaev.dsl.tsgen.jvmmodel.StrategyCompiler.*
@@ -38,6 +37,7 @@ import java.util.Set
 import java.util.HashSet
 import java.util.Arrays
 import org.eclipse.xtext.xbase.compiler.Later
+import org.dpolivaev.tsgen.scriptwriter.StrategyRunner
 
 /**
  * <p>Infers a JVM model from the source model.</p> 

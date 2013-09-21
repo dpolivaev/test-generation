@@ -389,10 +389,10 @@ class StrategyCompilationTest {
 	@Test def oneStrategyRun() {
 		'''
 			strategy First
-			run First
+			run strategy First
 		'''.assertCompilesTo('''
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
-			import org.dpolivaev.tsgen.scriptproducer.StrategyRunner;
+			import org.dpolivaev.tsgen.scriptwriter.StrategyRunner;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
@@ -419,10 +419,10 @@ class StrategyCompilationTest {
 		'''
 			strategy first
 			strategy second
-			run first with second
+			run strategy first with strategy second
 		'''.assertCompilesTo('''
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
-			import org.dpolivaev.tsgen.scriptproducer.StrategyRunner;
+			import org.dpolivaev.tsgen.scriptwriter.StrategyRunner;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
@@ -505,10 +505,10 @@ class StrategyCompilationTest {
 	@Test def runWithXslt() {
 		'''
 			strategy First
-			run First output "xml", apply "my.xslt" output "java"
+			run strategy First output "xml", apply "my.xslt" output "java"
 		'''.assertCompilesTo('''
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
-			import org.dpolivaev.tsgen.scriptproducer.StrategyRunner;
+			import org.dpolivaev.tsgen.scriptwriter.StrategyRunner;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
