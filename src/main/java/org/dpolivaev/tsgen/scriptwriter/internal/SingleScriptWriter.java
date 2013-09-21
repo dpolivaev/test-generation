@@ -1,8 +1,10 @@
 package org.dpolivaev.tsgen.scriptwriter.internal;
 
+import java.util.Collection;
+
 import javax.xml.transform.sax.TransformerHandler;
 
-import org.dpolivaev.tsgen.coverage.CoverageTracker;
+import org.dpolivaev.tsgen.coverage.Goal;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
@@ -14,8 +16,8 @@ public class SingleScriptWriter implements PropertyHandler {
     private PropertyHandler scriptProducer;
 
     @Override
-    public void handlePropertyCombination(PropertyContainer propertyContainer, CoverageTracker coverage) {
-        scriptProducer.handlePropertyCombination(propertyContainer, null);
+    public void handlePropertyCombination(PropertyContainer propertyContainer, Collection<Goal> goals) {
+        scriptProducer.handlePropertyCombination(propertyContainer, goals);
     }
 
     public SingleScriptWriter(PropertyContainer propertyContainer, ScriptConfiguration scriptConfiguration, ResultFactory resultFactory) {

@@ -1,9 +1,11 @@
 package org.dpolivaev.tsgen.scriptwriter.internal;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.CoverageTracker;
+import org.dpolivaev.tsgen.coverage.Goal;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
@@ -31,10 +33,11 @@ public class XmlTestCaseWriter implements PropertyHandler {
 	}
 
 	@Override
-    public void handlePropertyCombination(PropertyContainer propertyContainer, CoverageTracker coverage) {
+    public void handlePropertyCombination(PropertyContainer propertyContainer, Collection<Goal> goals) {
         xmlWriter.beginElement(TESTCASE_ELEMENT);
         addAttributes(propertyContainer, TESTCASE_PROPERTY);
-        addCoverage(propertyContainer, coverage);
+        for(Goal goal : goals)
+        addCoverage(propertyContainer, goal.coverageTracker());
         for(int i = 0; i < optionalElements.length; i+=2)
             addOptionalElement(propertyContainer, optionalElements[i], optionalElements[i+1]);
         xmlWriter.endElement(TESTCASE_ELEMENT);

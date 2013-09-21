@@ -1,19 +1,14 @@
 package org.dpolivaev.tsgen.coverage;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
-
-import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 
 public class CoverageTracker {
 	final private Set<CoverageEntry> firstTimeCoveredGoals = new LinkedHashSet<>();
 	final private Set<CoverageEntry> repeatedlyCoveredGoals = new LinkedHashSet<>();
 	final private CheckList completeCoverage= new CheckList(); 
 		
-	final private Collection<Goal> goals = new ArrayList<>();
-	
 	public void add(CoverageEntry coverageEntry) {
 		int count = count(coverageEntry);
 		if(count == 0)
@@ -27,16 +22,9 @@ public class CoverageTracker {
 		return completeCoverage.count(coverageEntry);
 	}
 
-	public void add(Goal goal) {
-		goals.add(goal);
-	}
-
-	public void checkGoals(PropertyContainer propertyContainer) {
+	public void startRound() {
 		firstTimeCoveredGoals.clear();
 		repeatedlyCoveredGoals.clear();
-		for(Goal goal : goals){
-			goal.check(propertyContainer, this);
-		}
 	}
 
 	public Set<CoverageEntry> firstTimeCoveredGoals() {
@@ -45,5 +33,10 @@ public class CoverageTracker {
 
 	public Set<CoverageEntry> repeatedlyCoveredGoals() {
 		return repeatedlyCoveredGoals;
+	}
+
+	public void addAll(Collection<CoverageEntry> newCoverageEntries) {
+		for(CoverageEntry coverageEntry:newCoverageEntries)
+			add(coverageEntry);
 	}
 }

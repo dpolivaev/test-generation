@@ -5,6 +5,7 @@ import static org.xmlmatchers.XmlMatchers.isEquivalentTo;
 import static org.xmlmatchers.transform.XmlConverters.the;
 
 import java.util.Arrays;
+import java.util.List;
 
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
@@ -13,16 +14,11 @@ import javax.xml.transform.sax.TransformerHandler;
 
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.CoverageTracker;
-import org.dpolivaev.tsgen.coverage.internal.RequirementCoverage;
+import org.dpolivaev.tsgen.coverage.Goal;
 import org.dpolivaev.tsgen.ruleengine.Assignments;
 import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
-import org.dpolivaev.tsgen.scriptwriter.internal.HandlerFactory;
-import org.dpolivaev.tsgen.scriptwriter.internal.ResultFactory;
-import org.dpolivaev.tsgen.scriptwriter.internal.XmlTestCaseWriter;
-import org.dpolivaev.tsgen.scriptwriter.internal.XmlWriter;
-import org.dpolivaev.tsgen.scriptwriter.internal.XmlWriterUsingTransformerHandler;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,6 +31,8 @@ public class XmlTestCaseProducerTest {
     private PropertyHandler producer;
     private Assignments propertyContainer;
     private XmlWriter xmlWriter;
+	private List<Goal> goals;
+	private Goal goal;
 	private CoverageTracker coverageTracker;
 
     @Before
@@ -44,8 +42,10 @@ public class XmlTestCaseProducerTest {
         Mockito.when(resultFactory.newResult("result", "xml")).thenReturn(dom);
         TransformerHandler handler = new HandlerFactory(resultFactory).newHandler(OutputConfiguration.OUTPUT_XML.forScript("result"));
         xmlWriter = new XmlWriterUsingTransformerHandler(handler);
-        coverageTracker = new CoverageTracker();
-        coverageTracker.add(new RequirementCoverage());
+		goal = Mockito.mock(Goal.class);
+		coverageTracker = new CoverageTracker();
+		Mockito.when(goal.coverageTracker()).thenReturn(coverageTracker);
+		goals = Arrays.asList(goal);
         producer = new XmlTestCaseWriter(xmlWriter);
         propertyContainer = new Assignments();
     }
@@ -56,8 +56,7 @@ public class XmlTestCaseProducerTest {
 
     private void createScript() throws SAXException {
         xmlWriter.startDocument();
-        coverageTracker.checkGoals(propertyContainer);
-        producer.handlePropertyCombination(propertyContainer, coverageTracker);
+        producer.handlePropertyCombination(propertyContainer, goals);
         xmlWriter.endDocument();
     }
 
@@ -156,7 +155,7 @@ public class XmlTestCaseProducerTest {
     }
     @Test
     public void createsTestCaseElementWithFirstHitCoverage() throws Exception{
-        givenProperty("requirement.requirement id", Arrays.asList("description"));
+        givenCoverage("requirement id", "description");
         createScript();
         checkOutput("<TestCase>"
         		+ "<Goal name='requirement id' count='1' firstTime = 'true'>description</Goal>"
@@ -165,7 +164,8 @@ public class XmlTestCaseProducerTest {
 
     @Test
     public void createsTestCaseElementWithSecondHitCoverage() throws Exception{
-        givenProperty("requirement.requirement id", Arrays.asList("description"));
+        givenCoverage("requirement id", "description");
+        coverageTracker.startRound();
         givenCoverage("requirement id", "description");
         createScript();
         checkOutput("<TestCase>"

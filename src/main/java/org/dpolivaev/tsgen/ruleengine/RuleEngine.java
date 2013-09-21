@@ -6,9 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.coverage.Goal;
-import org.dpolivaev.tsgen.coverage.internal.RequirementCoverage;
 import org.dpolivaev.tsgen.ruleengine.internal.PropertyAssignedEvent;
 import org.dpolivaev.tsgen.ruleengine.internal.PropertyCombinationStartedPropagator;
 import org.dpolivaev.tsgen.ruleengine.internal.PropertyValueSetPropagator;
@@ -27,16 +25,16 @@ public class RuleEngine implements EngineState {
     private String assignmentReason;
 	private String processedProperty;
 	private final Collection<ErrorHandler> errorHandlers;
-	private final CoverageTracker coverageTracker;
+	private Collection<Goal> goals;
 
     public RuleEngine() {
         super();
         this.assignments = new Assignments();
         this.strategy = null;
+        goals = new ArrayList<>();
         dependencies = new HashSet<>();
         propertyHandlers = new ArrayList<>();
         errorHandlers = new ArrayList<>();
-        coverageTracker = new CoverageTracker();
     }
 
     public RuleEngine addScriptWriter(PropertyHandler propertyHandler) {
@@ -98,9 +96,10 @@ public class RuleEngine implements EngineState {
         fireNextCombinationStartedEvent();
         dependencies = new HashSet<>();
         processedProperty = "";
-		coverageTracker.checkGoals(this);
+        for(Goal goal : goals)
+        	goal.check(this);
         for(PropertyHandler propertyHandler :propertyHandlers)
-        	propertyHandler.handlePropertyCombination(this, coverageTracker);
+        	propertyHandler.handlePropertyCombination(this, goals());
     }
 
     private void fireNextCombinationFinishedEvent() {
@@ -220,12 +219,12 @@ public class RuleEngine implements EngineState {
 		return assignmentReason;
 	}
 
-	@Override
-	public CoverageTracker coverage() {
-		return coverageTracker;
+	public void addGoal(Goal goal) {
+		goals.add(goal);
 	}
 
-	public void addGoal(Goal goal) {
-		coverageTracker.add(goal);
+	@Override
+	public Collection<Goal> goals() {
+		return goals;
 	}
 }

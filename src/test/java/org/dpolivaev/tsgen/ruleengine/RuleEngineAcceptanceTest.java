@@ -11,7 +11,9 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 
-import org.dpolivaev.tsgen.coverage.CoverageTracker;
+import java.util.Collection;
+
+import org.dpolivaev.tsgen.coverage.Goal;
 import org.dpolivaev.tsgen.ruleengine.Condition;
 import org.dpolivaev.tsgen.ruleengine.PropertyAlreadyAssignedException;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
@@ -318,9 +320,9 @@ public class RuleEngineAcceptanceTest {
         initializeRuleEngine(new CollectingScriptProducer() {
 
             @Override
-            public void handlePropertyCombination(PropertyContainer propertyContainer, CoverageTracker coverage) {
+            public void handlePropertyCombination(PropertyContainer propertyContainer, Collection<Goal> goals) {
                 propertyContainer.get("y");
-                super.handlePropertyCombination(propertyContainer, coverage);
+                super.handlePropertyCombination(propertyContainer, goals);
             }
 
         });
@@ -336,9 +338,9 @@ public class RuleEngineAcceptanceTest {
         initializeRuleEngine(new CollectingScriptProducer() {
 
             @Override
-            public void handlePropertyCombination(PropertyContainer propertyContainer, CoverageTracker coverage) {
+            public void handlePropertyCombination(PropertyContainer propertyContainer, Collection<Goal> goals) {
                 propertyContainer.get("x");
-                super.handlePropertyCombination(propertyContainer, coverage);
+                super.handlePropertyCombination(propertyContainer, goals);
             }
 
         });
@@ -398,9 +400,9 @@ public class RuleEngineAcceptanceTest {
         CollectingScriptProducer loggingScriptProducerMock = new CollectingScriptProducer() {
 
             @Override
-            public void handlePropertyCombination(PropertyContainer propertyContainer, CoverageTracker coverage) {
+            public void handlePropertyCombination(PropertyContainer propertyContainer, Collection<Goal> goals) {
                 propertyContainer.get("x");
-                super.handlePropertyCombination(propertyContainer, coverage);
+                super.handlePropertyCombination(propertyContainer, goals);
             }
 
         };
