@@ -2,11 +2,11 @@ package org.dpolivaev.tsgen.strategies.internal;
 
 import static org.dpolivaev.tsgen.testutils.TestUtils.ruleMock;
 
+import org.dpolivaev.tsgen.ruleengine.Assignment;
+import org.dpolivaev.tsgen.ruleengine.Assignments;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.Rule;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
-import org.dpolivaev.tsgen.ruleengine.internal.Assignment;
-import org.dpolivaev.tsgen.ruleengine.internal.Assignments;
 import org.dpolivaev.tsgen.strategies.internal.DescriptionProvider;
 import org.junit.Assert;
 import org.junit.Test;

@@ -9,8 +9,6 @@ import java.util.AbstractMap;
 
 import org.dpolivaev.tsgen.ruleengine.AssignmentFormatter;
 import org.dpolivaev.tsgen.ruleengine.Rule;
-import org.dpolivaev.tsgen.ruleengine.internal.Assignment;
-import org.dpolivaev.tsgen.ruleengine.internal.Assignments;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;

@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.dpolivaev.tsgen.coverage.CoverageTracker;
-import org.dpolivaev.tsgen.ruleengine.internal.Assignment;
-import org.dpolivaev.tsgen.ruleengine.internal.Assignments;
 import org.dpolivaev.tsgen.ruleengine.internal.PropertyAssignedEvent;
 import org.dpolivaev.tsgen.ruleengine.internal.PropertyCombinationStartedPropagator;
 import org.dpolivaev.tsgen.ruleengine.internal.PropertyValueSetPropagator;

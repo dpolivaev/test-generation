@@ -1,6 +1,5 @@
-package org.dpolivaev.tsgen.ruleengine.internal;
+package org.dpolivaev.tsgen.ruleengine;
 
-import org.dpolivaev.tsgen.ruleengine.Rule;
 
 public class Assignment {
     public final Object value;

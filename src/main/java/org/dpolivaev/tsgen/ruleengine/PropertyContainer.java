@@ -3,8 +3,6 @@ package org.dpolivaev.tsgen.ruleengine;
 import java.util.Map;
 import java.util.Set;
 
-import org.dpolivaev.tsgen.ruleengine.internal.Assignment;
-
 public interface PropertyContainer {
     boolean containsPropertyValues(Set<String> names);
     boolean containsPropertyValue(String name);

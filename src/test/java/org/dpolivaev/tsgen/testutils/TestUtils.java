@@ -2,8 +2,8 @@ package org.dpolivaev.tsgen.testutils;
 
 import static org.mockito.Mockito.mock;
 
+import org.dpolivaev.tsgen.ruleengine.Assignment;
 import org.dpolivaev.tsgen.ruleengine.Rule;
-import org.dpolivaev.tsgen.ruleengine.internal.Assignment;
 import org.mockito.Mockito;
 
 public class TestUtils {
