@@ -22,7 +22,7 @@ import org.dpolivaev.tsgen.utils.internal.Utils;
 public class RuleEngine implements EngineState {
     private Strategy strategy;
     final private Assignments assignments;
-    private final Collection<ScriptWriter> scriptWriters;
+    private final Collection<PropertyHandler> propertyHandlers;
     private Set<String> dependencies;
     private String assignmentReason;
 	private String processedProperty;
@@ -34,18 +34,18 @@ public class RuleEngine implements EngineState {
         this.assignments = new Assignments();
         this.strategy = null;
         dependencies = new HashSet<>();
-        scriptWriters = new ArrayList<>();
+        propertyHandlers = new ArrayList<>();
         errorHandlers = new ArrayList<>();
         coverageTracker = new CoverageTracker();
     }
 
-    public RuleEngine addScriptWriter(ScriptWriter scriptWriter) {
-		scriptWriters.add(scriptWriter);
+    public RuleEngine addScriptWriter(PropertyHandler propertyHandler) {
+		propertyHandlers.add(propertyHandler);
 		return this;
 	}
 
-    public void removeScriptWriter(ScriptWriter scriptWriter) {
-		scriptWriters.remove(scriptWriter);
+    public void removeScriptWriter(PropertyHandler propertyHandler) {
+		propertyHandlers.remove(propertyHandler);
 	}
 
     public void addErrorHandler(ErrorHandler errorHandler) {
@@ -99,8 +99,8 @@ public class RuleEngine implements EngineState {
         dependencies = new HashSet<>();
         processedProperty = "";
 		coverageTracker.checkGoals(this);
-        for(ScriptWriter scriptWriter :scriptWriters)
-        	scriptWriter.createScriptFor(this, coverageTracker);
+        for(PropertyHandler propertyHandler :propertyHandlers)
+        	propertyHandler.handlePropertyCombination(this, coverageTracker);
     }
 
     private void fireNextCombinationFinishedEvent() {

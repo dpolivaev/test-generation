@@ -14,7 +14,7 @@ import javax.xml.transform.sax.TransformerHandler;
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.coverage.internal.RequirementCoverage;
-import org.dpolivaev.tsgen.ruleengine.ScriptWriter;
+import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 import org.dpolivaev.tsgen.ruleengine.internal.Assignments;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
@@ -32,7 +32,7 @@ import org.xml.sax.SAXException;
 public class XmlTestCaseProducerTest {
 
     private DOMResult dom;
-    private ScriptWriter producer;
+    private PropertyHandler producer;
     private Assignments propertyContainer;
     private XmlWriter xmlWriter;
 	private CoverageTracker coverageTracker;
@@ -57,7 +57,7 @@ public class XmlTestCaseProducerTest {
     private void createScript() throws SAXException {
         xmlWriter.startDocument();
         coverageTracker.checkGoals(propertyContainer);
-        producer.createScriptFor(propertyContainer, coverageTracker);
+        producer.handlePropertyCombination(propertyContainer, coverageTracker);
         xmlWriter.endDocument();
     }
 

@@ -5,11 +5,11 @@ import java.util.List;
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-import org.dpolivaev.tsgen.ruleengine.ScriptWriter;
+import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 import org.dpolivaev.tsgen.ruleengine.internal.PropertyAccessor;
 
-public class XmlTestCaseWriter implements ScriptWriter {
+public class XmlTestCaseWriter implements PropertyHandler {
 
 	private static final String TESTCASE_PROPERTY = "testcase";
     private static final String TESTCASE_ELEMENT = "TestCase";
@@ -31,7 +31,7 @@ public class XmlTestCaseWriter implements ScriptWriter {
 	}
 
 	@Override
-    public void createScriptFor(PropertyContainer propertyContainer, CoverageTracker coverage) {
+    public void handlePropertyCombination(PropertyContainer propertyContainer, CoverageTracker coverage) {
         xmlWriter.beginElement(TESTCASE_ELEMENT);
         addAttributes(propertyContainer, TESTCASE_PROPERTY);
         addCoverage(propertyContainer, coverage);

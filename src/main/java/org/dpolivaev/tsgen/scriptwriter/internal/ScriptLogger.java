@@ -7,10 +7,10 @@ import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.ruleengine.AssignmentFormatter;
 import org.dpolivaev.tsgen.ruleengine.ErrorHandler;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-import org.dpolivaev.tsgen.ruleengine.ScriptWriter;
+import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.utils.internal.Utils;
 
-public class ScriptLogger implements ScriptWriter, ErrorHandler {
+public class ScriptLogger implements PropertyHandler, ErrorHandler {
 	final private Writer log;
 	final private AssignmentFormatter assignmentFormatter;
 
@@ -21,7 +21,7 @@ public class ScriptLogger implements ScriptWriter, ErrorHandler {
 	}
 
 	@Override
-	public void createScriptFor(PropertyContainer propertyContainer, CoverageTracker coverage) {
+	public void handlePropertyCombination(PropertyContainer propertyContainer, CoverageTracker coverage) {
 		try {
 			log.append(propertyContainer.getCombinationCounter() + " : "
 					+ assignmentFormatter.format(propertyContainer) + '\n');

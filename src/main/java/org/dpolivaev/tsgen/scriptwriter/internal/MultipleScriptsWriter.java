@@ -5,11 +5,11 @@ import java.util.Map;
 
 import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-import org.dpolivaev.tsgen.ruleengine.ScriptWriter;
+import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 
-public class MultipleScriptsWriter implements ScriptWriter{
+public class MultipleScriptsWriter implements PropertyHandler{
     private final Map<String, SingleScriptWriter> singleScriptProducers;
     private final ResultFactory resultFactory;
 	private OutputConfiguration outputConfiguration;
@@ -30,7 +30,7 @@ public class MultipleScriptsWriter implements ScriptWriter{
     }
 
      @Override
-    public void createScriptFor(PropertyContainer propertyContainer, CoverageTracker coverage) {
+    public void handlePropertyCombination(PropertyContainer propertyContainer, CoverageTracker coverage) {
         Object scriptValue = propertyContainer.get("script");
         String scriptName;
         if(scriptValue == SpecialValue.UNDEFINED)
@@ -40,7 +40,7 @@ public class MultipleScriptsWriter implements ScriptWriter{
         if(! singleScriptProducers.containsKey(scriptName)) {
             setSingleScriptProducer(scriptName, newSingleScriptProducer(scriptName, propertyContainer));
         }
-        getSingleScriptProducer(scriptName).createScriptFor(propertyContainer, null);
+        getSingleScriptProducer(scriptName).handlePropertyCombination(propertyContainer, null);
     }
 
     private SingleScriptWriter newSingleScriptProducer(String scriptName, PropertyContainer propertyContainer) {
