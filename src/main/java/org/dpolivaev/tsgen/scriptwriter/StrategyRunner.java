@@ -31,7 +31,7 @@ public class StrategyRunner {
 		ScriptLogger logger = new ScriptLogger(writer);
 		ruleEngine.addScriptWriter(logger);
 		ruleEngine.addErrorHandler(logger);
-		ruleEngine.addGoal(new Goal(new RequirementCoverage()));
+		ruleEngine.addGoal(new Goal("requirements", new RequirementCoverage()));
 		StreamResultFactory resultFactory = new StreamResultFactory();
 		MultipleScriptsWriter scriptProducer = new MultipleScriptsWriter(resultFactory);
 		scriptProducer.setOutputConfiguration(outputConfiguration);
