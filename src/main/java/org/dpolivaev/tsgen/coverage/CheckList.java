@@ -1,7 +1,5 @@
 package org.dpolivaev.tsgen.coverage;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -9,8 +7,6 @@ import java.util.Set;
 public class CheckList{
 	final private Map<CoverageEntry, Integer> items = new HashMap<>();
 		
-	final private Collection<Goal> goals = new ArrayList<>();
-	
 	public void add(CoverageEntry coverageEntry) {
 		int count = count(coverageEntry) + 1;
 		put(coverageEntry, count);
@@ -26,10 +22,6 @@ public class CheckList{
 			return 0;
 		else
 			return oldCount;
-	}
-
-	public void add(Goal goal) {
-		goals.add(goal);
 	}
 
 	public boolean contains(CheckList that) {
