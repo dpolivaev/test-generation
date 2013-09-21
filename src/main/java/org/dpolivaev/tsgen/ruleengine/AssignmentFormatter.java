@@ -6,8 +6,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
-import org.dpolivaev.tsgen.ruleengine.internal.Assignment;
-
 public class AssignmentFormatter {
     private String propertySeparator;
 

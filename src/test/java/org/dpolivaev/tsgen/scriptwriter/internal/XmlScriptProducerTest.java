@@ -6,7 +6,7 @@ import static org.xmlmatchers.transform.XmlConverters.the;
 
 import javax.xml.transform.dom.DOMResult;
 
-import org.dpolivaev.tsgen.ruleengine.internal.Assignments;
+import org.dpolivaev.tsgen.ruleengine.Assignments;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 import org.dpolivaev.tsgen.scriptwriter.internal.MultipleScriptsWriter;
 import org.dpolivaev.tsgen.scriptwriter.internal.ResultFactory;
