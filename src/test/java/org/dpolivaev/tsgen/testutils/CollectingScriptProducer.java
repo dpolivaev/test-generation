@@ -5,13 +5,13 @@ import java.io.Writer;
 
 import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-import org.dpolivaev.tsgen.ruleengine.ScriptWriter;
+import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.scriptwriter.internal.ScriptLogger;
 
 /**
  * @author Dimitry Polivaev 18.02.2013
  */
-public class CollectingScriptProducer implements ScriptWriter {
+public class CollectingScriptProducer implements PropertyHandler {
 
 	private final ScriptLogger loggingScriptProducer;
 	private Writer log;
@@ -22,8 +22,8 @@ public class CollectingScriptProducer implements ScriptWriter {
 	}
 
 	@Override
-	public void createScriptFor(PropertyContainer propertyContainer, CoverageTracker coverage) {
-		loggingScriptProducer.createScriptFor(propertyContainer, null);
+	public void handlePropertyCombination(PropertyContainer propertyContainer, CoverageTracker coverage) {
+		loggingScriptProducer.handlePropertyCombination(propertyContainer, null);
 	}
 
 	public String getAllScriptPropertyCombinations() {

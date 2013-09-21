@@ -6,7 +6,7 @@ import static org.junit.Assert.assertThat;
 import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
-import org.dpolivaev.tsgen.ruleengine.ScriptWriter;
+import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.ruleengine.internal.StatefulRule;
 import org.dpolivaev.tsgen.utils.internal.Utils;
@@ -20,10 +20,10 @@ public class RuleEngineTest {
 	public void containsAllDefaultProperties() {
 		Strategy strategy = Mockito.mock(Strategy.class);
 		Mockito.when(strategy.availableDefaultProperties()).thenReturn(Utils.set("name"));
-		final RuleEngine ruleEngine = new RuleEngine().addScriptWriter(new ScriptWriter() {
+		final RuleEngine ruleEngine = new RuleEngine().addScriptWriter(new PropertyHandler() {
 			
 			@Override
-			public void createScriptFor(PropertyContainer propertyContainer, CoverageTracker coverage) {
+			public void handlePropertyCombination(PropertyContainer propertyContainer, CoverageTracker coverage) {
 				assertThat(propertyContainer.containsPropertyValue("name"), equalTo(true));
 				
 			}
@@ -34,10 +34,10 @@ public class RuleEngineTest {
     @Test
 	public void ruleEngineResetsAssignmentReasonAfterPropertySetEventIsFired() {
 		Strategy strategy = Mockito.mock(Strategy.class);
-		final RuleEngine ruleEngine = new RuleEngine().addScriptWriter(new ScriptWriter() {
+		final RuleEngine ruleEngine = new RuleEngine().addScriptWriter(new PropertyHandler() {
 			
 			@Override
-			public void createScriptFor(PropertyContainer propertyContainer, CoverageTracker coverage) {
+			public void handlePropertyCombination(PropertyContainer propertyContainer, CoverageTracker coverage) {
 				StatefulRule triggeredRule = iterate("name").over("value2").when("triggeredBy").asRule();
 				RuleEngine ruleEngine = (RuleEngine) propertyContainer;
 				ruleEngine.setPropertyValue(triggeredRule, "value2", true);

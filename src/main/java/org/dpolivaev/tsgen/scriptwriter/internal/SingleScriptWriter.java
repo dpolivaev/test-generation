@@ -4,18 +4,18 @@ import javax.xml.transform.sax.TransformerHandler;
 
 import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-import org.dpolivaev.tsgen.ruleengine.ScriptWriter;
+import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 import org.dpolivaev.tsgen.scriptwriter.ScriptConfiguration;
 
-public class SingleScriptWriter implements ScriptWriter {
+public class SingleScriptWriter implements PropertyHandler {
 
     private XmlWriter xmlWriter;
-    private ScriptWriter scriptProducer;
+    private PropertyHandler scriptProducer;
 
     @Override
-    public void createScriptFor(PropertyContainer propertyContainer, CoverageTracker coverage) {
-        scriptProducer.createScriptFor(propertyContainer, null);
+    public void handlePropertyCombination(PropertyContainer propertyContainer, CoverageTracker coverage) {
+        scriptProducer.handlePropertyCombination(propertyContainer, null);
     }
 
     public SingleScriptWriter(PropertyContainer propertyContainer, ScriptConfiguration scriptConfiguration, ResultFactory resultFactory) {
