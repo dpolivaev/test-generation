@@ -61,7 +61,7 @@ ItemAction:{ValueAction}
 
 Run:
 	'run' strategies += StrategyReference 
-	('with' strategies += StrategyReference (',' (strategies += StrategyReference | goals += GoalReference) ))?
+	('with' strategies += StrategyReference (',' (strategies += StrategyReference | goals += GoalReference))* )?
 	outputConfiguration += OutputConfiguration? (',' outputConfiguration += OutputConfiguration)*
 	
 ;
