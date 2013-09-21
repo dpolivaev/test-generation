@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.dpolivaev.tsgen.coverage.CoverageTracker;
+import org.dpolivaev.tsgen.coverage.Goal;
+import org.dpolivaev.tsgen.coverage.internal.RequirementCoverage;
 import org.dpolivaev.tsgen.ruleengine.internal.PropertyAssignedEvent;
 import org.dpolivaev.tsgen.ruleengine.internal.PropertyCombinationStartedPropagator;
 import org.dpolivaev.tsgen.ruleengine.internal.PropertyValueSetPropagator;
@@ -221,5 +223,9 @@ public class RuleEngine implements EngineState {
 	@Override
 	public CoverageTracker coverage() {
 		return coverageTracker;
+	}
+
+	public void addGoal(Goal goal) {
+		coverageTracker.add(goal);
 	}
 }
