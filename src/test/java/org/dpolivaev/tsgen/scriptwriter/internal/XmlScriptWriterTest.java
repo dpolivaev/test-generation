@@ -11,6 +11,7 @@ import javax.xml.transform.dom.DOMResult;
 import org.dpolivaev.tsgen.coverage.Goal;
 import org.dpolivaev.tsgen.ruleengine.Assignments;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
+import org.dpolivaev.tsgen.scriptwriter.ScriptConfiguration;
 import org.dpolivaev.tsgen.scriptwriter.internal.MultipleScriptsWriter;
 import org.dpolivaev.tsgen.scriptwriter.internal.ResultFactory;
 import org.dpolivaev.tsgen.scriptwriter.internal.SingleScriptWriter;
@@ -30,8 +31,9 @@ public class XmlScriptWriterTest {
         givenProperty("testcase", "testcase 1");
         ResultFactory resultFactory = Mockito.mock(ResultFactory.class);
         final DOMResult dom = new DOMResult();
-		Mockito.when(resultFactory.newResult("scriptName", "xml")).thenReturn(dom);
-        SingleScriptWriter producer = new SingleScriptWriter(propertyContainer, OutputConfiguration.OUTPUT_XML.forScript("scriptName"), resultFactory);
+        final ScriptConfiguration scriptConfiguration = OutputConfiguration.OUTPUT_XML.forScript("scriptName");
+		Mockito.when(resultFactory.newResult(scriptConfiguration)).thenReturn(dom);
+		SingleScriptWriter producer = new SingleScriptWriter(propertyContainer, scriptConfiguration, resultFactory);
         producer.handlePropertyCombination(propertyContainer, Collections.<Goal>emptyList());
         producer.endScript();
         Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script id='scriptName'>" +
@@ -43,11 +45,12 @@ public class XmlScriptWriterTest {
     public void twoTestcases() {
         ResultFactory resultFactory = Mockito.mock(ResultFactory.class);
         final DOMResult dom = new DOMResult();
-		Mockito.when(resultFactory.newResult("scriptName", "xml")).thenReturn(dom);
+        final ScriptConfiguration scriptConfiguration = OutputConfiguration.OUTPUT_XML.forScript("scriptName");
+		Mockito.when(resultFactory.newResult(scriptConfiguration)).thenReturn(dom);
         givenProperty("script", "scriptName");
         givenProperty("testcase", "testcase 1");
-        SingleScriptWriter producer = new SingleScriptWriter(propertyContainer, 
-        		OutputConfiguration.OUTPUT_XML.forScript("scriptName"), 
+		SingleScriptWriter producer = new SingleScriptWriter(propertyContainer, 
+        		scriptConfiguration, 
         		resultFactory);
         producer.handlePropertyCombination(propertyContainer, Collections.<Goal>emptyList());
         
@@ -69,7 +72,7 @@ public class XmlScriptWriterTest {
         givenProperty("testcase", "testcase 1");
         ResultFactory resultFactory = Mockito.mock(ResultFactory.class);
         final DOMResult dom = new DOMResult();
-		Mockito.when(resultFactory.newResult("scriptName1", "xml")).thenReturn(dom);
+		Mockito.when(resultFactory.newResult(Mockito.<ScriptConfiguration>any())).thenReturn(dom);
         MultipleScriptsWriter producer = new MultipleScriptsWriter(resultFactory);
         producer.handlePropertyCombination(propertyContainer, Collections.<Goal>emptyList());
         producer.endScripts();
@@ -83,9 +86,8 @@ public class XmlScriptWriterTest {
     public void twoScriptsWithOneTestcase() {
         ResultFactory resultFactory = Mockito.mock(ResultFactory.class);
         final DOMResult dom1 = new DOMResult();
-        Mockito.when(resultFactory.newResult("scriptName1", "xml")).thenReturn(dom1);
         final DOMResult dom2 = new DOMResult();
-		Mockito.when(resultFactory.newResult("scriptName2", "xml")).thenReturn(dom2);
+        Mockito.when(resultFactory.newResult(Mockito.<ScriptConfiguration>any())).thenReturn(dom1).thenReturn(dom2);
         MultipleScriptsWriter producer = new MultipleScriptsWriter(resultFactory);
         givenProperty("script", "scriptName1");
         givenProperty("testcase", "testcase 1");
@@ -104,10 +106,10 @@ public class XmlScriptWriterTest {
     public void implicitScriptName() {
         ResultFactory resultFactory = Mockito.mock(ResultFactory.class);
         final DOMResult dom = new DOMResult();
-		Mockito.when(resultFactory.newResult("scriptName1", "xml")).thenReturn(dom);
+        final ScriptConfiguration scriptConfiguration = OutputConfiguration.OUTPUT_XML.forScript("scriptName1");
+		Mockito.when(resultFactory.newResult(scriptConfiguration)).thenReturn(dom);
         givenProperty("testcase", "testcase 1");
-        SingleScriptWriter producer = new SingleScriptWriter(propertyContainer, 
-        		OutputConfiguration.OUTPUT_XML.forScript("scriptName1"),resultFactory);
+		SingleScriptWriter producer = new SingleScriptWriter(propertyContainer, scriptConfiguration,resultFactory);
         producer.handlePropertyCombination(propertyContainer, Collections.<Goal>emptyList());
         producer.endScript();
         Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script id='script'>" +

@@ -3,8 +3,11 @@ package org.dpolivaev.tsgen.scriptwriter.internal;
 import javax.xml.transform.Result;
 import javax.xml.transform.dom.DOMResult;
 
+import org.dpolivaev.tsgen.scriptwriter.ScriptConfiguration;
+
 public class DomResultFactory implements ResultFactory{
-    public Result newResult(String scriptName, String FileExtension) {
-        return new DOMResult();
-    }
+	@Override
+	public Result newResult(ScriptConfiguration scriptConfiguration) {
+		return new DOMResult();
+	}
 }
