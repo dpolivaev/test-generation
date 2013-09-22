@@ -5,6 +5,7 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface GoalCoverage {
-	String goal(); 
+	String goal();
+	String item(); 
 	String[] coverage();
 }

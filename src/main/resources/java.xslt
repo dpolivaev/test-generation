@@ -2,7 +2,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.java.TransformationHelper"
 >
-<xsl:output method="text"/>
+<xsl:output method="text" encoding="utf-8"/>
 	<xsl:template name="eol1">
 		<xsl:text>
 	</xsl:text>
@@ -22,22 +22,24 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.java.Tr
 		<xsl:if test="Goal">
 			<xsl:call-template name="eol1"/>
 			<xsl:text>@Coverage(</xsl:text>
-			<xsl:if test="Goal[@count=1]">
+			<xsl:if test="Goal/Item[@firstTime='true']">
 				<xsl:call-template name="eol2"/>
 				<xsl:text>first = {</xsl:text>
-				<xsl:apply-templates select="Goal[@count=1]">
+				<xsl:apply-templates select="Goal/Item[@firstTime='true']">
+					<xsl:sort select="../@name"/>
 					<xsl:sort select="@name"/>
 				</xsl:apply-templates>
 				<xsl:call-template name="eol2"/>
 				<xsl:text>}</xsl:text>
 			</xsl:if>
-			<xsl:if test="Goal[@count=1] and Goal[@count>1]">
+			<xsl:if test="Goal/Item[@firstTime='true'] and Goal/Item[@firstTime='false']">
 				<xsl:text>,</xsl:text>
 			</xsl:if>
-			<xsl:if test="Goal[@count>1]">
+			<xsl:if test="Goal/Item[@firstTime='false']">
 				<xsl:call-template name="eol2"/>
 				<xsl:text>next = {</xsl:text>
-				<xsl:apply-templates select="Goal[@count>1]">
+				<xsl:apply-templates select="Goal/Item[@firstTime='false']">
+					<xsl:sort select="../@name"/>
 					<xsl:sort select="@name"/>
 				</xsl:apply-templates>
 				<xsl:call-template name="eol2"/>
@@ -48,21 +50,25 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.java.Tr
 		</xsl:if>
 	</xsl:template>
 	
-	<xsl:template match="Goal">
-		<xsl:variable name="id" select="@name"/>
-		<xsl:if test="not (preceding-sibling::Goal[@name=$id])">
+	<xsl:template match="Item">
+		<xsl:variable name="goal" select="../@name"/>
+		<xsl:variable name="item" select="@name"/>
+		<xsl:variable name="firstTime" select="@firstTime"/>
+		<xsl:if test="not (preceding-sibling::Item[@name=$item and @firstTime = $firstTime and ../@name=$goal])">
 			<xsl:call-template name="eol3"/>
 			<xsl:text>@GoalCoverage(goal = </xsl:text>
-			<xsl:value-of select="java:java-string($id)"/>
+			<xsl:value-of select="java:java-string($goal)"/>
+			<xsl:text>, item=</xsl:text>
+			<xsl:value-of select="java:java-string($item)"/>
 			<xsl:text>, coverage={</xsl:text>
 		</xsl:if>
 		<xsl:value-of select="java:java-string(text())"/>
-		<xsl:if test="following-sibling::Goal[@name=$id]">
+		<xsl:if test="following-sibling::Item[@name=$item and @firstTime = $firstTime and ../@name=$goal]">
 			<xsl:text>, </xsl:text>
 		</xsl:if>
-		<xsl:if test="not (following-sibling::Goal[@name=$id])">
+		<xsl:if test="not (following-sibling::Item[@name=$item and @firstTime = $firstTime and ../@name=$goal])">
 			<xsl:text>})</xsl:text>
-			<xsl:if test="following-sibling::Goal">
+			<xsl:if test="following-sibling::Item[@name=$item and @firstTime = $firstTime and ../@name=$goal]">
 				<xsl:text>,</xsl:text>
 			</xsl:if>
 		</xsl:if>
@@ -89,7 +95,8 @@ public class </xsl:text>
 	<xsl:text>Driver driver = new </xsl:text>
 	<xsl:value-of select="$class"/>
 	<xsl:text>Driver();</xsl:text>
-	<xsl:apply-templates/>
+	<xsl:call-template name="eol1"/>
+	<xsl:apply-templates select="TestCase[@id]"/>
 	<xsl:text>
 }
 </xsl:text>
@@ -112,7 +119,7 @@ public class </xsl:text>
 	<xsl:apply-templates select="child::*[name() != 'Description' and name() != 'Goal']"/>
 	<xsl:call-template name="eol1"/>
 	<xsl:text>}</xsl:text>
-	<xsl:call-template name="eol2"/>
+	<xsl:call-template name="eol1"/>
 	</xsl:template>
 	
 	<xsl:template match="Precondition|EnterState|PreconditionInState|Focus|VerificationInState|CheckState|Verification|Postprocessing">
