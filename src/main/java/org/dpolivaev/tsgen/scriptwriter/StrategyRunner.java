@@ -46,7 +46,11 @@ public class StrategyRunner {
 	}
 	
 	public StrategyRunner addOutput(Source xsltSource, String fileExtension) {
-		this.outputConfiguration = new OutputConfiguration(xsltSource, fileExtension);
+		return addOutput(xsltSource, null, fileExtension);
+	}
+
+	public StrategyRunner addOutput(Source xsltSource, File outputDirectory, String fileExtension) {
+		this.outputConfiguration = new OutputConfiguration(xsltSource, outputDirectory, fileExtension);
 		return this;
 	}
 
@@ -55,13 +59,21 @@ public class StrategyRunner {
 	}
 	
 	public StrategyRunner addOutput(String xsltSource, String fileExtension) {
+		return addOutput(xsltSource, null, fileExtension);
+	}
+	
+	public StrategyRunner addOutput(String xsltSource, File outputDirectory, String fileExtension) {
 		File xsltFile = new File(xsltSource);
 		if(xsltFile.canRead())
-			return addOutput(new StreamSource(xsltFile), fileExtension);
+			return addOutput(new StreamSource(xsltFile), outputDirectory, fileExtension);
 		InputStream resource = getClass().getResourceAsStream(xsltSource);
 		if(resource != null)
-			return addOutput(new StreamSource(resource), fileExtension);
+			return addOutput(new StreamSource(resource), outputDirectory, fileExtension);
 		throw new IllegalArgumentException("source " + xsltSource + " not available");
+	}
+
+	public StrategyRunner addOutput(File outputDirectory, String fileExtension) {
+		return addOutput((Source)null, outputDirectory, fileExtension);
 	}
 }
 
