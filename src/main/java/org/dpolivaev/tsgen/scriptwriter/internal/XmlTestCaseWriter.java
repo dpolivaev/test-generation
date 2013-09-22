@@ -2,6 +2,7 @@ package org.dpolivaev.tsgen.scriptwriter.internal;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.CoverageTracker;
@@ -42,29 +43,33 @@ public class XmlTestCaseWriter implements PropertyHandler {
             addOptionalElement(propertyContainer, optionalElements[i], optionalElements[i+1]);
         xmlWriter.endElement(TESTCASE_ELEMENT);
 
-    }
-
-    private void addCoverage(String name, CoverageTracker coverageTracker) {
-    	if(coverageTracker != null){
-    		for(final CoverageEntry coverageEntry : coverageTracker.firstTimeCoveredGoals()){
-    			final int count = coverageTracker.count(coverageEntry);
-    			addCoverageEntry(name, coverageEntry, count, true);
-    		}
-    		for(final CoverageEntry coverageEntry : coverageTracker.repeatedlyCoveredGoals()){
-    			final int count = coverageTracker.count(coverageEntry);
-    			addCoverageEntry(name, coverageEntry, count, false);
-    		}
-    	}
 	}
 
-	private void addCoverageEntry(String name, final CoverageEntry coverageEntry, int count, boolean firstTime) {
-		xmlWriter.beginElement("Goal");
-		xmlWriter.setAttribute("name", name);
-		xmlWriter.setAttribute("item", coverageEntry.getGoal());
+	private void addCoverage(String name, CoverageTracker coverageTracker) {
+		final Set<CoverageEntry> firstTimeCoveredGoals = coverageTracker.firstTimeCoveredGoals();
+		final Set<CoverageEntry> repeatedlyCoveredGoals = coverageTracker.repeatedlyCoveredGoals();
+		if(! (firstTimeCoveredGoals.isEmpty() && repeatedlyCoveredGoals.isEmpty())){
+			xmlWriter.beginElement("Goal");
+			xmlWriter.setAttribute("name", name);
+			for(final CoverageEntry coverageEntry : firstTimeCoveredGoals){
+				final int count = coverageTracker.count(coverageEntry);
+				addCoverageEntry(coverageEntry, count, true);
+			}
+			for(final CoverageEntry coverageEntry : repeatedlyCoveredGoals){
+				final int count = coverageTracker.count(coverageEntry);
+				addCoverageEntry(coverageEntry, count, false);
+			}
+			xmlWriter.endElement("Goal");
+		}
+	}
+
+	private void addCoverageEntry(final CoverageEntry coverageEntry, int count, boolean firstTime) {
+		xmlWriter.beginElement("Item");
+		xmlWriter.setAttribute("name", coverageEntry.getGoal());
 		xmlWriter.setAttribute("count", Integer.toString(count));
 		xmlWriter.setAttribute("firstTime", Boolean.toString(firstTime));
 		xmlWriter.addTextContent(coverageEntry.getReason().toString());
-		xmlWriter.endElement("Goal");
+		xmlWriter.endElement("Item");
 	}
 
 	private void addOptionalElement(PropertyContainer propertyContainer, String property, String element) {

@@ -159,7 +159,7 @@ public class XmlTestCaseProducerTest {
         givenCoverage("requirement id", "description");
         createScript();
         checkOutput("<TestCase>"
-        		+ "<Goal name='name' item='requirement id' count='1' firstTime = 'true'>description</Goal>"
+        		+ "<Goal name='name'> <Item name='requirement id' count='1' firstTime = 'true'>description</Item></Goal>"
         		+ "</TestCase>");
     }
 
@@ -170,7 +170,7 @@ public class XmlTestCaseProducerTest {
         givenCoverage("requirement id", "description");
         createScript();
         checkOutput("<TestCase>"
-        		+ "<Goal name='name' item='requirement id' count='2' firstTime = 'false'>description</Goal>"
+        		+ "<Goal name='name'> <Item name='requirement id' count='2' firstTime = 'false'>description</Item></Goal>"
         		+ "</TestCase>");
     }
 
