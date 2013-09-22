@@ -25,10 +25,10 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.xml.sax.SAXException;
 
-public class XmlTestCaseProducerTest {
+public class XmlTestCaseWriterTest {
 
     private DOMResult dom;
-    private PropertyHandler producer;
+    private PropertyHandler writer;
     private Assignments propertyContainer;
     private XmlWriter xmlWriter;
 	private List<Goal> goals;
@@ -47,7 +47,7 @@ public class XmlTestCaseProducerTest {
 		coverageTracker = new CoverageTracker();
 		Mockito.when(goal.coverageTracker()).thenReturn(coverageTracker);
 		goals = Arrays.asList(goal);
-        producer = new XmlTestCaseWriter(xmlWriter);
+        writer = new XmlTestCaseWriter(xmlWriter);
         propertyContainer = new Assignments();
     }
 
@@ -57,7 +57,7 @@ public class XmlTestCaseProducerTest {
 
     private void createScript() throws SAXException {
         xmlWriter.startDocument();
-        producer.handlePropertyCombination(propertyContainer, goals);
+        writer.handlePropertyCombination(propertyContainer, goals);
         xmlWriter.endDocument();
     }
 

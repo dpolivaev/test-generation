@@ -18,7 +18,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-public class XmlScriptProducerTest {
+public class XmlScriptWriterTest {
     private Assignments propertyContainer = new Assignments();
     private void givenProperty(String name, Object value) {
         propertyContainer.add(assignmentMock(name, value));
