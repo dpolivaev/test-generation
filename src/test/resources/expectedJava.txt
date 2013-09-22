@@ -1,0 +1,82 @@
+import static org.junit.Assert.*;
+import org.junit.Test;
+
+import org.dpolivaev.tsgen.java.Description;
+import org.dpolivaev.tsgen.java.Coverage;
+import org.dpolivaev.tsgen.java.GoalCoverage;
+
+public class CallPrice {
+	CallPriceDriver driver = new CallPriceDriver();
+	
+	@Description("->script: CallPrice\n"
++"->isCallValid: true\n"
++"isCallValid->destination: \"National\"\n"
++"destination->foc.country: \"Motherland\"\n"
++"foc.country->tariff: \"Standard\"\n"
++"tariff->foc.callBeginTime: \"0:00:00\"\n"
++"tariff->dayOfTheWeek: \"Monday\"\n"
++"destination->foc.callDuration: \"0:00:01\"\n"
++"<-testcase: isCallValid destination=\"National\" foc.country=\"Motherland\" tariff=\"Standard\" foc.callBeginTime=\"0:00:00\" dayOfTheWeek=\"Monday\" foc.callDuration=\"0:00:01\"")
+	@Coverage(
+		first = {
+			@GoalCoverage(goal = "requirements", item="req123", coverage={"\"National\"", "bla"})
+		}
+	)
+	@Test
+	public void test001_isCallValidDestinationNationalFocCountryMotherlandTariffStandardFocCallBeginTime00000DayOfTheWeekMondayFocCallDuration00001() {
+		
+	// Focus 1
+		driver.calculate(/* callBeginTime*/ "0:00:00", 
+			/* callDuration*/ "0:00:01", 
+			/* cheapCallActiveForCall*/ false, 
+			/* country*/ "Motherland", 
+			/* customerID*/ 12345, 
+			/* dayOfWeek*/ "Monday", 
+			/* phoneNumber*/ "valid");
+	}
+	
+	@Description("->script: CallPrice\n"
++"->isCallValid: true\n"
++"isCallValid->destination: \"National\"\n"
++"destination->foc.country: \"Motherland\"\n"
++"foc.country->tariff: \"Standard\"\n"
++"tariff->foc.callBeginTime: \"0:00:01\"\n"
++"tariff->dayOfTheWeek: \"Tuesday\"\n"
++"destination->foc.callDuration: \"0:00:59\"\n"
++"<-testcase: isCallValid destination=\"National\" foc.country=\"Motherland\" tariff=\"Standard\" foc.callBeginTime=\"0:00:01\" dayOfTheWeek=\"Tuesday\" foc.callDuration=\"0:00:59\"")
+	@Coverage(
+		next = {
+			@GoalCoverage(goal = "requirements", item="req123", coverage={"\"National\"", "bla"})
+		}
+	)
+	@Test
+	public void test002_isCallValidDestinationNationalFocCountryMotherlandTariffStandardFocCallBeginTime00001DayOfTheWeekTuesdayFocCallDuration00059() {
+		
+	// Focus 1
+		driver.calculate(/* callBeginTime*/ "0:00:01", 
+			/* callDuration*/ "0:00:59", 
+			/* cheapCallActiveForCall*/ false, 
+			/* country*/ "Motherland", 
+			/* customerID*/ 12345, 
+			/* dayOfWeek*/ "Tuesday", 
+			/* phoneNumber*/ "valid");
+	}
+	
+	@Description("description")
+	@Coverage(
+		first = {
+			@GoalCoverage(goal = "requirements2", item="req123", coverage={"\"National\""})
+		},
+		next = {
+			@GoalCoverage(goal = "requirements1", item="req123", coverage={"\"National\"", "bla"})
+			@GoalCoverage(goal = "requirements2", item="req123", coverage={"bla"})
+		}
+	)
+	@Test
+	public void test003_multipleGoals() {
+		
+	// Focus 1
+		driver.focus();
+	}
+	
+}
