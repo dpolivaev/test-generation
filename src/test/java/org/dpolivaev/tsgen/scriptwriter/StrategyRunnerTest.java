@@ -11,7 +11,7 @@ import org.junit.Test;
 
 public class StrategyRunnerTest {
 	@Test
-	public void testName() throws Exception {
+	public void outputsXml() throws Exception {
 		Strategy strategy = new Strategy();
 		final File expectedOutputFile = new File("testoutput", "script.xml");
 		expectedOutputFile.delete();
