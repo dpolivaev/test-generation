@@ -8,10 +8,16 @@ public class Goal {
 	final private String name;
 	final private GoalFunction goalFunction;
 	private CoverageTracker coverageTracker;
+	final private CheckList checkList;
 
 	public Goal(String name, GoalFunction goalFunction) {
+		this(name, goalFunction, null);
+	}
+
+	public Goal(String name, GoalFunction goalFunction, CheckList checkList) {
 		this.name = name;
 		this.goalFunction = goalFunction;
+		this.checkList = checkList;
 		this.coverageTracker = new CoverageTracker();
 	}
 

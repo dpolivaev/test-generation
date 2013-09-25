@@ -11,8 +11,8 @@ import org.dpolivaev.tsgen.utils.internal.Utils;
 import org.junit.Before;
 import org.junit.Test;
 
-public class GoalTest {
-	private static final CoverageEntry COVERAGE_ENTRY = new CoverageEntry("goal", "value");
+public class InfiniteGoalTest {
+	private static final CoverageEntry COVERAGE_ENTRY = new CoverageEntry("item", "value");
 	private static final GoalFunction GOAL_FUNCTION = new GoalFunction() {
 		
 		@Override

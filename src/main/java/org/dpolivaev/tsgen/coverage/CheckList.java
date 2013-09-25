@@ -7,13 +7,15 @@ import java.util.Set;
 public class CheckList{
 	final private Map<CoverageEntry, Integer> items = new HashMap<>();
 		
-	public void add(CoverageEntry coverageEntry) {
+	public CheckList add(CoverageEntry coverageEntry) {
 		int count = count(coverageEntry) + 1;
 		put(coverageEntry, count);
+		return this;
 	}
 
-	public void put(CoverageEntry coverageEntry, int count) {
+	public CheckList put(CoverageEntry coverageEntry, int count) {
 		items.put(coverageEntry, count);
+		return this;
 	}
 
 	public int count(CoverageEntry coverageEntry) {
@@ -22,14 +24,6 @@ public class CheckList{
 			return 0;
 		else
 			return oldCount;
-	}
-
-	public boolean contains(CheckList that) {
-		for(CoverageEntry entry : that.items()){
-			if(count(entry) < that.count(entry))
-				return false;
-		}
-		return true;
 	}
 
 	public Set<CoverageEntry> items() {

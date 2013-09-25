@@ -25,22 +25,4 @@ public class CheckListTest {
 		assertThat(checkList.count(COVERAGE_ENTRY), CoreMatchers.equalTo(3));
 	}
 
-	@Test
-	public void sameListContainsCheckList() {
-		final CheckList checkList1 = new CheckList();
-		checkList1.put(COVERAGE_ENTRY, 3);
-		final CheckList checkList2 = new CheckList();
-		checkList2.put(COVERAGE_ENTRY, 3);
-		
-		assertThat(checkList1.contains(checkList2), CoreMatchers.equalTo(true));
-	}
-	
-	@Test
-	public void emtpyListDoesNotContainCheckList() {
-		final CheckList checkList1 = new CheckList();
-		final CheckList checkList2 = new CheckList();
-		checkList2.add(COVERAGE_ENTRY);
-		
-		assertThat(checkList1.contains(checkList2), CoreMatchers.equalTo(false));
-	}
 }
