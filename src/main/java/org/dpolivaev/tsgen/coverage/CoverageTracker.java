@@ -7,19 +7,27 @@ import java.util.Set;
 public class CoverageTracker {
 	final private Set<CoverageEntry> firstTimeCoveredGoals = new LinkedHashSet<>();
 	final private Set<CoverageEntry> repeatedlyCoveredGoals = new LinkedHashSet<>();
-	final private CheckList completeCoverage= new CheckList(); 
+	final private CheckList checkList; 
 		
+	public CoverageTracker(CheckList checkList) {
+		this.checkList = checkList != null ? checkList : new CheckList();
+	}
+
+	public CoverageTracker() {
+		this(null);
+	}
+
 	public void add(CoverageEntry coverageEntry) {
 		int count = count(coverageEntry);
 		if(count == 0)
 			firstTimeCoveredGoals.add(coverageEntry);
 		else
 			repeatedlyCoveredGoals.add(coverageEntry);
-		completeCoverage.add(coverageEntry);
+		checkList.addReached(coverageEntry);
 	}
 
 	public int count(CoverageEntry coverageEntry) {
-		return completeCoverage.count(coverageEntry);
+		return checkList.countReached(coverageEntry);
 	}
 
 	public void startRound() {
@@ -35,8 +43,15 @@ public class CoverageTracker {
 		return repeatedlyCoveredGoals;
 	}
 
-	public void addAll(Collection<CoverageEntry> newCoverageEntries) {
+	public void addAllEntries(Collection<CoverageEntry> newCoverageEntries) {
 		for(CoverageEntry coverageEntry:newCoverageEntries)
 			add(coverageEntry);
+	}
+
+	public void addRequiredEntries(Collection<CoverageEntry> newCoverageEntries) {
+		for(CoverageEntry coverageEntry:newCoverageEntries)
+			if(checkList.isRequired(coverageEntry))
+				add(coverageEntry);
+		
 	}
 }

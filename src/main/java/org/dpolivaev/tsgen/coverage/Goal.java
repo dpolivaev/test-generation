@@ -8,7 +8,7 @@ public class Goal {
 	final private String name;
 	final private GoalFunction goalFunction;
 	private CoverageTracker coverageTracker;
-	final private CheckList checkList;
+	final private boolean finite;
 
 	public Goal(String name, GoalFunction goalFunction) {
 		this(name, goalFunction, null);
@@ -17,14 +17,17 @@ public class Goal {
 	public Goal(String name, GoalFunction goalFunction, CheckList checkList) {
 		this.name = name;
 		this.goalFunction = goalFunction;
-		this.checkList = checkList;
-		this.coverageTracker = new CoverageTracker();
+		this.coverageTracker = new CoverageTracker(checkList);
+		this.finite = checkList != null;
 	}
 
 	public void check(PropertyContainer propertyContainer) {
 		final Collection<CoverageEntry> newCoverageEntries = goalFunction.check(propertyContainer);
 		coverageTracker.startRound();
-		coverageTracker.addAll(newCoverageEntries);
+		if(finite)
+			coverageTracker.addRequiredEntries(newCoverageEntries);
+		else
+			coverageTracker.addAllEntries(newCoverageEntries);
 		
 	}
 

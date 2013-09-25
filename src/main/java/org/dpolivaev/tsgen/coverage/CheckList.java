@@ -5,28 +5,46 @@ import java.util.Map;
 import java.util.Set;
 
 public class CheckList{
-	final private Map<CoverageEntry, Integer> items = new HashMap<>();
+	final private Map<CoverageEntry, CoverageStatus> items = new HashMap<>();
 		
-	public CheckList add(CoverageEntry coverageEntry) {
-		int count = count(coverageEntry) + 1;
-		put(coverageEntry, count);
+	public CheckList addReached(CoverageEntry coverageEntry) {
+		int count = countReached(coverageEntry) + 1;
+		setReached(coverageEntry, count);
 		return this;
 	}
 
-	public CheckList put(CoverageEntry coverageEntry, int count) {
-		items.put(coverageEntry, count);
+
+	public CheckList setExpected(CoverageEntry coverageEntry, int expected) {
+		final CoverageStatus coverageStatus = items.get(coverageEntry);
+		if(coverageStatus == null)
+			items.put(coverageEntry, new CoverageStatus(expected, 0));
+		else
+			items.put(coverageEntry, new CoverageStatus(expected, coverageStatus.reached));
+		return this;
+	}
+	
+	public CheckList setReached(CoverageEntry coverageEntry, int count) {
+		final CoverageStatus coverageStatus = items.get(coverageEntry);
+		if(coverageStatus == null)
+			items.put(coverageEntry, new CoverageStatus(0, count));
+		else
+			items.put(coverageEntry, new CoverageStatus(coverageStatus.required, count));
 		return this;
 	}
 
-	public int count(CoverageEntry coverageEntry) {
-		final Integer oldCount = items.get(coverageEntry);
-		if(oldCount == null)
+	public int countReached(CoverageEntry coverageEntry) {
+		final CoverageStatus coverageStatus = items.get(coverageEntry);
+		if(coverageStatus == null)
 			return 0;
 		else
-			return oldCount;
+			return coverageStatus.reached;
 	}
 
 	public Set<CoverageEntry> items() {
 		return items.keySet();
+	}
+
+	public boolean isRequired(CoverageEntry coverageEntry) {
+		return items.containsKey(coverageEntry);
 	}
 }
