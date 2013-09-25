@@ -12,17 +12,17 @@ public class CheckListTest {
 	@Test
 	public void addsItem() {
 		final CheckList checkList = new CheckList();
-		checkList.add(COVERAGE_ENTRY);
+		checkList.addReached(COVERAGE_ENTRY);
 		
-		assertThat(checkList.count(COVERAGE_ENTRY), CoreMatchers.equalTo(1));
+		assertThat(checkList.countReached(COVERAGE_ENTRY), CoreMatchers.equalTo(1));
 	}
 
 	@Test
 	public void putsItem() {
 		final CheckList checkList = new CheckList();
-		checkList.put(COVERAGE_ENTRY, 3);
+		checkList.setReached(COVERAGE_ENTRY, 3);
 		
-		assertThat(checkList.count(COVERAGE_ENTRY), CoreMatchers.equalTo(3));
+		assertThat(checkList.countReached(COVERAGE_ENTRY), CoreMatchers.equalTo(3));
 	}
 
 }
