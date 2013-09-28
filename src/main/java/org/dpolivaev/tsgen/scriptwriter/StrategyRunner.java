@@ -9,6 +9,7 @@ import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 
 import org.dpolivaev.tsgen.coverage.Goal;
+import org.dpolivaev.tsgen.coverage.GoalChecker;
 import org.dpolivaev.tsgen.coverage.internal.RequirementCoverage;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
@@ -31,9 +32,11 @@ public class StrategyRunner {
 		ScriptLogger logger = new ScriptLogger(writer);
 		ruleEngine.addScriptWriter(logger);
 		ruleEngine.addErrorHandler(logger);
-		ruleEngine.addGoal(new Goal("requirements", new RequirementCoverage()));
+		GoalChecker goalChecker = new GoalChecker();
+		goalChecker.addGoal(new Goal("requirements", new RequirementCoverage()));
+		ruleEngine.setGoalChecker(goalChecker);
 		StreamResultFactory resultFactory = new StreamResultFactory();
-		MultipleScriptsWriter scriptProducer = new MultipleScriptsWriter(resultFactory);
+		MultipleScriptsWriter scriptProducer = new MultipleScriptsWriter(resultFactory, GoalChecker.NO_GOALS);
 		scriptProducer.setOutputConfiguration(outputConfiguration);
 		ruleEngine.addScriptWriter(scriptProducer);
 		ruleEngine.run(strategy);

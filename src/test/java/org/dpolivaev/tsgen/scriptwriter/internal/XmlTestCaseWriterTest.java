@@ -4,9 +4,6 @@ import static org.dpolivaev.tsgen.testutils.TestUtils.assignmentMock;
 import static org.xmlmatchers.XmlMatchers.isEquivalentTo;
 import static org.xmlmatchers.transform.XmlConverters.the;
 
-import java.util.Arrays;
-import java.util.List;
-
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMResult;
@@ -15,6 +12,7 @@ import javax.xml.transform.sax.TransformerHandler;
 import org.dpolivaev.tsgen.coverage.CheckList;
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.Goal;
+import org.dpolivaev.tsgen.coverage.GoalChecker;
 import org.dpolivaev.tsgen.ruleengine.Assignments;
 import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
@@ -32,7 +30,6 @@ public class XmlTestCaseWriterTest {
     private PropertyHandler writer;
     private Assignments propertyContainer;
     private XmlWriter xmlWriter;
-	private List<Goal> goals;
 	private Goal goal;
 	private CheckList checkList;
 
@@ -47,8 +44,9 @@ public class XmlTestCaseWriterTest {
 		Mockito.when(goal.name()).thenReturn("name");
 		checkList = new CheckList();
 		Mockito.when(goal.checkList()).thenReturn(checkList);
-		goals = Arrays.asList(goal);
-        writer = new XmlTestCaseWriter(xmlWriter);
+		GoalChecker goalChecker = new GoalChecker();
+		goalChecker.addGoal(goal);
+        writer = new XmlTestCaseWriter(xmlWriter, goalChecker);
         propertyContainer = new Assignments();
     }
 
@@ -58,7 +56,7 @@ public class XmlTestCaseWriterTest {
 
     private void createScript() throws SAXException {
         xmlWriter.startDocument();
-        writer.handlePropertyCombination(propertyContainer, goals);
+        writer.handlePropertyCombination(propertyContainer);
         xmlWriter.endDocument();
     }
 
