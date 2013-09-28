@@ -40,7 +40,7 @@ public class InfiniteGoalTest {
 	public void afterCheckingRegisteredGoals_firstTimeAddedCoverageEntriesAreAvailable() throws Exception {
 		goal.check((PropertyContainer) null);
 		CheckList checkList = goal.checkList();
-		assertThat(checkList.firstTimeCoveredGoals(), equalTo(Utils.set(COVERAGE_ENTRY)));
+		assertThat(checkList.firstTimeCoveredEntries(), equalTo(Utils.set(COVERAGE_ENTRY)));
 	}
 
 	@Test
@@ -48,7 +48,7 @@ public class InfiniteGoalTest {
 		goal.check((PropertyContainer) null);
 		goal.check((PropertyContainer) null);
 		CheckList checkList = goal.checkList();
-		assertThat(checkList.firstTimeCoveredGoals(), equalTo(Utils.<CoverageEntry>set()));
+		assertThat(checkList.firstTimeCoveredEntries(), equalTo(Utils.<CoverageEntry>set()));
 	}
 	
 
@@ -57,6 +57,6 @@ public class InfiniteGoalTest {
 		goal.check((PropertyContainer) null);
 		goal.check((PropertyContainer) null);
 		CheckList checkList = goal.checkList();
-		assertThat(checkList.repeatedlyCoveredGoals(), equalTo(Utils.<CoverageEntry>set(COVERAGE_ENTRY)));
+		assertThat(checkList.repeatedlyCoveredEntries(), equalTo(Utils.<CoverageEntry>set(COVERAGE_ENTRY)));
 	}
 }
