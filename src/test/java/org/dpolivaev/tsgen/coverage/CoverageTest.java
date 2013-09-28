@@ -10,11 +10,11 @@ public class CoverageTest {
 
 	private static final CoverageEntry COVERAGE_ENTRY = new CoverageEntry("goal", "value");
 
-	private CoverageTracker coverageTracker;
+	private CheckList checkList;
 	
 	@Before
 	public void setup(){
-		coverageTracker = new CoverageTracker();
+		checkList = new CheckList();
 	}
 	
 
@@ -28,8 +28,8 @@ public class CoverageTest {
 	
 	@Test
 	public void afterOneEntryIsAdded_coverageCountIs1() throws Exception {
-		coverageTracker.add(COVERAGE_ENTRY);
-		assertThat(coverageTracker.count(COVERAGE_ENTRY), equalTo(1));
+		checkList.addReached(COVERAGE_ENTRY);
+		assertThat(checkList.countReached(COVERAGE_ENTRY), equalTo(1));
 	}
 	
 }

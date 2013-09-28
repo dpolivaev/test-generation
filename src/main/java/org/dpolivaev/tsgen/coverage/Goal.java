@@ -7,8 +7,8 @@ import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 public class Goal {
 	final private String name;
 	final private GoalFunction goalFunction;
-	private CoverageTracker coverageTracker;
 	final private boolean finite;
+	final private CheckList checkList;
 
 	public Goal(String name, GoalFunction goalFunction) {
 		this(name, goalFunction, null);
@@ -17,26 +17,26 @@ public class Goal {
 	public Goal(String name, GoalFunction goalFunction, CheckList checkList) {
 		this.name = name;
 		this.goalFunction = goalFunction;
-		this.coverageTracker = new CoverageTracker(checkList);
 		this.finite = checkList != null;
+		this.checkList = checkList != null ? checkList : new CheckList();
 	}
 
 	public void check(PropertyContainer propertyContainer) {
 		final Collection<CoverageEntry> newCoverageEntries = goalFunction.check(propertyContainer);
-		coverageTracker.startRound();
+		checkList.startRound();
 		if(finite)
-			coverageTracker.addRequiredEntries(newCoverageEntries);
+			checkList.addRequiredEntries(newCoverageEntries);
 		else
-			coverageTracker.addAllEntries(newCoverageEntries);
+			checkList.addAllEntries(newCoverageEntries);
 		
-	}
-
-	public CoverageTracker coverageTracker() {
-		return coverageTracker;
 	}
 
 	public String name() {
 		return name;
+	}
+
+	public CheckList checkList() {
+		return checkList;
 	}
 
 }

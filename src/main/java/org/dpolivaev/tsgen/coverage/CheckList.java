@@ -1,15 +1,24 @@
 package org.dpolivaev.tsgen.coverage;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
 public class CheckList{
+	final private Set<CoverageEntry> firstTimeCoveredGoals = new LinkedHashSet<>();
+	final private Set<CoverageEntry> repeatedlyCoveredGoals = new LinkedHashSet<>();
+		
 	final private Map<CoverageEntry, CoverageStatus> items = new HashMap<>();
 		
 	public CheckList addReached(CoverageEntry coverageEntry) {
-		int count = countReached(coverageEntry) + 1;
-		setReached(coverageEntry, count);
+		int count = countReached(coverageEntry);
+		if(count == 0)
+			firstTimeCoveredGoals.add(coverageEntry);
+		else
+			repeatedlyCoveredGoals.add(coverageEntry);
+		setReached(coverageEntry, count + 1);
 		return this;
 	}
 
@@ -47,4 +56,29 @@ public class CheckList{
 	public boolean isRequired(CoverageEntry coverageEntry) {
 		return items.containsKey(coverageEntry);
 	}
+	
+	public void startRound() {
+		firstTimeCoveredGoals.clear();
+		repeatedlyCoveredGoals.clear();
+	}
+
+	public Set<CoverageEntry> firstTimeCoveredGoals() {
+		return firstTimeCoveredGoals;
+	}
+
+	public Set<CoverageEntry> repeatedlyCoveredGoals() {
+		return repeatedlyCoveredGoals;
+	}
+
+	public void addAllEntries(Collection<CoverageEntry> newCoverageEntries) {
+		for(CoverageEntry coverageEntry:newCoverageEntries)
+			addReached(coverageEntry);
+	}
+
+	public void addRequiredEntries(Collection<CoverageEntry> newCoverageEntries) {
+		for(CoverageEntry coverageEntry:newCoverageEntries)
+			if(isRequired(coverageEntry))
+				addReached(coverageEntry);
+	}
+	
 }
