@@ -46,8 +46,8 @@ public class XmlTestCaseWriter implements PropertyHandler {
 	}
 
 	private void addCoverage(String name, CheckList checkList) {
-		final Set<CoverageEntry> firstTimeCoveredGoals = checkList.firstTimeCoveredGoals();
-		final Set<CoverageEntry> repeatedlyCoveredGoals = checkList.repeatedlyCoveredGoals();
+		final Set<CoverageEntry> firstTimeCoveredGoals = checkList.firstTimeCoveredEntries();
+		final Set<CoverageEntry> repeatedlyCoveredGoals = checkList.repeatedlyCoveredEntries();
 		if(! (firstTimeCoveredGoals.isEmpty() && repeatedlyCoveredGoals.isEmpty())){
 			xmlWriter.beginElement("Goal");
 			xmlWriter.setAttribute("name", name);

@@ -7,17 +7,17 @@ import java.util.Map;
 import java.util.Set;
 
 public class CheckList{
-	final private Set<CoverageEntry> firstTimeCoveredGoals = new LinkedHashSet<>();
-	final private Set<CoverageEntry> repeatedlyCoveredGoals = new LinkedHashSet<>();
+	final private Set<CoverageEntry> firstTimeCoveredEntries = new LinkedHashSet<>();
+	final private Set<CoverageEntry> repeatedlyCoveredEntries = new LinkedHashSet<>();
 		
 	final private Map<CoverageEntry, CoverageStatus> items = new HashMap<>();
 		
 	public CheckList addReached(CoverageEntry coverageEntry) {
 		int count = countReached(coverageEntry);
 		if(count == 0)
-			firstTimeCoveredGoals.add(coverageEntry);
+			firstTimeCoveredEntries.add(coverageEntry);
 		else
-			repeatedlyCoveredGoals.add(coverageEntry);
+			repeatedlyCoveredEntries.add(coverageEntry);
 		setReached(coverageEntry, count + 1);
 		return this;
 	}
@@ -58,16 +58,16 @@ public class CheckList{
 	}
 	
 	public void startRound() {
-		firstTimeCoveredGoals.clear();
-		repeatedlyCoveredGoals.clear();
+		firstTimeCoveredEntries.clear();
+		repeatedlyCoveredEntries.clear();
 	}
 
-	public Set<CoverageEntry> firstTimeCoveredGoals() {
-		return firstTimeCoveredGoals;
+	public Set<CoverageEntry> firstTimeCoveredEntries() {
+		return firstTimeCoveredEntries;
 	}
 
-	public Set<CoverageEntry> repeatedlyCoveredGoals() {
-		return repeatedlyCoveredGoals;
+	public Set<CoverageEntry> repeatedlyCoveredEntries() {
+		return repeatedlyCoveredEntries;
 	}
 
 	public void addAllEntries(Collection<CoverageEntry> newCoverageEntries) {
