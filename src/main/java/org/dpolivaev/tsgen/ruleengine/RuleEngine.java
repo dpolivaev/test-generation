@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.dpolivaev.tsgen.coverage.Goal;
+import org.dpolivaev.tsgen.coverage.GoalChecker;
 import org.dpolivaev.tsgen.ruleengine.internal.PropertyAssignedEvent;
 import org.dpolivaev.tsgen.ruleengine.internal.PropertyCombinationStartedPropagator;
 import org.dpolivaev.tsgen.ruleengine.internal.PropertyValueSetPropagator;
@@ -25,16 +25,16 @@ public class RuleEngine implements EngineState {
     private String assignmentReason;
 	private String processedProperty;
 	private final Collection<ErrorHandler> errorHandlers;
-	private Collection<Goal> goals;
+	private GoalChecker goalChecker;
 
-    public RuleEngine() {
+	public RuleEngine() {
         super();
         this.assignments = new Assignments();
         this.strategy = null;
-        goals = new ArrayList<>();
         dependencies = new HashSet<>();
         propertyHandlers = new ArrayList<>();
         errorHandlers = new ArrayList<>();
+        goalChecker = GoalChecker.NO_GOALS;
     }
 
     public RuleEngine addScriptWriter(PropertyHandler propertyHandler) {
@@ -96,10 +96,9 @@ public class RuleEngine implements EngineState {
         fireNextCombinationStartedEvent();
         dependencies = new HashSet<>();
         processedProperty = "";
-        for(Goal goal : goals)
-        	goal.check(this);
+        goalChecker.handlePropertyCombination(this);
         for(PropertyHandler propertyHandler :propertyHandlers)
-        	propertyHandler.handlePropertyCombination(this, goals());
+        	propertyHandler.handlePropertyCombination(this);
     }
 
     private void fireNextCombinationFinishedEvent() {
@@ -219,12 +218,12 @@ public class RuleEngine implements EngineState {
 		return assignmentReason;
 	}
 
-	public void addGoal(Goal goal) {
-		goals.add(goal);
+    public GoalChecker getGoalChecker() {
+		return goalChecker;
 	}
 
-	@Override
-	public Collection<Goal> goals() {
-		return goals;
+	public void setGoalChecker(GoalChecker goalChecker) {
+		this.goalChecker = goalChecker;
 	}
+
 }

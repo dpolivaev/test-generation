@@ -11,9 +11,6 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 
-import java.util.Collection;
-
-import org.dpolivaev.tsgen.coverage.Goal;
 import org.dpolivaev.tsgen.ruleengine.Condition;
 import org.dpolivaev.tsgen.ruleengine.PropertyAlreadyAssignedException;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
@@ -320,9 +317,9 @@ public class RuleEngineAcceptanceTest {
         initializeRuleEngine(new CollectingScriptProducer() {
 
             @Override
-            public void handlePropertyCombination(PropertyContainer propertyContainer, Collection<Goal> goals) {
+            public void handlePropertyCombination(PropertyContainer propertyContainer) {
                 propertyContainer.get("y");
-                super.handlePropertyCombination(propertyContainer, goals);
+                super.handlePropertyCombination(propertyContainer);
             }
 
         });
@@ -338,9 +335,9 @@ public class RuleEngineAcceptanceTest {
         initializeRuleEngine(new CollectingScriptProducer() {
 
             @Override
-            public void handlePropertyCombination(PropertyContainer propertyContainer, Collection<Goal> goals) {
+            public void handlePropertyCombination(PropertyContainer propertyContainer) {
                 propertyContainer.get("x");
-                super.handlePropertyCombination(propertyContainer, goals);
+                super.handlePropertyCombination(propertyContainer);
             }
 
         });
@@ -400,9 +397,9 @@ public class RuleEngineAcceptanceTest {
         CollectingScriptProducer loggingScriptProducerMock = new CollectingScriptProducer() {
 
             @Override
-            public void handlePropertyCombination(PropertyContainer propertyContainer, Collection<Goal> goals) {
+            public void handlePropertyCombination(PropertyContainer propertyContainer) {
                 propertyContainer.get("x");
-                super.handlePropertyCombination(propertyContainer, goals);
+                super.handlePropertyCombination(propertyContainer);
             }
 
         };
@@ -439,7 +436,7 @@ public class RuleEngineAcceptanceTest {
                 assertThat(propertyContainer.get("name"), equalTo((Object)UNDEFINED));
                 return null;
             }
-        }).when(scriptProducer).handlePropertyCombination(ruleEngine, null);
+        }).when(scriptProducer).handlePropertyCombination(ruleEngine);
         ruleEngine.run(strategy);
     }
     
@@ -457,7 +454,7 @@ public class RuleEngineAcceptanceTest {
                 assertThat(propertyContainer.availableProperties("x"), equalTo(Utils.set("x1", "x2")));
                 return null;
             }
-        }).when(scriptProducer).handlePropertyCombination(ruleEngine, null);
+        }).when(scriptProducer).handlePropertyCombination(ruleEngine);
         ruleEngine.run(strategy);
     }
 }

@@ -1,10 +1,8 @@
 package org.dpolivaev.tsgen.scriptwriter.internal;
 
-import java.util.Collection;
-
 import javax.xml.transform.sax.TransformerHandler;
 
-import org.dpolivaev.tsgen.coverage.Goal;
+import org.dpolivaev.tsgen.coverage.GoalChecker;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
@@ -16,15 +14,15 @@ public class SingleScriptWriter implements PropertyHandler {
     private PropertyHandler scriptProducer;
 
     @Override
-    public void handlePropertyCombination(PropertyContainer propertyContainer, Collection<Goal> goals) {
-        scriptProducer.handlePropertyCombination(propertyContainer, goals);
+    public void handlePropertyCombination(PropertyContainer propertyContainer) {
+        scriptProducer.handlePropertyCombination(propertyContainer);
     }
 
-    public SingleScriptWriter(PropertyContainer propertyContainer, ScriptConfiguration scriptConfiguration, ResultFactory resultFactory) {
+    public SingleScriptWriter(PropertyContainer propertyContainer, ScriptConfiguration scriptConfiguration, ResultFactory resultFactory, GoalChecker goalChecker) {
         TransformerHandler handler = new HandlerFactory(resultFactory).newHandler(scriptConfiguration);
         xmlWriter = new XmlWriterUsingTransformerHandler(handler);
         xmlWriter.startDocument();
-        XmlTestCaseWriter testCaseProducer = new XmlTestCaseWriter(xmlWriter);
+        XmlTestCaseWriter testCaseProducer = new XmlTestCaseWriter(xmlWriter, goalChecker);
         xmlWriter.beginElement("Script");
         Object scriptValue = propertyContainer.get("script");
         if(scriptValue.equals(SpecialValue.UNDEFINED))

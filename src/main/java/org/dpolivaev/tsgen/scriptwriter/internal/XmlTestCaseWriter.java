@@ -1,12 +1,12 @@
 package org.dpolivaev.tsgen.scriptwriter.internal;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
 import org.dpolivaev.tsgen.coverage.CheckList;
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.Goal;
+import org.dpolivaev.tsgen.coverage.GoalChecker;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
@@ -28,16 +28,18 @@ public class XmlTestCaseWriter implements PropertyHandler {
         "post", "Postprocessing",
     };
     private final XmlWriter xmlWriter;
+	private GoalChecker goalChecker;
 
-    public XmlTestCaseWriter(XmlWriter xmlWriter) {
+    public XmlTestCaseWriter(XmlWriter xmlWriter, GoalChecker goalChecker) {
     	this.xmlWriter = xmlWriter;
+		this.goalChecker = goalChecker;
 	}
 
 	@Override
-    public void handlePropertyCombination(PropertyContainer propertyContainer, Collection<Goal> goals) {
+    public void handlePropertyCombination(PropertyContainer propertyContainer) {
         xmlWriter.beginElement(TESTCASE_ELEMENT);
         addAttributes(propertyContainer, TESTCASE_PROPERTY);
-        for(Goal goal : goals)
+        for(Goal goal : goalChecker.goals())
         	addCoverage(goal.name(), goal.checkList());
         for(int i = 0; i < optionalElements.length; i+=2)
             addOptionalElement(propertyContainer, optionalElements[i], optionalElements[i+1]);

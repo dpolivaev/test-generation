@@ -3,9 +3,8 @@ import static org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory.iterate;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 
-import java.util.Collection;
-
 import org.dpolivaev.tsgen.coverage.Goal;
+import org.dpolivaev.tsgen.coverage.GoalChecker;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
@@ -34,7 +33,7 @@ public class RuleEngineTest {
 		ruleEngine.addScriptWriter(new PropertyHandler() {
 			
 			@Override
-			public void handlePropertyCombination(PropertyContainer propertyContainer, Collection<Goal> goals) {
+			public void handlePropertyCombination(PropertyContainer propertyContainer) {
 				assertThat(propertyContainer.containsPropertyValue("name"), equalTo(true));
 				
 			}
@@ -47,7 +46,7 @@ public class RuleEngineTest {
 		ruleEngine.addScriptWriter(new PropertyHandler() {
 			
 			@Override
-			public void handlePropertyCombination(PropertyContainer propertyContainer, Collection<Goal> goals) {
+			public void handlePropertyCombination(PropertyContainer propertyContainer) {
 				StatefulRule triggeredRule = iterate("name").over("value2").when("triggeredBy").asRule();
 				RuleEngine ruleEngine = (RuleEngine) propertyContainer;
 				ruleEngine.setPropertyValue(triggeredRule, "value2", true);
@@ -61,7 +60,9 @@ public class RuleEngineTest {
     @Test
 	public void ruleEngineExecutesGoalChecks() throws Exception {
 		Goal goal = Mockito.mock(Goal.class);
-		ruleEngine.addGoal(goal);
+		GoalChecker goalChecker = new GoalChecker();
+		goalChecker.addGoal(goal);
+		ruleEngine.setGoalChecker(goalChecker);
 		ruleEngine.run(strategy);
 		
 		Mockito.verify(goal).check(ruleEngine);
