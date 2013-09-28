@@ -32,23 +32,23 @@ public class InfiniteGoalTest {
 	@Test
 	public void afterCheckingRegisteredGoals_returnedValuesAreAdded() throws Exception {
 		goal.check((PropertyContainer) null);
-		CoverageTracker coverageTracker = goal.coverageTracker();
-		assertThat(coverageTracker.count(COVERAGE_ENTRY), equalTo(1));
+		CheckList checkList = goal.checkList();
+		assertThat(checkList.countReached(COVERAGE_ENTRY), equalTo(1));
 	}
 	
 	@Test
 	public void afterCheckingRegisteredGoals_firstTimeAddedCoverageEntriesAreAvailable() throws Exception {
 		goal.check((PropertyContainer) null);
-		CoverageTracker coverageTracker = goal.coverageTracker();
-		assertThat(coverageTracker.firstTimeCoveredGoals(), equalTo(Utils.set(COVERAGE_ENTRY)));
+		CheckList checkList = goal.checkList();
+		assertThat(checkList.firstTimeCoveredGoals(), equalTo(Utils.set(COVERAGE_ENTRY)));
 	}
 
 	@Test
 	public void afterCheckingRegisteredGoalsAgain_firstTimeAddedCoverageEntriesAreEmpty() throws Exception {
 		goal.check((PropertyContainer) null);
 		goal.check((PropertyContainer) null);
-		CoverageTracker coverageTracker = goal.coverageTracker();
-		assertThat(coverageTracker.firstTimeCoveredGoals(), equalTo(Utils.<CoverageEntry>set()));
+		CheckList checkList = goal.checkList();
+		assertThat(checkList.firstTimeCoveredGoals(), equalTo(Utils.<CoverageEntry>set()));
 	}
 	
 
@@ -56,7 +56,7 @@ public class InfiniteGoalTest {
 	public void afterCheckingRegisteredGoalsAgain_nextTimeAddedCoverageEntriesAreEmpty() throws Exception {
 		goal.check((PropertyContainer) null);
 		goal.check((PropertyContainer) null);
-		CoverageTracker coverageTracker = goal.coverageTracker();
-		assertThat(coverageTracker.repeatedlyCoveredGoals(), equalTo(Utils.<CoverageEntry>set(COVERAGE_ENTRY)));
+		CheckList checkList = goal.checkList();
+		assertThat(checkList.repeatedlyCoveredGoals(), equalTo(Utils.<CoverageEntry>set(COVERAGE_ENTRY)));
 	}
 }

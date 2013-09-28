@@ -12,8 +12,8 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.TransformerHandler;
 
+import org.dpolivaev.tsgen.coverage.CheckList;
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
-import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.coverage.Goal;
 import org.dpolivaev.tsgen.ruleengine.Assignments;
 import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
@@ -34,7 +34,7 @@ public class XmlTestCaseWriterTest {
     private XmlWriter xmlWriter;
 	private List<Goal> goals;
 	private Goal goal;
-	private CoverageTracker coverageTracker;
+	private CheckList checkList;
 
     @Before
     public void setup() throws TransformerFactoryConfigurationError, TransformerConfigurationException, SAXException {
@@ -45,8 +45,8 @@ public class XmlTestCaseWriterTest {
         xmlWriter = new XmlWriterUsingTransformerHandler(handler);
 		goal = Mockito.mock(Goal.class);
 		Mockito.when(goal.name()).thenReturn("name");
-		coverageTracker = new CoverageTracker();
-		Mockito.when(goal.coverageTracker()).thenReturn(coverageTracker);
+		checkList = new CheckList();
+		Mockito.when(goal.checkList()).thenReturn(checkList);
 		goals = Arrays.asList(goal);
         writer = new XmlTestCaseWriter(xmlWriter);
         propertyContainer = new Assignments();
@@ -167,7 +167,7 @@ public class XmlTestCaseWriterTest {
     @Test
     public void createsTestCaseElementWithSecondHitCoverage() throws Exception{
         givenCoverage("requirement id", "description");
-        coverageTracker.startRound();
+        checkList.startRound();
         givenCoverage("requirement id", "description");
         createScript();
         checkOutput("<TestCase>"
@@ -176,7 +176,7 @@ public class XmlTestCaseWriterTest {
     }
 
 	private void givenCoverage(String requirementId, String description) {
-		coverageTracker.add(new CoverageEntry(requirementId, description));
+		checkList.addReached(new CoverageEntry(requirementId, description));
 		
 	}
 
