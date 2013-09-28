@@ -4,13 +4,14 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 public class CheckList{
 	final private Set<CoverageEntry> firstTimeCoveredEntries = new LinkedHashSet<>();
 	final private Set<CoverageEntry> repeatedlyCoveredEntries = new LinkedHashSet<>();
 		
-	final private Map<CoverageEntry, CoverageStatus> items = new HashMap<>();
+	final private Map<CoverageEntry, CoverageStatus> coveredEntries = new HashMap<>();
 		
 	public CheckList addReached(CoverageEntry coverageEntry) {
 		int count = countReached(coverageEntry);
@@ -24,37 +25,37 @@ public class CheckList{
 
 
 	public CheckList setExpected(CoverageEntry coverageEntry, int expected) {
-		final CoverageStatus coverageStatus = items.get(coverageEntry);
+		final CoverageStatus coverageStatus = coveredEntries.get(coverageEntry);
 		if(coverageStatus == null)
-			items.put(coverageEntry, new CoverageStatus(expected, 0));
+			coveredEntries.put(coverageEntry, new CoverageStatus(expected, 0));
 		else
-			items.put(coverageEntry, new CoverageStatus(expected, coverageStatus.reached));
+			coveredEntries.put(coverageEntry, new CoverageStatus(expected, coverageStatus.reached));
 		return this;
 	}
 	
 	public CheckList setReached(CoverageEntry coverageEntry, int count) {
-		final CoverageStatus coverageStatus = items.get(coverageEntry);
+		final CoverageStatus coverageStatus = coveredEntries.get(coverageEntry);
 		if(coverageStatus == null)
-			items.put(coverageEntry, new CoverageStatus(0, count));
+			coveredEntries.put(coverageEntry, new CoverageStatus(0, count));
 		else
-			items.put(coverageEntry, new CoverageStatus(coverageStatus.required, count));
+			coveredEntries.put(coverageEntry, new CoverageStatus(coverageStatus.required, count));
 		return this;
 	}
 
 	public int countReached(CoverageEntry coverageEntry) {
-		final CoverageStatus coverageStatus = items.get(coverageEntry);
+		final CoverageStatus coverageStatus = coveredEntries.get(coverageEntry);
 		if(coverageStatus == null)
 			return 0;
 		else
 			return coverageStatus.reached;
 	}
 
-	public Set<CoverageEntry> items() {
-		return items.keySet();
+	public Set<Entry<CoverageEntry, CoverageStatus>> coveredEntries() {
+		return coveredEntries.entrySet();
 	}
 
 	public boolean isRequired(CoverageEntry coverageEntry) {
-		return items.containsKey(coverageEntry);
+		return coveredEntries.containsKey(coverageEntry);
 	}
 	
 	public void startRound() {
