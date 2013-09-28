@@ -1,12 +1,12 @@
 package org.dpolivaev.tsgen.scriptwriter.internal;
 
-import javax.xml.transform.sax.TransformerHandler;
+import org.xml.sax.ContentHandler;
 
 import org.dpolivaev.tsgen.utils.internal.Utils;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
-public class XmlWriterUsingTransformerHandler implements XmlWriter {
+public class SaxXmlWriter implements XmlWriter {
 
     private String uri = "";
     public String getURI() {
@@ -17,11 +17,11 @@ public class XmlWriterUsingTransformerHandler implements XmlWriter {
         this.uri = uri;
     }
 
-    private final TransformerHandler handler;
+    private final ContentHandler handler;
     private AttributesImpl attrs;
     private String element;
 
-    public XmlWriterUsingTransformerHandler(TransformerHandler handler) {
+    public SaxXmlWriter(ContentHandler handler) {
         super();
         this.handler = handler;
     }
