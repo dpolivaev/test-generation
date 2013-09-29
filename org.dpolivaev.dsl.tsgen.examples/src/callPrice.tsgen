@@ -55,7 +55,5 @@ strategy CallPrice
 	let default foc.country be '"Greenland"', '"Blueland"', '"Neverland"', '"Yellowland"', '"Redland"', '"National"', '"missing"'
 	let default foc.customerID be 12345
 	let default foc.cheapCallActiveForCall be false
-
 	
-run strategy CallPrice
-run strategy CallPrice apply "/java.xslt" output "java"
+run strategy CallPrice output xml, apply "/java.xslt" output "java"

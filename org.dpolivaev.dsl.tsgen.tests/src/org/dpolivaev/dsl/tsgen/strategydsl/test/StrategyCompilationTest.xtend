@@ -520,7 +520,7 @@ class StrategyCompilationTest {
 			  }
 			  
 			  public void run1() {
-			    new StrategyRunner().addOutput("xml").addOutput("my.xslt", "java").run(first);
+			    new StrategyRunner().configureOutput("my.xslt", "java", true).run(first);
 			  }
 			  
 			  public static void main(final String[] args) {
