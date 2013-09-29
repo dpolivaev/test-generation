@@ -22,6 +22,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
 public class XmlTestCaseWriterTest {
@@ -38,7 +39,7 @@ public class XmlTestCaseWriterTest {
         dom = new DOMResult();
         ResultFactory resultFactory = Mockito.mock(ResultFactory.class);
         Mockito.when(resultFactory.newResult(Mockito.<ScriptConfiguration>any())).thenReturn(dom);
-        TransformerHandler handler = new HandlerFactory(resultFactory).newHandler(OutputConfiguration.OUTPUT_XML.forScript("result"));
+        ContentHandler handler = new HandlerFactory(resultFactory).newHandler(OutputConfiguration.OUTPUT_XML.forScript("result"));
         xmlWriter = new SaxXmlWriter(handler);
 		goal = Mockito.mock(Goal.class);
 		Mockito.when(goal.name()).thenReturn("name");

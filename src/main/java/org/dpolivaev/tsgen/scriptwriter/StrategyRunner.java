@@ -48,35 +48,35 @@ public class StrategyRunner {
 		}
 	}
 	
-	public StrategyRunner addOutput(Source xsltSource, String fileExtension) {
-		return addOutput(xsltSource, null, fileExtension);
+	public StrategyRunner configureOutput(Source xsltSource, String fileExtension, boolean outputXml) {
+		return configureOutput(xsltSource, null, fileExtension, outputXml);
 	}
 
-	public StrategyRunner addOutput(Source xsltSource, File outputDirectory, String fileExtension) {
-		this.outputConfiguration = new OutputConfiguration(xsltSource, outputDirectory, fileExtension);
+	public StrategyRunner configureOutput(Source xsltSource, File outputDirectory, String fileExtension, boolean outputXml) {
+		this.outputConfiguration = new OutputConfiguration(xsltSource, outputDirectory, fileExtension, outputXml);
 		return this;
 	}
 
-	public StrategyRunner addOutput(String fileExtension) {
-		return addOutput((Source)null, fileExtension);
+	public StrategyRunner configureOutput(String fileExtension) {
+		return configureOutput((Source)null, fileExtension, false);
 	}
 	
-	public StrategyRunner addOutput(String xsltSource, String fileExtension) {
-		return addOutput(xsltSource, null, fileExtension);
+	public StrategyRunner configureOutput(String xsltSource, String fileExtension, boolean outputXml) {
+		return configureOutput(xsltSource, null, fileExtension, outputXml);
 	}
 	
-	public StrategyRunner addOutput(String xsltSource, File outputDirectory, String fileExtension) {
+	public StrategyRunner configureOutput(String xsltSource, File outputDirectory, String fileExtension, boolean outputXml) {
 		File xsltFile = new File(xsltSource);
 		if(xsltFile.canRead())
-			return addOutput(new StreamSource(xsltFile), outputDirectory, fileExtension);
+			return configureOutput(new StreamSource(xsltFile), outputDirectory, fileExtension, outputXml);
 		InputStream resource = getClass().getResourceAsStream(xsltSource);
 		if(resource != null)
-			return addOutput(new StreamSource(resource), outputDirectory, fileExtension);
+			return configureOutput(new StreamSource(resource), outputDirectory, fileExtension, outputXml);
 		throw new IllegalArgumentException("source " + xsltSource + " not available");
 	}
 
-	public StrategyRunner addOutput(File outputDirectory, String fileExtension) {
-		return addOutput((Source)null, outputDirectory, fileExtension);
+	public StrategyRunner configureOutput(File outputDirectory, String fileExtension) {
+		return configureOutput((Source)null, outputDirectory, fileExtension, false);
 	}
 }
 
