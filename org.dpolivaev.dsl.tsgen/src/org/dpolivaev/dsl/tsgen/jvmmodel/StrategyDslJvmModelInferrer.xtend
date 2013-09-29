@@ -441,14 +441,15 @@ class ScriptInitializer{
 					append('new ')
 					append(run.newTypeRef(StrategyRunner).type)
 					append('()')
-					for(outputConfiguration : run.outputConfiguration){
-							append('.addOutput("')
-							if(outputConfiguration.xslt != null){
-							append(outputConfiguration.xslt)
-							append('", "')
-						}
+					val outputConfiguration = run.outputConfiguration
+					if(outputConfiguration != null){
+						append('.configureOutput("')
+						append(outputConfiguration.xslt)
+						append('", "')
 						append(outputConfiguration.fileExtension)
-						append('")')
+						append('", ')
+						append(outputConfiguration.xml.toString)
+						append(')')
 					}
 					append('.run(')
 					combinedStrategy(it, run.strategies, true)

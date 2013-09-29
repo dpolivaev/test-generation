@@ -62,12 +62,13 @@ ItemAction:{ValueAction}
 Run:
 	'run' strategies += StrategyReference 
 	('with' strategies += StrategyReference (',' (strategies += StrategyReference | goals += GoalReference))* )?
-	outputConfiguration += OutputConfiguration? (',' outputConfiguration += OutputConfiguration)*
+	outputConfiguration = OutputConfiguration?
+	('report' reportConfiguration = OutputConfiguration)?
 	
 ;
 
 OutputConfiguration:
-	('apply' xslt=STRING)? 'output' fileExtension = STRING
+	('output' xml ?= 'xml' ',')? 'apply' xslt=STRING 'output' fileExtension = STRING
 ;
 
 StrategyReference returns StrategyReference: {StrategyReference} 'strategy' expr = XExpression;
