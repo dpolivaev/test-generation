@@ -43,6 +43,7 @@ public class StrategyDslOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	protected def _text(SkipAction values) { return "skip"}
 	protected def _isLeaf(Condition condition){return true}
 	protected def _isLeaf(Trigger trigger){return true}
+	protected def _isLeaf(Run run){return true}
 	
 	protected def void _createNode(IOutlineNode parentNode, RuleGroup modelElement){
 		if(modelElement.condition == null && modelElement.trigger == null )
