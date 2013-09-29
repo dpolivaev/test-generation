@@ -15,7 +15,7 @@ public class StrategyRunnerTest {
 		Strategy strategy = new Strategy();
 		final File expectedOutputFile = new File("testoutput", "script.xml");
 		expectedOutputFile.delete();
-		new StrategyRunner().addOutput(new File("testoutput"), "xml").run(strategy.with(StrategyHelper.id("testcase")));
+		new StrategyRunner().configureOutput(new File("testoutput"), "xml").run(strategy.with(StrategyHelper.id("testcase")));
 		assertThat(expectedOutputFile.canRead(), equalTo(true));
 	}
 }
