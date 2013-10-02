@@ -13,6 +13,7 @@ import org.dpolivaev.tsgen.coverage.GoalChecker;
 import org.dpolivaev.tsgen.coverage.internal.RequirementCoverage;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
+import org.dpolivaev.tsgen.scriptwriter.internal.ReportWriter;
 import org.dpolivaev.tsgen.scriptwriter.internal.ScriptLogger;
 import org.dpolivaev.tsgen.scriptwriter.internal.MultipleScriptsWriter;
 import org.dpolivaev.tsgen.scriptwriter.internal.StreamResultFactory;
@@ -20,10 +21,12 @@ import org.dpolivaev.tsgen.utils.internal.Utils;
 
 public class StrategyRunner {
 	private OutputConfiguration outputConfiguration;
+	private ScriptConfiguration reportConfiguration;
 
 	public StrategyRunner() {
 		super();
 		this.outputConfiguration = OutputConfiguration.OUTPUT_XML;
+		this.reportConfiguration = new ScriptConfiguration(OutputConfiguration.OUTPUT_XML, "report");
 	}
 
 	public void run(Strategy strategy){
@@ -46,6 +49,8 @@ public class StrategyRunner {
 		} catch (IOException e) {
 			throw Utils.runtimeException(e);
 		}
+		ReportWriter reportWriter = new ReportWriter(resultFactory);
+		reportWriter.createReport(goalChecker, reportConfiguration);
 	}
 	
 	public StrategyRunner configureOutput(Source xsltSource, String fileExtension, boolean outputXml) {
