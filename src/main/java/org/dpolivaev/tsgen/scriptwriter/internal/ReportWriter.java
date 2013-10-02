@@ -2,14 +2,11 @@ package org.dpolivaev.tsgen.scriptwriter.internal;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.Map.Entry;
-
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.CoverageStatus;
 import org.dpolivaev.tsgen.coverage.Goal;
 import org.dpolivaev.tsgen.coverage.GoalChecker;
 import org.dpolivaev.tsgen.scriptwriter.ScriptConfiguration;
-import org.xml.sax.ContentHandler;
 
 public class ReportWriter {
 
