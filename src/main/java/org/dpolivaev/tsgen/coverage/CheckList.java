@@ -12,8 +12,18 @@ public class CheckList{
 	final private Set<CoverageEntry> repeatedlyCoveredEntries = new LinkedHashSet<>();
 		
 	final private Map<CoverageEntry, CoverageStatus> coveredEntries = new HashMap<>();
+	private int requiredItemNumber;
+	private int achievedItemNumber;
 		
-	public CheckList addReached(CoverageEntry coverageEntry) {
+	public void addReached(final Collection<CoverageEntry> newCoverageEntries) {
+		startRound();
+		if(requiredItemNumber() != 0)
+			addRequiredEntries(newCoverageEntries);
+		else
+			addAllEntries(newCoverageEntries);
+	}
+	
+	private CheckList addReached(CoverageEntry coverageEntry) {
 		int count = countReached(coverageEntry);
 		if(count == 0)
 			firstTimeCoveredEntries.add(coverageEntry);
@@ -26,19 +36,23 @@ public class CheckList{
 
 	public CheckList setExpected(CoverageEntry coverageEntry, int expected) {
 		final CoverageStatus coverageStatus = coveredEntries.get(coverageEntry);
-		if(coverageStatus == null)
+		if(coverageStatus == null) {
 			coveredEntries.put(coverageEntry, new CoverageStatus(expected, 0));
-		else
+			requiredItemNumber++;
+		} else
 			coveredEntries.put(coverageEntry, new CoverageStatus(expected, coverageStatus.reached));
 		return this;
 	}
 	
-	public CheckList setReached(CoverageEntry coverageEntry, int count) {
-		final CoverageStatus coverageStatus = coveredEntries.get(coverageEntry);
-		if(coverageStatus == null)
-			coveredEntries.put(coverageEntry, new CoverageStatus(0, count));
+	private CheckList setReached(CoverageEntry coverageEntry, int newReachedCount) {
+		final CoverageStatus oldCoverageStatus = coveredEntries.get(coverageEntry);
+		if(oldCoverageStatus == null)
+			coveredEntries.put(coverageEntry, new CoverageStatus(0, newReachedCount));
 		else
-			coveredEntries.put(coverageEntry, new CoverageStatus(coverageStatus.required, count));
+			coveredEntries.put(coverageEntry, new CoverageStatus(oldCoverageStatus.required, newReachedCount));
+		if(oldCoverageStatus != null && oldCoverageStatus.reached < oldCoverageStatus.required && newReachedCount >= oldCoverageStatus.required
+				|| oldCoverageStatus == null && newReachedCount == 1)
+			achievedItemNumber++;
 		return this;
 	}
 
@@ -58,7 +72,7 @@ public class CheckList{
 		return coveredEntries.containsKey(coverageEntry);
 	}
 	
-	public void startRound() {
+	private void startRound() {
 		firstTimeCoveredEntries.clear();
 		repeatedlyCoveredEntries.clear();
 	}
@@ -71,15 +85,30 @@ public class CheckList{
 		return repeatedlyCoveredEntries;
 	}
 
-	public void addAllEntries(Collection<CoverageEntry> newCoverageEntries) {
+	private void addAllEntries(Collection<CoverageEntry> newCoverageEntries) {
 		for(CoverageEntry coverageEntry:newCoverageEntries)
 			addReached(coverageEntry);
 	}
 
-	public void addRequiredEntries(Collection<CoverageEntry> newCoverageEntries) {
+	private void addRequiredEntries(Collection<CoverageEntry> newCoverageEntries) {
 		for(CoverageEntry coverageEntry:newCoverageEntries)
 			if(isRequired(coverageEntry))
 				addReached(coverageEntry);
 	}
-	
+
+	public int size() {
+		return coveredEntries.size();
+	}
+
+
+	public int requiredItemNumber() {
+		return requiredItemNumber;
+	}
+
+
+	public int achievedItemNumber() {
+		return achievedItemNumber;
+	}
+
+
 }

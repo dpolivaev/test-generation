@@ -2,16 +2,16 @@ package org.dpolivaev.tsgen.coverage;
 
 public class CoverageEntry {
 
-	final private String goal;
+	final private String name;
 	final private Object reason;
 
-	public CoverageEntry(String goal, Object reason) {
-		this.goal = goal;
+	public CoverageEntry(String name, Object reason) {
+		this.name = name;
 		this.reason = reason;
 	}
 
-	public String getGoal() {
-		return goal;
+	public String getName() {
+		return name;
 	}
 
 	public Object getReason() {
@@ -25,7 +25,7 @@ public class CoverageEntry {
 		result = prime * result
 				+ ((reason == null) ? 0 : reason.hashCode());
 		result = prime * result
-				+ ((goal == null) ? 0 : goal.hashCode());
+				+ ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
 
@@ -43,10 +43,10 @@ public class CoverageEntry {
 				return false;
 		} else if (!reason.equals(other.reason))
 			return false;
-		if (goal == null) {
-			if (other.goal != null)
+		if (name == null) {
+			if (other.name != null)
 				return false;
-		} else if (!goal.equals(other.goal))
+		} else if (!name.equals(other.name))
 			return false;
 		return true;
 	}

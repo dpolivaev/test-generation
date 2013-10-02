@@ -1,8 +1,11 @@
 package org.dpolivaev.tsgen.scriptwriter.internal;
 
+import static java.util.Arrays.asList;
 import static org.dpolivaev.tsgen.testutils.TestUtils.assignmentMock;
 import static org.xmlmatchers.XmlMatchers.isEquivalentTo;
 import static org.xmlmatchers.transform.XmlConverters.the;
+
+import java.util.Arrays;
 
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
@@ -166,7 +169,6 @@ public class XmlTestCaseWriterTest {
     @Test
     public void createsTestCaseElementWithSecondHitCoverage() throws Exception{
         givenCoverage("requirement id", "description");
-        checkList.startRound();
         givenCoverage("requirement id", "description");
         createScript();
         checkOutput("<TestCase>"
@@ -175,7 +177,7 @@ public class XmlTestCaseWriterTest {
     }
 
 	private void givenCoverage(String requirementId, String description) {
-		checkList.addReached(new CoverageEntry(requirementId, description));
+		checkList.addReached(asList(new CoverageEntry(requirementId, description)));
 		
 	}
 
