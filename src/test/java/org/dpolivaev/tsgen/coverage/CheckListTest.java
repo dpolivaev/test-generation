@@ -4,9 +4,6 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 
-import java.util.Arrays;
-
-import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 
