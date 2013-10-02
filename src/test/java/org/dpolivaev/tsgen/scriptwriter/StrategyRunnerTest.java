@@ -14,8 +14,15 @@ public class StrategyRunnerTest {
 	public void outputsXml() throws Exception {
 		Strategy strategy = new Strategy();
 		final File expectedOutputFile = new File("testoutput", "script.xml");
+		final File expectedReportFile = new File("report.xml");
 		expectedOutputFile.delete();
+		expectedReportFile.delete();
 		new StrategyRunner().configureOutput(new File("testoutput"), "xml").run(strategy.with(StrategyHelper.id("testcase")));
 		assertThat(expectedOutputFile.canRead(), equalTo(true));
+		assertThat(expectedReportFile.canRead(), equalTo(true));
+		expectedOutputFile.delete();
+		expectedReportFile.delete();
+		assertThat(expectedOutputFile.canRead(), equalTo(false));
+		assertThat(expectedReportFile.canRead(), equalTo(false));
 	}
 }

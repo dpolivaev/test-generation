@@ -9,13 +9,6 @@ import org.xml.sax.helpers.AttributesImpl;
 public class SaxXmlWriter implements XmlWriter {
 
     private String uri = "";
-    public String getURI() {
-        return uri;
-    }
-
-    public void setURI(String uri) {
-        this.uri = uri;
-    }
 
     private final ContentHandler handler;
     private AttributesImpl attrs;
@@ -99,4 +92,11 @@ public class SaxXmlWriter implements XmlWriter {
 		
 	}    
     
+    public String getURI() {
+        return uri;
+    }
+
+    public void setURI(String uri) {
+        this.uri = uri;
+    }
 }
