@@ -1,7 +1,10 @@
 package org.dpolivaev.tsgen.coverage;
 
+import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
+
+import java.util.Arrays;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
@@ -27,23 +30,52 @@ public class CheckListTest {
 	}
 	
 	@Test
-	public void afterOneEntryIsAdded_coverageCountIs1() throws Exception {
-		checkList.addReached(COVERAGE_ENTRY);
+	public void afterOneEntryIsAdded_coverageCountIs1(){
+		checkList.addReached(asList(COVERAGE_ENTRY));
 		assertThat(checkList.countReached(COVERAGE_ENTRY), equalTo(1));
 	}
 
 	@Test
 	public void addsItem() {
-		checkList.addReached(COVERAGE_ENTRY);
+		checkList.addReached(asList(COVERAGE_ENTRY));
 		
-		assertThat(checkList.countReached(COVERAGE_ENTRY), CoreMatchers.equalTo(1));
+		assertThat(checkList.countReached(COVERAGE_ENTRY), equalTo(1));
 	}
 
 	@Test
-	public void putsItem() {
-		checkList.setReached(COVERAGE_ENTRY, 3);
-		
-		assertThat(checkList.countReached(COVERAGE_ENTRY), CoreMatchers.equalTo(3));
+	public void newCheckListHasNoRequriedItems(){
+		assertThat(checkList.requiredItemNumber(), equalTo(0));
+	}
+	
+	@Test
+	public void checkListWithSingleRequiredItem(){
+		checkList.setExpected(COVERAGE_ENTRY, 2);
+		assertThat(checkList.requiredItemNumber(), equalTo(1));
+	}
+	
+	@Test
+	public void checkListWithTwoRequiredItems(){
+		checkList.setExpected(COVERAGE_ENTRY, 1);
+		CoverageEntry COVERAGE_ENTRY2 = new CoverageEntry("goal", "2");
+		checkList.setExpected(COVERAGE_ENTRY2, 1);
+		assertThat(checkList.requiredItemNumber(), equalTo(2));
 	}
 
+	@Test
+	public void newCheckListHasNoFinishedItems(){
+		assertThat(checkList.achievedItemNumber(), equalTo(0));
+	}
+	
+	@Test
+	public void checkListWithSingleFinishedItem(){
+		checkList.setExpected(COVERAGE_ENTRY, 1);
+		checkList.addReached(asList(COVERAGE_ENTRY));
+		assertThat(checkList.achievedItemNumber(), equalTo(1));
+	}
+	@Test
+	public void checkOpenListSingleFinishedItem(){
+		checkList.addReached(asList(COVERAGE_ENTRY));
+		assertThat(checkList.achievedItemNumber(), equalTo(1));
+	}
+	
 }

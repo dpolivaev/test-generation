@@ -7,7 +7,14 @@ import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 
 public class GoalChecker implements PropertyHandler{
-	public static final GoalChecker NO_GOALS = new GoalChecker();
+	public static final GoalChecker NO_GOALS = new GoalChecker(){
+
+		@Override
+		public void addGoal(Goal goal) {
+			throw new UnsupportedOperationException("this object must not be added a goal");
+		}
+		
+	};
 	private Collection<Goal> goals = new ArrayList<>();
 
 	@Override

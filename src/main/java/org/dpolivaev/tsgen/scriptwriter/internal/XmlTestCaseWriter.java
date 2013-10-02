@@ -67,7 +67,7 @@ public class XmlTestCaseWriter implements PropertyHandler {
 
 	private void addCoverageEntry(final CoverageEntry coverageEntry, int count, boolean firstTime) {
 		xmlWriter.beginElement("Item");
-		xmlWriter.setAttribute("name", coverageEntry.getGoal());
+		xmlWriter.setAttribute("name", coverageEntry.getName());
 		xmlWriter.setAttribute("count", Integer.toString(count));
 		xmlWriter.setAttribute("firstTime", Boolean.toString(firstTime));
 		xmlWriter.addTextContent(coverageEntry.getReason().toString());
