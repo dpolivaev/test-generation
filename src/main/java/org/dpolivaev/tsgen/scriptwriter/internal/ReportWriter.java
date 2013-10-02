@@ -1,5 +1,6 @@
 package org.dpolivaev.tsgen.scriptwriter.internal;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -22,14 +23,17 @@ public class ReportWriter {
     }
 
 	public void createReport(GoalChecker goalChecker, ScriptConfiguration scriptConfiguration) {
-		xmlWriter = new SaxXmlWriter(handlerFactory.newHandler(scriptConfiguration));
-        xmlWriter.startDocument();
-        xmlWriter.beginElement("Report");
-        for(Goal goal : goalChecker.goals())
-        	createGoalReport(goal);
-        xmlWriter.endElement("Report");
-        xmlWriter.endDocument();
-        xmlWriter = null;
+		final Collection<Goal> goals = goalChecker.goals();
+		if(! goals.isEmpty()){
+			xmlWriter = new SaxXmlWriter(handlerFactory.newHandler(scriptConfiguration));
+			xmlWriter.startDocument();
+			xmlWriter.beginElement("Report");
+			for(Goal goal : goals)
+				createGoalReport(goal);
+			xmlWriter.endElement("Report");
+			xmlWriter.endDocument();
+			xmlWriter = null;
+		}
 	}
 
 	private void createGoalReport(Goal goal) {

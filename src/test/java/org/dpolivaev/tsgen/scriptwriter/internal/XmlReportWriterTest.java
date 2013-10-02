@@ -15,6 +15,7 @@ import org.dpolivaev.tsgen.coverage.GoalFunction;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 import org.dpolivaev.tsgen.scriptwriter.ScriptConfiguration;
+import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -28,8 +29,7 @@ public class XmlReportWriterTest {
 		Mockito.when(resultFactory.newResult(scriptConfiguration)).thenReturn(dom);
 		ReportWriter producer = new ReportWriter(resultFactory);
         producer.createReport(GoalChecker.NO_GOALS, scriptConfiguration);
-        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Report>" +
-        "</Report>")));
+        Assert.assertThat(dom.getNode(), CoreMatchers.nullValue());
     }
     
     @Test
