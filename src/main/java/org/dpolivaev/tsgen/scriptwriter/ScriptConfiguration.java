@@ -14,12 +14,12 @@ public class ScriptConfiguration {
 	}
 	
 	public File xmlFile() {
-		final String xmlName = scriptName != null ? scriptName + "." + outputConfiguration.xmlFileExtension : outputConfiguration.xmlFileExtension;
-		return new File(outputConfiguration.directory, xmlName);
+		final String xmlName = scriptName != null ? scriptName + "." + outputConfiguration.getXmlFileExtension() : outputConfiguration.getXmlFileExtension();
+		return new File(outputConfiguration.getDirectory(), xmlName);
 	}
 
 	public File outputFile() {
-		final String xmlName = scriptName != null ? scriptName + "." + outputConfiguration.fileExtension : outputConfiguration.fileExtension;
-		return new File(outputConfiguration.directory, xmlName);
+		final String xmlName = scriptName != null ? scriptName + "." + outputConfiguration.getFileExtension() : outputConfiguration.getFileExtension();
+		return new File(outputConfiguration.getDirectory(), xmlName);
 	}
 }

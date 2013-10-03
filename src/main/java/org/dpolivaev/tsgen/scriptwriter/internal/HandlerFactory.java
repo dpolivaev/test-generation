@@ -28,14 +28,14 @@ public class HandlerFactory {
         try {
             SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", null);
             final OutputConfiguration outputConfiguration = scriptConfiguration.outputConfiguration;
-			Source xsltSource = outputConfiguration.xsltSource;
+			Source xsltSource = outputConfiguration.getXsltSource();
             final TransformerHandler transformerHandler = xsltSource != null ? tf.newTransformerHandler(xsltSource) :  tf.newTransformerHandler();
 			final TransformerHandler xsltHandler = autoCloseStream(transformerHandler);
             if(xsltSource == null){
             	setOutputProperties(autoCloseStream(xsltHandler));
             }
             autoCloseStream(xsltHandler).setResult(result);
-            if(xsltSource == null || outputConfiguration.xmlFileExtension == null)
+            if(xsltSource == null || outputConfiguration.getXmlFileExtension() == null)
             	return autoCloseStream(xsltHandler);
 			TransformerHandler plainXmlHandler = tf.newTransformerHandler();
 			final File xmlFile = scriptConfiguration.xmlFile();
