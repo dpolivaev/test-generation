@@ -63,13 +63,19 @@ Run:
 	'run' strategies += StrategyReference 
 	('with' strategies += StrategyReference (',' (strategies += StrategyReference | goals += GoalReference))* )?
 	outputConfiguration = OutputConfiguration?
-	('report' reportConfiguration = OutputConfiguration)?
+	reportConfiguration = ReportConfiguration?
 	
 ;
 
 OutputConfiguration:
 	('output' xml = STRING ',')? 'apply' xslt=STRING 'output' fileExtension = STRING
 	| 'output' xml = STRING
+;
+
+ReportConfiguration returns OutputConfiguration:
+	'report' (
+		(xml = STRING ',')? 'apply' xslt=STRING 'output' fileExtension = STRING | xml = STRING
+	)
 ;
 
 StrategyReference returns StrategyReference: {StrategyReference} 'strategy' expr = XExpression;

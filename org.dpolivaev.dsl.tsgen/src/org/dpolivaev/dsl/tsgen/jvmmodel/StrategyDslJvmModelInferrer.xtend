@@ -38,6 +38,7 @@ import java.util.HashSet
 import java.util.Arrays
 import org.eclipse.xtext.xbase.compiler.Later
 import org.dpolivaev.tsgen.scriptwriter.StrategyRunner
+import org.dpolivaev.dsl.tsgen.strategydsl.OutputConfiguration
 
 /**
  * <p>Infers a JVM model from the source model.</p> 
@@ -442,19 +443,8 @@ class ScriptInitializer{
 					append('strategyRunner = new ')
 					append(run.newTypeRef(StrategyRunner).type)
 					append('();')
-					val outputConfiguration = run.outputConfiguration
-					if(outputConfiguration != null){
-						newLine
-						append('strategyRunner.getOutputConfiguration()')
-						appendOutputFile(it, "Xml", outputConfiguration.xml)
-						if(outputConfiguration.xslt != null){
-							append('.setXsltSource("')
-							append(outputConfiguration.xslt)
-							append('")')
-						}
-						appendOutputFile(it, "File", outputConfiguration.fileExtension)
-						append(';')
-					}
+					appendOutputConfiguration(it, "Output", run.outputConfiguration)
+					appendOutputConfiguration(it, "Report", run.reportConfiguration)
 					newLine
 					append('strategyRunner.run(')
 					combinedStrategy(it, run.strategies, true)
@@ -462,6 +452,21 @@ class ScriptInitializer{
 				]
 				visibility = JvmVisibility::PUBLIC
 			]
+		}
+	}
+
+	def private appendOutputConfiguration(ITreeAppendable it, String target, OutputConfiguration outputConfiguration) {
+		if(outputConfiguration != null){
+			newLine
+			append('strategyRunner.get' + target + 'Configuration()')
+			appendOutputFile(it, "Xml", outputConfiguration.xml)
+			if(outputConfiguration.xslt != null){
+				append('.setXsltSource("')
+				append(outputConfiguration.xslt)
+				append('")')
+			}
+			appendOutputFile(it, "File", outputConfiguration.fileExtension)
+			append(';')
 		}
 	}
 
