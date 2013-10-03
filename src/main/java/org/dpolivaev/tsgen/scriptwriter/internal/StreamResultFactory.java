@@ -12,8 +12,7 @@ import org.dpolivaev.tsgen.scriptwriter.ScriptConfiguration;
 
 public class StreamResultFactory implements ResultFactory{
      public Result newResult(ScriptConfiguration scriptConfiguration) {
-		final File outputFile = new File(scriptConfiguration.outputConfiguration.directory, 
-				scriptConfiguration.scriptName + "." + scriptConfiguration.outputConfiguration.fileExtension);
+		final File outputFile = scriptConfiguration.outputFile();
 		try {
 			return new StreamResult(new BufferedOutputStream(new FileOutputStream(outputFile)));
 		} catch (FileNotFoundException e) {
