@@ -18,7 +18,7 @@ public class StrategyRunnerTest {
 		expectedOutputFile.delete();
 		expectedReportFile.delete();
 		final StrategyRunner strategyRunner = new StrategyRunner();
-		strategyRunner.getOutputConfiguration().setDirectory(new File("testoutput")).setFileExtension("xml");
+		strategyRunner.getOutputConfiguration().setFileDirectory("testoutput").setFileExtension("xml");
 		strategyRunner.run(strategy.with(StrategyHelper.id("testcase")));
 		assertThat(expectedOutputFile.canRead(), equalTo(true));
 		assertThat(expectedReportFile.canRead(), equalTo(true));

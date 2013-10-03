@@ -35,7 +35,7 @@ public class HandlerFactory {
             	setOutputProperties(autoCloseStream(xsltHandler));
             }
             autoCloseStream(xsltHandler).setResult(result);
-            if(xsltSource == null || outputConfiguration.getXmlFileExtension() == null)
+            if(xsltSource == null || outputConfiguration.getXmlExtension() == null)
             	return autoCloseStream(xsltHandler);
 			TransformerHandler plainXmlHandler = tf.newTransformerHandler();
 			final File xmlFile = scriptConfiguration.xmlFile();
