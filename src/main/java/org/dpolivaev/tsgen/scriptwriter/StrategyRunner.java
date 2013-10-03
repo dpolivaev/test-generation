@@ -53,35 +53,35 @@ public class StrategyRunner {
 		reportWriter.createReport(goalChecker, reportConfiguration);
 	}
 	
-	public StrategyRunner configureOutput(Source xsltSource, String fileExtension, boolean outputXml) {
-		return configureOutput(xsltSource, null, fileExtension, outputXml);
+	public StrategyRunner configureOutput(String outputXml, Source xsltSource, String fileExtension) {
+		return configureOutput(null, outputXml, xsltSource, fileExtension);
 	}
 
-	public StrategyRunner configureOutput(Source xsltSource, File outputDirectory, String fileExtension, boolean outputXml) {
-		this.outputConfiguration = new OutputConfiguration(xsltSource, outputDirectory, fileExtension, outputXml);
+	public StrategyRunner configureOutput(File outputDirectory, String outputXml, Source xsltSource, String fileExtension) {
+		this.outputConfiguration = new OutputConfiguration(outputDirectory, outputXml, xsltSource, fileExtension);
 		return this;
 	}
 
 	public StrategyRunner configureOutput(String fileExtension) {
-		return configureOutput((Source)null, fileExtension, false);
+		return configureOutput(null, (Source)null, fileExtension);
 	}
 	
-	public StrategyRunner configureOutput(String xsltSource, String fileExtension, boolean outputXml) {
-		return configureOutput(xsltSource, null, fileExtension, outputXml);
+	public StrategyRunner configureOutput(String outputXml, String xsltSource, String fileExtension) {
+		return configureOutput(null, outputXml, xsltSource, fileExtension);
 	}
 	
-	public StrategyRunner configureOutput(String xsltSource, File outputDirectory, String fileExtension, boolean outputXml) {
+	public StrategyRunner configureOutput(File outputDirectory, String outputXml, String xsltSource, String fileExtension) {
 		File xsltFile = new File(xsltSource);
 		if(xsltFile.canRead())
-			return configureOutput(new StreamSource(xsltFile), outputDirectory, fileExtension, outputXml);
+			return configureOutput(outputDirectory, outputXml, new StreamSource(xsltFile), fileExtension);
 		InputStream resource = getClass().getResourceAsStream(xsltSource);
 		if(resource != null)
-			return configureOutput(new StreamSource(resource), outputDirectory, fileExtension, outputXml);
+			return configureOutput(outputDirectory, outputXml, new StreamSource(resource), fileExtension);
 		throw new IllegalArgumentException("source " + xsltSource + " not available");
 	}
 
 	public StrategyRunner configureOutput(File outputDirectory, String fileExtension) {
-		return configureOutput((Source)null, outputDirectory, fileExtension, false);
+		return configureOutput(outputDirectory, null, (Source)null, fileExtension);
 	}
 }
 
