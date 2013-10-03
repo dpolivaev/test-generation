@@ -446,21 +446,13 @@ class ScriptInitializer{
 					if(outputConfiguration != null){
 						newLine
 						append('strategyRunner.getOutputConfiguration()')
-						if(outputConfiguration.xml != null){
-							append('.setXmlFileExtension("')
-							append(outputConfiguration.xml)
-							append('")')
-						}
+						appendOutputFile(it, "Xml", outputConfiguration.xml)
 						if(outputConfiguration.xslt != null){
 							append('.setXsltSource("')
 							append(outputConfiguration.xslt)
 							append('")')
 						}
-						if(outputConfiguration.fileExtension != null){
-							append('.setFileExtension("')
-							append(outputConfiguration.fileExtension)
-							append('")')
-						}
+						appendOutputFile(it, "File", outputConfiguration.fileExtension)
 						append(';')
 					}
 					newLine
@@ -470,6 +462,26 @@ class ScriptInitializer{
 				]
 				visibility = JvmVisibility::PUBLIC
 			]
+		}
+	}
+
+	def private appendOutputFile(ITreeAppendable it, String target, String fileConfig) {
+		if(fileConfig != null){
+			val path = fileConfig.replace('\\'.charAt(0), '/'.charAt(0))
+			val lastSeparator = path.lastIndexOf('/')
+			if(lastSeparator == -1){
+				append('.set' + target + 'Extension("')
+				append(fileConfig)
+				append('")')
+			}
+			else{
+				append('.set' + target + 'Directory("')
+				append(fileConfig.substring(0, lastSeparator))
+				append('")')
+				append('.set' + target + 'Extension("')
+				append(fileConfig.substring(lastSeparator + 1))
+				append('")')
+			}
 		}
 	}
 	
