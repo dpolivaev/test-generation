@@ -437,21 +437,34 @@ class ScriptInitializer{
 			val methodName = "run" + counter
 			jvmType.members += run.toMethod(methodName, run.newTypeRef(void)) [
 				body = [
-					
-					append('new ')
 					append(run.newTypeRef(StrategyRunner).type)
-					append('()')
+					append(' ')
+					append('strategyRunner = new ')
+					append(run.newTypeRef(StrategyRunner).type)
+					append('();')
 					val outputConfiguration = run.outputConfiguration
 					if(outputConfiguration != null){
-						append('.configureOutput("')
-						append(outputConfiguration.xslt)
-						append('", "')
-						append(outputConfiguration.fileExtension)
-						append('", ')
-						append(outputConfiguration.xml.toString)
-						append(')')
+						newLine
+						append('strategyRunner.getOutputConfiguration()')
+						if(outputConfiguration.xml != null){
+							append('.setXmlFileExtension("')
+							append(outputConfiguration.xml)
+							append('")')
+						}
+						if(outputConfiguration.xslt != null){
+							append('.setXsltSource("')
+							append(outputConfiguration.xslt)
+							append('")')
+						}
+						if(outputConfiguration.fileExtension != null){
+							append('.setFileExtension("')
+							append(outputConfiguration.fileExtension)
+							append('")')
+						}
+						append(';')
 					}
-					append('.run(')
+					newLine
+					append('strategyRunner.run(')
 					combinedStrategy(it, run.strategies, true)
 					append(');')
 				]

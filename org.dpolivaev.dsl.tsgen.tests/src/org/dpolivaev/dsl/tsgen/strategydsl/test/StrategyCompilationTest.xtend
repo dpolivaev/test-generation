@@ -404,7 +404,8 @@ class StrategyCompilationTest {
 			  }
 			  
 			  public void run1() {
-			    new StrategyRunner().run(first);
+			    StrategyRunner strategyRunner = new StrategyRunner();
+			    strategyRunner.run(first);
 			  }
 			  
 			  public static void main(final String[] args) {
@@ -441,7 +442,8 @@ class StrategyCompilationTest {
 			  }
 			  
 			  public void run1() {
-			    new StrategyRunner().run(first.with(second));
+			    StrategyRunner strategyRunner = new StrategyRunner();
+			    strategyRunner.run(first.with(second));
 			  }
 			  
 			  public static void main(final String[] args) {
@@ -520,7 +522,9 @@ class StrategyCompilationTest {
 			  }
 			  
 			  public void run1() {
-			    new StrategyRunner().configureOutput("my.xslt", "java", true).run(first);
+			    StrategyRunner strategyRunner = new StrategyRunner();
+			    strategyRunner.getOutputConfiguration().setXmlFileExtension("xml").setXsltSource("my.xslt").setFileExtension("java");
+			    strategyRunner.run(first);
 			  }
 			  
 			  public static void main(final String[] args) {
