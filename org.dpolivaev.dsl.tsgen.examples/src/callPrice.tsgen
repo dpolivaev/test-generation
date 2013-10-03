@@ -56,4 +56,6 @@ strategy CallPrice
 	let default foc.customerID be 12345
 	let default foc.cheapCallActiveForCall be false
 	
-run strategy CallPrice output xml, apply "/java.xslt" output "java"
+run strategy CallPrice 
+	output "output/xml", apply "/java.xslt" output "output/java" 
+	report  "output/report.xml"
