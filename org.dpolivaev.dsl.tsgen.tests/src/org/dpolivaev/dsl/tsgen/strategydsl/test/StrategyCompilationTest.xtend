@@ -535,6 +535,37 @@ class StrategyCompilationTest {
 		''')
 	}	
 
+	@Test def runWithXml() {
+		'''
+			strategy First
+			run strategy First output "testoutput/xml"
+		'''.assertCompilesTo('''
+			import org.dpolivaev.tsgen.ruleengine.Strategy;
+			import org.dpolivaev.tsgen.scriptwriter.StrategyRunner;
+			
+			@SuppressWarnings("all")
+			public class MyFile {
+			  public final Strategy first = defineStrategyFirst();
+			  
+			  private Strategy defineStrategyFirst() {
+			    Strategy strategy = new Strategy();
+			    return strategy;
+			  }
+			  
+			  public void run1() {
+			    StrategyRunner strategyRunner = new StrategyRunner();
+			    strategyRunner.getOutputConfiguration().setFileDirectory("testoutput").setFileExtension("xml");
+			    strategyRunner.run(first);
+			  }
+			  
+			  public static void main(final String[] args) {
+			    MyFile instance = new MyFile();
+			    instance.run1();
+			  }
+			}
+		''')
+	}	
+
 	@Test def runWithReport() {
 		'''
 			strategy First

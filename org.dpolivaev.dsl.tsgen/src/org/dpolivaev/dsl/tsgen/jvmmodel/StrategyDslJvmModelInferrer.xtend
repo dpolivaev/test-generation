@@ -459,13 +459,15 @@ class ScriptInitializer{
 		if(outputConfiguration != null){
 			newLine
 			append('strategyRunner.get' + target + 'Configuration()')
-			appendOutputFile(it, "Xml", outputConfiguration.xml)
 			if(outputConfiguration.xslt != null){
+				appendOutputFile(it, "Xml", outputConfiguration.xml)
 				append('.setXsltSource("')
 				append(outputConfiguration.xslt)
 				append('")')
+				appendOutputFile(it, "File", outputConfiguration.fileExtension)
 			}
-			appendOutputFile(it, "File", outputConfiguration.fileExtension)
+			else
+				appendOutputFile(it, "File", outputConfiguration.xml)
 			append(';')
 		}
 	}
