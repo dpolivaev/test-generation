@@ -68,7 +68,8 @@ Run:
 ;
 
 OutputConfiguration:
-	('output' xml ?= 'xml' ',')? 'apply' xslt=STRING 'output' fileExtension = STRING
+	('output' xml = STRING ',')? 'apply' xslt=STRING 'output' fileExtension = STRING
+	| 'output' xml = STRING
 ;
 
 StrategyReference returns StrategyReference: {StrategyReference} 'strategy' expr = XExpression;
