@@ -9,25 +9,18 @@ import javax.xml.transform.stream.StreamSource;
 public class OutputConfiguration {
 	private Source xsltSource;
 	private String fileExtension;
-	private File directory;
-	private String xmlFileExtension;
+	private String xmlExtension;
+	private String fileDirectory;
+	private String xmlDirectory;
 	
 	public static final OutputConfiguration OUTPUT_XML = new OutputConfiguration();
 
 	public OutputConfiguration(){
-		this("xml");
+		setFileExtension("xml");
 	}
 	
-	public OutputConfiguration(File directory, String outputXml, Source xsltSource, String fileExtension) {
-		super();
-		this.xsltSource = xsltSource;
-		this.fileExtension = fileExtension;
-		this.directory = directory;
-		this.xmlFileExtension = outputXml;
-	}
-
 	public OutputConfiguration(String extension) {
-		this(null, null, null, extension);
+		setFileExtension(extension);
 	}
 
 	public ScriptConfiguration forScript(String name){
@@ -53,38 +46,45 @@ public class OutputConfiguration {
 		return this;
 	}
 
-	public File getDirectory() {
-		return directory;
-	}
-
-	public OutputConfiguration setDirectory(File directory) {
-		this.directory = directory;
-		return this;
-	}
-
-	public String getXmlFileExtension() {
-		return xmlFileExtension;
+	public String getXmlExtension() {
+		return xmlExtension;
 	}
 	
-	public void setXsltSource(String xsltSource) {
+	public OutputConfiguration setXsltSource(String xsltSource) {
 		File xsltFile = new File(xsltSource);
 		if(xsltFile.canRead()) {
-			setXsltSource(new StreamSource(xsltFile));
+			return setXsltSource(new StreamSource(xsltFile));
 		}
 		else{
 			InputStream resource = getClass().getResourceAsStream(xsltSource);
 			if(resource != null) {
-				setXsltSource(new StreamSource(resource));
+				return setXsltSource(new StreamSource(resource));
 			}
 			else
 				throw new IllegalArgumentException("source " + xsltSource + " not available");
 		}
 	}
 
+	public OutputConfiguration setXmlExtension(String xmlFileExtension) {
+		this.xmlExtension = xmlFileExtension;
+		return this;
+	}
 
+	public String getFileDirectory() {
+		return fileDirectory;
+	}
 
-	public OutputConfiguration setXmlFileExtension(String xmlFileExtension) {
-		this.xmlFileExtension = xmlFileExtension;
+	public OutputConfiguration setFileDirectory(String fileDirectory) {
+		this.fileDirectory = fileDirectory;
+		return this;
+	}
+
+	public String getXmlDirectory() {
+		return xmlDirectory;
+	}
+
+	public OutputConfiguration setXmlDirectory(String xmlDirectory) {
+		this.xmlDirectory = xmlDirectory;
 		return this;
 	}
 }
