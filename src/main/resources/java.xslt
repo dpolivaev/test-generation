@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.java.TransformationHelper"
+xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.scriptwriter.TransformationHelper"
 >
 <xsl:output method="text" encoding="utf-8"/>
 	<xsl:template name="eol1">
