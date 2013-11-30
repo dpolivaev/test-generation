@@ -1,4 +1,4 @@
-package org.dpolivaev.tsgen.java;
+package org.dpolivaev.tsgen.scriptwriter;
 
 import org.dpolivaev.tsgen.utils.internal.IdConverter;
 import org.dpolivaev.tsgen.utils.internal.StringConverter;
