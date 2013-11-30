@@ -17,7 +17,7 @@ public class XmlTestCaseWriter implements PropertyHandler {
 	private static final String TESTCASE_PROPERTY = "testcase";
     private static final String TESTCASE_ELEMENT = "TestCase";
     
-    private static final String[] optionalElements = {
+    private static final String[] testCaseParts = {
         "pre", "Precondition",
         "foc", "Focus",
         "veri", "Verification",
@@ -37,10 +37,14 @@ public class XmlTestCaseWriter implements PropertyHandler {
         addAttributes(propertyContainer, TESTCASE_PROPERTY);
         for(Goal goal : goalChecker.goals())
         	addCoverage(goal.name(), goal.checkList());
-        for(int i = 0; i < optionalElements.length; i+=2)
-            addOptionalElement(propertyContainer, optionalElements[i], optionalElements[i+1]);
+        addParts(propertyContainer, testCaseParts);
         xmlWriter.endElement(TESTCASE_ELEMENT);
 
+	}
+
+	public void addParts(PropertyContainer propertyContainer, String[] parts) {
+		for(int i = 0; i < parts.length; i+=2)
+            addParts(propertyContainer, parts[i], parts[i+1]);
 	}
 
 	private void addCoverage(String name, CheckList checkList) {
@@ -70,7 +74,7 @@ public class XmlTestCaseWriter implements PropertyHandler {
 		xmlWriter.endElement("Item");
 	}
 
-	private void addOptionalElement(PropertyContainer propertyContainer, String property, String element) {
+	private void addParts(PropertyContainer propertyContainer, String property, String element) {
         if(propertyContainer.containsPropertyValue(property))
             addElement(propertyContainer, property, element);
         for(int i = 1; i <= 9; i++)
