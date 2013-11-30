@@ -11,8 +11,13 @@ public class TestIdProviderTest {
 	final static String VALUE_NAME_SEPARATOR_CHAR = "\u001F";
 	final static String PROPERTY_SEPARATOR_CHAR = "\u001E";
 	
-	private void checkJavaId(String invalidId, String validId) {
-		String javaId = new IdConverter().javaId(invalidId);
+	private void checkCamelCaseId(String invalidId, String validId) {
+		String javaId = new IdConverter().camelCaseId(invalidId);
+		assertThat(javaId, CoreMatchers.equalTo(validId));
+	}
+	
+	private void check_snakeCaseId(String invalidId, String validId) {
+		String javaId = new IdConverter().snakeCaseId(invalidId);
 		assertThat(javaId, CoreMatchers.equalTo(validId));
 	}
 
@@ -45,41 +50,56 @@ public class TestIdProviderTest {
 	}
 	
 	@Test
-	public void givenValidJavaId_returnsSameString() throws Exception {
+	public void givenValidJavaId_camelCaseId_returnsSameString() throws Exception {
 		String validId = "abc123_";
-		checkJavaId(validId, validId);
+		checkCamelCaseId(validId, validId);
 	}
 	@Test
-	public void givenNonAlphaNumericCharactersRemovesThem() throws Exception {
-		checkJavaId("abc$123_", "abc123_");
-	}
-
-	@Test
-	public void givenNonAlphaNumericCharactersAfterUpperCaseLetterInsertsUnderscoreBetweenFollowingCharacter() throws Exception {
-		checkJavaId("abC$abc", "abC_abc");
-		checkJavaId("abC$1bc", "abC_1bc");
+	public void givenNonAlphaNumericCharacters_camelCaseId_removesThem() throws Exception {
+		checkCamelCaseId("abc$123_", "abc123_");
 	}
 
 	@Test
-	public void givenNonAlphaNumericCharactersMakesFollowingLowerCaseLetterUpperCase() throws Exception {
-		checkJavaId("abc$abc", "abcAbc");
+	public void givenNonAlphaNumericCharactersAfterUpperCaseLetter_camelCaseId_insertsUnderscoreBetweenFollowingCharacter() throws Exception {
+		checkCamelCaseId("abC$abc", "abC_abc");
+		checkCamelCaseId("abC$1bc", "abC_1bc");
 	}
 
 	@Test
-	public void createsLowerCaseJavaId() throws Exception {
-		String javaId = new IdConverter().lowerCaseJavaId("ABC§abc");
+	public void givenNonAlphaNumericCharacters_camelCaseId_makesFollowingLowerCaseLetterUpperCase() throws Exception {
+		checkCamelCaseId("abc$abc", "abcAbc");
+	}
+
+	@Test
+	public void givenUpperCaseCharacters_snakeCaseId_makesSnakeCase() throws Exception {
+		check_snakeCaseId("A", "a");
+	}
+	
+	@Test
+	public void givenUpperCaseAfterLowerCase_snakeCaseId_insertsUnderscore() throws Exception {
+		check_snakeCaseId("aA", "a_a");
+	}
+
+	@Test
+	public void givenUpperCaseAfterUpperCase_snakeCaseId_insertsNoUnderscore() throws Exception {
+		check_snakeCaseId("AA", "aa");
+	}
+
+	@Test
+	public void createsLowerFirstCamelCaseId() throws Exception {
+		String javaId = new IdConverter().lowerFirstCamelCaseId("ABC§abc");
 		assertThat(javaId, CoreMatchers.equalTo("aBC_abc"));
 	}
 
 	@Test
-	public void createsUpperCaseJavaId() throws Exception {
-		String javaId = new IdConverter().upperCaseJavaId("abc§abc");
+	public void createsUpperFirstCamelCaseId() throws Exception {
+		String javaId = new IdConverter().upperFirstCamelCaseId("abc§abc");
 		assertThat(javaId, CoreMatchers.equalTo("AbcAbc"));
 	}
 
 	@Test
 	public void insertsUnderscoreIfStartsWithNumber() throws Exception {
-		checkJavaId("1", "_1");
+		checkCamelCaseId("1", "_1");
 	}
 
 }
