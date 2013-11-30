@@ -24,8 +24,14 @@ public class SingleScriptWriter implements PropertyHandler {
         XmlTestCaseWriter testCaseProducer = new XmlTestCaseWriter(xmlWriter, goalChecker);
         xmlWriter.beginElement("Script");
         Object scriptValue = propertyContainer.get("script");
-        if(scriptValue.equals(SpecialValue.UNDEFINED))
+        if(scriptValue.equals(SpecialValue.UNDEFINED)){
+        	scriptValue = "script";
         	xmlWriter.setAttribute("id", "script");
+        }
+        Object driverValue = propertyContainer.get("driver");
+        if(driverValue.equals(SpecialValue.UNDEFINED))
+        	driverValue = scriptValue + "Driver";
+        xmlWriter.setAttribute("driver", driverValue.toString());
         testCaseProducer.addAttributes(propertyContainer, "script");
         scriptProducer = testCaseProducer;
     }
