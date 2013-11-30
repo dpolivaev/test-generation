@@ -134,21 +134,13 @@ public class XmlTestCaseWriterTest {
     public void createsTestCaseElementWithAllPartsAndContent() throws Exception{
         givenProperty("testcase", "testcase");
         givenProperty("pre", "precondition");
-        givenProperty("state", "State");
-        givenProperty("preInState", "precondition in state");
         givenProperty("foc", "focus");
-        givenProperty("veriInState", "verification in state");
-        givenProperty("stateAfter", "state after");
         givenProperty("veri", "verification");
         givenProperty("post", "postprocessing");
         createScript();
         checkOutput("<TestCase id='testcase'>" +
                 "<Precondition id='precondition'/>" +
-                "<EnterState id='State'/>" +
-                "<PreconditionInState id='precondition in state'/>" +
                 "<Focus id='focus'/>" +
-                "<VerificationInState id='verification in state'/>" +
-                "<CheckState id='state after'/>" +
                 "<Verification id='verification'/>" +
                 "<Postprocessing id='postprocessing'/>" +
         	"</TestCase>");
