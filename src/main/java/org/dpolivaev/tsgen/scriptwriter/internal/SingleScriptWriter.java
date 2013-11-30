@@ -11,6 +11,10 @@ public class SingleScriptWriter implements PropertyHandler {
 
     private XmlWriter xmlWriter;
     private PropertyHandler scriptProducer;
+    private static final String[] scriptParts = {
+        "scriptpre", "ScriptPrecondition",
+        "scriptpost", "ScriptPostprocessing",
+    };
 
     @Override
     public void handlePropertyCombination(PropertyContainer propertyContainer) {
@@ -33,6 +37,7 @@ public class SingleScriptWriter implements PropertyHandler {
         	driverValue = scriptValue + "Driver";
         xmlWriter.setAttribute("driver", driverValue.toString());
         testCaseProducer.addAttributes(propertyContainer, "script");
+        testCaseProducer.addParts(propertyContainer, scriptParts);
         scriptProducer = testCaseProducer;
     }
     
