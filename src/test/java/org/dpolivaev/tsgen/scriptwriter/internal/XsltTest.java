@@ -28,7 +28,8 @@ public class XsltTest {
 	@Parameterized.Parameters(name="{0}")
 	   public static Collection<Object[]> resources() {
 	      return Arrays.asList(new Object[][] {
-	         { "/java.xslt", "/expectedJava.txt" }
+	 	         { "/testInput.xml", "/java.xslt", "/expectedJava.txt" },
+		         { "/testInput.xml", "/cmocka.xslt", "/expected_cmocka.c" }
 	      });
 	   }
 	
@@ -37,9 +38,9 @@ public class XsltTest {
 	private String expected;
 	private static TransformerFactory transFact;
 
-	public XsltTest(String xslt, String expected) {
+	public XsltTest(String testInput, String xslt, String expected) {
 		super();
-		testInput = "/testInput.xml";
+		this.testInput = testInput;
 		this.xslt = xslt;
 		this.expected = expected;
 	}
