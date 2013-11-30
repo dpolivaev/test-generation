@@ -87,8 +87,8 @@ import org.dpolivaev.tsgen.java.Coverage;
 import org.dpolivaev.tsgen.java.GoalCoverage;
 
 public class </xsl:text>
-	<xsl:variable name="class" select="java:upper-case-java-id(@id)"/>
-	<xsl:variable name="driver" select="java:upper-case-java-id(@driver)"/>
+	<xsl:variable name="class" select="java:upper-first-camel-case-id(@id)"/>
+	<xsl:variable name="driver" select="java:upper-first-camel-case-id(@driver)"/>
 	<xsl:value-of select="$class"/>
 	<xsl:text> {</xsl:text>
 	<xsl:call-template name="eol1"/>
@@ -106,7 +106,7 @@ public class </xsl:text>
 	<xsl:template match="TestCase"/> 
 	
 	<xsl:template match="TestCase[@id]">
-	<xsl:variable name="method" select="java:lower-case-java-id(@id)"/>
+	<xsl:variable name="method" select="java:lower-first-camel-case-id(@id)"/>
 	<xsl:apply-templates select="Description"/>
 	<xsl:call-template name="Coverage"/>	
 	<xsl:call-template name="eol1"/>
@@ -124,7 +124,7 @@ public class </xsl:text>
 	</xsl:template>
 	
 	<xsl:template match="Precondition|EnterState|PreconditionInState|Focus|VerificationInState|CheckState|Verification|Postprocessing">
-		<xsl:variable name="method" select="java:lower-case-java-id(@id)"/>
+		<xsl:variable name="method" select="java:lower-first-camel-case-id(@id)"/>
 		<xsl:call-template name="eol1"/>
 		<xsl:text>// </xsl:text>
 		<xsl:value-of select="name()"/>

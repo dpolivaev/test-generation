@@ -4,16 +4,16 @@ import org.dpolivaev.tsgen.utils.internal.IdConverter;
 import org.dpolivaev.tsgen.utils.internal.StringConverter;
 
 public class TransformationHelper {
-	public static String javaId(String input){
-		return new IdConverter().javaId(input);
+	public static String camelCaseId(String input){
+		return new IdConverter().camelCaseId(input);
 	}
 	
-	public static String lowerCaseJavaId(String input){
-		return new IdConverter().lowerCaseJavaId(input);
+	public static String lowerFirstCamelCaseId(String input){
+		return new IdConverter().lowerFirstCamelCaseId(input);
 	}
 	
-	public static String upperCaseJavaId(String input){
-		return new IdConverter().upperCaseJavaId(input);
+	public static String upperFirstCamelCaseId(String input){
+		return new IdConverter().upperFirstCamelCaseId(input);
 	}
 	
 	public static String javaString(String input){

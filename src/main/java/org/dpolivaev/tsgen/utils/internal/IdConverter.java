@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 public class IdConverter{
 	private static final Pattern invalidCharacters = Pattern.compile("[^A-Za-z0-9_]+");
 	
-	public String javaId(String input) {
+	public String camelCaseId(String input) {
 		String output = input;
 		output = removeInvalidCharacters(output);
 		output = makeFirstToNotNumber(output);
@@ -53,8 +53,8 @@ public class IdConverter{
 		}
 	}
 
-	public String lowerCaseJavaId(String input) {
-		String validCharacterString = javaId(input);
+	public String lowerFirstCamelCaseId(String input) {
+		String validCharacterString = camelCaseId(input);
 		if(validCharacterString.isEmpty() || ! Character.isUpperCase(validCharacterString.charAt(0)))
 			return validCharacterString;
 		else {
@@ -65,8 +65,8 @@ public class IdConverter{
 		}
 	}
 
-	public String upperCaseJavaId(String input) {
-		String validCharacterString = javaId(input);
+	public String upperFirstCamelCaseId(String input) {
+		String validCharacterString = camelCaseId(input);
 		if(validCharacterString.isEmpty() || ! Character.isLowerCase(validCharacterString.charAt(0)))
 			return validCharacterString;
 		else {
@@ -75,5 +75,25 @@ public class IdConverter{
 			output.append(validCharacterString.subSequence(1, validCharacterString.length()));
 			return output.toString();
 		}
+	}
+
+	public String snakeCaseId(String invalidId) {
+		String output = camelCaseId(invalidId);
+		output = replaceUpperCaseByUnderscore(output);
+		return output;
+	}
+
+	private String replaceUpperCaseByUnderscore(String input) {
+		StringBuilder sb = new StringBuilder();
+		boolean lastCharacterWasLowerCase = false;
+		for(char c : input.toCharArray()){
+			char lowerCaseCharacter = Character.toLowerCase(c);
+			boolean lowerCaseCharacterFound = c == lowerCaseCharacter;
+			if(lastCharacterWasLowerCase && ! lowerCaseCharacterFound)
+				sb.append('_');
+			sb.append(lowerCaseCharacter);
+			lastCharacterWasLowerCase = lowerCaseCharacterFound;
+		}
+		return sb.toString();
 	}
 }
