@@ -23,7 +23,7 @@ destination->foc.callDuration: "0:00:01"
 */
 static void test001_is_call_valid_destination_national_foc_country_motherland_tariff_standard_foc_call_begin_time00000_day_of_the_week_monday_foc_call_duration00001() {
 	// Focus 1
-		driver_calculate(/* call_begin_time*/ "0:00:00", 
+		call_price_driver_calculate(/* call_begin_time*/ "0:00:00", 
 			/* call_duration*/ "0:00:01", 
 			/* cheap_call_active_for_call*/ false, 
 			/* country*/ "Motherland", 
@@ -47,7 +47,7 @@ destination->foc.callDuration: "0:00:59"
 */
 static void test002_is_call_valid_destination_national_foc_country_motherland_tariff_standard_foc_call_begin_time00001_day_of_the_week_tuesday_foc_call_duration00059() {
 	// Focus 1
-		driver_calculate(/* call_begin_time*/ "0:00:01", 
+		call_price_driver_calculate(/* call_begin_time*/ "0:00:01", 
 			/* call_duration*/ "0:00:59", 
 			/* cheap_call_active_for_call*/ false, 
 			/* country*/ "Motherland", 
@@ -67,7 +67,7 @@ description
 */
 static void test003_multiple_goals() {
 	// Focus 1
-		driver_focus();
+		call_price_driver_focus();
 }
 
 

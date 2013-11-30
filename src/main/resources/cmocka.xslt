@@ -22,6 +22,9 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.scriptw
 			</xsl:text>
 	</xsl:template>
 	
+	<xsl:template name="driver">
+		<xsl:value-of select="java:snake-case-id(ancestor-or-self::Script/@driver)"/>
+	</xsl:template>	
 	
 	<xsl:template name="Coverage">
 		<xsl:if test="Goal">
@@ -76,9 +79,8 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.scriptw
 	
 	<xsl:template match="Script">
 	<xsl:variable name="file" select="java:snake-case-id(@id)"/>
-	<xsl:variable name="driver" select="java:snake-case-id(@driver)"/>
 	<xsl:text>#include "</xsl:text>
-	<xsl:value-of select="$driver"/>
+	<xsl:call-template name="driver"/>
 	<xsl:text>.h"
 static void global_precondition() {</xsl:text>
 	<xsl:call-template name="eol"/>
@@ -151,7 +153,8 @@ static void global_postprocessing(){</xsl:text>
 		<xsl:text> </xsl:text>
 		<xsl:number/>
 		<xsl:call-template name="eol2"/>
-		<xsl:text>driver_</xsl:text>
+		<xsl:call-template name="driver"/>
+		<xsl:text>_</xsl:text>
 		<xsl:value-of select="$method"/>
 		<xsl:text>(</xsl:text>
 		<xsl:apply-templates select="Parameter"/>
