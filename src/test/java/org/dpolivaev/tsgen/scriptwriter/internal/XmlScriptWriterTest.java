@@ -34,7 +34,24 @@ public class XmlScriptWriterTest {
 		SingleScriptWriter producer = new SingleScriptWriter(propertyContainer, scriptConfiguration, resultFactory, GoalChecker.NO_GOALS);
         producer.handlePropertyCombination(propertyContainer);
         producer.endScript();
-        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script id='scriptName'>" +
+        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script id='scriptName' driver='scriptNameDriver'>" +
+                "<TestCase id='testcase 1'/>" +
+        "</Script>")));
+    }
+
+    @Test
+    public void explicitDriverTestcase() {
+        givenProperty("script", "scriptName");
+        givenProperty("testcase", "testcase 1");
+        givenProperty("driver", "driver1");
+        ResultFactory resultFactory = Mockito.mock(ResultFactory.class);
+        final DOMResult dom = new DOMResult();
+        final ScriptConfiguration scriptConfiguration = OutputConfiguration.OUTPUT_XML.forScript("scriptName");
+		Mockito.when(resultFactory.newResult(scriptConfiguration)).thenReturn(dom);
+		SingleScriptWriter producer = new SingleScriptWriter(propertyContainer, scriptConfiguration, resultFactory, GoalChecker.NO_GOALS);
+        producer.handlePropertyCombination(propertyContainer);
+        producer.endScript();
+        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script id='scriptName' driver='driver1'>" +
                 "<TestCase id='testcase 1'/>" +
         "</Script>")));
     }
@@ -58,7 +75,7 @@ public class XmlScriptWriterTest {
         producer.handlePropertyCombination(propertyContainer);
         producer.endScript();
         
-        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script id='scriptName'>" +
+        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script id='scriptName'  driver='scriptNameDriver'>" +
             "<TestCase id='testcase 1'/>" +
             "<TestCase id='testcase 2'/>" +
         "</Script>")));
@@ -74,7 +91,7 @@ public class XmlScriptWriterTest {
         MultipleScriptsWriter producer = new MultipleScriptsWriter(resultFactory, GoalChecker.NO_GOALS);
         producer.handlePropertyCombination(propertyContainer);
         producer.endScripts();
-        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script id='scriptName1'>" +
+        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script id='scriptName1' driver='scriptName1Driver'>" +
                 "<TestCase id='testcase 1'/>" +
         "</Script>")));
     }
@@ -96,7 +113,7 @@ public class XmlScriptWriterTest {
         producer.handlePropertyCombination(propertyContainer);
         producer.endScripts();
         
-        Assert.assertThat(the(dom2.getNode()), isEquivalentTo(the("<Script id='scriptName2'>" +
+        Assert.assertThat(the(dom2.getNode()), isEquivalentTo(the("<Script id='scriptName2' driver='scriptName2Driver'>" +
                 "<TestCase id='testcase 1'/>" +
         "</Script>")));
     }
@@ -110,7 +127,7 @@ public class XmlScriptWriterTest {
 		SingleScriptWriter producer = new SingleScriptWriter(propertyContainer, scriptConfiguration,resultFactory, GoalChecker.NO_GOALS);
         producer.handlePropertyCombination(propertyContainer);
         producer.endScript();
-        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script id='script'>" +
+        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the("<Script id='script' driver='scriptDriver'>" +
                 "<TestCase id='testcase 1'/>" +
         "</Script>")));
     }

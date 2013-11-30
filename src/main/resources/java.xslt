@@ -88,13 +88,14 @@ import org.dpolivaev.tsgen.java.GoalCoverage;
 
 public class </xsl:text>
 	<xsl:variable name="class" select="java:upper-case-java-id(@id)"/>
+	<xsl:variable name="driver" select="java:upper-case-java-id(@driver)"/>
 	<xsl:value-of select="$class"/>
 	<xsl:text> {</xsl:text>
 	<xsl:call-template name="eol1"/>
-	<xsl:value-of select="$class"/>
-	<xsl:text>Driver driver = new </xsl:text>
-	<xsl:value-of select="$class"/>
-	<xsl:text>Driver();</xsl:text>
+	<xsl:value-of select="$driver"/>
+	<xsl:text> driver = new </xsl:text>
+	<xsl:value-of select="$driver"/>
+	<xsl:text>();</xsl:text>
 	<xsl:call-template name="eol1"/>
 	<xsl:apply-templates select="TestCase[@id]"/>
 	<xsl:text>
