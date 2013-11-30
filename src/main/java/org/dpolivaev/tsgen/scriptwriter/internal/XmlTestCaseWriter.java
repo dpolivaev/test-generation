@@ -19,11 +19,7 @@ public class XmlTestCaseWriter implements PropertyHandler {
     
     private static final String[] optionalElements = {
         "pre", "Precondition",
-        "state", "EnterState",
-        "preInState", "PreconditionInState",
         "foc", "Focus",
-        "veriInState", "VerificationInState",
-        "stateAfter", "CheckState",
         "veri", "Verification",
         "post", "Postprocessing",
     };
