@@ -3,6 +3,10 @@
 xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.scriptwriter.TransformationHelper"
 >
 <xsl:output method="text" encoding="utf-8"/>
+	<xsl:template name="eol">
+		<xsl:text>
+</xsl:text>
+	</xsl:template>
 	<xsl:template name="eol1">
 		<xsl:text>
 	</xsl:text>
@@ -18,35 +22,28 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.scriptw
 			</xsl:text>
 	</xsl:template>
 	
+	
 	<xsl:template name="Coverage">
 		<xsl:if test="Goal">
-			<xsl:call-template name="eol1"/>
-			<xsl:text>@Coverage(</xsl:text>
+			<xsl:call-template name="eol"/>
 			<xsl:if test="Goal/Item[@firstTime='true']">
-				<xsl:call-template name="eol2"/>
-				<xsl:text>first = {</xsl:text>
+				<xsl:call-template name="eol"/>
+				<xsl:text>\par First Hit Coverage:</xsl:text>
 				<xsl:apply-templates select="Goal/Item[@firstTime='true']">
 					<xsl:sort select="../@name"/>
 					<xsl:sort select="@name"/>
 				</xsl:apply-templates>
-				<xsl:call-template name="eol2"/>
-				<xsl:text>}</xsl:text>
-			</xsl:if>
-			<xsl:if test="Goal/Item[@firstTime='true'] and Goal/Item[@firstTime='false']">
-				<xsl:text>,</xsl:text>
+				<xsl:call-template name="eol"/>
 			</xsl:if>
 			<xsl:if test="Goal/Item[@firstTime='false']">
-				<xsl:call-template name="eol2"/>
-				<xsl:text>next = {</xsl:text>
+				<xsl:call-template name="eol"/>
+				<xsl:text>\par Next Hit Coverage:</xsl:text>
 				<xsl:apply-templates select="Goal/Item[@firstTime='false']">
 					<xsl:sort select="../@name"/>
 					<xsl:sort select="@name"/>
 				</xsl:apply-templates>
-				<xsl:call-template name="eol2"/>
-				<xsl:text>}</xsl:text>
+				<xsl:call-template name="eol"/>
 			</xsl:if>
-			<xsl:call-template name="eol1"/>
-			<xsl:text>)</xsl:text>
 		</xsl:if>
 	</xsl:template>
 	
@@ -56,18 +53,17 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.scriptw
 		<xsl:variable name="firstTime" select="@firstTime"/>
 		<xsl:if test="not (preceding-sibling::Item[@name=$item and @firstTime = $firstTime and ../@name=$goal])">
 			<xsl:call-template name="eol3"/>
-			<xsl:text>@GoalCoverage(goal = </xsl:text>
-			<xsl:value-of select="java:java-string($goal)"/>
+			<xsl:text>goal = </xsl:text>
+			<xsl:value-of select="$goal"/>
 			<xsl:text>, item=</xsl:text>
-			<xsl:value-of select="java:java-string($item)"/>
-			<xsl:text>, coverage={</xsl:text>
+			<xsl:value-of select="$item"/>
+			<xsl:text>, coverage=</xsl:text>
 		</xsl:if>
-		<xsl:value-of select="java:java-string(text())"/>
+		<xsl:value-of select="text()"/>
 		<xsl:if test="following-sibling::Item[@name=$item and @firstTime = $firstTime and ../@name=$goal]">
 			<xsl:text>, </xsl:text>
 		</xsl:if>
 		<xsl:if test="not (following-sibling::Item[@name=$item and @firstTime = $firstTime and ../@name=$goal])">
-			<xsl:text>})</xsl:text>
 			<xsl:if test="following-sibling::Item[@name=$item and @firstTime = $firstTime and ../@name=$goal]">
 				<xsl:text>,</xsl:text>
 			</xsl:if>
@@ -79,59 +75,83 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.scriptw
 	</xsl:template>
 	
 	<xsl:template match="Script">
-		<xsl:text>import static org.junit.Assert.*;
-import org.junit.Test;
-
-import org.dpolivaev.tsgen.java.Description;
-import org.dpolivaev.tsgen.java.Coverage;
-import org.dpolivaev.tsgen.java.GoalCoverage;
-
-public class </xsl:text>
-	<xsl:variable name="class" select="java:upper-first-camel-case-id(@id)"/>
-	<xsl:variable name="driver" select="java:upper-first-camel-case-id(@driver)"/>
-	<xsl:value-of select="$class"/>
-	<xsl:text> {</xsl:text>
-	<xsl:call-template name="eol1"/>
+	<xsl:variable name="file" select="java:snake-case-id(@id)"/>
+	<xsl:variable name="driver" select="java:snake-case-id(@driver)"/>
+	<xsl:text>#include "</xsl:text>
 	<xsl:value-of select="$driver"/>
-	<xsl:text> driver = new </xsl:text>
-	<xsl:value-of select="$driver"/>
-	<xsl:text>();</xsl:text>
-	<xsl:call-template name="eol1"/>
-	<xsl:apply-templates select="TestCase[@id]"/>
+	<xsl:text>.h"
+static void global_precondition() {</xsl:text>
+	<xsl:call-template name="eol"/>
+	<xsl:apply-templates select="ScriptPrecondition"/>
 	<xsl:text>
+}
+
+static void global_postprocessing(){</xsl:text>
+	<xsl:call-template name="eol"/>
+	<xsl:apply-templates select="ScriptPostprocessing"/>
+	<xsl:text>
+}
+
+</xsl:text>
+	<xsl:apply-templates select="TestCase[@id]"/>
+	<xsl:call-template name="eol"/>
+	<xsl:call-template name="eol"/>
+	<xsl:text>int run_</xsl:text>
+	<xsl:value-of select="$file"/>
+	<xsl:text>(void) {
+    int rc;
+    const UnitTest tests[] = {</xsl:text>
+    <xsl:for-each select="TestCase[@id]">    
+	    <xsl:call-template name="eol2"/>   
+	    <xsl:text>unit_test(</xsl:text>
+	    <xsl:call-template name="testCaseName"/>
+	    <xsl:text>),</xsl:text>
+	</xsl:for-each>
+	<xsl:call-template name="eol1"/>
+	<xsl:text>};
+	global_precondition();
+    rc = run_tests(tests);
+    global_postprocessing();
+    return rc;
 }
 </xsl:text>
 	</xsl:template>
 	
 	<xsl:template match="TestCase"/> 
 	
+	<xsl:template name="testCaseName">
+		<xsl:variable name="method" select="java:snake-case-id(@id)"/>
+		<xsl:text>test</xsl:text>
+		<xsl:number format="001"/>
+		<xsl:text>_</xsl:text>
+		<xsl:value-of select="$method"/>
+	</xsl:template>
+	
 	<xsl:template match="TestCase[@id]">
-	<xsl:variable name="method" select="java:lower-first-camel-case-id(@id)"/>
-	<xsl:apply-templates select="Description"/>
-	<xsl:call-template name="Coverage"/>	
-	<xsl:call-template name="eol1"/>
-	<xsl:text>@Test
-	public void test</xsl:text>
-	<xsl:number format="001"/>
-	<xsl:text>_</xsl:text>
-	<xsl:value-of select="$method"/>
-	<xsl:text>() {</xsl:text>
-	<xsl:call-template name="eol2"/>
-	<xsl:apply-templates select="child::*[name() != 'Description' and name() != 'Goal']"/>
-	<xsl:call-template name="eol1"/>
-	<xsl:text>}</xsl:text>
-	<xsl:call-template name="eol1"/>
+		<xsl:text>/*!</xsl:text>
+		<xsl:call-template name="eol"/>
+		<xsl:apply-templates select="Description"/>
+		<xsl:call-template name="Coverage"/>	
+		<xsl:text>*/</xsl:text>
+		<xsl:call-template name="eol"/>
+		<xsl:text>static void </xsl:text>
+		<xsl:call-template name="testCaseName"/>
+		<xsl:text>() {</xsl:text>
+		<xsl:apply-templates select="child::*[name() != 'Description' and name() != 'Goal']"/>
+		<xsl:call-template name="eol"/>
+		<xsl:text>}</xsl:text>
+		<xsl:call-template name="eol"/>
 	</xsl:template>
 	
 	<xsl:template match="ScriptPrecondition|Precondition|Focus|Verification|Postprocessing|ScriptPostprocessing">
-		<xsl:variable name="method" select="java:lower-first-camel-case-id(@id)"/>
+		<xsl:variable name="method" select="java:snake-case-id(@id)"/>
 		<xsl:call-template name="eol1"/>
 		<xsl:text>// </xsl:text>
 		<xsl:value-of select="name()"/>
 		<xsl:text> </xsl:text>
 		<xsl:number/>
 		<xsl:call-template name="eol2"/>
-		<xsl:text>driver.</xsl:text>
+		<xsl:text>driver_</xsl:text>
 		<xsl:value-of select="$method"/>
 		<xsl:text>(</xsl:text>
 		<xsl:apply-templates select="Parameter"/>
@@ -144,16 +164,12 @@ public class </xsl:text>
 			<xsl:call-template name="eol3"/>
 		</xsl:if>
 		<xsl:text>/* </xsl:text>
-		<xsl:value-of select="@name"/>
+		<xsl:value-of select="java:snake-case-id(@name)"/>
 		<xsl:text>*/ </xsl:text>
 		<xsl:value-of select="text()"/>
 	</xsl:template>
 	
 	<xsl:template match="Description">
-		<xsl:call-template name="eol1"/>
-		<xsl:text>@Description(</xsl:text>
-		<xsl:value-of select="java:java-string(text())"></xsl:value-of>
-		<xsl:text>)</xsl:text>
+		<xsl:value-of select="text()"></xsl:value-of>
 	</xsl:template>
-	
 </xsl:stylesheet>
