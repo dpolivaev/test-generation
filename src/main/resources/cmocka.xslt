@@ -79,10 +79,19 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.scriptw
 	
 	<xsl:template match="Script">
 	<xsl:variable name="file" select="java:snake-lower-case-id(@id)"/>
-	<xsl:text>#include "driver/</xsl:text>
+	<xsl:text>#include &lt;stdarg.h&gt;
+#include &lt;stddef.h&gt;
+#include &lt;setjmp.h&gt;
+#include &lt;cmocka.h&gt;
+
+</xsl:text>
+
+	<xsl:text>#include "</xsl:text>
 	<xsl:call-template name="driver"/>
-	<xsl:text>.h"
-static void global_precondition() {</xsl:text>
+	<xsl:text>.h"</xsl:text>
+	<xsl:call-template name="eol"/>
+	<xsl:call-template name="eol"/>
+	<xsl:text>static void global_precondition() {</xsl:text>
 	<xsl:call-template name="eol"/>
 	<xsl:apply-templates select="ScriptPrecondition"/>
 	<xsl:text>
