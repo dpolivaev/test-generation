@@ -79,7 +79,7 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.scriptw
 	
 	<xsl:template match="Script">
 	<xsl:variable name="file" select="java:snake-case-id(@id)"/>
-	<xsl:text>#include "</xsl:text>
+	<xsl:text>#include "driver/</xsl:text>
 	<xsl:call-template name="driver"/>
 	<xsl:text>.h"
 static void global_precondition() {</xsl:text>
@@ -98,9 +98,7 @@ static void global_postprocessing(){</xsl:text>
 	<xsl:apply-templates select="TestCase[@id]"/>
 	<xsl:call-template name="eol"/>
 	<xsl:call-template name="eol"/>
-	<xsl:text>int run_</xsl:text>
-	<xsl:value-of select="$file"/>
-	<xsl:text>(void) {
+	<xsl:text>int main(void) {
     int rc;
     const UnitTest tests[] = {</xsl:text>
     <xsl:for-each select="TestCase[@id]">    

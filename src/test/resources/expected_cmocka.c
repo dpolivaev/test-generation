@@ -1,4 +1,4 @@
-#include "call_price_driver.h"
+#include "driver/call_price_driver.h"
 static void global_precondition() {
 
 }
@@ -71,7 +71,7 @@ static void test003_multiple_goals() {
 }
 
 
-int run_call_price(void) {
+int main(void) {
     int rc;
     const UnitTest tests[] = {
 		unit_test(test001_is_call_valid_destination_national_foc_country_motherland_tariff_standard_foc_call_begin_time00000_day_of_the_week_monday_foc_call_duration00001),
