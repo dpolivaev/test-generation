@@ -77,7 +77,7 @@ public class IdConverter{
 		}
 	}
 
-	public String snakeCaseId(String invalidId) {
+	public String snakeLowerCaseId(String invalidId) {
 		String output = camelCaseId(invalidId);
 		output = replaceUpperCaseByUnderscore(output);
 		return output;
@@ -95,5 +95,9 @@ public class IdConverter{
 			lastCharacterWasLowerCase = lowerCaseCharacterFound;
 		}
 		return sb.toString();
+	}
+
+	public String snakeUpperCaseId(String invalidId) {
+		return snakeLowerCaseId(invalidId).toUpperCase();
 	}
 }

@@ -25,7 +25,7 @@ static void test001_is_call_valid_destination_national_foc_country_motherland_ta
 	// Focus 1
 		call_price_driver_calculate(/* call_begin_time*/ "0:00:00", 
 			/* call_duration*/ "0:00:01", 
-			/* cheap_call_active_for_call*/ false, 
+			/* cheap_call_active_for_call*/ FALSE, 
 			/* country*/ "Motherland", 
 			/* customer_id*/ 12345, 
 			/* day_of_week*/ "Monday", 
@@ -49,7 +49,7 @@ static void test002_is_call_valid_destination_national_foc_country_motherland_ta
 	// Focus 1
 		call_price_driver_calculate(/* call_begin_time*/ "0:00:01", 
 			/* call_duration*/ "0:00:59", 
-			/* cheap_call_active_for_call*/ false, 
+			/* cheap_call_active_for_call*/ FALSE, 
 			/* country*/ "Motherland", 
 			/* customer_id*/ 12345, 
 			/* day_of_week*/ "Tuesday", 
