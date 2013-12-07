@@ -16,8 +16,13 @@ public class TestIdProviderTest {
 		assertThat(javaId, CoreMatchers.equalTo(validId));
 	}
 	
-	private void check_snakeCaseId(String invalidId, String validId) {
-		String javaId = new IdConverter().snakeCaseId(invalidId);
+	private void check_snakeLowerCaseId(String invalidId, String validId) {
+		String javaId = new IdConverter().snakeLowerCaseId(invalidId);
+		assertThat(javaId, CoreMatchers.equalTo(validId));
+	}
+
+	private void check_snakeUpperCaseId(String invalidId, String validId) {
+		String javaId = new IdConverter().snakeUpperCaseId(invalidId);
 		assertThat(javaId, CoreMatchers.equalTo(validId));
 	}
 
@@ -71,18 +76,23 @@ public class TestIdProviderTest {
 	}
 
 	@Test
-	public void givenUpperCaseCharacters_snakeCaseId_makesSnakeCase() throws Exception {
-		check_snakeCaseId("A", "a");
+	public void givenUpperCaseCharacters_snakeLowerCaseId_makesLowerCase() throws Exception {
+		check_snakeLowerCaseId("A", "a");
 	}
 	
 	@Test
-	public void givenUpperCaseAfterLowerCase_snakeCaseId_insertsUnderscore() throws Exception {
-		check_snakeCaseId("aA", "a_a");
+	public void givenUpperCaseAfterLowerCase_snakeLowerCaseId_insertsUnderscore() throws Exception {
+		check_snakeLowerCaseId("aA", "a_a");
 	}
 
 	@Test
-	public void givenUpperCaseAfterUpperCase_snakeCaseId_insertsNoUnderscore() throws Exception {
-		check_snakeCaseId("AA", "aa");
+	public void givenUpperCaseAfterUpperCase_snakeLowerCaseId_insertsNoUnderscore() throws Exception {
+		check_snakeLowerCaseId("AA", "aa");
+	}
+
+	@Test
+	public void givenUpperCaseAfterLowerCase_snakeUpperCaseId_insertsUnderscore() throws Exception {
+		check_snakeUpperCaseId("aA", "A_A");
 	}
 
 	@Test

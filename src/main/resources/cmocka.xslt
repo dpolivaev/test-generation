@@ -23,7 +23,7 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.scriptw
 	</xsl:template>
 	
 	<xsl:template name="driver">
-		<xsl:value-of select="java:snake-case-id(ancestor-or-self::Script/@driver)"/>
+		<xsl:value-of select="java:snake-lower-case-id(ancestor-or-self::Script/@driver)"/>
 	</xsl:template>	
 	
 	<xsl:template name="Coverage">
@@ -78,7 +78,7 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.scriptw
 	</xsl:template>
 	
 	<xsl:template match="Script">
-	<xsl:variable name="file" select="java:snake-case-id(@id)"/>
+	<xsl:variable name="file" select="java:snake-lower-case-id(@id)"/>
 	<xsl:text>#include "driver/</xsl:text>
 	<xsl:call-template name="driver"/>
 	<xsl:text>.h"
@@ -120,7 +120,7 @@ static void global_postprocessing(){</xsl:text>
 	<xsl:template match="TestCase"/> 
 	
 	<xsl:template name="testCaseName">
-		<xsl:variable name="method" select="java:snake-case-id(@id)"/>
+		<xsl:variable name="method" select="java:snake-lower-case-id(@id)"/>
 		<xsl:text>test</xsl:text>
 		<xsl:number format="001"/>
 		<xsl:text>_</xsl:text>
@@ -144,7 +144,7 @@ static void global_postprocessing(){</xsl:text>
 	</xsl:template>
 	
 	<xsl:template match="ScriptPrecondition|Precondition|Focus|Verification|Postprocessing|ScriptPostprocessing">
-		<xsl:variable name="method" select="java:snake-case-id(@id)"/>
+		<xsl:variable name="method" select="java:snake-lower-case-id(@id)"/>
 		<xsl:call-template name="eol1"/>
 		<xsl:text>// </xsl:text>
 		<xsl:value-of select="name()"/>
@@ -165,9 +165,16 @@ static void global_postprocessing(){</xsl:text>
 			<xsl:call-template name="eol3"/>
 		</xsl:if>
 		<xsl:text>/* </xsl:text>
-		<xsl:value-of select="java:snake-case-id(@name)"/>
+		<xsl:value-of select="java:snake-lower-case-id(@name)"/>
 		<xsl:text>*/ </xsl:text>
-		<xsl:value-of select="text()"/>
+		<xsl:choose>
+			<xsl:when test="number(text()) = text() or starts-with(text(), '&quot;') or contains(text(), '(')">
+				<xsl:value-of select="text()"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="java:snake-upper-case-id(text())"/>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 	
 	<xsl:template match="Description">

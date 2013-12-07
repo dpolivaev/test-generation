@@ -8,8 +8,12 @@ public class TransformationHelper {
 		return new IdConverter().camelCaseId(input);
 	}
 	
-	public static String snakeCaseId(String input){
-		return new IdConverter().snakeCaseId(input);
+	public static String snakeLowerCaseId(String input){
+		return new IdConverter().snakeLowerCaseId(input);
+	}
+	
+	public static String snakeUpperCaseId(String input){
+		return new IdConverter().snakeUpperCaseId(input);
 	}
 	
 	public static String lowerFirstCamelCaseId(String input){
