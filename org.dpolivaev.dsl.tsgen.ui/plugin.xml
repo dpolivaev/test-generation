@@ -521,4 +521,73 @@
     </provider>
   </extension>
 
+     <extension
+         point="org.eclipse.debug.core.launchConfigurationTypes">
+      <launchConfigurationType
+            id="org.dpolivaev.dsl.tsgen.ui.StrategyLaunchConfigurationType"
+            modes="run, debug"
+            name="Generation Launch"
+            delegate="org.dpolivaev.dsl.tsgen.ui.StrategyDslExecutableExtensionFactory:org.dpolivaev.dsl.tsgen.ui.launch.StrategyDSLLaunchDelegate"
+            sourceLocatorId="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector"
+            sourcePathComputerId="org.eclipse.jdt.launching.sourceLookup.javaSourcePathComputer"/>
+   </extension>
+   
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+            class="org.dpolivaev.dsl.tsgen.ui.StrategyDslExecutableExtensionFactory:org.dpolivaev.dsl.tsgen.ui.launch.StrategyDSLLaunchTabGroup"
+            id="org.dpolivaev.dsl.tsgen.ui.StrategyLaunchConfigurationTabGroup"
+            type="org.dpolivaev.dsl.tsgen.ui.StrategyLaunchConfigurationType">
+            <launchMode 
+                  mode="debug"
+                  perspective="org.eclipse.debug.ui.DebugPerspective"
+                  description="Debug a Strategy File">
+            </launchMode>
+            <launchMode
+                  mode="run"
+                  description="Run a Strategy File">
+            </launchMode>
+      </launchConfigurationTabGroup>
+   </extension>
+
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+      <launchConfigurationTypeImage
+            configTypeID="org.dpolivaev.dsl.tsgen.ui.StrategyLaunchConfigurationType"
+            icon="icons/buildlaunch16.gif"
+            id="org.dpolivaev.dsl.tsgen.ui.StrategyLaunchConfigurationTypeImage"/>
+   </extension>
+
+
+   <extension
+         point="org.eclipse.debug.ui.launchShortcuts">
+      <shortcut
+            class="org.dpolivaev.dsl.tsgen.ui.StrategyDslExecutableExtensionFactory:org.dpolivaev.dsl.tsgen.ui.launch.StrategyDSLLaunchShortcut"
+            description="Launches a Build File"
+            icon="icons/buildlaunch16.gif"
+            id="org.xtext.builddsl.ui.launch.shortcut1"
+            label="Build Tasks"
+            modes="run, debug">
+          <contextualLaunch>
+           <enablement>
+             <with variable="selection">
+               <count value="1"/>
+               <iterate
+                     ifEmpty="false"
+                     operator="and">
+                  <adapt type="org.eclipse.core.resources.IFile"/>
+                    <test property="org.eclipse.debug.ui.matchesPattern"
+                          value="*.tsgen"/>
+               </iterate>
+             </with>
+           </enablement>
+           <contextLabel
+              mode="run"
+              label="Generation Task"/>
+          <contextLabel
+              mode="debug"
+              label="Generation Task"/>
+         </contextualLaunch>
+      </shortcut>
+   </extension>
 </plugin>
