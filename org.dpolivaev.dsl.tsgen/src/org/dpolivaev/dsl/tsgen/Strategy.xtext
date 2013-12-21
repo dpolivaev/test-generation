@@ -23,13 +23,14 @@ RuleGroup : {RuleGroup}
 Rule : PropertyRule|RequirementRule;
 
 PropertyRule returns Rule:
-	'let'
 	(
+		'let'
 		default ?= 'default'? name=PROPERTY_ID
-		'be' actions += ValueAction (',' actions += ValueAction)*
+		'be' 
+		(('shared' id=PROPERTY_ID)?  actions += ValueAction (',' actions += ValueAction)* | 'from' ruleReference = [Rule]) 
 		(ordered ?= 'ordered' | shuffled ?= 'shuffled')? 
-		| actions += SkipAction name=PROPERTY_ID
 	)
+	| actions += SkipAction
 ;
 
 RequirementRule returns Rule:

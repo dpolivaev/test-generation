@@ -205,8 +205,14 @@ class ScriptInitializer{
 		append(ruleFactoryType)
 		appendTriggers(it, ruleGroup)
 		appendConditions(it, ruleGroup)
-		appendRuleValues(it, rule)
-		appendRuleOrder(it, rule)
+		if(! rule.actions.empty  && rule.actions.get(0) instanceof SkipAction){
+			apppendSkip(it)
+		}
+		else{
+			appendRuleName(it, rule)
+			appendRuleValues(it, rule, true)
+			appendRuleOrder(it, rule)
+		}
 		if(rule.isDefault)
 			append('.asDefaultRule()')
 		else if(temporaryRule)
@@ -275,22 +281,26 @@ class ScriptInitializer{
 		} while(true)
 	}
 	
-	private def appendRuleValues(ITreeAppendable it, Rule rule) {
+
+	def private appendRuleName(ITreeAppendable it, Rule rule) {
 		val name = rule.name.escapeQuotes;
 		append('.iterate("')
 		if(rule.requirement)
 			append('requirement.')
 		append(name)
 		append('")')
+	}
+
+	def  private void appendRuleValues(ITreeAppendable it, Rule rule, boolean appendActionRuleGroups) {
+		if(rule.ruleReference != null){
+			appendRuleValues(it, rule.ruleReference, false)
+			return
+		}
 		for(action:rule.actions){
-			if(action instanceof ValueAction){
-				val valueAction = action as ValueAction
-				apppendValueAction(it, valueAction, rule.requirement)
+			val valueAction = action as ValueAction
+			apppendValueAction(it, valueAction, rule.requirement)
+			if(appendActionRuleGroups)
 				appendActionRuleGroups(it, valueAction)
-			}
-			else if(action instanceof SkipAction){
-				apppendSkip(it)
-			}
 		}
 	}
 
