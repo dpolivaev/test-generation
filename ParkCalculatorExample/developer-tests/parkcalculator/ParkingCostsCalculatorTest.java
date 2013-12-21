@@ -194,7 +194,7 @@ public class ParkingCostsCalculatorTest {
 	@Test
 	public void economyParkingZeroMinutes_costs0() {
 		ParkingCostsCalculator parkingCostsCalculator = new ParkingCostsCalculator();
-		int cost = parkingCostsCalculator.selectLot("Economy Parking")
+		int cost = parkingCostsCalculator.selectLot("Economy Lot Parking")
 		.setEntryDate("01/01/2001").setEntryTime("1:00").setEntryDayPart("am")
 		.setLeavingDate("01/01/2001").setLeavingTime("1:00").setLeavingDayPart("am")
 		.calculateCosts();
@@ -205,7 +205,7 @@ public class ParkingCostsCalculatorTest {
 	@Test
 	public void economyParkingoneWeek_costs54() {
 		ParkingCostsCalculator parkingCostsCalculator = new ParkingCostsCalculator();
-		int cost = parkingCostsCalculator.selectLot("Economy Parking")
+		int cost = parkingCostsCalculator.selectLot("Economy Lot Parking")
 		.setEntryDate("01/01/2001").setEntryTime("1:00").setEntryDayPart("am")
 		.setLeavingDate("01/08/2001").setLeavingTime("1:00").setLeavingDayPart("am")
 		.calculateCosts();
@@ -216,7 +216,7 @@ public class ParkingCostsCalculatorTest {
 	@Test
 	public void economyParking1Day_costs9() {
 		ParkingCostsCalculator parkingCostsCalculator = new ParkingCostsCalculator();
-		int cost = parkingCostsCalculator.selectLot("Economy Parking")
+		int cost = parkingCostsCalculator.selectLot("Economy Lot Parking")
 		.setEntryDate("01/01/2001").setEntryTime("1:00").setEntryDayPart("am")
 		.setLeavingDate("01/02/2001").setLeavingTime("1:00").setLeavingDayPart("am")
 		.calculateCosts();
@@ -227,7 +227,7 @@ public class ParkingCostsCalculatorTest {
 	@Test
 	public void economyParking4hours1minute_costs9() {
 		ParkingCostsCalculator parkingCostsCalculator = new ParkingCostsCalculator();
-		int cost = parkingCostsCalculator.selectLot("Economy Parking")
+		int cost = parkingCostsCalculator.selectLot("Economy Lot Parking")
 		.setEntryDate("01/01/2001").setEntryTime("1:00").setEntryDayPart("am")
 		.setLeavingDate("01/01/2001").setLeavingTime("5:01").setLeavingDayPart("am")
 		.calculateCosts();
@@ -238,7 +238,7 @@ public class ParkingCostsCalculatorTest {
 	@Test
 	public void economyParking3hours1minute_costs8() {
 		ParkingCostsCalculator parkingCostsCalculator = new ParkingCostsCalculator();
-		int cost = parkingCostsCalculator.selectLot("Economy Parking")
+		int cost = parkingCostsCalculator.selectLot("Economy Lot Parking")
 		.setEntryDate("01/01/2001").setEntryTime("1:00").setEntryDayPart("am")
 		.setLeavingDate("01/01/2001").setLeavingTime("4:01").setLeavingDayPart("am")
 		.calculateCosts();
