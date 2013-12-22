@@ -3,7 +3,7 @@
 #include <setjmp.h>
 #include <cmocka.h>
 
-#include "call_price_driver.h"
+#include "testdriver/call_price_driver.h"
 
 static void global_precondition() {
 

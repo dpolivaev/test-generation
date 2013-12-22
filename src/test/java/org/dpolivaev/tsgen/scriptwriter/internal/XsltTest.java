@@ -25,7 +25,7 @@ import javax.xml.transform.stream.StreamSource;
 @RunWith(Parameterized.class)
 public class XsltTest {
 	
-	@Parameterized.Parameters(name="{0}")
+	@Parameterized.Parameters(name="{0}|{1}>{2}")
 	   public static Collection<Object[]> resources() {
 	      return Arrays.asList(new Object[][] {
 	 	         { "/testInput.xml", "/java.xslt", "/expectedJava.txt" },

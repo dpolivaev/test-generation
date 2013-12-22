@@ -1,9 +1,14 @@
+package tests;
+
 import static org.junit.Assert.*;
 import org.junit.Test;
 
 import org.dpolivaev.tsgen.java.Description;
 import org.dpolivaev.tsgen.java.Coverage;
 import org.dpolivaev.tsgen.java.GoalCoverage;
+
+import testdriver.CallPriceDriver;
+import static testdriver.CallPriceDriver.*;
 
 public class CallPrice {
 	CallPriceDriver driver = new CallPriceDriver();

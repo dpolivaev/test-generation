@@ -23,7 +23,15 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.scriptw
 	</xsl:template>
 	
 	<xsl:template name="driver">
-		<xsl:value-of select="java:snake-lower-case-id(ancestor-or-self::Script/@driver)"/>
+		<xsl:value-of select="java:snake-lower-case-id(java:substring-after-last(ancestor-or-self::Script/@driver, '/'))"/>
+	</xsl:template>	
+	
+	<xsl:template name="driver-directory">
+		<xsl:variable name="directory" select="java:substring-before-last(ancestor-or-self::Script/@driver, '/')"/>
+		<xsl:if test="$directory != ''">
+			<xsl:value-of select="$directory"/>
+			<xsl:text>/</xsl:text>
+		</xsl:if>
 	</xsl:template>	
 	
 	<xsl:template name="Coverage">
@@ -87,6 +95,7 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.scriptw
 </xsl:text>
 
 	<xsl:text>#include "</xsl:text>
+	<xsl:call-template name="driver-directory"/>
 	<xsl:call-template name="driver"/>
 	<xsl:text>.h"</xsl:text>
 	<xsl:call-template name="eol"/>
