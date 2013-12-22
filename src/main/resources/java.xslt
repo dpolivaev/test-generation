@@ -3,6 +3,11 @@
 xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.scriptwriter.TransformationHelper"
 >
 <xsl:output method="text" encoding="utf-8"/>
+	<xsl:template name="eol">
+		<xsl:text>
+</xsl:text>
+	</xsl:template>
+
 	<xsl:template name="eol1">
 		<xsl:text>
 	</xsl:text>
@@ -79,16 +84,41 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.scriptw
 	</xsl:template>
 	
 	<xsl:template match="Script">
-		<xsl:text>import static org.junit.Assert.*;
+	<xsl:variable name="package" select="java:substring-before-last(@id, '/')"/>
+	<xsl:variable name="class" select="java:upper-first-camel-case-id(java:substring-after-last(@id, '/'))"/>
+	<xsl:variable name="driverpackage" select="java:substring-before-last(@driver, '/')"/>
+	<xsl:variable name="driver" select="java:upper-first-camel-case-id(java:substring-after-last(@driver, '/'))"/>
+	<xsl:if test="$package != ''">
+		<xsl:text>package </xsl:text>
+		<xsl:value-of select="$package"/>
+		<xsl:text>;</xsl:text>
+		<xsl:call-template name="eol"/>
+		<xsl:call-template name="eol"/>
+	</xsl:if>
+	<xsl:text>import static org.junit.Assert.*;
 import org.junit.Test;
 
 import org.dpolivaev.tsgen.java.Description;
 import org.dpolivaev.tsgen.java.Coverage;
 import org.dpolivaev.tsgen.java.GoalCoverage;
 
-public class </xsl:text>
-	<xsl:variable name="class" select="java:upper-first-camel-case-id(@id)"/>
-	<xsl:variable name="driver" select="java:upper-first-camel-case-id(@driver)"/>
+</xsl:text>
+	<xsl:if test="$driverpackage != ''">
+		<xsl:text>import </xsl:text>
+		<xsl:value-of select="$driverpackage"/>
+		<xsl:text>.</xsl:text>
+		<xsl:value-of select="$driver"/>
+		<xsl:text>;</xsl:text>
+		<xsl:call-template name="eol"/>
+		<xsl:text>import static </xsl:text>
+		<xsl:value-of select="$driverpackage"/>
+		<xsl:text>.</xsl:text>
+		<xsl:value-of select="$driver"/>
+		<xsl:text>.*;</xsl:text>
+		<xsl:call-template name="eol"/>
+		<xsl:call-template name="eol"/>
+	</xsl:if>
+	<xsl:text>public class </xsl:text>
 	<xsl:value-of select="$class"/>
 	<xsl:text> {</xsl:text>
 	<xsl:call-template name="eol1"/>
