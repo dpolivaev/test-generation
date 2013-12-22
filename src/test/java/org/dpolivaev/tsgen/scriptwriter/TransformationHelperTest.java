@@ -3,7 +3,6 @@ package org.dpolivaev.tsgen.scriptwriter;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 public class TransformationHelperTest {

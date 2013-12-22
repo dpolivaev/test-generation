@@ -3,10 +3,8 @@ package org.dpolivaev.tsgen.ruleengine.internal;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.dpolivaev.tsgen.ruleengine.InvalidCombinationException;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.Rule;
-import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 
 public class ConstantValue implements ValueWithRulesProvider{
     private final Object value;
