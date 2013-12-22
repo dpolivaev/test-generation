@@ -27,5 +27,19 @@ public class TransformationHelper {
 	public static String javaString(String input){
 		return new StringConverter().javaString(input);
 	}
+	
+	public static String substringBeforeLast(String input, String delimiter){
+		final int lastIndexOfDelimiter = input.lastIndexOf(delimiter);
+		if(lastIndexOfDelimiter <= 0)
+			return "";
+		return input.substring(0, lastIndexOfDelimiter);
+	}
+
+	public static String substringAfterLast(String input, String delimiter){
+			final int lastIndexOfDelimiter = input.lastIndexOf(delimiter);
+			if(lastIndexOfDelimiter <= 0)
+				return input;
+			return input.substring(lastIndexOfDelimiter + 1);
+	}
 
 }
