@@ -29,8 +29,6 @@ public class ConstantValue implements ValueWithRulesProvider{
      */
     @Override
     public Object value(PropertyContainer propertyContainer) {
-        if (value == SpecialValue.SKIP)
-            throw new InvalidCombinationException();
         return value;
     }
 

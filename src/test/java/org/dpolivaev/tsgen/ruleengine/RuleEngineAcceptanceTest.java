@@ -2,7 +2,6 @@ package org.dpolivaev.tsgen.ruleengine;
 
 import static org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory.iterate;
 import static org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory.when;
-import static org.dpolivaev.tsgen.ruleengine.SpecialValue.SKIP;
 import static org.dpolivaev.tsgen.ruleengine.SpecialValue.UNDEFINED;
 import static org.dpolivaev.tsgen.testutils.Combinations.combination;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -350,7 +349,7 @@ public class RuleEngineAcceptanceTest {
     public void triggeredRuleWithSkippingValues() {
 
         strategy.addRule(iterate("x").over("a1", "a2"));
-        strategy.addRule(when("x").iterate("y").over(SKIP)._if(new Condition() {
+        strategy.addRule(when("x").skip()._if(new Condition() {
 
             @Override
             public boolean isSatisfied(PropertyContainer propertyContainer) {

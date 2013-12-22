@@ -1,7 +1,7 @@
 package org.dpolivaev.tsgen.ruleengine;
 
 import static org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory.iterate;
-import static org.dpolivaev.tsgen.ruleengine.SpecialValue.SKIP;
+import static org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory.skip;
 import static org.dpolivaev.tsgen.testutils.Combinations.combination;
 import static org.junit.Assert.assertEquals;
 
@@ -385,7 +385,7 @@ public class RuleEngineExamples {
     }
     
     @Test
-    public void skip() {
+    public void skipCombination() {
 //'skip'
 //    $x
 //        :
@@ -399,7 +399,7 @@ public class RuleEngineExamples {
         strategy.addRule(iterate("x").over("a", "b", "c")
             .with(
                 iterate("y").over("A", "C"),
-                iterate("y").over(SKIP)._if(new Condition() {
+                skip()._if(new Condition() {
                     
                     @Override
                     public boolean isSatisfied(PropertyContainer propertyContainer) {
@@ -411,7 +411,7 @@ public class RuleEngineExamples {
         
         expect(combination("x", "a", "y", "A")
             .followedBy("x", "a", "y", "C")
-             .skip()
+             .skip().skip()
             .followedBy("x", "c", "y", "A")
             .followedBy("x", "c", "y", "C"));
    }
