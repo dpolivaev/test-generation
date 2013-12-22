@@ -118,6 +118,8 @@ import org.dpolivaev.tsgen.java.GoalCoverage;
 		<xsl:call-template name="eol"/>
 		<xsl:call-template name="eol"/>
 	</xsl:if>
+	<xsl:text>@SuppressWarnings("unused")</xsl:text>
+	<xsl:call-template name="eol"/>
 	<xsl:text>public class </xsl:text>
 	<xsl:value-of select="$class"/>
 	<xsl:text> {</xsl:text>
