@@ -342,7 +342,32 @@ class StrategyCompilationTest {
 			  }
 			}
 		''')
-	}	
+	}
+	
+	@Test def withSharedValues() {
+		'''
+			strategy First
+			let a be shared listA 1 {let b be 2}, 3 {}
+			let default d be from listA
+		'''.assertCompilesTo('''
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+			import org.dpolivaev.tsgen.ruleengine.Strategy;
+			
+			@SuppressWarnings("all")
+			public class MyFile {
+			  public final Strategy first = defineStrategyFirst();
+			  
+			  private Strategy defineStrategyFirst() {
+			    Strategy strategy = new Strategy();
+			    strategy.addRule(Factory.iterate("a").over(1).with(
+			      Factory.iterate("b").over(2).asTriggeredRule()
+			    ).over(3).asRule());
+			    strategy.addRule(Factory.iterate("d").over(1).over(3).asDefaultRule());
+			    return strategy;
+			  }
+			}
+		''')
+	}
 	
 	@Test def ordered() {
 		'''
