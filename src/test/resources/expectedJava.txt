@@ -10,6 +10,7 @@ import org.dpolivaev.tsgen.java.GoalCoverage;
 import testdriver.CallPriceDriver;
 import static testdriver.CallPriceDriver.*;
 
+@SuppressWarnings("unused")
 public class CallPrice {
 	CallPriceDriver driver = new CallPriceDriver();
 	
