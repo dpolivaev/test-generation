@@ -28,7 +28,7 @@ public class CallPrice {
 		}
 	)
 	@Test
-	public void test001_isCallValidDestinationNationalFocCountryMotherlandTariffStandardFocCallBeginTime00000DayOfTheWeekMondayFocCallDuration00001() {
+	public void test001_isCallValidDestinationNationalFocCountryMotherlandTariffStandardFocCallBeginTime00000DayOfTheWeekMondayFocCallDuration00001() throws Exception {
 		
 	// Focus 1
 		driver.calculate(/* callBeginTime*/ "0:00:00", 
@@ -55,7 +55,7 @@ public class CallPrice {
 		}
 	)
 	@Test
-	public void test002_isCallValidDestinationNationalFocCountryMotherlandTariffStandardFocCallBeginTime00001DayOfTheWeekTuesdayFocCallDuration00059() {
+	public void test002_isCallValidDestinationNationalFocCountryMotherlandTariffStandardFocCallBeginTime00001DayOfTheWeekTuesdayFocCallDuration00059() throws Exception {
 		
 	// Focus 1
 		driver.calculate(/* callBeginTime*/ "0:00:01", 
@@ -78,7 +78,7 @@ public class CallPrice {
 		}
 	)
 	@Test
-	public void test003_multipleGoals() {
+	public void test003_multipleGoals() throws Exception {
 		
 	// Focus 1
 		driver.focus();
