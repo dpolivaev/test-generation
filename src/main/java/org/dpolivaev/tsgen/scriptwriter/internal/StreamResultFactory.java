@@ -14,9 +14,17 @@ public class StreamResultFactory implements ResultFactory{
      public Result newResult(ScriptConfiguration scriptConfiguration) {
 		final File outputFile = scriptConfiguration.outputFile();
 		try {
-			return new StreamResult(new BufferedOutputStream(new FileOutputStream(outputFile)));
+			return new StreamResult(new BufferedOutputStream(createOutputFileStream(outputFile)));
 		} catch (FileNotFoundException e) {
 			throw new RuntimeException(e);
 		}
     }
+
+	private FileOutputStream createOutputFileStream(final File outputFile)
+			throws FileNotFoundException {
+		File directory = outputFile.getParentFile();
+		if(directory != null)
+			directory.mkdirs();
+		return new FileOutputStream(outputFile);
+	}
 }

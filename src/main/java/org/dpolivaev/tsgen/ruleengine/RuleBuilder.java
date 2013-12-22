@@ -143,9 +143,23 @@ public class RuleBuilder {
             return new RuleBuilder().iterate(property);
         }
 
+        static public RuleBuilder skip() {
+            return new RuleBuilder().skip();
+        }
+
         static public RuleBuilder _if(Condition condition) {
             return new RuleBuilder()._if(condition);
         }
     }
+
+	public RuleBuilder skip() {
+		return iterate(" skip ").over(new ValueProvider() {
+			
+			@Override
+			public Object value(PropertyContainer propertyContainer) {
+				throw new InvalidCombinationException();
+			}
+		});
+	}
 
 }
