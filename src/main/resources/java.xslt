@@ -145,7 +145,7 @@ import org.dpolivaev.tsgen.java.GoalCoverage;
 	<xsl:number format="001"/>
 	<xsl:text>_</xsl:text>
 	<xsl:value-of select="$method"/>
-	<xsl:text>() {</xsl:text>
+	<xsl:text>() throws Exception {</xsl:text>
 	<xsl:call-template name="eol2"/>
 	<xsl:apply-templates select="child::*[name() != 'Description' and name() != 'Goal']"/>
 	<xsl:call-template name="eol1"/>
