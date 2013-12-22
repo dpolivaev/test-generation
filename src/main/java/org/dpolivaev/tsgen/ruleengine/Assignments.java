@@ -20,7 +20,7 @@ public class Assignments implements PropertyContainer {
     public void add(Assignment assignment) {
         String targetedPropertyName = assignment.getTargetedPropertyName();
         if (assignments.containsKey(targetedPropertyName))
-            throw new PropertyAlreadyAssignedException();
+            throw new PropertyAlreadyAssignedException(targetedPropertyName);
         assignments.put(targetedPropertyName, assignment);
 	}
 
