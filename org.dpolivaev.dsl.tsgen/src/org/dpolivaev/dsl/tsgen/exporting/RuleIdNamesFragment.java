@@ -1,7 +1,7 @@
 package org.dpolivaev.dsl.tsgen.exporting;
 import java.util.Set;
 
-import org.dpolivaev.dsl.tsgen.naming.RuleXBaseNameProvider;
+import org.dpolivaev.dsl.tsgen.naming.ValuesXBaseNameProvider;
 import org.eclipse.xtext.Grammar;
 import org.eclipse.xtext.generator.BindFactory;
 import org.eclipse.xtext.generator.Binding;
@@ -21,7 +21,7 @@ public class RuleIdNamesFragment extends DefaultGeneratorFragment {
 	@Override
 	public Set<Binding> getGuiceBindingsRt(Grammar grammar) {
 		return new BindFactory()
-			.addfinalTypeToType(IQualifiedNameProvider.class.getName(), RuleXBaseNameProvider.class.getName())
+			.addfinalTypeToType(IQualifiedNameProvider.class.getName(), ValuesXBaseNameProvider.class.getName())
 			.getBindings();
 	}
 

@@ -75,6 +75,30 @@ class StrategyCompilationTest {
 		''')
 	}	
 	
+	@Test def withMultilineString() {
+		'''
+			strategy first
+				let x be "line1
+			line2
+			line3
+			"
+		'''.assertCompilesTo('''
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+			import org.dpolivaev.tsgen.ruleengine.Strategy;
+			
+			@SuppressWarnings("all")
+			public class MyFile {
+			  public final Strategy first = defineStrategyFirst();
+			  
+			  private Strategy defineStrategyFirst() {
+			    Strategy strategy = new Strategy();
+			    strategy.addRule(Factory.iterate("x").over("line1\nline2\nline3\n").asRule());
+			    return strategy;
+			  }
+			}
+		''')
+	}	
+	
 	@Test def withTriggeredRules() {
 		'''
 			strategy first
@@ -347,7 +371,7 @@ class StrategyCompilationTest {
 	@Test def withSharedValues() {
 		'''
 			strategy First
-			let a be shared listA 1 {let b be 2}, 3 {}
+			let a be listA with 1 {let b be 2}, 3 {}
 			let default d be from listA
 		'''.assertCompilesTo('''
 			import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
