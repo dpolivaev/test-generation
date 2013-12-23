@@ -64,9 +64,7 @@ public class ParkCalculatorTestDriver {
 	private Date leavingTime() {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(entryTime);
-		calendar.add(Calendar.DAY_OF_MONTH, weeks * 7 + days);
-		calendar.add(Calendar.HOUR, hours);
-		calendar.add(Calendar.MINUTE, minutes);
+		calendar.add(Calendar.MINUTE, ((weeks * 7 + days) *24 + hours) * 60 + minutes);
 		Date leavingTime = calendar.getTime();
 		return leavingTime;
 	}
@@ -74,79 +72,52 @@ public class ParkCalculatorTestDriver {
 		calculatedCosts = parkingCostsCalculator.calculateCosts();
 	}
 
-	public void verifyParkingCostsForLONG_TERM_GARAGE_PARKING() {
-		
-	}
 
-	public void verifyParkingCostsForECONOMY_LOT_PARKING() {
+	public void selectIllegalLot(BadValues value) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void verifyParkingCostsForLONG_TERM_SURFACE_PARKING() {
+	public void setIllegalEntryDate(BadValues value) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void verifyParkingCostsForSHORT_TERM_PARKING() {
-		int expectedCosts = (weeks * 7 + days) * 24;
-		int partialDayCosts;
-		if(hours > 0){
-			partialDayCosts = hours * 2;
-			if(minutes > 30)
-				partialDayCosts += 2;
-			else if(minutes > 0)
-				partialDayCosts += 1;
-		}
-		else if(minutes > 0)
-			partialDayCosts = 2;
-		else
-			partialDayCosts = 0;
-		expectedCosts += Math.min(24, partialDayCosts);
-		assertThat(calculatedCosts,equalTo(expectedCosts));
-	}
-
-	public void verifyParkingCostsForVALET_PARKING() {
-		int expectedCosts = (weeks * 7 + days) * 18;
-		if(hours > 5)
-			expectedCosts += 18;
-		else if(hours != 0 || minutes != 0)
-			expectedCosts += 12;
-		assertThat(calculatedCosts,equalTo(expectedCosts));
-		
-	}
-
-	public void illegalEntryDate(BadValues nullValue) {
+	public void setIllegalEntryDayPart(BadValues value) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void illegalEntryDayPart(BadValues nullValue) {
+	public void setIllegalEntryTime(BadValues value) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void illegalEntryTime(BadValues nullValue) {
+	public void setIllegalLeavingDate(BadValues value) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void illegalLeavingDate(BadValues nullValue) {
+	public void setIllegalLeavingDayPart(BadValues value) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void illegalLeavingDayPart(BadValues nullValue) {
+	public void setIllegalLeavingTime(BadValues value) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void illegalLeavingTime(BadValues nullValue) {
+	public void useIllegalDateInCalculation() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void illegalLot(BadValues nullValue) {
+	public void verifyParkingCosts(int expectedCosts) {
+		assertThat(calculatedCosts, equalTo(expectedCosts));
+	}
+
+	public void useLeavingDateEarlierThanEntryDate() {
 		// TODO Auto-generated method stub
 		
 	}
