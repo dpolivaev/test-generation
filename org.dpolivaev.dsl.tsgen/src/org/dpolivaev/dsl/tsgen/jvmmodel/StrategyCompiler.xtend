@@ -7,6 +7,7 @@ import org.dpolivaev.dsl.tsgen.strategydsl.PropertyCall
 import org.eclipse.xtext.xbase.XStringLiteral
 import org.eclipse.xtext.common.types.JvmTypeReference
 import org.eclipse.xtext.util.Strings
+import org.eclipse.xtext.xbase.compiler.Later
 
 class StrategyCompiler extends XbaseCompiler {
 	override protected doInternalToJavaStatement(XExpression expr, ITreeAppendable it, boolean isReferenced) {
@@ -61,4 +62,20 @@ class StrategyCompiler extends XbaseCompiler {
 		return output
 	}
 	
+	override protected void convertWrapperToPrimitive(
+		JvmTypeReference wrapper, 
+		JvmTypeReference primitive, 
+		XExpression context, 
+		ITreeAppendable appendable,
+		Later expression) {
+		appendable.append("(");
+		expression.exec(appendable);
+		appendable.append(")");
+		if(primitive.qualifiedName != Object.name){
+			appendable.append(".");
+			serialize(primitive, context, appendable);
+			appendable.append("Value(");
+			appendable.append(")");
+		}
+	}
 }
