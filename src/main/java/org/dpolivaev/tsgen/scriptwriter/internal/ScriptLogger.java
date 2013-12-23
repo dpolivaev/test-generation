@@ -23,7 +23,7 @@ public class ScriptLogger implements PropertyHandler, ErrorHandler {
 	public void handlePropertyCombination(PropertyContainer propertyContainer) {
 		try {
 			log.append(propertyContainer.getCombinationCounter() + " : "
-					+ assignmentFormatter.format(propertyContainer) + '\n');
+					+ assignmentFormatter.format(propertyContainer).replace('\n', ' ') + '\n');
 		} catch (IOException e) {
 			throw Utils.runtimeException(e);
 		}
