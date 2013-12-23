@@ -1,13 +1,11 @@
 package parkcalculator;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 public class ParkDateTimeTest {

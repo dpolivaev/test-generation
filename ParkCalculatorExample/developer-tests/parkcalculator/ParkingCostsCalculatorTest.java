@@ -57,6 +57,17 @@ public class ParkingCostsCalculatorTest {
 	}
 	
 	@Test
+	public void valetParkingOneWeek_costs18x7() {
+		ParkingCostsCalculator parkingCostsCalculator = new ParkingCostsCalculator();
+		int cost = parkingCostsCalculator.selectLot("Valet Parking")
+		.setEntryDate("01/01/2001").setEntryTime("1:00").setEntryDayPart("am")
+		.setLeavingDate("01/08/2001").setLeavingTime("1:00").setLeavingDayPart("am")
+		.calculateCosts();
+		
+		assertThat(cost, CoreMatchers.equalTo(18*7));
+	}
+	
+	@Test
 	public void valetParking24HoursOneMinute_costs30() {
 		ParkingCostsCalculator parkingCostsCalculator = new ParkingCostsCalculator();
 		int cost = parkingCostsCalculator.selectLot("Valet Parking")

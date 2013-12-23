@@ -1,0 +1,39 @@
+import org.dpolivaev.tsgen.strategies.StrategyHelper
+
+strategy parkCostCalculatorTests 
+	extends StrategyHelper.id("testcase")
+
+let script be "parkcalculator/ParkCalculatorTest"
+let script.imports be "import static parkcalculator.Lots.*;
+import static parkcalculator.BadValues.*;"
+let driver be "parkcalculator/ParkCalculatorTestDriver"
+
+let foc be "calculate parking costs"{
+		let pre1 be "select lot"
+		let pre1.lot be listOfValidLots with 
+			"VALET_PARKING", 
+			"SHORT_TERM_PARKING", 
+			"LONG_TERM_GARAGE_PARKING", 
+			"LONG_TERM_SURFACE_PARKING", 
+			"ECONOMY_LOT_PARKING"{
+				let pre3.parkingWeeks be 0, 1, 6
+				let pre3.parkingDays be 0, 1, 6
+				let pre3.parkingHours be 0, 1, 23
+				let pre3.parkingMinutes be 0, 1, 59
+			}
+		let pre2 be "set entry time"
+		let pre2.entryTime be '"01/1/1970 12:00 am"', '"12/31/1999 12:00 pm"', '"02/28/2016 23:59 pm"'
+		
+		let pre3 be "set leaving time"
+		let veri be "verify parking costs for " + :pre1.lot
+		
+	}, 
+	"illegal lot", "illegal entry date", "illegal entry time", "illegal entry day part",
+	"illegal leaving date", "illegal leaving time", "illegal leaving day part"{
+		let foc.wrongValue be "NULL_VALUE", "BAD_VALUE"
+	}
+	
+	
+run strategy parkCostCalculatorTests 
+	output "output/xml", apply "/java.xslt" output "generated-tests/java" 
+	report  "output/report.xml"

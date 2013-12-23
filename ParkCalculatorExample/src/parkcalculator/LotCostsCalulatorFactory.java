@@ -10,7 +10,7 @@ public class LotCostsCalulatorFactory {
 
 	public LotCostsCalulator calculator(String lot) {
 		if(VALET_PARKING.equals(lot))
-			return new ValueLotCostsCalulator();
+			return new ValletLotCostsCalulator();
 		if(SHORT_TERM_PARKING.equals(lot))
 			return new ShortTermLotCostsCalulator();
 		if(LONG_TERM_GARAGE_PARKING.equals(lot))
