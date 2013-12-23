@@ -118,6 +118,10 @@ import org.dpolivaev.tsgen.java.GoalCoverage;
 		<xsl:call-template name="eol"/>
 		<xsl:call-template name="eol"/>
 	</xsl:if>
+	<xsl:if test="Parameter[@name='imports']">
+		<xsl:value-of select="Parameter[@name='imports']"/>
+		<xsl:call-template name="eol"/>
+	</xsl:if>
 	<xsl:text>@SuppressWarnings("unused")</xsl:text>
 	<xsl:call-template name="eol"/>
 	<xsl:text>public class </xsl:text>
