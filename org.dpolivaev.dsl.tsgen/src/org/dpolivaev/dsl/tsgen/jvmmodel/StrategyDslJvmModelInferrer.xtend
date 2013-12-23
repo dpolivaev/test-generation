@@ -39,6 +39,7 @@ import java.util.Arrays
 import org.eclipse.xtext.xbase.compiler.Later
 import org.dpolivaev.tsgen.scriptwriter.StrategyRunner
 import org.dpolivaev.dsl.tsgen.strategydsl.OutputConfiguration
+import org.dpolivaev.dsl.tsgen.strategydsl.Values
 
 /**
  * <p>Infers a JVM model from the source model.</p> 
@@ -205,12 +206,12 @@ class ScriptInitializer{
 		append(ruleFactoryType)
 		appendTriggers(it, ruleGroup)
 		appendConditions(it, ruleGroup)
-		if(! rule.actions.empty  && rule.actions.get(0) instanceof SkipAction){
+		if(rule.skip){
 			apppendSkip(it)
 		}
 		else{
 			appendRuleName(it, rule)
-			appendRuleValues(it, rule, true)
+			appendRuleValues(it, rule.values, rule.requirement, true)
 			appendRuleOrder(it, rule)
 		}
 		if(rule.isDefault)
@@ -291,14 +292,14 @@ class ScriptInitializer{
 		append('")')
 	}
 
-	def  private void appendRuleValues(ITreeAppendable it, Rule rule, boolean appendActionRuleGroups) {
-		if(rule.ruleReference != null){
-			appendRuleValues(it, rule.ruleReference, false)
+	def  private void appendRuleValues(ITreeAppendable it, Values values, boolean requirement, boolean appendActionRuleGroups) {
+		if(values.valueReference != null){
+			appendRuleValues(it, values.valueReference, requirement, false)
 			return
 		}
-		for(action:rule.actions){
+		for(action:values.actions){
 			val valueAction = action as ValueAction
-			apppendValueAction(it, valueAction, rule.requirement)
+			apppendValueAction(it, valueAction, requirement)
 			if(appendActionRuleGroups)
 				appendActionRuleGroups(it, valueAction)
 		}

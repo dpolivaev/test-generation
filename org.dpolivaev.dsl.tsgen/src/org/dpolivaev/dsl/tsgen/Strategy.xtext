@@ -27,14 +27,22 @@ PropertyRule returns Rule:
 		'let'
 		default ?= 'default'? name=PROPERTY_ID
 		'be' 
-		(('shared' id=PROPERTY_ID)?  actions += ValueAction (',' actions += ValueAction)* | 'from' ruleReference = [Rule]) 
+		values = PropertyValues
 		(ordered ?= 'ordered' | shuffled ?= 'shuffled')? 
 	)
-	| actions += SkipAction
+	| skip ?= SkipAction
+;
+
+PropertyValues returns Values:
+	((name=PROPERTY_ID 'with')?  actions += ValueAction (',' actions += ValueAction)* | 'from' valueReference = [Values]) 
 ;
 
 RequirementRule returns Rule:
-	requirement ?= 'cover' name=PROPERTY_ID 'by' actions += ItemAction
+	requirement ?= 'cover' name=PROPERTY_ID 'by' values = ItemValues 
+;
+
+ItemValues returns Values:
+	actions += ItemAction
 ;
 
 Trigger:
