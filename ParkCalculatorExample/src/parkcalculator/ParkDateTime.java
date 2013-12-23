@@ -34,7 +34,7 @@ public class ParkDateTime {
 		try {
 			return dateTimeParser.parse(dateTimeAsString);
 		} catch (Exception e) {
-			throw new IllegalArgumentException(e);
+			throw new IllegalTimeException(e);
 		}
 	}
 

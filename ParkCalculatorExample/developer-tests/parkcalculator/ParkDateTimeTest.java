@@ -25,6 +25,34 @@ public class ParkDateTimeTest {
 		assertThat(difference.differenceInMilliSeconds(), equalTo(60L*1000));
 	}
 	
+	
+	@Test(expected=IllegalTimeException.class)
+	public void illegalEntryDate(){
+		ParkDateTime earlierDate = new ParkDateTime().setDate("Unknown").setTime("1:00").setDayPart("am");
+		ParkDateTime leavingDate = new ParkDateTime().setDate("12/31/2001").setTime("1:01").setDayPart("am");
+		leavingDate.substract(earlierDate);
+	}
+	
+	@Test(expected=IllegalTimeException.class)
+	public void nullEntryDate(){
+		ParkDateTime earlierDate = new ParkDateTime().setDate(null).setTime("1:00").setDayPart("am");
+		ParkDateTime leavingDate = new ParkDateTime().setDate("12/31/2001").setTime("1:01").setDayPart("am");
+		leavingDate.substract(earlierDate);
+	}
+
+	@Test(expected=IllegalTimeException.class)
+	public void illegalLeavingDate(){
+		ParkDateTime earlierDate = new ParkDateTime().setDate("12/31/2001").setTime("1:00").setDayPart("am");
+		ParkDateTime leavingDate = new ParkDateTime().setDate("Unknown").setTime("1:01").setDayPart("am");
+		leavingDate.substract(earlierDate);
+	}
+	
+	@Test(expected=IllegalTimeException.class)
+	public void nullLeavingDate(){
+		ParkDateTime earlierDate = new ParkDateTime().setDate("12/31/2001").setTime("1:00").setDayPart("am");
+		ParkDateTime leavingDate = new ParkDateTime().setDate(null).setTime("1:01").setDayPart("am");
+		leavingDate.substract(earlierDate);
+	}
 
 	@Test
 	public void calculatesWeekDifference() throws Exception {
