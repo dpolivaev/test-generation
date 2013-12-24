@@ -77,7 +77,7 @@ class StrategyDSLLaunchShortcut implements ILaunchShortcut {
 		val generation = contents.filter(Generation).head
 		if(generation == null)
 			return null
-		val className = generation.eResource.URI.trimFileExtension.lastSegment.toFirstUpper
+		val className = generation.eResource.URI.trimFileExtension.lastSegment
 		val qualifiedClassName = if(generation.package != null) generation.package + '.' + className else className
 		qualifiedClassName
 	}
