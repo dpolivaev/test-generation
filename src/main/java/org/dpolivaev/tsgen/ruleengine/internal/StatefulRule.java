@@ -107,8 +107,7 @@ public abstract class StatefulRule implements Rule {
             for (Rule rule : dependentRules)
                 rule.propertyCombinationFinished(engineState);
             if (!isBlockedBy(dependentRules)) {
-                removeValueRelatedRules(engineState);
-                dependentRules.clear();
+                clearDependentRules(engineState);
                 if (valueProviders.allValuesUsed())
                     setBlocksRequiredProperties(false);
             }
@@ -116,16 +115,19 @@ public abstract class StatefulRule implements Rule {
         }
     }
 
-    private void removeValueRelatedRules(EngineState engineState) {
-        Collection<Rule> relatedRules = valueProviders.currentProvider().rules(engineState);
-        for (Rule rule : relatedRules) {
-            engineState.currentStrategy().removeRule(rule);
+    public void clearDependentRules(EngineState engineState) {
+        for (Rule dependentRule : dependentRules){
+        	dependentRule.clearDependentRules(engineState);
         }
+        Collection<Rule> valueRelatedRules = valueProviders.currentProvider().rules(engineState);
+        for (Rule removedRule : valueRelatedRules)
+            engineState.currentStrategy().removeRule(removedRule);
+        dependentRules.clear();
     }
 
     @Override
-    public void setBlocksRequiredProperties() {
-        setBlocksRequiredProperties(!false);
+    public void setBlocksRequiredProperties(boolean block) {
+        this.blocksRequiredProperties = block;
     }
 
     @Override
@@ -140,9 +142,9 @@ public abstract class StatefulRule implements Rule {
 
     @Override
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder("StatefulRule [");
+        StringBuilder stringBuilder = new StringBuilder(getClass().getSimpleName()).append(" [");
         appendTriggeringPropertyList(stringBuilder);
-        stringBuilder.append(targetedPropertyName).append("]");
+        stringBuilder.append(targetedPropertyName).append("]").append(valueProviders);
         return stringBuilder.toString();
     }
 
@@ -166,11 +168,6 @@ public abstract class StatefulRule implements Rule {
         return condition;
     }
 
-    protected void setBlocksRequiredProperties(boolean blocksRequiredProperties) {
-        this.blocksRequiredProperties = blocksRequiredProperties;
-    }
-
-    
     @Override
     public boolean forcesIteration() {
         return valueProviders.containsMultipleValues();

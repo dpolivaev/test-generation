@@ -112,10 +112,10 @@ public class AlternatingRuleTest {
 
         AlternatingRule alternatingRule = new AlternatingRule(first, second);
         alternatingRule.propertyCombinationStarted(state);
-        alternatingRule.setBlocksRequiredProperties();
+        alternatingRule.setBlocksRequiredProperties(true);
 
-        verify(first).setBlocksRequiredProperties();
-        verify(second, never()).setBlocksRequiredProperties();
+        verify(first).setBlocksRequiredProperties(true);
+        verify(second, never()).setBlocksRequiredProperties(true);
     }
 
     @Test

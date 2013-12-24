@@ -69,7 +69,10 @@ public class Strategy {
     }
 
     private <T> void removeRule(Map<T, Rule> rules, T key, Rule rule) {
-        Rule reducedRule = rules.get(key).without(rule);
+        Rule containedRule = rules.get(key);
+        if(containedRule == null)
+        	return;
+		Rule reducedRule = containedRule.without(rule);
         if (reducedRule == null)
             rules.remove(key);
         else

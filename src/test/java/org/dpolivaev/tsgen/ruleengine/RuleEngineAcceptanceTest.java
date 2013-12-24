@@ -456,4 +456,4 @@ public class RuleEngineAcceptanceTest {
         }).when(scriptProducer).handlePropertyCombination(ruleEngine);
         ruleEngine.run(strategy);
     }
-}
+ }

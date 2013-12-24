@@ -30,4 +30,9 @@ public class ConstantValue implements ValueWithRulesProvider{
         return value;
     }
 
+	@Override
+	public String toString() {
+		return value.toString();
+	}
+
 }

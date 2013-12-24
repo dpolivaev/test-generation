@@ -33,4 +33,9 @@ public class ValueWithRules implements ValueWithRulesProvider {
         return rules;
     }
 
+	@Override
+	public String toString() {
+		return valueProvider.toString();
+	}
+
 }
