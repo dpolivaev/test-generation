@@ -243,7 +243,7 @@ public class RuleEngineExamples {
 //                            'D', 'E'
         
         strategy.addRule(iterate("x").over("a", "b", "c")
-            .with(iterate("y'").over(new ValueProvider() {
+            .with(iterate("y1").over(new ValueProvider() {
                 @Override
                 public Object value(PropertyContainer propertyContainer) {
                     return propertyContainer.get("y");
@@ -262,9 +262,9 @@ public class RuleEngineExamples {
         }).asDefaultRule());
         
         generateCombinationsForStrategy();
-        expect(combination("x", "a", "y", "D", "y'", "D")
-            .followedBy("x", "b", "y", "C", "y'", "C")
-            .followedBy("x", "c", "y", "E", "y'", "E")
+        expect(combination("x", "a", "y", "D", "y1", "D")
+            .followedBy("x", "b", "y", "C", "y1", "C")
+            .followedBy("x", "c", "y", "E", "y1", "E")
             .followedBy("x", "d", "y", "A")
             .followedBy("x", "d", "y", "B"));
     }

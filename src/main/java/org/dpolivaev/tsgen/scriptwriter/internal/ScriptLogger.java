@@ -24,6 +24,7 @@ public class ScriptLogger implements PropertyHandler, ErrorHandler {
 		try {
 			log.append(propertyContainer.getCombinationCounter() + " : "
 					+ assignmentFormatter.format(propertyContainer).replace('\n', ' ') + '\n');
+			log.flush();
 		} catch (IOException e) {
 			throw Utils.runtimeException(e);
 		}

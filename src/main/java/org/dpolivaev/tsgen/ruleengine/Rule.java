@@ -28,7 +28,7 @@ public interface Rule {
 
     boolean isValueAddedToCurrentCombination();
 
-    void setBlocksRequiredProperties();
+    void setBlocksRequiredProperties(boolean block);
 
     Rule combineWith(Rule rule);
 
@@ -39,4 +39,6 @@ public interface Rule {
     boolean isDefaultRule();
 
     boolean forcesIteration();
+
+	void clearDependentRules(EngineState engineState);
 }

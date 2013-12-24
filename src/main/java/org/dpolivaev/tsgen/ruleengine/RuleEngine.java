@@ -101,6 +101,9 @@ public class RuleEngine implements EngineState {
     }
 
     private void fireNextCombinationFinishedEvent() {
+        for (Rule rule : assignments.firedRules())
+        	if(rule.isDefaultRule())
+        		strategy.getDefaultRulesForProperty(rule.getTargetedPropertyName()).propertyCombinationFinished(this);
         for (Rule rule : strategy.topRules())
             rule.propertyCombinationFinished(this);
 	}

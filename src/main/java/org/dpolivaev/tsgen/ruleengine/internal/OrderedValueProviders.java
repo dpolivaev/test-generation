@@ -1,5 +1,7 @@
 package org.dpolivaev.tsgen.ruleengine.internal;
 
+import java.util.Arrays;
+
 
 public class OrderedValueProviders implements ValueProviders {
     private ValueWithRulesProvider[] valueWithRulesProviders;
@@ -42,6 +44,11 @@ public class OrderedValueProviders implements ValueProviders {
     public boolean containsMultipleValues() {
         return size() > 1;
     }
+
+	@Override
+	public String toString() {
+		return Arrays.toString(valueWithRulesProviders);
+	}
     
     
 }

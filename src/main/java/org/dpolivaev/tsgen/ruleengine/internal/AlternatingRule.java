@@ -56,10 +56,8 @@ public class AlternatingRule implements Rule {
     	Rule newActiveRule = activeRule(propertyCombinationStarter);
     	if(newActiveRule != null){
     		if (activeRule != null) {
-    			if (activeRule.blocksRequiredProperties()) {
-    				if (!activeRule.equals(newActiveRule)) {
-    					throw new InconsistentRuleException("Inconsistent rules for property " + getTargetedPropertyName());
-    				}
+    			if (!activeRule.equals(newActiveRule)) {
+    				throw new InconsistentRuleException("Inconsistent rules for property " + getTargetedPropertyName());
     			}
     		}
     		activeRule = newActiveRule;
@@ -89,8 +87,8 @@ public class AlternatingRule implements Rule {
     }
 
     @Override
-    public void setBlocksRequiredProperties() {
-        activeRule.setBlocksRequiredProperties();
+    public void setBlocksRequiredProperties(boolean block) {
+        activeRule.setBlocksRequiredProperties(block);
     }
 
     @Override
@@ -117,6 +115,8 @@ public class AlternatingRule implements Rule {
 
     @Override
     public Rule without(Rule rule) {
+    	if(activeRule == rule)
+    		activeRule = null;
         rules.remove(rule);
         if (rules.size() == 1)
             return firstRule();
@@ -132,5 +132,11 @@ public class AlternatingRule implements Rule {
     public boolean forcesIteration() {
         return activeRule.forcesIteration();
     }
+
+	@Override
+	public void clearDependentRules(EngineState engineState) {
+		activeRule.clearDependentRules(engineState);
+		
+	}
 
 }

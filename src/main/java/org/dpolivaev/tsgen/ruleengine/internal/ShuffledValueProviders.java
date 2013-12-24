@@ -59,4 +59,10 @@ public class ShuffledValueProviders implements ValueProviders {
 	public Order getOrder() {
 		return order;
 	}
+
+	public String toString() {
+		return orderedValueProviders.toString();
+	}
+	
+	
 }
