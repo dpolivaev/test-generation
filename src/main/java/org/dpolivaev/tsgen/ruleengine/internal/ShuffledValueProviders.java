@@ -55,4 +55,8 @@ public class ShuffledValueProviders implements ValueProviders {
     public boolean containsMultipleValues() {
         return orderedValueProviders.containsMultipleValues();
     }
+
+	public Order getOrder() {
+		return order;
+	}
 }

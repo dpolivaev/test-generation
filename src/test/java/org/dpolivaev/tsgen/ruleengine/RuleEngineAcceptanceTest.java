@@ -112,8 +112,8 @@ public class RuleEngineAcceptanceTest {
     @Test
     public void twoRulesWithValuesA1_A2_A3andB1_B2() {
 
-        strategy.addRule(iterate("x").over("a1", "a2", "a3"));
-        strategy.addRule(iterate("y").over("b1", "b2"));
+        strategy.addRule(iterate("x").over("a1", "a2", "a3").ordered());
+        strategy.addRule(iterate("y").over("b1", "b2").ordered());
 
         generateCombinationsForStrategy();
 
@@ -125,8 +125,8 @@ public class RuleEngineAcceptanceTest {
     public void twoTriggeredRulesWithValuesA1_A2_A3andB1_B2() {
 
         strategy.addRule(iterate("x").over("1"));
-        strategy.addRule(iterate("y").over("a1", "a2", "a3").when("x"));
-        strategy.addRule(iterate("z").over("b1", "b2").when("x"));
+        strategy.addRule(iterate("y").over("a1", "a2", "a3").ordered().when("x"));
+        strategy.addRule(iterate("z").over("b1", "b2").ordered().when("x"));
 
         generateCombinationsForStrategy();
 
@@ -147,8 +147,8 @@ public class RuleEngineAcceptanceTest {
 
     @Test
     public void triggeringAndTriggeredRulesWithValuesA_B_and_C_D() {
-        strategy.addRule(iterate("x").over("a", "b"));
-        strategy.addRule(when("x").iterate("y").over("c", "d"));
+        strategy.addRule(iterate("x").over("a", "b").ordered());
+        strategy.addRule(when("x").iterate("y").over("c", "d").ordered());
 
         generateCombinationsForStrategy();
 
@@ -241,8 +241,8 @@ public class RuleEngineAcceptanceTest {
     @Test
     public void ruleAndRuleWithDependentCondition() {
 
-        strategy.addRule(iterate("x").over("a1", "a2"));
-        strategy.addRule(iterate("y").over("b1", "b2").when("x")._if(new Condition() {
+        strategy.addRule(iterate("x").over("a1", "a2").ordered());
+        strategy.addRule(iterate("y").over("b1", "b2").ordered().when("x")._if(new Condition() {
 
             @Override
             public boolean isSatisfied(PropertyContainer propertyContainer) {
@@ -282,8 +282,8 @@ public class RuleEngineAcceptanceTest {
 
     @Test
     public void ruleManagesValueSpecificTemporaryRules() {
-        RuleBuilder temporaryRule = iterate("y").over("1", "2");
-        strategy.addRule(iterate("x").over("a", "b").with(temporaryRule));
+        RuleBuilder temporaryRule = iterate("y").over("1", "2").ordered();
+        strategy.addRule(iterate("x").over("a", "b").ordered().with(temporaryRule));
 
         generateCombinationsForStrategy();
 
