@@ -8,7 +8,6 @@ import org.dpolivaev.dsl.tsgen.strategydsl.Condition
 import org.dpolivaev.dsl.tsgen.strategydsl.Generation
 import org.dpolivaev.dsl.tsgen.strategydsl.Rule
 import org.dpolivaev.dsl.tsgen.strategydsl.RuleGroup
-import org.dpolivaev.dsl.tsgen.strategydsl.SkipAction
 import org.dpolivaev.dsl.tsgen.strategydsl.ValueAction
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.EcoreUtil2
@@ -28,7 +27,6 @@ import org.eclipse.xtext.xbase.jvmmodel.IJvmDeclaredTypeAcceptor
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory
-import org.dpolivaev.tsgen.ruleengine.ValueProvider
 import org.dpolivaev.dsl.tsgen.strategydsl.StrategyReference
 
 import static extension org.dpolivaev.dsl.tsgen.jvmmodel.StrategyCompiler.*
@@ -40,6 +38,7 @@ import org.eclipse.xtext.xbase.compiler.Later
 import org.dpolivaev.tsgen.scriptwriter.StrategyRunner
 import org.dpolivaev.dsl.tsgen.strategydsl.OutputConfiguration
 import org.dpolivaev.dsl.tsgen.strategydsl.Values
+import org.dpolivaev.dsl.tsgen.strategydsl.ValueProvider
 
 /**
  * <p>Infers a JVM model from the source model.</p> 
@@ -135,11 +134,11 @@ class ScriptInitializer{
 	}
 	
 	private def appendValueProviders(ValueAction action){
-		for(expr:action.valueProviders){
-			if(shouldCreateMethodFor(expr)){
-				createMethod(expr, "valueProvider", expr.newTypeRef(Object), true)
-			}
-		}
+		for(valueProvider:action.valueProviders)
+			for(expr:valueProvider.expressions)
+				if(shouldCreateMethodFor(expr))
+					createMethod(expr, "valueProvider", valueProvider.newTypeRef(Object), true)
+		
 	}
 	
 	private def createMethod(XExpression expr, String prefix, JvmTypeReference resultTypeRef, boolean useParameters){
@@ -352,47 +351,62 @@ class ScriptInitializer{
 	def private appendValueAction(ITreeAppendable it, ValueAction valueAction) {	
 		append('.over(')
 		var firstValue = true
-		for (expr: valueAction.valueProviders){
+		for (valueProvider: valueAction.valueProviders){
 			if(firstValue)
 				firstValue = false
 			else
 				append(', ')
-			val methodName = methods.get(expr)
-			if(methodName == null)
-				xbaseCompiler.compileAsJavaExpression(expr, it, valueAction.newTypeRef(Object))
-			else{
-				appendImplementationObject(it, valueAction.newTypeRef(ValueProvider).type, "Object value", 
-					[append('''«methodName»(propertyContainer)''')]
-				)
-			}
+			val expressions = valueProvider.expressions 
+			if(expressions.size == 1 && methods.get(expressions.get(0)) == null)
+				xbaseCompiler.compileAsJavaExpression(expressions.get(0), it, valueProvider.newTypeRef(Object))
+			else	
+				appendImplementationObject(it, valueAction.newTypeRef(org.dpolivaev.tsgen.ruleengine.ValueProvider).type, "Object value", 
+					[appendValueExpression(it, valueProvider)])
 		}
 		append(')')
+	}
+
+	def private appendValueExpression(ITreeAppendable it, ValueProvider valueProvider) {
+		val concatenation = valueProvider.expressions.size() > 1
+		if(concatenation)
+			append("new StringBuilder()");
+		
+		for (expr : valueProvider.expressions){	
+			if(concatenation)
+				append(".append(");
+			val methodName = methods.get(expr)
+			if(methodName == null)
+				xbaseCompiler.compileAsJavaExpression(expr, it, valueProvider.newTypeRef(Object))
+			else{
+				append('''«methodName»(propertyContainer)''')
+			}
+			if(concatenation)
+				append(")");
+		}
+		if(concatenation)
+			append(".toString()");
 	}
 	
 	def private apppendRequirementValueAction(ITreeAppendable it, ValueAction valueAction) {
 		append('.over(')
-		appendImplementationObject(it, valueAction.newTypeRef(ValueProvider).type, "Object value",
+		appendImplementationObject(it, valueAction.newTypeRef(org.dpolivaev.tsgen.ruleengine.ValueProvider).type, "Object value",
 			[
 				append(valueAction.newTypeRef(Arrays).type)
 				append('.asList(')
 				var firstValue = true
-				for (expr: valueAction.valueProviders){
+				for (valueProvider: valueAction.valueProviders){
 					if(firstValue)
 						firstValue = false
 					else
 						append(', ')
-					val methodName = methods.get(expr)
-					if(methodName == null)
-						xbaseCompiler.compileAsJavaExpression(expr, it, valueAction.newTypeRef(Object))
-					else
-						append('''«methodName»(propertyContainer)''')
+					appendValueExpression(it, valueProvider)
 				}
 				append(')')
 			]
 		) 
 		append(')')
 	}
-	
+
 	def private apppendSkip(ITreeAppendable it){
 		append('.skip()')
 	}

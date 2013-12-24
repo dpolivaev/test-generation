@@ -435,6 +435,31 @@ class StrategyCompilationTest {
 		''')
 	}
 	
+	@Test def concatenatedValues(){
+		'''
+			strategy first
+				let x be ("a" "b")
+		'''.assertCompilesTo('''
+			import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+			import org.dpolivaev.tsgen.ruleengine.Strategy;
+			import org.dpolivaev.tsgen.ruleengine.ValueProvider;
+			
+			@SuppressWarnings("all")
+			public class MyFile {
+			  public final Strategy first = defineStrategyFirst();
+			  
+			  private Strategy defineStrategyFirst() {
+			    Strategy strategy = new Strategy();
+			    strategy.addRule(Factory.iterate("x").over(new ValueProvider(){
+			      @Override public Object value(PropertyContainer propertyContainer) { return new StringBuilder().append("a").append("b").toString(); }
+			    }).asRule());
+			    return strategy;
+			  }
+			}
+		''')
+	}
+	
 	@Test def oneStrategyRun() {
 		'''
 			strategy First
