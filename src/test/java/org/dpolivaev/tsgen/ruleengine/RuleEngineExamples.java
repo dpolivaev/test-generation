@@ -64,7 +64,7 @@ public class RuleEngineExamples {
 //                $y
 //                    :
 //                        'A', 'B', 'C'
-        strategy.addRule(iterate("x").over("a", "b", "c").with(iterate("y").over("A", "B", "C")));
+        strategy.addRule(iterate("x").over("a", "b", "c").ordered().with(iterate("y").over("A", "B", "C").ordered()));
         generateCombinationsForStrategy();
         expect(combination("x", "a", "y", "A").followedBy("x", "a", "y", "B").followedBy("x", "a", "y", "C")
             .followedBy("x", "b", "y", "A").followedBy("x", "b", "y", "B").followedBy("x", "b", "y", "C")
@@ -85,9 +85,9 @@ public class RuleEngineExamples {
 //        :
 //            '1', '2', '3', '4', '5'
 //                ordered
-        strategy.addRule(iterate("x").over("a", "b", "c"));
-        strategy.addRule(iterate("y").over("A", "B"));
-        strategy.addRule(iterate("z").over("1", "2", "3", "4", "5"));
+        strategy.addRule(iterate("x").over("a", "b", "c").ordered());
+        strategy.addRule(iterate("y").over("A", "B").ordered());
+        strategy.addRule(iterate("z").over("1", "2", "3", "4", "5").ordered());
         generateCombinationsForStrategy();
         expect(combination("x", "a", "y", "A", "z", "1")
             .followedBy("x", "b", "y", "B", "z", "2")
@@ -109,8 +109,8 @@ public class RuleEngineExamples {
 //      $z
 //          :
 //              $x # " && " # $y ,  $x # " || " # $y
-        strategy.addRule(iterate("x").over("a", "b", "c"));
-        strategy.addRule(iterate("y").over("A", "B"));
+        strategy.addRule(iterate("x").over("a", "b", "c").ordered());
+        strategy.addRule(iterate("y").over("A", "B").ordered());
         strategy.addRule(iterate("z").over(new ValueProvider() {
             @Override
             public Object value(PropertyContainer propertyContainer) {
@@ -122,7 +122,7 @@ public class RuleEngineExamples {
             public Object value(PropertyContainer propertyContainer) {
                  return propertyContainer.get("x") + "||" + propertyContainer.get("y");
             }
-        }));
+        }).ordered());
         generateCombinationsForStrategy();
         expect(combination("x", "a", "y", "A", "z", "a&&A")
             .followedBy("x", "a", "y", "A", "z", "a||A")
@@ -156,10 +156,10 @@ public class RuleEngineExamples {
             public Object value(PropertyContainer propertyContainer) {
                  return propertyContainer.get("x") + "||" + propertyContainer.get("y");
             }
-        }).when("x", "y"));
+        }).ordered().when("x", "y"));
         
-        strategy.addRule(iterate("x").over("a", "b", "c"));
-        strategy.addRule(iterate("y").over("A", "B"));
+        strategy.addRule(iterate("x").over("a", "b", "c").ordered());
+        strategy.addRule(iterate("y").over("A", "B").ordered());
         
         generateCombinationsForStrategy();
         
@@ -184,7 +184,7 @@ public class RuleEngineExamples {
 //                $y
 //                    :
 //                        'C'
-        strategy.addRule(iterate("x").over("a", "b").with(iterate("y").over("A", "B"))
+        strategy.addRule(iterate("x").over("a", "b").ordered().with(iterate("y").over("A", "B").ordered())
             .over("c").with(iterate("y").over("C")));
         generateCombinationsForStrategy();
         expect(combination("x", "a", "y", "A").followedBy("x", "a", "y", "B")
@@ -396,9 +396,9 @@ public class RuleEngineExamples {
 //                    if
 //                        $x == 'b'
 //                            skip
-        strategy.addRule(iterate("x").over("a", "b", "c")
+        strategy.addRule(iterate("x").over("a", "b", "c").ordered()
             .with(
-                iterate("y").over("A", "C"),
+                iterate("y").over("A", "C").ordered(),
                 skip()._if(new Condition() {
                     
                     @Override
