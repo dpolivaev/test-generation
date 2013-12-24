@@ -4,8 +4,11 @@ import java.util.Random;
 
 public class Permutation {
 
-    public Permutation(int size) {
-        this(size, new Random());
+    public static long seed = 1;
+    final public static long  RANDOM_SEED = -1;
+
+	public Permutation(int size) {
+        this(size, seed == RANDOM_SEED ? new Random() : new Random(seed));
     }
 
     public Permutation(int size, Random random) {
