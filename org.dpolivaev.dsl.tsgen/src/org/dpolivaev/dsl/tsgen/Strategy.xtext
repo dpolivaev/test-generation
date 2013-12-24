@@ -60,12 +60,16 @@ SkipAction : {SkipAction}
 ;
 
 ValueAction:{ValueAction}
-	valueProviders += XExpression (=>',' valueProviders += XExpression)*
-	('{' ruleGroups += RuleGroup* '}')?
+	valueProviders += ValueProvider (=>',' valueProviders += ValueProvider)*
+	(=>'{' ruleGroups += RuleGroup* '}')?
 ;
 
 ItemAction:{ValueAction}
-	valueProviders += XExpression (=>',' valueProviders += XExpression)*
+	valueProviders += ValueProvider (=>',' valueProviders += ValueProvider)*
+;
+
+ValueProvider:
+	=>'(' expressions += XExpression+ ')' | expressions += XExpression 
 ;
 
 Run:
