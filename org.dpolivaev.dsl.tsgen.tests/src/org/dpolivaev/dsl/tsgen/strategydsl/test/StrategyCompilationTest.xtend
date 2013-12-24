@@ -44,9 +44,9 @@ class StrategyCompilationTest {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  public final Strategy first = defineStrategyFirst();
+			  public final static Strategy first = defineStrategyFirst();
 			  
-			  private Strategy defineStrategyFirst() {
+			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
 			    return strategy;
 			  }
@@ -64,9 +64,9 @@ class StrategyCompilationTest {
 		
 		@SuppressWarnings("all")
 		public class MyFile {
-		  public final Strategy first = defineStrategyFirst();
+		  public final static Strategy first = defineStrategyFirst();
 		  
-		  private Strategy defineStrategyFirst() {
+		  private static Strategy defineStrategyFirst() {
 		    Strategy strategy = new Strategy();
 		    strategy.addRule(Factory.iterate("x y").over(1, 2, 3).asRule());
 		    return strategy;
@@ -88,9 +88,9 @@ class StrategyCompilationTest {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  public final Strategy first = defineStrategyFirst();
+			  public final static Strategy first = defineStrategyFirst();
 			  
-			  private Strategy defineStrategyFirst() {
+			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
 			    strategy.addRule(Factory.iterate("x").over("line1\nline2\nline3\n").asRule());
 			    return strategy;
@@ -109,9 +109,9 @@ class StrategyCompilationTest {
 		
 		@SuppressWarnings("all")
 		public class MyFile {
-		  public final Strategy first = defineStrategyFirst();
+		  public final static Strategy first = defineStrategyFirst();
 		  
-		  private Strategy defineStrategyFirst() {
+		  private static Strategy defineStrategyFirst() {
 		    Strategy strategy = new Strategy();
 		    strategy.addRule(Factory.when("x1", "x2").iterate("y").over(1, 2, 3).asRule());
 		    return strategy;
@@ -132,13 +132,13 @@ class StrategyCompilationTest {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  private Object valueProvider1(final PropertyContainer propertyContainer) {
+			  private static Object valueProvider1(final PropertyContainer propertyContainer) {
 			    return propertyContainer.get("x");
 			  }
 			  
-			  public final Strategy first = defineStrategyFirst();
+			  public final static Strategy first = defineStrategyFirst();
 			  
-			  private Strategy defineStrategyFirst() {
+			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
 			    strategy.addRule(Factory.iterate("y").over(new ValueProvider(){
 			      @Override public Object value(PropertyContainer propertyContainer) { return valueProvider1(propertyContainer); }
@@ -161,14 +161,14 @@ class StrategyCompilationTest {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  private Boolean condition1(final PropertyContainer propertyContainer) {
+			  private static Boolean condition1(final PropertyContainer propertyContainer) {
 			    boolean _lessThan = (1 < 2);
 			    return Boolean.valueOf(_lessThan);
 			  }
 			  
-			  public final Strategy first = defineStrategyFirst();
+			  public final static Strategy first = defineStrategyFirst();
 			  
-			  private Strategy defineStrategyFirst() {
+			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
 			    strategy.addRule(Factory._if(new Condition(){
 			      @Override public boolean isSatisfied(PropertyContainer propertyContainer) { return condition1(propertyContainer); }
@@ -192,14 +192,14 @@ class StrategyCompilationTest {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  private Boolean condition1(final PropertyContainer propertyContainer) {
+			  private static Boolean condition1(final PropertyContainer propertyContainer) {
 			    boolean _lessThan = (1 < 2);
 			    return Boolean.valueOf(_lessThan);
 			  }
 			  
-			  public final Strategy first = defineStrategyFirst();
+			  public final static Strategy first = defineStrategyFirst();
 			  
-			  private Strategy defineStrategyFirst() {
+			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
 			    strategy.addRule(Factory._if(new Condition(){
 			      @Override public boolean isSatisfied(PropertyContainer propertyContainer) { return condition1(propertyContainer); }
@@ -223,19 +223,19 @@ class StrategyCompilationTest {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  private Boolean condition1(final PropertyContainer propertyContainer) {
+			  private static Boolean condition1(final PropertyContainer propertyContainer) {
 			    boolean _lessThan = (1 < 2);
 			    return Boolean.valueOf(_lessThan);
 			  }
 			  
-			  private Boolean condition2(final PropertyContainer propertyContainer) {
+			  private static Boolean condition2(final PropertyContainer propertyContainer) {
 			    boolean _lessThan = (3 < 4);
 			    return Boolean.valueOf(_lessThan);
 			  }
 			  
-			  public final Strategy first = defineStrategyFirst();
+			  public final static Strategy first = defineStrategyFirst();
 			  
-			  private Strategy defineStrategyFirst() {
+			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
 			    strategy.addRule(Factory._if(new Condition(){
 			      @Override public boolean isSatisfied(PropertyContainer propertyContainer) { return condition1(propertyContainer) && condition2(propertyContainer); }
@@ -255,9 +255,9 @@ class StrategyCompilationTest {
 		
 		@SuppressWarnings("all")
 		public class MyFile {
-		  public final Strategy first = defineStrategyFirst();
+		  public final static Strategy first = defineStrategyFirst();
 		  
-		  private Strategy defineStrategyFirst() {
+		  private static Strategy defineStrategyFirst() {
 		    Strategy strategy = new Strategy();
 		    strategy.addRule(Factory.iterate("x").over(1, 2, 3).asDefaultRule());
 		    return strategy;
@@ -278,9 +278,9 @@ class StrategyCompilationTest {
 		
 		@SuppressWarnings("all")
 		public class MyFile {
-		  public final Strategy first = defineStrategyFirst();
+		  public final static Strategy first = defineStrategyFirst();
 		  
-		  private Strategy defineStrategyFirst() {
+		  private static Strategy defineStrategyFirst() {
 		    Strategy strategy = new Strategy();
 		    strategy.addRule(Factory.when("x1", "x2").iterate("y").over(1, 2, 3).asRule());
 		    return strategy;
@@ -301,9 +301,9 @@ class StrategyCompilationTest {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  public final Strategy first = defineStrategyFirst();
+			  public final static Strategy first = defineStrategyFirst();
 			  
-			  private Strategy defineStrategyFirst() {
+			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
 			    strategy.addRule(Factory.iterate("x").over(1).with(
 			      Factory.iterate("y").over(2).asTriggeredRule()
@@ -327,9 +327,9 @@ class StrategyCompilationTest {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  public final Strategy first = defineStrategyFirst();
+			  public final static Strategy first = defineStrategyFirst();
 			  
-			  private Strategy defineStrategyFirst() {
+			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
 			    strategy.addRule(Factory.iterate("x").over(1).with(
 			      Factory.iterate("y").over(2).asTriggeredRule(),
@@ -355,9 +355,9 @@ class StrategyCompilationTest {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  public final Strategy first = defineStrategyFirst();
+			  public final static Strategy first = defineStrategyFirst();
 			  
-			  private Strategy defineStrategyFirst() {
+			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
 			    strategy.addRule(Factory.iterate("x").over(1).with(
 			      Factory.when("x").iterate("y").over(2).asTriggeredRule()
@@ -379,9 +379,9 @@ class StrategyCompilationTest {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  public final Strategy first = defineStrategyFirst();
+			  public final static Strategy First = defineStrategyFirst();
 			  
-			  private Strategy defineStrategyFirst() {
+			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
 			    strategy.addRule(Factory.iterate("a").over(1).with(
 			      Factory.iterate("b").over(2).asTriggeredRule()
@@ -403,9 +403,9 @@ class StrategyCompilationTest {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  public final Strategy first = defineStrategyFirst();
+			  public final static Strategy first = defineStrategyFirst();
 			  
-			  private Strategy defineStrategyFirst() {
+			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
 			    strategy.addRule(Factory.iterate("x").over(2, 3).ordered().asRule());
 			    return strategy;
@@ -424,9 +424,9 @@ class StrategyCompilationTest {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  public final Strategy first = defineStrategyFirst();
+			  public final static Strategy first = defineStrategyFirst();
 			  
-			  private Strategy defineStrategyFirst() {
+			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
 			    strategy.addRule(Factory.iterate("x").over(2, 3).shuffled().asRule());
 			    return strategy;
@@ -447,9 +447,9 @@ class StrategyCompilationTest {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  public final Strategy first = defineStrategyFirst();
+			  public final static Strategy first = defineStrategyFirst();
 			  
-			  private Strategy defineStrategyFirst() {
+			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
 			    strategy.addRule(Factory.iterate("x").over(new ValueProvider(){
 			      @Override public Object value(PropertyContainer propertyContainer) { return new StringBuilder().append("a").append("b").toString(); }
@@ -470,21 +470,20 @@ class StrategyCompilationTest {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  public final Strategy first = defineStrategyFirst();
+			  public final static Strategy First = defineStrategyFirst();
 			  
-			  private Strategy defineStrategyFirst() {
+			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
 			    return strategy;
 			  }
 			  
-			  public void run1() {
+			  public static void run1() {
 			    StrategyRunner strategyRunner = new StrategyRunner();
-			    strategyRunner.run(first);
+			    strategyRunner.run(First);
 			  }
 			  
 			  public static void main(final String[] args) {
-			    MyFile instance = new MyFile();
-			    instance.run1();
+			    MyFile.run1();
 			  }
 			}
 		''')
@@ -501,28 +500,27 @@ class StrategyCompilationTest {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  public final Strategy first = defineStrategyFirst();
+			  public final static Strategy first = defineStrategyFirst();
 			  
-			  public final Strategy second = defineStrategySecond();
+			  public final static Strategy second = defineStrategySecond();
 			  
-			  private Strategy defineStrategyFirst() {
+			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
 			    return strategy;
 			  }
 			  
-			  private Strategy defineStrategySecond() {
+			  private static Strategy defineStrategySecond() {
 			    Strategy strategy = new Strategy();
 			    return strategy;
 			  }
 			  
-			  public void run1() {
+			  public static void run1() {
 			    StrategyRunner strategyRunner = new StrategyRunner();
 			    strategyRunner.run(first.with(second));
 			  }
 			  
 			  public static void main(final String[] args) {
-			    MyFile instance = new MyFile();
-			    instance.run1();
+			    MyFile.run1();
 			  }
 			}
 		''')
@@ -537,16 +535,16 @@ class StrategyCompilationTest {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  public final Strategy first = defineStrategyFirst();
+			  public final static Strategy first = defineStrategyFirst();
 			  
-			  public final Strategy second = defineStrategySecond();
+			  public final static Strategy second = defineStrategySecond();
 			  
-			  private Strategy defineStrategyFirst() {
+			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
 			    return strategy;
 			  }
 			  
-			  private Strategy defineStrategySecond() {
+			  private static Strategy defineStrategySecond() {
 			    Strategy strategy = new Strategy().with(first).with(first);
 			    return strategy;
 			  }
@@ -564,14 +562,14 @@ class StrategyCompilationTest {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  private Strategy externalStrategy1() {
+			  private static Strategy externalStrategy1() {
 			    Strategy _strategy = new Strategy();
 			    return _strategy;
 			  }
 			  
-			  public final Strategy first = defineStrategyFirst();
+			  public final static Strategy first = defineStrategyFirst();
 			  
-			  private Strategy defineStrategyFirst() {
+			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy().with(externalStrategy1());
 			    return strategy;
 			  }
@@ -588,22 +586,21 @@ class StrategyCompilationTest {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  public final Strategy first = defineStrategyFirst();
+			  public final static Strategy First = defineStrategyFirst();
 			  
-			  private Strategy defineStrategyFirst() {
+			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
 			    return strategy;
 			  }
 			  
-			  public void run1() {
+			  public static void run1() {
 			    StrategyRunner strategyRunner = new StrategyRunner();
 			    strategyRunner.getOutputConfiguration().setXmlDirectory("testoutput").setXmlExtension("xml").setXsltSource("my.xslt").setFileDirectory("testoutput").setFileExtension("java");
-			    strategyRunner.run(first);
+			    strategyRunner.run(First);
 			  }
 			  
 			  public static void main(final String[] args) {
-			    MyFile instance = new MyFile();
-			    instance.run1();
+			    MyFile.run1();
 			  }
 			}
 		''')
@@ -619,22 +616,21 @@ class StrategyCompilationTest {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  public final Strategy first = defineStrategyFirst();
+			  public final static Strategy First = defineStrategyFirst();
 			  
-			  private Strategy defineStrategyFirst() {
+			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
 			    return strategy;
 			  }
 			  
-			  public void run1() {
+			  public static void run1() {
 			    StrategyRunner strategyRunner = new StrategyRunner();
 			    strategyRunner.getOutputConfiguration().setFileDirectory("testoutput").setFileExtension("xml");
-			    strategyRunner.run(first);
+			    strategyRunner.run(First);
 			  }
 			  
 			  public static void main(final String[] args) {
-			    MyFile instance = new MyFile();
-			    instance.run1();
+			    MyFile.run1();
 			  }
 			}
 		''')
@@ -650,22 +646,21 @@ class StrategyCompilationTest {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  public final Strategy first = defineStrategyFirst();
+			  public final static Strategy First = defineStrategyFirst();
 			  
-			  private Strategy defineStrategyFirst() {
+			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
 			    return strategy;
 			  }
 			  
-			  public void run1() {
+			  public static void run1() {
 			    StrategyRunner strategyRunner = new StrategyRunner();
 			    strategyRunner.getReportConfiguration().setXmlDirectory("testoutput").setXmlExtension("xml").setXsltSource("my.xslt").setFileDirectory("testoutput").setFileExtension("report");
-			    strategyRunner.run(first);
+			    strategyRunner.run(First);
 			  }
 			  
 			  public static void main(final String[] args) {
-			    MyFile instance = new MyFile();
-			    instance.run1();
+			    MyFile.run1();
 			  }
 			}
 		''')
@@ -684,9 +679,9 @@ class StrategyCompilationTest {
 			
 			@SuppressWarnings("all")
 			public class MyFile {
-			  public final Strategy first = defineStrategyFirst();
+			  public final static Strategy First = defineStrategyFirst();
 			  
-			  private Strategy defineStrategyFirst() {
+			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
 			    strategy.addRule(Factory.iterate("requirement.req1").over(new ValueProvider(){
 			      @Override public Object value(PropertyContainer propertyContainer) { return Arrays.asList(123, 456); }
@@ -711,13 +706,13 @@ class StrategyCompilationTest {
 				
 				@SuppressWarnings("all")
 				public class MyFile {
-				  private Object valueProvider1(final PropertyContainer propertyContainer) {
+				  private static Object valueProvider1(final PropertyContainer propertyContainer) {
 				    return propertyContainer.get("a");
 				  }
 				  
-				  public final Strategy first = defineStrategyFirst();
+				  public final static Strategy First = defineStrategyFirst();
 				  
-				  private Strategy defineStrategyFirst() {
+				  private static Strategy defineStrategyFirst() {
 				    Strategy strategy = new Strategy();
 				    strategy.addRule(Factory.iterate("a").over(123).asDefaultRule());
 				    strategy.addRule(Factory.iterate("requirement.req1").over(new ValueProvider(){

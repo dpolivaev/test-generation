@@ -79,7 +79,7 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 	 *            <code>true</code>.
 	 */
 	def dispatch void infer(Generation script, IJvmDeclaredTypeAcceptor acceptor, boolean isPreIndexingPhase) {
-		val className = script.eResource.URI.trimFileExtension.lastSegment.toFirstUpper
+		val className = script.eResource.URI.trimFileExtension.lastSegment
 		val qualifiedClassName = if(script.package != null) script.package + '.' + className else className
 		acceptor.accept(script.toClass(qualifiedClassName)).initializeLater([
 			new ScriptInitializer(jvmTypesBuilder, xbaseCompiler, it, script).initializeClass()
@@ -150,6 +150,7 @@ class ScriptInitializer{
 						parameters += expr.toParameter("propertyContainer", expr.newTypeRef(PropertyContainer))
 					body = expr
 					visibility = JvmVisibility::PRIVATE
+					static = true
 				]
 	}
 	
@@ -182,6 +183,7 @@ class ScriptInitializer{
 					append('''return strategy;''')
 				]
 				visibility = JvmVisibility::PRIVATE
+				static = true
 			]
 		}
 	}
@@ -441,12 +443,13 @@ class ScriptInitializer{
 	private def inferStrategyFields(){
 		for (strategy : script.strategies) {
 			val methodName = "defineStrategy" + strategy.name.toFirstUpper
-			jvmType.members += strategy.toField(strategy.name.toFirstLower, strategy.newTypeRef(org.dpolivaev.tsgen.ruleengine.Strategy)) [
+			jvmType.members += strategy.toField(strategy.name, strategy.newTypeRef(org.dpolivaev.tsgen.ruleengine.Strategy)) [
 				setInitializer [
 					append('''«methodName»()''')
 				]
 				final = true
 				visibility = JvmVisibility::PUBLIC
+				static = true
 			]
 		}
 	}
@@ -476,6 +479,7 @@ class ScriptInitializer{
 					append(');')
 				]
 				visibility = JvmVisibility::PUBLIC
+				static = true
 			]
 		}
 	}
@@ -540,7 +544,7 @@ class ScriptInitializer{
 			append('()')
 		}
 		else
-			append(ref.expr.toString.toFirstLower)
+			append(ref.expr.toString)
 	}
 	
 	private def inferMainMethod(){
@@ -549,13 +553,13 @@ class ScriptInitializer{
 			jvmType.members += script.toMethod("main", script.newTypeRef(Void::TYPE)) [
 				parameters += script.toParameter("args", script.newTypeRef(typeof(String)).addArrayTypeDimension)
 				body = [
-					append('''«className» instance = new «className»();''')
 					var counter = 0
 					for (run : script.runs) {
+						if(counter != 0)
+							newLine
 						counter = counter + 1
 						val methodName = "run" + counter
-						newLine
-						append('''instance.«methodName»();''')
+						append('''«className».«methodName»();''')
 						}
 				]
 				visibility = JvmVisibility::PUBLIC
