@@ -28,15 +28,15 @@ public class StrategyRunner {
 		RuleEngine ruleEngine = new RuleEngine();
 		OutputStreamWriter writer = new OutputStreamWriter(System.out);
 		ScriptLogger logger = new ScriptLogger(writer);
-		ruleEngine.addScriptWriter(logger);
+		ruleEngine.addHandler(logger);
 		ruleEngine.addErrorHandler(logger);
 		GoalChecker goalChecker = new GoalChecker();
 		goalChecker.addGoal(new Goal("requirements", new RequirementCoverage()));
-		ruleEngine.setGoalChecker(goalChecker);
+		ruleEngine.addHandler(goalChecker);
 		StreamResultFactory resultFactory = new StreamResultFactory();
 		MultipleScriptsWriter scriptProducer = new MultipleScriptsWriter(resultFactory, GoalChecker.NO_GOALS);
 		scriptProducer.setOutputConfiguration(outputConfiguration);
-		ruleEngine.addScriptWriter(scriptProducer);
+		ruleEngine.addHandler(scriptProducer);
 		ruleEngine.run(strategy);
 		try {
 			scriptProducer.endScripts();

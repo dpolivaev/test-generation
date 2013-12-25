@@ -53,7 +53,7 @@ public class RuleEngineAcceptanceTest {
 
     private void initializeRuleEngine(CollectingScriptProducer loggingScriptProducerMock) {
         scriptProducerMock = loggingScriptProducerMock;
-        ruleEngine = new RuleEngine().addScriptWriter(scriptProducerMock);
+        ruleEngine = new RuleEngine().addHandler(scriptProducerMock);
     }
     
     @Before
@@ -427,7 +427,7 @@ public class RuleEngineAcceptanceTest {
     @Test
     public void returnsUndefined_ifNoRuleIsSatisfied(){
         PropertyHandler scriptProducer = mock(PropertyHandler.class);
-        final RuleEngine ruleEngine = new RuleEngine().addScriptWriter(scriptProducer);
+        final RuleEngine ruleEngine = new RuleEngine().addHandler(scriptProducer);
         doAnswer(new Answer<Object>() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -445,7 +445,7 @@ public class RuleEngineAcceptanceTest {
         strategy.addRule(iterate("x2").over("2").asDefaultRule());
         strategy.addRule(iterate("y").over("2").asDefaultRule());
         PropertyHandler scriptProducer = mock(PropertyHandler.class);
-        final RuleEngine ruleEngine = new RuleEngine().addScriptWriter(scriptProducer);
+        final RuleEngine ruleEngine = new RuleEngine().addHandler(scriptProducer);
         doAnswer(new Answer<Object>() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {

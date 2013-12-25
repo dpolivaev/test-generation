@@ -24,7 +24,6 @@ public class RuleEngine implements EngineState {
     private String assignmentReason;
 	private String processedProperty;
 	private final Collection<ErrorHandler> errorHandlers;
-	private PropertyHandler goalChecker;
 
 	public RuleEngine() {
         super();
@@ -33,15 +32,14 @@ public class RuleEngine implements EngineState {
         dependencies = new HashSet<>();
         propertyHandlers = new ArrayList<>();
         errorHandlers = new ArrayList<>();
-        goalChecker = PropertyHandler.DO_NOTHING;
     }
 
-    public RuleEngine addScriptWriter(PropertyHandler propertyHandler) {
+    public RuleEngine addHandler(PropertyHandler propertyHandler) {
 		propertyHandlers.add(propertyHandler);
 		return this;
 	}
 
-    public void removeScriptWriter(PropertyHandler propertyHandler) {
+    public void removeHandler(PropertyHandler propertyHandler) {
 		propertyHandlers.remove(propertyHandler);
 	}
 
@@ -95,7 +93,6 @@ public class RuleEngine implements EngineState {
         fireNextCombinationStartedEvent();
         dependencies = new HashSet<>();
         processedProperty = "";
-        goalChecker.handlePropertyCombination(this);
         for(PropertyHandler propertyHandler :propertyHandlers)
         	propertyHandler.handlePropertyCombination(this);
     }
@@ -219,9 +216,4 @@ public class RuleEngine implements EngineState {
     public String getAssignmentReason() {
 		return assignmentReason;
 	}
-
-	public void setGoalChecker(PropertyHandler goalChecker) {
-		this.goalChecker = goalChecker;
-	}
-
 }
