@@ -30,7 +30,11 @@ public final class ExceptionMatcher extends BaseMatcher<Runnable> {
 
 	@Override
 	public void describeMismatch(Object item, Description description) {
-	    description.appendText("was ").appendValue(thrownException);
+	    description.appendText("was ");
+	    if(thrownException != null)
+	    	description.appendValue(thrownException);
+	    else
+	    	description.appendText("not thrown");
 	}
 
 	@Override
