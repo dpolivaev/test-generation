@@ -12,7 +12,7 @@ let foc be "calculate parking costs"{
 		let pre1 be "select lot"
 		let pre2 be "set entry time"
 		let pre3 be "set leaving time"
-		let veri be "verify parking costs"
+		let default veri be "verify parking costs"
 		
 		let pre2.entryTime be '"01/1/1970 12:00 am"', '"12/31/1999 12:00 pm"', '"02/28/2016 23:59 pm"'
 		
@@ -76,59 +76,46 @@ let foc be "calculate parking costs"{
 			"LONG_TERM_GARAGE_PARKING"{
 				let default dayCosts be (:pre3.weeks" * 78 + ":pre3.days" * 13") 
 				let "parking time" be 
-						"0 hours"{
-							let pre3.hours be 0
-							let pre3.minutes be 0
-							let veri.expectedCosts be :dayCosts
-						},
-						"6 hour or less"{
-							let pre3.hours be 0, 5, 6 ordered
-							let pre3.minutes be 1, 59, 0 ordered
-							let veri.expectedCosts be (:dayCosts" + ":pre3.hours" * 2 + " if(:pre3.minutes != 0) 2 else 0 )
-						},
-						"more than 6 hours"{
-							let pre3.hours be 6, 23 ordered
-							let pre3.minutes be 1, 59 ordered
-							let veri.expectedCosts be (:dayCosts" + "13)
-						} 
+					"0 hours"{
+						let pre3.hours be 0
+						let pre3.minutes be 0
+						let veri.expectedCosts be :dayCosts
+					},
+					"6 hour or less"{
+						let pre3.hours be 0, 5, 6 ordered
+						let pre3.minutes be 1, 59, 0 ordered
+						let veri.expectedCosts be (:dayCosts" + ":pre3.hours" * 2 + " if(:pre3.minutes != 0) 2 else 0 )
+					},
+					"more than 6 hours"{
+						let pre3.hours be 6, 23 ordered
+						let pre3.minutes be 1, 59 ordered
+						let veri.expectedCosts be (:dayCosts" + "13)
+					} 
 			}, 
 			"LONG_TERM_SURFACE_PARKING"{
-				let default dayCosts be (:pre3.weeks" * 60 + ":pre3.days" * 10") 
-				let "parking time" be 
-						"0 hours"{
-							let pre3.hours be 0
-							let pre3.minutes be 0
-							let veri.expectedCosts be :dayCosts
-						},
-						"5 hour or less"{
-							let pre3.hours be 0, 4, 5 ordered
-							let pre3.minutes be 1, 59, 0 ordered
-							let veri.expectedCosts be (:dayCosts" + ":pre3.hours" * 2 + " if(:pre3.minutes != 0) 2 else 0)
-						},
-						"more than 5 hours"{
-							let pre3.hours be 5, 23 ordered
-							let pre3.minutes be 1, 59 ordered
-							let veri.expectedCosts be (:dayCosts" + 10")
-						} 
+				let veri be ("verify parking costs for lot ":pre1.lot)
+				let pre3.hours be 0, 4, 5, 23 {
+					let pre3.minutes be 0,1, 59
+				}
 			}, 
 			"ECONOMY_LOT_PARKING"{
 				let default dayCosts be :pre3.weeks as int * 54 + :pre3.days as int * 9
 				let "parking time" be 
-						"0 hours"{
-							let pre3.hours be 0
-							let pre3.minutes be 0
-							let veri.expectedCosts be :dayCosts
-						},
-						"4 hour or less"{
-							let pre3.hours be 0, 3, 4 ordered
-							let pre3.minutes be 1, 59, 0 ordered
-							let veri.expectedCosts be :dayCosts as int + :pre3.hours as int * 2 + if(:pre3.minutes != 0) 2 else 0
-						},
-						"more than 4 hours"{
-							let pre3.hours be 4, 23 ordered
-							let pre3.minutes be 1, 59 ordered
-							let veri.expectedCosts be :dayCosts as int + 9
-						} 
+					"0 hours"{
+						let pre3.hours be 0
+						let pre3.minutes be 0
+						let veri.expectedCosts be :dayCosts
+					},
+					"4 hour or less"{
+						let pre3.hours be 0, 3, 4 ordered
+						let pre3.minutes be 1, 59, 0 ordered
+						let veri.expectedCosts be :dayCosts as int + :pre3.hours as int * 2 + if(:pre3.minutes != 0) 2 else 0
+					},
+					"more than 4 hours"{
+						let pre3.hours be 4, 23 ordered
+						let pre3.minutes be 1, 59 ordered
+						let veri.expectedCosts be :dayCosts as int + 9
+					} 
 			}
 		
 	}, 

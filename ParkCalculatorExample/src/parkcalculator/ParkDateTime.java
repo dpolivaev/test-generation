@@ -25,7 +25,10 @@ public class ParkDateTime {
 	}
 
 	public ParkDateTime setDayPart(String dayPart) {
-		this.dayPart = dayPart.toUpperCase();
+		if(dayPart == null)
+			this.dayPart = null;
+		else
+			this.dayPart = dayPart.toUpperCase();
 		return this;
 	}
 
