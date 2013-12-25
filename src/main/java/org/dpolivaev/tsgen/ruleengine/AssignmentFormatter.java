@@ -54,33 +54,30 @@ public class AssignmentFormatter {
 
 	private boolean includesAssignment(Map.Entry<String, Assignment> assignment) {
 		return  !(shouldFormatIteratingRulesOnly && !assignment.getValue().rule.forcesIteration() || excludedByValue(assignment))
-				&& isIncludedByExcludePatterns(assignment) && isIncludedByIncludePatterns(assignment);
+				&& ! isExcludedByExcludePatterns(assignment) && isIncludedByIncludePatterns(assignment);
 	}
 	
 	private boolean excludedByValue(Entry<String, Assignment> assignment) {
 		return excludeUndefined && SpecialValue.UNDEFINED.equals(assignment.getValue().value);
 	}
 
-	private boolean isIncludedByExcludePatterns(Map.Entry<String, Assignment> assignment) {
-		for(Pattern pattern:excludePatterns){
-			if(pattern.matcher(assignment.getKey()).matches())
-				return false;
-		}
-		return true;
-	}
-	
-	private boolean isIncludedByIncludePatterns(Map.Entry<String, Assignment> assignment) {
-		if(includePatterns.isEmpty())
-			return true;
-		else {
-			for(Pattern pattern:includePatterns){
-				if(pattern.matcher(assignment.getKey()).matches())
-					return true;
-			}
-			return false;
-		}
+	private boolean isExcludedByExcludePatterns(Map.Entry<String, Assignment> assignment) {
+		return matches(assignment, excludePatterns);
 	}
 
+	private boolean isIncludedByIncludePatterns(Map.Entry<String, Assignment> assignment) {
+		return includePatterns.isEmpty() || matches(assignment, includePatterns);
+	}
+
+	private boolean matches(Map.Entry<String, Assignment> assignment,
+			List<Pattern> patterns) {
+		for(Pattern pattern:patterns){
+			if(pattern.matcher(assignment.getKey()).matches())
+				return true;
+		}
+		return false;
+	}
+	
     AssignmentFormatter append(StringBuilder assignedPropertiesStringBuilder,
         Map.Entry<String, Assignment> assignment) {
         String targetedPropertyName = assignment.getKey();
