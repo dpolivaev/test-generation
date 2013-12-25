@@ -79,6 +79,13 @@ public class RuleEngineAcceptanceTest {
     }
 
     @Test
+    public void singleRuleWithUnsatisfiedCondition_doesNotRequireValues() {
+        strategy.addRule(iterate("x")._if(FALSE));
+        generateCombinationsForStrategy();
+        expect(combination());
+    }
+
+    @Test
     public void singleRuleWithValuesA_B() {
         strategy.addRule(iterate("property").over("a", "b"));
 
