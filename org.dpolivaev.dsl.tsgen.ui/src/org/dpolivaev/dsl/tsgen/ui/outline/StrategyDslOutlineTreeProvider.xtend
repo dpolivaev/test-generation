@@ -65,5 +65,5 @@ public class StrategyDslOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	
 	protected def _text(Run run) { return run.text}
 	
-	private def text(EObject it) {return node.text.trim.replaceAll("\\s+", " ")}
+	private def text(EObject it) {return node?.text?.trim.replaceAll("\\s+", " ")}
 }

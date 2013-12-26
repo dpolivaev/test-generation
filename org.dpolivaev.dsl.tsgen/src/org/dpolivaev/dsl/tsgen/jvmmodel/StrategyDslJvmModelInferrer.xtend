@@ -212,7 +212,7 @@ class ScriptInitializer{
 		}
 		else{
 			appendRuleName(it, rule)
-			appendRuleValues(it, rule.values, rule.requirement, true)
+			appendRuleValues(it, rule.values, true)
 			appendRuleOrder(it, rule)
 		}
 		if(rule.isDefault)
@@ -287,20 +287,18 @@ class ScriptInitializer{
 	def private appendRuleName(ITreeAppendable it, Rule rule) {
 		val name = rule.name.escapeQuotes;
 		append('.iterate("')
-		if(rule.requirement)
-			append('requirement.')
 		append(name)
 		append('")')
 	}
 
-	def  private void appendRuleValues(ITreeAppendable it, Values values, boolean requirement, boolean appendActionRuleGroups) {
+	def  private void appendRuleValues(ITreeAppendable it, Values values, boolean appendActionRuleGroups) {
 		if(values.valueReference != null){
-			appendRuleValues(it, values.valueReference, requirement, false)
+			appendRuleValues(it, values.valueReference, false)
 			return
 		}
 		for(action:values.actions){
 			val valueAction = action as ValueAction
-			apppendValueAction(it, valueAction, requirement)
+			apppendValueAction(it, valueAction)
 			if(appendActionRuleGroups)
 				appendActionRuleGroups(it, valueAction)
 		}
@@ -343,10 +341,7 @@ class ScriptInitializer{
 				appendInnerGroups(it, group.ruleGroups, firstLine)
 			}
 		}
-	def private apppendValueAction(ITreeAppendable it, ValueAction valueAction, boolean requirement) {
-		if(requirement)
-			apppendRequirementValueAction(it, valueAction)
-		else
+	def private apppendValueAction(ITreeAppendable it, ValueAction valueAction) {
 			appendValueAction(it, valueAction)	
 	}
 	
@@ -389,26 +384,6 @@ class ScriptInitializer{
 			append(".toString()");
 	}
 	
-	def private apppendRequirementValueAction(ITreeAppendable it, ValueAction valueAction) {
-		append('.over(')
-		appendImplementationObject(it, valueAction.newTypeRef(org.dpolivaev.tsgen.ruleengine.ValueProvider).type, "Object value",
-			[
-				append(valueAction.newTypeRef(Arrays).type)
-				append('.asList(')
-				var firstValue = true
-				for (valueProvider: valueAction.valueProviders){
-					if(firstValue)
-						firstValue = false
-					else
-						append(', ')
-					appendValueExpression(it, valueProvider)
-				}
-				append(')')
-			]
-		) 
-		append(')')
-	}
-
 	def private apppendSkip(ITreeAppendable it){
 		append('.skip()')
 	}
