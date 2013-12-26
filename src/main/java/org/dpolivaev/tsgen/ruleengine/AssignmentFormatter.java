@@ -39,11 +39,17 @@ public class AssignmentFormatter {
         includePatterns = new ArrayList<>();
         excludePatterns = new ArrayList<>();
     }
+    
+    public AssignmentFormatter(String propertySeparator,
+			String valueNameSeparator) {
+		this();
+		this.propertySeparator = propertySeparator;
+		nameValueSeparator = valueNameSeparator;
+	}
 
-    public String format(PropertyContainer assignments) {
+	public String format(PropertyContainer assignments) {
         StringBuilder assignedPropertiesStringBuilder = new StringBuilder();
-        Map<String, Assignment> assignmentsAsMap = assignments.getAssignmentsAsMap();
-        for (Map.Entry<String, Assignment> assignment : assignmentsAsMap.entrySet()) {
+        for (Assignment assignment : assignments.getAssignments()) {
             if(includesAssignment(assignment)){
                 appendSeparator(assignedPropertiesStringBuilder);
                 append(assignedPropertiesStringBuilder, assignment);
@@ -52,43 +58,62 @@ public class AssignmentFormatter {
         return assignedPropertiesStringBuilder.toString();
     }
 
-	private boolean includesAssignment(Map.Entry<String, Assignment> assignment) {
-		return  !(shouldFormatIteratingRulesOnly && !assignment.getValue().rule.forcesIteration() || excludedByValue(assignment))
+	private boolean includesAssignment(Assignment assignment) {
+		return  !(shouldFormatIteratingRulesOnly && !assignment.rule.forcesIteration() || excludedByValue(assignment))
 				&& ! isExcludedByExcludePatterns(assignment) && isIncludedByIncludePatterns(assignment);
 	}
 	
-	private boolean excludedByValue(Entry<String, Assignment> assignment) {
-		return excludeUndefined && SpecialValue.UNDEFINED.equals(assignment.getValue().value);
+	private boolean excludedByValue(Assignment assignment) {
+		return excludeUndefined && SpecialValue.UNDEFINED.equals(assignment.value);
 	}
 
-	private boolean isExcludedByExcludePatterns(Map.Entry<String, Assignment> assignment) {
+	private boolean isExcludedByExcludePatterns(Assignment assignment) {
 		return matches(assignment, excludePatterns);
 	}
 
-	private boolean isIncludedByIncludePatterns(Map.Entry<String, Assignment> assignment) {
+	private boolean isIncludedByIncludePatterns(Assignment assignment) {
 		return includePatterns.isEmpty() || matches(assignment, includePatterns);
 	}
 
-	private boolean matches(Map.Entry<String, Assignment> assignment,
+	private boolean matches(Assignment assignment,
 			List<Pattern> patterns) {
 		for(Pattern pattern:patterns){
-			if(pattern.matcher(assignment.getKey()).matches())
+			if(pattern.matcher(assignment.getTargetedPropertyName()).matches())
 				return true;
 		}
 		return false;
 	}
 	
-    AssignmentFormatter append(StringBuilder assignedPropertiesStringBuilder,
-        Map.Entry<String, Assignment> assignment) {
-        String targetedPropertyName = assignment.getKey();
-        Assignment assignmentProperties = assignment.getValue();
-        if (appendsReasons)
-            assignedPropertiesStringBuilder.append(assignmentProperties.reason);
-        assignedPropertiesStringBuilder.append(targetedPropertyName)
-            .append(nameValueSeparator)
-            .append(assignmentProperties.value);
+    protected AssignmentFormatter append(StringBuilder assignedPropertiesStringBuilder,
+    		Assignment assignment) {
+        appendReason(assignedPropertiesStringBuilder, assignment);
+        appendName(assignedPropertiesStringBuilder, assignment);
+        appendNameValueSeparator(assignedPropertiesStringBuilder, assignment);
+        appendValue(assignedPropertiesStringBuilder, assignment);
         return this;
     }
+
+	protected void appendValue(StringBuilder assignedPropertiesStringBuilder,
+			Assignment assignment) {
+		assignedPropertiesStringBuilder.append(assignment.value);
+	}
+
+    protected void appendNameValueSeparator(
+			StringBuilder assignedPropertiesStringBuilder, Assignment assignment) {
+		assignedPropertiesStringBuilder.append(nameValueSeparator);
+	}
+
+    protected void appendName(StringBuilder assignedPropertiesStringBuilder,
+			Assignment assignment) {
+		String targetedPropertyName = assignment.getTargetedPropertyName();
+        assignedPropertiesStringBuilder.append(targetedPropertyName);
+	}
+
+    protected void appendReason(StringBuilder assignedPropertiesStringBuilder,
+			Assignment assignmentProperties) {
+		if (appendsReasons)
+            assignedPropertiesStringBuilder.append(assignmentProperties.reason);
+	}
 
     private void appendSeparator(StringBuilder assignedPropertiesStringBuilder) {
         if (assignedPropertiesStringBuilder.length() > 0) {

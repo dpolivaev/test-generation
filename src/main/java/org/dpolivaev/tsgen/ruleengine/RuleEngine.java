@@ -209,8 +209,8 @@ public class RuleEngine implements EngineState {
     }
 
     @Override
-    public Map<String, Assignment> getAssignmentsAsMap() {
-        return assignments.getAssignmentsAsMap();
+    public Collection<Assignment> getAssignments() {
+        return assignments.getAssignments();
     }
     
     public String getAssignmentReason() {

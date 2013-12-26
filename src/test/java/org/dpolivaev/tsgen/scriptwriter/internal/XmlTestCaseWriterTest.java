@@ -51,7 +51,7 @@ public class XmlTestCaseWriterTest {
     }
 
     private void givenProperty(String name, Object value) {
-        propertyContainer.add(assignmentMock(name, value));
+        propertyContainer.add(assignmentMock(name, value, ""));
     }
 
     private void createScript() throws SAXException {

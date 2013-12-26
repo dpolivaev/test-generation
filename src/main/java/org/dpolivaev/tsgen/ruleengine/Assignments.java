@@ -39,8 +39,8 @@ public class Assignments implements PropertyContainer {
         return (T)assignments.get(name).value;
 	}
 
-    public Map<String, Assignment> getAssignmentsAsMap() {
-        return Collections.unmodifiableMap(assignments);
+    public Collection<Assignment> getAssignments() {
+        return Collections.unmodifiableCollection(assignments.values());
     }
 
     public Collection<Rule> firedRules() {

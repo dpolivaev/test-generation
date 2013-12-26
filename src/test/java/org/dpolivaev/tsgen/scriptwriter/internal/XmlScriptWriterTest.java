@@ -19,7 +19,7 @@ import org.mockito.Mockito;
 public class XmlScriptWriterTest {
     private Assignments propertyContainer = new Assignments();
     private void givenProperty(String name, Object value) {
-        propertyContainer.add(assignmentMock(name, value));
+        propertyContainer.add(assignmentMock(name, value, ""));
     }
     
 	private DOMResult createScript() {
