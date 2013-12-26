@@ -20,9 +20,7 @@ RuleGroup : {RuleGroup}
 	| rule = Rule
 ;
 
-Rule : PropertyRule|RequirementRule;
-
-PropertyRule returns Rule:
+Rule returns Rule:
 	(
 		'let'
 		default ?= 'default'? name=PROPERTY_ID
@@ -37,20 +35,12 @@ PropertyValues returns Values:
 	((name=PROPERTY_ID 'with')?  actions += ValueAction (',' actions += ValueAction)* | 'from' valueReference = [Values]) 
 ;
 
-RequirementRule returns Rule:
-	requirement ?= 'cover' name=PROPERTY_ID 'by' values = ItemValues 
-;
-
-ItemValues returns Values:
-	actions += ItemAction
-;
-
 Trigger:
 	'for' 'each' properties += PROPERTY_ID (',' properties += PROPERTY_ID)*
 ;
 
 Condition:
-	'if' expr = XExpression 'then'
+	'if' expr = XExpression
 ;
 
 Action: ValueAction | SkipAction;
@@ -145,5 +135,5 @@ PropertyCall returns xbase::XExpression hidden():
 ;	
 
 PROPERTY_ID hidden():
-	ID (=> '.' ID)* | STRING
+	ID (=> '.' ID)* | STRING | '['ID (=> '.' ID)*']' 
 ;

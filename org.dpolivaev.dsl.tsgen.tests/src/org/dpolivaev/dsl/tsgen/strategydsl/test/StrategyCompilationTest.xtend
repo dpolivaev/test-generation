@@ -152,7 +152,7 @@ class StrategyCompilationTest {
 	@Test def withCondition() {
 		'''
 			strategy first
-				if 1 < 2 then let y be 3
+				if 1 < 2 let y be 3
 		'''.assertCompilesTo('''
 			import org.dpolivaev.tsgen.ruleengine.Condition;
 			import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
@@ -181,7 +181,7 @@ class StrategyCompilationTest {
 	@Test def withConditionalGroup() {
 		'''
 			strategy first
-				if 1 < 2 then {
+				if 1 < 2 {
 					let y be 3
 				}
 		'''.assertCompilesTo('''
@@ -212,8 +212,8 @@ class StrategyCompilationTest {
 	@Test def withConditionalGroupAndCondition() {
 		'''
 			strategy first
-				if 1 < 2 then {
-					if 3 < 4 then let y be 5
+				if 1 < 2 {
+					if 3 < 4 let y be 5
 				}
 			'''.assertCompilesTo('''
 			import org.dpolivaev.tsgen.ruleengine.Condition;
@@ -669,13 +669,10 @@ class StrategyCompilationTest {
 	@Test def coverage() {
 		'''
 			strategy First
-				cover req1 by 123, 456
+				let [req1] be 123
 		'''.assertCompilesTo('''
-			import java.util.Arrays;
-			import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 			import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
-			import org.dpolivaev.tsgen.ruleengine.ValueProvider;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
@@ -683,9 +680,7 @@ class StrategyCompilationTest {
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
-			    strategy.addRule(Factory.iterate("requirement.req1").over(new ValueProvider(){
-			      @Override public Object value(PropertyContainer propertyContainer) { return Arrays.asList(123, 456); }
-			    }).asRule());
+			    strategy.addRule(Factory.iterate("[req1]").over(123).asRule());
 			    return strategy;
 			  }
 			}
@@ -696,9 +691,8 @@ class StrategyCompilationTest {
 		'''
 			strategy First
 				let default a be 123
-				cover req1 by :a
+				let req1 be :a
 		'''.assertCompilesTo('''
-				import java.util.Arrays;
 				import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 				import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
 				import org.dpolivaev.tsgen.ruleengine.Strategy;
@@ -715,8 +709,8 @@ class StrategyCompilationTest {
 				  private static Strategy defineStrategyFirst() {
 				    Strategy strategy = new Strategy();
 				    strategy.addRule(Factory.iterate("a").over(123).asDefaultRule());
-				    strategy.addRule(Factory.iterate("requirement.req1").over(new ValueProvider(){
-				      @Override public Object value(PropertyContainer propertyContainer) { return Arrays.asList(valueProvider1(propertyContainer)); }
+				    strategy.addRule(Factory.iterate("req1").over(new ValueProvider(){
+				      @Override public Object value(PropertyContainer propertyContainer) { return valueProvider1(propertyContainer); }
 				    }).asRule());
 				    return strategy;
 				  }
