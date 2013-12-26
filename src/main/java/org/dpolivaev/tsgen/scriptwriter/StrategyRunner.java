@@ -34,7 +34,7 @@ public class StrategyRunner {
 		goalChecker.addGoal(new Goal("requirements", new RequirementCoverage()));
 		ruleEngine.addHandler(goalChecker);
 		StreamResultFactory resultFactory = new StreamResultFactory();
-		MultipleScriptsWriter scriptProducer = new MultipleScriptsWriter(resultFactory, GoalChecker.NO_GOALS);
+		MultipleScriptsWriter scriptProducer = new MultipleScriptsWriter(resultFactory, goalChecker);
 		scriptProducer.setOutputConfiguration(outputConfiguration);
 		ruleEngine.addHandler(scriptProducer);
 		ruleEngine.run(strategy);

@@ -54,7 +54,7 @@ public class CallPrice {
 +"destination->foc.callDuration: \"0:00:59\"\n"
 +"<-testcase: isCallValid destination=\"National\" foc.country=\"Motherland\" tariff=\"Standard\" foc.callBeginTime=\"0:00:01\" dayOfTheWeek=\"Tuesday\" foc.callDuration=\"0:00:59\"")
 	@Coverage(
-		next = {
+		again = {
 			@GoalCoverage(goal = "requirements", item="req123", coverage={"\"National\"", "bla"})
 		}
 	)
@@ -76,8 +76,8 @@ public class CallPrice {
 		first = {
 			@GoalCoverage(goal = "requirements2", item="req123", coverage={"\"National\""})
 		},
-		next = {
-			@GoalCoverage(goal = "requirements1", item="req123", coverage={"\"National\"", "bla"})
+		again = {
+			@GoalCoverage(goal = "requirements1", item="req123", coverage={"\"National\"", "bla"}),
 			@GoalCoverage(goal = "requirements2", item="req123", coverage={"bla"})
 		}
 	)
