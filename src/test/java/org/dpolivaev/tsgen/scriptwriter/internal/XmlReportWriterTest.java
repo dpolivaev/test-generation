@@ -39,7 +39,17 @@ public class XmlReportWriterTest {
         final ScriptConfiguration scriptConfiguration = OutputConfiguration.OUTPUT_XML.forScript("reportName");
 		Mockito.when(resultFactory.newResult(scriptConfiguration)).thenReturn(dom);
 		final GoalChecker goals = new GoalChecker();
-		goals.addGoal(new Goal("goal", new GoalFunction() {
+		goals.addGoal(new Goal("goal2", new GoalFunction() {
+			
+			@Override
+			public Collection<CoverageEntry> check(PropertyContainer propertyContainer) {
+				return Arrays.asList(
+						new CoverageEntry("item2", "value"),
+						new CoverageEntry("item1", "value2"),
+						new CoverageEntry("item1", "value1"));
+			}
+		}));
+		goals.addGoal(new Goal("goal1", new GoalFunction() {
 			
 			@Override
 			public Collection<CoverageEntry> check(PropertyContainer propertyContainer) {
@@ -51,8 +61,13 @@ public class XmlReportWriterTest {
         producer.createReport(goals, scriptConfiguration);
         Assert.assertThat(the(dom.getNode()), isEquivalentTo(the(
         	"<Report>"
-        	+ "<Goal name='goal' required='0' achieved='1'>"
-        		+ "<Item name='item' required='0' reached='1'>value</Item>"
+                	+ "<Goal name='goal1' required='0' achieved='1'>"
+            		+ "<Item name='item' required='0' reached='1'>value</Item>"
+            	+ "</Goal>" 
+            	+ "<Goal name='goal2' required='0' achieved='3'>"
+        		+ "<Item name='item1' required='0' reached='1'>value1</Item>"
+        		+ "<Item name='item1' required='0' reached='1'>value2</Item>"
+        		+ "<Item name='item2' required='0' reached='1'>value</Item>"
         	+ "</Goal>" 
         	+ "</Report>")));
     }
