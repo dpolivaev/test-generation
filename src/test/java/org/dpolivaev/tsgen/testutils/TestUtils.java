@@ -12,9 +12,9 @@ public class TestUtils {
         Mockito.when(rule.getTargetedPropertyName()).thenReturn(targetedPropertyName);
         return rule;
     }
-    
-    public static Assignment assignmentMock(String name, Object value){
-        return new Assignment(ruleMock(name), value, "");
-    }
+ 
+	static public Assignment assignmentMock(String name, Object value, String reason) {
+		return new Assignment(ruleMock(name), value, reason);
+	}
 
 }

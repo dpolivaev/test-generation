@@ -1,7 +1,6 @@
 package org.dpolivaev.tsgen.strategies.internal;
 
-import java.util.regex.Pattern;
-
+import org.dpolivaev.tsgen.ruleengine.Assignment;
 import org.dpolivaev.tsgen.ruleengine.AssignmentFormatter;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
@@ -9,10 +8,10 @@ import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.ruleengine.ValueProvider;
 
 public class TestIdProvider implements ValueProvider{
-	final static private String VALUE_NAME_SEPARATOR_CHAR = "\u001F"; // Unicode unit separator char
-	final static private String PROPERTY_SEPARATOR_CHAR = "\u001E";	// Unicode record separator char
-	final static private AssignmentFormatter assignmentFormatter;
 	
+	public static final String TEST_CASE_PARTS_REGEX = "(?:pre|foc|veri|post)(?:\\d+)?(?:\\..+)?";
+
+
 	public static Strategy strategy(String propertyName){
 		Strategy strategy = new Strategy();
 		TestIdProvider instance = new TestIdProvider("=", " ");
@@ -20,16 +19,6 @@ public class TestIdProvider implements ValueProvider{
 		return strategy;
 
 	}; 
-	static {
-		assignmentFormatter = AssignmentFormatter.create(VALUE_NAME_SEPARATOR_CHAR, PROPERTY_SEPARATOR_CHAR);
-		assignmentFormatter.shouldFormatIteratingRulesOnly(true);
-		assignmentFormatter.appendReasons(false);
-	}
-	
-	final static private Pattern truePattern = Pattern.compile("([^" + PROPERTY_SEPARATOR_CHAR + VALUE_NAME_SEPARATOR_CHAR + "]+" + ")" + VALUE_NAME_SEPARATOR_CHAR + "true(" +PROPERTY_SEPARATOR_CHAR + "|$)", Pattern.CASE_INSENSITIVE); 
-	final static private Pattern falsePattern = Pattern.compile("(?:[^" + PROPERTY_SEPARATOR_CHAR + VALUE_NAME_SEPARATOR_CHAR + "]+" + ")" + VALUE_NAME_SEPARATOR_CHAR + "false(?:" +PROPERTY_SEPARATOR_CHAR + "|$)", Pattern.CASE_INSENSITIVE); 
-	final static private Pattern recordSeparatorPattern = Pattern.compile(PROPERTY_SEPARATOR_CHAR); 
-	final static private Pattern unitSeparatorPattern = Pattern.compile(VALUE_NAME_SEPARATOR_CHAR);
 	
 	final String propertySeparator;
 	final String valueNameSeparator;
@@ -40,20 +29,42 @@ public class TestIdProvider implements ValueProvider{
 		this.valueNameSeparator = valueNameSeparator;
 		this.propertySeparator = propertySeparator;
 	}
-
-	public String idFrom(String string) {
-		String id = string;
-		id = truePattern.matcher(id).replaceAll("$1$2");
-		id = falsePattern.matcher(id).replaceAll("");
-		id = recordSeparatorPattern.matcher(id).replaceAll(propertySeparator);
-		id = unitSeparatorPattern.matcher(id).replaceAll(valueNameSeparator);
-		return id;
-	}
 	
 	@Override
 	public Object value(PropertyContainer propertyContainer) {
+		AssignmentFormatter assignmentFormatter = new AssignmentFormatter(propertySeparator, valueNameSeparator){
+
+			@Override
+			protected AssignmentFormatter append(
+					StringBuilder assignedPropertiesStringBuilder,
+					Assignment assignment) {
+				Object value = assignment.value;
+				final boolean isTrue = Boolean.TRUE.equals(value);
+				final boolean isNumber = value instanceof Number;
+				if(isTrue || isNumber)
+					appendName(assignedPropertiesStringBuilder, assignment);
+				if(value instanceof Boolean)
+					return this;
+				if(isNumber)
+					appendNameValueSeparator(assignedPropertiesStringBuilder, assignment);
+				appendValue(assignedPropertiesStringBuilder, assignment);
+				return this;
+			}
+
+			@Override
+			protected void appendName(
+					StringBuilder assignedPropertiesStringBuilder,
+					Assignment assignment) {
+				String targetedPropertyName = assignment.getTargetedPropertyName();
+				final int endOfTestPartName = targetedPropertyName.indexOf('.');
+				assignedPropertiesStringBuilder.append(targetedPropertyName.substring(endOfTestPartName + 1));
+			}
+		};
+		assignmentFormatter.shouldFormatIteratingRulesOnly(true);
+		assignmentFormatter.appendReasons(false);
+		assignmentFormatter.include(TEST_CASE_PARTS_REGEX);
 		final String values = assignmentFormatter.format(propertyContainer);
-		return idFrom(values);
+		return values;
 	}
 
 }

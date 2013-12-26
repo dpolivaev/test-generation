@@ -16,9 +16,12 @@ public class DescriptionProvider  implements ValueProvider{
 
 	public DescriptionProvider(String nameValueSeparator, String propertySeparator) {
 		formatter = AssignmentFormatter.create(nameValueSeparator, propertySeparator);
-		formatter.exclude("\\[.*|\\w+Description");
+		formatter.exclude("\\[.*");
+		formatter.exclude(TestIdProvider.TEST_CASE_PARTS_REGEX);
+		formatter.exclude("(?:script)(?:\\..+)?");
+		formatter.exclude("testcase");
 		formatter.excludeUndefined(true);
-		formatter.appendReasons(true);
+		formatter.appendReasons(false);
 	}
 
 	public String describe(PropertyContainer assignments) {

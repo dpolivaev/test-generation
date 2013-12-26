@@ -1,5 +1,6 @@
 package org.dpolivaev.tsgen.ruleengine;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,6 +11,6 @@ public interface PropertyContainer {
     <T> T get(String name);
     int getCombinationCounter();
     Set<String> availableProperties(String startWith);
-    Map<String, Assignment> getAssignmentsAsMap();
+    Iterable<Assignment> getAssignments();
 
 }

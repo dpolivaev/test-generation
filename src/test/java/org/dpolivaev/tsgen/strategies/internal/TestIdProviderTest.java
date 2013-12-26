@@ -1,115 +1,100 @@
 package org.dpolivaev.tsgen.strategies.internal;
 
-import static org.junit.Assert.*;
+import static org.dpolivaev.tsgen.testutils.TestUtils.assignmentMock;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
 
-import org.dpolivaev.tsgen.strategies.internal.TestIdProvider;
-import org.dpolivaev.tsgen.utils.internal.IdConverter;
-import org.hamcrest.CoreMatchers;
+import org.dpolivaev.tsgen.ruleengine.Assignment;
+import org.dpolivaev.tsgen.ruleengine.Assignments;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 public class TestIdProviderTest {
-	final static String VALUE_NAME_SEPARATOR_CHAR = "\u001F";
-	final static String PROPERTY_SEPARATOR_CHAR = "\u001E";
+	private Assignments assignments;
+	private TestIdProvider testIdProvider;
 	
-	private void checkCamelCaseId(String invalidId, String validId) {
-		String javaId = new IdConverter().camelCaseId(invalidId);
-		assertThat(javaId, CoreMatchers.equalTo(validId));
+	private void givenAssignment(String name, Object value, String reason) {
+		final Assignment assignmentMock = assignmentMock(name, value, reason);
+		Mockito.when(assignmentMock.rule.forcesIteration()).thenReturn(true);
+		assignments.add(assignmentMock);
 	}
 	
-	private void check_snakeLowerCaseId(String invalidId, String validId) {
-		String javaId = new IdConverter().snakeLowerCaseId(invalidId);
-		assertThat(javaId, CoreMatchers.equalTo(validId));
-	}
-
-	private void check_snakeUpperCaseId(String invalidId, String validId) {
-		String javaId = new IdConverter().snakeUpperCaseId(invalidId);
-		assertThat(javaId, CoreMatchers.equalTo(validId));
+	@Before
+	public void setup(){
+		assignments = new Assignments();
+		testIdProvider = new TestIdProvider("=", " ");
 	}
 
 	@Test
-	public void onePropertyString() {
-		TestIdProvider idProvider = new TestIdProvider("=", " ");
-		String id = idProvider.idFrom("x" + VALUE_NAME_SEPARATOR_CHAR+ "y");
-		assertThat(id, CoreMatchers.equalTo("x=y"));
+	public void ignoresNonSpecificProperties(){
+		givenAssignment("name", "value", "");
+		assertThat((String)testIdProvider.value(assignments), equalTo(""));
+		
 	}
 
 	@Test
-	public void twoPropertyString() {
-		TestIdProvider idProvider = new TestIdProvider("=", " ");
-		String id = idProvider.idFrom("x" + VALUE_NAME_SEPARATOR_CHAR+ "1" + PROPERTY_SEPARATOR_CHAR + "y" + VALUE_NAME_SEPARATOR_CHAR+ "2");
-		assertThat(id, CoreMatchers.equalTo("x=1 y=2"));
+	public void includesFoc(){
+		givenAssignment("foc", "value", "");
+		assertThat((String)testIdProvider.value(assignments), equalTo("value"));
+		
 	}
-
 	@Test
-	public void removesTrue() {
-		TestIdProvider idProvider = new TestIdProvider("=", " ");
-		String id = idProvider.idFrom("x" + VALUE_NAME_SEPARATOR_CHAR+ "true" + PROPERTY_SEPARATOR_CHAR + "y" + VALUE_NAME_SEPARATOR_CHAR+ "TRUE");
-		assertThat(id, CoreMatchers.equalTo("x y"));
-	}
-
-	@Test
-	public void removesFalse() {
-		TestIdProvider idProvider = new TestIdProvider("=", " ");
-		String id = idProvider.idFrom("x" + VALUE_NAME_SEPARATOR_CHAR+ "false" + PROPERTY_SEPARATOR_CHAR + "y" + VALUE_NAME_SEPARATOR_CHAR+ "FALSE");
-		assertThat(id, CoreMatchers.equalTo(""));
+	public void includesFoc1(){
+		givenAssignment("foc1", "value", "");
+		assertThat((String)testIdProvider.value(assignments), equalTo("value"));
+		
 	}
 	
 	@Test
-	public void givenValidJavaId_camelCaseId_returnsSameString() throws Exception {
-		String validId = "abc123_";
-		checkCamelCaseId(validId, validId);
+	public void excludesNonIteratedValues(){
+		final Assignment assignmentMock = assignmentMock("foc", "value", "");
+		Mockito.when(assignmentMock.rule.forcesIteration()).thenReturn(false);
+		assignments.add(assignmentMock);
+		assertThat((String)testIdProvider.value(assignments), equalTo(""));
 	}
 	@Test
-	public void givenNonAlphaNumericCharacters_camelCaseId_removesThem() throws Exception {
-		checkCamelCaseId("abc$123_", "abc123_");
+	public void includesFocTrue(){
+		givenAssignment("foc.x", true, "");
+		assertThat((String)testIdProvider.value(assignments), equalTo("x"));
+		
 	}
-
 	@Test
-	public void givenNonAlphaNumericCharactersAfterUpperCaseLetter_camelCaseId_insertsUnderscoreBetweenFollowingCharacter() throws Exception {
-		checkCamelCaseId("abC$abc", "abC_abc");
-		checkCamelCaseId("abC$1bc", "abC_1bc");
-	}
-
-	@Test
-	public void givenNonAlphaNumericCharacters_camelCaseId_makesFollowingLowerCaseLetterUpperCase() throws Exception {
-		checkCamelCaseId("abc$abc", "abcAbc");
-	}
-
-	@Test
-	public void givenUpperCaseCharacters_snakeLowerCaseId_makesLowerCase() throws Exception {
-		check_snakeLowerCaseId("A", "a");
+	public void excludesFocFalse(){
+		givenAssignment("foc.x", false, "");
+		assertThat((String)testIdProvider.value(assignments), equalTo(""));
+		
 	}
 	
 	@Test
-	public void givenUpperCaseAfterLowerCase_snakeLowerCaseId_insertsUnderscore() throws Exception {
-		check_snakeLowerCaseId("aA", "a_a");
+	public void includesFocString(){
+		givenAssignment("foc.x", "y", "");
+		assertThat((String)testIdProvider.value(assignments), equalTo("y"));
+		
 	}
-
+	
 	@Test
-	public void givenUpperCaseAfterUpperCase_snakeLowerCaseId_insertsNoUnderscore() throws Exception {
-		check_snakeLowerCaseId("AA", "aa");
+	public void includesFocNumber(){
+		givenAssignment("foc.x", 6, "");
+		assertThat((String)testIdProvider.value(assignments), equalTo("x=6"));
+		
 	}
-
 	@Test
-	public void givenUpperCaseAfterLowerCase_snakeUpperCaseId_insertsUnderscore() throws Exception {
-		check_snakeUpperCaseId("aA", "A_A");
+	public void includesPre(){
+		givenAssignment("pre", "value", "");
+		assertThat((String)testIdProvider.value(assignments), equalTo("value"));
+		
 	}
-
 	@Test
-	public void createsLowerFirstCamelCaseId() throws Exception {
-		String javaId = new IdConverter().lowerFirstCamelCaseId("ABC§abc");
-		assertThat(javaId, CoreMatchers.equalTo("aBC_abc"));
+	public void includesVeri(){
+		givenAssignment("veri", "value", "");
+		assertThat((String)testIdProvider.value(assignments), equalTo("value"));
+		
 	}
-
 	@Test
-	public void createsUpperFirstCamelCaseId() throws Exception {
-		String javaId = new IdConverter().upperFirstCamelCaseId("abc§abc");
-		assertThat(javaId, CoreMatchers.equalTo("AbcAbc"));
+	public void includesPost(){
+		givenAssignment("post", "value", "");
+		assertThat((String)testIdProvider.value(assignments), equalTo("value"));
+		
 	}
-
-	@Test
-	public void insertsUnderscoreIfStartsWithNumber() throws Exception {
-		checkCamelCaseId("1", "_1");
-	}
-
 }

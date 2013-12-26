@@ -1,64 +1,68 @@
 package org.dpolivaev.tsgen.strategies.internal;
 
-import static org.dpolivaev.tsgen.testutils.TestUtils.ruleMock;
+import static org.dpolivaev.tsgen.testutils.TestUtils.assignmentMock;
 
-import org.dpolivaev.tsgen.ruleengine.Assignment;
 import org.dpolivaev.tsgen.ruleengine.Assignments;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-import org.dpolivaev.tsgen.ruleengine.Rule;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
-import org.dpolivaev.tsgen.strategies.internal.DescriptionProvider;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 public class DescriptionProviderTest {
-
-	@Test
-	public void includesUsualRulesWithReasons() {
-        Rule rule1 = ruleMock("name");
-        Rule rule2 = ruleMock("name2");
-        Rule ruleRequirement = ruleMock("[id1]");
-        
-        Assignments assignments = new Assignments();
-        assignments.add(new Assignment(rule1, "value", ""));
-        assignments.add(new Assignment(rule2, "value2", "name->"));
-        assignments.add(new Assignment(ruleRequirement, "reason", ""));
-        
-		String description = new DescriptionProvider().describe((PropertyContainer)assignments);
-		Assert.assertEquals("name: value\n"+
-						"name->name2: value2", description);
+	private Assignments assignments;
+	private void givenAssignment(String name, Object value, String reason) {
+		assignments.add(assignmentMock(name, value, reason));
+	}
+	
+	@Before
+	public void setup(){
+		assignments = new Assignments();
 	}
 
 	@Test
+	public void includesUsualRulesWithoutReasons() {
+		givenAssignment("name", "value", "");
+		givenAssignment("name2", "value2", "name->");
+		givenAssignment("[id1]", "reason", "");
+
+		String description = new DescriptionProvider()
+				.describe((PropertyContainer) assignments);
+		Assert.assertEquals("name: value\n" + "name2: value2",
+				description);
+	}
+
+
+	@Test
 	public void excludesRequirements() {
-        Rule ruleRequirement = ruleMock("[id1]");
-        
-        Assignments assignments = new Assignments();
-        assignments.add(new Assignment(ruleRequirement, "reason", ""));
-        
-		String description = new DescriptionProvider().describe((PropertyContainer)assignments);
+		givenAssignment("[id1]", "reason", "");
+
+		String description = new DescriptionProvider()
+				.describe((PropertyContainer) assignments);
 		Assert.assertEquals("", description);
 	}
 
 	@Test
 	public void excludesUndefinedValues() {
-        Rule ruleRequirement = ruleMock("name");
-        
-        Assignments assignments = new Assignments();
-        assignments.add(new Assignment(ruleRequirement, SpecialValue.UNDEFINED, ""));
-        
-		String description = new DescriptionProvider().describe((PropertyContainer)assignments);
+		givenAssignment("name", SpecialValue.UNDEFINED,"");
+
+		String description = new DescriptionProvider()
+				.describe((PropertyContainer) assignments);
 		Assert.assertEquals("", description);
 	}
 
 	@Test
-	public void excludesDescriptions() {
-        Rule ruleRequirement = ruleMock("xxxDescription");
-        
-        Assignments assignments = new Assignments();
-        assignments.add(new Assignment(ruleRequirement, "value", ""));
-        
-		String description = new DescriptionProvider().describe((PropertyContainer)assignments);
+	public void excludesTestPartsAndParams() {
+		givenAssignment("pre", "pre","");
+		givenAssignment("foc", "foc","");
+		givenAssignment("foc1", "foc1","");
+		givenAssignment("foc.x", "foc.x","");
+		givenAssignment("veri", "veri","");
+		givenAssignment("post", "post","");
+		givenAssignment("script", "script","");
+
+		String description = new DescriptionProvider()
+				.describe((PropertyContainer) assignments);
 		Assert.assertEquals("", description);
 	}
 

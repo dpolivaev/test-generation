@@ -1,6 +1,7 @@
 package org.dpolivaev.tsgen.ruleengine;
 
 import static org.dpolivaev.tsgen.ruleengine.AssignmentFormatter.create;
+import static org.dpolivaev.tsgen.testutils.TestUtils.assignmentMock;
 import static org.dpolivaev.tsgen.testutils.TestUtils.ruleMock;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
@@ -9,6 +10,7 @@ import java.util.AbstractMap;
 
 import org.dpolivaev.tsgen.ruleengine.AssignmentFormatter;
 import org.dpolivaev.tsgen.ruleengine.Rule;
+import org.dpolivaev.tsgen.testutils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -30,7 +32,7 @@ public class AssignmentFormatterTest {
     @Test
     public void formatsOneEntry() {
         formatter.append(assignedPropertiesStringBuilder, //
-            new AbstractMap.SimpleEntry<String, Assignment>("name", new Assignment(null, "value", "reason->")));
+            assignmentMock("name","value", "reason->"));
         assertThat(assignedPropertiesStringBuilder.toString(), equalTo("reason->name=value"));
     }
 
@@ -48,7 +50,7 @@ public class AssignmentFormatterTest {
     public void formatsOneEntryWithoutReason() {
         formatter.appendReasons(false);
         formatter.append(assignedPropertiesStringBuilder, //
-            new AbstractMap.SimpleEntry<String, Assignment>("name", new Assignment(null, "value", "reason->")));
+            assignmentMock("name","value", "reason->"));
         assertThat(assignedPropertiesStringBuilder.toString(), equalTo("name=value"));
     }
 
