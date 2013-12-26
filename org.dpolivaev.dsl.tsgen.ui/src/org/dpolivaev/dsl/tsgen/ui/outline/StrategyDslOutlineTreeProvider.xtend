@@ -63,6 +63,19 @@ public class StrategyDslOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			createNode(parentNode, group)
 	}
 	
+	protected def _createChildren(IOutlineNode parentNode, Strategy strategy){
+		for(group: strategy.ruleGroups)
+			createNode(parentNode, group)
+	}
+	
+	protected def _isLeaf(Strategy strategy){return strategy.ruleGroups.empty}
+	
+	protected def _createChildren(IOutlineNode parentNode, Rule rule){
+		_createChildren(parentNode, rule.values);
+	}
+	
+	protected def _isLeaf(Rule rule){return _isLeaf(rule.values)}
+	
 	protected def _text(Run run) { return run.text}
 	
 	private def text(EObject it) {return node?.text?.trim.replaceAll("\\s+", " ")}
