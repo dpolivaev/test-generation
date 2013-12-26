@@ -26,52 +26,63 @@ let foc be "calculate parking costs"{
 		
 		let pre1.lot be listOfValidLots with 
 			"VALET_PARKING"{
-				let default dayCosts be ("(7 * ":pre3.weeks" + ":pre3.days") * 18")
+				let dayCosts be ("(7 * ":pre3.weeks" + ":pre3.days") * 18")
 				let "parking time" be 
 					"0 hours"{
 						let pre3.hours be 0
 						let pre3.minutes be 0
 						let veri.expectedCosts be :dayCosts
+						let [Req2] be (:pre1.lot" costs ":veri.expectedCosts)
+						let [Req3] be (:pre1.lot" costs ":veri.expectedCosts)
 					},
 					"5 hours or less"{
 						let pre3.hours be 0, 4, 5 ordered
 						let pre3.minutes be 1, 59, 0 ordered
 						let veri.expectedCosts be (:dayCosts " + 12")
+						let [Req3] be (:pre1.lot" costs ":veri.expectedCosts)
 					},
 					"more than 5 hours"{
 						let pre3.hours be 5, 22, 23 ordered
 						let pre3.minutes be 1, 0, 59 ordered
 						let veri.expectedCosts be (:dayCosts  " + 18")
+						let [Req2] be (:pre1.lot" costs ":veri.expectedCosts)
 					}
+				let [Req1] be (:pre1.lot " costs " :"parking time")
 			}, 
 			"SHORT_TERM_PARKING"{
-				let default dayCosts be ("(7 * ":pre3.weeks" + ":pre3.days") * 24")
+				let dayCosts be ("(7 * ":pre3.weeks" + ":pre3.days") * 24")
 				let "parking time" be 
 					"0 hours"{
 						let pre3.hours be 0
 						let pre3.minutes be 0
 						let veri.expectedCosts be :dayCosts
+						let [Req5] be (:pre1.lot" costs ":veri.expectedCosts)
 					},
 					"1 hour or less"{
 						let pre3.hours be 0, 0, 1 ordered
 						let pre3.minutes be 1, 59, 0 ordered
 						let veri.expectedCosts be (:dayCosts" + 2")
+						let [Req5] be (:pre1.lot" costs ":veri.expectedCosts)
 					},
 					"11 hours or less with additional 1/2 hour"{
 						let pre3.hours be 1, 11 ordered
 						let pre3.minutes be 1, 30 ordered
 						let veri.expectedCosts be (:dayCosts" + ":pre3.hours" * 2 + 1")
+						let [Req5] be (:pre1.lot" costs ":veri.expectedCosts)
 					},
 					"11 hours or less with additional hour"{
 						let pre3.hours be 1, 11 ordered
 						let pre3.minutes be 31, 59 ordered
 						let veri.expectedCosts be (:dayCosts" + ":pre3.hours" * 2 + 2")
+						let [Req5] be (:pre1.lot" costs ":veri.expectedCosts)
 					},
 					"12 hours or more"{
 						let pre3.hours be 12, 23 ordered
 						let pre3.minutes be 0, 59 ordered
 						let veri.expectedCosts be (:dayCosts" + 24")
+						let [Req6] be (:pre1.lot" costs ":veri.expectedCosts)
 					}
+				let [Req4] be (:pre1.lot " " :"parking time")
 			},  
 			"LONG_TERM_GARAGE_PARKING"{
 				let default dayCosts be (:pre3.weeks" * 78 + ":pre3.days" * 13") 
@@ -80,23 +91,32 @@ let foc be "calculate parking costs"{
 						let pre3.hours be 0
 						let pre3.minutes be 0
 						let veri.expectedCosts be :dayCosts
+						let [Req8] be (:pre1.lot" costs ":veri.expectedCosts)
+						let [Req10] be (:pre1.lot" costs ":veri.expectedCosts)
 					},
 					"6 hour or less"{
 						let pre3.hours be 0, 5, 6 ordered
 						let pre3.minutes be 1, 59, 0 ordered
 						let veri.expectedCosts be (:dayCosts" + ":pre3.hours" * 2 + " if(:pre3.minutes != 0) 2 else 0 )
+						let [Req8] be (:pre1.lot" costs ":veri.expectedCosts)
 					},
 					"more than 6 hours"{
 						let pre3.hours be 6, 23 ordered
 						let pre3.minutes be 1, 59 ordered
 						let veri.expectedCosts be (:dayCosts" + "13)
-					} 
+						let [Req9] be (:pre1.lot" costs ":veri.expectedCosts)
+					}
+				let [Req7] be (:pre1.lot " " :"parking time")	 
 			}, 
 			"LONG_TERM_SURFACE_PARKING"{
 				let veri be ("verify parking costs for lot ":pre1.lot)
 				let pre3.hours be 0, 4, 5, 23 {
 					let pre3.minutes be 0,1, 59
 				}
+				let [Req11] be (:pre1.lot" ":pre3.hours" hours " :pre3.minutes" minutes")
+				if (:pre3.hours as int) < 5 let [Req12] be (:pre3.hours" hours " :pre3.minutes" minutes")
+				if (:pre3.hours as int) >= 5 let [Req13] be (:pre3.hours" hours " :pre3.minutes" minutes")
+				if :pre3.days  == 0 let [Req14] be (:pre1.lot" ":pre3.weeks" weeks " :pre3.days" days")
 			}, 
 			"ECONOMY_LOT_PARKING"{
 				let default dayCosts be :pre3.weeks as int * 54 + :pre3.days as int * 9
@@ -105,17 +125,22 @@ let foc be "calculate parking costs"{
 						let pre3.hours be 0
 						let pre3.minutes be 0
 						let veri.expectedCosts be :dayCosts
+						let [Req16] be (:pre1.lot" costs ":veri.expectedCosts)
+						let [Req18] be (:pre1.lot" costs ":veri.expectedCosts)
 					},
 					"4 hour or less"{
 						let pre3.hours be 0, 3, 4 ordered
 						let pre3.minutes be 1, 59, 0 ordered
 						let veri.expectedCosts be :dayCosts as int + :pre3.hours as int * 2 + if(:pre3.minutes != 0) 2 else 0
+						let [Req16] be (:pre1.lot" costs ":veri.expectedCosts)
 					},
 					"more than 4 hours"{
 						let pre3.hours be 4, 23 ordered
 						let pre3.minutes be 1, 59 ordered
 						let veri.expectedCosts be :dayCosts as int + 9
+						let [Req17] be (:pre1.lot" costs ":veri.expectedCosts)
 					} 
+				let [Req15] be (:pre1.lot " " :"parking time")	 
 			}
 		
 	}, 
