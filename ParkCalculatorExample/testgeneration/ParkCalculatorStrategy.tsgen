@@ -1,7 +1,7 @@
 import org.dpolivaev.tsgen.strategies.StrategyHelper
 
 strategy parkCostCalculatorTests 
-	extends StrategyHelper.id("testcase")
+	extends StrategyHelper.id("testcase") with StrategyHelper.description("testcaseDescription")
 
 let script be "parkcalculator/ParkCalculatorTest"
 let script.imports be "import static parkcalculator.Lots.*;
