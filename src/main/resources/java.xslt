@@ -42,7 +42,7 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.scriptw
 			</xsl:if>
 			<xsl:if test="Goal/Item[@firstTime='false']">
 				<xsl:call-template name="eol2"/>
-				<xsl:text>next = {</xsl:text>
+				<xsl:text>again = {</xsl:text>
 				<xsl:apply-templates select="Goal/Item[@firstTime='false']">
 					<xsl:sort select="../@name"/>
 					<xsl:sort select="@name"/>
@@ -73,7 +73,7 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.scriptw
 		</xsl:if>
 		<xsl:if test="not (following-sibling::Item[@name=$item and @firstTime = $firstTime and ../@name=$goal])">
 			<xsl:text>})</xsl:text>
-			<xsl:if test="following-sibling::Item[@name=$item and @firstTime = $firstTime and ../@name=$goal]">
+			<xsl:if test="following-sibling::Item[@firstTime = $firstTime] or ../following-sibling::Goal[Item/@firstTime = $firstTime]">
 				<xsl:text>,</xsl:text>
 			</xsl:if>
 		</xsl:if>

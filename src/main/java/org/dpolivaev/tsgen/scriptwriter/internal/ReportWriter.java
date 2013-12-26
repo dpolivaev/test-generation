@@ -1,7 +1,13 @@
 package org.dpolivaev.tsgen.scriptwriter.internal;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.CoverageStatus;
 import org.dpolivaev.tsgen.coverage.Goal;
@@ -20,7 +26,14 @@ public class ReportWriter {
     }
 
 	public void createReport(GoalChecker goalChecker, ScriptConfiguration scriptConfiguration) {
-		final Collection<Goal> goals = goalChecker.goals();
+		final ArrayList<Goal> goals = new ArrayList<>(goalChecker.goals());
+		Collections.sort(goals, new Comparator<Goal>() {
+
+			@Override
+			public int compare(Goal o1, Goal o2) {
+				return o1.name().compareTo(o2.name());
+			}
+		});
 		if(! goals.isEmpty()){
 			xmlWriter = new SaxXmlWriter(handlerFactory.newHandler(scriptConfiguration));
 			xmlWriter.startDocument();
@@ -38,7 +51,22 @@ public class ReportWriter {
 		xmlWriter.setAttribute("name", goal.name());
 		xmlWriter.setAttribute("required", Integer.toString(goal.checkList().requiredItemNumber()));
 		xmlWriter.setAttribute("achieved", Integer.toString(goal.checkList().achievedItemNumber()));
-		for (Map.Entry<CoverageEntry, CoverageStatus> entry : goal.checkList().coveredEntries())
+		ArrayList<Entry<CoverageEntry, CoverageStatus>>  coveredEntries = new ArrayList<>(goal.checkList().coveredEntries());
+		Collections.sort(coveredEntries, new Comparator<Map.Entry<CoverageEntry, CoverageStatus>>() {
+
+			@Override
+			public int compare(Entry<CoverageEntry, CoverageStatus> o1,
+					Entry<CoverageEntry, CoverageStatus> o2) {
+				CoverageEntry entry1 = o1.getKey();
+				CoverageEntry entry2 = o2.getKey();
+				int nameComparison = entry1.getName().compareTo(entry2.getName());
+				if(nameComparison != 0)
+					return nameComparison;
+				return entry1.getReason().compareTo(entry2.getReason());
+				
+			}
+		});
+		for (Map.Entry<CoverageEntry, CoverageStatus> entry : coveredEntries)
 			writeItemReport(entry.getKey(), entry.getValue());
 		xmlWriter.endElement("Goal");
 	}

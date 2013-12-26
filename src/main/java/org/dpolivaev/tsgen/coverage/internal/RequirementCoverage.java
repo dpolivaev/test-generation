@@ -11,7 +11,7 @@ import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 import org.dpolivaev.tsgen.ruleengine.internal.PropertyAccessor;
 
 public class RequirementCoverage implements GoalFunction{
-	private static final String REQUIREMENT_PREFIX = "requirement.";
+	private static final String REQUIREMENT_PREFIX = "[";
 
 	@Override
 	public Collection<CoverageEntry> check(PropertyContainer propertyContainer) {
@@ -21,14 +21,10 @@ public class RequirementCoverage implements GoalFunction{
     		final Object value = propertyContainer.get(propertyName);
     		if(value == SpecialValue.UNDEFINED)
     			continue;
-    		@SuppressWarnings("unchecked")
-			List<Object> coverageItems = (List<Object>) value;
-    		String requirementId = propertyName.substring(REQUIREMENT_PREFIX.length());
-    		for(Object item : coverageItems){
-    			String description = item.toString();
-    			final CoverageEntry coverageEntry = new CoverageEntry(requirementId, description);
-				coverageEntries.add(coverageEntry);
-    		}
+    		String requirementId = propertyName.substring(REQUIREMENT_PREFIX.length(), propertyName.length() - REQUIREMENT_PREFIX.length());
+			String description = value.toString();
+			final CoverageEntry coverageEntry = new CoverageEntry(requirementId, description);
+			coverageEntries.add(coverageEntry);
     	}
     	return coverageEntries;
     }

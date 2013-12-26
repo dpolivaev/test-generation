@@ -17,7 +17,7 @@ public class DescriptionProviderTest {
 	public void includesUsualRulesWithReasons() {
         Rule rule1 = ruleMock("name");
         Rule rule2 = ruleMock("name2");
-        Rule ruleRequirement = ruleMock("requirement.id1");
+        Rule ruleRequirement = ruleMock("[id1]");
         
         Assignments assignments = new Assignments();
         assignments.add(new Assignment(rule1, "value", ""));
@@ -31,7 +31,7 @@ public class DescriptionProviderTest {
 
 	@Test
 	public void excludesRequirements() {
-        Rule ruleRequirement = ruleMock("requirement.id1");
+        Rule ruleRequirement = ruleMock("[id1]");
         
         Assignments assignments = new Assignments();
         assignments.add(new Assignment(ruleRequirement, "reason", ""));

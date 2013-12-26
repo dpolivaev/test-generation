@@ -16,7 +16,7 @@ public class DescriptionProvider  implements ValueProvider{
 
 	public DescriptionProvider(String nameValueSeparator, String propertySeparator) {
 		formatter = AssignmentFormatter.create(nameValueSeparator, propertySeparator);
-		formatter.exclude("requirement\\..*|\\w+Description");
+		formatter.exclude("\\[.*|\\w+Description");
 		formatter.excludeUndefined(true);
 		formatter.appendReasons(true);
 	}
