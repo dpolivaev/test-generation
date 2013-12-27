@@ -21,7 +21,7 @@ public class StrategyRunner {
 	public StrategyRunner() {
 		super();
 		this.outputConfiguration = new OutputConfiguration();
-		this.reportConfiguration = new OutputConfiguration("report.xml");
+		this.reportConfiguration = new OutputConfiguration();
 	}
 
 	public void run(Strategy strategy){
@@ -33,13 +33,17 @@ public class StrategyRunner {
 		GoalChecker goalChecker = new GoalChecker();
 		goalChecker.addGoal(new Goal("requirements", new RequirementCoverage()));
 		ruleEngine.addHandler(goalChecker);
+		MultipleScriptsWriter scriptProducer = null;
 		StreamResultFactory resultFactory = new StreamResultFactory();
-		MultipleScriptsWriter scriptProducer = new MultipleScriptsWriter(resultFactory, goalChecker);
-		scriptProducer.setOutputConfiguration(outputConfiguration);
-		ruleEngine.addHandler(scriptProducer);
+		if (outputConfiguration.isFileValid()){
+			scriptProducer = new MultipleScriptsWriter(resultFactory, goalChecker);
+			scriptProducer.setOutputConfiguration(outputConfiguration);
+			ruleEngine.addHandler(scriptProducer);
+		}
 		ruleEngine.run(strategy);
 		try {
-			scriptProducer.endScripts();
+			if(scriptProducer != null)
+				scriptProducer.endScripts();
 			writer.close();
 		} catch (IOException e) {
 			throw Utils.runtimeException(e);

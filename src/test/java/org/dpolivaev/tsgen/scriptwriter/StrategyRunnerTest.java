@@ -33,10 +33,19 @@ public class StrategyRunnerTest {
 		expectedReportFile.delete();
 		final StrategyRunner strategyRunner = new StrategyRunner();
 		strategyRunner.getOutputConfiguration().setFileDirectory("testoutput").setFileExtension("xml");
+		strategyRunner.getReportConfiguration().setFileExtension("report.xml");
 		
 		strategyRunner.run(strategy.with(StrategyHelper.id("testcase")));
 		
 		checkOutputFilesAreCreated(expectedOutputFile, expectedReportFile);
 		checkOutputStreamsAreClosed(expectedOutputFile, expectedReportFile);
+	}
+
+	
+	@Test
+	public void outputsNothing() throws Exception {
+		Strategy strategy = new Strategy();
+		final StrategyRunner strategyRunner = new StrategyRunner();
+		strategyRunner.run(strategy.with(StrategyHelper.id("testcase")));
 	}
 }

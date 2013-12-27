@@ -25,7 +25,7 @@ public class XmlReportWriterTest {
     public void emptyReport() {
         ResultFactory resultFactory = Mockito.mock(ResultFactory.class);
         final DOMResult dom = new DOMResult();
-        final ScriptConfiguration scriptConfiguration = OutputConfiguration.OUTPUT_XML.forScript("reportName");
+        final ScriptConfiguration scriptConfiguration = OutputConfiguration.OUTPUT_NOTHING.forScript("reportName");
 		Mockito.when(resultFactory.newResult(scriptConfiguration)).thenReturn(dom);
 		ReportWriter producer = new ReportWriter(resultFactory);
         producer.createReport(GoalChecker.NO_GOALS, scriptConfiguration);
@@ -36,7 +36,7 @@ public class XmlReportWriterTest {
     public void openGoalReport() {
         ResultFactory resultFactory = Mockito.mock(ResultFactory.class);
         final DOMResult dom = new DOMResult();
-        final ScriptConfiguration scriptConfiguration = OutputConfiguration.OUTPUT_XML.forScript("reportName");
+        final ScriptConfiguration scriptConfiguration = new OutputConfiguration().setFileExtension("report.xml").forScript("reportName");
 		Mockito.when(resultFactory.newResult(scriptConfiguration)).thenReturn(dom);
 		final GoalChecker goals = new GoalChecker();
 		goals.addGoal(new Goal("goal2", new GoalFunction() {

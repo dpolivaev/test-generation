@@ -13,16 +13,11 @@ public class OutputConfiguration {
 	private String fileDirectory;
 	private String xmlDirectory;
 	
-	public static final OutputConfiguration OUTPUT_XML = new OutputConfiguration();
+	public static final OutputConfiguration OUTPUT_NOTHING = new OutputConfiguration();
 
 	public OutputConfiguration(){
-		setFileExtension("xml");
 	}
 	
-	public OutputConfiguration(String extension) {
-		setFileExtension(extension);
-	}
-
 	public ScriptConfiguration forScript(String name){
 		final ScriptConfiguration scriptConfiguration = new ScriptConfiguration(this, name);
 		return scriptConfiguration;
@@ -86,5 +81,9 @@ public class OutputConfiguration {
 	public OutputConfiguration setXmlDirectory(String xmlDirectory) {
 		this.xmlDirectory = xmlDirectory;
 		return this;
+	}
+
+	public boolean isFileValid() {
+		return  getFileExtension() != null;
 	}
 }

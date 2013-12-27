@@ -34,7 +34,7 @@ public class ReportWriter {
 				return o1.name().compareTo(o2.name());
 			}
 		});
-		if(! goals.isEmpty()){
+		if(! goals.isEmpty() && scriptConfiguration.isFileValid()){
 			xmlWriter = new SaxXmlWriter(handlerFactory.newHandler(scriptConfiguration));
 			xmlWriter.startDocument();
 			xmlWriter.beginElement("Report");
