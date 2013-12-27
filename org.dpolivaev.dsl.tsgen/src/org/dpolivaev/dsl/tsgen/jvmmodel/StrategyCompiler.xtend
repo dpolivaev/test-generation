@@ -5,11 +5,14 @@ import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
 import org.eclipse.xtext.xbase.XExpression
 import org.dpolivaev.dsl.tsgen.strategydsl.PropertyCall
 import org.eclipse.xtext.xbase.XStringLiteral
-import org.eclipse.xtext.common.types.JvmTypeReference
 import org.eclipse.xtext.util.Strings
-import org.eclipse.xtext.xbase.compiler.Later
+import org.eclipse.xtext.xbase.XCastedExpression
+import org.eclipse.xtext.common.types.util.Primitives
+import javax.inject.Inject
+import org.eclipse.xtext.common.types.JvmPrimitiveType
 
 class StrategyCompiler extends XbaseCompiler {
+	@Inject Primitives primitives;
 	override protected doInternalToJavaStatement(XExpression expr, ITreeAppendable it, boolean isReferenced) {
 		switch expr {
 			PropertyCall:{
@@ -23,7 +26,18 @@ class StrategyCompiler extends XbaseCompiler {
 	override protected internalToConvertedExpression(XExpression expr, ITreeAppendable it) {
 		switch expr {
 			PropertyCall:{
-				append('''propertyContainer.get("«expr.name.escapeQuotes»")''');
+				append('propertyContainer.')
+				val container = expr.eContainer
+				if(container instanceof XCastedExpression){
+					val type = (container as XCastedExpression).type.type
+					if(type instanceof JvmPrimitiveType){
+						append('<')
+						append(primitives.getWrapperType(type))
+						append('>')
+					}
+				}
+				
+				append('''get("«expr.name.escapeQuotes»")''');
 			}
 			default :
 				super.internalToConvertedExpression(expr, it)
@@ -60,22 +74,5 @@ class StrategyCompiler extends XbaseCompiler {
 			output = output.substring(0, output.length - 1)
 		output = output.replaceAll("\"", "\\\\\\\"")
 		return output
-	}
-	
-	override protected void convertWrapperToPrimitive(
-		JvmTypeReference wrapper, 
-		JvmTypeReference primitive, 
-		XExpression context, 
-		ITreeAppendable appendable,
-		Later expression) {
-		appendable.append("(");
-		expression.exec(appendable);
-		appendable.append(")");
-		if(primitive.qualifiedName != Object.name){
-			appendable.append(".");
-			serialize(primitive, context, appendable);
-			appendable.append("Value(");
-			appendable.append(")");
-		}
 	}
 }
