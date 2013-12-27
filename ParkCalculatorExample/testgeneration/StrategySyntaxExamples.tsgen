@@ -1,0 +1,101 @@
+strategy SyntaxExamples
+
+let example be 
+	'stand alone property' {
+    	let x be 'a', 'b', 'c'
+    },
+	'all combinations' {
+    	let x be 'a', 'b', 'c' {
+          let y be  'A', 'B', 'C'
+        }
+    },
+    'parallel combinations ordered' {
+    	let x be 'a', 'b', 'c' ordered
+    	let y be 'A', 'B' ordered
+    	let z be '1', '2', '3', '4', '5' ordered
+    },
+	'parallel combinations shuffled'{
+    	let x be 'a', 'b', 'c' shuffled
+    	let y be 'A', 'B' shuffled
+    	let z be '1', '2', '3', '4', '5' shuffled
+    },
+    'parallel combinations first ordered then shuffled by default' {
+    	let x be 'a', 'b', 'c'
+    	let y be 'A', 'B'
+    	let z be '1', '2', '3', '4', '5', '6'
+    },
+	'dependent values'{
+    	let x be 'a', 'b', 'c' ordered
+    	let y be 'A', 'B' ordered
+    	let z be :x + " && " + :y,  :x + " || " + :y
+    },
+	'explicit dependencies' {
+    	for each x, y  let z be (:x " && " :y),  (:x" || ":y)	
+    	let x be 'a', 'b', 'c' 
+    	let y be'A', 'B'
+    },
+	'branches'{
+		let x be 'a', 'b' {
+        	let y be 'A', 'B'
+        },
+        'c'{let y be 'C'}
+     },
+	'conditions' {
+    	let x be 'a', 'b', 'c'{
+        	let y be 'C'
+            if :x == 'c' let y be 'A', 'B'
+        }
+    },
+	'defaults' {
+	    let x be 
+	    	'a', 'b', 'c'{},
+	        'd'{
+				let y be 'A', 'B'
+	        }
+	   let default y be 'C'
+	   if :x != 'b' let default y be 'D', 'E'
+	   let z be :y
+	   },
+	'branched defaults'{
+    	let x be 
+    		'a', 'b', 'c'{},
+            'd'{
+                let y be 'A', 'B'
+            },
+            'e' { let default y be 'E'}
+       let default y be 'C'
+       let default y be 'C'
+       if :x != 'b' let default y be 'D', 'E'
+       let z be :y
+	},
+	'chained defaults'{
+    	let x be 
+    		'a', 'b', 'c'{},
+            'd'{
+                let y be 'A', 'B'
+            },
+            'e' { let default y be 'E'}
+       let default y be :z
+       if :z != 'b' let default y be :z
+       let default z be :x
+       if :x != 'b' let default y be 'D', 'E'
+       let w be :y
+	},
+	'skip'{
+	    let x be 'a', 'b', 'c'{
+	       if :x == 'b' skip
+	       let y be 'A', 'C'
+		}
+	},
+	"new rules override old rule's content and keep rule evaluation order" {
+	    let x be "a"
+	    let default y be "A"
+	    let default y be "B"
+	    let default y be "C"
+	    let z be :y
+	    let x be "b"
+	    let x be "c"
+    }
+    
+run strategy SyntaxExamples
+     
