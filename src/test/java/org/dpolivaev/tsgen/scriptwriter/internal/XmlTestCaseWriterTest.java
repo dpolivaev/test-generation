@@ -38,7 +38,7 @@ public class XmlTestCaseWriterTest {
         dom = new DOMResult();
         ResultFactory resultFactory = Mockito.mock(ResultFactory.class);
         Mockito.when(resultFactory.newResult(Mockito.<ScriptConfiguration>any())).thenReturn(dom);
-        ContentHandler handler = new HandlerFactory(resultFactory).newHandler(OutputConfiguration.OUTPUT_XML.forScript("result"));
+        ContentHandler handler = new HandlerFactory(resultFactory).newHandler(OutputConfiguration.OUTPUT_NOTHING.forScript("result"));
         xmlWriter = new SaxXmlWriter(handler);
 		goal = Mockito.mock(Goal.class);
 		Mockito.when(goal.name()).thenReturn("name");

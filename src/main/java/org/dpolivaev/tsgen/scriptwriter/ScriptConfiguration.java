@@ -22,4 +22,8 @@ public class ScriptConfiguration {
 		final String xmlName = scriptName != null ? scriptName + "." + outputConfiguration.getFileExtension() : outputConfiguration.getFileExtension();
 		return new File(outputConfiguration.getFileDirectory(), xmlName);
 	}
+
+	public boolean isFileValid() {
+		return outputConfiguration.isFileValid();
+	}
 }

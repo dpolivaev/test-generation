@@ -27,7 +27,7 @@ public class MultipleScriptsWriter implements PropertyHandler{
         this.resultFactory = resultFactory;
 		this.goalChecker = goalChecker;
         singleScriptProducers = new HashMap<String, SingleScriptWriter>();
-        outputConfiguration = OutputConfiguration.OUTPUT_XML;
+        outputConfiguration = OutputConfiguration.OUTPUT_NOTHING;
         
     }
 
