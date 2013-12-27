@@ -59,7 +59,7 @@ class StrategyCompilationTest {
 			strategy first
 				let "x y" be 1, 2, 3
 		'''.assertCompilesTo('''
-		import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+		import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 		import org.dpolivaev.tsgen.ruleengine.Strategy;
 		
 		@SuppressWarnings("all")
@@ -68,7 +68,7 @@ class StrategyCompilationTest {
 		  
 		  private static Strategy defineStrategyFirst() {
 		    Strategy strategy = new Strategy();
-		    strategy.addRule(Factory.iterate("x y").over(1, 2, 3).asRule());
+		    strategy.addRule(RuleBuilder.Factory.iterate("x y").over(1, 2, 3).asRule());
 		    return strategy;
 		  }
 		}
@@ -83,7 +83,7 @@ class StrategyCompilationTest {
 			line3
 			"
 		'''.assertCompilesTo('''
-			import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
@@ -92,7 +92,7 @@ class StrategyCompilationTest {
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
-			    strategy.addRule(Factory.iterate("x").over("line1\nline2\nline3\n").asRule());
+			    strategy.addRule(RuleBuilder.Factory.iterate("x").over("line1\nline2\nline3\n").asRule());
 			    return strategy;
 			  }
 			}
@@ -104,7 +104,7 @@ class StrategyCompilationTest {
 			strategy first
 				for each x1, x2 let y be 1, 2, 3
 		'''.assertCompilesTo('''
-		import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+		import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 		import org.dpolivaev.tsgen.ruleengine.Strategy;
 		
 		@SuppressWarnings("all")
@@ -113,7 +113,7 @@ class StrategyCompilationTest {
 		  
 		  private static Strategy defineStrategyFirst() {
 		    Strategy strategy = new Strategy();
-		    strategy.addRule(Factory.when("x1", "x2").iterate("y").over(1, 2, 3).asRule());
+		    strategy.addRule(RuleBuilder.Factory.when("x1", "x2").iterate("y").over(1, 2, 3).asRule());
 		    return strategy;
 		  }
 		}
@@ -126,7 +126,7 @@ class StrategyCompilationTest {
 				let y be :x
 		'''.assertCompilesTo('''
 			import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-			import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			import org.dpolivaev.tsgen.ruleengine.ValueProvider;
 			
@@ -140,7 +140,7 @@ class StrategyCompilationTest {
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
-			    strategy.addRule(Factory.iterate("y").over(new ValueProvider(){
+			    strategy.addRule(RuleBuilder.Factory.iterate("y").over(new ValueProvider(){
 			      @Override public Object value(PropertyContainer propertyContainer) { return valueProvider1(propertyContainer); }
 			    }).asRule());
 			    return strategy;
@@ -156,21 +156,20 @@ class StrategyCompilationTest {
 		'''.assertCompilesTo('''
 			import org.dpolivaev.tsgen.ruleengine.Condition;
 			import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-			import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
 			  private static Boolean condition1(final PropertyContainer propertyContainer) {
-			    boolean _lessThan = (1 < 2);
-			    return Boolean.valueOf(_lessThan);
+			    return Boolean.valueOf((1 < 2));
 			  }
 			  
 			  public final static Strategy first = defineStrategyFirst();
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
-			    strategy.addRule(Factory._if(new Condition(){
+			    strategy.addRule(RuleBuilder.Factory._if(new Condition(){
 			      @Override public boolean isSatisfied(PropertyContainer propertyContainer) { return condition1(propertyContainer); }
 			    }).iterate("y").over(3).asRule());
 			    return strategy;
@@ -187,21 +186,20 @@ class StrategyCompilationTest {
 		'''.assertCompilesTo('''
 			import org.dpolivaev.tsgen.ruleengine.Condition;
 			import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-			import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
 			  private static Boolean condition1(final PropertyContainer propertyContainer) {
-			    boolean _lessThan = (1 < 2);
-			    return Boolean.valueOf(_lessThan);
+			    return Boolean.valueOf((1 < 2));
 			  }
 			  
 			  public final static Strategy first = defineStrategyFirst();
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
-			    strategy.addRule(Factory._if(new Condition(){
+			    strategy.addRule(RuleBuilder.Factory._if(new Condition(){
 			      @Override public boolean isSatisfied(PropertyContainer propertyContainer) { return condition1(propertyContainer); }
 			    }).iterate("y").over(3).asRule());
 			    return strategy;
@@ -218,26 +216,24 @@ class StrategyCompilationTest {
 			'''.assertCompilesTo('''
 			import org.dpolivaev.tsgen.ruleengine.Condition;
 			import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-			import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
 			  private static Boolean condition1(final PropertyContainer propertyContainer) {
-			    boolean _lessThan = (1 < 2);
-			    return Boolean.valueOf(_lessThan);
+			    return Boolean.valueOf((1 < 2));
 			  }
 			  
 			  private static Boolean condition2(final PropertyContainer propertyContainer) {
-			    boolean _lessThan = (3 < 4);
-			    return Boolean.valueOf(_lessThan);
+			    return Boolean.valueOf((3 < 4));
 			  }
 			  
 			  public final static Strategy first = defineStrategyFirst();
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
-			    strategy.addRule(Factory._if(new Condition(){
+			    strategy.addRule(RuleBuilder.Factory._if(new Condition(){
 			      @Override public boolean isSatisfied(PropertyContainer propertyContainer) { return condition1(propertyContainer) && condition2(propertyContainer); }
 			    }).iterate("y").over(5).asRule());
 			    return strategy;
@@ -250,7 +246,7 @@ class StrategyCompilationTest {
 			strategy first
 				let default x be 1, 2, 3
 		'''.assertCompilesTo('''
-		import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+		import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 		import org.dpolivaev.tsgen.ruleengine.Strategy;
 		
 		@SuppressWarnings("all")
@@ -259,7 +255,7 @@ class StrategyCompilationTest {
 		  
 		  private static Strategy defineStrategyFirst() {
 		    Strategy strategy = new Strategy();
-		    strategy.addRule(Factory.iterate("x").over(1, 2, 3).asDefaultRule());
+		    strategy.addRule(RuleBuilder.Factory.iterate("x").over(1, 2, 3).asDefaultRule());
 		    return strategy;
 		  }
 		}
@@ -273,7 +269,7 @@ class StrategyCompilationTest {
 					for each x2 let y be 1, 2, 3
 				}
 		'''.assertCompilesTo('''
-		import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+		import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 		import org.dpolivaev.tsgen.ruleengine.Strategy;
 		
 		@SuppressWarnings("all")
@@ -282,7 +278,7 @@ class StrategyCompilationTest {
 		  
 		  private static Strategy defineStrategyFirst() {
 		    Strategy strategy = new Strategy();
-		    strategy.addRule(Factory.when("x1", "x2").iterate("y").over(1, 2, 3).asRule());
+		    strategy.addRule(RuleBuilder.Factory.when("x1", "x2").iterate("y").over(1, 2, 3).asRule());
 		    return strategy;
 		  }
 		}
@@ -296,7 +292,7 @@ class StrategyCompilationTest {
 					let y be 2
 				}
 		'''.assertCompilesTo('''
-			import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
@@ -305,8 +301,8 @@ class StrategyCompilationTest {
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
-			    strategy.addRule(Factory.iterate("x").over(1).with(
-			      Factory.iterate("y").over(2).asTriggeredRule()
+			    strategy.addRule(RuleBuilder.Factory.iterate("x").over(1).with(
+			      RuleBuilder.Factory.iterate("y").over(2).asTriggeredRule()
 			    ).asRule());
 			    return strategy;
 			  }
@@ -322,7 +318,7 @@ class StrategyCompilationTest {
 					let z be 3
 				}
 		'''.assertCompilesTo('''
-			import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
@@ -331,9 +327,9 @@ class StrategyCompilationTest {
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
-			    strategy.addRule(Factory.iterate("x").over(1).with(
-			      Factory.iterate("y").over(2).asTriggeredRule(),
-			      Factory.iterate("z").over(3).asTriggeredRule()
+			    strategy.addRule(RuleBuilder.Factory.iterate("x").over(1).with(
+			      RuleBuilder.Factory.iterate("y").over(2).asTriggeredRule(),
+			      RuleBuilder.Factory.iterate("z").over(3).asTriggeredRule()
 			    ).asRule());
 			    return strategy;
 			  }
@@ -350,7 +346,7 @@ class StrategyCompilationTest {
 					}
 				}
 		'''.assertCompilesTo('''
-			import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
@@ -359,8 +355,8 @@ class StrategyCompilationTest {
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
-			    strategy.addRule(Factory.iterate("x").over(1).with(
-			      Factory.when("x").iterate("y").over(2).asTriggeredRule()
+			    strategy.addRule(RuleBuilder.Factory.iterate("x").over(1).with(
+			      RuleBuilder.Factory.when("x").iterate("y").over(2).asTriggeredRule()
 			    ).asRule());
 			    return strategy;
 			  }
@@ -374,7 +370,7 @@ class StrategyCompilationTest {
 			let a be listA with 1 {let b be 2}, 3 {}
 			let default d be from listA
 		'''.assertCompilesTo('''
-			import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
@@ -383,10 +379,10 @@ class StrategyCompilationTest {
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
-			    strategy.addRule(Factory.iterate("a").over(1).with(
-			      Factory.iterate("b").over(2).asTriggeredRule()
+			    strategy.addRule(RuleBuilder.Factory.iterate("a").over(1).with(
+			      RuleBuilder.Factory.iterate("b").over(2).asTriggeredRule()
 			    ).over(3).asRule());
-			    strategy.addRule(Factory.iterate("d").over(1).over(3).asDefaultRule());
+			    strategy.addRule(RuleBuilder.Factory.iterate("d").over(1).over(3).asDefaultRule());
 			    return strategy;
 			  }
 			}
@@ -398,7 +394,7 @@ class StrategyCompilationTest {
 			strategy first
 				let x be 2, 3 ordered 		
 		'''.assertCompilesTo('''
-			import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
@@ -407,7 +403,7 @@ class StrategyCompilationTest {
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
-			    strategy.addRule(Factory.iterate("x").over(2, 3).ordered().asRule());
+			    strategy.addRule(RuleBuilder.Factory.iterate("x").over(2, 3).ordered().asRule());
 			    return strategy;
 			  }
 			}
@@ -419,7 +415,7 @@ class StrategyCompilationTest {
 			strategy first
 				let x be 2, 3 shuffled 		
 		'''.assertCompilesTo('''
-			import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
@@ -428,7 +424,7 @@ class StrategyCompilationTest {
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
-			    strategy.addRule(Factory.iterate("x").over(2, 3).shuffled().asRule());
+			    strategy.addRule(RuleBuilder.Factory.iterate("x").over(2, 3).shuffled().asRule());
 			    return strategy;
 			  }
 			}
@@ -441,7 +437,7 @@ class StrategyCompilationTest {
 				let x be ("a" "b")
 		'''.assertCompilesTo('''
 			import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-			import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			import org.dpolivaev.tsgen.ruleengine.ValueProvider;
 			
@@ -451,7 +447,7 @@ class StrategyCompilationTest {
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
-			    strategy.addRule(Factory.iterate("x").over(new ValueProvider(){
+			    strategy.addRule(RuleBuilder.Factory.iterate("x").over(new ValueProvider(){
 			      @Override public Object value(PropertyContainer propertyContainer) { return new StringBuilder().append("a").append("b").toString(); }
 			    }).asRule());
 			    return strategy;
@@ -671,7 +667,7 @@ class StrategyCompilationTest {
 			strategy First
 				let [req1] be 123
 		'''.assertCompilesTo('''
-			import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
@@ -680,7 +676,7 @@ class StrategyCompilationTest {
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
-			    strategy.addRule(Factory.iterate("[req1]").over(123).asRule());
+			    strategy.addRule(RuleBuilder.Factory.iterate("[req1]").over(123).asRule());
 			    return strategy;
 			  }
 			}
@@ -694,7 +690,7 @@ class StrategyCompilationTest {
 				let req1 be :a
 		'''.assertCompilesTo('''
 				import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-				import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
+				import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 				import org.dpolivaev.tsgen.ruleengine.Strategy;
 				import org.dpolivaev.tsgen.ruleengine.ValueProvider;
 				
@@ -708,8 +704,8 @@ class StrategyCompilationTest {
 				  
 				  private static Strategy defineStrategyFirst() {
 				    Strategy strategy = new Strategy();
-				    strategy.addRule(Factory.iterate("a").over(123).asDefaultRule());
-				    strategy.addRule(Factory.iterate("req1").over(new ValueProvider(){
+				    strategy.addRule(RuleBuilder.Factory.iterate("a").over(123).asDefaultRule());
+				    strategy.addRule(RuleBuilder.Factory.iterate("req1").over(new ValueProvider(){
 				      @Override public Object value(PropertyContainer propertyContainer) { return valueProvider1(propertyContainer); }
 				    }).asRule());
 				    return strategy;
