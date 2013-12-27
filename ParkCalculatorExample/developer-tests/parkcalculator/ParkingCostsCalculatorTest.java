@@ -3,7 +3,6 @@ package parkcalculator;
 import static org.junit.Assert.*;
 
 import org.hamcrest.CoreMatchers;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class ParkingCostsCalculatorTest {
