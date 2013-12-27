@@ -4,12 +4,20 @@ import com.google.inject.Inject
 import java.util.ArrayList
 import java.util.Collection
 import java.util.HashMap
+import java.util.HashSet
+import java.util.Set
 import org.dpolivaev.dsl.tsgen.strategydsl.Condition
 import org.dpolivaev.dsl.tsgen.strategydsl.Generation
+import org.dpolivaev.dsl.tsgen.strategydsl.OutputConfiguration
 import org.dpolivaev.dsl.tsgen.strategydsl.Rule
 import org.dpolivaev.dsl.tsgen.strategydsl.RuleGroup
+import org.dpolivaev.dsl.tsgen.strategydsl.StrategyReference
 import org.dpolivaev.dsl.tsgen.strategydsl.ValueAction
-import org.eclipse.emf.ecore.EObject
+import org.dpolivaev.dsl.tsgen.strategydsl.ValueProvider
+import org.dpolivaev.dsl.tsgen.strategydsl.Values
+import org.dpolivaev.tsgen.ruleengine.PropertyContainer
+import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory
+import org.dpolivaev.tsgen.scriptwriter.StrategyRunner
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.common.types.JvmGenericType
 import org.eclipse.xtext.common.types.JvmType
@@ -20,25 +28,15 @@ import org.eclipse.xtext.xbase.XExpression
 import org.eclipse.xtext.xbase.XNullLiteral
 import org.eclipse.xtext.xbase.XNumberLiteral
 import org.eclipse.xtext.xbase.XStringLiteral
+import org.eclipse.xtext.xbase.compiler.Later
 import org.eclipse.xtext.xbase.compiler.XbaseCompiler
 import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
 import org.eclipse.xtext.xbase.jvmmodel.AbstractModelInferrer
 import org.eclipse.xtext.xbase.jvmmodel.IJvmDeclaredTypeAcceptor
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
-import org.dpolivaev.tsgen.ruleengine.PropertyContainer
-import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory
-import org.dpolivaev.dsl.tsgen.strategydsl.StrategyReference
 
 import static extension org.dpolivaev.dsl.tsgen.jvmmodel.StrategyCompiler.*
-
-import java.util.Set
-import java.util.HashSet
-import java.util.Arrays
-import org.eclipse.xtext.xbase.compiler.Later
-import org.dpolivaev.tsgen.scriptwriter.StrategyRunner
-import org.dpolivaev.dsl.tsgen.strategydsl.OutputConfiguration
-import org.dpolivaev.dsl.tsgen.strategydsl.Values
-import org.dpolivaev.dsl.tsgen.strategydsl.ValueProvider
+import static extension org.eclipse.xtext.nodemodel.util.NodeModelUtils.*
 
 /**
  * <p>Infers a JVM model from the source model.</p> 
@@ -87,10 +85,34 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 	}
 }
 
+class Methods{
+	val map = new HashMap<String, String>
+	
+	def put(String prefix, XExpression expression, String name) {
+		val text = expression.node.text
+		map.put(prefix + text, name)
+	}
+	
+	def contains(String prefix, XExpression expression) {
+		val text = expression.node.text
+		map.containsKey(prefix + text)
+	}
+	
+	def size() {
+		map.size
+	}
+	
+	def get(String prefix, XExpression expression) {
+		val text = expression.node.text
+		map.get(prefix + text)
+	}
+	
+}
+
 class ScriptInitializer{
 	val extension JvmTypesBuilder jvmTypesBuilder
 	val XbaseCompiler xbaseCompiler
-	val HashMap<EObject, String> methods
+	val Methods methods
 	val Set<String> declaredStrategies
 	val JvmGenericType jvmType
 	val Generation script
@@ -99,7 +121,7 @@ class ScriptInitializer{
 	new(extension JvmTypesBuilder jvmTypesBuilder, XbaseCompiler xbaseCompiler, JvmGenericType jvmType, Generation script){
 		this.jvmTypesBuilder = jvmTypesBuilder
 		this.xbaseCompiler = xbaseCompiler
-		this.methods = new HashMap<EObject, String>
+		this.methods = new Methods
 		this.declaredStrategies = new HashSet<String>
 		this.script = script
 		this.jvmType = jvmType
@@ -128,23 +150,29 @@ class ScriptInitializer{
 		}
 	}
 	
+	final static val EXTERNAL_STRATEGY = "externalStrategy"
 	private def appendStrategyReferences(StrategyReference ref){
-		if(ref.expr != null && ! declaredStrategies.contains(ref.expr.toString))
-			createMethod(ref.expr, "externalStrategy", ref.expr.newTypeRef(org.dpolivaev.tsgen.ruleengine.Strategy), false)
+		if(ref.expr != null && ! declaredStrategies.contains(ref.expr.toString)) {
+			createMethod(ref.expr, EXTERNAL_STRATEGY, ref.expr.newTypeRef(org.dpolivaev.tsgen.ruleengine.Strategy), false)
+		}
 	}
 	
+    final static val VALUE_PROVIDER = "valueProvider"
 	private def appendValueProviders(ValueAction action){
 		for(valueProvider:action.valueProviders)
 			for(expr:valueProvider.expressions)
-				if(shouldCreateMethodFor(expr))
-					createMethod(expr, "valueProvider", valueProvider.newTypeRef(Object), true)
+				if(shouldCreateMethodFor(expr)) {
+					createMethod(expr, VALUE_PROVIDER, valueProvider.newTypeRef(Object), true)
+				}
 		
 	}
 	
 	private def createMethod(XExpression expr, String prefix, JvmTypeReference resultTypeRef, boolean useParameters){
+				if(methods.contains(prefix, expr))
+					return
 				val valueProviderCounter = methods.size + 1
 				val name = prefix + valueProviderCounter
-				methods.put(expr, name)
+				methods.put(prefix, expr, name)
 				jvmType.members += expr.toMethod(name, resultTypeRef)[
 					if(useParameters)
 						parameters += expr.toParameter("propertyContainer", expr.newTypeRef(PropertyContainer))
@@ -158,11 +186,12 @@ class ScriptInitializer{
 		return !(expr instanceof XStringLiteral || expr instanceof XNumberLiteral || expr instanceof XBooleanLiteral || expr instanceof XNullLiteral)
 	}
 	
+   final static val CONDITION = "condition"
 	private def appendConditions(Condition condition){
 		if(condition != null){
 			val expr = condition.expr
 			if(expr != null){
-				createMethod(expr, "condition", expr.newTypeRef(Boolean), true)
+				createMethod(expr, CONDITION, expr.newTypeRef(Boolean), true)
 			}
 		}
 	}
@@ -271,7 +300,7 @@ class ScriptInitializer{
 		do {
 			val condition = group.condition
 			if(condition != null && condition.expr != null){
-				val methodName = methods.get(condition.expr)
+				val methodName = methods.get(CONDITION, condition.expr)
 				methodNames.add(methodName) 
 			}
 			val container = group.eContainer
@@ -354,7 +383,7 @@ class ScriptInitializer{
 			else
 				append(', ')
 			val expressions = valueProvider.expressions 
-			if(expressions.size == 1 && methods.get(expressions.get(0)) == null)
+			if(expressions.size == 1 && methods.get(VALUE_PROVIDER, expressions.get(0)) == null)
 				xbaseCompiler.compileAsJavaExpression(expressions.get(0), it, valueProvider.newTypeRef(Object))
 			else	
 				appendImplementationObject(it, valueAction.newTypeRef(org.dpolivaev.tsgen.ruleengine.ValueProvider).type, "Object value", 
@@ -371,7 +400,7 @@ class ScriptInitializer{
 		for (expr : valueProvider.expressions){	
 			if(concatenation)
 				append(".append(");
-			val methodName = methods.get(expr)
+			val methodName = methods.get(VALUE_PROVIDER, expr)
 			if(methodName == null)
 				xbaseCompiler.compileAsJavaExpression(expr, it, valueProvider.newTypeRef(Object))
 			else{
@@ -513,7 +542,7 @@ class ScriptInitializer{
 	}
 
 	def private appendStrategyReference(ITreeAppendable it, StrategyReference ref) {
-		val methodName = methods.get(ref.expr)
+		val methodName = methods.get(EXTERNAL_STRATEGY, ref.expr)
 		if(methodName != null){
 			append(methodName)
 			append('()')
