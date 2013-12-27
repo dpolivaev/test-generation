@@ -54,7 +54,7 @@ public class StrategyDslOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	
 	protected def _text(RuleGroup modelElement) { 
 		return (if (modelElement.trigger != null)'''for each «modelElement.trigger.properties»''' else "")
-		+ (if(modelElement.condition != null) '''if «modelElement.condition.expr.text»''' else "")
+		+ (if(modelElement?.condition?.expr != null) '''if «modelElement.condition.expr.text»''' else "")
 	}
 	protected def _createChildren(IOutlineNode parentNode, RuleGroup ruleGroup){
 		if(ruleGroup.rule != null)
@@ -71,12 +71,13 @@ public class StrategyDslOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	protected def _isLeaf(Strategy strategy){return strategy.ruleGroups.empty}
 	
 	protected def _createChildren(IOutlineNode parentNode, Rule rule){
-		_createChildren(parentNode, rule.values);
+		if(rule.values != null)
+			_createChildren(parentNode, rule.values);
 	}
 	
-	protected def _isLeaf(Rule rule){return _isLeaf(rule.values)}
+	protected def _isLeaf(Rule rule){return rule.values != null && _isLeaf(rule.values)}
 	
 	protected def _text(Run run) { return run.text}
 	
-	private def text(EObject it) {return node?.text?.trim.replaceAll("\\s+", " ")}
+	private def text(EObject it) {return node?.text?.trim?.replaceAll("\\s+", " ")}
 }
