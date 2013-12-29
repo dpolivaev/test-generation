@@ -8,7 +8,6 @@ import org.eclipse.xtext.generator.Binding;
 import org.eclipse.xtext.generator.DefaultGeneratorFragment;
 import org.eclipse.xtext.generator.IGeneratorFragment;
 import org.eclipse.xtext.naming.IQualifiedNameProvider;
-import org.eclipse.xtext.naming.SimpleNameProvider;
 
 /**
  * An {@link IGeneratorFragment} to create simple name based scopes.
