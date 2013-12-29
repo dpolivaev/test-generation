@@ -170,7 +170,8 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 			
 			for(method:model.subs){
 				members += model.toMethod(method.name, method.returnType)[
-					parameters += method.parameters
+					for(parameter:method.parameters)
+					parameters += parameter.toParameter(parameter.name, parameter.parameterType)
 					body = method.body
 				]
 			}
