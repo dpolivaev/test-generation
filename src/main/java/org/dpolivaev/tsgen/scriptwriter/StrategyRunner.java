@@ -2,7 +2,8 @@ package org.dpolivaev.tsgen.scriptwriter;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 
 import org.dpolivaev.tsgen.coverage.Goal;
 import org.dpolivaev.tsgen.coverage.GoalChecker;
@@ -10,6 +11,7 @@ import org.dpolivaev.tsgen.coverage.code.Model;
 import org.dpolivaev.tsgen.coverage.internal.CodeCoverageGoalBuilder;
 import org.dpolivaev.tsgen.coverage.internal.CodeCoverageResetter;
 import org.dpolivaev.tsgen.coverage.internal.RequirementCoverage;
+import org.dpolivaev.tsgen.ruleengine.PropertyAccessor;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.scriptwriter.internal.MultipleScriptsWriter;
@@ -21,17 +23,26 @@ import org.dpolivaev.tsgen.utils.internal.Utils;
 public class StrategyRunner {
 	private OutputConfiguration outputConfiguration;
 	private OutputConfiguration reportConfiguration;
-	final private ArrayList<Model> models;
+	final private Collection<Model> models;
+	final private Collection<PropertyAccessor> propertyAccessors;
 
 	public StrategyRunner() {
 		super();
 		this.outputConfiguration = new OutputConfiguration();
 		this.reportConfiguration = new OutputConfiguration();
-		models = new ArrayList<>();
+		models = new HashSet<>();
+		propertyAccessors = new HashSet<>();
 	}
 	
 	public StrategyRunner addModel(Model model){
 		models.add(model);
+		if(model instanceof PropertyAccessor)
+			propertyAccessors.add((PropertyAccessor) model);
+		return this;
+	}
+
+	public StrategyRunner addPropertyAccessor(PropertyAccessor propertyAccessor){
+		propertyAccessors.add(propertyAccessor);
 		return this;
 	}
 
@@ -52,7 +63,15 @@ public class StrategyRunner {
 			scriptProducer.setOutputConfiguration(outputConfiguration);
 			ruleEngine.addHandler(scriptProducer);
 		}
-		ruleEngine.run(strategy);
+		try {
+			for(PropertyAccessor propertyAccessor : propertyAccessors)
+				propertyAccessor.setPropertyContainer(ruleEngine);
+			ruleEngine.run(strategy);
+		} 
+		finally {
+			for(PropertyAccessor propertyAccessor : propertyAccessors)
+				propertyAccessor.setPropertyContainer(null);
+		}
 		try {
 			if(scriptProducer != null)
 				scriptProducer.endScripts();
