@@ -1,5 +1,38 @@
 import org.dpolivaev.tsgen.strategies.StrategyHelper
 
+model ShortTermParkingCalculator{
+	def calculateCosts(int weeks, int days, int hours, int minutes){
+		val DAILY_MAX = 24
+		val COSTS_PER_HOUR = 2
+		["Req4"]
+		val costsForCompletedDays = (weeks * 7 + days) * DAILY_MAX
+		val costsForHours = 
+			if(hours * COSTS_PER_HOUR >= DAILY_MAX)
+				["Req6"] DAILY_MAX
+			else if(hours == 0){
+				if(minutes > 0){
+					if(minutes <= 30){
+						["Req5.first hour"];
+					}
+					COSTS_PER_HOUR
+				}
+				else
+					0
+			}
+			else hours * COSTS_PER_HOUR + 
+					if(minutes > 0){
+							if(minutes <= 30){
+								["Req5.additional 1/2 hour"] 1
+							}
+							else
+								["Req5.additional 2/2 hour"] COSTS_PER_HOUR
+						}
+						else
+							0
+		costsForCompletedDays + costsForHours
+	}
+}
+
 strategy parkCostCalculatorTests 
 	extends StrategyHelper.id("testcase") with StrategyHelper.description("testcaseDescription")
 
@@ -51,38 +84,10 @@ let foc be "calculate parking costs"{
 			}, 
 			"SHORT_TERM_PARKING"{
 				let dayCosts be ("(7 * ":pre3.weeks" + ":pre3.days") * 24")
-				let "parking time" be 
-					"0 hours"{
-						let pre3.hours be 0
-						let pre3.minutes be 0
-						let veri.expectedCosts be :dayCosts
-						let [Req5] be (:pre1.lot" costs ":veri.expectedCosts)
-					},
-					"1 hour or less"{
-						let pre3.hours be 0, 0, 1 ordered
-						let pre3.minutes be 1, 59, 0 ordered
-						let veri.expectedCosts be (:dayCosts" + 2")
-						let [Req5] be (:pre1.lot" costs ":veri.expectedCosts)
-					},
-					"11 hours or less with additional 1/2 hour"{
-						let pre3.hours be 1, 11 ordered
-						let pre3.minutes be 1, 30 ordered
-						let veri.expectedCosts be (:dayCosts" + ":pre3.hours" * 2 + 1")
-						let [Req5] be (:pre1.lot" costs ":veri.expectedCosts)
-					},
-					"11 hours or less with additional hour"{
-						let pre3.hours be 1, 11 ordered
-						let pre3.minutes be 31, 59 ordered
-						let veri.expectedCosts be (:dayCosts" + ":pre3.hours" * 2 + 2")
-						let [Req5] be (:pre1.lot" costs ":veri.expectedCosts)
-					},
-					"12 hours or more"{
-						let pre3.hours be 12, 23 ordered
-						let pre3.minutes be 0, 59 ordered
-						let veri.expectedCosts be (:dayCosts" + 24")
-						let [Req6] be (:pre1.lot" costs ":veri.expectedCosts)
-					}
-				let [Req4] be (:pre1.lot " " :"parking time")
+				let pre3.hours be 0, 1, 11, 12, 23 {
+					let pre3.minutes be 0, 30, 31, 59
+				}
+				let veri.expectedCosts be ShortTermParkingCalculator.calculateCosts(:pre3.weeks as int, :pre3.days as int, :pre3.hours as int, :pre3.minutes as int) 
 			},  
 			"LONG_TERM_GARAGE_PARKING"{
 				let default dayCosts be (:pre3.weeks" * 78 + ":pre3.days" * 13") 
@@ -159,6 +164,6 @@ let foc be "calculate parking costs"{
 		let default pre1.lot be from listOfValidLots
 	}
 	
-run strategy parkCostCalculatorTests 
+run strategy parkCostCalculatorTests with model ShortTermParkingCalculator 
 	output "output/xml", apply "/java.xslt" output "generated-tests/java" 
 	report  "output/report.xml"
