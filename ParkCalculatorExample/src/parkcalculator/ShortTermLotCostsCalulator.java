@@ -12,10 +12,10 @@ public class ShortTermLotCostsCalulator implements LotCostsCalulator {
 
 	@Override
 	public int calculateCosts(DateTimeDifference difference) {
-		int startedHours = difference.startedHours();
+		int hours = difference.hours();
 		long minutes = difference.minutes();
 		final int costs = longTermLotCostsCalulator.calculateCosts(difference);
-		if(startedHours > 1 && minutes > 0 && minutes <= 30)
+		if(hours > 0 && hours < 12 && minutes > 0 && minutes <= 30)
 			return costs - 1;
 		return costs;
 	}
