@@ -31,8 +31,7 @@ Export-Package: org.dpolivaev.dsl.tsgen,
  org.dpolivaev.dsl.tsgen.strategydsl,
  org.dpolivaev.dsl.tsgen.strategydsl.impl,
  org.dpolivaev.dsl.tsgen.strategydsl.util,
- org.dpolivaev.dsl.tsgen.validation,
- org.dpolivaev.tsgen.ruleengine
+ org.dpolivaev.dsl.tsgen.validation
 Bundle-ClassPath: .,
  lib/org.dpolivaev.tsgen.ruleengine-1.0-SNAPSHOT.jar
 

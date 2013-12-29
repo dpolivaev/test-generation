@@ -8,14 +8,16 @@ import org.eclipse.xtext.xbase.XCastedExpression
 import org.eclipse.xtext.common.types.JvmPrimitiveType
 import com.google.inject.Inject
 import org.eclipse.xtext.common.types.util.Primitives
+import org.dpolivaev.dsl.tsgen.strategydsl.LabeledExpression
+import org.eclipse.xtext.xbase.typesystem.references.AnyTypeReference
 
 class StrategyTypeComputer extends XbaseTypeComputer {
 	@Inject Primitives primitives;
 	override computeTypes(XExpression expression, ITypeComputationState state) {
-		if(expression instanceof PropertyCall) {
-			_computeTypes(expression as PropertyCall, state);
-		} else {
-			super.computeTypes(expression, state)
+		switch(expression){
+			PropertyCall : _computeTypes(expression, state)
+			LabeledExpression : _computeTypes(expression, state)
+			default: super.computeTypes(expression, state)
 		}
 	}
 	
@@ -31,4 +33,9 @@ class StrategyTypeComputer extends XbaseTypeComputer {
 		}
 		state.acceptActualType(getTypeForName(Object, state))
 	}
+	protected def _computeTypes(LabeledExpression expression, ITypeComputationState state) {
+		val type = state.computeTypes(expression.expr).actualExpressionType?:new AnyTypeReference(state.getReferenceOwner())
+		state.acceptActualType(type)
+	}
+	
 }
