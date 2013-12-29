@@ -8,6 +8,8 @@ import java.util.HashSet
 import java.util.Set
 import org.dpolivaev.dsl.tsgen.strategydsl.Condition
 import org.dpolivaev.dsl.tsgen.strategydsl.Generation
+import org.dpolivaev.dsl.tsgen.strategydsl.LabeledExpression
+import org.dpolivaev.dsl.tsgen.strategydsl.Model
 import org.dpolivaev.dsl.tsgen.strategydsl.OutputConfiguration
 import org.dpolivaev.dsl.tsgen.strategydsl.Rule
 import org.dpolivaev.dsl.tsgen.strategydsl.RuleGroup
@@ -37,6 +39,12 @@ import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 
 import static extension org.dpolivaev.dsl.tsgen.jvmmodel.StrategyCompiler.*
 import static extension org.eclipse.xtext.nodemodel.util.NodeModelUtils.*
+import org.dpolivaev.tsgen.ruleengine.PropertyAccessor
+import org.dpolivaev.tsgen.coverage.code.CodeCoverageTracker
+import java.util.List
+import java.util.Arrays
+import org.eclipse.xtext.xbase.XVariableDeclaration
+import org.dpolivaev.dsl.tsgen.strategydsl.ModelReference
 
 /**
  * <p>Infers a JVM model from the source model.</p> 
@@ -78,9 +86,95 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 	 */
 	def dispatch void infer(Generation script, IJvmDeclaredTypeAcceptor acceptor, boolean isPreIndexingPhase) {
 		val className = script.eResource.URI.trimFileExtension.lastSegment
-		val qualifiedClassName = if(script.package != null) script.package + '.' + className else className
+		val qualifiedClassName = qualifiedClassName(script.package, className)
 		acceptor.accept(script.toClass(qualifiedClassName)).initializeLater([
 			new ScriptInitializer(jvmTypesBuilder, xbaseCompiler, it, script).initializeClass()
+		])
+		for(model:script.models)
+			inferModel(acceptor, script.package, model)
+	}
+	
+	static def qualifiedClassName(String classPackage, String className) {
+		if(classPackage != null) classPackage + '.' + className else className
+	}
+	
+	private def inferModel(IJvmDeclaredTypeAcceptor acceptor, String classPackage, Model model) {
+		val qualifiedClassName = qualifiedClassName(classPackage, model.name.toFirstUpper)
+		acceptor.accept(model.toClass(qualifiedClassName)).initializeLater([
+			superTypes += model.newTypeRef(org.dpolivaev.tsgen.coverage.code.Model)
+			superTypes += model.newTypeRef(PropertyAccessor)
+			val labels = new HashSet<String>
+			val contents = EcoreUtil2.eAllContents(model)
+			for(obj : contents){
+				if (obj instanceof LabeledExpression)
+					labels += (obj as LabeledExpression).label
+			}
+//			public void setPropertyContainer(PropertyContainer propertyContainer)
+			members += model.toField("labels", model.newTypeRef(List, model.newTypeRef(String)))[
+				setInitializer [
+					append(model.newTypeRef(Arrays).type)
+					append('.asList(')
+					append('new String[]{')
+					for(label:labels){
+						append(label.substring(1, label.length-1))
+						append(',')
+					}
+					append('})')
+				]
+				final = true
+				visibility = JvmVisibility::PUBLIC
+				static = true			
+			]
+			members += model.toField("propertyContainer", model.newTypeRef(PropertyContainer))
+			members += model.toField("codeCoverageTracker", model.newTypeRef(CodeCoverageTracker))[
+				setInitializer [
+					append('''new CodeCoverageTracker()''')
+				]
+			]
+			
+			members += model.toMethod("getName", model.newTypeRef(String)) [
+				body = [
+						append('''return "«model.name»";''')
+				]
+				visibility = JvmVisibility::PUBLIC
+			]
+			
+			members += model.toMethod("getCodeCoverageTracker", model.newTypeRef(CodeCoverageTracker)) [
+				body = [
+						append('return codeCoverageTracker;')
+				]
+				visibility = JvmVisibility::PUBLIC
+			]
+			
+			members += model.toMethod("getExpectedItems", model.newTypeRef(List, model.newTypeRef(String))) [
+				body = [
+						append('return labels;')
+				]
+				visibility = JvmVisibility::PUBLIC
+			]
+			
+			members += model.toMethod("setPropertyContainer", model.newTypeRef(Void::TYPE)) [
+				parameters += model.toParameter("propertyContainer", model.newTypeRef(PropertyContainer))
+				body = [
+						append('this.propertyContainer=propertyContainer;')
+				]
+				visibility = JvmVisibility::PUBLIC
+			]
+			for(expr:model.vars){
+				val declaration = expr as XVariableDeclaration
+				members += model.toField(declaration.name, declaration.type)[
+					setInitializer(declaration.right)
+					final = ! declaration.writeable
+				]
+			}
+			
+			for(method:model.subs){
+				members += model.toMethod(method.name, method.returnType)[
+					parameters += method.parameters
+					body = method.body
+				]
+			}
+			
 		])
 	}
 }
@@ -113,7 +207,7 @@ class ScriptInitializer{
 	val extension JvmTypesBuilder jvmTypesBuilder
 	val XbaseCompiler xbaseCompiler
 	val Methods methods
-	val Set<String> declaredStrategies
+	val Set<String> declaredFields
 	val JvmGenericType jvmType
 	val Generation script
 	val JvmType ruleFactoryType
@@ -122,7 +216,7 @@ class ScriptInitializer{
 		this.jvmTypesBuilder = jvmTypesBuilder
 		this.xbaseCompiler = xbaseCompiler
 		this.methods = new Methods
-		this.declaredStrategies = new HashSet<String>
+		this.declaredFields = new HashSet<String>
 		this.script = script
 		this.jvmType = jvmType
 		ruleFactoryType = script.newTypeRef(Factory).type 
@@ -131,14 +225,31 @@ class ScriptInitializer{
 	
 	def initializeClass(){
 		inferExpressions()
+		inferModels()
 		inferStrategyFields()
 		inferStrategyMethods()
 		inferRunMethods()
 	}
 	
+	private def inferModels(){
+		for(model:script.models)
+			jvmType.members += model.toField(model.name, model.newTypeRef(StrategyDslJvmModelInferrer.qualifiedClassName(
+				script.package, model.name.toFirstUpper
+			))) [
+				setInitializer [
+					append('''new «model.name.toFirstUpper»()''')
+				]
+				final = true
+				visibility = JvmVisibility::PUBLIC
+				static = true
+			]
+	}
+	
 	private def inferExpressions(){
 		for(strategy : script.strategies)
-			declaredStrategies += strategy.name
+			declaredFields += strategy.name
+		for(model : script.models)
+			declaredFields += model.name
 		val contents = EcoreUtil2.eAllContents(script)
 		for(obj : contents){
 			if (obj instanceof ValueAction) 
@@ -147,13 +258,22 @@ class ScriptInitializer{
 				appendConditions(obj as Condition)
 			else if (obj instanceof StrategyReference) 
 				appendStrategyReferences(obj as StrategyReference)
+			else if (obj instanceof ModelReference) 
+				appendModelReferences(obj as ModelReference)
 		}
 	}
 	
 	final static val EXTERNAL_STRATEGY = "externalStrategy"
 	private def appendStrategyReferences(StrategyReference ref){
-		if(ref.expr != null && ! declaredStrategies.contains(ref.expr.toString)) {
+		if(ref.expr != null && ! declaredFields.contains(ref.expr.toString)) {
 			createMethod(ref.expr, EXTERNAL_STRATEGY, ref.expr.newTypeRef(org.dpolivaev.tsgen.ruleengine.Strategy), false)
+		}
+	}
+	
+	final static val EXTERNAL_MODEL = "externalModel"
+	private def appendModelReferences(ModelReference ref){
+		if(ref.expr != null && ! declaredFields.contains(ref.expr.toString)) {
+			createMethod(ref.expr, EXTERNAL_MODEL, ref.expr.newTypeRef(org.dpolivaev.tsgen.coverage.code.Model), false)
 		}
 	}
 	
@@ -477,6 +597,12 @@ class ScriptInitializer{
 					append('();')
 					appendOutputConfiguration(it, "Output", run.outputConfiguration)
 					appendOutputConfiguration(it, "Report", run.reportConfiguration)
+					for(model:run.models){
+						newLine
+						append('strategyRunner.addModel(')
+						appendReference(it, EXTERNAL_MODEL, model.expr)
+						append(');')
+					}
 					newLine
 					append('strategyRunner.run(')
 					combinedStrategy(it, run.strategies, true)
@@ -530,25 +656,25 @@ class ScriptInitializer{
 		for(strategy : strategies){
 			if(first){
 				first = false
-				appendStrategyReference(it, strategy)
+				appendReference(it, EXTERNAL_STRATEGY, strategy.expr)
 			}
 			else{
 				append(".with(")
-				appendStrategyReference(it, strategy)
+				appendReference(it, EXTERNAL_STRATEGY, strategy.expr)
 				append(")")
 			}
 		}
 		return it.toString
 	}
 
-	def private appendStrategyReference(ITreeAppendable it, StrategyReference ref) {
-		val methodName = methods.get(EXTERNAL_STRATEGY, ref.expr)
+	def private appendReference(ITreeAppendable it, String prefix, XExpression expr) {
+		val methodName = methods.get(prefix, expr)
 		if(methodName != null){
 			append(methodName)
 			append('()')
 		}
 		else
-			append(ref.expr.toString)
+			append(expr.toString)
 	}
 	
 	private def inferMainMethod(){

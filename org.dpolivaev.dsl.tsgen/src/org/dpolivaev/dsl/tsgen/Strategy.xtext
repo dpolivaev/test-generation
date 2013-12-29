@@ -7,7 +7,7 @@ generate strategydsl "http://www.dpolivaev.org/dsl/tsgen/strategydsl"
 Generation: {Generation}
 	('package' package = QualifiedName)?
 	importSection=XImportSection?
-	(strategies+=Strategy | models += Model | goals += Goal | vars += XVariableDeclaration | subs += MethodDefinition | runs += Run)*
+	(strategies+=Strategy | models += Model | goals += Goal | runs += Run)*
 ;
 	
 Strategy:
@@ -64,7 +64,7 @@ ValueProvider:
 
 Run:
 	'run' strategies += StrategyReference 
-	('with' strategies += StrategyReference (',' (strategies += StrategyReference | goals += GoalReference))* )?
+	('with' (strategies += StrategyReference | goals += GoalReference | models += ModelReference) (',' (strategies += StrategyReference | goals += GoalReference | model += ModelReference))* )?
 	outputConfiguration = OutputConfiguration?
 	reportConfiguration = ReportConfiguration?
 	
@@ -84,6 +84,7 @@ ReportConfiguration returns OutputConfiguration:
 StrategyReference returns StrategyReference: {StrategyReference} 'strategy' expr = XExpression;
 ShortFormStrategyReference returns StrategyReference: {StrategyReference} expr = XExpression;
 GoalReference : 'goal' expr = XExpression;
+ModelReference : 'model' expr = XExpression;
 
 Model:'model' name = ValidID
 	'{'

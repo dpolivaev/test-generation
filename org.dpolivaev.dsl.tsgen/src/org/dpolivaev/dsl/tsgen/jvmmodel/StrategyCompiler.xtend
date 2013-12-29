@@ -11,6 +11,8 @@ import org.eclipse.xtext.xbase.XExpression
 import org.eclipse.xtext.xbase.XStringLiteral
 import org.eclipse.xtext.xbase.compiler.XbaseCompiler
 import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
+import org.eclipse.xtext.common.types.JvmDeclaredType
+import org.dpolivaev.tsgen.coverage.code.CodeCoverageTracker
 
 class StrategyCompiler extends XbaseCompiler {
 	@Inject Primitives primitives
@@ -46,7 +48,18 @@ class StrategyCompiler extends XbaseCompiler {
 	}
 	
 	def hasCodeTracker(ITreeAppendable it) {
-		hasObject("codeCoverageTracker")
+		if (hasObject("this")) {
+			val thisElement = getObject("this");
+			if (thisElement instanceof JvmDeclaredType) {
+				val type = thisElement as JvmDeclaredType
+				val field = type.declaredFields.findFirst[
+					simpleName == "codeCoverageTracker"
+				]
+				return field != null && field.type.qualifiedName.equals(CodeCoverageTracker.name)
+			}
+			
+		}
+		return false
 	}
 	
 	override protected internalToConvertedExpression(XExpression expr, ITreeAppendable it) {
