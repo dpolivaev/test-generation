@@ -1,5 +1,6 @@
 import org.dpolivaev.tsgen.strategies.StrategyHelper
 
+
 model ShortTermParkingCalculator{
 	def calculateCosts(int weeks, int days, int hours, int minutes){
 		val DAILY_MAX = 24
@@ -11,9 +12,8 @@ model ShortTermParkingCalculator{
 				["Req6"] DAILY_MAX
 			else if(hours == 0){
 				if(minutes > 0){
-					if(minutes <= 30){
-						["Req5.first hour"];
-					}
+					if(minutes <= 30)
+						["Req5" "first hour"];
 					COSTS_PER_HOUR
 				}
 				else
@@ -21,11 +21,10 @@ model ShortTermParkingCalculator{
 			}
 			else hours * COSTS_PER_HOUR + 
 					if(minutes > 0){
-							if(minutes <= 30){
-								["Req5.additional 1/2 hour"] 1
-							}
+							if(minutes <= 30)
+								["Req5" "additional 1/2 hour"] 1
 							else
-								["Req5.additional 2/2 hour"] COSTS_PER_HOUR
+								["Req5" "additional 2/2 hour"] COSTS_PER_HOUR
 						}
 						else
 							0
