@@ -10,6 +10,7 @@ import org.junit.Test;
 public class CheckListTest {
 
 	private static final CoverageEntry COVERAGE_ENTRY = new CoverageEntry("goal", "reason");
+	private static final CoverageEntry ANY_REASON_COVERAGE_ENTRY = new CoverageEntry("goal", CoverageEntry.ANY);
 
 	private CheckList checkList;
 	
@@ -60,19 +61,36 @@ public class CheckListTest {
 
 	@Test
 	public void newCheckListHasNoFinishedItems(){
-		assertThat(checkList.achievedItemNumber(), equalTo(0));
+		assertThat(checkList.achievedRequiredItemNumber(), equalTo(0));
 	}
 	
 	@Test
 	public void checkListWithSingleFinishedItem(){
 		checkList.setExpected(COVERAGE_ENTRY, 1);
 		checkList.addReached(asList(COVERAGE_ENTRY));
-		assertThat(checkList.achievedItemNumber(), equalTo(1));
+		assertThat(checkList.achievedRequiredItemNumber(), equalTo(1));
 	}
 	@Test
-	public void checkOpenListSingleFinishedItem(){
+	public void checkOpenListSingleFinishedItemAchievedRequiredItemNumber(){
+		checkList.addReached(asList(COVERAGE_ENTRY));
+		assertThat(checkList.achievedRequiredItemNumber(), equalTo(0));
+	}
+	
+	@Test
+	public void checkOpenListSingleFinishedItemAchievedItemNumber(){
 		checkList.addReached(asList(COVERAGE_ENTRY));
 		assertThat(checkList.achievedItemNumber(), equalTo(1));
 	}
+
+	@Test
+	public void checkListWithAnyReason(){
+		checkList.setExpected(ANY_REASON_COVERAGE_ENTRY, 1);
+		checkList.addReached(asList(COVERAGE_ENTRY));
+		assertThat(checkList.achievedRequiredItemNumber(), equalTo(1));
+	}
 	
+	@Test(expected=IllegalArgumentException.class)
+	public void reachedWithNoReason(){
+		checkList.addReached(asList(ANY_REASON_COVERAGE_ENTRY));	
+	}
 }

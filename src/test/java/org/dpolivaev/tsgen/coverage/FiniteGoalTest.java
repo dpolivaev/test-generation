@@ -27,7 +27,7 @@ public class FiniteGoalTest {
 		};
 		Goal goal = new Goal("goal", goalFunction, checkList);
 		goal.check((PropertyContainer) null);
-		assertThat(checkList.countReached(new CoverageEntry("item", "value")), equalTo(0));
+		assertThat(checkList.achievedRequiredItemNumber(), equalTo(0));
 	}
 
 }

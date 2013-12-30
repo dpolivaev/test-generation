@@ -62,8 +62,19 @@ public class ReportWriter {
 				int nameComparison = entry1.getName().compareTo(entry2.getName());
 				if(nameComparison != 0)
 					return nameComparison;
-				return entry1.getReason().compareTo(entry2.getReason());
+				return compareReasons(entry1, entry2);
 				
+			}
+
+			public int compareReasons(CoverageEntry entry1, CoverageEntry entry2) {
+				String reason1 = entry1.getReason();
+				String reason2 = entry2.getReason();
+				if (reason1 == null && reason2 != null)
+					return 1;
+				else if(reason2 == null)
+					return -1;
+				else 
+					return reason1.compareTo(reason2);
 			}
 		});
 		for (Map.Entry<CoverageEntry, CoverageStatus> entry : coveredEntries)
@@ -76,7 +87,11 @@ public class ReportWriter {
 		xmlWriter.setAttribute("name", coverageEntry.getName());
 		xmlWriter.setAttribute("required", Integer.toString(coverageStatus.required));
 		xmlWriter.setAttribute("reached", Integer.toString(coverageStatus.reached));
-		xmlWriter.addTextContent(coverageEntry.getReason().toString());
+		String reason = coverageEntry.getReason();
+		if(reason != null)
+			xmlWriter.addTextContent(reason.toString());
+		else
+			xmlWriter.addTextContent("total");
 		xmlWriter.endElement("Item");
 	}
 }

@@ -8,7 +8,7 @@ import java.util.HashSet;
 import org.dpolivaev.tsgen.coverage.Goal;
 import org.dpolivaev.tsgen.coverage.GoalChecker;
 import org.dpolivaev.tsgen.coverage.code.Model;
-import org.dpolivaev.tsgen.coverage.internal.CodeCoverageGoalBuilder;
+import org.dpolivaev.tsgen.coverage.internal.RequirementsCoverageGoalBuilder;
 import org.dpolivaev.tsgen.coverage.internal.CodeCoverageResetter;
 import org.dpolivaev.tsgen.coverage.internal.RequirementCoverage;
 import org.dpolivaev.tsgen.ruleengine.PropertyAccessor;
@@ -85,21 +85,14 @@ public class StrategyRunner {
 
 	private GoalChecker createGoalChecker() {
 		GoalChecker goalChecker = new GoalChecker();
-		goalChecker.addGoal(createRequirementsGoal());
-		if(! models.isEmpty()){
-			goalChecker.addGoal(createCoverageGoal());
-		}
+		goalChecker.addGoal(createCoverageGoal());
 		return goalChecker;
 	}
 
 	private Goal createCoverageGoal() {
-		return new CodeCoverageGoalBuilder(models).createGoal();
+		return new RequirementsCoverageGoalBuilder(models).createGoal();
 	}
 
-	public Goal createRequirementsGoal() {
-		return new Goal("requirements", new RequirementCoverage());
-	}
-	
 	public OutputConfiguration getOutputConfiguration() {
 		return outputConfiguration;
 	}
