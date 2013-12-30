@@ -13,14 +13,19 @@ public class CheckList{
 		
 	final private Map<CoverageEntry, CoverageStatus> coveredEntries = new HashMap<>();
 	private int requiredItemNumber;
+	private int achievedRequiredItemNumber;
 	private int achievedItemNumber;
 		
 	public void addReached(final Collection<CoverageEntry> newCoverageEntries) {
 		startRound();
-		if(requiredItemNumber() != 0)
-			addRequiredEntries(newCoverageEntries);
-		else
-			addAllEntries(newCoverageEntries);
+		for(CoverageEntry coverageEntry:newCoverageEntries){
+			if(coverageEntry.getReason() == CoverageEntry.ANY)
+				throw new IllegalArgumentException("no reason in " + coverageEntry);
+			addReached(coverageEntry);
+			final CoverageEntry entryForAnyReason = coverageEntry.forAnyReason();
+			if(coveredEntries.containsKey(entryForAnyReason))
+				addReached(entryForAnyReason);
+		}
 	}
 	
 	private CheckList addReached(CoverageEntry coverageEntry) {
@@ -50,8 +55,13 @@ public class CheckList{
 			coveredEntries.put(coverageEntry, new CoverageStatus(0, newReachedCount));
 		else
 			coveredEntries.put(coverageEntry, new CoverageStatus(oldCoverageStatus.required, newReachedCount));
-		if(oldCoverageStatus != null && oldCoverageStatus.reached < oldCoverageStatus.required && newReachedCount >= oldCoverageStatus.required
-				|| oldCoverageStatus == null && newReachedCount == 1)
+		final boolean containsReason = coverageEntry.getReason() != CoverageEntry.ANY;
+		if(oldCoverageStatus != null && oldCoverageStatus.reached < oldCoverageStatus.required && newReachedCount >= oldCoverageStatus.required) {
+			if(containsReason)
+				achievedItemNumber++;
+			achievedRequiredItemNumber++;
+		} 
+		else if (oldCoverageStatus == null && newReachedCount == 1 && containsReason)
 			achievedItemNumber++;
 		return this;
 	}
@@ -68,10 +78,6 @@ public class CheckList{
 		return coveredEntries.entrySet();
 	}
 
-	public boolean isRequired(CoverageEntry coverageEntry) {
-		return coveredEntries.containsKey(coverageEntry);
-	}
-	
 	private void startRound() {
 		firstTimeCoveredEntries.clear();
 		repeatedlyCoveredEntries.clear();
@@ -85,29 +91,20 @@ public class CheckList{
 		return repeatedlyCoveredEntries;
 	}
 
-	private void addAllEntries(Collection<CoverageEntry> newCoverageEntries) {
-		for(CoverageEntry coverageEntry:newCoverageEntries)
-			addReached(coverageEntry);
-	}
-
-	private void addRequiredEntries(Collection<CoverageEntry> newCoverageEntries) {
-		for(CoverageEntry coverageEntry:newCoverageEntries)
-			if(isRequired(coverageEntry))
-				addReached(coverageEntry);
-	}
-
 	public int size() {
 		return coveredEntries.size();
 	}
-
 
 	public int requiredItemNumber() {
 		return requiredItemNumber;
 	}
 
-
 	public int achievedItemNumber() {
 		return achievedItemNumber;
+	}
+
+	public int achievedRequiredItemNumber() {
+		return achievedRequiredItemNumber;
 	}
 
 

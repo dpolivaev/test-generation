@@ -3,6 +3,7 @@ package org.dpolivaev.tsgen.coverage;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -13,8 +14,9 @@ import java.util.List;
 
 import org.dpolivaev.tsgen.coverage.code.CodeCoverageTracker;
 import org.dpolivaev.tsgen.coverage.code.Model;
-import org.dpolivaev.tsgen.coverage.internal.CodeCoverageGoalBuilder;
+import org.dpolivaev.tsgen.coverage.internal.RequirementsCoverageGoalBuilder;
 import org.dpolivaev.tsgen.coverage.internal.CodeCoverageResetter;
+import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.junit.Test;
 
 public class CodeCoverageTest {
@@ -40,23 +42,23 @@ public class CodeCoverageTest {
 	@Test
 	public void codeCoverageCollectsPoints(){
 		final CodeCoverageTracker codeCoverageTracker = new CodeCoverageTracker();
-		codeCoverageTracker.reach("point");
-		final List<String> coverage = codeCoverageTracker.getReached();
-		assertThat(coverage, equalTo(asList("point")));
+		codeCoverageTracker.reach("point", "reason");
+		final List<CoverageEntry> coverage = codeCoverageTracker.getReached();
+		assertThat(coverage, equalTo(asList(new CoverageEntry("point", "reason"))));
 	}
 	
 	@Test
 	public void codeCoverageClearsPoints(){
 		final CodeCoverageTracker codeCoverageTracker = new CodeCoverageTracker();
-		codeCoverageTracker.reach("point");
+		codeCoverageTracker.reach("point", "reason");
 		codeCoverageTracker.clear();
-		final List<String> coverage = codeCoverageTracker.getReached();
-		assertThat(coverage, equalTo(Arrays.<String>asList()));
+		final List<CoverageEntry> coverage = codeCoverageTracker.getReached();
+		assertThat(coverage, equalTo(Arrays.<CoverageEntry>asList()));
 	}
 	
 	@Test
 	public void emptyCodeCoverageGoal() throws Exception {
-		final CodeCoverageGoalBuilder codeCoverageGoalBuilder = new CodeCoverageGoalBuilder(Collections.<Model>emptyList());
+		final RequirementsCoverageGoalBuilder codeCoverageGoalBuilder = new RequirementsCoverageGoalBuilder(Collections.<Model>emptyList());
 		final Goal goal = codeCoverageGoalBuilder.createGoal();
 		assertThat(goal.checkList().requiredItemNumber(), equalTo(0));
 	}
@@ -64,7 +66,7 @@ public class CodeCoverageTest {
 	@Test
 	public void codeCoverageGoalForModel() throws Exception {
 		Model model = mockModel(asList("item"));
-		final CodeCoverageGoalBuilder codeCoverageGoalBuilder = new CodeCoverageGoalBuilder(asList(model));
+		final RequirementsCoverageGoalBuilder codeCoverageGoalBuilder = new RequirementsCoverageGoalBuilder(asList(model));
 		final Goal goal = codeCoverageGoalBuilder.createGoal();
 		assertThat(goal.checkList().requiredItemNumber(), equalTo(1));
 	}
@@ -72,10 +74,12 @@ public class CodeCoverageTest {
 	@Test
 	public void codeCoverageForModel() throws Exception {
 		Model model = mockModel(asList("item"));
-		final CodeCoverageGoalBuilder codeCoverageGoalBuilder = new CodeCoverageGoalBuilder(asList(model));
+		PropertyContainer propertyContainer = mock(PropertyContainer.class);
+		when(propertyContainer.availableProperties(anyString())).thenReturn(Collections.<String>emptySet());
+		final RequirementsCoverageGoalBuilder codeCoverageGoalBuilder = new RequirementsCoverageGoalBuilder(asList(model));
 		final Goal goal = codeCoverageGoalBuilder.createGoal();
-		model.getCodeCoverageTracker().reach("item");
-		goal.check(null);
+		model.getCodeCoverageTracker().reach("item", "reason");
+		goal.check(propertyContainer);
 		assertThat(goal.checkList().achievedItemNumber(), equalTo(1));
 	}
 }
