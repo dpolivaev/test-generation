@@ -111,8 +111,10 @@ MethodDefinition:
 ')')? 
 
 (body=XBlockExpression | '=' body = XExpression);
-	
+
 XPrimaryExpression returns xbase::XExpression:
+	PropertyCall |
+	LabeledExpression |
 	XConstructorCall |
 	XBlockExpression |
 	XSwitchExpression |
@@ -125,33 +127,19 @@ XPrimaryExpression returns xbase::XExpression:
 	XThrowExpression |
 	XReturnExpression |
 	XTryCatchFinallyExpression |
-	XParenthesizedExpression |
-	PropertyCall |
-	LabeledExpression
-	;
-	
+	XParenthesizedExpression;
+
+
 PropertyCall returns xbase::XExpression hidden():
 	{PropertyCall}
 	':' name = PROPERTY_ID 
 ;
 
-XExpressionInsideBlock returns xbase::XExpression:
-	=>XExpression|LabelStatement|XVariableDeclaration;
-
-LabelStatement returns xbase::XExpression:
-	{LabeledExpression}
-	label = LABEL
-;
-
 LabeledExpression returns xbase::XExpression:
-	{LabeledExpression}
-	label = LABEL expr = XExpression
+	=>({LabeledExpression}
+	'[' label = STRING) reason = XExpression?']' (=>expr = XExpression)?
 ;
 
 PROPERTY_ID hidden():
-	ID (=> '.' ID)* | STRING | '['ID (=> '.' ID)*']' | LABEL
+	ID (=> '.' ID)* | STRING | '['ID (=> '.' ID)*']' | '[' STRING ']'
 ;
-
-terminal LABEL:
-	'[' STRING ']'
-;	

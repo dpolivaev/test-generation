@@ -26,9 +26,19 @@ class StrategyCompiler extends XbaseCompiler {
 	
 	def _internalToJavaStatement(LabeledExpression expr, ITreeAppendable b, boolean isReferenced) {
 		if(expr.label != null && hasCodeTracker(b)) {
+			if(expr.reason != null)
+				doInternalToJavaStatement(expr.reason, b, true)
 			val it = b.trace(expr, false);
 			newLine
-			append("codeCoverageTracker.reach(").append(expr.label.substring(1, expr.label.length-1)).append(");");
+			append('codeCoverageTracker.reach("') append(expr.label) append('", ')
+			if(expr.reason != null){
+				append('String.valueOf(')
+				internalToConvertedExpression(expr.reason, it, expr.reason.getType())
+				append(')')
+				}
+			else
+				append('""')				
+			append(");");
 			if(expr.expr != null){
 				if (isReferenced && !isPrimitiveVoid(expr)) {
 					declareSyntheticVariable(expr, it);
@@ -37,13 +47,13 @@ class StrategyCompiler extends XbaseCompiler {
 				internalToJavaStatement(expr.expr, it, canBeReferenced);
 				if (canBeReferenced) {
 					newLine
-					append(getVarName(expr, it)).append(" = ");
+					append(getVarName(expr, it)).append(" = ")
 					internalToConvertedExpression(expr.expr, it, getType(expr));
 					append(";")
 				}
 			}
 		}
-		else if(expr.expr != null)
+		if(expr.expr != null)
 			doInternalToJavaStatement(expr.expr, b, isReferenced)
 	}
 	

@@ -109,15 +109,13 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 				if (obj instanceof LabeledExpression)
 					labels += (obj as LabeledExpression).label
 			}
-//			public void setPropertyContainer(PropertyContainer propertyContainer)
 			members += model.toField("labels", model.newTypeRef(List, model.newTypeRef(String)))[
 				setInitializer [
 					append(model.newTypeRef(Arrays).type)
 					append('.asList(')
 					append('new String[]{')
 					for(label:labels){
-						append(label.substring(1, label.length-1))
-						append(',')
+						append('"') append(label) append('",')
 					}
 					append('})')
 				]
