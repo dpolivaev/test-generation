@@ -83,10 +83,7 @@ Workflow {
     		fragment = scoping.ImportNamespacesScopingFragment auto-inject {
     			generateStub = false
     		}
-    		
-    		// fragment = exporting.QualifiedNamesFragment auto-inject {}
-    		fragment = exporting.RuleIdNamesFragment auto-inject {}
-    		
+    		fragment = exporting.QualifiedNamesFragment auto-inject {}
     		fragment = builder.BuilderIntegrationFragment auto-inject {}
     
     		// generator API

@@ -4,6 +4,7 @@
 package org.dpolivaev.dsl.tsgen;
 
 import org.dpolivaev.dsl.tsgen.jvmmodel.StrategyCompiler;
+import org.dpolivaev.dsl.tsgen.naming.ValuesXBaseNameProvider;
 import org.dpolivaev.dsl.tsgen.typesystem.StrategyTypeComputer;
 import org.eclipse.xtext.xbase.compiler.XbaseCompiler;
 import org.eclipse.xtext.xbase.typesystem.computation.ITypeComputer;
@@ -14,6 +15,10 @@ import org.eclipse.xtext.xbase.typesystem.computation.ITypeComputer;
 public class StrategyDslRuntimeModule extends org.dpolivaev.dsl.tsgen.AbstractStrategyDslRuntimeModule {
 	public Class<? extends XbaseCompiler> bindXbaseCompiler() {
 		return StrategyCompiler.class;
+	}
+	
+	public Class<? extends org.eclipse.xtext.naming.IQualifiedNameProvider> bindIQualifiedNameProvider() {
+		return ValuesXBaseNameProvider.class;
 	}
 
 	@Override
