@@ -20,9 +20,9 @@ public class ParkCalculatorTest {
 +"parking time: 0 hours")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req1", coverage={"VALET_PARKING costs 0 hours"}),
-			@GoalCoverage(goal = "requirements", item="Req2", coverage={"VALET_PARKING costs (7 * 0 + 0) * 18"}),
-			@GoalCoverage(goal = "requirements", item="Req3", coverage={"VALET_PARKING costs (7 * 0 + 0) * 18"})
+			@GoalCoverage(goal = "requirement coverage", item="Req1", coverage={"VALET_PARKING costs 0 hours"}),
+			@GoalCoverage(goal = "requirement coverage", item="Req2", coverage={"VALET_PARKING costs (7 * 0 + 0) * 18"}),
+			@GoalCoverage(goal = "requirement coverage", item="Req3", coverage={"VALET_PARKING costs (7 * 0 + 0) * 18"})
 		}
 	)
 	@Test
@@ -47,8 +47,8 @@ public class ParkCalculatorTest {
 +"parking time: 5 hours or less")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req1", coverage={"VALET_PARKING costs 5 hours or less"}),
-			@GoalCoverage(goal = "requirements", item="Req3", coverage={"VALET_PARKING costs (7 * 0 + 1) * 18 + 12"})
+			@GoalCoverage(goal = "requirement coverage", item="Req1", coverage={"VALET_PARKING costs 5 hours or less"}),
+			@GoalCoverage(goal = "requirement coverage", item="Req3", coverage={"VALET_PARKING costs (7 * 0 + 1) * 18 + 12"})
 		}
 	)
 	@Test
@@ -73,10 +73,10 @@ public class ParkCalculatorTest {
 +"parking time: 5 hours or less")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req3", coverage={"VALET_PARKING costs (7 * 0 + 6) * 18 + 12"})
+			@GoalCoverage(goal = "requirement coverage", item="Req3", coverage={"VALET_PARKING costs (7 * 0 + 6) * 18 + 12"})
 		},
 		again = {
-			@GoalCoverage(goal = "requirements", item="Req1", coverage={"VALET_PARKING costs 5 hours or less"})
+			@GoalCoverage(goal = "requirement coverage", item="Req1", coverage={"VALET_PARKING costs 5 hours or less"})
 		}
 	)
 	@Test
@@ -101,10 +101,10 @@ public class ParkCalculatorTest {
 +"parking time: 5 hours or less")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req3", coverage={"VALET_PARKING costs (7 * 1 + 1) * 18 + 12"})
+			@GoalCoverage(goal = "requirement coverage", item="Req3", coverage={"VALET_PARKING costs (7 * 1 + 1) * 18 + 12"})
 		},
 		again = {
-			@GoalCoverage(goal = "requirements", item="Req1", coverage={"VALET_PARKING costs 5 hours or less"})
+			@GoalCoverage(goal = "requirement coverage", item="Req1", coverage={"VALET_PARKING costs 5 hours or less"})
 		}
 	)
 	@Test
@@ -129,8 +129,8 @@ public class ParkCalculatorTest {
 +"parking time: more than 5 hours")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req1", coverage={"VALET_PARKING costs more than 5 hours"}),
-			@GoalCoverage(goal = "requirements", item="Req2", coverage={"VALET_PARKING costs (7 * 1 + 6) * 18 + 18"})
+			@GoalCoverage(goal = "requirement coverage", item="Req1", coverage={"VALET_PARKING costs more than 5 hours"}),
+			@GoalCoverage(goal = "requirement coverage", item="Req2", coverage={"VALET_PARKING costs (7 * 1 + 6) * 18 + 18"})
 		}
 	)
 	@Test
@@ -155,10 +155,10 @@ public class ParkCalculatorTest {
 +"parking time: more than 5 hours")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req2", coverage={"VALET_PARKING costs (7 * 6 + 0) * 18 + 18"})
+			@GoalCoverage(goal = "requirement coverage", item="Req2", coverage={"VALET_PARKING costs (7 * 6 + 0) * 18 + 18"})
 		},
 		again = {
-			@GoalCoverage(goal = "requirements", item="Req1", coverage={"VALET_PARKING costs more than 5 hours"})
+			@GoalCoverage(goal = "requirement coverage", item="Req1", coverage={"VALET_PARKING costs more than 5 hours"})
 		}
 	)
 	@Test
@@ -183,10 +183,10 @@ public class ParkCalculatorTest {
 +"parking time: more than 5 hours")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req2", coverage={"VALET_PARKING costs (7 * 6 + 6) * 18 + 18"})
+			@GoalCoverage(goal = "requirement coverage", item="Req2", coverage={"VALET_PARKING costs (7 * 6 + 6) * 18 + 18"})
 		},
 		again = {
-			@GoalCoverage(goal = "requirements", item="Req1", coverage={"VALET_PARKING costs more than 5 hours"})
+			@GoalCoverage(goal = "requirement coverage", item="Req1", coverage={"VALET_PARKING costs more than 5 hours"})
 		}
 	)
 	@Test
@@ -211,10 +211,10 @@ public class ParkCalculatorTest {
 +"parking time: 5 hours or less")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req3", coverage={"VALET_PARKING costs (7 * 26 + 4) * 18 + 12"})
+			@GoalCoverage(goal = "requirement coverage", item="Req3", coverage={"VALET_PARKING costs (7 * 26 + 4) * 18 + 12"})
 		},
 		again = {
-			@GoalCoverage(goal = "requirements", item="Req1", coverage={"VALET_PARKING costs 5 hours or less"})
+			@GoalCoverage(goal = "requirement coverage", item="Req1", coverage={"VALET_PARKING costs 5 hours or less"})
 		}
 	)
 	@Test
@@ -238,7 +238,7 @@ public class ParkCalculatorTest {
 	@Description("dayCosts: (7 * 26 + 4) * 24")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "code coverage", item="ShortTermParkingCalculator", coverage={"Req4"})
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""})
 		}
 	)
 	@Test
@@ -262,10 +262,10 @@ public class ParkCalculatorTest {
 	@Description("dayCosts: (7 * 0 + 1) * 24")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "code coverage", item="ShortTermParkingCalculator", coverage={"Req5.first hour"})
+			@GoalCoverage(goal = "requirement coverage", item="Req5", coverage={"first hour"})
 		},
 		again = {
-			@GoalCoverage(goal = "code coverage", item="ShortTermParkingCalculator", coverage={"Req4"})
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""})
 		}
 	)
 	@Test
@@ -289,7 +289,7 @@ public class ParkCalculatorTest {
 	@Description("dayCosts: (7 * 0 + 6) * 24")
 	@Coverage(
 		again = {
-			@GoalCoverage(goal = "code coverage", item="ShortTermParkingCalculator", coverage={"Req4"})
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""})
 		}
 	)
 	@Test
@@ -313,7 +313,7 @@ public class ParkCalculatorTest {
 	@Description("dayCosts: (7 * 0 + 0) * 24")
 	@Coverage(
 		again = {
-			@GoalCoverage(goal = "code coverage", item="ShortTermParkingCalculator", coverage={"Req4"})
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""})
 		}
 	)
 	@Test
@@ -337,10 +337,10 @@ public class ParkCalculatorTest {
 	@Description("dayCosts: (7 * 1 + 1) * 24")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "code coverage", item="ShortTermParkingCalculator", coverage={"Req5.additional 2/2 hour"})
+			@GoalCoverage(goal = "requirement coverage", item="Req5", coverage={"additional 2/2 hour"})
 		},
 		again = {
-			@GoalCoverage(goal = "code coverage", item="ShortTermParkingCalculator", coverage={"Req4"})
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""})
 		}
 	)
 	@Test
@@ -364,7 +364,7 @@ public class ParkCalculatorTest {
 	@Description("dayCosts: (7 * 1 + 6) * 24")
 	@Coverage(
 		again = {
-			@GoalCoverage(goal = "code coverage", item="ShortTermParkingCalculator", coverage={"Req4"})
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""})
 		}
 	)
 	@Test
@@ -388,10 +388,10 @@ public class ParkCalculatorTest {
 	@Description("dayCosts: (7 * 6 + 0) * 24")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "code coverage", item="ShortTermParkingCalculator", coverage={"Req5.additional 1/2 hour"})
+			@GoalCoverage(goal = "requirement coverage", item="Req5", coverage={"additional 1/2 hour"})
 		},
 		again = {
-			@GoalCoverage(goal = "code coverage", item="ShortTermParkingCalculator", coverage={"Req4"})
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""})
 		}
 	)
 	@Test
@@ -415,7 +415,8 @@ public class ParkCalculatorTest {
 	@Description("dayCosts: (7 * 6 + 6) * 24")
 	@Coverage(
 		again = {
-			@GoalCoverage(goal = "code coverage", item="ShortTermParkingCalculator", coverage={"Req4", "Req5.additional 2/2 hour"})
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req5", coverage={"additional 2/2 hour"})
 		}
 	)
 	@Test
@@ -439,7 +440,8 @@ public class ParkCalculatorTest {
 	@Description("dayCosts: (7 * 1 + 6) * 24")
 	@Coverage(
 		again = {
-			@GoalCoverage(goal = "code coverage", item="ShortTermParkingCalculator", coverage={"Req4", "Req5.additional 1/2 hour"})
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req5", coverage={"additional 1/2 hour"})
 		}
 	)
 	@Test
@@ -463,7 +465,8 @@ public class ParkCalculatorTest {
 	@Description("dayCosts: (7 * 1 + 1) * 24")
 	@Coverage(
 		again = {
-			@GoalCoverage(goal = "code coverage", item="ShortTermParkingCalculator", coverage={"Req4", "Req5.additional 2/2 hour"})
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req5", coverage={"additional 2/2 hour"})
 		}
 	)
 	@Test
@@ -487,7 +490,7 @@ public class ParkCalculatorTest {
 	@Description("dayCosts: (7 * 6 + 6) * 24")
 	@Coverage(
 		again = {
-			@GoalCoverage(goal = "code coverage", item="ShortTermParkingCalculator", coverage={"Req4"})
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""})
 		}
 	)
 	@Test
@@ -511,7 +514,8 @@ public class ParkCalculatorTest {
 	@Description("dayCosts: (7 * 6 + 0) * 24")
 	@Coverage(
 		again = {
-			@GoalCoverage(goal = "code coverage", item="ShortTermParkingCalculator", coverage={"Req4", "Req5.additional 2/2 hour"})
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req5", coverage={"additional 2/2 hour"})
 		}
 	)
 	@Test
@@ -535,10 +539,10 @@ public class ParkCalculatorTest {
 	@Description("dayCosts: (7 * 0 + 6) * 24")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "code coverage", item="ShortTermParkingCalculator", coverage={"Req6"})
+			@GoalCoverage(goal = "requirement coverage", item="Req6", coverage={""})
 		},
 		again = {
-			@GoalCoverage(goal = "code coverage", item="ShortTermParkingCalculator", coverage={"Req4"})
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""})
 		}
 	)
 	@Test
@@ -562,7 +566,8 @@ public class ParkCalculatorTest {
 	@Description("dayCosts: (7 * 0 + 0) * 24")
 	@Coverage(
 		again = {
-			@GoalCoverage(goal = "code coverage", item="ShortTermParkingCalculator", coverage={"Req4", "Req6"})
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req6", coverage={""})
 		}
 	)
 	@Test
@@ -586,7 +591,8 @@ public class ParkCalculatorTest {
 	@Description("dayCosts: (7 * 0 + 1) * 24")
 	@Coverage(
 		again = {
-			@GoalCoverage(goal = "code coverage", item="ShortTermParkingCalculator", coverage={"Req4", "Req6"})
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req6", coverage={""})
 		}
 	)
 	@Test
@@ -610,7 +616,8 @@ public class ParkCalculatorTest {
 	@Description("dayCosts: (7 * 26 + 4) * 24")
 	@Coverage(
 		again = {
-			@GoalCoverage(goal = "code coverage", item="ShortTermParkingCalculator", coverage={"Req4", "Req6"})
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req6", coverage={""})
 		}
 	)
 	@Test
@@ -634,7 +641,8 @@ public class ParkCalculatorTest {
 	@Description("dayCosts: (7 * 0 + 6) * 24")
 	@Coverage(
 		again = {
-			@GoalCoverage(goal = "code coverage", item="ShortTermParkingCalculator", coverage={"Req4", "Req6"})
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req6", coverage={""})
 		}
 	)
 	@Test
@@ -658,7 +666,8 @@ public class ParkCalculatorTest {
 	@Description("dayCosts: (7 * 0 + 0) * 24")
 	@Coverage(
 		again = {
-			@GoalCoverage(goal = "code coverage", item="ShortTermParkingCalculator", coverage={"Req4", "Req6"})
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req6", coverage={""})
 		}
 	)
 	@Test
@@ -682,7 +691,8 @@ public class ParkCalculatorTest {
 	@Description("dayCosts: (7 * 0 + 1) * 24")
 	@Coverage(
 		again = {
-			@GoalCoverage(goal = "code coverage", item="ShortTermParkingCalculator", coverage={"Req4", "Req6"})
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req6", coverage={""})
 		}
 	)
 	@Test
@@ -706,7 +716,8 @@ public class ParkCalculatorTest {
 	@Description("dayCosts: (7 * 1 + 1) * 24")
 	@Coverage(
 		again = {
-			@GoalCoverage(goal = "code coverage", item="ShortTermParkingCalculator", coverage={"Req4", "Req6"})
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req6", coverage={""})
 		}
 	)
 	@Test
@@ -731,9 +742,9 @@ public class ParkCalculatorTest {
 +"dayCosts: 6 * 78 + 0 * 13")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req10", coverage={"LONG_TERM_GARAGE_PARKING costs 6 * 78 + 0 * 13"}),
-			@GoalCoverage(goal = "requirements", item="Req7", coverage={"LONG_TERM_GARAGE_PARKING 0 hours"}),
-			@GoalCoverage(goal = "requirements", item="Req8", coverage={"LONG_TERM_GARAGE_PARKING costs 6 * 78 + 0 * 13"})
+			@GoalCoverage(goal = "requirement coverage", item="Req10", coverage={"LONG_TERM_GARAGE_PARKING costs 6 * 78 + 0 * 13"}),
+			@GoalCoverage(goal = "requirement coverage", item="Req7", coverage={"LONG_TERM_GARAGE_PARKING 0 hours"}),
+			@GoalCoverage(goal = "requirement coverage", item="Req8", coverage={"LONG_TERM_GARAGE_PARKING costs 6 * 78 + 0 * 13"})
 		}
 	)
 	@Test
@@ -758,8 +769,8 @@ public class ParkCalculatorTest {
 +"dayCosts: 6 * 78 + 6 * 13")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req7", coverage={"LONG_TERM_GARAGE_PARKING 6 hour or less"}),
-			@GoalCoverage(goal = "requirements", item="Req8", coverage={"LONG_TERM_GARAGE_PARKING costs 6 * 78 + 6 * 13 + 0 * 2 + 2"})
+			@GoalCoverage(goal = "requirement coverage", item="Req7", coverage={"LONG_TERM_GARAGE_PARKING 6 hour or less"}),
+			@GoalCoverage(goal = "requirement coverage", item="Req8", coverage={"LONG_TERM_GARAGE_PARKING costs 6 * 78 + 6 * 13 + 0 * 2 + 2"})
 		}
 	)
 	@Test
@@ -784,10 +795,10 @@ public class ParkCalculatorTest {
 +"dayCosts: 26 * 78 + 4 * 13")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req8", coverage={"LONG_TERM_GARAGE_PARKING costs 26 * 78 + 4 * 13 + 5 * 2 + 2"})
+			@GoalCoverage(goal = "requirement coverage", item="Req8", coverage={"LONG_TERM_GARAGE_PARKING costs 26 * 78 + 4 * 13 + 5 * 2 + 2"})
 		},
 		again = {
-			@GoalCoverage(goal = "requirements", item="Req7", coverage={"LONG_TERM_GARAGE_PARKING 6 hour or less"})
+			@GoalCoverage(goal = "requirement coverage", item="Req7", coverage={"LONG_TERM_GARAGE_PARKING 6 hour or less"})
 		}
 	)
 	@Test
@@ -812,10 +823,10 @@ public class ParkCalculatorTest {
 +"dayCosts: 6 * 78 + 6 * 13")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req8", coverage={"LONG_TERM_GARAGE_PARKING costs 6 * 78 + 6 * 13 + 6 * 2 + 0"})
+			@GoalCoverage(goal = "requirement coverage", item="Req8", coverage={"LONG_TERM_GARAGE_PARKING costs 6 * 78 + 6 * 13 + 6 * 2 + 0"})
 		},
 		again = {
-			@GoalCoverage(goal = "requirements", item="Req7", coverage={"LONG_TERM_GARAGE_PARKING 6 hour or less"})
+			@GoalCoverage(goal = "requirement coverage", item="Req7", coverage={"LONG_TERM_GARAGE_PARKING 6 hour or less"})
 		}
 	)
 	@Test
@@ -840,8 +851,8 @@ public class ParkCalculatorTest {
 +"dayCosts: 6 * 78 + 0 * 13")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req7", coverage={"LONG_TERM_GARAGE_PARKING more than 6 hours"}),
-			@GoalCoverage(goal = "requirements", item="Req9", coverage={"LONG_TERM_GARAGE_PARKING costs 6 * 78 + 0 * 13 + 13"})
+			@GoalCoverage(goal = "requirement coverage", item="Req7", coverage={"LONG_TERM_GARAGE_PARKING more than 6 hours"}),
+			@GoalCoverage(goal = "requirement coverage", item="Req9", coverage={"LONG_TERM_GARAGE_PARKING costs 6 * 78 + 0 * 13 + 13"})
 		}
 	)
 	@Test
@@ -866,10 +877,10 @@ public class ParkCalculatorTest {
 +"dayCosts: 1 * 78 + 6 * 13")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req9", coverage={"LONG_TERM_GARAGE_PARKING costs 1 * 78 + 6 * 13 + 13"})
+			@GoalCoverage(goal = "requirement coverage", item="Req9", coverage={"LONG_TERM_GARAGE_PARKING costs 1 * 78 + 6 * 13 + 13"})
 		},
 		again = {
-			@GoalCoverage(goal = "requirements", item="Req7", coverage={"LONG_TERM_GARAGE_PARKING more than 6 hours"})
+			@GoalCoverage(goal = "requirement coverage", item="Req7", coverage={"LONG_TERM_GARAGE_PARKING more than 6 hours"})
 		}
 	)
 	@Test
@@ -893,8 +904,8 @@ public class ParkCalculatorTest {
 	@Description("")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 0 hours 0 minutes"}),
-			@GoalCoverage(goal = "requirements", item="Req12", coverage={"0 hours 0 minutes"})
+			@GoalCoverage(goal = "requirement coverage", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 0 hours 0 minutes"}),
+			@GoalCoverage(goal = "requirement coverage", item="Req12", coverage={"0 hours 0 minutes"})
 		}
 	)
 	@Test
@@ -918,8 +929,8 @@ public class ParkCalculatorTest {
 	@Description("")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 0 hours 1 minutes"}),
-			@GoalCoverage(goal = "requirements", item="Req12", coverage={"0 hours 1 minutes"})
+			@GoalCoverage(goal = "requirement coverage", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 0 hours 1 minutes"}),
+			@GoalCoverage(goal = "requirement coverage", item="Req12", coverage={"0 hours 1 minutes"})
 		}
 	)
 	@Test
@@ -943,9 +954,9 @@ public class ParkCalculatorTest {
 	@Description("")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 0 hours 59 minutes"}),
-			@GoalCoverage(goal = "requirements", item="Req12", coverage={"0 hours 59 minutes"}),
-			@GoalCoverage(goal = "requirements", item="Req14", coverage={"LONG_TERM_SURFACE_PARKING 0 weeks 0 days"})
+			@GoalCoverage(goal = "requirement coverage", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 0 hours 59 minutes"}),
+			@GoalCoverage(goal = "requirement coverage", item="Req12", coverage={"0 hours 59 minutes"}),
+			@GoalCoverage(goal = "requirement coverage", item="Req14", coverage={"LONG_TERM_SURFACE_PARKING 0 weeks 0 days"})
 		}
 	)
 	@Test
@@ -969,8 +980,8 @@ public class ParkCalculatorTest {
 	@Description("")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 4 hours 1 minutes"}),
-			@GoalCoverage(goal = "requirements", item="Req12", coverage={"4 hours 1 minutes"})
+			@GoalCoverage(goal = "requirement coverage", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 4 hours 1 minutes"}),
+			@GoalCoverage(goal = "requirement coverage", item="Req12", coverage={"4 hours 1 minutes"})
 		}
 	)
 	@Test
@@ -994,11 +1005,11 @@ public class ParkCalculatorTest {
 	@Description("")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 4 hours 59 minutes"}),
-			@GoalCoverage(goal = "requirements", item="Req12", coverage={"4 hours 59 minutes"})
+			@GoalCoverage(goal = "requirement coverage", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 4 hours 59 minutes"}),
+			@GoalCoverage(goal = "requirement coverage", item="Req12", coverage={"4 hours 59 minutes"})
 		},
 		again = {
-			@GoalCoverage(goal = "requirements", item="Req14", coverage={"LONG_TERM_SURFACE_PARKING 0 weeks 0 days"})
+			@GoalCoverage(goal = "requirement coverage", item="Req14", coverage={"LONG_TERM_SURFACE_PARKING 0 weeks 0 days"})
 		}
 	)
 	@Test
@@ -1022,8 +1033,8 @@ public class ParkCalculatorTest {
 	@Description("")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 4 hours 0 minutes"}),
-			@GoalCoverage(goal = "requirements", item="Req12", coverage={"4 hours 0 minutes"})
+			@GoalCoverage(goal = "requirement coverage", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 4 hours 0 minutes"}),
+			@GoalCoverage(goal = "requirement coverage", item="Req12", coverage={"4 hours 0 minutes"})
 		}
 	)
 	@Test
@@ -1047,8 +1058,8 @@ public class ParkCalculatorTest {
 	@Description("")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 5 hours 59 minutes"}),
-			@GoalCoverage(goal = "requirements", item="Req13", coverage={"5 hours 59 minutes"})
+			@GoalCoverage(goal = "requirement coverage", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 5 hours 59 minutes"}),
+			@GoalCoverage(goal = "requirement coverage", item="Req13", coverage={"5 hours 59 minutes"})
 		}
 	)
 	@Test
@@ -1072,8 +1083,8 @@ public class ParkCalculatorTest {
 	@Description("")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 5 hours 0 minutes"}),
-			@GoalCoverage(goal = "requirements", item="Req13", coverage={"5 hours 0 minutes"})
+			@GoalCoverage(goal = "requirement coverage", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 5 hours 0 minutes"}),
+			@GoalCoverage(goal = "requirement coverage", item="Req13", coverage={"5 hours 0 minutes"})
 		}
 	)
 	@Test
@@ -1097,8 +1108,8 @@ public class ParkCalculatorTest {
 	@Description("")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 5 hours 1 minutes"}),
-			@GoalCoverage(goal = "requirements", item="Req13", coverage={"5 hours 1 minutes"})
+			@GoalCoverage(goal = "requirement coverage", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 5 hours 1 minutes"}),
+			@GoalCoverage(goal = "requirement coverage", item="Req13", coverage={"5 hours 1 minutes"})
 		}
 	)
 	@Test
@@ -1122,8 +1133,8 @@ public class ParkCalculatorTest {
 	@Description("")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 23 hours 59 minutes"}),
-			@GoalCoverage(goal = "requirements", item="Req13", coverage={"23 hours 59 minutes"})
+			@GoalCoverage(goal = "requirement coverage", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 23 hours 59 minutes"}),
+			@GoalCoverage(goal = "requirement coverage", item="Req13", coverage={"23 hours 59 minutes"})
 		}
 	)
 	@Test
@@ -1147,9 +1158,9 @@ public class ParkCalculatorTest {
 	@Description("")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 23 hours 0 minutes"}),
-			@GoalCoverage(goal = "requirements", item="Req13", coverage={"23 hours 0 minutes"}),
-			@GoalCoverage(goal = "requirements", item="Req14", coverage={"LONG_TERM_SURFACE_PARKING 6 weeks 0 days"})
+			@GoalCoverage(goal = "requirement coverage", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 23 hours 0 minutes"}),
+			@GoalCoverage(goal = "requirement coverage", item="Req13", coverage={"23 hours 0 minutes"}),
+			@GoalCoverage(goal = "requirement coverage", item="Req14", coverage={"LONG_TERM_SURFACE_PARKING 6 weeks 0 days"})
 		}
 	)
 	@Test
@@ -1173,8 +1184,8 @@ public class ParkCalculatorTest {
 	@Description("")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 23 hours 1 minutes"}),
-			@GoalCoverage(goal = "requirements", item="Req13", coverage={"23 hours 1 minutes"})
+			@GoalCoverage(goal = "requirement coverage", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 23 hours 1 minutes"}),
+			@GoalCoverage(goal = "requirement coverage", item="Req13", coverage={"23 hours 1 minutes"})
 		}
 	)
 	@Test
@@ -1199,9 +1210,9 @@ public class ParkCalculatorTest {
 +"dayCosts: 1440")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req15", coverage={"ECONOMY_LOT_PARKING 0 hours"}),
-			@GoalCoverage(goal = "requirements", item="Req16", coverage={"ECONOMY_LOT_PARKING costs 1440"}),
-			@GoalCoverage(goal = "requirements", item="Req18", coverage={"ECONOMY_LOT_PARKING costs 1440"})
+			@GoalCoverage(goal = "requirement coverage", item="Req15", coverage={"ECONOMY_LOT_PARKING 0 hours"}),
+			@GoalCoverage(goal = "requirement coverage", item="Req16", coverage={"ECONOMY_LOT_PARKING costs 1440"}),
+			@GoalCoverage(goal = "requirement coverage", item="Req18", coverage={"ECONOMY_LOT_PARKING costs 1440"})
 		}
 	)
 	@Test
@@ -1226,8 +1237,8 @@ public class ParkCalculatorTest {
 +"dayCosts: 0")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req15", coverage={"ECONOMY_LOT_PARKING 4 hour or less"}),
-			@GoalCoverage(goal = "requirements", item="Req16", coverage={"ECONOMY_LOT_PARKING costs 2"})
+			@GoalCoverage(goal = "requirement coverage", item="Req15", coverage={"ECONOMY_LOT_PARKING 4 hour or less"}),
+			@GoalCoverage(goal = "requirement coverage", item="Req16", coverage={"ECONOMY_LOT_PARKING costs 2"})
 		}
 	)
 	@Test
@@ -1252,10 +1263,10 @@ public class ParkCalculatorTest {
 +"dayCosts: 54")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req16", coverage={"ECONOMY_LOT_PARKING costs 62"})
+			@GoalCoverage(goal = "requirement coverage", item="Req16", coverage={"ECONOMY_LOT_PARKING costs 62"})
 		},
 		again = {
-			@GoalCoverage(goal = "requirements", item="Req15", coverage={"ECONOMY_LOT_PARKING 4 hour or less"})
+			@GoalCoverage(goal = "requirement coverage", item="Req15", coverage={"ECONOMY_LOT_PARKING 4 hour or less"})
 		}
 	)
 	@Test
@@ -1280,10 +1291,10 @@ public class ParkCalculatorTest {
 +"dayCosts: 9")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req16", coverage={"ECONOMY_LOT_PARKING costs 17"})
+			@GoalCoverage(goal = "requirement coverage", item="Req16", coverage={"ECONOMY_LOT_PARKING costs 17"})
 		},
 		again = {
-			@GoalCoverage(goal = "requirements", item="Req15", coverage={"ECONOMY_LOT_PARKING 4 hour or less"})
+			@GoalCoverage(goal = "requirement coverage", item="Req15", coverage={"ECONOMY_LOT_PARKING 4 hour or less"})
 		}
 	)
 	@Test
@@ -1308,8 +1319,8 @@ public class ParkCalculatorTest {
 +"dayCosts: 324")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req15", coverage={"ECONOMY_LOT_PARKING more than 4 hours"}),
-			@GoalCoverage(goal = "requirements", item="Req17", coverage={"ECONOMY_LOT_PARKING costs 333"})
+			@GoalCoverage(goal = "requirement coverage", item="Req15", coverage={"ECONOMY_LOT_PARKING more than 4 hours"}),
+			@GoalCoverage(goal = "requirement coverage", item="Req17", coverage={"ECONOMY_LOT_PARKING costs 333"})
 		}
 	)
 	@Test
@@ -1334,10 +1345,10 @@ public class ParkCalculatorTest {
 +"dayCosts: 378")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req17", coverage={"ECONOMY_LOT_PARKING costs 387"})
+			@GoalCoverage(goal = "requirement coverage", item="Req17", coverage={"ECONOMY_LOT_PARKING costs 387"})
 		},
 		again = {
-			@GoalCoverage(goal = "requirements", item="Req15", coverage={"ECONOMY_LOT_PARKING more than 4 hours"})
+			@GoalCoverage(goal = "requirement coverage", item="Req15", coverage={"ECONOMY_LOT_PARKING more than 4 hours"})
 		}
 	)
 	@Test
@@ -1362,10 +1373,10 @@ public class ParkCalculatorTest {
 +"dayCosts: 108")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req16", coverage={"ECONOMY_LOT_PARKING costs 110"})
+			@GoalCoverage(goal = "requirement coverage", item="Req16", coverage={"ECONOMY_LOT_PARKING costs 110"})
 		},
 		again = {
-			@GoalCoverage(goal = "requirements", item="Req15", coverage={"ECONOMY_LOT_PARKING 4 hour or less"})
+			@GoalCoverage(goal = "requirement coverage", item="Req15", coverage={"ECONOMY_LOT_PARKING 4 hour or less"})
 		}
 	)
 	@Test
@@ -1390,10 +1401,10 @@ public class ParkCalculatorTest {
 +"dayCosts: 63")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirements", item="Req16", coverage={"ECONOMY_LOT_PARKING costs 71"})
+			@GoalCoverage(goal = "requirement coverage", item="Req16", coverage={"ECONOMY_LOT_PARKING costs 71"})
 		},
 		again = {
-			@GoalCoverage(goal = "requirements", item="Req15", coverage={"ECONOMY_LOT_PARKING 4 hour or less"})
+			@GoalCoverage(goal = "requirement coverage", item="Req15", coverage={"ECONOMY_LOT_PARKING 4 hour or less"})
 		}
 	)
 	@Test
