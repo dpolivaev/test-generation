@@ -3,6 +3,9 @@
  */
 package org.dpolivaev.dsl.tsgen.validation
 
+import org.eclipse.xtext.validation.Check
+import org.eclipse.xtext.xbase.XExpression
+import org.dpolivaev.dsl.tsgen.strategydsl.LabeledExpression
 
 //import org.eclipse.xtext.validation.Check
 
@@ -12,4 +15,14 @@ package org.dpolivaev.dsl.tsgen.validation
  * see http://www.eclipse.org/Xtext/documentation.html#validation
  */
 class StrategyDslValidator extends AbstractStrategyDslValidator {
+	@Check
+	override checkInnerExpressions(XExpression expr) {
+		val container = expr.eContainer
+		switch(container){
+			 LabeledExpression case container.reason == expr: return
+		} 
+		super.checkInnerExpressions(expr)
+	}
+	
+	
 }
