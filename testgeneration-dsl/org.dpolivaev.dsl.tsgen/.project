@@ -33,9 +33,9 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>lib/ruleengine</name>
+			<name>lib/engine</name>
 			<type>2</type>
-			<locationURI>M2_REPO/org/dpolivaev/tsgen/org.dpolivaev.tsgen.ruleengine/1.0-SNAPSHOT</locationURI>
+			<locationURI>M2_REPO/org/dpolivaev/tsgen/org.dpolivaev.tsgen.engine/1.0-SNAPSHOT</locationURI>
 		</link>
 	</linkedResources>
 	<variableList>
