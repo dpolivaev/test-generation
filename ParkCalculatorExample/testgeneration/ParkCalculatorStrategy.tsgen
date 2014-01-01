@@ -1,0 +1,168 @@
+import org.dpolivaev.tsgen.strategies.StrategyHelper
+
+
+model ShortTermParkingCalculator{
+	def calculateCosts(int weeks, int days, int hours, int minutes){
+		val DAILY_MAX = 24
+		val COSTS_PER_HOUR = 2
+		["Req4"]
+		val costsForCompletedDays = (weeks * 7 + days) * DAILY_MAX
+		val costsForHours = 
+			if(hours * COSTS_PER_HOUR >= DAILY_MAX)
+				["Req6"] DAILY_MAX
+			else if(hours == 0){
+				if(minutes > 0){
+					if(minutes <= 30)
+						["Req5" "first hour"];
+					COSTS_PER_HOUR
+				}
+				else
+					0
+			}
+			else hours * COSTS_PER_HOUR + 
+					if(minutes > 0){
+							if(minutes <= 30)
+								["Req5" "additional 1/2 hour"] 1
+							else
+								["Req5" "additional 2/2 hour"] COSTS_PER_HOUR
+						}
+						else
+							0
+		costsForCompletedDays + costsForHours
+	}
+}
+
+strategy parkCostCalculatorTests 
+	extends StrategyHelper.id("testcase") with StrategyHelper.description("testcaseDescription")
+
+let script be "parkcalculator/ParkCalculatorTest"
+let script.imports be "import static parkcalculator.Lots.*;
+import static parkcalculator.BadValues.*;"
+let script.driver be "parkcalculator/ParkCalculatorTestDriver"
+
+let foc be "calculate parking costs"{
+		let pre1 be "select lot"
+		let pre2 be "set entry time"
+		let pre3 be "set leaving time"
+		let default veri be "verify parking costs"
+		
+		let pre2.entryTime be '"01/1/1970 12:00 am"', '"12/31/1999 12:00 pm"', '"02/28/2016 23:59 pm"'
+		
+		for each pre1.lot {
+			let pre3.weeks be 
+				0  { let pre3.days be 0, 1, 6}, 
+				1  { let pre3.days be 1, 6},
+				6  { let pre3.days be 0, 6},
+				26 { let pre3.days be 4}
+		}
+		
+		let pre1.lot be listOfValidLots with 
+			"VALET_PARKING"{
+				let dayCosts be ("(7 * ":pre3.weeks" + ":pre3.days") * 18")
+				let "parking time" be 
+					"0 hours"{
+						let pre3.hours be 0
+						let pre3.minutes be 0
+						let veri.expectedCosts be :dayCosts
+						let [Req2] be (:pre1.lot" costs ":veri.expectedCosts)
+						let [Req3] be (:pre1.lot" costs ":veri.expectedCosts)
+					},
+					"5 hours or less"{
+						let pre3.hours be 0, 4, 5 ordered
+						let pre3.minutes be 1, 59, 0 ordered
+						let veri.expectedCosts be (:dayCosts " + 12")
+						let [Req3] be (:pre1.lot" costs ":veri.expectedCosts)
+					},
+					"more than 5 hours"{
+						let pre3.hours be 5, 22, 23 ordered
+						let pre3.minutes be 1, 0, 59 ordered
+						let veri.expectedCosts be (:dayCosts  " + 18")
+						let [Req2] be (:pre1.lot" costs ":veri.expectedCosts)
+					}
+				let [Req1] be (:pre1.lot " costs " :"parking time")
+			}, 
+			"SHORT_TERM_PARKING"{
+				let dayCosts be ("(7 * ":pre3.weeks" + ":pre3.days") * 24")
+				let pre3.hours be 0, 1, 11, 12, 23 {
+					let pre3.minutes be 0, 30, 31, 59
+				}
+				let veri.expectedCosts be ShortTermParkingCalculator.calculateCosts(:pre3.weeks as int, :pre3.days as int, :pre3.hours as int, :pre3.minutes as int) 
+			},  
+			"LONG_TERM_GARAGE_PARKING"{
+				let default dayCosts be (:pre3.weeks" * 78 + ":pre3.days" * 13") 
+				let "parking time" be 
+					"0 hours"{
+						let pre3.hours be 0
+						let pre3.minutes be 0
+						let veri.expectedCosts be :dayCosts
+						let [Req8] be (:pre1.lot" costs ":veri.expectedCosts)
+						let [Req10] be (:pre1.lot" costs ":veri.expectedCosts)
+					},
+					"6 hour or less"{
+						let pre3.hours be 0, 5, 6 ordered
+						let pre3.minutes be 1, 59, 0 ordered
+						let veri.expectedCosts be (:dayCosts" + ":pre3.hours" * 2 + " if(:pre3.minutes != 0) 2 else 0 )
+						let [Req8] be (:pre1.lot" costs ":veri.expectedCosts)
+					},
+					"more than 6 hours"{
+						let pre3.hours be 6, 23 ordered
+						let pre3.minutes be 1, 59 ordered
+						let veri.expectedCosts be (:dayCosts" + "13)
+						let [Req9] be (:pre1.lot" costs ":veri.expectedCosts)
+					}
+				let [Req7] be (:pre1.lot " " :"parking time")	 
+			}, 
+			"LONG_TERM_SURFACE_PARKING"{
+				let veri be ("verify parking costs for lot ":pre1.lot)
+				let pre3.hours be 0, 4, 5, 23 {
+					let pre3.minutes be 0,1, 59
+				}
+				let [Req11] be (:pre1.lot" ":pre3.hours" hours " :pre3.minutes" minutes")
+				if (:pre3.hours as int) < 5 let [Req12] be (:pre3.hours" hours " :pre3.minutes" minutes")
+				if (:pre3.hours as int) >= 5 let [Req13] be (:pre3.hours" hours " :pre3.minutes" minutes")
+				if :pre3.days  == 0 let [Req14] be (:pre1.lot" ":pre3.weeks" weeks " :pre3.days" days")
+			}, 
+			"ECONOMY_LOT_PARKING"{
+				let default dayCosts be :pre3.weeks as int * 54 + :pre3.days as int * 9
+				let "parking time" be 
+					"0 hours"{
+						let pre3.hours be 0
+						let pre3.minutes be 0
+						let veri.expectedCosts be :dayCosts
+						let [Req16] be (:pre1.lot" costs ":veri.expectedCosts)
+						let [Req18] be (:pre1.lot" costs ":veri.expectedCosts)
+					},
+					"4 hour or less"{
+						let pre3.hours be 0, 3, 4 ordered
+						let pre3.minutes be 1, 59, 0 ordered
+						let veri.expectedCosts be :dayCosts as int + :pre3.hours as int * 2 + if(:pre3.minutes != 0) 2 else 0
+						let [Req16] be (:pre1.lot" costs ":veri.expectedCosts)
+					},
+					"more than 4 hours"{
+						let pre3.hours be 4, 23 ordered
+						let pre3.minutes be 1, 59 ordered
+						let veri.expectedCosts be :dayCosts as int + 9
+						let [Req17] be (:pre1.lot" costs ":veri.expectedCosts)
+					} 
+				let [Req15] be (:pre1.lot " " :"parking time")	 
+			}
+		
+	}, 
+	"select illegal lot"{
+		let foc.wrongValue be "NULL_VALUE", "BAD_VALUE"
+	}, 
+	"use illegal date in calculation"{
+		let pre1 be "select lot"
+		let default pre1.lot be from listOfValidLots
+		let illegalElement be "entry date", "entry time", "entry day part", "leaving date", "leaving time", "leaving day part"
+		let pre2 be "set illegal " + :illegalElement
+		let pre2.wrongValue be "NULL_VALUE", "BAD_VALUE"
+	},
+	"use leaving date earlier than entry date"{
+		let pre1 be "select lot"
+		let default pre1.lot be from listOfValidLots
+	}
+	
+run strategy parkCostCalculatorTests with model ShortTermParkingCalculator 
+	output "output/xml", apply "/java.xslt" output "generated-tests/java" 
+	report  "output/report.xml"
