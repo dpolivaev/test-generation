@@ -1,0 +1,81 @@
+
+Loading: ImportedStrings GeneratorMain 
+0 errors encountered during compile.
+
+
+Calling: GeneratorMain.run()
+ 1 : $topologies=stand alone property -- $x=a
+ 2 : $topologies=stand alone property -- $x=b
+ 3 : $topologies=stand alone property -- $x=c
+ 4 : $topologies=all combinations 1 -- $x=a -- $y=A
+ 5 : $topologies=all combinations 1 -- $x=a -- $y=B
+ 6 : $topologies=all combinations 1 -- $x=a -- $y=C
+ 7 : $topologies=all combinations 1 -- $x=b -- $y=A
+ 8 : $topologies=all combinations 1 -- $x=b -- $y=B
+ 9 : $topologies=all combinations 1 -- $x=b -- $y=C
+10 : $topologies=all combinations 1 -- $x=c -- $y=A
+11 : $topologies=all combinations 1 -- $x=c -- $y=B
+12 : $topologies=all combinations 1 -- $x=c -- $y=C
+13 : $topologies=all combinations 2 -- $x=a -- $y=A
+14 : $topologies=all combinations 2 -- $x=a -- $y=B
+15 : $topologies=all combinations 2 -- $x=a -- $y=C
+16 : $topologies=all combinations 2 -- $x=b -- $y=A
+17 : $topologies=all combinations 2 -- $x=b -- $y=B
+18 : $topologies=all combinations 2 -- $x=b -- $y=C
+19 : $topologies=all combinations 2 -- $x=c -- $y=A
+20 : $topologies=all combinations 2 -- $x=c -- $y=B
+21 : $topologies=all combinations 2 -- $x=c -- $y=C
+22 : $topologies=parallel combinations ordered -- $x=a -- $y=A -- $z=1
+23 : $topologies=parallel combinations ordered -- $x=b -- $y=B -- $z=2
+24 : $topologies=parallel combinations ordered -- $x=c -- $y=A -- $z=3
+25 : $topologies=parallel combinations ordered -- $x=a -- $y=B -- $z=4
+26 : $topologies=parallel combinations ordered -- $x=b -- $y=A -- $z=5
+27 : $topologies=parallel combinations shuffled -- $x=c -- $y=B -- $z=1
+28 : $topologies=parallel combinations shuffled -- $x=b -- $y=A -- $z=2
+29 : $topologies=parallel combinations shuffled -- $x=a -- $y=B -- $z=4
+30 : $topologies=parallel combinations shuffled -- $x=c -- $y=A -- $z=5
+31 : $topologies=parallel combinations shuffled -- $x=b -- $y=B -- $z=3
+32 : $topologies=dependent values -- $x=a -- $y=A -- $z=a && A
+33 : $topologies=dependent values -- $x=a -- $y=A -- $z=a || A
+34 : $topologies=dependent values -- $x=b -- $y=B -- $z=b && B
+35 : $topologies=dependent values -- $x=c -- $y=A -- $z=c && A
+36 : $topologies=explicit dependencies -- $x=a -- $y=A -- $z=a && A
+37 : $topologies=explicit dependencies -- $x=a -- $z=a || A -- $y=A -- $z=a || A
+38 : $topologies=explicit dependencies -- $x=b -- $y=B -- $z=b && B
+39 : $topologies=explicit dependencies -- $x=b -- $z=b || B -- $y=B -- $z=b || B
+40 : $topologies=explicit dependencies -- $x=c -- $y=A -- $z=c && A
+41 : $topologies=explicit dependencies -- $x=c -- $z=c || A -- $y=A -- $z=c || A
+42 : $topologies=branches -- $x=a -- $y=A
+43 : $topologies=branches -- $x=a -- $y=B
+44 : $topologies=branches -- $x=b -- $y=A
+45 : $topologies=branches -- $x=b -- $y=B
+46 : $topologies=branches -- $x=c -- $y=C
+47 : $topologies=conditions -- $x=a -- $y=C
+48 : $topologies=conditions -- $x=b -- $y=C
+49 : $topologies=conditions -- $x=c -- $y=A
+50 : $topologies=conditions -- $x=c -- $y=B
+51 : $topologies=defaults -- $x=a
+52 : $topologies=defaults -- $x=b
+53 : $topologies=defaults -- $x=c
+54 : $topologies=defaults -- $x=d -- $y=A
+55 : $topologies=defaults -- $x=d -- $y=B
+56 : $topologies=branched defaults -- $x=a
+57 : $topologies=branched defaults -- $x=b
+58 : $topologies=branched defaults -- $x=c
+59 : $topologies=branched defaults -- $x=d -- $y=A
+60 : $topologies=branched defaults -- $x=d -- $y=B
+61 : $topologies=branched defaults -- $x=e
+62 : $topologies=chained defaults -- $x=a
+63 : $topologies=chained defaults -- $x=b
+64 : $topologies=chained defaults -- $x=c
+65 : $topologies=chained defaults -- $x=d -- $y=A
+66 : $topologies=chained defaults -- $x=d -- $y=B
+67 : $topologies=skip -- $x=a -- $y=A
+68 : $topologies=skip -- $x=a -- $y=C
+69 : $topologies=skip -- $x=c -- $y=is not set -- $y=A
+70 : $topologies=skip -- $x=c -- $y=C
+71 : $topologies=rule stack -- $x=c
+Test generation completed.
+
+
+Framework done.
