@@ -1,0 +1,9 @@
+bin
+target
+.classpath
+.project
+out.xml
+scratch
+.settings/
+debuglog.txt
+backups
