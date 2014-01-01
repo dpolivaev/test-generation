@@ -15,4 +15,5 @@ and testgeneration-dsl
 1. Make sure that derived java files are created in folder /ParkCalculatorExample/src-gen
 1. Right-click on ParkCalculatorStrategy.tsgen ans select "Generate tests" . This should run the generation.
 1. Check the output printed on the console 
-1. Find generated files in directory org.dpolivaev.dsl.tsgen.examples/output
+1. Find generated test script ParkCalculatorTest.hava in directory /ParkCalculatorExample/generated-tests and generated requirement coverage report.xml in directory /ParkCalculatorExample/output/ . There is also a generated test script in xml format /ParkCalculatorExample/output/parkcalculator/ParkCalculatorTest.xml
+
