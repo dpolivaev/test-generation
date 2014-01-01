@@ -36,8 +36,6 @@ public class StrategyRunner {
 	
 	public StrategyRunner addModel(Model model){
 		models.add(model);
-		if(model instanceof PropertyAccessor)
-			propertyAccessors.add((PropertyAccessor) model);
 		return this;
 	}
 
