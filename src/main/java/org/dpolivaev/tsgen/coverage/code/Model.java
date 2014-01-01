@@ -5,5 +5,5 @@ import java.util.List;
 public interface Model {
 	String getName();
 	CodeCoverageTracker getCodeCoverageTracker();
-	List<String> getExpectedItems();
+	List<String> getRequiredItems();
 }

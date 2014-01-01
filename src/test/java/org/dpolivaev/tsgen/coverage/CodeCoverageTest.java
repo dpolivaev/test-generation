@@ -26,7 +26,7 @@ public class CodeCoverageTest {
 		final CodeCoverageTracker codeCoverageTracker = new CodeCoverageTracker();
 		when(model.getCodeCoverageTracker()).thenReturn(codeCoverageTracker);
 		final List<String> itemList = items;
-		when(model.getExpectedItems()).thenReturn(itemList);
+		when(model.getRequiredItems()).thenReturn(itemList);
 		return model;
 	}
 
