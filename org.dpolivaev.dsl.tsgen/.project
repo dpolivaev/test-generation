@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>org.dpolivaev.dsl.tsgen</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.pde.ManifestBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.pde.SchemaBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.xtext.ui.shared.xtextBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>org.eclipse.pde.PluginNature</nature>
+		<nature>org.eclipse.xtext.ui.shared.xtextNature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>lib/ruleengine</name>
+			<type>2</type>
+			<locationURI>M2_REPO/org/dpolivaev/tsgen/org.dpolivaev.tsgen.ruleengine/1.0-SNAPSHOT</locationURI>
+		</link>
+	</linkedResources>
+	<variableList>
+		<variable>
+			<name>M2_REPO</name>
+			<value>file:/C:/Users/Dimitry/.m2/repository</value>
+		</variable>
+	</variableList>
+</projectDescription>
