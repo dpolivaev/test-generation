@@ -1,0 +1,143 @@
+grammar org.dpolivaev.dsl.tsgen.StrategyDsl with org.eclipse.xtext.xbase.Xbase
+
+import 'http://www.eclipse.org/xtext/xbase/Xbase' as xbase
+
+generate strategydsl "http://www.dpolivaev.org/dsl/tsgen/strategydsl"
+
+Generation: {Generation}
+	('package' package = QualifiedName)?
+	importSection=XImportSection?
+	(strategies+=Strategy | models += Model | /* goals += Goal | */ runs += Run)*
+;
+	
+Strategy:
+	'strategy' name=ID ('extends' baseStrategies += ShortFormStrategyReference ('with' baseStrategies += ShortFormStrategyReference)* )?
+		ruleGroups += RuleGroup* 
+	;
+
+RuleGroup : {RuleGroup}
+	(trigger = Trigger condition = Condition? | condition = Condition) (rule = Rule | '{' ruleGroups += RuleGroup* '}') 
+	| rule = Rule
+;
+
+Rule returns Rule:
+	(
+		'let'
+		default ?= 'default'? name=PROPERTY_ID
+		'be' 
+		values = PropertyValues
+		(ordered ?= 'ordered' | shuffled ?= 'shuffled')? 
+	)
+	| skip ?= SkipAction
+;
+
+PropertyValues returns Values:
+	((name=PROPERTY_ID 'with')?  actions += ValueAction (',' actions += ValueAction)* | 'from' valueReference = [Values]) 
+;
+
+Trigger:
+	'for' 'each' properties += PROPERTY_ID (',' properties += PROPERTY_ID)*
+;
+
+Condition:
+	'if' expr = XExpression
+;
+
+SkipAction : {SkipAction}
+	'skip'
+;
+
+ValueAction:{ValueAction}
+	valueProviders += ValueProvider (=>',' valueProviders += ValueProvider)*
+	(=>'{' ruleGroups += RuleGroup* '}')?
+;
+
+ValueProvider:
+	=>'(' expressions += XExpression+ ')' | expressions += XExpression 
+;
+
+Run:
+	'run' strategies += StrategyReference 
+	('with' (strategies += StrategyReference | /* goals += GoalReference | */ models += ModelReference) 
+	   (',' (strategies += StrategyReference | /* goals += GoalReference | */ model += ModelReference))*
+	)?
+	outputConfiguration = OutputConfiguration?
+	reportConfiguration = ReportConfiguration?
+	
+;
+
+OutputConfiguration:
+	('output' xml = STRING ',')? 'apply' xslt=STRING 'output' fileExtension = STRING
+	| 'output' xml = STRING
+;
+
+ReportConfiguration returns OutputConfiguration:
+	'report' (
+		(xml = STRING ',')? 'apply' xslt=STRING 'output' fileExtension = STRING | xml = STRING
+	)
+;
+
+StrategyReference returns StrategyReference: {StrategyReference} 'strategy' expr = XExpression;
+ShortFormStrategyReference returns StrategyReference: {StrategyReference} expr = XExpression;
+// GoalReference : 'goal' expr = XExpression;
+ModelReference : 'model' goal ?= 'goal'? expr = XExpression;
+
+Model:'model' name = ValidID
+	'{'
+		(vars += XVariableDeclaration | subs += MethodDefinition)*
+	'}'
+;
+
+/*
+Goal: CheckList|OpenGoal;
+
+CheckList:
+'goal' name = ValidID  expr = XExpression 'matches' item += XExpression (',' item += XExpression)*
+;
+
+OpenGoal: 
+'open' 'goal' name = ValidID  expr = XExpression
+;
+ */
+ 
+MethodDefinition:
+'def' returnType=JvmTypeReference? name=ValidID 
+('(' 
+	(parameters+=FullJvmFormalParameter 
+		(',' parameters+=FullJvmFormalParameter)*
+	)? 
+')')? 
+
+(body=XBlockExpression | '=' body = XExpression);
+
+XPrimaryExpression returns xbase::XExpression:
+	PropertyCall |
+	LabeledExpression |
+	XConstructorCall |
+	XBlockExpression |
+	XSwitchExpression |
+	XFeatureCall |
+	XLiteral |
+	XIfExpression |
+	XForLoopExpression |
+	XWhileExpression |
+	XDoWhileExpression |
+	XThrowExpression |
+	XReturnExpression |
+	XTryCatchFinallyExpression |
+	XParenthesizedExpression;
+
+
+PropertyCall returns xbase::XExpression hidden():
+	{PropertyCall}
+	':' name = PROPERTY_ID 
+;
+
+LabeledExpression returns xbase::XExpression:
+	=>({LabeledExpression}
+	'[' label = STRING) reason = XExpression?']' (=>expr = XExpression)?
+;
+
+PROPERTY_ID hidden():
+	ID (=> '.' ID)* | STRING | '['ID (=> '.' ID)*']' | '[' STRING ']'
+;
