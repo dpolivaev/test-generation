@@ -45,6 +45,7 @@ import java.util.List
 import java.util.Arrays
 import org.eclipse.xtext.xbase.XVariableDeclaration
 import org.dpolivaev.dsl.tsgen.strategydsl.ModelReference
+import org.dpolivaev.tsgen.scriptwriter.PropertyAccessingModel
 
 /**
  * <p>Infers a JVM model from the source model.</p> 
@@ -101,8 +102,7 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 	private def inferModel(IJvmDeclaredTypeAcceptor acceptor, String classPackage, Model model) {
 		val qualifiedClassName = qualifiedClassName(classPackage, model.name.toFirstUpper)
 		acceptor.accept(model.toClass(qualifiedClassName)).initializeLater([
-			superTypes += model.newTypeRef(org.dpolivaev.tsgen.coverage.code.Model)
-			superTypes += model.newTypeRef(PropertyAccessor)
+			superTypes += model.newTypeRef(PropertyAccessingModel)
 			val labels = new HashSet<String>
 			val contents = EcoreUtil2.eAllContents(model)
 			for(obj : contents){
@@ -131,6 +131,7 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 			]
 			
 			members += model.toMethod("getName", model.newTypeRef(String)) [
+				annotations += model.toAnnotation(Override)
 				body = [
 						append('''return "«model.name»";''')
 				]
@@ -138,13 +139,15 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 			]
 			
 			members += model.toMethod("getCodeCoverageTracker", model.newTypeRef(CodeCoverageTracker)) [
+				annotations += model.toAnnotation(Override)
 				body = [
 						append('return codeCoverageTracker;')
 				]
 				visibility = JvmVisibility::PUBLIC
 			]
 			
-			members += model.toMethod("getExpectedItems", model.newTypeRef(List, model.newTypeRef(String))) [
+			members += model.toMethod("getRequiredItems", model.newTypeRef(List, model.newTypeRef(String))) [
+				annotations += model.toAnnotation(Override)
 				body = [
 						append('return labels;')
 				]
@@ -152,6 +155,7 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 			]
 			
 			members += model.toMethod("setPropertyContainer", model.newTypeRef(Void::TYPE)) [
+				annotations += model.toAnnotation(Override)
 				parameters += model.toParameter("propertyContainer", model.newTypeRef(PropertyContainer))
 				body = [
 						append('this.propertyContainer=propertyContainer;')
@@ -272,7 +276,7 @@ class ScriptInitializer{
 	final static val EXTERNAL_MODEL = "externalModel"
 	private def appendModelReferences(ModelReference ref){
 		if(ref.expr != null && ! declaredFields.contains(ref.expr.toString)) {
-			createMethod(ref.expr, EXTERNAL_MODEL, ref.expr.newTypeRef(org.dpolivaev.tsgen.coverage.code.Model), false)
+			createMethod(ref.expr, EXTERNAL_MODEL, ref.expr.newTypeRef(PropertyAccessingModel), false)
 		}
 	}
 	
@@ -598,7 +602,13 @@ class ScriptInitializer{
 					appendOutputConfiguration(it, "Report", run.reportConfiguration)
 					for(model:run.models){
 						newLine
-						append('strategyRunner.addModel(')
+						append('strategyRunner')
+						if(model.goal){
+							append('.addModel(')
+							appendReference(it, EXTERNAL_MODEL, model.expr)
+							append(')')
+						}
+						append('.addPropertyAccessor(')
 						appendReference(it, EXTERNAL_MODEL, model.expr)
 						append(');')
 					}
