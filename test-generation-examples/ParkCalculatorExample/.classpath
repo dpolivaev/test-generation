@@ -7,7 +7,7 @@
 	<classpathentry kind="src" path="test-driver"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="var" path="M2_REPO/org/dpolivaev/tsgen/org.dpolivaev.tsgen.ruleengine/1.0-SNAPSHOT/org.dpolivaev.tsgen.ruleengine-1.0-SNAPSHOT.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/dpolivaev/tsgen/org.dpolivaev.tsgen.engine/1.0-SNAPSHOT/org.dpolivaev.tsgen.engine-1.0-SNAPSHOT.jar"/>
 	<classpathentry kind="var" path="M2_REPO/com/google/guava/guava/12.0/guava-12.0.jar" sourcepath="M2_REPO/com/google/guava/guava/12.0/guava-12.0-sources.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:file:/C:/Users/Dimitry/.m2/repository/com/google/guava/guava/12.0/guava-12.0-javadoc.jar!/"/>
