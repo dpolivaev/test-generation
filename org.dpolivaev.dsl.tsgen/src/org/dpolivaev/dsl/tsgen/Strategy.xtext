@@ -7,7 +7,7 @@ generate strategydsl "http://www.dpolivaev.org/dsl/tsgen/strategydsl"
 Generation: {Generation}
 	('package' package = QualifiedName)?
 	importSection=XImportSection?
-	(strategies+=Strategy | models += Model | goals += Goal | runs += Run)*
+	(strategies+=Strategy | models += Model | /* goals += Goal | */ runs += Run)*
 ;
 	
 Strategy:
@@ -43,8 +43,6 @@ Condition:
 	'if' expr = XExpression
 ;
 
-Action: ValueAction | SkipAction;
-
 SkipAction : {SkipAction}
 	'skip'
 ;
@@ -54,17 +52,15 @@ ValueAction:{ValueAction}
 	(=>'{' ruleGroups += RuleGroup* '}')?
 ;
 
-ItemAction:{ValueAction}
-	valueProviders += ValueProvider (=>',' valueProviders += ValueProvider)*
-;
-
 ValueProvider:
 	=>'(' expressions += XExpression+ ')' | expressions += XExpression 
 ;
 
 Run:
 	'run' strategies += StrategyReference 
-	('with' (strategies += StrategyReference | goals += GoalReference | models += ModelReference) (',' (strategies += StrategyReference | goals += GoalReference | model += ModelReference))* )?
+	('with' (strategies += StrategyReference | /* goals += GoalReference | */ models += ModelReference) 
+	   (',' (strategies += StrategyReference | /* goals += GoalReference | */ model += ModelReference))*
+	)?
 	outputConfiguration = OutputConfiguration?
 	reportConfiguration = ReportConfiguration?
 	
@@ -83,8 +79,8 @@ ReportConfiguration returns OutputConfiguration:
 
 StrategyReference returns StrategyReference: {StrategyReference} 'strategy' expr = XExpression;
 ShortFormStrategyReference returns StrategyReference: {StrategyReference} expr = XExpression;
-GoalReference : 'goal' expr = XExpression;
-ModelReference : 'model' expr = XExpression;
+// GoalReference : 'goal' expr = XExpression;
+ModelReference : 'model' goal ?= 'goal'? expr = XExpression;
 
 Model:'model' name = ValidID
 	'{'
@@ -92,6 +88,7 @@ Model:'model' name = ValidID
 	'}'
 ;
 
+/*
 Goal: CheckList|OpenGoal;
 
 CheckList:
@@ -101,7 +98,8 @@ CheckList:
 OpenGoal: 
 'open' 'goal' name = ValidID  expr = XExpression
 ;
-
+ */
+ 
 MethodDefinition:
 'def' returnType=JvmTypeReference? name=ValidID 
 ('(' 
