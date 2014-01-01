@@ -2,8 +2,10 @@ Test generation
 ===============
 ## Compile and run the example 
 
-1. Install the latest eclipse with XText sdk plugin
-1. Execute `mvn eclipse:eclipse` in folder test-generation-engine to create eclipse project for the engine
+1. Install the latest eclipse with XText sdk plugin and maven
+1. Create eclipse classpath variable M2_REPO pointing to your maven repository  
+1. Run `mvn eclipse:eclipse` in folder test-generation-engine to create eclipse project for the engine
+1. Run `mvn install` in the same folder
 1. Import all projects from folders test-generation-engine and 
 and testgeneration-dsl
 1. Right-click on file /org.dpolivaev.dsl.tsgen/src/org/dpolivaev/dsl/tsgen/Strategy.xtext and select  "Run As -> Generate XText Artifacts"
