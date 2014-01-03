@@ -40,7 +40,8 @@ let script.imports be "import static parkcalculator.Lots.*;
 import static parkcalculator.BadValues.*;"
 let script.driver be "parkcalculator/ParkCalculatorTestDriver"
 
-let foc be "calculate parking costs"{
+let category be "success"{
+	let foc be "calculate parking costs"{
 		let pre1 be "select lot"
 		let pre2 be "set entry time"
 		let pre3 be "set leaving time"
@@ -146,22 +147,25 @@ let foc be "calculate parking costs"{
 					} 
 				let [Req15] be (:pre1.lot " " :"parking time")	 
 			}
-		
-	}, 
-	"select illegal lot"{
-		let foc.wrongValue be "NULL_VALUE", "BAD_VALUE"
-	}, 
-	"use illegal date in calculation"{
-		let pre1 be "select lot"
-		let default pre1.lot be from listOfValidLots
-		let illegalElement be "entry date", "entry time", "entry day part", "leaving date", "leaving time", "leaving day part"
-		let pre2 be "set illegal " + :illegalElement
-		let pre2.wrongValue be "NULL_VALUE", "BAD_VALUE"
+		}
 	},
-	"use leaving date earlier than entry date"{
-		let pre1 be "select lot"
-		let default pre1.lot be from listOfValidLots
-	}
+"failure"{
+	let foc be  
+		"select illegal lot"{
+			let foc.wrongValue be "NULL_VALUE", "BAD_VALUE"
+		}, 
+		"use illegal date in calculation"{
+			let pre1 be "select lot"
+			let default pre1.lot be from listOfValidLots
+			let illegalElement be "entry date", "entry time", "entry day part", "leaving date", "leaving time", "leaving day part"
+			let pre2 be "set illegal " + :illegalElement
+			let pre2.wrongValue be "NULL_VALUE", "BAD_VALUE"
+		},
+		"use leaving date earlier than entry date"{
+			let pre1 be "select lot"
+			let default pre1.lot be from listOfValidLots
+		}
+}
 	
 run strategy parkCostCalculatorTests with model ShortTermParkingCalculator 
 	output "output/xml", apply "/java.xslt" output "generated-tests/java" 
