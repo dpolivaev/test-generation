@@ -1,19 +1,85 @@
-Test generation
-===============
-## Compile and run the example 
+Strategy-driven test generation
+===============================
 
-1. Install the latest eclipse with XText sdk plugin and maven
-1. Create eclipse classpath variable M2_REPO pointing to your maven repository  
-1. Run `mvn eclipse:eclipse` in folder test-generation-engine to create eclipse project for the engine
-1. Run `mvn install` in the same folder
-1. Import all projects from folders test-generation-engine and 
-and testgeneration-dsl
-1. Right-click on file /org.dpolivaev.dsl.tsgen/src/org/dpolivaev/dsl/tsgen/Strategy.xtext and select  "Run As -> Generate XText Artifacts"
-1. Run eclipse application
-1. Import project from folder test-generation-examples into the run (or debugged) application
-1. Open file /ParkCalculatorExample/testgeneration/ParkCalculatorStrategy.tsgen in editor. Make sure it is the special editor
-1. Make sure that derived java files are created in folder /ParkCalculatorExample/src-gen
-1. Right-click on ParkCalculatorStrategy.tsgen ans select "Generate tests" . This should run the generation.
-1. Check the output printed on the console 
+
+Test suites should systematically and automatically execute and evaluate systems with considerably big state space for systematic testing of complex software systems, It makes their development very challenging and expansive. Testers have to implement or generate test scripts containing thousands of isolated executable test cases. Each single test case should be so simple enough so that test results can be easily evaluated. Often it makes code duplication in the test code unavoidable. If every test script is written by a human the costs for test code maintenance by specification changes can explode. The aim of this project is to give testers a tool for efficient, scalable, flexible and redundancy free implementation of automatically executable test suites. The tool also helps to estimate the test coverage achieved by the generated test suite.
+
+
+Application of this tool is demonstrated by example of developing a test suite for parking cost calculator similar to the one from http://www.grr.org/ParkCalc.php It's specification comes from http://www.grr.org/ParkingRates.php . This example was used in numerous testing community activities and testing dojos e.g. http://www.shino.de/2010/06/20/parkcalc-automation-getting-started/  Originally it was a web application. For demonstration purposes I implemented it in java and used only strings as parameters so that it feels very close to calls of internet URLs. The specification used for our demo implementation is given in Appendix A. The complete tests should check all subsystems of the calculator and consider date and time parsing. They should also make sure that the calculator correctly handles winter and summer time. It makes not only the difference between the entry and leaving times but also the absolute time values and their format relevant for the test.
+A short introduction to the used approach.
+
+
+Usually a test case consists of three parts named Arrange, Act and Assert. They arrange all necessary preconditions and inputs, act on the system under test (SUT) and assert that the expected results have occurred (see http://c2.com/cgi/wiki?ArrangeActAssert). They can be followed by a fourth part which changes the SUT state so that next test can run. Further I call the parts as preconditions, focus, verification and post-processing. The whole test case variety comes from variety of preconditions, focuses, verifications and the related post-processing which can differ in the used calls and their parameters. For complex test suites tests can be grouped in different categories.
+
+For instance in order to test the park calculator there are preconditions necessary to select the parking lot and enter the entry and leaving times, the test focus runs the calculation, the verification compares the result with the expectation, and no post-processing is needed. In our example all test cases are split in categories “success” and “failure”.
+
+Test strategies describe this variety using an abstraction of test properties. Test property is a key-value pair. It can describe anything e.g. test categories, method calls, their parameters, test categories, expected results or commented references to covered requirements used for test coverage analysis. The test generator builds all relevant value combinations of different properties considering dependencies between them and maps each such combination into a test script.
+
+The test strategy focuses on specifying variety and dependencies of the test properties. Some properties are mapped to the test script elements and to the covered specification requirements by convention. So properties with names starting with “pre”, “foc”, “veri” and “post” followed by a number like “pre1” or “pre2” are mapped to method calls used in the corresponding test fragments. Properties named like “pre1.x” are transformed to the method arguments with corresponding names.  The methods themselves must be implemented by a test developer in a separate test driver module responsible for all communications with the test target. Their signatures are completely defined by the test strategy in a TDD – like fashion.
+
+For calculation of expected results used in the verification and for estimation of the test coverage separate implementations of the SUT logic called models can be helpful. Our DSL based on Xtext and Xbase (http://www.eclipse.org/Xtext/) offers special elements for code coverage tracking. In addition strategy properties with names inclosed in rectangular brackets are interpreted as links to the covered requirements. It makes possible to create requirement coverage reports for each test generation run.
+The generated test script is internally generated as XML first. It can be transformed to arbitrary programming language using  a XSLT transformation. Example transformations to Java with JUnit and C with cmocka are already integrated in the library.
+
+Getting started
+===============
+The test generation framework can be either installed from update site archive or compiled from the source code licensed under LGPL 3 or later. Compilation from the source is explained in Appendix B.
+  
+1. Run eclipse with the test generation plugin and  import project from folder test-generation-examples into the eclipse workspace. 
+1. Open file /ParkCalculatorExample/testgeneration/ParkCalculatorStrategy.tsgen in editor. Make sure it is the special editor for the strategy dsl files with syntax highlighting and outline.
+1. Check that derived java files containg strategy classes are created in folder /ParkCalculatorExample/src-gen.
+1. Right-click on ParkCalculatorStrategy.tsgen ans select "Generate tests". It should run the generation. Check the output printed on the console
 1. Find generated test script ParkCalculatorTest.hava in directory /ParkCalculatorExample/generated-tests and generated requirement coverage report.xml in directory /ParkCalculatorExample/output/ . There is also a generated test script in xml format /ParkCalculatorExample/output/parkcalculator/ParkCalculatorTest.xml
 
+Strategy definition DSL is explained in the next chapters using two example projects.
+
+Park calculator example
+===============================
+This project defines test strategy using one test model and the corresponding test driver. It tracks model code coverage and requirement coverage and outputs the tests as JUnit tests.
+
+The strategy and the model are defined in directory testgeneration in file ParkCalculatorStrategy.tsgen, the test driver in directory test-driver/parkcalculator.
+
+The same project contains a test-driven implementation of the parking costs calculator with developer tests. It allows the execution of the generated tests against this code. The source code is contained in directory src, and the developer tests in directory developer-tests.
+
+Strategy DSL syntax example
+============================
+
+This project contains further examples of strategy definitions. It demonstrates how to specify different kinds of dependencies between the test properties.
+
+
+Appendix A: Park calculator specification
+=========================================
+Parking Rates
+
+##Valet Parking
+* [Req1] Lot named "Valet Parking"
+* [Req2] $18 per day
+* [Req3] $12 for five hours or less
+##Short-Term (hourly) Parking
+* [Req4] Lot named "Short-Term (hourly) Parking"
+* [Req5] $2.00 first hour; $1.00 each additional 1/2 hour
+* [Req6] $24.00 daily maximum
+##Long-Term Garage Parking
+* [Req7] Lot named "Long-Term Garage Parking"
+* [Req8] $2.00 per hour
+* [Req9] $13.00 daily maximum
+* [Req10] $78.00 per week (7th day free)
+##Long-Term Surface Parking (North Lot)
+* [Req11] Lot named "Long-Term Surface Parking"
+* [Req12] $2.00 per hour
+* [Req13] $10.00 daily maximum
+* [Req14] $60.00 per week (7th day free)
+##Economy Lot Parking
+* [Req15] Lot named "Economy Lot Parking"
+* [Req16] $2.00 per hour
+* [Req17] $9.00 daily maximum
+* [Req18] $54.00 per week (7th day free)
+
+Appendix B: Framework and eclipse plug-in compilation
+=========================================
+1.     Install the latest eclipse with XText sdk plugin and maven
+2.     Create eclipse classpath variable M2_REPO pointing to your maven repository
+3.     Run mvn eclipse:eclipse in folder test-generation-engine to create eclipse project for the engine
+4.     Run mvn install in the same folder
+5.     Import all projects from folders test-generation-engine and and testgeneration-dsl
+6.     Right-click on file /org.dpolivaev.dsl.tsgen/src/org/dpolivaev/dsl/tsgen/Strategy.xtext and select "Run As -> Generate XText Artifacts"
+7.     Run eclipse application
