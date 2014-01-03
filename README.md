@@ -43,7 +43,9 @@ This project defines test strategy using one test model and the corresponding te
 
 The strategy and the model are defined in directory `testgeneration` in file `ParkCalculatorStrategy.tsgen`, the test driver in directory `test-driver/parkcalculator`.
 
-The same project contains a test-driven implementation of the parking costs calculator with developer tests. It allows the execution of the generated tests against this code. The source code is contained in directory src, and the developer tests in directory developer-tests.
+The framework automatically translates tsgen files to java files in directory `src-gen`. The last are run to generate the tests. The generation result is placed in directory `generated-tests` . It is also under version control that allows to see the generation results without executing the generation.
+
+The test-driven implementation of the parking costs calculator with developer tests allows the execution of the generated tests against this code. The source code is contained in directory src, and the developer tests in directory developer-tests.
 
 Strategy DSL syntax example
 ============================
