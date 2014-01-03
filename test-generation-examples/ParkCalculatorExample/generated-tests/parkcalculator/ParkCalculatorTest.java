@@ -16,7 +16,8 @@ import static parkcalculator.BadValues.*;
 public class ParkCalculatorTest {
 	ParkCalculatorTestDriver driver = new ParkCalculatorTestDriver();
 	
-	@Description("dayCosts: (7 * 0 + 0) * 18\n"
+	@Description("category: success\n"
++"dayCosts: (7 * 0 + 0) * 18\n"
 +"parking time: 0 hours")
 	@Coverage(
 		first = {
@@ -26,7 +27,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test001_calculateParkingCosts01119701200AmVALET_PARKING_weeks0Days0() throws Exception {
+	public void test001__01119701200AmVALET_PARKING_weeks0Days0() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ VALET_PARKING);
@@ -43,7 +44,8 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ (7 * 0 + 0) * 18);
 	}
 	
-	@Description("dayCosts: (7 * 0 + 1) * 18\n"
+	@Description("category: success\n"
++"dayCosts: (7 * 0 + 1) * 18\n"
 +"parking time: 5 hours or less")
 	@Coverage(
 		first = {
@@ -52,7 +54,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test002_calculateParkingCosts123119991200PmVALET_PARKING_weeks0Days1Hours0Minutes1() throws Exception {
+	public void test002__123119991200PmVALET_PARKING_weeks0Days1Hours0Minutes1() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ VALET_PARKING);
@@ -69,7 +71,8 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ (7 * 0 + 1) * 18 + 12);
 	}
 	
-	@Description("dayCosts: (7 * 0 + 6) * 18\n"
+	@Description("category: success\n"
++"dayCosts: (7 * 0 + 6) * 18\n"
 +"parking time: 5 hours or less")
 	@Coverage(
 		first = {
@@ -80,7 +83,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test003_calculateParkingCosts022820162359PmVALET_PARKING_weeks0Days6Hours4Minutes59() throws Exception {
+	public void test003__022820162359PmVALET_PARKING_weeks0Days6Hours4Minutes59() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ VALET_PARKING);
@@ -97,7 +100,8 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ (7 * 0 + 6) * 18 + 12);
 	}
 	
-	@Description("dayCosts: (7 * 1 + 1) * 18\n"
+	@Description("category: success\n"
++"dayCosts: (7 * 1 + 1) * 18\n"
 +"parking time: 5 hours or less")
 	@Coverage(
 		first = {
@@ -108,7 +112,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test004_calculateParkingCosts123119991200PmVALET_PARKING_weeks1Days1Hours5Minutes0() throws Exception {
+	public void test004__123119991200PmVALET_PARKING_weeks1Days1Hours5Minutes0() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ VALET_PARKING);
@@ -125,7 +129,8 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ (7 * 1 + 1) * 18 + 12);
 	}
 	
-	@Description("dayCosts: (7 * 1 + 6) * 18\n"
+	@Description("category: success\n"
++"dayCosts: (7 * 1 + 6) * 18\n"
 +"parking time: more than 5 hours")
 	@Coverage(
 		first = {
@@ -134,7 +139,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test005_calculateParkingCosts022820162359PmVALET_PARKING_weeks1Days6Hours5Minutes1() throws Exception {
+	public void test005__022820162359PmVALET_PARKING_weeks1Days6Hours5Minutes1() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ VALET_PARKING);
@@ -151,7 +156,8 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ (7 * 1 + 6) * 18 + 18);
 	}
 	
-	@Description("dayCosts: (7 * 6 + 0) * 18\n"
+	@Description("category: success\n"
++"dayCosts: (7 * 6 + 0) * 18\n"
 +"parking time: more than 5 hours")
 	@Coverage(
 		first = {
@@ -162,7 +168,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test006_calculateParkingCosts01119701200AmVALET_PARKING_weeks6Days0Hours22Minutes0() throws Exception {
+	public void test006__01119701200AmVALET_PARKING_weeks6Days0Hours22Minutes0() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ VALET_PARKING);
@@ -179,7 +185,8 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ (7 * 6 + 0) * 18 + 18);
 	}
 	
-	@Description("dayCosts: (7 * 6 + 6) * 18\n"
+	@Description("category: success\n"
++"dayCosts: (7 * 6 + 6) * 18\n"
 +"parking time: more than 5 hours")
 	@Coverage(
 		first = {
@@ -190,7 +197,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test007_calculateParkingCosts022820162359PmVALET_PARKING_weeks6Days6Hours23Minutes59() throws Exception {
+	public void test007__022820162359PmVALET_PARKING_weeks6Days6Hours23Minutes59() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ VALET_PARKING);
@@ -207,7 +214,8 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ (7 * 6 + 6) * 18 + 18);
 	}
 	
-	@Description("dayCosts: (7 * 26 + 4) * 18\n"
+	@Description("category: success\n"
++"dayCosts: (7 * 26 + 4) * 18\n"
 +"parking time: 5 hours or less")
 	@Coverage(
 		first = {
@@ -218,7 +226,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test008_calculateParkingCosts01119701200AmVALET_PARKING_weeks26Hours0Minutes1() throws Exception {
+	public void test008__01119701200AmVALET_PARKING_weeks26Hours0Minutes1() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ VALET_PARKING);
@@ -235,9 +243,10 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ (7 * 26 + 4) * 18 + 12);
 	}
 	
-	@Description("dayCosts: (7 * 26 + 4) * 24")
+	@Description("category: success\n"
++"dayCosts: (7 * 26 + 4) * 24")
 	@Test
-	public void test009_calculateParkingCosts123119991200PmSHORT_TERM_PARKING_weeks26Hours0Minutes0() throws Exception {
+	public void test009__123119991200PmSHORT_TERM_PARKING_weeks26Hours0Minutes0() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
@@ -254,9 +263,10 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 4464);
 	}
 	
-	@Description("dayCosts: (7 * 0 + 1) * 24")
+	@Description("category: success\n"
++"dayCosts: (7 * 0 + 1) * 24")
 	@Test
-	public void test010_calculateParkingCosts022820162359PmSHORT_TERM_PARKING_weeks0Days1Hours0Minutes30() throws Exception {
+	public void test010__022820162359PmSHORT_TERM_PARKING_weeks0Days1Hours0Minutes30() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
@@ -273,9 +283,10 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 26);
 	}
 	
-	@Description("dayCosts: (7 * 0 + 6) * 24")
+	@Description("category: success\n"
++"dayCosts: (7 * 0 + 6) * 24")
 	@Test
-	public void test011_calculateParkingCosts01119701200AmSHORT_TERM_PARKING_weeks0Days6Hours0Minutes31() throws Exception {
+	public void test011__01119701200AmSHORT_TERM_PARKING_weeks0Days6Hours0Minutes31() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
@@ -292,9 +303,10 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 146);
 	}
 	
-	@Description("dayCosts: (7 * 0 + 0) * 24")
+	@Description("category: success\n"
++"dayCosts: (7 * 0 + 0) * 24")
 	@Test
-	public void test012_calculateParkingCosts123119991200PmSHORT_TERM_PARKING_weeks0Days0Hours0Minutes59() throws Exception {
+	public void test012__123119991200PmSHORT_TERM_PARKING_weeks0Days0Hours0Minutes59() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
@@ -311,9 +323,10 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 2);
 	}
 	
-	@Description("dayCosts: (7 * 1 + 1) * 24")
+	@Description("category: success\n"
++"dayCosts: (7 * 1 + 1) * 24")
 	@Test
-	public void test013_calculateParkingCosts123119991200PmSHORT_TERM_PARKING_weeks1Days1Hours1Minutes59() throws Exception {
+	public void test013__123119991200PmSHORT_TERM_PARKING_weeks1Days1Hours1Minutes59() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
@@ -330,9 +343,10 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 196);
 	}
 	
-	@Description("dayCosts: (7 * 1 + 6) * 24")
+	@Description("category: success\n"
++"dayCosts: (7 * 1 + 6) * 24")
 	@Test
-	public void test014_calculateParkingCosts022820162359PmSHORT_TERM_PARKING_weeks1Days6Hours1Minutes0() throws Exception {
+	public void test014__022820162359PmSHORT_TERM_PARKING_weeks1Days6Hours1Minutes0() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
@@ -349,9 +363,10 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 314);
 	}
 	
-	@Description("dayCosts: (7 * 6 + 0) * 24")
+	@Description("category: success\n"
++"dayCosts: (7 * 6 + 0) * 24")
 	@Test
-	public void test015_calculateParkingCosts01119701200AmSHORT_TERM_PARKING_weeks6Days0Hours1Minutes30() throws Exception {
+	public void test015__01119701200AmSHORT_TERM_PARKING_weeks6Days0Hours1Minutes30() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
@@ -368,9 +383,10 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 1011);
 	}
 	
-	@Description("dayCosts: (7 * 6 + 6) * 24")
+	@Description("category: success\n"
++"dayCosts: (7 * 6 + 6) * 24")
 	@Test
-	public void test016_calculateParkingCosts01119701200AmSHORT_TERM_PARKING_weeks6Days6Hours1Minutes31() throws Exception {
+	public void test016__01119701200AmSHORT_TERM_PARKING_weeks6Days6Hours1Minutes31() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
@@ -387,9 +403,10 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 1156);
 	}
 	
-	@Description("dayCosts: (7 * 1 + 6) * 24")
+	@Description("category: success\n"
++"dayCosts: (7 * 1 + 6) * 24")
 	@Test
-	public void test017_calculateParkingCosts123119991200PmSHORT_TERM_PARKING_weeks1Days6Hours11Minutes30() throws Exception {
+	public void test017__123119991200PmSHORT_TERM_PARKING_weeks1Days6Hours11Minutes30() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
@@ -406,9 +423,10 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 335);
 	}
 	
-	@Description("dayCosts: (7 * 1 + 1) * 24")
+	@Description("category: success\n"
++"dayCosts: (7 * 1 + 1) * 24")
 	@Test
-	public void test018_calculateParkingCosts022820162359PmSHORT_TERM_PARKING_weeks1Days1Hours11Minutes31() throws Exception {
+	public void test018__022820162359PmSHORT_TERM_PARKING_weeks1Days1Hours11Minutes31() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
@@ -425,9 +443,10 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 216);
 	}
 	
-	@Description("dayCosts: (7 * 6 + 6) * 24")
+	@Description("category: success\n"
++"dayCosts: (7 * 6 + 6) * 24")
 	@Test
-	public void test019_calculateParkingCosts01119701200AmSHORT_TERM_PARKING_weeks6Days6Hours11Minutes0() throws Exception {
+	public void test019__01119701200AmSHORT_TERM_PARKING_weeks6Days6Hours11Minutes0() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
@@ -444,9 +463,10 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 1174);
 	}
 	
-	@Description("dayCosts: (7 * 6 + 0) * 24")
+	@Description("category: success\n"
++"dayCosts: (7 * 6 + 0) * 24")
 	@Test
-	public void test020_calculateParkingCosts022820162359PmSHORT_TERM_PARKING_weeks6Days0Hours11Minutes59() throws Exception {
+	public void test020__022820162359PmSHORT_TERM_PARKING_weeks6Days0Hours11Minutes59() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
@@ -463,9 +483,10 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 1032);
 	}
 	
-	@Description("dayCosts: (7 * 0 + 6) * 24")
+	@Description("category: success\n"
++"dayCosts: (7 * 0 + 6) * 24")
 	@Test
-	public void test021_calculateParkingCosts123119991200PmSHORT_TERM_PARKING_weeks0Days6Hours12Minutes0() throws Exception {
+	public void test021__123119991200PmSHORT_TERM_PARKING_weeks0Days6Hours12Minutes0() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
@@ -482,9 +503,10 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 168);
 	}
 	
-	@Description("dayCosts: (7 * 0 + 0) * 24")
+	@Description("category: success\n"
++"dayCosts: (7 * 0 + 0) * 24")
 	@Test
-	public void test022_calculateParkingCosts022820162359PmSHORT_TERM_PARKING_weeks0Days0Hours12Minutes30() throws Exception {
+	public void test022__022820162359PmSHORT_TERM_PARKING_weeks0Days0Hours12Minutes30() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
@@ -501,9 +523,10 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 24);
 	}
 	
-	@Description("dayCosts: (7 * 0 + 1) * 24")
+	@Description("category: success\n"
++"dayCosts: (7 * 0 + 1) * 24")
 	@Test
-	public void test023_calculateParkingCosts123119991200PmSHORT_TERM_PARKING_weeks0Days1Hours12Minutes31() throws Exception {
+	public void test023__123119991200PmSHORT_TERM_PARKING_weeks0Days1Hours12Minutes31() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
@@ -520,9 +543,10 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 48);
 	}
 	
-	@Description("dayCosts: (7 * 26 + 4) * 24")
+	@Description("category: success\n"
++"dayCosts: (7 * 26 + 4) * 24")
 	@Test
-	public void test024_calculateParkingCosts01119701200AmSHORT_TERM_PARKING_weeks26Hours12Minutes59() throws Exception {
+	public void test024__01119701200AmSHORT_TERM_PARKING_weeks26Hours12Minutes59() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
@@ -539,9 +563,10 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 4488);
 	}
 	
-	@Description("dayCosts: (7 * 0 + 6) * 24")
+	@Description("category: success\n"
++"dayCosts: (7 * 0 + 6) * 24")
 	@Test
-	public void test025_calculateParkingCosts123119991200PmSHORT_TERM_PARKING_weeks0Days6Hours23Minutes31() throws Exception {
+	public void test025__123119991200PmSHORT_TERM_PARKING_weeks0Days6Hours23Minutes31() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
@@ -558,9 +583,10 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 168);
 	}
 	
-	@Description("dayCosts: (7 * 0 + 0) * 24")
+	@Description("category: success\n"
++"dayCosts: (7 * 0 + 0) * 24")
 	@Test
-	public void test026_calculateParkingCosts022820162359PmSHORT_TERM_PARKING_weeks0Days0Hours23Minutes30() throws Exception {
+	public void test026__022820162359PmSHORT_TERM_PARKING_weeks0Days0Hours23Minutes30() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
@@ -577,9 +603,10 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 24);
 	}
 	
-	@Description("dayCosts: (7 * 0 + 1) * 24")
+	@Description("category: success\n"
++"dayCosts: (7 * 0 + 1) * 24")
 	@Test
-	public void test027_calculateParkingCosts01119701200AmSHORT_TERM_PARKING_weeks0Days1Hours23Minutes0() throws Exception {
+	public void test027__01119701200AmSHORT_TERM_PARKING_weeks0Days1Hours23Minutes0() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
@@ -596,9 +623,10 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 48);
 	}
 	
-	@Description("dayCosts: (7 * 1 + 1) * 24")
+	@Description("category: success\n"
++"dayCosts: (7 * 1 + 1) * 24")
 	@Test
-	public void test028_calculateParkingCosts022820162359PmSHORT_TERM_PARKING_weeks1Days1Hours23Minutes59() throws Exception {
+	public void test028__022820162359PmSHORT_TERM_PARKING_weeks1Days1Hours23Minutes59() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
@@ -615,7 +643,8 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 216);
 	}
 	
-	@Description("parking time: 0 hours\n"
+	@Description("category: success\n"
++"parking time: 0 hours\n"
 +"dayCosts: 6 * 78 + 0 * 13")
 	@Coverage(
 		first = {
@@ -625,7 +654,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test029_calculateParkingCosts123119991200PmLONG_TERM_GARAGE_PARKING_weeks6Days0() throws Exception {
+	public void test029__123119991200PmLONG_TERM_GARAGE_PARKING_weeks6Days0() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ LONG_TERM_GARAGE_PARKING);
@@ -642,7 +671,8 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 6 * 78 + 0 * 13);
 	}
 	
-	@Description("parking time: 6 hour or less\n"
+	@Description("category: success\n"
++"parking time: 6 hour or less\n"
 +"dayCosts: 6 * 78 + 6 * 13")
 	@Coverage(
 		first = {
@@ -651,7 +681,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test030_calculateParkingCosts01119701200AmLONG_TERM_GARAGE_PARKING_weeks6Days6Hours0Minutes1() throws Exception {
+	public void test030__01119701200AmLONG_TERM_GARAGE_PARKING_weeks6Days6Hours0Minutes1() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ LONG_TERM_GARAGE_PARKING);
@@ -668,7 +698,8 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 6 * 78 + 6 * 13 + 0 * 2 + 2);
 	}
 	
-	@Description("parking time: 6 hour or less\n"
+	@Description("category: success\n"
++"parking time: 6 hour or less\n"
 +"dayCosts: 26 * 78 + 4 * 13")
 	@Coverage(
 		first = {
@@ -679,7 +710,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test031_calculateParkingCosts123119991200PmLONG_TERM_GARAGE_PARKING_weeks26Hours5Minutes59() throws Exception {
+	public void test031__123119991200PmLONG_TERM_GARAGE_PARKING_weeks26Hours5Minutes59() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ LONG_TERM_GARAGE_PARKING);
@@ -696,7 +727,8 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 26 * 78 + 4 * 13 + 5 * 2 + 2);
 	}
 	
-	@Description("parking time: 6 hour or less\n"
+	@Description("category: success\n"
++"parking time: 6 hour or less\n"
 +"dayCosts: 6 * 78 + 6 * 13")
 	@Coverage(
 		first = {
@@ -707,7 +739,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test032_calculateParkingCosts022820162359PmLONG_TERM_GARAGE_PARKING_weeks6Days6Hours6Minutes0() throws Exception {
+	public void test032__022820162359PmLONG_TERM_GARAGE_PARKING_weeks6Days6Hours6Minutes0() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ LONG_TERM_GARAGE_PARKING);
@@ -724,7 +756,8 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 6 * 78 + 6 * 13 + 6 * 2 + 0);
 	}
 	
-	@Description("parking time: more than 6 hours\n"
+	@Description("category: success\n"
++"parking time: more than 6 hours\n"
 +"dayCosts: 6 * 78 + 0 * 13")
 	@Coverage(
 		first = {
@@ -733,7 +766,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test033_calculateParkingCosts01119701200AmLONG_TERM_GARAGE_PARKING_weeks6Days0Hours6Minutes1() throws Exception {
+	public void test033__01119701200AmLONG_TERM_GARAGE_PARKING_weeks6Days0Hours6Minutes1() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ LONG_TERM_GARAGE_PARKING);
@@ -750,7 +783,8 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 6 * 78 + 0 * 13 + 13);
 	}
 	
-	@Description("parking time: more than 6 hours\n"
+	@Description("category: success\n"
++"parking time: more than 6 hours\n"
 +"dayCosts: 1 * 78 + 6 * 13")
 	@Coverage(
 		first = {
@@ -761,7 +795,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test034_calculateParkingCosts123119991200PmLONG_TERM_GARAGE_PARKING_weeks1Days6Hours23Minutes59() throws Exception {
+	public void test034__123119991200PmLONG_TERM_GARAGE_PARKING_weeks1Days6Hours23Minutes59() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ LONG_TERM_GARAGE_PARKING);
@@ -778,7 +812,7 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 1 * 78 + 6 * 13 + 13);
 	}
 	
-	@Description("")
+	@Description("category: success")
 	@Coverage(
 		first = {
 			@GoalCoverage(goal = "requirement coverage", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 0 hours 0 minutes"}),
@@ -786,7 +820,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test035_calculateParkingCosts01119701200AmLONG_TERM_SURFACE_PARKING_weeks0Days1Hours0Minutes0() throws Exception {
+	public void test035__01119701200AmLONG_TERM_SURFACE_PARKING_weeks0Days1Hours0Minutes0() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ LONG_TERM_SURFACE_PARKING);
@@ -803,7 +837,7 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCostsForLotLONG_TERM_SURFACE_PARKING();
 	}
 	
-	@Description("")
+	@Description("category: success")
 	@Coverage(
 		first = {
 			@GoalCoverage(goal = "requirement coverage", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 0 hours 1 minutes"}),
@@ -811,7 +845,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test036_calculateParkingCosts022820162359PmLONG_TERM_SURFACE_PARKING_weeks0Days6Hours0Minutes1() throws Exception {
+	public void test036__022820162359PmLONG_TERM_SURFACE_PARKING_weeks0Days6Hours0Minutes1() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ LONG_TERM_SURFACE_PARKING);
@@ -828,7 +862,7 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCostsForLotLONG_TERM_SURFACE_PARKING();
 	}
 	
-	@Description("")
+	@Description("category: success")
 	@Coverage(
 		first = {
 			@GoalCoverage(goal = "requirement coverage", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 0 hours 59 minutes"}),
@@ -837,7 +871,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test037_calculateParkingCosts022820162359PmLONG_TERM_SURFACE_PARKING_weeks0Days0Hours0Minutes59() throws Exception {
+	public void test037__022820162359PmLONG_TERM_SURFACE_PARKING_weeks0Days0Hours0Minutes59() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ LONG_TERM_SURFACE_PARKING);
@@ -854,7 +888,7 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCostsForLotLONG_TERM_SURFACE_PARKING();
 	}
 	
-	@Description("")
+	@Description("category: success")
 	@Coverage(
 		first = {
 			@GoalCoverage(goal = "requirement coverage", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 4 hours 1 minutes"}),
@@ -862,7 +896,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test038_calculateParkingCosts123119991200PmLONG_TERM_SURFACE_PARKING_weeks26Hours4Minutes1() throws Exception {
+	public void test038__123119991200PmLONG_TERM_SURFACE_PARKING_weeks26Hours4Minutes1() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ LONG_TERM_SURFACE_PARKING);
@@ -879,7 +913,7 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCostsForLotLONG_TERM_SURFACE_PARKING();
 	}
 	
-	@Description("")
+	@Description("category: success")
 	@Coverage(
 		first = {
 			@GoalCoverage(goal = "requirement coverage", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 4 hours 59 minutes"}),
@@ -890,7 +924,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test039_calculateParkingCosts01119701200AmLONG_TERM_SURFACE_PARKING_weeks0Days0Hours4Minutes59() throws Exception {
+	public void test039__01119701200AmLONG_TERM_SURFACE_PARKING_weeks0Days0Hours4Minutes59() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ LONG_TERM_SURFACE_PARKING);
@@ -907,7 +941,7 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCostsForLotLONG_TERM_SURFACE_PARKING();
 	}
 	
-	@Description("")
+	@Description("category: success")
 	@Coverage(
 		first = {
 			@GoalCoverage(goal = "requirement coverage", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 4 hours 0 minutes"}),
@@ -915,7 +949,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test040_calculateParkingCosts01119701200AmLONG_TERM_SURFACE_PARKING_weeks0Days1Hours4Minutes0() throws Exception {
+	public void test040__01119701200AmLONG_TERM_SURFACE_PARKING_weeks0Days1Hours4Minutes0() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ LONG_TERM_SURFACE_PARKING);
@@ -932,7 +966,7 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCostsForLotLONG_TERM_SURFACE_PARKING();
 	}
 	
-	@Description("")
+	@Description("category: success")
 	@Coverage(
 		first = {
 			@GoalCoverage(goal = "requirement coverage", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 5 hours 59 minutes"}),
@@ -940,7 +974,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test041_calculateParkingCosts123119991200PmLONG_TERM_SURFACE_PARKING_weeks0Days6Hours5Minutes59() throws Exception {
+	public void test041__123119991200PmLONG_TERM_SURFACE_PARKING_weeks0Days6Hours5Minutes59() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ LONG_TERM_SURFACE_PARKING);
@@ -957,7 +991,7 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCostsForLotLONG_TERM_SURFACE_PARKING();
 	}
 	
-	@Description("")
+	@Description("category: success")
 	@Coverage(
 		first = {
 			@GoalCoverage(goal = "requirement coverage", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 5 hours 0 minutes"}),
@@ -965,7 +999,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test042_calculateParkingCosts022820162359PmLONG_TERM_SURFACE_PARKING_weeks1Days6Hours5Minutes0() throws Exception {
+	public void test042__022820162359PmLONG_TERM_SURFACE_PARKING_weeks1Days6Hours5Minutes0() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ LONG_TERM_SURFACE_PARKING);
@@ -982,7 +1016,7 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCostsForLotLONG_TERM_SURFACE_PARKING();
 	}
 	
-	@Description("")
+	@Description("category: success")
 	@Coverage(
 		first = {
 			@GoalCoverage(goal = "requirement coverage", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 5 hours 1 minutes"}),
@@ -990,7 +1024,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test043_calculateParkingCosts01119701200AmLONG_TERM_SURFACE_PARKING_weeks1Days1Hours5Minutes1() throws Exception {
+	public void test043__01119701200AmLONG_TERM_SURFACE_PARKING_weeks1Days1Hours5Minutes1() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ LONG_TERM_SURFACE_PARKING);
@@ -1007,7 +1041,7 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCostsForLotLONG_TERM_SURFACE_PARKING();
 	}
 	
-	@Description("")
+	@Description("category: success")
 	@Coverage(
 		first = {
 			@GoalCoverage(goal = "requirement coverage", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 23 hours 59 minutes"}),
@@ -1015,7 +1049,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test044_calculateParkingCosts123119991200PmLONG_TERM_SURFACE_PARKING_weeks6Days6Hours23Minutes59() throws Exception {
+	public void test044__123119991200PmLONG_TERM_SURFACE_PARKING_weeks6Days6Hours23Minutes59() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ LONG_TERM_SURFACE_PARKING);
@@ -1032,7 +1066,7 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCostsForLotLONG_TERM_SURFACE_PARKING();
 	}
 	
-	@Description("")
+	@Description("category: success")
 	@Coverage(
 		first = {
 			@GoalCoverage(goal = "requirement coverage", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 23 hours 0 minutes"}),
@@ -1041,7 +1075,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test045_calculateParkingCosts022820162359PmLONG_TERM_SURFACE_PARKING_weeks6Days0Hours23Minutes0() throws Exception {
+	public void test045__022820162359PmLONG_TERM_SURFACE_PARKING_weeks6Days0Hours23Minutes0() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ LONG_TERM_SURFACE_PARKING);
@@ -1058,7 +1092,7 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCostsForLotLONG_TERM_SURFACE_PARKING();
 	}
 	
-	@Description("")
+	@Description("category: success")
 	@Coverage(
 		first = {
 			@GoalCoverage(goal = "requirement coverage", item="Req11", coverage={"LONG_TERM_SURFACE_PARKING 23 hours 1 minutes"}),
@@ -1066,7 +1100,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test046_calculateParkingCosts022820162359PmLONG_TERM_SURFACE_PARKING_weeks26Hours23Minutes1() throws Exception {
+	public void test046__022820162359PmLONG_TERM_SURFACE_PARKING_weeks26Hours23Minutes1() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ LONG_TERM_SURFACE_PARKING);
@@ -1083,7 +1117,8 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCostsForLotLONG_TERM_SURFACE_PARKING();
 	}
 	
-	@Description("parking time: 0 hours\n"
+	@Description("category: success\n"
++"parking time: 0 hours\n"
 +"dayCosts: 1440")
 	@Coverage(
 		first = {
@@ -1093,7 +1128,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test047_calculateParkingCosts01119701200AmECONOMY_LOT_PARKING_weeks26() throws Exception {
+	public void test047__01119701200AmECONOMY_LOT_PARKING_weeks26() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ ECONOMY_LOT_PARKING);
@@ -1110,7 +1145,8 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 1440);
 	}
 	
-	@Description("parking time: 4 hour or less\n"
+	@Description("category: success\n"
++"parking time: 4 hour or less\n"
 +"dayCosts: 0")
 	@Coverage(
 		first = {
@@ -1119,7 +1155,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test048_calculateParkingCosts123119991200PmECONOMY_LOT_PARKING_weeks0Days0Hours0Minutes1() throws Exception {
+	public void test048__123119991200PmECONOMY_LOT_PARKING_weeks0Days0Hours0Minutes1() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ ECONOMY_LOT_PARKING);
@@ -1136,7 +1172,8 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 2);
 	}
 	
-	@Description("parking time: 4 hour or less\n"
+	@Description("category: success\n"
++"parking time: 4 hour or less\n"
 +"dayCosts: 54")
 	@Coverage(
 		first = {
@@ -1147,7 +1184,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test049_calculateParkingCosts123119991200PmECONOMY_LOT_PARKING_weeks0Days6Hours3Minutes59() throws Exception {
+	public void test049__123119991200PmECONOMY_LOT_PARKING_weeks0Days6Hours3Minutes59() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ ECONOMY_LOT_PARKING);
@@ -1164,7 +1201,8 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 62);
 	}
 	
-	@Description("parking time: 4 hour or less\n"
+	@Description("category: success\n"
++"parking time: 4 hour or less\n"
 +"dayCosts: 9")
 	@Coverage(
 		first = {
@@ -1175,7 +1213,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test050_calculateParkingCosts01119701200AmECONOMY_LOT_PARKING_weeks0Days1Hours4Minutes0() throws Exception {
+	public void test050__01119701200AmECONOMY_LOT_PARKING_weeks0Days1Hours4Minutes0() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ ECONOMY_LOT_PARKING);
@@ -1192,7 +1230,8 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 17);
 	}
 	
-	@Description("parking time: more than 4 hours\n"
+	@Description("category: success\n"
++"parking time: more than 4 hours\n"
 +"dayCosts: 324")
 	@Coverage(
 		first = {
@@ -1201,7 +1240,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test051_calculateParkingCosts022820162359PmECONOMY_LOT_PARKING_weeks6Days0Hours4Minutes1() throws Exception {
+	public void test051__022820162359PmECONOMY_LOT_PARKING_weeks6Days0Hours4Minutes1() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ ECONOMY_LOT_PARKING);
@@ -1218,7 +1257,8 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 333);
 	}
 	
-	@Description("parking time: more than 4 hours\n"
+	@Description("category: success\n"
++"parking time: more than 4 hours\n"
 +"dayCosts: 378")
 	@Coverage(
 		first = {
@@ -1229,7 +1269,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test052_calculateParkingCosts123119991200PmECONOMY_LOT_PARKING_weeks6Days6Hours23Minutes59() throws Exception {
+	public void test052__123119991200PmECONOMY_LOT_PARKING_weeks6Days6Hours23Minutes59() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ ECONOMY_LOT_PARKING);
@@ -1246,7 +1286,8 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 387);
 	}
 	
-	@Description("parking time: 4 hour or less\n"
+	@Description("category: success\n"
++"parking time: 4 hour or less\n"
 +"dayCosts: 108")
 	@Coverage(
 		first = {
@@ -1257,7 +1298,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test053_calculateParkingCosts022820162359PmECONOMY_LOT_PARKING_weeks1Days6Hours0Minutes1() throws Exception {
+	public void test053__022820162359PmECONOMY_LOT_PARKING_weeks1Days6Hours0Minutes1() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ ECONOMY_LOT_PARKING);
@@ -1274,7 +1315,8 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 110);
 	}
 	
-	@Description("parking time: 4 hour or less\n"
+	@Description("category: success\n"
++"parking time: 4 hour or less\n"
 +"dayCosts: 63")
 	@Coverage(
 		first = {
@@ -1285,7 +1327,7 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test054_calculateParkingCosts01119701200AmECONOMY_LOT_PARKING_weeks1Days1Hours3Minutes59() throws Exception {
+	public void test054__01119701200AmECONOMY_LOT_PARKING_weeks1Days1Hours3Minutes59() throws Exception {
 		
 	// Precondition 1
 		driver.selectLot(/* lot*/ ECONOMY_LOT_PARKING);
@@ -1302,7 +1344,7 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 71);
 	}
 	
-	@Description("")
+	@Description("category: failure")
 	@Test
 	public void test055_selectIllegalLotNULL_VALUE() throws Exception {
 		
@@ -1310,7 +1352,7 @@ public class ParkCalculatorTest {
 		driver.selectIllegalLot(/* wrongValue*/ NULL_VALUE);
 	}
 	
-	@Description("")
+	@Description("category: failure")
 	@Test
 	public void test056_selectIllegalLotBAD_VALUE() throws Exception {
 		
@@ -1318,7 +1360,8 @@ public class ParkCalculatorTest {
 		driver.selectIllegalLot(/* wrongValue*/ BAD_VALUE);
 	}
 	
-	@Description("illegalElement: entry date")
+	@Description("category: failure\n"
++"illegalElement: entry date")
 	@Test
 	public void test057_useIllegalDateInCalculationNULL_VALUE() throws Exception {
 		
@@ -1330,7 +1373,8 @@ public class ParkCalculatorTest {
 		driver.useIllegalDateInCalculation();
 	}
 	
-	@Description("illegalElement: entry time")
+	@Description("category: failure\n"
++"illegalElement: entry time")
 	@Test
 	public void test058_useIllegalDateInCalculationBAD_VALUE() throws Exception {
 		
@@ -1342,7 +1386,8 @@ public class ParkCalculatorTest {
 		driver.useIllegalDateInCalculation();
 	}
 	
-	@Description("illegalElement: entry day part")
+	@Description("category: failure\n"
++"illegalElement: entry day part")
 	@Test
 	public void test059_useIllegalDateInCalculationNULL_VALUE() throws Exception {
 		
@@ -1354,7 +1399,8 @@ public class ParkCalculatorTest {
 		driver.useIllegalDateInCalculation();
 	}
 	
-	@Description("illegalElement: leaving date")
+	@Description("category: failure\n"
++"illegalElement: leaving date")
 	@Test
 	public void test060_useIllegalDateInCalculationBAD_VALUE() throws Exception {
 		
@@ -1366,7 +1412,8 @@ public class ParkCalculatorTest {
 		driver.useIllegalDateInCalculation();
 	}
 	
-	@Description("illegalElement: leaving time")
+	@Description("category: failure\n"
++"illegalElement: leaving time")
 	@Test
 	public void test061_useIllegalDateInCalculationBAD_VALUE() throws Exception {
 		
@@ -1378,7 +1425,8 @@ public class ParkCalculatorTest {
 		driver.useIllegalDateInCalculation();
 	}
 	
-	@Description("illegalElement: leaving day part")
+	@Description("category: failure\n"
++"illegalElement: leaving day part")
 	@Test
 	public void test062_useIllegalDateInCalculationNULL_VALUE() throws Exception {
 		
@@ -1390,7 +1438,7 @@ public class ParkCalculatorTest {
 		driver.useIllegalDateInCalculation();
 	}
 	
-	@Description("")
+	@Description("category: failure")
 	@Test
 	public void test063_useLeavingDateEarlierThanEntryDate() throws Exception {
 		
