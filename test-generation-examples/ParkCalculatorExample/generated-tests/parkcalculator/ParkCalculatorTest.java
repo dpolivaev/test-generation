@@ -243,8 +243,12 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ (7 * 26 + 4) * 18 + 12);
 	}
 	
-	@Description("category: success\n"
-+"dayCosts: (7 * 26 + 4) * 24")
+	@Description("category: success")
+	@Coverage(
+		first = {
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""})
+		}
+	)
 	@Test
 	public void test009__123119991200PmSHORT_TERM_PARKING_weeks26Hours0Minutes0() throws Exception {
 		
@@ -263,8 +267,15 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 4464);
 	}
 	
-	@Description("category: success\n"
-+"dayCosts: (7 * 0 + 1) * 24")
+	@Description("category: success")
+	@Coverage(
+		first = {
+			@GoalCoverage(goal = "requirement coverage", item="Req5", coverage={"first hour"})
+		},
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""})
+		}
+	)
 	@Test
 	public void test010__022820162359PmSHORT_TERM_PARKING_weeks0Days1Hours0Minutes30() throws Exception {
 		
@@ -283,8 +294,12 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 26);
 	}
 	
-	@Description("category: success\n"
-+"dayCosts: (7 * 0 + 6) * 24")
+	@Description("category: success")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""})
+		}
+	)
 	@Test
 	public void test011__01119701200AmSHORT_TERM_PARKING_weeks0Days6Hours0Minutes31() throws Exception {
 		
@@ -303,8 +318,12 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 146);
 	}
 	
-	@Description("category: success\n"
-+"dayCosts: (7 * 0 + 0) * 24")
+	@Description("category: success")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""})
+		}
+	)
 	@Test
 	public void test012__123119991200PmSHORT_TERM_PARKING_weeks0Days0Hours0Minutes59() throws Exception {
 		
@@ -323,8 +342,15 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 2);
 	}
 	
-	@Description("category: success\n"
-+"dayCosts: (7 * 1 + 1) * 24")
+	@Description("category: success")
+	@Coverage(
+		first = {
+			@GoalCoverage(goal = "requirement coverage", item="Req5", coverage={"additional 2/2 hour"})
+		},
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""})
+		}
+	)
 	@Test
 	public void test013__123119991200PmSHORT_TERM_PARKING_weeks1Days1Hours1Minutes59() throws Exception {
 		
@@ -343,8 +369,12 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 196);
 	}
 	
-	@Description("category: success\n"
-+"dayCosts: (7 * 1 + 6) * 24")
+	@Description("category: success")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""})
+		}
+	)
 	@Test
 	public void test014__022820162359PmSHORT_TERM_PARKING_weeks1Days6Hours1Minutes0() throws Exception {
 		
@@ -363,8 +393,15 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 314);
 	}
 	
-	@Description("category: success\n"
-+"dayCosts: (7 * 6 + 0) * 24")
+	@Description("category: success")
+	@Coverage(
+		first = {
+			@GoalCoverage(goal = "requirement coverage", item="Req5", coverage={"additional 1/2 hour"})
+		},
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""})
+		}
+	)
 	@Test
 	public void test015__01119701200AmSHORT_TERM_PARKING_weeks6Days0Hours1Minutes30() throws Exception {
 		
@@ -383,8 +420,13 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 1011);
 	}
 	
-	@Description("category: success\n"
-+"dayCosts: (7 * 6 + 6) * 24")
+	@Description("category: success")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req5", coverage={"additional 2/2 hour"})
+		}
+	)
 	@Test
 	public void test016__01119701200AmSHORT_TERM_PARKING_weeks6Days6Hours1Minutes31() throws Exception {
 		
@@ -403,8 +445,13 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 1156);
 	}
 	
-	@Description("category: success\n"
-+"dayCosts: (7 * 1 + 6) * 24")
+	@Description("category: success")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req5", coverage={"additional 1/2 hour"})
+		}
+	)
 	@Test
 	public void test017__123119991200PmSHORT_TERM_PARKING_weeks1Days6Hours11Minutes30() throws Exception {
 		
@@ -423,8 +470,13 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 335);
 	}
 	
-	@Description("category: success\n"
-+"dayCosts: (7 * 1 + 1) * 24")
+	@Description("category: success")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req5", coverage={"additional 2/2 hour"})
+		}
+	)
 	@Test
 	public void test018__022820162359PmSHORT_TERM_PARKING_weeks1Days1Hours11Minutes31() throws Exception {
 		
@@ -443,8 +495,12 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 216);
 	}
 	
-	@Description("category: success\n"
-+"dayCosts: (7 * 6 + 6) * 24")
+	@Description("category: success")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""})
+		}
+	)
 	@Test
 	public void test019__01119701200AmSHORT_TERM_PARKING_weeks6Days6Hours11Minutes0() throws Exception {
 		
@@ -463,8 +519,13 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 1174);
 	}
 	
-	@Description("category: success\n"
-+"dayCosts: (7 * 6 + 0) * 24")
+	@Description("category: success")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req5", coverage={"additional 2/2 hour"})
+		}
+	)
 	@Test
 	public void test020__022820162359PmSHORT_TERM_PARKING_weeks6Days0Hours11Minutes59() throws Exception {
 		
@@ -483,8 +544,15 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 1032);
 	}
 	
-	@Description("category: success\n"
-+"dayCosts: (7 * 0 + 6) * 24")
+	@Description("category: success")
+	@Coverage(
+		first = {
+			@GoalCoverage(goal = "requirement coverage", item="Req6", coverage={""})
+		},
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""})
+		}
+	)
 	@Test
 	public void test021__123119991200PmSHORT_TERM_PARKING_weeks0Days6Hours12Minutes0() throws Exception {
 		
@@ -503,8 +571,13 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 168);
 	}
 	
-	@Description("category: success\n"
-+"dayCosts: (7 * 0 + 0) * 24")
+	@Description("category: success")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req6", coverage={""})
+		}
+	)
 	@Test
 	public void test022__022820162359PmSHORT_TERM_PARKING_weeks0Days0Hours12Minutes30() throws Exception {
 		
@@ -523,8 +596,13 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 24);
 	}
 	
-	@Description("category: success\n"
-+"dayCosts: (7 * 0 + 1) * 24")
+	@Description("category: success")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req6", coverage={""})
+		}
+	)
 	@Test
 	public void test023__123119991200PmSHORT_TERM_PARKING_weeks0Days1Hours12Minutes31() throws Exception {
 		
@@ -543,8 +621,13 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 48);
 	}
 	
-	@Description("category: success\n"
-+"dayCosts: (7 * 26 + 4) * 24")
+	@Description("category: success")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req6", coverage={""})
+		}
+	)
 	@Test
 	public void test024__01119701200AmSHORT_TERM_PARKING_weeks26Hours12Minutes59() throws Exception {
 		
@@ -563,8 +646,13 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 4488);
 	}
 	
-	@Description("category: success\n"
-+"dayCosts: (7 * 0 + 6) * 24")
+	@Description("category: success")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req6", coverage={""})
+		}
+	)
 	@Test
 	public void test025__123119991200PmSHORT_TERM_PARKING_weeks0Days6Hours23Minutes31() throws Exception {
 		
@@ -583,8 +671,13 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 168);
 	}
 	
-	@Description("category: success\n"
-+"dayCosts: (7 * 0 + 0) * 24")
+	@Description("category: success")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req6", coverage={""})
+		}
+	)
 	@Test
 	public void test026__022820162359PmSHORT_TERM_PARKING_weeks0Days0Hours23Minutes30() throws Exception {
 		
@@ -603,8 +696,13 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 24);
 	}
 	
-	@Description("category: success\n"
-+"dayCosts: (7 * 0 + 1) * 24")
+	@Description("category: success")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req6", coverage={""})
+		}
+	)
 	@Test
 	public void test027__01119701200AmSHORT_TERM_PARKING_weeks0Days1Hours23Minutes0() throws Exception {
 		
@@ -623,8 +721,13 @@ public class ParkCalculatorTest {
 		driver.verifyParkingCosts(/* expectedCosts*/ 48);
 	}
 	
-	@Description("category: success\n"
-+"dayCosts: (7 * 1 + 1) * 24")
+	@Description("category: success")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req4", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req6", coverage={""})
+		}
+	)
 	@Test
 	public void test028__022820162359PmSHORT_TERM_PARKING_weeks1Days1Hours23Minutes59() throws Exception {
 		
