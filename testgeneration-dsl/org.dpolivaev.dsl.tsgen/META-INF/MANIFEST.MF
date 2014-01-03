@@ -32,6 +32,6 @@ Export-Package: org.dpolivaev.dsl.tsgen,
  org.dpolivaev.dsl.tsgen.strategydsl.impl,
  org.dpolivaev.dsl.tsgen.strategydsl.util,
  org.dpolivaev.dsl.tsgen.validation
-Bundle-ClassPath: .,
+Bundle-ClassPath: lib/org.dpolivaev.dsl.tsgen.jar,
  lib/org.dpolivaev.tsgen.engine-1.0-SNAPSHOT.jar
 
