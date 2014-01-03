@@ -1,51 +1,100 @@
 strategy SyntaxExamples
 
 let example be 
+	/*
+	 * generate three property combinations with x='a', x='b' and x='c'
+	 */
 	'stand alone property' {
     	let x be 'a', 'b', 'c'
     },
+
+	/*
+	 * generate a cross product of three values for x and three values for y
+	 */
 	'all combinations' {
     	let x be 'a', 'b', 'c' {
           let y be  'A', 'B', 'C'
         }
     },
+    
+	/*
+	 * parallel iteration over values of x, y and z creates 5 combinations given in 5 columns below:
+	 * x takes values 'a', 'b', 'c', 'a', 'b' 
+	 * y takes values 'A', 'B', 'A', 'B', 'A' 
+	 * z takes values '1', '2', '3', '4', '5' 
+	 */
     'parallel combinations ordered' {
     	let x be 'a', 'b', 'c' ordered
     	let y be 'A', 'B' ordered
     	let z be '1', '2', '3', '4', '5' ordered
     },
+    
+    /*
+     * There are 5 combinations. 
+     * Unlike the previous case the combinations are not specified in advance.
+     */
 	'parallel combinations shuffled'{
     	let x be 'a', 'b', 'c' shuffled
     	let y be 'A', 'B' shuffled
     	let z be '1', '2', '3', '4', '5' shuffled
     },
+    
+    /*
+     * There are 5 combinations. 
+     * Unlike the previous case first iteration of each property is ordered,
+     * all following iterations are not.
+     */
     'parallel combinations first ordered then shuffled by default' {
     	let x be 'a', 'b', 'c'
     	let y be 'A', 'B'
     	let z be '1', '2', '3', '4', '5', '6'
     },
+    
+    /*
+     * values of z depend on values of x and y
+     */
 	'dependent values'{
     	let x be 'a', 'b', 'c' ordered
     	let y be 'A', 'B' ordered
     	let z be :x + " && " + :y,  :x + " || " + :y
     },
+    
+    /*
+     * For each pair of x and y there are two values of z
+     */
 	'explicit dependencies' {
     	for each x, y  let z be (:x " && " :y),  (:x" || ":y)	
     	let x be 'a', 'b', 'c' 
     	let y be'A', 'B'
     },
+    
+    /*
+     * values of y depend on values of x.
+     * In this case 5 combinations are created.
+     */
 	'branches'{
 		let x be 'a', 'b' {
         	let y be 'A', 'B'
         },
         'c'{let y be 'C'}
      },
+     
+     /*
+      * Here y is set to 'C' unless x is set to 'c'.
+      * The second rule for y containing keyword "if" is added to the rule stack after the first,
+      * it is evaluated first but it is only applicable if the condition is satisfied. 
+      */
 	'conditions' {
     	let x be 'a', 'b', 'c'{
         	let y be 'C'
             if :x == 'c' let y be 'A', 'B'
         }
     },
+    
+    /*
+     * Values for y are given by default rules.
+     * They are lazily evaluated when value of property y is requested. 
+     */
 	'defaults' {
 	    let x be 
 	    	'a', 'b', 'c'{},
@@ -56,6 +105,10 @@ let example be
 	   if :x != 'b' let default y be 'D', 'E'
 	   let z be :y
 	   },
+	   
+	 /*
+	  * Default rules can be defined only for parts of the strategies.
+	  */  
 	'branched defaults'{
     	let x be 
     		'a', 'b', 'c'{},
@@ -68,6 +121,11 @@ let example be
        if :x != 'b' let default y be 'D', 'E'
        let z be :y
 	},
+	
+	/*
+	 * Default rules can reference properties set by other default rules
+	 * which are evaluated in backward chaining 
+	 */
 	'chained defaults'{
     	let x be 
     		'a', 'b', 'c'{},
@@ -81,12 +139,21 @@ let example be
        if :x != 'b' let default y be 'D', 'E'
        let w be :y
 	},
+	
+	/*
+	 * It is allowed to skip some combinations.
+	 * In the below example only 4 combinations are generated.
+	 */
 	'skip'{
 	    let x be 'a', 'b', 'c'{
 	       if :x == 'b' skip
 	       let y be 'A', 'C'
 		}
 	},
+	
+	/*
+	 * New rules override old rule's content and keep rule evaluation order
+	 */
 	"new rules override old rule's content and keep rule evaluation order" {
 	    let x be "a"
 	    let default y be "A"
@@ -95,6 +162,22 @@ let example be
 	    let z be :y
 	    let x be "b"
 	    let x be "c"
+    },
+    
+    /*
+     * Named value lists can be defined and used at any place
+     */
+    "named value lists can be defined " {
+    	let x be namedListOfXValues with 'a', 'b', 'c' {
+    		let y be 'A', 'B'
+    	}
+    },
+    
+     "named value lists can be reused globally " {
+    	let x be from namedListOfXValues
+    	let default y be from namedListOfXValues shuffled
+    	let z be :y
+    		
     }
     
 run strategy SyntaxExamples

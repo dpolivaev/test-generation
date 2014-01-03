@@ -196,7 +196,7 @@ let category be "success"{
 		"use illegal date in calculation"{
 			let pre1 be "select lot"
 			/*
-			 * pre1.lot can take any value from  listOfValidLots defined above
+			 * pre1.lot can take values from listOfValidLots defined above
 			 * Default rules do not force iteration.  
 			 */
 			let default pre1.lot be from listOfValidLots
