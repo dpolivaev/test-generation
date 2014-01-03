@@ -45,6 +45,15 @@ public class StrategyDslOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	protected def _isLeaf(Trigger trigger){return true}
 	protected def _isLeaf(Run run){return true}
 	
+	protected override void _createChildren(IOutlineNode parentNode, EObject modelElement) {
+		val contents = modelElement.eContents().sortBy[
+			val node = it.node
+			if (node != null) node.offset else 0
+		];
+		for (EObject childElement : contents)
+			createNode(parentNode, childElement);
+	}
+
 	protected def void _createNode(IOutlineNode parentNode, RuleGroup modelElement){
 		if(modelElement.condition == null && modelElement.trigger == null )
 			createChildren(parentNode, modelElement)
