@@ -5,9 +5,10 @@ Strategy-driven test generation
 Test suites should systematically and automatically execute and evaluate systems with considerably big state space for systematic testing of complex software systems, It makes their development very challenging and expansive. Testers have to implement or generate test scripts containing thousands of isolated executable test cases. Each single test case should be so simple enough so that test results can be easily evaluated. Often it makes code duplication in the test code unavoidable. If every test script is written by a human the costs for test code maintenance by specification changes can explode. The aim of this project is to give testers a tool for efficient, scalable, flexible and redundancy free implementation of automatically executable test suites. The tool also helps to estimate the test coverage achieved by the generated test suite.
 
 
-Application of this tool is demonstrated by example of developing a test suite for parking cost calculator similar to the one from http://www.grr.org/ParkCalc.php It's specification comes from http://www.grr.org/ParkingRates.php . This example was used in numerous testing community activities and testing dojos e.g. http://www.shino.de/2010/06/20/parkcalc-automation-getting-started/  Originally it was a web application. For demonstration purposes I implemented it in java and used only strings as parameters so that it feels very close to calls of internet URLs. The specification used for our demo implementation is given in Appendix A. The complete tests should check all subsystems of the calculator and consider date and time parsing. They should also make sure that the calculator correctly handles winter and summer time. It makes not only the difference between the entry and leaving times but also the absolute time values and their format relevant for the test.
-A short introduction to the used approach.
+Application of this tool is demonstrated by example of developing a test suite for parking cost calculator similar to the one from http://www.grr.org/ParkCalc.php It's specification comes from http://www.grr.org/ParkingRates.php . This example was used in numerous testing community activities and testing dojos e.g. http://www.shino.de/2010/06/20/parkcalc-automation-getting-started/.  It is a web application. For demonstration purposes I implemented its logic in java and used only strings as parameters so that it feels very close to calls of internet URLs. The specification used for our demo implementation is given in Appendix A. The complete tests should check all subsystems of the calculator and consider date and time parsing. They should also make sure that the calculator correctly handles winter and summer time. It makes not only the difference between the entry and leaving times but also the absolute time values and their format relevant for the test.
 
+A short introduction to the used approach.
+=========================================
 
 Usually a test case consists of three parts named Arrange, Act and Assert. They arrange all necessary preconditions and inputs, act on the system under test (SUT) and assert that the expected results have occurred (see http://c2.com/cgi/wiki?ArrangeActAssert). They can be followed by a fourth part which changes the SUT state so that next test can run. Further I call the parts as preconditions, focus, verification and post-processing. The whole test case variety comes from variety of preconditions, focuses, verifications and the related post-processing which can differ in the used calls and their parameters. For complex test suites tests can be grouped in different categories.
 
@@ -46,28 +47,31 @@ Strategy DSL syntax example
 This project contains further examples of strategy definitions. It demonstrates how to specify different kinds of dependencies between the test properties.
 
 
-Appendix A: Park calculator specification
+Appendix A: Parking rates specification
 =========================================
-Parking Rates
 
 ##Valet Parking
 * [Req1] Lot named "Valet Parking"
 * [Req2] $18 per day
 * [Req3] $12 for five hours or less
+
 ##Short-Term (hourly) Parking
 * [Req4] Lot named "Short-Term (hourly) Parking"
 * [Req5] $2.00 first hour; $1.00 each additional 1/2 hour
 * [Req6] $24.00 daily maximum
+
 ##Long-Term Garage Parking
 * [Req7] Lot named "Long-Term Garage Parking"
 * [Req8] $2.00 per hour
 * [Req9] $13.00 daily maximum
 * [Req10] $78.00 per week (7th day free)
+
 ##Long-Term Surface Parking (North Lot)
 * [Req11] Lot named "Long-Term Surface Parking"
 * [Req12] $2.00 per hour
 * [Req13] $10.00 daily maximum
 * [Req14] $60.00 per week (7th day free)
+
 ##Economy Lot Parking
 * [Req15] Lot named "Economy Lot Parking"
 * [Req16] $2.00 per hour
