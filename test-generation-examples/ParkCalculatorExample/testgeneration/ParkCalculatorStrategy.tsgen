@@ -1,21 +1,55 @@
 import org.dpolivaev.tsgen.strategies.StrategyHelper
 
+/* 
+ * Declare strategy parkCostCalculatorTests 
+ * using predefined rules for test case id and test case description
+ * available as StrategyHelper method
+ */
 strategy parkCostCalculatorTests 
 	extends StrategyHelper.id("testcase") with StrategyHelper.description("testcaseDescription")
 
+/*
+ * Set properties used by the writer as generated test class, 
+ * its imports and the test driver class.
+ * Their values remains the same all the time.
+ */
 let script be "parkcalculator/ParkCalculatorTest"
 let script.imports be "import static parkcalculator.Lots.*;
 import static parkcalculator.BadValues.*;"
 let script.driver be "parkcalculator/ParkCalculatorTestDriver"
 
+/*
+ * Declare property "category" with values "success" and "failure".
+ */
 let category be "success"{
+
+	/*
+	 * In this category define test focus as "calculate parking costs"
+	 */
 	let foc be "calculate parking costs"{
+		
+		/*
+		 * For this focus define preconditions and verification steps
+		 */		
 		let pre1 be "select lot"
 		let pre2 be "set entry time"
 		let pre3 be "set leaving time"
+		
+		/* Keyword "default" means that property “veri” is lasily evaluated 
+		 * and can be redefined adding another value to the rule set.
+		 */
 		let default veri be "verify parking costs"
 		
+		/* 
+		 * Define multiple values for parameter “entryTime” of the second precondition.
+		 */
 		let pre2.entryTime be '"01/1/1970 12:00 am"', '"12/31/1999 12:00 pm"', '"02/28/2016 23:59 pm"'
+		
+		/*
+		 * Leaving time is calculated as entry time plus parking weeks, days, hours and minutes. 
+		 * For each value of parameter "lot" used in the first precondition
+		 * there are eight values of weeks and days which must be tried by the test.
+		 */
 		
 		for each pre1.lot {
 			let pre3.weeks be 
@@ -24,10 +58,26 @@ let category be "success"{
 				6  { let pre3.days be 0, 6},
 				26 { let pre3.days be 4}
 		}
-		
+		/*
+		 * pre1.lot iterates over values "VALET_PARKING", "SHORT_TERM_PARKING" and so on.
+		 * This value list is given a name listOfValidLots.
+		 * It allows to use this list in definitions of other rules and reduce duplication.
+		 */
 		let pre1.lot be listOfValidLots with 
 			"VALET_PARKING"{
+				/*
+				 * Costs for completed days required for calculation of expected costs for the verification
+				 * are calculated as a concatenation of strings put in the round brackets.
+				 * 
+				 * Operator ':' is an accessor of another property value.
+				 * 
+				 */
 				let dayCosts be ("(7 * ":pre3.weeks" + ":pre3.days") * 18")
+				
+				/*
+				 * "parking time" is a helper property. 
+				 * Arbitrary quoted strings can be used as property names too.
+				 */
 				let "parking time" be 
 					"0 hours"{
 						let pre3.hours be 0
@@ -37,9 +87,20 @@ let category be "success"{
 						let [Req3] be (:pre1.lot" costs ":veri.expectedCosts)
 					},
 					"5 hours or less"{
+						/*
+						 * Iteration over the following properties takes place simultaneously.
+						 * Keyword "ordered" means that the following two properties are assigned their values in the given order
+						 * so that they build pairs (0:1, 4:59 and 5:0)
+						 */
 						let pre3.hours be 0, 4, 5 ordered
 						let pre3.minutes be 1, 59, 0 ordered
 						let veri.expectedCosts be (:dayCosts " + 12")
+						
+						/*
+						 * Properties with names put in rectangular brackets are interpreted as requirements 
+						 * satisfied by the test where they occur. This information can be collected in report and 
+						 * additionally be written into the generated test file. 
+						 */
 						let [Req3] be (:pre1.lot" costs ":veri.expectedCosts)
 					},
 					"more than 5 hours"{
@@ -51,10 +112,14 @@ let category be "success"{
 				let [Req1] be (:pre1.lot " costs " :"parking time")
 			}, 
 			"SHORT_TERM_PARKING"{
-				let dayCosts be ("(7 * ":pre3.weeks" + ":pre3.days") * 24")
 				let pre3.hours be 0, 1, 11, 12, 23 {
 					let pre3.minutes be 0, 30, 31, 59
 				}
+				/*
+				 * Calculation of expected costs here makes use of a model ShortTermParkingCalculator defined right after the strategy.
+				 * It demonstrates that use of separate models makes strategy more concise because 
+				 * it does not have to implement the calculations itself. 
+				 */
 				let veri.expectedCosts be ShortTermParkingCalculator.calculateCosts(:pre3.weeks as int, :pre3.days as int, :pre3.hours as int, :pre3.minutes as int) 
 			},  
 			"LONG_TERM_GARAGE_PARKING"{
@@ -70,6 +135,9 @@ let category be "success"{
 					"6 hour or less"{
 						let pre3.hours be 0, 5, 6 ordered
 						let pre3.minutes be 1, 59, 0 ordered
+						/*
+						 * All expressions are xbase expressions. They can include e.g. an if statement.
+						 */
 						let veri.expectedCosts be (:dayCosts" + ":pre3.hours" * 2 + " if(:pre3.minutes != 0) 2 else 0 )
 						let [Req8] be (:pre1.lot" costs ":veri.expectedCosts)
 					},
@@ -92,6 +160,9 @@ let category be "success"{
 				if :pre3.days  == 0 let [Req14] be (:pre1.lot" ":pre3.weeks" weeks " :pre3.days" days")
 			}, 
 			"ECONOMY_LOT_PARKING"{
+				/*
+				 * In this example the dayCosts and expectedCosts are calculated completely by the strategy.
+				 */
 				let default dayCosts be :pre3.weeks as int * 54 + :pre3.days as int * 9
 				let "parking time" be 
 					"0 hours"{
@@ -124,6 +195,10 @@ let category be "success"{
 		}, 
 		"use illegal date in calculation"{
 			let pre1 be "select lot"
+			/*
+			 * pre1.lot can take any value from  listOfValidLots defined above
+			 * Default rules do not force iteration.  
+			 */
 			let default pre1.lot be from listOfValidLots
 			let illegalElement be "entry date", "entry time", "entry day part", "leaving date", "leaving time", "leaving day part"
 			let pre2 be "set illegal " + :illegalElement
@@ -135,10 +210,17 @@ let category be "success"{
 		}
 }
 
+/*
+ * Models can implement methods called by strategies.
+ * Model code coverage is evaluated using requirement references defined in the code.
+ */
 model ShortTermParkingCalculator{
 	def calculateCosts(int weeks, int days, int hours, int minutes){
 		val DAILY_MAX = 24
 		val COSTS_PER_HOUR = 2
+		/*
+		 * Simple requirement reference is a string enclosed in rectangular brackets. 
+		 */
 		["Req4"]
 		val costsForCompletedDays = (weeks * 7 + days) * DAILY_MAX
 		val costsForHours = 
@@ -147,6 +229,10 @@ model ShortTermParkingCalculator{
 			else if(hours == 0){
 				if(minutes > 0){
 					if(minutes <= 30)
+						/*
+						 * Extended requirement reference contains an expression after the requirement id string.
+						 * Here it is just a constant string "first hour", but here can be arbitrary expression.
+						 */
 						["Req5" "first hour"];
 					COSTS_PER_HOUR
 				}
@@ -165,7 +251,19 @@ model ShortTermParkingCalculator{
 		costsForCompletedDays + costsForHours
 	}
 }
-	
-run strategy parkCostCalculatorTests with model ShortTermParkingCalculator 
+
+/*
+ * run section defines what strategies are executed and configures the output.
+ * Strategies to be run and models to be checked for the code coverage must be mentioned here. 
+ */	
+run strategy parkCostCalculatorTests with model goal ShortTermParkingCalculator 
+	/*
+	 * the next line lets generated test be written in xml format in directory output
+	 * and as a junit test generated by applying xslt transformation java.xslt to the above xml file.
+	 * The generated java file is put in directory generated-tests
+	 */
 	output "output/xml", apply "/java.xslt" output "generated-tests/java" 
+	/*
+	 * Requirement coverage information should be written in file output/report.xml
+	 */
 	report  "output/report.xml"

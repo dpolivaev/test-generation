@@ -4,8 +4,7 @@ Strategy-driven test generation
 
 Test suites should systematically and automatically execute and evaluate systems with considerably big state space for systematic testing of complex software systems, It makes their development very challenging and expansive. Testers have to implement or generate test scripts containing thousands of isolated executable test cases. Each single test case should be so simple enough so that test results can be easily evaluated. Often it makes code duplication in the test code unavoidable. If every test script is written by a human the costs for test code maintenance by specification changes can explode. The aim of this project is to give testers a tool for efficient, scalable, flexible and redundancy free implementation of automatically executable test suites. The tool also helps to estimate the test coverage achieved by the generated test suite.
 
-
-Application of this tool is demonstrated by example of developing a test suite for parking cost calculator similar to the one from http://www.grr.org/ParkCalc.php It's specification comes from http://www.grr.org/ParkingRates.php . This example was used in numerous testing community activities and testing dojos e.g. http://www.shino.de/2010/06/20/parkcalc-automation-getting-started/.  It is a web application. For demonstration purposes I implemented its logic in java and used only strings as parameters so that it feels very close to calls of internet URLs. The complete tests should check all subsystems of the calculator and consider date and time parsing. They should also make sure that the calculator correctly handles winter and summer time. It makes not only the difference between the entry and leaving times but also the absolute time values and their format relevant for the test.
+Application of this tool is demonstrated by example of developing a test suite for parking cost calculator. This example was used in numerous testing community activities and testing dojos 
 
 A short introduction to the used approach.
 =========================================
@@ -35,6 +34,11 @@ Strategy definition DSL is explained in the next chapters using two example proj
 
 Park calculator example
 ===============================
+
+Application of this tool is demonstrated by example of developing a test suite for parking cost calculator similar to the one from http://www.grr.org/ParkCalc.php. It's specification comes from http://www.grr.org/ParkingRates.php . This example was used in numerous testing community activities and testing dojos e.g. http://www.shino.de/2010/06/20/parkcalc-automation-getting-started/.  It is a web application. For demonstration purposes I implemented its logic in java and used only strings as parameters so that it feels very close to calls of internet URLs. To emulate a web page where all values can be entered separately there are setter methods corresponding to each input. 
+
+The complete tests should check all subsystems of the calculator and consider date and time parsing. They should also make sure that the calculator correctly handles winter and summer time. It makes not only the difference between the entry and leaving times but also the absolute time values and their format relevant for the test.
+
 This project defines test strategy using one test model and the corresponding test driver. It tracks model code coverage and requirement coverage and outputs the tests as JUnit tests. The parking rate specification is given in file `requirements/parkingRates.md`
 
 The strategy and the model are defined in directory `testgeneration` in file `ParkCalculatorStrategy.tsgen`, the test driver in directory `test-driver/parkcalculator`.
