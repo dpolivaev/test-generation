@@ -1,37 +1,5 @@
 import org.dpolivaev.tsgen.strategies.StrategyHelper
 
-
-model ShortTermParkingCalculator{
-	def calculateCosts(int weeks, int days, int hours, int minutes){
-		val DAILY_MAX = 24
-		val COSTS_PER_HOUR = 2
-		["Req4"]
-		val costsForCompletedDays = (weeks * 7 + days) * DAILY_MAX
-		val costsForHours = 
-			if(hours * COSTS_PER_HOUR >= DAILY_MAX)
-				["Req6"] DAILY_MAX
-			else if(hours == 0){
-				if(minutes > 0){
-					if(minutes <= 30)
-						["Req5" "first hour"];
-					COSTS_PER_HOUR
-				}
-				else
-					0
-			}
-			else hours * COSTS_PER_HOUR + 
-					if(minutes > 0){
-							if(minutes <= 30)
-								["Req5" "additional 1/2 hour"] 1
-							else
-								["Req5" "additional 2/2 hour"] COSTS_PER_HOUR
-						}
-						else
-							0
-		costsForCompletedDays + costsForHours
-	}
-}
-
 strategy parkCostCalculatorTests 
 	extends StrategyHelper.id("testcase") with StrategyHelper.description("testcaseDescription")
 
@@ -165,6 +133,37 @@ let category be "success"{
 			let pre1 be "select lot"
 			let default pre1.lot be from listOfValidLots
 		}
+}
+
+model ShortTermParkingCalculator{
+	def calculateCosts(int weeks, int days, int hours, int minutes){
+		val DAILY_MAX = 24
+		val COSTS_PER_HOUR = 2
+		["Req4"]
+		val costsForCompletedDays = (weeks * 7 + days) * DAILY_MAX
+		val costsForHours = 
+			if(hours * COSTS_PER_HOUR >= DAILY_MAX)
+				["Req6"] DAILY_MAX
+			else if(hours == 0){
+				if(minutes > 0){
+					if(minutes <= 30)
+						["Req5" "first hour"];
+					COSTS_PER_HOUR
+				}
+				else
+					0
+			}
+			else hours * COSTS_PER_HOUR + 
+					if(minutes > 0){
+							if(minutes <= 30)
+								["Req5" "additional 1/2 hour"] 1
+							else
+								["Req5" "additional 2/2 hour"] COSTS_PER_HOUR
+						}
+						else
+							0
+		costsForCompletedDays + costsForHours
+	}
 }
 	
 run strategy parkCostCalculatorTests with model ShortTermParkingCalculator 
