@@ -17,7 +17,7 @@ public class FiniteGoalTest {
 
 	@Test
 	public void ignoresEntriesNotFoundInTheCheckList() {
-		final CheckList checkList = new CheckList().setExpected(new CoverageEntry("item", "wanted value"), 1);
+		final CheckList checkList = new CheckList().addExpected(new CoverageEntry("item", "wanted value"));
 		final GoalFunction goalFunction = new GoalFunction() {
 			
 			@Override

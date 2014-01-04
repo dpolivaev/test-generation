@@ -84,7 +84,6 @@ public class ReportWriter {
 	private void writeItemReport(CoverageEntry coverageEntry, CoverageStatus coverageStatus) {
 		xmlWriter.beginElement("Item");
 		xmlWriter.setAttribute("name", coverageEntry.getName());
-		xmlWriter.setAttribute("required", Integer.toString(coverageStatus.required));
 		xmlWriter.setAttribute("reached", Integer.toString(coverageStatus.reached));
 		String reason = coverageEntry.getReason();
 		if(reason != null)

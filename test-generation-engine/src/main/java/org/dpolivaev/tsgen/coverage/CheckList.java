@@ -21,11 +21,22 @@ public class CheckList{
 		for(CoverageEntry coverageEntry:newCoverageEntries){
 			if(coverageEntry.getReason() == CoverageEntry.ANY)
 				throw new IllegalArgumentException("no reason in " + coverageEntry);
-			addReached(coverageEntry);
 			final CoverageEntry entryForAnyReason = coverageEntry.forAnyReason();
-			if(coveredEntries.containsKey(entryForAnyReason))
-				addReached(entryForAnyReason);
+			if(coveredEntries.containsKey(entryForAnyReason)){
+				replaceExpected(entryForAnyReason, coverageEntry);
+			}
+			addReached(coverageEntry);
 		}
+	}
+
+	private void replaceExpected(final CoverageEntry oldEntry, CoverageEntry newEntry) {
+		removeExpected(oldEntry);
+		addExpected(newEntry);
+	}
+
+	private void removeExpected(final CoverageEntry entry) {
+		coveredEntries.remove(entry);
+		requiredItemNumber--;
 	}
 	
 	private CheckList addReached(CoverageEntry coverageEntry) {
@@ -39,24 +50,22 @@ public class CheckList{
 	}
 
 
-	public CheckList setExpected(CoverageEntry coverageEntry, int expected) {
-		final CoverageStatus coverageStatus = coveredEntries.get(coverageEntry);
-		if(coverageStatus == null) {
-			coveredEntries.put(coverageEntry, new CoverageStatus(expected, 0));
+	public CheckList addExpected(CoverageEntry coverageEntry) {
+		if(! coveredEntries.containsKey(coverageEntry)) {
+			coveredEntries.put(coverageEntry, new CoverageStatus(0));
 			requiredItemNumber++;
-		} else
-			coveredEntries.put(coverageEntry, new CoverageStatus(expected, coverageStatus.reached));
+		}
 		return this;
 	}
 	
 	private CheckList setReached(CoverageEntry coverageEntry, int newReachedCount) {
 		final CoverageStatus oldCoverageStatus = coveredEntries.get(coverageEntry);
 		if(oldCoverageStatus == null)
-			coveredEntries.put(coverageEntry, new CoverageStatus(0, newReachedCount));
+			coveredEntries.put(coverageEntry, new CoverageStatus(newReachedCount));
 		else
-			coveredEntries.put(coverageEntry, new CoverageStatus(oldCoverageStatus.required, newReachedCount));
+			coveredEntries.put(coverageEntry, new CoverageStatus(newReachedCount));
 		final boolean containsReason = coverageEntry.getReason() != CoverageEntry.ANY;
-		if(oldCoverageStatus != null && oldCoverageStatus.reached < oldCoverageStatus.required && newReachedCount >= oldCoverageStatus.required) {
+		if(oldCoverageStatus != null && oldCoverageStatus.reached == 0 && newReachedCount >= 1) {
 			if(containsReason)
 				achievedItemNumber++;
 			achievedRequiredItemNumber++;

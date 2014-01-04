@@ -47,15 +47,15 @@ public class CheckListTest {
 	
 	@Test
 	public void checkListWithSingleRequiredItem(){
-		checkList.setExpected(COVERAGE_ENTRY, 2);
+		checkList.addExpected(COVERAGE_ENTRY);
 		assertThat(checkList.requiredItemNumber(), equalTo(1));
 	}
 	
 	@Test
 	public void checkListWithTwoRequiredItems(){
-		checkList.setExpected(COVERAGE_ENTRY, 1);
+		checkList.addExpected(COVERAGE_ENTRY);
 		CoverageEntry COVERAGE_ENTRY2 = new CoverageEntry("goal", "2");
-		checkList.setExpected(COVERAGE_ENTRY2, 1);
+		checkList.addExpected(COVERAGE_ENTRY2);
 		assertThat(checkList.requiredItemNumber(), equalTo(2));
 	}
 
@@ -66,7 +66,7 @@ public class CheckListTest {
 	
 	@Test
 	public void checkListWithSingleFinishedItem(){
-		checkList.setExpected(COVERAGE_ENTRY, 1);
+		checkList.addExpected(COVERAGE_ENTRY);
 		checkList.addReached(asList(COVERAGE_ENTRY));
 		assertThat(checkList.achievedRequiredItemNumber(), equalTo(1));
 	}
@@ -84,7 +84,7 @@ public class CheckListTest {
 
 	@Test
 	public void checkListWithAnyReason(){
-		checkList.setExpected(ANY_REASON_COVERAGE_ENTRY, 1);
+		checkList.addExpected(ANY_REASON_COVERAGE_ENTRY);
 		checkList.addReached(asList(COVERAGE_ENTRY));
 		assertThat(checkList.achievedRequiredItemNumber(), equalTo(1));
 	}
