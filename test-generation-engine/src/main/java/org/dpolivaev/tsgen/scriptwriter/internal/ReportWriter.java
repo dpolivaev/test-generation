@@ -49,7 +49,8 @@ public class ReportWriter {
 		xmlWriter.beginElement("Goal");
 		xmlWriter.setAttribute("name", goal.name());
 		xmlWriter.setAttribute("required", Integer.toString(goal.checkList().requiredItemNumber()));
-		xmlWriter.setAttribute("achieved", Integer.toString(goal.checkList().achievedItemNumber()));
+		xmlWriter.setAttribute("achieved", Integer.toString(goal.checkList().achievedRequiredItemNumber()));
+		xmlWriter.setAttribute("total", Integer.toString(goal.checkList().totalAchievedItemNumber()));
 		ArrayList<Entry<CoverageEntry, CoverageStatus>>  coveredEntries = new ArrayList<>(goal.checkList().coveredEntries());
 		Collections.sort(coveredEntries, new Comparator<Map.Entry<CoverageEntry, CoverageStatus>>() {
 

@@ -79,7 +79,7 @@ public class CheckListTest {
 	@Test
 	public void checkOpenListSingleFinishedItemAchievedItemNumber(){
 		checkList.addReached(asList(COVERAGE_ENTRY));
-		assertThat(checkList.achievedItemNumber(), equalTo(1));
+		assertThat(checkList.totalAchievedItemNumber(), equalTo(1));
 	}
 
 	@Test

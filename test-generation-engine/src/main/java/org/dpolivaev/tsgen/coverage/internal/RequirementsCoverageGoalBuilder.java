@@ -36,8 +36,8 @@ public class RequirementsCoverageGoalBuilder {
 	CheckList createCheckList() {
 		final CheckList checkList = new CheckList();
 		for(Model model:models)
-			for (String item: model.getRequiredItems())
-				checkList.addExpected(new CoverageEntry(item, CoverageEntry.ANY));
+			for (CoverageEntry item: model.getRequiredItems())
+				checkList.addExpected(item);
 		return checkList;
 	}
 

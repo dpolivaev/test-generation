@@ -20,13 +20,11 @@ import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.junit.Test;
 
 public class CodeCoverageTest {
-	private Model mockModel(List<String> items) {
+	private Model mockModel(List<CoverageEntry> items) {
 		Model model = mock(Model.class);
-		when(model.getName()).thenReturn("model");
 		final CodeCoverageTracker codeCoverageTracker = new CodeCoverageTracker();
 		when(model.getCodeCoverageTracker()).thenReturn(codeCoverageTracker);
-		final List<String> itemList = items;
-		when(model.getRequiredItems()).thenReturn(itemList);
+		when(model.getRequiredItems()).thenReturn(items);
 		return model;
 	}
 
@@ -65,7 +63,7 @@ public class CodeCoverageTest {
 	
 	@Test
 	public void codeCoverageGoalForModel() throws Exception {
-		Model model = mockModel(asList("item"));
+		Model model = mockModel(asList(new CoverageEntry("item", CoverageEntry.ANY)));
 		final RequirementsCoverageGoalBuilder codeCoverageGoalBuilder = new RequirementsCoverageGoalBuilder(asList(model));
 		final Goal goal = codeCoverageGoalBuilder.createGoal();
 		assertThat(goal.checkList().requiredItemNumber(), equalTo(1));
@@ -73,13 +71,13 @@ public class CodeCoverageTest {
 	
 	@Test
 	public void codeCoverageForModel() throws Exception {
-		Model model = mockModel(asList("item"));
+		Model model = mockModel(asList(new CoverageEntry("item", CoverageEntry.ANY)));
 		PropertyContainer propertyContainer = mock(PropertyContainer.class);
 		when(propertyContainer.availableProperties(anyString())).thenReturn(Collections.<String>emptySet());
 		final RequirementsCoverageGoalBuilder codeCoverageGoalBuilder = new RequirementsCoverageGoalBuilder(asList(model));
 		final Goal goal = codeCoverageGoalBuilder.createGoal();
 		model.getCodeCoverageTracker().reach("item", "reason");
 		goal.check(propertyContainer);
-		assertThat(goal.checkList().achievedItemNumber(), equalTo(1));
+		assertThat(goal.checkList().totalAchievedItemNumber(), equalTo(1));
 	}
 }
