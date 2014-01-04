@@ -1,10 +1,10 @@
 package org.dpolivaev.tsgen.coverage.internal;
 
 import org.dpolivaev.tsgen.coverage.code.CodeCoverageTracker;
+import org.dpolivaev.tsgen.ruleengine.PropertyCombinationHandler;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 
-public class CodeCoverageResetter implements PropertyHandler{
+public class CodeCoverageResetter extends PropertyCombinationHandler{
 
 	final private CodeCoverageTracker codeCoverageTracker;
 
@@ -16,9 +16,4 @@ public class CodeCoverageResetter implements PropertyHandler{
 	public void handlePropertyCombination(PropertyContainer propertyContainer) {
 		codeCoverageTracker.clear();
 	}
-
-	@Override
-	public void generationFinished() {
-	}
-
 }

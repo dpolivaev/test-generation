@@ -16,6 +16,9 @@ public class SingleScriptWriter implements PropertyHandler {
         "scriptpost", "ScriptPostprocessing",
     };
 
+	@Override
+	public void generationStarted(PropertyContainer propertyContainer) {}
+	
     @Override
     public void handlePropertyCombination(PropertyContainer propertyContainer) {
         scriptProducer.handlePropertyCombination(propertyContainer);

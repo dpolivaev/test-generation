@@ -3,14 +3,14 @@ package org.dpolivaev.tsgen.testutils;
 import java.io.StringWriter;
 import java.io.Writer;
 
+import org.dpolivaev.tsgen.ruleengine.PropertyCombinationHandler;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.scriptwriter.internal.ScriptLogger;
 
 /**
  * @author Dimitry Polivaev 18.02.2013
  */
-public class CollectingScriptProducer implements PropertyHandler {
+public class CollectingScriptProducer extends PropertyCombinationHandler{
 
 	private final ScriptLogger loggingScriptProducer;
 	private Writer log;
@@ -31,10 +31,5 @@ public class CollectingScriptProducer implements PropertyHandler {
 
 	public void appendReasons(boolean appendReasons) {
 		loggingScriptProducer.appendReasons(appendReasons);
-	}
-
-	@Override
-	public void generationFinished() {
-		
 	}
 }

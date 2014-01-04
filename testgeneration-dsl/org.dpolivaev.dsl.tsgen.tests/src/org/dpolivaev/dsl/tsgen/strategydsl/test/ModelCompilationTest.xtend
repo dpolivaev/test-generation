@@ -60,8 +60,18 @@ class ModelCompilationTest {
 			  }
 			  
 			  @Override
-			  public void setPropertyContainer(final PropertyContainer propertyContainer) {
+			  public void generationStarted(final PropertyContainer propertyContainer) {
 			    this.propertyContainer=propertyContainer;
+			  }
+			  
+			  @Override
+			  public void handlePropertyCombination(final PropertyContainer propertyContainer) {
+			    
+			  }
+			  
+			  @Override
+			  public void generationFinished() {
+			    this.propertyContainer=null;
 			  }
 			}
 			
@@ -119,8 +129,18 @@ class ModelCompilationTest {
 			  }
 			  
 			  @Override
-			  public void setPropertyContainer(final PropertyContainer propertyContainer) {
+			  public void generationStarted(final PropertyContainer propertyContainer) {
 			    this.propertyContainer=propertyContainer;
+			  }
+			  
+			  @Override
+			  public void handlePropertyCombination(final PropertyContainer propertyContainer) {
+			    
+			  }
+			  
+			  @Override
+			  public void generationFinished() {
+			    this.propertyContainer=null;
 			  }
 			  
 			  public int calculate(final int i) {
@@ -222,8 +242,18 @@ class ModelCompilationTest {
 			  }
 			  
 			  @Override
-			  public void setPropertyContainer(final PropertyContainer propertyContainer) {
+			  public void generationStarted(final PropertyContainer propertyContainer) {
 			    this.propertyContainer=propertyContainer;
+			  }
+			  
+			  @Override
+			  public void handlePropertyCombination(final PropertyContainer propertyContainer) {
+			    
+			  }
+			  
+			  @Override
+			  public void generationFinished() {
+			    this.propertyContainer=null;
 			  }
 			  
 			  public int calculate(final int i) {
