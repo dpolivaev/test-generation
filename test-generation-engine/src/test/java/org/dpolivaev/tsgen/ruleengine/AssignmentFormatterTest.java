@@ -6,11 +6,8 @@ import static org.dpolivaev.tsgen.testutils.TestUtils.ruleMock;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 
-import java.util.AbstractMap;
-
 import org.dpolivaev.tsgen.ruleengine.AssignmentFormatter;
 import org.dpolivaev.tsgen.ruleengine.Rule;
-import org.dpolivaev.tsgen.testutils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;

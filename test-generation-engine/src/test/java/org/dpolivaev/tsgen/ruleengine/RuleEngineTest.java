@@ -3,8 +3,6 @@ import static org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory.iterate;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 
-import org.dpolivaev.tsgen.coverage.Goal;
-import org.dpolivaev.tsgen.coverage.GoalChecker;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.PropertyHandler;

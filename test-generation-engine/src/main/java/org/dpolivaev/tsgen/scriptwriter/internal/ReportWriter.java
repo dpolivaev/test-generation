@@ -1,13 +1,10 @@
 package org.dpolivaev.tsgen.scriptwriter.internal;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
-
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.CoverageStatus;
 import org.dpolivaev.tsgen.coverage.Goal;

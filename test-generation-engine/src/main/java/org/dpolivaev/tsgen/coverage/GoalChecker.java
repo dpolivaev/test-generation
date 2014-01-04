@@ -5,7 +5,6 @@ import java.util.Collection;
 
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
-import org.dpolivaev.tsgen.scriptwriter.ScriptConfiguration;
 import org.dpolivaev.tsgen.scriptwriter.internal.ReportWriter;
 
 public class GoalChecker implements PropertyHandler{
