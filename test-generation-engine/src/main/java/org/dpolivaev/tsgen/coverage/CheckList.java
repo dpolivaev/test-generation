@@ -14,7 +14,7 @@ public class CheckList{
 	final private Map<CoverageEntry, CoverageStatus> coveredEntries = new HashMap<>();
 	private int requiredItemNumber;
 	private int achievedRequiredItemNumber;
-	private int achievedItemNumber;
+	private int totalAchievedItemNumber;
 		
 	public void addReached(final Collection<CoverageEntry> newCoverageEntries) {
 		startRound();
@@ -67,11 +67,11 @@ public class CheckList{
 		final boolean containsReason = coverageEntry.getReason() != CoverageEntry.ANY;
 		if(oldCoverageStatus != null && oldCoverageStatus.reached == 0 && newReachedCount >= 1) {
 			if(containsReason)
-				achievedItemNumber++;
+				totalAchievedItemNumber++;
 			achievedRequiredItemNumber++;
 		} 
 		else if (oldCoverageStatus == null && newReachedCount == 1 && containsReason)
-			achievedItemNumber++;
+			totalAchievedItemNumber++;
 		return this;
 	}
 
@@ -108,8 +108,8 @@ public class CheckList{
 		return requiredItemNumber;
 	}
 
-	public int achievedItemNumber() {
-		return achievedItemNumber;
+	public int totalAchievedItemNumber() {
+		return totalAchievedItemNumber;
 	}
 
 	public int achievedRequiredItemNumber() {

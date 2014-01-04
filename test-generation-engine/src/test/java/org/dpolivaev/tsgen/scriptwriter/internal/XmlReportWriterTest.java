@@ -8,6 +8,7 @@ import java.util.Collection;
 
 import javax.xml.transform.dom.DOMResult;
 
+import org.dpolivaev.tsgen.coverage.CheckList;
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.Goal;
 import org.dpolivaev.tsgen.coverage.GoalChecker;
@@ -39,6 +40,9 @@ public class XmlReportWriterTest {
         final ScriptConfiguration scriptConfiguration = new OutputConfiguration().setFileExtension("report.xml").forScript("reportName");
 		Mockito.when(resultFactory.newResult(scriptConfiguration)).thenReturn(dom);
 		final GoalChecker goals = new GoalChecker(null);
+		CheckList checkList = new CheckList(); 
+		checkList.addExpected(new CoverageEntry("item2", "value"));
+		checkList.addExpected(new CoverageEntry("item1", CoverageEntry.ANY));
 		goals.addGoal(new Goal("goal2", new GoalFunction() {
 			
 			@Override
@@ -48,7 +52,8 @@ public class XmlReportWriterTest {
 						new CoverageEntry("item1", "value2"),
 						new CoverageEntry("item1", "value1"));
 			}
-		}));
+		}, checkList));
+		
 		goals.addGoal(new Goal("goal1", new GoalFunction() {
 			
 			@Override
@@ -61,10 +66,10 @@ public class XmlReportWriterTest {
         producer.createReport(goals);
         Assert.assertThat(the(dom.getNode()), isEquivalentTo(the(
         	"<Report>"
-                	+ "<Goal name='goal1' required='0' achieved='1'>"
+                	+ "<Goal name='goal1' required='0' achieved='0' total='1'>"
             		+ "<Item name='item' reached='1'>value</Item>"
             	+ "</Goal>" 
-            	+ "<Goal name='goal2' required='0' achieved='3'>"
+            	+ "<Goal name='goal2' required='2' achieved='2' total='3'>"
         		+ "<Item name='item1' reached='1'>value1</Item>"
         		+ "<Item name='item1' reached='1'>value2</Item>"
         		+ "<Item name='item2' reached='1'>value</Item>"

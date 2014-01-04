@@ -32,13 +32,14 @@ class ModelCompilationTest {
 			
 			import java.util.Arrays;
 			import java.util.List;
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
 			import org.dpolivaev.tsgen.coverage.code.CodeCoverageTracker;
 			import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 			import org.dpolivaev.tsgen.scriptwriter.PropertyAccessingModel;
 			
 			@SuppressWarnings("all")
 			public class MyModel implements PropertyAccessingModel {
-			  public final static List<String> labels = Arrays.asList(new String[]{});
+			  public final static List<CoverageEntry> labels = Arrays.asList(new CoverageEntry[]{});
 			  
 			  private PropertyContainer propertyContainer;
 			  
@@ -55,7 +56,7 @@ class ModelCompilationTest {
 			  }
 			  
 			  @Override
-			  public List<String> getRequiredItems() {
+			  public List<CoverageEntry> getRequiredItems() {
 			    return labels;
 			  }
 			  
@@ -101,13 +102,14 @@ class ModelCompilationTest {
 			
 			import java.util.Arrays;
 			import java.util.List;
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
 			import org.dpolivaev.tsgen.coverage.code.CodeCoverageTracker;
 			import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 			import org.dpolivaev.tsgen.scriptwriter.PropertyAccessingModel;
 			
 			@SuppressWarnings("all")
 			public class MyModel implements PropertyAccessingModel {
-			  public final static List<String> labels = Arrays.asList(new String[]{"req2","req1",});
+			  public final static List<CoverageEntry> labels = Arrays.asList(new CoverageEntry[]{new CoverageEntry("req1", "reason1"),new CoverageEntry("req2", CoverageEntry.ANY),});
 			  
 			  private PropertyContainer propertyContainer;
 			  
@@ -124,7 +126,7 @@ class ModelCompilationTest {
 			  }
 			  
 			  @Override
-			  public List<String> getRequiredItems() {
+			  public List<CoverageEntry> getRequiredItems() {
 			    return labels;
 			  }
 			  
@@ -214,13 +216,14 @@ class ModelCompilationTest {
 			
 			import java.util.Arrays;
 			import java.util.List;
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
 			import org.dpolivaev.tsgen.coverage.code.CodeCoverageTracker;
 			import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 			import org.dpolivaev.tsgen.scriptwriter.PropertyAccessingModel;
 			
 			@SuppressWarnings("all")
 			public class MyModel implements PropertyAccessingModel {
-			  public final static List<String> labels = Arrays.asList(new String[]{});
+			  public final static List<CoverageEntry> labels = Arrays.asList(new CoverageEntry[]{});
 			  
 			  private PropertyContainer propertyContainer;
 			  
@@ -237,7 +240,7 @@ class ModelCompilationTest {
 			  }
 			  
 			  @Override
-			  public List<String> getRequiredItems() {
+			  public List<CoverageEntry> getRequiredItems() {
 			    return labels;
 			  }
 			  

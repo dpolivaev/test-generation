@@ -2,14 +2,17 @@ package org.dpolivaev.dsl.tsgen.jvmmodel
 
 import com.google.inject.Inject
 import java.util.ArrayList
+import java.util.Arrays
 import java.util.Collection
 import java.util.HashMap
 import java.util.HashSet
+import java.util.List
 import java.util.Set
 import org.dpolivaev.dsl.tsgen.strategydsl.Condition
 import org.dpolivaev.dsl.tsgen.strategydsl.Generation
 import org.dpolivaev.dsl.tsgen.strategydsl.LabeledExpression
 import org.dpolivaev.dsl.tsgen.strategydsl.Model
+import org.dpolivaev.dsl.tsgen.strategydsl.ModelReference
 import org.dpolivaev.dsl.tsgen.strategydsl.OutputConfiguration
 import org.dpolivaev.dsl.tsgen.strategydsl.Rule
 import org.dpolivaev.dsl.tsgen.strategydsl.RuleGroup
@@ -17,8 +20,11 @@ import org.dpolivaev.dsl.tsgen.strategydsl.StrategyReference
 import org.dpolivaev.dsl.tsgen.strategydsl.ValueAction
 import org.dpolivaev.dsl.tsgen.strategydsl.ValueProvider
 import org.dpolivaev.dsl.tsgen.strategydsl.Values
+import org.dpolivaev.tsgen.coverage.CoverageEntry
+import org.dpolivaev.tsgen.coverage.code.CodeCoverageTracker
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory
+import org.dpolivaev.tsgen.scriptwriter.PropertyAccessingModel
 import org.dpolivaev.tsgen.scriptwriter.StrategyRunner
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.common.types.JvmGenericType
@@ -30,6 +36,7 @@ import org.eclipse.xtext.xbase.XExpression
 import org.eclipse.xtext.xbase.XNullLiteral
 import org.eclipse.xtext.xbase.XNumberLiteral
 import org.eclipse.xtext.xbase.XStringLiteral
+import org.eclipse.xtext.xbase.XVariableDeclaration
 import org.eclipse.xtext.xbase.compiler.Later
 import org.eclipse.xtext.xbase.compiler.XbaseCompiler
 import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
@@ -39,12 +46,6 @@ import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 
 import static extension org.dpolivaev.dsl.tsgen.jvmmodel.StrategyCompiler.*
 import static extension org.eclipse.xtext.nodemodel.util.NodeModelUtils.*
-import org.dpolivaev.tsgen.coverage.code.CodeCoverageTracker
-import java.util.List
-import java.util.Arrays
-import org.eclipse.xtext.xbase.XVariableDeclaration
-import org.dpolivaev.dsl.tsgen.strategydsl.ModelReference
-import org.dpolivaev.tsgen.scriptwriter.PropertyAccessingModel
 
 /**
  * <p>Infers a JVM model from the source model.</p> 
@@ -102,19 +103,27 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 		val qualifiedClassName = qualifiedClassName(classPackage, model.name.toFirstUpper)
 		acceptor.accept(model.toClass(qualifiedClassName)).initializeLater([
 			superTypes += model.newTypeRef(PropertyAccessingModel)
-			val labels = new HashSet<String>
+			val labels = new HashSet<CoverageEntry>
 			val contents = EcoreUtil2.eAllContents(model)
 			for(obj : contents){
 				if (obj instanceof LabeledExpression)
-					labels += (obj as LabeledExpression).label
+					labels += coverageEntry(obj as LabeledExpression)
 			}
-			members += model.toField("labels", model.newTypeRef(List, model.newTypeRef(String)))[
+			members += model.toField("labels", model.newTypeRef(List, model.newTypeRef(CoverageEntry)))[
 				setInitializer [
 					append(model.newTypeRef(Arrays).type)
 					append('.asList(')
-					append('new String[]{')
+					append('new ') append(model.newTypeRef(CoverageEntry).type) append('[]{')
 					for(label:labels){
-						append('"') append(label) append('",')
+						append('new ')
+						append(model.newTypeRef(CoverageEntry).type) 
+						append('("') append(label.name) append('", ')
+						if(label.reason == CoverageEntry.ANY)  
+							append(model.newTypeRef(CoverageEntry).type).append('.ANY')
+						else
+							append('"').append(label.reason).append('"')
+								 
+						append('),')
 					}
 					append('})')
 				]
@@ -129,14 +138,6 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 				]
 			]
 			
-			members += model.toMethod("getName", model.newTypeRef(String)) [
-				annotations += model.toAnnotation(Override)
-				body = [
-						append('''return "«model.name»";''')
-				]
-				visibility = JvmVisibility::PUBLIC
-			]
-			
 			members += model.toMethod("getCodeCoverageTracker", model.newTypeRef(CodeCoverageTracker)) [
 				annotations += model.toAnnotation(Override)
 				body = [
@@ -145,7 +146,7 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 				visibility = JvmVisibility::PUBLIC
 			]
 			
-			members += model.toMethod("getRequiredItems", model.newTypeRef(List, model.newTypeRef(String))) [
+			members += model.toMethod("getRequiredItems", model.newTypeRef(List, model.newTypeRef(CoverageEntry))) [
 				annotations += model.toAnnotation(Override)
 				body = [
 						append('return labels;')
@@ -193,6 +194,18 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 			}
 			
 		])
+	}
+	
+	def coverageEntry(LabeledExpression expression) {
+		val expressionReason =expression.reason
+		val reason =
+			switch(expressionReason){
+				XStringLiteral : expressionReason.value
+				XNumberLiteral : expressionReason.value
+				XBooleanLiteral : expressionReason.isTrue.toString
+				default : CoverageEntry.ANY
+			} 
+		new CoverageEntry(expression.label, reason)
 	}
 }
 
@@ -320,7 +333,12 @@ class ScriptInitializer{
 	}
 	
 	private def shouldCreateMethodFor(XExpression expr){
-		return !(expr instanceof XStringLiteral || expr instanceof XNumberLiteral || expr instanceof XBooleanLiteral || expr instanceof XNullLiteral)
+		return !isLiteral(expr);
+	}
+	
+	private def isLiteral(XExpression expr) {
+		val isLiteral = expr instanceof XStringLiteral || expr instanceof XNumberLiteral || expr instanceof XBooleanLiteral || expr instanceof XNullLiteral
+		isLiteral
 	}
 	
    final static val CONDITION = "condition"
