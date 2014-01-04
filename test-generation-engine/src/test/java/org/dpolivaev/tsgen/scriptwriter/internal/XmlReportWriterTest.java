@@ -62,12 +62,12 @@ public class XmlReportWriterTest {
         Assert.assertThat(the(dom.getNode()), isEquivalentTo(the(
         	"<Report>"
                 	+ "<Goal name='goal1' required='0' achieved='1'>"
-            		+ "<Item name='item' required='0' reached='1'>value</Item>"
+            		+ "<Item name='item' reached='1'>value</Item>"
             	+ "</Goal>" 
             	+ "<Goal name='goal2' required='0' achieved='3'>"
-        		+ "<Item name='item1' required='0' reached='1'>value1</Item>"
-        		+ "<Item name='item1' required='0' reached='1'>value2</Item>"
-        		+ "<Item name='item2' required='0' reached='1'>value</Item>"
+        		+ "<Item name='item1' reached='1'>value1</Item>"
+        		+ "<Item name='item1' reached='1'>value2</Item>"
+        		+ "<Item name='item2' reached='1'>value</Item>"
         	+ "</Goal>" 
         	+ "</Report>")));
     }
