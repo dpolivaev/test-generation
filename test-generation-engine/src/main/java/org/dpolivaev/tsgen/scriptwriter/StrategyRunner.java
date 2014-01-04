@@ -1,6 +1,5 @@
 package org.dpolivaev.tsgen.scriptwriter;
 
-import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.Collection;
 import java.util.HashSet;
@@ -10,7 +9,6 @@ import org.dpolivaev.tsgen.coverage.GoalChecker;
 import org.dpolivaev.tsgen.coverage.code.Model;
 import org.dpolivaev.tsgen.coverage.internal.RequirementsCoverageGoalBuilder;
 import org.dpolivaev.tsgen.coverage.internal.CodeCoverageResetter;
-import org.dpolivaev.tsgen.coverage.internal.RequirementCoverage;
 import org.dpolivaev.tsgen.ruleengine.PropertyAccessor;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
@@ -19,7 +17,6 @@ import org.dpolivaev.tsgen.scriptwriter.internal.ReportWriter;
 import org.dpolivaev.tsgen.scriptwriter.internal.ResultFactory;
 import org.dpolivaev.tsgen.scriptwriter.internal.ScriptLogger;
 import org.dpolivaev.tsgen.scriptwriter.internal.StreamResultFactory;
-import org.dpolivaev.tsgen.utils.internal.Utils;
 
 public class StrategyRunner {
 	private OutputConfiguration outputConfiguration;
