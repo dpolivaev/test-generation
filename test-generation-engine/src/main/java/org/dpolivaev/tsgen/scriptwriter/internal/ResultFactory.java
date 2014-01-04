@@ -4,6 +4,6 @@ import javax.xml.transform.Result;
 
 import org.dpolivaev.tsgen.scriptwriter.ScriptConfiguration;
 
-interface ResultFactory{
+public interface ResultFactory{
     Result newResult(ScriptConfiguration scriptConfiguration);
 }

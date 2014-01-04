@@ -70,10 +70,16 @@ public class RuleEngine implements EngineState {
             	fireNextCombinationFinishedEvent();
 
             } while (!topRulesHaveFinished());
+            handleGenerationFinished();
         }
         finally {
             this.strategy = null;
         }
+	}
+
+	private void handleGenerationFinished() {
+		for(PropertyHandler propertyHandler :propertyHandlers)
+			propertyHandler.generationFinished();
 	}
 
     private void handle(Exception e) {
@@ -93,9 +99,13 @@ public class RuleEngine implements EngineState {
         fireNextCombinationStartedEvent();
         dependencies = new HashSet<>();
         processedProperty = "";
-        for(PropertyHandler propertyHandler :propertyHandlers)
-        	propertyHandler.handlePropertyCombination(this);
+        handlePropertyCombination();
     }
+
+	private void handlePropertyCombination() {
+		for(PropertyHandler propertyHandler :propertyHandlers)
+        	propertyHandler.handlePropertyCombination(this);
+	}
 
     private void fireNextCombinationFinishedEvent() {
         for (Rule rule : assignments.firedRules())

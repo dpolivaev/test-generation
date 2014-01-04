@@ -16,6 +16,7 @@ import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.scriptwriter.internal.MultipleScriptsWriter;
 import org.dpolivaev.tsgen.scriptwriter.internal.ReportWriter;
+import org.dpolivaev.tsgen.scriptwriter.internal.ResultFactory;
 import org.dpolivaev.tsgen.scriptwriter.internal.ScriptLogger;
 import org.dpolivaev.tsgen.scriptwriter.internal.StreamResultFactory;
 import org.dpolivaev.tsgen.utils.internal.Utils;
@@ -50,12 +51,12 @@ public class StrategyRunner {
 		ScriptLogger logger = new ScriptLogger(writer);
 		ruleEngine.addHandler(logger);
 		ruleEngine.addErrorHandler(logger);
-		GoalChecker goalChecker = createGoalChecker();
+		StreamResultFactory resultFactory = new StreamResultFactory();
+		GoalChecker goalChecker = createGoalChecker(resultFactory);
 		ruleEngine.addHandler(goalChecker);
 		for(Model model:models)
 			ruleEngine.addHandler(new CodeCoverageResetter(model.getCodeCoverageTracker()));
 		MultipleScriptsWriter scriptProducer = null;
-		StreamResultFactory resultFactory = new StreamResultFactory();
 		if (outputConfiguration.isFileValid()){
 			scriptProducer = new MultipleScriptsWriter(resultFactory, goalChecker);
 			scriptProducer.setOutputConfiguration(outputConfiguration);
@@ -70,19 +71,11 @@ public class StrategyRunner {
 			for(PropertyAccessor propertyAccessor : propertyAccessors)
 				propertyAccessor.setPropertyContainer(null);
 		}
-		try {
-			if(scriptProducer != null)
-				scriptProducer.endScripts();
-			writer.close();
-		} catch (IOException e) {
-			throw Utils.runtimeException(e);
-		}
-		ReportWriter reportWriter = new ReportWriter(resultFactory);
-		reportWriter.createReport(goalChecker, new ScriptConfiguration(reportConfiguration, null));
 	}
 
-	private GoalChecker createGoalChecker() {
-		GoalChecker goalChecker = new GoalChecker();
+	private GoalChecker createGoalChecker(ResultFactory resultFactory) {
+		ReportWriter reportWriter = new ReportWriter(resultFactory, new ScriptConfiguration(reportConfiguration, null));
+		GoalChecker goalChecker = new GoalChecker(reportWriter);
 		goalChecker.addGoal(createCoverageGoal());
 		return goalChecker;
 	}

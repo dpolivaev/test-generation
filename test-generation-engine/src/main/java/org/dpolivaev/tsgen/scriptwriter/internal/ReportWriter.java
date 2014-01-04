@@ -20,12 +20,14 @@ public class ReportWriter {
 
 	final private HandlerFactory handlerFactory;
 	private XmlWriter xmlWriter;
+	final private ScriptConfiguration reportConfiguration;
 
-	public ReportWriter(ResultFactory resultFactory) {
+	public ReportWriter(ResultFactory resultFactory, ScriptConfiguration reportConfiguration) {
         handlerFactory = new HandlerFactory(resultFactory);
+        this.reportConfiguration = reportConfiguration;
     }
 
-	public void createReport(GoalChecker goalChecker, ScriptConfiguration scriptConfiguration) {
+	public void createReport(GoalChecker goalChecker) {
 		final ArrayList<Goal> goals = new ArrayList<>(goalChecker.goals());
 		Collections.sort(goals, new Comparator<Goal>() {
 
@@ -34,8 +36,8 @@ public class ReportWriter {
 				return o1.name().compareTo(o2.name());
 			}
 		});
-		if(! goals.isEmpty() && scriptConfiguration.isFileValid()){
-			xmlWriter = new SaxXmlWriter(handlerFactory.newHandler(scriptConfiguration));
+		if(! goals.isEmpty() && reportConfiguration.isFileValid()){
+			xmlWriter = new SaxXmlWriter(handlerFactory.newHandler(reportConfiguration));
 			xmlWriter.startDocument();
 			xmlWriter.beginElement("Report");
 			for(Goal goal : goals)

@@ -17,4 +17,8 @@ public class CodeCoverageResetter implements PropertyHandler{
 		codeCoverageTracker.clear();
 	}
 
+	@Override
+	public void generationFinished() {
+	}
+
 }

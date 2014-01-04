@@ -41,6 +41,10 @@ public class XmlTestCaseWriter implements PropertyHandler {
         xmlWriter.endElement(TESTCASE_ELEMENT);
 
 	}
+	
+	@Override
+	public void generationFinished() {
+	}
 
 	public void addParts(PropertyContainer propertyContainer, String[] parts) {
 		for(int i = 0; i < parts.length; i+=2)
@@ -128,5 +132,4 @@ public class XmlTestCaseWriter implements PropertyHandler {
         if(!value.equals(SpecialValue.UNDEFINED))
             xmlWriter.setAttribute(attributeName, value.toString());
 	}
-
 }

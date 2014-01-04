@@ -27,8 +27,8 @@ public class XmlReportWriterTest {
         final DOMResult dom = new DOMResult();
         final ScriptConfiguration scriptConfiguration = OutputConfiguration.OUTPUT_NOTHING.forScript("reportName");
 		Mockito.when(resultFactory.newResult(scriptConfiguration)).thenReturn(dom);
-		ReportWriter producer = new ReportWriter(resultFactory);
-        producer.createReport(GoalChecker.NO_GOALS, scriptConfiguration);
+		ReportWriter producer = new ReportWriter(resultFactory, scriptConfiguration);
+        producer.createReport(GoalChecker.NO_GOALS);
         Assert.assertThat(dom.getNode(), CoreMatchers.nullValue());
     }
     
@@ -38,7 +38,7 @@ public class XmlReportWriterTest {
         final DOMResult dom = new DOMResult();
         final ScriptConfiguration scriptConfiguration = new OutputConfiguration().setFileExtension("report.xml").forScript("reportName");
 		Mockito.when(resultFactory.newResult(scriptConfiguration)).thenReturn(dom);
-		final GoalChecker goals = new GoalChecker();
+		final GoalChecker goals = new GoalChecker(null);
 		goals.addGoal(new Goal("goal2", new GoalFunction() {
 			
 			@Override
@@ -57,8 +57,8 @@ public class XmlReportWriterTest {
 			}
 		}));
 		goals.handlePropertyCombination(null);
-		ReportWriter producer = new ReportWriter(resultFactory);
-        producer.createReport(goals, scriptConfiguration);
+		ReportWriter producer = new ReportWriter(resultFactory, scriptConfiguration);
+        producer.createReport(goals);
         Assert.assertThat(the(dom.getNode()), isEquivalentTo(the(
         	"<Report>"
                 	+ "<Goal name='goal1' required='0' achieved='1'>"

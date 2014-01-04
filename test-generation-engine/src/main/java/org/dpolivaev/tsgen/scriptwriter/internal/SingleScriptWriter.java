@@ -41,7 +41,7 @@ public class SingleScriptWriter implements PropertyHandler {
         scriptProducer = testCaseProducer;
     }
     
-     public void endScript() {
+     public void generationFinished() {
         xmlWriter.endElement("Script");
         xmlWriter.endDocument();
     }

@@ -9,7 +9,12 @@ public interface PropertyHandler {
 		@Override
 		public void handlePropertyCombination(PropertyContainer propertyContainer) {
 		}
+
+		@Override
+		public void generationFinished() {
+		}
 	};
 
 	void handlePropertyCombination(PropertyContainer propertyContainer);
+	void generationFinished();
 }
