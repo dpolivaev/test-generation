@@ -32,4 +32,9 @@ public class CollectingScriptProducer implements PropertyHandler {
 	public void appendReasons(boolean appendReasons) {
 		loggingScriptProducer.appendReasons(appendReasons);
 	}
+
+	@Override
+	public void generationFinished() {
+		
+	}
 }

@@ -50,9 +50,9 @@ public class MultipleScriptsWriter implements PropertyHandler{
         		resultFactory, goalChecker);
     }
 
-    public void endScripts() {
+    public void generationFinished() {
         for(SingleScriptWriter singleScriptProducer:singleScriptProducers.values())
-            singleScriptProducer.endScript();
+            singleScriptProducer.generationFinished();
         
     }
 

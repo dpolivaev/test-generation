@@ -29,7 +29,7 @@ public class XmlScriptWriterTest {
 		Mockito.when(resultFactory.newResult(scriptConfiguration)).thenReturn(dom);
 		SingleScriptWriter producer = new SingleScriptWriter(propertyContainer, scriptConfiguration, resultFactory, GoalChecker.NO_GOALS);
         producer.handlePropertyCombination(propertyContainer);
-        producer.endScript();
+        producer.generationFinished();
 		return dom;
 	}
 
@@ -71,7 +71,7 @@ public class XmlScriptWriterTest {
         givenProperty("script", "scriptName");
         givenProperty("testcase", "testcase 2");
         producer.handlePropertyCombination(propertyContainer);
-        producer.endScript();
+        producer.generationFinished();
         
         checkOutput(dom, "<Script id='scriptName'  driver='scriptNameDriver'>" +
 		            "<TestCase id='testcase 1'/>" +

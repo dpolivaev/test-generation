@@ -55,4 +55,13 @@ public class ScriptLogger implements PropertyHandler, ErrorHandler {
 			assignmentFormatter.setPropertySeparator(propertySeparator);
 		}
 	}
+
+	@Override
+	public void generationFinished() {
+		try {
+			log.close();
+		} catch (IOException e) {
+			throw Utils.runtimeException(e);
+		}
+	}
 }

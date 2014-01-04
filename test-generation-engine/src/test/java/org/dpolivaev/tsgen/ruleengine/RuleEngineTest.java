@@ -30,7 +30,7 @@ public class RuleEngineTest {
 	@Test
 	public void containsAllDefaultProperties() {
 		Mockito.when(strategy.availableDefaultProperties()).thenReturn(Utils.set("name"));
-		ruleEngine.addHandler(new PropertyHandler() {
+		ruleEngine.addHandler(new PropertyCombinationHandler() {
 			
 			@Override
 			public void handlePropertyCombination(PropertyContainer propertyContainer) {
@@ -43,7 +43,7 @@ public class RuleEngineTest {
 
     @Test
 	public void ruleEngineResetsAssignmentReasonAfterPropertySetEventIsFired() {
-		ruleEngine.addHandler(new PropertyHandler() {
+		ruleEngine.addHandler(new PropertyCombinationHandler() {
 			
 			@Override
 			public void handlePropertyCombination(PropertyContainer propertyContainer) {
@@ -57,14 +57,14 @@ public class RuleEngineTest {
 		ruleEngine.run(strategy);
 	}
     
-    @Test
-	public void ruleEngineExecutesGoalChecks() throws Exception {
-		Goal goal = Mockito.mock(Goal.class);
-		GoalChecker goalChecker = new GoalChecker();
-		goalChecker.addGoal(goal);
-		ruleEngine.addHandler(goalChecker);
+
+	@Test
+	public void callsGenerationFinished() {
+		final PropertyHandler propertyHandler = Mockito.mock(PropertyHandler.class);
+		ruleEngine.addHandler(propertyHandler);
 		ruleEngine.run(strategy);
 		
-		Mockito.verify(goal).check(ruleEngine);
+		Mockito.verify(propertyHandler).generationFinished();
 	}
-}
+
+ }
