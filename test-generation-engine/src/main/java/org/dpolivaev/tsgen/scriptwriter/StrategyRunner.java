@@ -9,7 +9,7 @@ import org.dpolivaev.tsgen.coverage.GoalChecker;
 import org.dpolivaev.tsgen.coverage.code.Model;
 import org.dpolivaev.tsgen.coverage.internal.RequirementsCoverageGoalBuilder;
 import org.dpolivaev.tsgen.coverage.internal.CodeCoverageResetter;
-import org.dpolivaev.tsgen.ruleengine.PropertyAccessor;
+import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.scriptwriter.internal.MultipleScriptsWriter;
@@ -22,7 +22,7 @@ public class StrategyRunner {
 	private OutputConfiguration outputConfiguration;
 	private OutputConfiguration reportConfiguration;
 	final private Collection<Model> models;
-	final private Collection<PropertyAccessor> propertyAccessors;
+	final private Collection<PropertyHandler> propertyAccessors;
 
 	public StrategyRunner() {
 		super();
@@ -37,7 +37,7 @@ public class StrategyRunner {
 		return this;
 	}
 
-	public StrategyRunner addPropertyAccessor(PropertyAccessor propertyAccessor){
+	public StrategyRunner addPropertyAccessor(PropertyHandler propertyAccessor){
 		propertyAccessors.add(propertyAccessor);
 		return this;
 	}
@@ -59,15 +59,9 @@ public class StrategyRunner {
 			scriptProducer.setOutputConfiguration(outputConfiguration);
 			ruleEngine.addHandler(scriptProducer);
 		}
-		try {
-			for(PropertyAccessor propertyAccessor : propertyAccessors)
-				propertyAccessor.setPropertyContainer(ruleEngine);
-			ruleEngine.run(strategy);
-		} 
-		finally {
-			for(PropertyAccessor propertyAccessor : propertyAccessors)
-				propertyAccessor.setPropertyContainer(null);
-		}
+		for(PropertyHandler propertyAccessor : propertyAccessors)
+			ruleEngine.addHandler(propertyAccessor);
+		ruleEngine.run(strategy);
 	}
 
 	private GoalChecker createGoalChecker(ResultFactory resultFactory) {

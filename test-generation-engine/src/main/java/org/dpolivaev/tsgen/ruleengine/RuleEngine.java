@@ -54,6 +54,7 @@ public class RuleEngine implements EngineState {
         this.strategy = strategy;
         assignments.resetCounter();
         try {
+        	fireGenerationStarted();
             do {
                 Set<String> oldDependencies = dependencies;
                 try {
@@ -69,14 +70,19 @@ public class RuleEngine implements EngineState {
             	fireNextCombinationFinishedEvent();
 
             } while (!topRulesHaveFinished());
-            handleGenerationFinished();
+            fireGenerationFinished();
         }
         finally {
             this.strategy = null;
         }
 	}
 
-	private void handleGenerationFinished() {
+	private void fireGenerationStarted() {
+		for(PropertyHandler propertyHandler :propertyHandlers)
+			propertyHandler.generationStarted(this);
+	}
+
+	private void fireGenerationFinished() {
 		for(PropertyHandler propertyHandler :propertyHandlers)
 			propertyHandler.generationFinished();
 	}

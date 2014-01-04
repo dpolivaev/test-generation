@@ -39,7 +39,6 @@ import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 
 import static extension org.dpolivaev.dsl.tsgen.jvmmodel.StrategyCompiler.*
 import static extension org.eclipse.xtext.nodemodel.util.NodeModelUtils.*
-import org.dpolivaev.tsgen.ruleengine.PropertyAccessor
 import org.dpolivaev.tsgen.coverage.code.CodeCoverageTracker
 import java.util.List
 import java.util.Arrays
@@ -154,11 +153,26 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 				visibility = JvmVisibility::PUBLIC
 			]
 			
-			members += model.toMethod("setPropertyContainer", model.newTypeRef(Void::TYPE)) [
+			members += model.toMethod("generationStarted", model.newTypeRef(Void::TYPE)) [
 				annotations += model.toAnnotation(Override)
 				parameters += model.toParameter("propertyContainer", model.newTypeRef(PropertyContainer))
 				body = [
 						append('this.propertyContainer=propertyContainer;')
+				]
+				visibility = JvmVisibility::PUBLIC
+			]
+			
+			members += model.toMethod("handlePropertyCombination", model.newTypeRef(Void::TYPE)) [
+				annotations += model.toAnnotation(Override)
+				parameters += model.toParameter("propertyContainer", model.newTypeRef(PropertyContainer))
+				body = []
+				visibility = JvmVisibility::PUBLIC
+			]
+			
+			members += model.toMethod("generationFinished", model.newTypeRef(Void::TYPE)) [
+				annotations += model.toAnnotation(Override)
+				body = [
+						append('this.propertyContainer=null;')
 				]
 				visibility = JvmVisibility::PUBLIC
 			]

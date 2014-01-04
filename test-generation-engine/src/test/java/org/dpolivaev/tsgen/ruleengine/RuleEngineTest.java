@@ -11,6 +11,7 @@ import org.dpolivaev.tsgen.ruleengine.internal.StatefulRule;
 import org.dpolivaev.tsgen.utils.internal.Utils;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InOrder;
 import org.mockito.Mockito;
 
 
@@ -57,12 +58,14 @@ public class RuleEngineTest {
     
 
 	@Test
-	public void callsGenerationFinished() {
+	public void firesEvents() {
 		final PropertyHandler propertyHandler = Mockito.mock(PropertyHandler.class);
 		ruleEngine.addHandler(propertyHandler);
 		ruleEngine.run(strategy);
 		
-		Mockito.verify(propertyHandler).generationFinished();
+		InOrder inOrder = Mockito.inOrder(propertyHandler);
+		inOrder.verify(propertyHandler).handlePropertyCombination(ruleEngine);
+		inOrder.verify(propertyHandler).generationFinished();
 	}
 
  }

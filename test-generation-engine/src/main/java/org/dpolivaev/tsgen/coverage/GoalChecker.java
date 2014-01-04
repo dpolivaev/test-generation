@@ -3,11 +3,11 @@ package org.dpolivaev.tsgen.coverage;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.dpolivaev.tsgen.ruleengine.PropertyCombinationHandler;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.scriptwriter.internal.ReportWriter;
 
-public class GoalChecker implements PropertyHandler{
+public class GoalChecker extends PropertyCombinationHandler{
 	public static final GoalChecker NO_GOALS = new GoalChecker(null){
 
 		@Override

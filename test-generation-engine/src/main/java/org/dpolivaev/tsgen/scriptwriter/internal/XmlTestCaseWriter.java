@@ -43,8 +43,10 @@ public class XmlTestCaseWriter implements PropertyHandler {
 	}
 	
 	@Override
-	public void generationFinished() {
-	}
+	public void generationStarted(PropertyContainer propertyContainer) {}
+	
+	@Override
+	public void generationFinished() {}
 
 	public void addParts(PropertyContainer propertyContainer, String[] parts) {
 		for(int i = 0; i < parts.length; i+=2)

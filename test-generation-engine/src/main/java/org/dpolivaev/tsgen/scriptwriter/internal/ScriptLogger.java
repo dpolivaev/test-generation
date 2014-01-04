@@ -57,6 +57,9 @@ public class ScriptLogger implements PropertyHandler, ErrorHandler {
 	}
 
 	@Override
+	public void generationStarted(PropertyContainer propertyContainer) {}
+	
+	@Override
 	public void generationFinished() {
 		try {
 			log.close();

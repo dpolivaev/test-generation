@@ -50,7 +50,11 @@ public class MultipleScriptsWriter implements PropertyHandler{
         		resultFactory, goalChecker);
     }
 
-    public void generationFinished() {
+	@Override
+	public void generationStarted(PropertyContainer propertyContainer) {}
+	
+	@Override
+	public void generationFinished() {
         for(SingleScriptWriter singleScriptProducer:singleScriptProducers.values())
             singleScriptProducer.generationFinished();
         
