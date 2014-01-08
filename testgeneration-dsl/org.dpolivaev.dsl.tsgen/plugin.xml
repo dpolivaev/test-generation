@@ -10,6 +10,13 @@
        genModel = "org/dpolivaev/dsl/tsgen/TsGenDsl.genmodel" /> 
 	
   </extension>
+  <extension
+        point="org.eclipse.jdt.core.classpathContainerInitializer">
+     <classpathContainerInitializer
+           class="org.dpolivaev.dsl.tsgen.internal.buildpath.DslStrategyContainerInitializer"
+           id="org.dpolivaev.dsl.tsgen.TSGEN_CONTAINER">
+     </classpathContainerInitializer>
+  </extension>
 
 
 

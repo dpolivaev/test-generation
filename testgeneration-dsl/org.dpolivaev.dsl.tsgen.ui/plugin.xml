@@ -590,4 +590,12 @@
          </contextualLaunch>
       </shortcut>
    </extension>
+   <extension
+         point="org.eclipse.jdt.ui.classpathContainerPage">
+      <classpathContainerPage
+            class="org.dpolivaev.dsl.tsgen.ui.internal.buildpath.StrategyClasspathPage"
+            id="org.dpolivaev.dsl.tsgen.TSGEN_CONTAINER"
+            name="Test generation library">
+      </classpathContainerPage>
+   </extension>
 </plugin>
