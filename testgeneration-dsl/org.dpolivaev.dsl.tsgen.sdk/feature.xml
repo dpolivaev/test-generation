@@ -12,6 +12,7 @@
       <import plugin="org.antlr.runtime"/>
       <import plugin="org.eclipse.xtext.common.types"/>
       <import plugin="org.eclipse.xtext.xbase.lib"/>
+      <import plugin="org.eclipse.jdt.core"/>
       <import plugin="org.apache.log4j"/>
       <import plugin="org.eclipse.xtext.ui"/>
       <import plugin="org.eclipse.ui.editors" version="3.5.0" match="greaterOrEqual"/>
@@ -23,19 +24,32 @@
       <import plugin="org.eclipse.xtext.common.types.ui"/>
       <import plugin="org.eclipse.xtext.ui.codetemplates.ui"/>
       <import plugin="org.eclipse.compare"/>
-      <import plugin="org.eclipse.jdt.core"/>
       <import plugin="org.eclipse.jdt.debug.ui"/>
       <import plugin="org.eclipse.jdt.launching"/>
+      <import plugin="com.google.guava"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.core.variables"/>
+      <import plugin="org.eclipse.equinox.simpleconfigurator.manipulator"/>
+      <import plugin="org.eclipse.equinox.frameworkadmin"/>
+      <import plugin="org.eclipse.jdt.ui" version="3.9.1" match="greaterOrEqual"/>
    </requires>
 
    <plugin
          id="org.dpolivaev.dsl.tsgen"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
    <plugin
          id="org.dpolivaev.dsl.tsgen.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.dpolivaev.tsgen.engine"
          download-size="0"
          install-size="0"
          version="0.0.0"

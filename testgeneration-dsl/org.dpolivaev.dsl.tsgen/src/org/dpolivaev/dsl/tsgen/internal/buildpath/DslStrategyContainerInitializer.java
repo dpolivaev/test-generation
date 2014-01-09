@@ -61,7 +61,7 @@ public class DslStrategyContainerInitializer extends ClasspathContainerInitializ
 
 	public void initialize(IPath containerPath, IJavaProject project) throws CoreException {
 		TestGenerationContainer container= new TestGenerationContainer(containerPath,
-				BuildPathSupport.getTsGenLibraryEntry(), 
+				BuildPathSupport.getTsGenEngineEntry(), 
 				BuildPathSupport.getGuavaLibraryEntry(),
 				BuildPathSupport.getXBaseLibraryEntry());
 		JavaCore.setClasspathContainer(containerPath, new IJavaProject[] { project }, 	new IClasspathContainer[] { container }, null);
