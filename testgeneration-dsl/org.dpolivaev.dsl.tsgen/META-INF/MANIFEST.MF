@@ -22,7 +22,8 @@ Require-Bundle: org.eclipse.xtext;visibility:=reexport,
  org.eclipse.core.runtime,
  org.eclipse.core.variables,
  org.eclipse.equinox.simpleconfigurator.manipulator,
- org.eclipse.equinox.frameworkadmin
+ org.eclipse.equinox.frameworkadmin,
+ org.dpolivaev.tsgen.engine
 Import-Package: org.apache.log4j,
  org.eclipse.xtext.xbase.lib
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
@@ -38,7 +39,5 @@ Export-Package: org.dpolivaev.dsl.tsgen,
  org.dpolivaev.dsl.tsgen.strategydsl.impl,
  org.dpolivaev.dsl.tsgen.strategydsl.util,
  org.dpolivaev.dsl.tsgen.validation
-Bundle-ClassPath: lib/org.dpolivaev.dsl.tsgen.jar,
- lib/org.dpolivaev.tsgen.engine-1.0-SNAPSHOT.jar
 Bundle-Activator: org.dpolivaev.dsl.tsgen.internal.StrategyDslPlugin
 

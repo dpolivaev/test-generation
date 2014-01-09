@@ -155,8 +155,8 @@ public class BuildPathSupport {
 	}
 
 	
-	public static final PluginDescription TSGEN_PLUGIN= new PluginDescription(
-			"org.dpolivaev.dsl.tsgen", VersionRange.emptyRange, "lib/org.dpolivaev.tsgen.engine-1.0-SNAPSHOT.jar", "lib/org.dpolivaev.tsgen.engine-1.0-SNAPSHOT.jar", "org.dpolivaev.dsl.tsgen.source", "source-bundle/",  null);
+	public static final PluginDescription TSGEN_ENGINE_PLUGIN= new PluginDescription(
+			"org.dpolivaev.tsgen.engine", VersionRange.emptyRange, "bin", "org.dpolivaev.tsgen.engine_*.jar", "org.dpolivaev.tsgen.engine.source", "src/main/java",  null);
 	
 	private static final PluginDescription GUAVA_PLUGIN= new PluginDescription(
 			"com.google.guava", VersionRange.emptyRange, null, "com.google.guava_*.jar", "com.google.guava.source", "source-bundle/", null);
@@ -167,8 +167,8 @@ public class BuildPathSupport {
 	/**
 	 * @return the org.junit version 4 library, or <code>null</code> if not available
 	 */
-	public static IClasspathEntry getTsGenLibraryEntry() {
-		return TSGEN_PLUGIN.getLibraryEntry();
+	public static IClasspathEntry getTsGenEngineEntry() {
+		return TSGEN_ENGINE_PLUGIN.getLibraryEntry();
 	}
 
 	/**

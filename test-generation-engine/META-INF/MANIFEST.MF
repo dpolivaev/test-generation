@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Test generation engine
+Bundle-SymbolicName: org.dpolivaev.tsgen.engine
+Bundle-Version: 0.0.1.qualifier
+Export-Package: org.dpolivaev.tsgen.coverage,
+ org.dpolivaev.tsgen.coverage.code,
+ org.dpolivaev.tsgen.java,
+ org.dpolivaev.tsgen.ruleengine,
+ org.dpolivaev.tsgen.scriptwriter,
+ org.dpolivaev.tsgen.strategies
+Require-Bundle: com.google.guava
