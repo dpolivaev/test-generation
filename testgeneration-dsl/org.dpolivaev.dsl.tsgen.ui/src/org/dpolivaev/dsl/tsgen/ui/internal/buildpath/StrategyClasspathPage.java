@@ -26,24 +26,20 @@ public class StrategyClasspathPage extends NewElementWizardPage implements IClas
 		super("StrategyClasspathPage"); //$NON-NLS-1$
 	}
 
-	@Override
 	public void createControl(Composite parent) {
 		final Label label = new Label(parent, 0);
 		label.setText("Test generation library");
 		setControl(label);
 	}
 
-	@Override
 	public boolean finish() {
 		return true;
 	}
 
-	@Override
 	public IClasspathEntry getSelection() {
 		return JavaCore.newContainerEntry(BuildPathSupport.CONTAINER_PATH);
 	}
 
-	@Override
 	public void setSelection(IClasspathEntry containerEntry) {
 	}
 
