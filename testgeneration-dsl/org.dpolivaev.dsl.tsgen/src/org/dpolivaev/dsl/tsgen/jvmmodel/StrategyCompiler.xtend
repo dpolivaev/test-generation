@@ -12,7 +12,7 @@ import org.eclipse.xtext.xbase.XStringLiteral
 import org.eclipse.xtext.xbase.compiler.XbaseCompiler
 import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
 import org.eclipse.xtext.common.types.JvmDeclaredType
-import org.dpolivaev.tsgen.coverage.code.CodeCoverageTracker
+import org.dpolivaev.tsgen.coverage.CoverageTracker
 
 class StrategyCompiler extends XbaseCompiler {
 	@Inject Primitives primitives
@@ -30,7 +30,7 @@ class StrategyCompiler extends XbaseCompiler {
 				doInternalToJavaStatement(expr.reason, b, true)
 			val it = b.trace(expr, false);
 			newLine
-			append('codeCoverageTracker.reach("') append(expr.label) append('", ')
+			append('coverageTracker.reach("') append(expr.label) append('", ')
 			if(expr.reason != null){
 				append('String.valueOf(')
 				internalToConvertedExpression(expr.reason, it, expr.reason.getType())
@@ -63,9 +63,9 @@ class StrategyCompiler extends XbaseCompiler {
 			if (thisElement instanceof JvmDeclaredType) {
 				val type = thisElement as JvmDeclaredType
 				val field = type.declaredFields.findFirst[
-					simpleName == "codeCoverageTracker"
+					simpleName == "coverageTracker"
 				]
-				return field != null && field.type.qualifiedName.equals(CodeCoverageTracker.name)
+				return field != null && field.type.qualifiedName.equals(CoverageTracker.name)
 			}
 			
 		}

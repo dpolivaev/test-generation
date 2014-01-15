@@ -1,15 +1,13 @@
-package org.dpolivaev.tsgen.coverage.code;
+package org.dpolivaev.tsgen.coverage;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dpolivaev.tsgen.coverage.CoverageEntry;
-
-public class CodeCoverageTracker{
+public class CoverageTracker{
 
 	final private List<CoverageEntry> points;
 
-	public CodeCoverageTracker() {
+	public CoverageTracker() {
 		points = new ArrayList<>();
 	}
 
