@@ -24,7 +24,7 @@ import org.dpolivaev.tsgen.coverage.CoverageEntry
 import org.dpolivaev.tsgen.coverage.CoverageTracker
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory
-import org.dpolivaev.tsgen.scriptwriter.PropertyAccessingModel
+import org.dpolivaev.tsgen.coverage.PropertyAccessingModel
 import org.dpolivaev.tsgen.scriptwriter.StrategyRunner
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.common.types.JvmGenericType
