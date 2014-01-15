@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.dpolivaev.tsgen.coverage.code.CodeCoverageTracker;
 import org.dpolivaev.tsgen.coverage.code.Model;
 import org.dpolivaev.tsgen.coverage.internal.RequirementsCoverageGoalBuilder;
 import org.dpolivaev.tsgen.coverage.internal.CodeCoverageResetter;
@@ -20,63 +19,53 @@ import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.junit.Test;
 
 public class CodeCoverageTest {
-	private Model mockModel(List<CoverageEntry> items) {
-		Model model = mock(Model.class);
-		final CodeCoverageTracker codeCoverageTracker = new CodeCoverageTracker();
-		when(model.getCodeCoverageTracker()).thenReturn(codeCoverageTracker);
-		when(model.getRequiredItems()).thenReturn(items);
-		return model;
-	}
-
-
 	@Test
 	public void codeCoverageResetterClearsCodeCoverage() {
-		final CodeCoverageTracker codeCoverageTracker = mock(CodeCoverageTracker.class);
-		final CodeCoverageResetter codeCoverageResetter = new CodeCoverageResetter(codeCoverageTracker);
+		final CoverageTracker coverageTracker = mock(CoverageTracker.class);
+		final CodeCoverageResetter codeCoverageResetter = new CodeCoverageResetter(coverageTracker);
 		codeCoverageResetter.handlePropertyCombination(null);
-		verify(codeCoverageTracker).clear();
+		verify(coverageTracker).clear();
 	}
 	
 	@Test
 	public void codeCoverageCollectsPoints(){
-		final CodeCoverageTracker codeCoverageTracker = new CodeCoverageTracker();
-		codeCoverageTracker.reach("point", "reason");
-		final List<CoverageEntry> coverage = codeCoverageTracker.getReached();
+		final CoverageTracker coverageTracker = new CoverageTracker();
+		coverageTracker.reach("point", "reason");
+		final List<CoverageEntry> coverage = coverageTracker.getReached();
 		assertThat(coverage, equalTo(asList(new CoverageEntry("point", "reason"))));
 	}
 	
 	@Test
 	public void codeCoverageClearsPoints(){
-		final CodeCoverageTracker codeCoverageTracker = new CodeCoverageTracker();
-		codeCoverageTracker.reach("point", "reason");
-		codeCoverageTracker.clear();
-		final List<CoverageEntry> coverage = codeCoverageTracker.getReached();
+		final CoverageTracker coverageTracker = new CoverageTracker();
+		coverageTracker.reach("point", "reason");
+		coverageTracker.clear();
+		final List<CoverageEntry> coverage = coverageTracker.getReached();
 		assertThat(coverage, equalTo(Arrays.<CoverageEntry>asList()));
 	}
 	
 	@Test
 	public void emptyCodeCoverageGoal() throws Exception {
-		final RequirementsCoverageGoalBuilder codeCoverageGoalBuilder = new RequirementsCoverageGoalBuilder(Collections.<Model>emptyList());
+		final RequirementsCoverageGoalBuilder codeCoverageGoalBuilder = new RequirementsCoverageGoalBuilder(Collections.<CoverageTracker>emptyList(), Collections.<CoverageEntry>emptyList());
 		final Goal goal = codeCoverageGoalBuilder.createGoal();
 		assertThat(goal.checkList().requiredItemNumber(), equalTo(0));
 	}
 	
 	@Test
 	public void codeCoverageGoalForModel() throws Exception {
-		Model model = mockModel(asList(new CoverageEntry("item", CoverageEntry.ANY)));
-		final RequirementsCoverageGoalBuilder codeCoverageGoalBuilder = new RequirementsCoverageGoalBuilder(asList(model));
+		final RequirementsCoverageGoalBuilder codeCoverageGoalBuilder = new RequirementsCoverageGoalBuilder(Collections.<CoverageTracker>emptyList(), asList(new CoverageEntry("item", CoverageEntry.ANY)));
 		final Goal goal = codeCoverageGoalBuilder.createGoal();
 		assertThat(goal.checkList().requiredItemNumber(), equalTo(1));
 	}
 	
 	@Test
 	public void codeCoverageForModel() throws Exception {
-		Model model = mockModel(asList(new CoverageEntry("item", CoverageEntry.ANY)));
 		PropertyContainer propertyContainer = mock(PropertyContainer.class);
 		when(propertyContainer.availableProperties(anyString())).thenReturn(Collections.<String>emptySet());
-		final RequirementsCoverageGoalBuilder codeCoverageGoalBuilder = new RequirementsCoverageGoalBuilder(asList(model));
+		CoverageTracker tracker = new CoverageTracker();
+		final RequirementsCoverageGoalBuilder codeCoverageGoalBuilder = new RequirementsCoverageGoalBuilder(asList(tracker),  Collections.<CoverageEntry>emptyList());
 		final Goal goal = codeCoverageGoalBuilder.createGoal();
-		model.getCodeCoverageTracker().reach("item", "reason");
+		tracker.reach("item", "reason");
 		goal.check(propertyContainer);
 		assertThat(goal.checkList().totalAchievedItemNumber(), equalTo(1));
 	}

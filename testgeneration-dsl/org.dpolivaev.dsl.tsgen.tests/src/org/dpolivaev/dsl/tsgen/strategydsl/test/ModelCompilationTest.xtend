@@ -33,7 +33,7 @@ class ModelCompilationTest {
 			import java.util.Arrays;
 			import java.util.List;
 			import org.dpolivaev.tsgen.coverage.CoverageEntry;
-			import org.dpolivaev.tsgen.coverage.code.CodeCoverageTracker;
+			import org.dpolivaev.tsgen.coverage.CoverageTracker;
 			import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 			import org.dpolivaev.tsgen.scriptwriter.PropertyAccessingModel;
 			
@@ -43,16 +43,11 @@ class ModelCompilationTest {
 			  
 			  private PropertyContainer propertyContainer;
 			  
-			  private CodeCoverageTracker codeCoverageTracker = new CodeCoverageTracker();
+			  private CoverageTracker coverageTracker = new CoverageTracker();
 			  
 			  @Override
-			  public String getName() {
-			    return "myModel";
-			  }
-			  
-			  @Override
-			  public CodeCoverageTracker getCodeCoverageTracker() {
-			    return codeCoverageTracker;
+			  public CoverageTracker getCoverageTracker() {
+			    return coverageTracker;
 			  }
 			  
 			  @Override
@@ -103,7 +98,7 @@ class ModelCompilationTest {
 			import java.util.Arrays;
 			import java.util.List;
 			import org.dpolivaev.tsgen.coverage.CoverageEntry;
-			import org.dpolivaev.tsgen.coverage.code.CodeCoverageTracker;
+			import org.dpolivaev.tsgen.coverage.CoverageTracker;
 			import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 			import org.dpolivaev.tsgen.scriptwriter.PropertyAccessingModel;
 			
@@ -113,16 +108,11 @@ class ModelCompilationTest {
 			  
 			  private PropertyContainer propertyContainer;
 			  
-			  private CodeCoverageTracker codeCoverageTracker = new CodeCoverageTracker();
+			  private CoverageTracker coverageTracker = new CoverageTracker();
 			  
 			  @Override
-			  public String getName() {
-			    return "myModel";
-			  }
-			  
-			  @Override
-			  public CodeCoverageTracker getCodeCoverageTracker() {
-			    return codeCoverageTracker;
+			  public CoverageTracker getCoverageTracker() {
+			    return coverageTracker;
 			  }
 			  
 			  @Override
@@ -148,8 +138,8 @@ class ModelCompilationTest {
 			  public int calculate(final int i) {
 			    int _xblockexpression = (int) 0;
 			    {
-			      codeCoverageTracker.reach("req1", String.valueOf("reason1"));
-			      codeCoverageTracker.reach("req2", "");
+			      coverageTracker.reach("req1", String.valueOf("reason1"));
+			      coverageTracker.reach("req2", "");
 			      int _labeledexpression = (int) 0;
 			      _labeledexpression = 2;
 			      final int x = _labeledexpression;
@@ -203,7 +193,7 @@ class ModelCompilationTest {
 			  
 			  public static void run1() {
 			    StrategyRunner strategyRunner = new StrategyRunner();
-			    strategyRunner.addModel(myModel).addPropertyAccessor(myModel);
+			    strategyRunner.addCoverageTracker(myModel.getCoverageTracker()).addRequiredItems(myModel.getRequiredItems()).addPropertyAccessor(myModel);
 			    strategyRunner.run(s);
 			  }
 			  
@@ -217,7 +207,7 @@ class ModelCompilationTest {
 			import java.util.Arrays;
 			import java.util.List;
 			import org.dpolivaev.tsgen.coverage.CoverageEntry;
-			import org.dpolivaev.tsgen.coverage.code.CodeCoverageTracker;
+			import org.dpolivaev.tsgen.coverage.CoverageTracker;
 			import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 			import org.dpolivaev.tsgen.scriptwriter.PropertyAccessingModel;
 			
@@ -227,16 +217,11 @@ class ModelCompilationTest {
 			  
 			  private PropertyContainer propertyContainer;
 			  
-			  private CodeCoverageTracker codeCoverageTracker = new CodeCoverageTracker();
+			  private CoverageTracker coverageTracker = new CoverageTracker();
 			  
 			  @Override
-			  public String getName() {
-			    return "myModel";
-			  }
-			  
-			  @Override
-			  public CodeCoverageTracker getCodeCoverageTracker() {
-			    return codeCoverageTracker;
+			  public CoverageTracker getCoverageTracker() {
+			    return coverageTracker;
 			  }
 			  
 			  @Override

@@ -3,10 +3,12 @@ package org.dpolivaev.tsgen.scriptwriter;
 import java.io.OutputStreamWriter;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
+import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.coverage.Goal;
 import org.dpolivaev.tsgen.coverage.GoalChecker;
-import org.dpolivaev.tsgen.coverage.code.Model;
 import org.dpolivaev.tsgen.coverage.internal.RequirementsCoverageGoalBuilder;
 import org.dpolivaev.tsgen.coverage.internal.CodeCoverageResetter;
 import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
@@ -21,19 +23,27 @@ import org.dpolivaev.tsgen.scriptwriter.internal.StreamResultFactory;
 public class StrategyRunner {
 	private OutputConfiguration outputConfiguration;
 	private OutputConfiguration reportConfiguration;
-	final private Collection<Model> models;
+	final private Collection<CoverageTracker> trackers;
+	final private Collection<CoverageEntry> requiredEntries;
 	final private Collection<PropertyHandler> propertyAccessors;
 
 	public StrategyRunner() {
 		super();
 		this.outputConfiguration = new OutputConfiguration();
 		this.reportConfiguration = new OutputConfiguration();
-		models = new HashSet<>();
+		trackers = new HashSet<>();
+		requiredEntries = new HashSet<>();
 		propertyAccessors = new HashSet<>();
 	}
 	
-	public StrategyRunner addModel(Model model){
-		models.add(model);
+	public StrategyRunner addCoverageTracker(final CoverageTracker coverageTracker) {
+		trackers.add(coverageTracker);
+		return this;
+	}
+
+	public StrategyRunner addRequiredItems(
+			final List<CoverageEntry> requiredItems) {
+		requiredEntries.addAll(requiredItems);
 		return this;
 	}
 
@@ -51,8 +61,8 @@ public class StrategyRunner {
 		StreamResultFactory resultFactory = new StreamResultFactory();
 		GoalChecker goalChecker = createGoalChecker(resultFactory);
 		ruleEngine.addHandler(goalChecker);
-		for(Model model:models)
-			ruleEngine.addHandler(new CodeCoverageResetter(model.getCodeCoverageTracker()));
+		for(CoverageTracker tracker :trackers)
+			ruleEngine.addHandler(new CodeCoverageResetter(tracker));
 		MultipleScriptsWriter scriptProducer = null;
 		if (outputConfiguration.isFileValid()){
 			scriptProducer = new MultipleScriptsWriter(resultFactory, goalChecker);
@@ -72,7 +82,7 @@ public class StrategyRunner {
 	}
 
 	private Goal createCoverageGoal() {
-		return new RequirementsCoverageGoalBuilder(models).createGoal();
+		return new RequirementsCoverageGoalBuilder(trackers, requiredEntries).createGoal();
 	}
 
 	public OutputConfiguration getOutputConfiguration() {

@@ -21,7 +21,7 @@ import org.dpolivaev.dsl.tsgen.strategydsl.ValueAction
 import org.dpolivaev.dsl.tsgen.strategydsl.ValueProvider
 import org.dpolivaev.dsl.tsgen.strategydsl.Values
 import org.dpolivaev.tsgen.coverage.CoverageEntry
-import org.dpolivaev.tsgen.coverage.code.CodeCoverageTracker
+import org.dpolivaev.tsgen.coverage.CoverageTracker
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory
 import org.dpolivaev.tsgen.scriptwriter.PropertyAccessingModel
@@ -132,16 +132,16 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 				static = true			
 			]
 			members += model.toField("propertyContainer", model.newTypeRef(PropertyContainer))
-			members += model.toField("codeCoverageTracker", model.newTypeRef(CodeCoverageTracker))[
+			members += model.toField("coverageTracker", model.newTypeRef(CoverageTracker))[
 				setInitializer [
-					append('''new CodeCoverageTracker()''')
+					append('''new CoverageTracker()''')
 				]
 			]
 			
-			members += model.toMethod("getCodeCoverageTracker", model.newTypeRef(CodeCoverageTracker)) [
+			members += model.toMethod("getCoverageTracker", model.newTypeRef(CoverageTracker)) [
 				annotations += model.toAnnotation(Override)
 				body = [
-						append('return codeCoverageTracker;')
+						append('return coverageTracker;')
 				]
 				visibility = JvmVisibility::PUBLIC
 			]
@@ -636,9 +636,12 @@ class ScriptInitializer{
 						newLine
 						append('strategyRunner')
 						if(model.goal){
-							append('.addModel(')
+							append('.addCoverageTracker(')
 							appendReference(it, EXTERNAL_MODEL, model.expr)
-							append(')')
+							append('.getCoverageTracker())')
+							append('.addRequiredItems(')
+							appendReference(it, EXTERNAL_MODEL, model.expr)
+							append('.getRequiredItems())')
 						}
 						append('.addPropertyAccessor(')
 						appendReference(it, EXTERNAL_MODEL, model.expr)

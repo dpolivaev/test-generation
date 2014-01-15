@@ -5,18 +5,20 @@ import java.util.Collection;
 
 import org.dpolivaev.tsgen.coverage.CheckList;
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.coverage.Goal;
 import org.dpolivaev.tsgen.coverage.GoalFunction;
-import org.dpolivaev.tsgen.coverage.code.Model;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 
 
 public class RequirementsCoverageGoalBuilder {
 
-	final private Collection<Model> models;
+	final private Collection<CoverageTracker> trackers;
+	final private Collection<CoverageEntry> requiredEntries;
 
-	public RequirementsCoverageGoalBuilder(Collection<Model> list) {
-		this.models = list;
+	public RequirementsCoverageGoalBuilder(Collection<CoverageTracker> trackers, Collection<CoverageEntry> requiredEntries) {
+		this.trackers = trackers;
+		this.requiredEntries = requiredEntries;
 	}
 
 	public Goal createGoal(){
@@ -25,8 +27,8 @@ public class RequirementsCoverageGoalBuilder {
 			@Override
 			public Collection<CoverageEntry> check(PropertyContainer propertyContainer) {
 				Collection<CoverageEntry> coveredItems = new ArrayList<>(requirementCoverage.check(propertyContainer));
-				for(Model model:models)
-					for (CoverageEntry reached: model.getCodeCoverageTracker().getReached())
+				for(CoverageTracker tracker:trackers)
+					for (CoverageEntry reached: tracker.getReached())
 						coveredItems.add(reached);
 				return coveredItems;
 			}
@@ -35,9 +37,8 @@ public class RequirementsCoverageGoalBuilder {
 
 	CheckList createCheckList() {
 		final CheckList checkList = new CheckList();
-		for(Model model:models)
-			for (CoverageEntry item: model.getRequiredItems())
-				checkList.addExpected(item);
+		for (CoverageEntry item: requiredEntries)
+			checkList.addExpected(item);
 		return checkList;
 	}
 
