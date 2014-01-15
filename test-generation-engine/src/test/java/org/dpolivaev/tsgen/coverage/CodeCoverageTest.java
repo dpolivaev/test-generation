@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.dpolivaev.tsgen.coverage.code.Model;
 import org.dpolivaev.tsgen.coverage.internal.RequirementsCoverageGoalBuilder;
 import org.dpolivaev.tsgen.coverage.internal.CodeCoverageResetter;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;

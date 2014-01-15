@@ -34,8 +34,8 @@ class ModelCompilationTest {
 			import java.util.List;
 			import org.dpolivaev.tsgen.coverage.CoverageEntry;
 			import org.dpolivaev.tsgen.coverage.CoverageTracker;
+			import org.dpolivaev.tsgen.coverage.PropertyAccessingModel;
 			import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-			import org.dpolivaev.tsgen.scriptwriter.PropertyAccessingModel;
 			
 			@SuppressWarnings("all")
 			public class MyModel implements PropertyAccessingModel {
@@ -99,8 +99,8 @@ class ModelCompilationTest {
 			import java.util.List;
 			import org.dpolivaev.tsgen.coverage.CoverageEntry;
 			import org.dpolivaev.tsgen.coverage.CoverageTracker;
+			import org.dpolivaev.tsgen.coverage.PropertyAccessingModel;
 			import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-			import org.dpolivaev.tsgen.scriptwriter.PropertyAccessingModel;
 			
 			@SuppressWarnings("all")
 			public class MyModel implements PropertyAccessingModel {
@@ -208,8 +208,8 @@ class ModelCompilationTest {
 			import java.util.List;
 			import org.dpolivaev.tsgen.coverage.CoverageEntry;
 			import org.dpolivaev.tsgen.coverage.CoverageTracker;
+			import org.dpolivaev.tsgen.coverage.PropertyAccessingModel;
 			import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-			import org.dpolivaev.tsgen.scriptwriter.PropertyAccessingModel;
 			
 			@SuppressWarnings("all")
 			public class MyModel implements PropertyAccessingModel {

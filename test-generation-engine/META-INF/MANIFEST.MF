@@ -4,7 +4,6 @@ Bundle-Name: Test generation engine
 Bundle-SymbolicName: org.dpolivaev.tsgen.engine
 Bundle-Version: 0.0.1.qualifier
 Export-Package: org.dpolivaev.tsgen.coverage,
- org.dpolivaev.tsgen.coverage.code,
  org.dpolivaev.tsgen.java,
  org.dpolivaev.tsgen.ruleengine,
  org.dpolivaev.tsgen.scriptwriter,
