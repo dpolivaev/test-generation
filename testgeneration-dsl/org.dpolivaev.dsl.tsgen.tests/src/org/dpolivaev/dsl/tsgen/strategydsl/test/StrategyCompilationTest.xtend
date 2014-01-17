@@ -68,6 +68,29 @@ class StrategyCompilationTest {
 		''')
 	}	
 	
+	@Test def withExplicitTriggeredRule() {
+		'''
+			strategy first
+				let "x y" be 1
+				for each "x y" let z be 2
+		'''.assertCompilesTo('''
+		import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
+		import org.dpolivaev.tsgen.ruleengine.Strategy;
+		
+		@SuppressWarnings("all")
+		public class MyFile {
+		  public final static Strategy first = defineStrategyFirst();
+		  
+		  private static Strategy defineStrategyFirst() {
+		    Strategy strategy = new Strategy();
+		    strategy.addRule(RuleBuilder.Factory.iterate("x y").over(1).asRule());
+		    strategy.addRule(RuleBuilder.Factory.when("x y").iterate("z").over(2).asRule());
+		    return strategy;
+		  }
+		}
+		''')
+	}	
+	
 	@Test def withMultilineString() {
 		'''
 			strategy first

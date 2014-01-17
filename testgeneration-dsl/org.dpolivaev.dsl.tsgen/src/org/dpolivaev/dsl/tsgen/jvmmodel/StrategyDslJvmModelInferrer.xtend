@@ -418,7 +418,7 @@ class ScriptInitializer{
 				}
 				else
 					append(', ')
-				append('''"«name»"''')	
+				append('''"«name.escapeQuotes»"''')	
 			}
 			append(')')
 		}
