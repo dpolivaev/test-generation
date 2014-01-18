@@ -41,6 +41,8 @@ public class CheckList{
 	
 	private CheckList addReached(CoverageEntry coverageEntry) {
 		int count = countReached(coverageEntry);
+		if(firstTimeCoveredEntries.contains(coverageEntry) || repeatedlyCoveredEntries.contains(coverageEntry))
+			return this;
 		if(count == 0)
 			firstTimeCoveredEntries.add(coverageEntry);
 		else
