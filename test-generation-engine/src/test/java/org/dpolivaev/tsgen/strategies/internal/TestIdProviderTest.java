@@ -49,10 +49,18 @@ public class TestIdProviderTest {
 	
 	@Test
 	public void excludesNonIteratedValues(){
-		final Assignment assignmentMock = assignmentMock("focus", "value", "");
+		final Assignment assignmentMock = assignmentMock("verification", "value", "");
 		Mockito.when(assignmentMock.rule.forcesIteration()).thenReturn(false);
 		assignments.add(assignmentMock);
 		assertThat((String)testIdProvider.value(assignments), equalTo(""));
+	}
+	
+	@Test
+	public void keepsFocus(){
+		final Assignment assignmentMock = assignmentMock("focus", "value", "");
+		Mockito.when(assignmentMock.rule.forcesIteration()).thenReturn(false);
+		assignments.add(assignmentMock);
+		assertThat((String)testIdProvider.value(assignments), equalTo("value"));
 	}
 	
 	@Test
