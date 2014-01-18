@@ -30,10 +30,7 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.scriptw
 			<xsl:if test="Goal/Item[@firstTime='true']">
 				<xsl:call-template name="eol2"/>
 				<xsl:text>first = {</xsl:text>
-				<xsl:apply-templates select="Goal/Item[@firstTime='true']">
-					<xsl:sort select="../@name"/>
-					<xsl:sort select="@name"/>
-				</xsl:apply-templates>
+				<xsl:apply-templates select="Goal/Item[@firstTime='true']"/>
 				<xsl:call-template name="eol2"/>
 				<xsl:text>}</xsl:text>
 			</xsl:if>
@@ -43,10 +40,7 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.scriptw
 			<xsl:if test="Goal/Item[@firstTime='false']">
 				<xsl:call-template name="eol2"/>
 				<xsl:text>again = {</xsl:text>
-				<xsl:apply-templates select="Goal/Item[@firstTime='false']">
-					<xsl:sort select="../@name"/>
-					<xsl:sort select="@name"/>
-				</xsl:apply-templates>
+				<xsl:apply-templates select="Goal/Item[@firstTime='false']"/>
 				<xsl:call-template name="eol2"/>
 				<xsl:text>}</xsl:text>
 			</xsl:if>

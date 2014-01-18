@@ -749,6 +749,12 @@ public class ParkCalculatorTest {
 	
 	@Description("category: success\n"
 +"modelCallResult: 468")
+	@Coverage(
+		first = {
+			@GoalCoverage(goal = "requirement coverage", item="Req10", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req7", coverage={""})
+		}
+	)
 	@Test
 	public void test029_calculateParkingCostsLONG_TERM_GARAGE_PARKING_123119991200PmWeeks6Days0Hours0Minutes0() throws Exception {
 		
@@ -769,6 +775,15 @@ public class ParkCalculatorTest {
 	
 	@Description("category: success\n"
 +"modelCallResult: 548")
+	@Coverage(
+		first = {
+			@GoalCoverage(goal = "requirement coverage", item="Req8", coverage={""})
+		},
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req10", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req7", coverage={""})
+		}
+	)
 	@Test
 	public void test030_calculateParkingCostsLONG_TERM_GARAGE_PARKING_01119701200AmWeeks6Days6Hours0Minutes30() throws Exception {
 		
@@ -789,6 +804,13 @@ public class ParkCalculatorTest {
 	
 	@Description("category: success\n"
 +"modelCallResult: 2082")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req10", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req7", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req8", coverage={""})
+		}
+	)
 	@Test
 	public void test031_calculateParkingCostsLONG_TERM_GARAGE_PARKING_123119991200PmWeeks26Hours0Minutes31() throws Exception {
 		
@@ -809,6 +831,13 @@ public class ParkCalculatorTest {
 	
 	@Description("category: success\n"
 +"modelCallResult: 548")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req10", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req7", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req8", coverage={""})
+		}
+	)
 	@Test
 	public void test032_calculateParkingCostsLONG_TERM_GARAGE_PARKING_022820162359PmWeeks6Days6Hours0Minutes59() throws Exception {
 		
@@ -829,6 +858,13 @@ public class ParkCalculatorTest {
 	
 	@Description("category: success\n"
 +"modelCallResult: 472")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req10", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req7", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req8", coverage={""})
+		}
+	)
 	@Test
 	public void test033_calculateParkingCostsLONG_TERM_GARAGE_PARKING_01119701200AmWeeks6Days0Hours1Minutes59() throws Exception {
 		
@@ -849,6 +885,13 @@ public class ParkCalculatorTest {
 	
 	@Description("category: success\n"
 +"modelCallResult: 158")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req10", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req7", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req8", coverage={""})
+		}
+	)
 	@Test
 	public void test034_calculateParkingCostsLONG_TERM_GARAGE_PARKING_123119991200PmWeeks1Days6Hours1Minutes0() throws Exception {
 		
@@ -869,6 +912,12 @@ public class ParkCalculatorTest {
 	
 	@Description("category: success\n"
 +"modelCallResult: 17")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req7", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req8", coverage={""})
+		}
+	)
 	@Test
 	public void test035_calculateParkingCostsLONG_TERM_GARAGE_PARKING_01119701200AmWeeks0Days1Hours1Minutes30() throws Exception {
 		
@@ -889,6 +938,12 @@ public class ParkCalculatorTest {
 	
 	@Description("category: success\n"
 +"modelCallResult: 82")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req7", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req8", coverage={""})
+		}
+	)
 	@Test
 	public void test036_calculateParkingCostsLONG_TERM_GARAGE_PARKING_022820162359PmWeeks0Days6Hours1Minutes31() throws Exception {
 		
@@ -909,6 +964,12 @@ public class ParkCalculatorTest {
 	
 	@Description("category: success\n"
 +"modelCallResult: 12")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req7", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req8", coverage={""})
+		}
+	)
 	@Test
 	public void test037_calculateParkingCostsLONG_TERM_GARAGE_PARKING_022820162359PmWeeks0Days0Hours5Minutes30() throws Exception {
 		
@@ -929,6 +990,13 @@ public class ParkCalculatorTest {
 	
 	@Description("category: success\n"
 +"modelCallResult: 2092")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req10", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req7", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req8", coverage={""})
+		}
+	)
 	@Test
 	public void test038_calculateParkingCostsLONG_TERM_GARAGE_PARKING_123119991200PmWeeks26Hours5Minutes31() throws Exception {
 		
@@ -949,6 +1017,12 @@ public class ParkCalculatorTest {
 	
 	@Description("category: success\n"
 +"modelCallResult: 10")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req7", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req8", coverage={""})
+		}
+	)
 	@Test
 	public void test039_calculateParkingCostsLONG_TERM_GARAGE_PARKING_01119701200AmWeeks0Days0Hours5Minutes0() throws Exception {
 		
@@ -969,6 +1043,12 @@ public class ParkCalculatorTest {
 	
 	@Description("category: success\n"
 +"modelCallResult: 25")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req7", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req8", coverage={""})
+		}
+	)
 	@Test
 	public void test040_calculateParkingCostsLONG_TERM_GARAGE_PARKING_01119701200AmWeeks0Days1Hours5Minutes59() throws Exception {
 		
@@ -989,6 +1069,12 @@ public class ParkCalculatorTest {
 	
 	@Description("category: success\n"
 +"modelCallResult: 90")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req7", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req8", coverage={""})
+		}
+	)
 	@Test
 	public void test041_calculateParkingCostsLONG_TERM_GARAGE_PARKING_123119991200PmWeeks0Days6Hours6Minutes0() throws Exception {
 		
@@ -1009,6 +1095,15 @@ public class ParkCalculatorTest {
 	
 	@Description("category: success\n"
 +"modelCallResult: 169")
+	@Coverage(
+		first = {
+			@GoalCoverage(goal = "requirement coverage", item="Req9", coverage={""})
+		},
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req10", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req7", coverage={""})
+		}
+	)
 	@Test
 	public void test042_calculateParkingCostsLONG_TERM_GARAGE_PARKING_022820162359PmWeeks1Days6Hours6Minutes30() throws Exception {
 		
@@ -1029,6 +1124,13 @@ public class ParkCalculatorTest {
 	
 	@Description("category: success\n"
 +"modelCallResult: 104")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req10", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req7", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req9", coverage={""})
+		}
+	)
 	@Test
 	public void test043_calculateParkingCostsLONG_TERM_GARAGE_PARKING_01119701200AmWeeks1Days1Hours6Minutes31() throws Exception {
 		
@@ -1049,6 +1151,13 @@ public class ParkCalculatorTest {
 	
 	@Description("category: success\n"
 +"modelCallResult: 559")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req10", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req7", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req9", coverage={""})
+		}
+	)
 	@Test
 	public void test044_calculateParkingCostsLONG_TERM_GARAGE_PARKING_123119991200PmWeeks6Days6Hours6Minutes59() throws Exception {
 		
@@ -1069,6 +1178,13 @@ public class ParkCalculatorTest {
 	
 	@Description("category: success\n"
 +"modelCallResult: 481")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req10", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req7", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req9", coverage={""})
+		}
+	)
 	@Test
 	public void test045_calculateParkingCostsLONG_TERM_GARAGE_PARKING_022820162359PmWeeks6Days0Hours23Minutes31() throws Exception {
 		
@@ -1089,6 +1205,13 @@ public class ParkCalculatorTest {
 	
 	@Description("category: success\n"
 +"modelCallResult: 2093")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req10", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req7", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req9", coverage={""})
+		}
+	)
 	@Test
 	public void test046_calculateParkingCostsLONG_TERM_GARAGE_PARKING_022820162359PmWeeks26Hours23Minutes30() throws Exception {
 		
@@ -1109,6 +1232,13 @@ public class ParkCalculatorTest {
 	
 	@Description("category: success\n"
 +"modelCallResult: 2093")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req10", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req7", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req9", coverage={""})
+		}
+	)
 	@Test
 	public void test047_calculateParkingCostsLONG_TERM_GARAGE_PARKING_01119701200AmWeeks26Hours23Minutes0() throws Exception {
 		
@@ -1129,6 +1259,12 @@ public class ParkCalculatorTest {
 	
 	@Description("category: success\n"
 +"modelCallResult: 13")
+	@Coverage(
+		again = {
+			@GoalCoverage(goal = "requirement coverage", item="Req7", coverage={""}),
+			@GoalCoverage(goal = "requirement coverage", item="Req9", coverage={""})
+		}
+	)
 	@Test
 	public void test048_calculateParkingCostsLONG_TERM_GARAGE_PARKING_123119991200PmWeeks0Days0Hours23Minutes59() throws Exception {
 		
