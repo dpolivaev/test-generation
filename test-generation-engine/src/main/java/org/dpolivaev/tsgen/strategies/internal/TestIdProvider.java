@@ -1,5 +1,6 @@
 package org.dpolivaev.tsgen.strategies.internal;
 
+import java.util.Collection;
 import org.dpolivaev.tsgen.ruleengine.Assignment;
 import org.dpolivaev.tsgen.ruleengine.AssignmentFormatter;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
@@ -7,11 +8,9 @@ import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.ruleengine.ValueProvider;
 
+
 public class TestIdProvider implements ValueProvider{
 	
-	public static final String TEST_CASE_PARTS_REGEX = "(?:pre|foc|veri|post)(?:\\d+)?(?:\\..+)?";
-
-
 	public static Strategy strategy(String propertyName){
 		Strategy strategy = new Strategy();
 		TestIdProvider instance = new TestIdProvider("=", " ");
@@ -62,9 +61,14 @@ public class TestIdProvider implements ValueProvider{
 		};
 		assignmentFormatter.shouldFormatIteratingRulesOnly(true);
 		assignmentFormatter.appendReasons(false);
-		assignmentFormatter.include(TEST_CASE_PARTS_REGEX);
-		final String values = assignmentFormatter.format(propertyContainer);
-		return values;
+		Collection<Assignment> testPartProperties = new AssignmentFilter(propertyContainer).testPartRelevantAssignments();
+		final String values = assignmentFormatter.format(testPartProperties);
+		return values.trim();
+	}
+
+	public Collection<Assignment> testPartRelevantAssignments(
+			PropertyContainer propertyContainer) {
+		return new AssignmentFilter(propertyContainer).testPartRelevantAssignments();
 	}
 
 }

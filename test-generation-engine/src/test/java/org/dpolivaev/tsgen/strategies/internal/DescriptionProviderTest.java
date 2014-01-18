@@ -54,9 +54,9 @@ public class DescriptionProviderTest {
 	@Test
 	public void excludesTestPartsAndParams() {
 		givenAssignment("pre", "pre","");
-		givenAssignment("foc", "foc","");
+		givenAssignment("foc", "foc(x)","");
+		givenAssignment("x", "x","");
 		givenAssignment("foc1", "foc1","");
-		givenAssignment("foc.x", "foc.x","");
 		givenAssignment("veri", "veri","");
 		givenAssignment("post", "post","");
 		givenAssignment("script", "script","");

@@ -39,6 +39,11 @@ public class Assignments implements PropertyContainer {
         return (T)assignments.get(name).value;
 	}
 
+	@Override
+	public Assignment getAssignment(String name) {
+		return assignments.get(name);
+	}
+
     public Collection<Assignment> getAssignments() {
         return Collections.unmodifiableCollection(assignments.values());
     }

@@ -8,6 +8,7 @@ import static org.xmlmatchers.transform.XmlConverters.the;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMResult;
+
 import org.dpolivaev.tsgen.coverage.CheckList;
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.Goal;
@@ -32,6 +33,11 @@ public class XmlTestCaseWriterTest {
     private XmlWriter xmlWriter;
 	private Goal goal;
 	private CheckList checkList;
+
+	private void givenCoverage(String requirementId, String description) {
+		checkList.addReached(asList(new CoverageEntry(requirementId, description)));
+		
+	}
 
     @Before
     public void setup() throws TransformerFactoryConfigurationError, TransformerConfigurationException, SAXException {
@@ -164,10 +170,38 @@ public class XmlTestCaseWriterTest {
         		+ "</TestCase>");
     }
 
-	private void givenCoverage(String requirementId, String description) {
-		checkList.addReached(asList(new CoverageEntry(requirementId, description)));
-		
-	}
+    @Test
+    public void createsTestCaseElementWithZeroFocusParameters() throws Exception{
+        givenProperty("testcase", "testcase");
+        givenProperty("foc", "focus ()");
+        createScript();
+        checkOutput("<TestCase id='testcase'><Focus id='focus'>"
+        		+ "</Focus></TestCase>");
+    }
+    
+    @Test
+    public void createsTestCaseElementWithOneFocusParameter() throws Exception{
+        givenProperty("testcase", "testcase");
+        givenProperty("foc", "focus (x)");
+        givenProperty("x", "1");
+        createScript();
+        checkOutput("<TestCase id='testcase'><Focus id='focus'>"
+        		+ "<Parameter name='x'>1</Parameter>"
+        		+ "</Focus></TestCase>");
+    }
 
+    
+    @Test
+    public void createsTestCaseElementWithTwoFocusParameters() throws Exception{
+        givenProperty("testcase", "testcase");
+        givenProperty("foc", "focus (x, y)");
+        givenProperty("x", "1");
+        givenProperty("y", "2");
+        createScript();
+        checkOutput("<TestCase id='testcase'><Focus id='focus'>"
+        		+ "<Parameter name='x'>1</Parameter>"
+        		+ "<Parameter name='y'>2</Parameter>"
+        		+ "</Focus></TestCase>");
+    }
 }
 
