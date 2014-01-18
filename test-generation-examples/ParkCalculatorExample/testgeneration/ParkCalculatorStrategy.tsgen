@@ -26,19 +26,19 @@ let category be "success"{
 	/*
 	 * In this category define test focus as "calculate parking costs"
 	 */
-	let foc be "calculate parking costs"{
+	let focus be "calculate parking costs"{
 		
 		/*
 		 * For this focus define preconditions and verification steps
 		 */		
-		let pre1 be "select lot (parking lot)"
-		let pre2 be "set entry time (entry time)"
-		let pre3 be "set parking duration (weeks, days, hours, minutes)"
+		let precondition1 be "select lot (parking lot)"
+		let precondition2 be "set entry time (entry time)"
+		let precondition3 be "set parking duration (weeks, days, hours, minutes)"
 		
-		/* Keyword "default" means that property “veri” is lasily evaluated 
+		/* Keyword "default" means that property “verification” is lasily evaluated 
 		 * and can be redefined adding another value to the rule set.
 		 */
-		let default veri be "verify parking costs (expectedCosts)"
+		let default verification be "verify parking costs (expectedCosts)"
 		
 		/* 
 		 * Define multiple values for parameter “entryTime” of the second precondition.
@@ -151,7 +151,7 @@ let category be "success"{
 				let [Req7] be (:"parking lot" " " :"parking time")	 
 			}, 
 			"LONG_TERM_SURFACE_PARKING"{
-				let veri be ("verify parking costs for lot ":"parking lot")
+				let verification be ("verify parking costs for lot ":"parking lot")
 				let hours be 0, 4, 5, 23 {
 					let minutes be 0,1, 59
 				}
@@ -190,23 +190,23 @@ let category be "success"{
 		}
 	},
 "failure"{
-	let foc be  
+	let focus be  
 		"select illegal lot (wrongValue)"{
 			let wrongValue be "NULL_VALUE", "BAD_VALUE"
 		}, 
 		"use illegal date in calculation"{
-			let pre1 be "select lot(lot)"
+			let precondition1 be "select lot(lot)"
 			/*
 			 * lot can take values from listOfValidLots defined above
 			 * Default rules do not force iteration.  
 			 */
 			let default lot be from listOfValidLots
 			let illegalElement be "entry date", "entry time", "entry day part", "leaving date", "leaving time", "leaving day part"
-			let pre2 be ("set illegal " :illegalElement "(wrongValue)")
+			let precondition2 be ("set illegal " :illegalElement "(wrongValue)")
 			let wrongValue be "NULL_VALUE", "BAD_VALUE"
 		},
 		"use leaving date earlier than entry date"{
-			let pre1 be "select lot(lot)"
+			let precondition1 be "select lot(lot)"
 			let default lot be from listOfValidLots
 		}
 }

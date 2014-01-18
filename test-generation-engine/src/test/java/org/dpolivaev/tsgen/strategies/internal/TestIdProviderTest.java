@@ -36,20 +36,20 @@ public class TestIdProviderTest {
 
 	@Test
 	public void includesFoc(){
-		givenAssignment("foc", "value", "");
+		givenAssignment("focus", "value", "");
 		assertThat((String)testIdProvider.value(assignments), equalTo("value"));
 		
 	}
 	@Test
 	public void includesFoc1(){
-		givenAssignment("foc1", "value", "");
+		givenAssignment("focus1", "value", "");
 		assertThat((String)testIdProvider.value(assignments), equalTo("value"));
 		
 	}
 	
 	@Test
 	public void excludesNonIteratedValues(){
-		final Assignment assignmentMock = assignmentMock("foc", "value", "");
+		final Assignment assignmentMock = assignmentMock("focus", "value", "");
 		Mockito.when(assignmentMock.rule.forcesIteration()).thenReturn(false);
 		assignments.add(assignmentMock);
 		assertThat((String)testIdProvider.value(assignments), equalTo(""));
@@ -57,7 +57,7 @@ public class TestIdProviderTest {
 	
 	@Test
 	public void excludesFocFalse(){
-		givenAssignment("foc", "focus(x)", "");
+		givenAssignment("focus", "focus(x)", "");
 		givenAssignment("x", false, "");
 		assertThat((String)testIdProvider.value(assignments), equalTo("focus"));
 		
@@ -66,7 +66,7 @@ public class TestIdProviderTest {
 	@Ignore
 	@Test
 	public void includesFocTrue(){
-		givenAssignment("foc", "focus(x)", "");
+		givenAssignment("focus", "focus(x)", "");
 		givenAssignment("x", true, "");
 		assertThat((String)testIdProvider.value(assignments), equalTo("focus x"));
 		
@@ -74,26 +74,26 @@ public class TestIdProviderTest {
 	
 	@Test
 	public void includesFocNumber(){
-		givenAssignment("foc", "focus(x)", "");
+		givenAssignment("focus", "focus(x)", "");
 		givenAssignment("x", 6, "");
 		assertThat((String)testIdProvider.value(assignments), equalTo("focus x=6"));
 		
 	}
 	@Test
 	public void includesPre(){
-		givenAssignment("pre", "value", "");
+		givenAssignment("precondition", "value", "");
 		assertThat((String)testIdProvider.value(assignments), equalTo("value"));
 		
 	}
 	@Test
 	public void includesVeri(){
-		givenAssignment("veri", "value", "");
+		givenAssignment("verification", "value", "");
 		assertThat((String)testIdProvider.value(assignments), equalTo("value"));
 		
 	}
 	@Test
 	public void includesPost(){
-		givenAssignment("post", "value", "");
+		givenAssignment("postprocessing", "value", "");
 		assertThat((String)testIdProvider.value(assignments), equalTo("value"));
 		
 	}

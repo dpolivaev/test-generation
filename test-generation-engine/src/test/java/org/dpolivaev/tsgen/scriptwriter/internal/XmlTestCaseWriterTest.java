@@ -111,7 +111,7 @@ public class XmlTestCaseWriterTest {
     @Test
     public void createsTestCaseElementWithFocusPartAndContent() throws Exception{
         givenProperty("testcase", "testcase");
-        givenProperty("foc", "focus");
+        givenProperty("focus", "focus");
         createScript();
         checkOutput("<TestCase id='testcase'><Focus id='focus'/></TestCase>");
     }
@@ -119,8 +119,8 @@ public class XmlTestCaseWriterTest {
     @Test
     public void createsTestCaseElementWithTwoFocusPartsAndContent() throws Exception{
         givenProperty("testcase", "testcase");
-        givenProperty("foc", "focus");
-        givenProperty("foc1", "focus1");
+        givenProperty("focus", "focus");
+        givenProperty("focus1", "focus1");
         createScript();
         checkOutput("<TestCase id='testcase'><Focus id='focus'/><Focus id='focus1'/></TestCase>");
     }
@@ -128,9 +128,9 @@ public class XmlTestCaseWriterTest {
     @Test
     public void createsTestCaseElementWithThreeFocusPartsAndContent() throws Exception{
         givenProperty("testcase", "testcase");
-        givenProperty("foc", "focus");
-        givenProperty("foc1", "focus1");
-        givenProperty("foc3", "focus3");
+        givenProperty("focus", "focus");
+        givenProperty("focus1", "focus1");
+        givenProperty("focus3", "focus3");
         createScript();
         checkOutput("<TestCase id='testcase'><Focus id='focus'/><Focus id='focus1'/><Focus id='focus3'/></TestCase>");
     }
@@ -139,10 +139,10 @@ public class XmlTestCaseWriterTest {
     @Test
     public void createsTestCaseElementWithAllPartsAndContent() throws Exception{
         givenProperty("testcase", "testcase");
-        givenProperty("pre", "precondition");
-        givenProperty("foc", "focus");
-        givenProperty("veri", "verification");
-        givenProperty("post", "postprocessing");
+        givenProperty("precondition", "precondition");
+        givenProperty("focus", "focus");
+        givenProperty("verification", "verification");
+        givenProperty("postprocessing", "postprocessing");
         createScript();
         checkOutput("<TestCase id='testcase'>" +
                 "<Precondition id='precondition'/>" +
@@ -173,7 +173,7 @@ public class XmlTestCaseWriterTest {
     @Test
     public void createsTestCaseElementWithZeroFocusParameters() throws Exception{
         givenProperty("testcase", "testcase");
-        givenProperty("foc", "focus ()");
+        givenProperty("focus", "focus ()");
         createScript();
         checkOutput("<TestCase id='testcase'><Focus id='focus'>"
         		+ "</Focus></TestCase>");
@@ -182,7 +182,7 @@ public class XmlTestCaseWriterTest {
     @Test
     public void createsTestCaseElementWithOneFocusParameter() throws Exception{
         givenProperty("testcase", "testcase");
-        givenProperty("foc", "focus (x)");
+        givenProperty("focus", "focus (x)");
         givenProperty("x", "1");
         createScript();
         checkOutput("<TestCase id='testcase'><Focus id='focus'>"
@@ -194,7 +194,7 @@ public class XmlTestCaseWriterTest {
     @Test
     public void createsTestCaseElementWithTwoFocusParameters() throws Exception{
         givenProperty("testcase", "testcase");
-        givenProperty("foc", "focus (x, y)");
+        givenProperty("focus", "focus (x, y)");
         givenProperty("x", "1");
         givenProperty("y", "2");
         createScript();

@@ -11,7 +11,7 @@ import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.scriptwriter.internal.PartValueParser;
 
 public class AssignmentFilter {
-	private static final Pattern TEST_CASE_PARTS_REGEX =  Pattern.compile("(?:pre|foc|veri|post)(?:\\d+)?");
+	private static final Pattern TEST_CASE_PARTS_REGEX =  Pattern.compile("(?:precondition|focus|verification|postprocessing)(?:\\d+)?");
 	final private PropertyContainer propertyContainer;
 
 	public AssignmentFilter(PropertyContainer propertyContainer) {

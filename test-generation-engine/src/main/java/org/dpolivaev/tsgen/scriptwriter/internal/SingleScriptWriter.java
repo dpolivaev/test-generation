@@ -12,8 +12,8 @@ public class SingleScriptWriter implements PropertyHandler {
     private XmlWriter xmlWriter;
     private PropertyHandler scriptProducer;
     private static final String[] scriptParts = {
-        "scriptpre", "ScriptPrecondition",
-        "scriptpost", "ScriptPostprocessing",
+        "scriptprecondition", "ScriptPrecondition",
+        "scriptpostprocessing", "ScriptPostprocessing",
     };
 
 	@Override
