@@ -18,10 +18,10 @@ public class XmlTestCaseWriter implements PropertyHandler {
     private static final String TESTCASE_ELEMENT = "TestCase";
     
     private static final String[] testCaseParts = {
-        "pre", "Precondition",
-        "foc", "Focus",
-        "veri", "Verification",
-        "post", "Postprocessing",
+        "precondition", "Precondition",
+        "focus", "Focus",
+        "verification", "Verification",
+        "postprocessing", "Postprocessing",
     };
     private final XmlWriter xmlWriter;
 	private GoalChecker goalChecker;
@@ -88,7 +88,7 @@ public class XmlTestCaseWriter implements PropertyHandler {
 	private void addParts(PropertyContainer propertyContainer, String property, String element) {
         if(propertyContainer.containsPropertyValue(property))
             addPart(propertyContainer, property, element);
-        for(int i = 1; i <= 9; i++)
+        for(int i = 1; i <= 99; i++)
             if(propertyContainer.containsPropertyValue(property + i))
                 addPart(propertyContainer, property + i, element);
     }

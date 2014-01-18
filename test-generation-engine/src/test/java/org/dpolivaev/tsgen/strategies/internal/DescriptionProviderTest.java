@@ -53,12 +53,12 @@ public class DescriptionProviderTest {
 
 	@Test
 	public void excludesTestPartsAndParams() {
-		givenAssignment("pre", "pre","");
-		givenAssignment("foc", "foc(x)","");
+		givenAssignment("precondition", "precondition","");
+		givenAssignment("focus", "focus(x)","");
 		givenAssignment("x", "x","");
-		givenAssignment("foc1", "foc1","");
-		givenAssignment("veri", "veri","");
-		givenAssignment("post", "post","");
+		givenAssignment("focus1", "focus1","");
+		givenAssignment("verification", "verification","");
+		givenAssignment("postprocessing", "postprocessing","");
 		givenAssignment("script", "script","");
 
 		String description = new DescriptionProvider()
