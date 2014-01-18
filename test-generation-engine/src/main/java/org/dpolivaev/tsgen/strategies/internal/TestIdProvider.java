@@ -34,6 +34,11 @@ public class TestIdProvider implements ValueProvider{
 		AssignmentFormatter assignmentFormatter = new AssignmentFormatter(propertySeparator, valueNameSeparator){
 
 			@Override
+			protected boolean includesAssignment(Assignment assignment) {
+				return assignment.rule.forcesIteration() || assignment.getTargetedPropertyName().equals("focus");
+			}
+
+			@Override
 			protected AssignmentFormatter append(
 					StringBuilder assignedPropertiesStringBuilder,
 					Assignment assignment) {
@@ -59,7 +64,6 @@ public class TestIdProvider implements ValueProvider{
 				assignedPropertiesStringBuilder.append(targetedPropertyName.substring(endOfTestPartName + 1));
 			}
 		};
-		assignmentFormatter.shouldFormatIteratingRulesOnly(true);
 		assignmentFormatter.appendReasons(false);
 		Collection<Assignment> testPartProperties = new AssignmentFilter(propertyContainer).testPartRelevantAssignments();
 		final String values = assignmentFormatter.format(testPartProperties);

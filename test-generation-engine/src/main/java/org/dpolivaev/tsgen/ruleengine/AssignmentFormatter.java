@@ -61,7 +61,7 @@ public class AssignmentFormatter {
         return assignedPropertiesStringBuilder.toString();
 	}
 
-	private boolean includesAssignment(Assignment assignment) {
+	protected boolean includesAssignment(Assignment assignment) {
 		return  !(shouldFormatIteratingRulesOnly && !assignment.rule.forcesIteration() || excludedByValue(assignment))
 				&& ! isExcludedByExcludePatterns(assignment) && isIncludedByIncludePatterns(assignment);
 	}
