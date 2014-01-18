@@ -59,7 +59,7 @@ ValueProvider:
 Run:
 	'run' strategies += StrategyReference 
 	('with' (strategies += StrategyReference | /* goals += GoalReference | */ models += ModelReference) 
-	   (',' (strategies += StrategyReference | /* goals += GoalReference | */ model += ModelReference))*
+	   (',' (strategies += StrategyReference | /* goals += GoalReference | */ models += ModelReference))*
 	)?
 	outputConfiguration = OutputConfiguration?
 	reportConfiguration = ReportConfiguration?
