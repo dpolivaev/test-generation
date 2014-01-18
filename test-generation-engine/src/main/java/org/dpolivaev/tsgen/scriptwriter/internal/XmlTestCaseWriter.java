@@ -1,5 +1,9 @@
 package org.dpolivaev.tsgen.scriptwriter.internal;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -56,8 +60,8 @@ public class XmlTestCaseWriter implements PropertyHandler {
 	}
 
 	private void addCoverage(String name, CheckList checkList) {
-		final Set<CoverageEntry> firstTimeCoveredGoals = checkList.firstTimeCoveredEntries();
-		final Set<CoverageEntry> repeatedlyCoveredGoals = checkList.repeatedlyCoveredEntries();
+		final Collection<CoverageEntry> firstTimeCoveredGoals = sort(checkList.firstTimeCoveredEntries());
+		final Collection<CoverageEntry> repeatedlyCoveredGoals = sort(checkList.repeatedlyCoveredEntries());
 		if(! (firstTimeCoveredGoals.isEmpty() && repeatedlyCoveredGoals.isEmpty())){
 			xmlWriter.beginElement("Goal");
 			xmlWriter.setAttribute("name", name);
@@ -71,6 +75,16 @@ public class XmlTestCaseWriter implements PropertyHandler {
 			}
 			xmlWriter.endElement("Goal");
 		}
+	}
+
+	public Collection<CoverageEntry> sort(Collection<CoverageEntry> collection) {
+		ArrayList<CoverageEntry> list = new ArrayList<>(collection);
+		Collections.sort(list, new Comparator<CoverageEntry>(){
+			@Override
+			public int compare(CoverageEntry entry1, CoverageEntry entry2) {
+					return entry1.getName().compareTo(entry2.getName());
+			}});
+		return list;
 	}
 
 	private void addCoverageEntry(final CoverageEntry coverageEntry, int count, boolean firstTime) {
