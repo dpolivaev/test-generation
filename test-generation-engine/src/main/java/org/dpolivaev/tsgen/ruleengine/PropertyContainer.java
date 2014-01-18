@@ -1,5 +1,6 @@
 package org.dpolivaev.tsgen.ruleengine;
 
+import java.util.Collection;
 import java.util.Set;
 
 public interface PropertyContainer {
@@ -7,8 +8,9 @@ public interface PropertyContainer {
     boolean containsPropertyValue(String name);
 	boolean containsTriggeringPropertyValue(String name);
     <T> T get(String name);
+    Assignment getAssignment(String name);
     int getCombinationCounter();
     Set<String> availableProperties(String startWith);
-    Iterable<Assignment> getAssignments();
+    Collection<Assignment> getAssignments();
 
 }

@@ -24,7 +24,6 @@ import org.dpolivaev.tsgen.coverage.CoverageEntry
 import org.dpolivaev.tsgen.coverage.CoverageTracker
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory
-import org.dpolivaev.tsgen.coverage.PropertyAccessingModel
 import org.dpolivaev.tsgen.scriptwriter.StrategyRunner
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.common.types.JvmGenericType
@@ -46,6 +45,8 @@ import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 
 import static extension org.dpolivaev.dsl.tsgen.jvmmodel.StrategyCompiler.*
 import static extension org.eclipse.xtext.nodemodel.util.NodeModelUtils.*
+import org.dpolivaev.tsgen.ruleengine.PropertyHandler
+import org.dpolivaev.tsgen.coverage.RequiredItemContainer
 
 /**
  * <p>Infers a JVM model from the source model.</p> 
@@ -102,7 +103,8 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 	private def inferModel(IJvmDeclaredTypeAcceptor acceptor, String classPackage, Model model) {
 		val qualifiedClassName = qualifiedClassName(classPackage, model.name.toFirstUpper)
 		acceptor.accept(model.toClass(qualifiedClassName)).initializeLater([
-			superTypes += model.newTypeRef(PropertyAccessingModel)
+			superTypes += model.newTypeRef(PropertyHandler)
+			superTypes += model.newTypeRef(RequiredItemContainer)
 			val labels = new HashSet<CoverageEntry>
 			val contents = EcoreUtil2.eAllContents(model)
 			for(obj : contents){
@@ -139,7 +141,6 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 			]
 			
 			members += model.toMethod("getCoverageTracker", model.newTypeRef(CoverageTracker)) [
-				annotations += model.toAnnotation(Override)
 				body = [
 						append('return coverageTracker;')
 				]
@@ -303,7 +304,7 @@ class ScriptInitializer{
 	final static val EXTERNAL_MODEL = "externalModel"
 	private def appendModelReferences(ModelReference ref){
 		if(ref.expr != null && ! declaredFields.contains(ref.expr.toString)) {
-			createMethod(ref.expr, EXTERNAL_MODEL, ref.expr.newTypeRef(PropertyAccessingModel), false)
+			createMethod(ref.expr, EXTERNAL_MODEL, ref.expr.inferredType, false)
 		}
 	}
 	

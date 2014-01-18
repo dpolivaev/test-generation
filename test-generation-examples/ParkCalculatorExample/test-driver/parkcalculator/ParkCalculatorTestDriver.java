@@ -53,7 +53,7 @@ public class ParkCalculatorTestDriver {
 		return dayPartFormatter.format(time);
 	}
 
-	public void setLeavingTime(int days, int hours, int minutes, int weeks) {
+	public void setParkingDuration(int weeks, int days, int hours, int minutes) {
 		this.weeks = weeks;
 		this.days = days;
 		this.hours = hours;

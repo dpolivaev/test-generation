@@ -17,7 +17,6 @@ public class DescriptionProvider  implements ValueProvider{
 	public DescriptionProvider(String nameValueSeparator, String propertySeparator) {
 		formatter = AssignmentFormatter.create(nameValueSeparator, propertySeparator);
 		formatter.exclude("\\[.*");
-		formatter.exclude(TestIdProvider.TEST_CASE_PARTS_REGEX);
 		formatter.exclude("(?:script)(?:\\..+)?");
 		formatter.exclude("testcase");
 		formatter.excludeUndefined(true);
@@ -25,7 +24,8 @@ public class DescriptionProvider  implements ValueProvider{
 	}
 
 	public String describe(PropertyContainer assignments) {
-		return formatter.format(assignments);
+		final AssignmentFilter assignmentFilter = new AssignmentFilter(assignments);
+		return formatter.format(assignmentFilter.descriptionRelevantAssignments());
 	}
 
 	public static Strategy strategy(String propertyName){

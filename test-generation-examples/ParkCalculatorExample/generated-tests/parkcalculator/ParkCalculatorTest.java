@@ -27,17 +27,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test001__01119701200AmVALET_PARKING_weeks0Days0() throws Exception {
+	public void test001_vALET_PARKING_01119701200AmWeeks0Days0() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ VALET_PARKING);
+		driver.selectLot(/* parking lot*/ VALET_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "01/1/1970 12:00 am");
+		driver.setEntryTime(/* entry time*/ "01/1/1970 12:00 am");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 0, 
+		driver.setParkingDuration(/* weeks*/ 0, 
+			/* days*/ 0, 
 			/* hours*/ 0, 
-			/* minutes*/ 0, 
-			/* weeks*/ 0);
+			/* minutes*/ 0);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -54,17 +54,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test002__123119991200PmVALET_PARKING_weeks0Days1Hours0Minutes1() throws Exception {
+	public void test002_vALET_PARKING_123119991200PmWeeks0Days1Hours0Minutes1() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ VALET_PARKING);
+		driver.selectLot(/* parking lot*/ VALET_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "12/31/1999 12:00 pm");
+		driver.setEntryTime(/* entry time*/ "12/31/1999 12:00 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 1, 
+		driver.setParkingDuration(/* weeks*/ 0, 
+			/* days*/ 1, 
 			/* hours*/ 0, 
-			/* minutes*/ 1, 
-			/* weeks*/ 0);
+			/* minutes*/ 1);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -83,17 +83,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test003__022820162359PmVALET_PARKING_weeks0Days6Hours4Minutes59() throws Exception {
+	public void test003_vALET_PARKING_022820162359PmWeeks0Days6Hours4Minutes59() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ VALET_PARKING);
+		driver.selectLot(/* parking lot*/ VALET_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "02/28/2016 23:59 pm");
+		driver.setEntryTime(/* entry time*/ "02/28/2016 23:59 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 6, 
+		driver.setParkingDuration(/* weeks*/ 0, 
+			/* days*/ 6, 
 			/* hours*/ 4, 
-			/* minutes*/ 59, 
-			/* weeks*/ 0);
+			/* minutes*/ 59);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -112,17 +112,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test004__123119991200PmVALET_PARKING_weeks1Days1Hours5Minutes0() throws Exception {
+	public void test004_vALET_PARKING_123119991200PmWeeks1Days1Hours5Minutes0() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ VALET_PARKING);
+		driver.selectLot(/* parking lot*/ VALET_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "12/31/1999 12:00 pm");
+		driver.setEntryTime(/* entry time*/ "12/31/1999 12:00 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 1, 
+		driver.setParkingDuration(/* weeks*/ 1, 
+			/* days*/ 1, 
 			/* hours*/ 5, 
-			/* minutes*/ 0, 
-			/* weeks*/ 1);
+			/* minutes*/ 0);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -139,17 +139,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test005__022820162359PmVALET_PARKING_weeks1Days6Hours5Minutes1() throws Exception {
+	public void test005_vALET_PARKING_022820162359PmWeeks1Days6Hours5Minutes1() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ VALET_PARKING);
+		driver.selectLot(/* parking lot*/ VALET_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "02/28/2016 23:59 pm");
+		driver.setEntryTime(/* entry time*/ "02/28/2016 23:59 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 6, 
+		driver.setParkingDuration(/* weeks*/ 1, 
+			/* days*/ 6, 
 			/* hours*/ 5, 
-			/* minutes*/ 1, 
-			/* weeks*/ 1);
+			/* minutes*/ 1);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -168,17 +168,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test006__01119701200AmVALET_PARKING_weeks6Days0Hours22Minutes0() throws Exception {
+	public void test006_vALET_PARKING_01119701200AmWeeks6Days0Hours22Minutes0() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ VALET_PARKING);
+		driver.selectLot(/* parking lot*/ VALET_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "01/1/1970 12:00 am");
+		driver.setEntryTime(/* entry time*/ "01/1/1970 12:00 am");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 0, 
+		driver.setParkingDuration(/* weeks*/ 6, 
+			/* days*/ 0, 
 			/* hours*/ 22, 
-			/* minutes*/ 0, 
-			/* weeks*/ 6);
+			/* minutes*/ 0);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -197,17 +197,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test007__022820162359PmVALET_PARKING_weeks6Days6Hours23Minutes59() throws Exception {
+	public void test007_vALET_PARKING_022820162359PmWeeks6Days6Hours23Minutes59() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ VALET_PARKING);
+		driver.selectLot(/* parking lot*/ VALET_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "02/28/2016 23:59 pm");
+		driver.setEntryTime(/* entry time*/ "02/28/2016 23:59 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 6, 
+		driver.setParkingDuration(/* weeks*/ 6, 
+			/* days*/ 6, 
 			/* hours*/ 23, 
-			/* minutes*/ 59, 
-			/* weeks*/ 6);
+			/* minutes*/ 59);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -226,17 +226,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test008__01119701200AmVALET_PARKING_weeks26Hours0Minutes1() throws Exception {
+	public void test008_vALET_PARKING_01119701200AmWeeks26Hours0Minutes1() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ VALET_PARKING);
+		driver.selectLot(/* parking lot*/ VALET_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "01/1/1970 12:00 am");
+		driver.setEntryTime(/* entry time*/ "01/1/1970 12:00 am");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 4, 
+		driver.setParkingDuration(/* weeks*/ 26, 
+			/* days*/ 4, 
 			/* hours*/ 0, 
-			/* minutes*/ 1, 
-			/* weeks*/ 26);
+			/* minutes*/ 1);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -250,17 +250,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test009__123119991200PmSHORT_TERM_PARKING_weeks26Hours0Minutes0() throws Exception {
+	public void test009_sHORT_TERM_PARKING_123119991200PmWeeks26Hours0Minutes0() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
+		driver.selectLot(/* parking lot*/ SHORT_TERM_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "12/31/1999 12:00 pm");
+		driver.setEntryTime(/* entry time*/ "12/31/1999 12:00 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 4, 
+		driver.setParkingDuration(/* weeks*/ 26, 
+			/* days*/ 4, 
 			/* hours*/ 0, 
-			/* minutes*/ 0, 
-			/* weeks*/ 26);
+			/* minutes*/ 0);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -277,17 +277,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test010__022820162359PmSHORT_TERM_PARKING_weeks0Days1Hours0Minutes30() throws Exception {
+	public void test010_sHORT_TERM_PARKING_022820162359PmWeeks0Days1Hours0Minutes30() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
+		driver.selectLot(/* parking lot*/ SHORT_TERM_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "02/28/2016 23:59 pm");
+		driver.setEntryTime(/* entry time*/ "02/28/2016 23:59 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 1, 
+		driver.setParkingDuration(/* weeks*/ 0, 
+			/* days*/ 1, 
 			/* hours*/ 0, 
-			/* minutes*/ 30, 
-			/* weeks*/ 0);
+			/* minutes*/ 30);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -301,17 +301,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test011__01119701200AmSHORT_TERM_PARKING_weeks0Days6Hours0Minutes31() throws Exception {
+	public void test011_sHORT_TERM_PARKING_01119701200AmWeeks0Days6Hours0Minutes31() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
+		driver.selectLot(/* parking lot*/ SHORT_TERM_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "01/1/1970 12:00 am");
+		driver.setEntryTime(/* entry time*/ "01/1/1970 12:00 am");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 6, 
+		driver.setParkingDuration(/* weeks*/ 0, 
+			/* days*/ 6, 
 			/* hours*/ 0, 
-			/* minutes*/ 31, 
-			/* weeks*/ 0);
+			/* minutes*/ 31);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -325,17 +325,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test012__123119991200PmSHORT_TERM_PARKING_weeks0Days0Hours0Minutes59() throws Exception {
+	public void test012_sHORT_TERM_PARKING_123119991200PmWeeks0Days0Hours0Minutes59() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
+		driver.selectLot(/* parking lot*/ SHORT_TERM_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "12/31/1999 12:00 pm");
+		driver.setEntryTime(/* entry time*/ "12/31/1999 12:00 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 0, 
+		driver.setParkingDuration(/* weeks*/ 0, 
+			/* days*/ 0, 
 			/* hours*/ 0, 
-			/* minutes*/ 59, 
-			/* weeks*/ 0);
+			/* minutes*/ 59);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -352,17 +352,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test013__123119991200PmSHORT_TERM_PARKING_weeks1Days1Hours1Minutes59() throws Exception {
+	public void test013_sHORT_TERM_PARKING_123119991200PmWeeks1Days1Hours1Minutes59() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
+		driver.selectLot(/* parking lot*/ SHORT_TERM_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "12/31/1999 12:00 pm");
+		driver.setEntryTime(/* entry time*/ "12/31/1999 12:00 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 1, 
+		driver.setParkingDuration(/* weeks*/ 1, 
+			/* days*/ 1, 
 			/* hours*/ 1, 
-			/* minutes*/ 59, 
-			/* weeks*/ 1);
+			/* minutes*/ 59);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -376,17 +376,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test014__022820162359PmSHORT_TERM_PARKING_weeks1Days6Hours1Minutes0() throws Exception {
+	public void test014_sHORT_TERM_PARKING_022820162359PmWeeks1Days6Hours1Minutes0() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
+		driver.selectLot(/* parking lot*/ SHORT_TERM_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "02/28/2016 23:59 pm");
+		driver.setEntryTime(/* entry time*/ "02/28/2016 23:59 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 6, 
+		driver.setParkingDuration(/* weeks*/ 1, 
+			/* days*/ 6, 
 			/* hours*/ 1, 
-			/* minutes*/ 0, 
-			/* weeks*/ 1);
+			/* minutes*/ 0);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -403,17 +403,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test015__01119701200AmSHORT_TERM_PARKING_weeks6Days0Hours1Minutes30() throws Exception {
+	public void test015_sHORT_TERM_PARKING_01119701200AmWeeks6Days0Hours1Minutes30() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
+		driver.selectLot(/* parking lot*/ SHORT_TERM_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "01/1/1970 12:00 am");
+		driver.setEntryTime(/* entry time*/ "01/1/1970 12:00 am");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 0, 
+		driver.setParkingDuration(/* weeks*/ 6, 
+			/* days*/ 0, 
 			/* hours*/ 1, 
-			/* minutes*/ 30, 
-			/* weeks*/ 6);
+			/* minutes*/ 30);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -428,17 +428,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test016__01119701200AmSHORT_TERM_PARKING_weeks6Days6Hours1Minutes31() throws Exception {
+	public void test016_sHORT_TERM_PARKING_01119701200AmWeeks6Days6Hours1Minutes31() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
+		driver.selectLot(/* parking lot*/ SHORT_TERM_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "01/1/1970 12:00 am");
+		driver.setEntryTime(/* entry time*/ "01/1/1970 12:00 am");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 6, 
+		driver.setParkingDuration(/* weeks*/ 6, 
+			/* days*/ 6, 
 			/* hours*/ 1, 
-			/* minutes*/ 31, 
-			/* weeks*/ 6);
+			/* minutes*/ 31);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -453,17 +453,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test017__123119991200PmSHORT_TERM_PARKING_weeks1Days6Hours11Minutes30() throws Exception {
+	public void test017_sHORT_TERM_PARKING_123119991200PmWeeks1Days6Hours11Minutes30() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
+		driver.selectLot(/* parking lot*/ SHORT_TERM_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "12/31/1999 12:00 pm");
+		driver.setEntryTime(/* entry time*/ "12/31/1999 12:00 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 6, 
+		driver.setParkingDuration(/* weeks*/ 1, 
+			/* days*/ 6, 
 			/* hours*/ 11, 
-			/* minutes*/ 30, 
-			/* weeks*/ 1);
+			/* minutes*/ 30);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -478,17 +478,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test018__022820162359PmSHORT_TERM_PARKING_weeks1Days1Hours11Minutes31() throws Exception {
+	public void test018_sHORT_TERM_PARKING_022820162359PmWeeks1Days1Hours11Minutes31() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
+		driver.selectLot(/* parking lot*/ SHORT_TERM_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "02/28/2016 23:59 pm");
+		driver.setEntryTime(/* entry time*/ "02/28/2016 23:59 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 1, 
+		driver.setParkingDuration(/* weeks*/ 1, 
+			/* days*/ 1, 
 			/* hours*/ 11, 
-			/* minutes*/ 31, 
-			/* weeks*/ 1);
+			/* minutes*/ 31);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -502,17 +502,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test019__01119701200AmSHORT_TERM_PARKING_weeks6Days6Hours11Minutes0() throws Exception {
+	public void test019_sHORT_TERM_PARKING_01119701200AmWeeks6Days6Hours11Minutes0() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
+		driver.selectLot(/* parking lot*/ SHORT_TERM_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "01/1/1970 12:00 am");
+		driver.setEntryTime(/* entry time*/ "01/1/1970 12:00 am");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 6, 
+		driver.setParkingDuration(/* weeks*/ 6, 
+			/* days*/ 6, 
 			/* hours*/ 11, 
-			/* minutes*/ 0, 
-			/* weeks*/ 6);
+			/* minutes*/ 0);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -527,17 +527,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test020__022820162359PmSHORT_TERM_PARKING_weeks6Days0Hours11Minutes59() throws Exception {
+	public void test020_sHORT_TERM_PARKING_022820162359PmWeeks6Days0Hours11Minutes59() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
+		driver.selectLot(/* parking lot*/ SHORT_TERM_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "02/28/2016 23:59 pm");
+		driver.setEntryTime(/* entry time*/ "02/28/2016 23:59 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 0, 
+		driver.setParkingDuration(/* weeks*/ 6, 
+			/* days*/ 0, 
 			/* hours*/ 11, 
-			/* minutes*/ 59, 
-			/* weeks*/ 6);
+			/* minutes*/ 59);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -554,17 +554,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test021__123119991200PmSHORT_TERM_PARKING_weeks0Days6Hours12Minutes0() throws Exception {
+	public void test021_sHORT_TERM_PARKING_123119991200PmWeeks0Days6Hours12Minutes0() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
+		driver.selectLot(/* parking lot*/ SHORT_TERM_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "12/31/1999 12:00 pm");
+		driver.setEntryTime(/* entry time*/ "12/31/1999 12:00 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 6, 
+		driver.setParkingDuration(/* weeks*/ 0, 
+			/* days*/ 6, 
 			/* hours*/ 12, 
-			/* minutes*/ 0, 
-			/* weeks*/ 0);
+			/* minutes*/ 0);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -579,17 +579,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test022__022820162359PmSHORT_TERM_PARKING_weeks0Days0Hours12Minutes30() throws Exception {
+	public void test022_sHORT_TERM_PARKING_022820162359PmWeeks0Days0Hours12Minutes30() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
+		driver.selectLot(/* parking lot*/ SHORT_TERM_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "02/28/2016 23:59 pm");
+		driver.setEntryTime(/* entry time*/ "02/28/2016 23:59 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 0, 
+		driver.setParkingDuration(/* weeks*/ 0, 
+			/* days*/ 0, 
 			/* hours*/ 12, 
-			/* minutes*/ 30, 
-			/* weeks*/ 0);
+			/* minutes*/ 30);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -604,17 +604,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test023__123119991200PmSHORT_TERM_PARKING_weeks0Days1Hours12Minutes31() throws Exception {
+	public void test023_sHORT_TERM_PARKING_123119991200PmWeeks0Days1Hours12Minutes31() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
+		driver.selectLot(/* parking lot*/ SHORT_TERM_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "12/31/1999 12:00 pm");
+		driver.setEntryTime(/* entry time*/ "12/31/1999 12:00 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 1, 
+		driver.setParkingDuration(/* weeks*/ 0, 
+			/* days*/ 1, 
 			/* hours*/ 12, 
-			/* minutes*/ 31, 
-			/* weeks*/ 0);
+			/* minutes*/ 31);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -629,17 +629,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test024__01119701200AmSHORT_TERM_PARKING_weeks26Hours12Minutes59() throws Exception {
+	public void test024_sHORT_TERM_PARKING_01119701200AmWeeks26Hours12Minutes59() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
+		driver.selectLot(/* parking lot*/ SHORT_TERM_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "01/1/1970 12:00 am");
+		driver.setEntryTime(/* entry time*/ "01/1/1970 12:00 am");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 4, 
+		driver.setParkingDuration(/* weeks*/ 26, 
+			/* days*/ 4, 
 			/* hours*/ 12, 
-			/* minutes*/ 59, 
-			/* weeks*/ 26);
+			/* minutes*/ 59);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -654,17 +654,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test025__123119991200PmSHORT_TERM_PARKING_weeks0Days6Hours23Minutes31() throws Exception {
+	public void test025_sHORT_TERM_PARKING_123119991200PmWeeks0Days6Hours23Minutes31() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
+		driver.selectLot(/* parking lot*/ SHORT_TERM_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "12/31/1999 12:00 pm");
+		driver.setEntryTime(/* entry time*/ "12/31/1999 12:00 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 6, 
+		driver.setParkingDuration(/* weeks*/ 0, 
+			/* days*/ 6, 
 			/* hours*/ 23, 
-			/* minutes*/ 31, 
-			/* weeks*/ 0);
+			/* minutes*/ 31);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -679,17 +679,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test026__022820162359PmSHORT_TERM_PARKING_weeks0Days0Hours23Minutes30() throws Exception {
+	public void test026_sHORT_TERM_PARKING_022820162359PmWeeks0Days0Hours23Minutes30() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
+		driver.selectLot(/* parking lot*/ SHORT_TERM_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "02/28/2016 23:59 pm");
+		driver.setEntryTime(/* entry time*/ "02/28/2016 23:59 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 0, 
+		driver.setParkingDuration(/* weeks*/ 0, 
+			/* days*/ 0, 
 			/* hours*/ 23, 
-			/* minutes*/ 30, 
-			/* weeks*/ 0);
+			/* minutes*/ 30);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -704,17 +704,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test027__01119701200AmSHORT_TERM_PARKING_weeks0Days1Hours23Minutes0() throws Exception {
+	public void test027_sHORT_TERM_PARKING_01119701200AmWeeks0Days1Hours23Minutes0() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
+		driver.selectLot(/* parking lot*/ SHORT_TERM_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "01/1/1970 12:00 am");
+		driver.setEntryTime(/* entry time*/ "01/1/1970 12:00 am");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 1, 
+		driver.setParkingDuration(/* weeks*/ 0, 
+			/* days*/ 1, 
 			/* hours*/ 23, 
-			/* minutes*/ 0, 
-			/* weeks*/ 0);
+			/* minutes*/ 0);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -729,17 +729,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test028__022820162359PmSHORT_TERM_PARKING_weeks1Days1Hours23Minutes59() throws Exception {
+	public void test028_sHORT_TERM_PARKING_022820162359PmWeeks1Days1Hours23Minutes59() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ SHORT_TERM_PARKING);
+		driver.selectLot(/* parking lot*/ SHORT_TERM_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "02/28/2016 23:59 pm");
+		driver.setEntryTime(/* entry time*/ "02/28/2016 23:59 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 1, 
+		driver.setParkingDuration(/* weeks*/ 1, 
+			/* days*/ 1, 
 			/* hours*/ 23, 
-			/* minutes*/ 59, 
-			/* weeks*/ 1);
+			/* minutes*/ 59);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -757,17 +757,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test029__123119991200PmLONG_TERM_GARAGE_PARKING_weeks6Days0() throws Exception {
+	public void test029_lONG_TERM_GARAGE_PARKING_123119991200PmWeeks6Days0() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ LONG_TERM_GARAGE_PARKING);
+		driver.selectLot(/* parking lot*/ LONG_TERM_GARAGE_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "12/31/1999 12:00 pm");
+		driver.setEntryTime(/* entry time*/ "12/31/1999 12:00 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 0, 
+		driver.setParkingDuration(/* weeks*/ 6, 
+			/* days*/ 0, 
 			/* hours*/ 0, 
-			/* minutes*/ 0, 
-			/* weeks*/ 6);
+			/* minutes*/ 0);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -784,17 +784,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test030__01119701200AmLONG_TERM_GARAGE_PARKING_weeks6Days6Hours0Minutes1() throws Exception {
+	public void test030_lONG_TERM_GARAGE_PARKING_01119701200AmWeeks6Days6Hours0Minutes1() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ LONG_TERM_GARAGE_PARKING);
+		driver.selectLot(/* parking lot*/ LONG_TERM_GARAGE_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "01/1/1970 12:00 am");
+		driver.setEntryTime(/* entry time*/ "01/1/1970 12:00 am");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 6, 
+		driver.setParkingDuration(/* weeks*/ 6, 
+			/* days*/ 6, 
 			/* hours*/ 0, 
-			/* minutes*/ 1, 
-			/* weeks*/ 6);
+			/* minutes*/ 1);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -813,17 +813,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test031__123119991200PmLONG_TERM_GARAGE_PARKING_weeks26Hours5Minutes59() throws Exception {
+	public void test031_lONG_TERM_GARAGE_PARKING_123119991200PmWeeks26Hours5Minutes59() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ LONG_TERM_GARAGE_PARKING);
+		driver.selectLot(/* parking lot*/ LONG_TERM_GARAGE_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "12/31/1999 12:00 pm");
+		driver.setEntryTime(/* entry time*/ "12/31/1999 12:00 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 4, 
+		driver.setParkingDuration(/* weeks*/ 26, 
+			/* days*/ 4, 
 			/* hours*/ 5, 
-			/* minutes*/ 59, 
-			/* weeks*/ 26);
+			/* minutes*/ 59);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -842,17 +842,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test032__022820162359PmLONG_TERM_GARAGE_PARKING_weeks6Days6Hours6Minutes0() throws Exception {
+	public void test032_lONG_TERM_GARAGE_PARKING_022820162359PmWeeks6Days6Hours6Minutes0() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ LONG_TERM_GARAGE_PARKING);
+		driver.selectLot(/* parking lot*/ LONG_TERM_GARAGE_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "02/28/2016 23:59 pm");
+		driver.setEntryTime(/* entry time*/ "02/28/2016 23:59 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 6, 
+		driver.setParkingDuration(/* weeks*/ 6, 
+			/* days*/ 6, 
 			/* hours*/ 6, 
-			/* minutes*/ 0, 
-			/* weeks*/ 6);
+			/* minutes*/ 0);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -869,17 +869,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test033__01119701200AmLONG_TERM_GARAGE_PARKING_weeks6Days0Hours6Minutes1() throws Exception {
+	public void test033_lONG_TERM_GARAGE_PARKING_01119701200AmWeeks6Days0Hours6Minutes1() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ LONG_TERM_GARAGE_PARKING);
+		driver.selectLot(/* parking lot*/ LONG_TERM_GARAGE_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "01/1/1970 12:00 am");
+		driver.setEntryTime(/* entry time*/ "01/1/1970 12:00 am");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 0, 
+		driver.setParkingDuration(/* weeks*/ 6, 
+			/* days*/ 0, 
 			/* hours*/ 6, 
-			/* minutes*/ 1, 
-			/* weeks*/ 6);
+			/* minutes*/ 1);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -898,17 +898,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test034__123119991200PmLONG_TERM_GARAGE_PARKING_weeks1Days6Hours23Minutes59() throws Exception {
+	public void test034_lONG_TERM_GARAGE_PARKING_123119991200PmWeeks1Days6Hours23Minutes59() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ LONG_TERM_GARAGE_PARKING);
+		driver.selectLot(/* parking lot*/ LONG_TERM_GARAGE_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "12/31/1999 12:00 pm");
+		driver.setEntryTime(/* entry time*/ "12/31/1999 12:00 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 6, 
+		driver.setParkingDuration(/* weeks*/ 1, 
+			/* days*/ 6, 
 			/* hours*/ 23, 
-			/* minutes*/ 59, 
-			/* weeks*/ 1);
+			/* minutes*/ 59);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -923,17 +923,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test035__01119701200AmLONG_TERM_SURFACE_PARKING_weeks0Days1Hours0Minutes0() throws Exception {
+	public void test035_lONG_TERM_SURFACE_PARKING_01119701200AmWeeks0Days1Hours0Minutes0() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ LONG_TERM_SURFACE_PARKING);
+		driver.selectLot(/* parking lot*/ LONG_TERM_SURFACE_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "01/1/1970 12:00 am");
+		driver.setEntryTime(/* entry time*/ "01/1/1970 12:00 am");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 1, 
+		driver.setParkingDuration(/* weeks*/ 0, 
+			/* days*/ 1, 
 			/* hours*/ 0, 
-			/* minutes*/ 0, 
-			/* weeks*/ 0);
+			/* minutes*/ 0);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -948,17 +948,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test036__022820162359PmLONG_TERM_SURFACE_PARKING_weeks0Days6Hours0Minutes1() throws Exception {
+	public void test036_lONG_TERM_SURFACE_PARKING_022820162359PmWeeks0Days6Hours0Minutes1() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ LONG_TERM_SURFACE_PARKING);
+		driver.selectLot(/* parking lot*/ LONG_TERM_SURFACE_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "02/28/2016 23:59 pm");
+		driver.setEntryTime(/* entry time*/ "02/28/2016 23:59 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 6, 
+		driver.setParkingDuration(/* weeks*/ 0, 
+			/* days*/ 6, 
 			/* hours*/ 0, 
-			/* minutes*/ 1, 
-			/* weeks*/ 0);
+			/* minutes*/ 1);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -974,17 +974,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test037__022820162359PmLONG_TERM_SURFACE_PARKING_weeks0Days0Hours0Minutes59() throws Exception {
+	public void test037_lONG_TERM_SURFACE_PARKING_022820162359PmWeeks0Days0Hours0Minutes59() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ LONG_TERM_SURFACE_PARKING);
+		driver.selectLot(/* parking lot*/ LONG_TERM_SURFACE_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "02/28/2016 23:59 pm");
+		driver.setEntryTime(/* entry time*/ "02/28/2016 23:59 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 0, 
+		driver.setParkingDuration(/* weeks*/ 0, 
+			/* days*/ 0, 
 			/* hours*/ 0, 
-			/* minutes*/ 59, 
-			/* weeks*/ 0);
+			/* minutes*/ 59);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -999,17 +999,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test038__123119991200PmLONG_TERM_SURFACE_PARKING_weeks26Hours4Minutes1() throws Exception {
+	public void test038_lONG_TERM_SURFACE_PARKING_123119991200PmWeeks26Hours4Minutes1() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ LONG_TERM_SURFACE_PARKING);
+		driver.selectLot(/* parking lot*/ LONG_TERM_SURFACE_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "12/31/1999 12:00 pm");
+		driver.setEntryTime(/* entry time*/ "12/31/1999 12:00 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 4, 
+		driver.setParkingDuration(/* weeks*/ 26, 
+			/* days*/ 4, 
 			/* hours*/ 4, 
-			/* minutes*/ 1, 
-			/* weeks*/ 26);
+			/* minutes*/ 1);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -1027,17 +1027,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test039__01119701200AmLONG_TERM_SURFACE_PARKING_weeks0Days0Hours4Minutes59() throws Exception {
+	public void test039_lONG_TERM_SURFACE_PARKING_01119701200AmWeeks0Days0Hours4Minutes59() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ LONG_TERM_SURFACE_PARKING);
+		driver.selectLot(/* parking lot*/ LONG_TERM_SURFACE_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "01/1/1970 12:00 am");
+		driver.setEntryTime(/* entry time*/ "01/1/1970 12:00 am");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 0, 
+		driver.setParkingDuration(/* weeks*/ 0, 
+			/* days*/ 0, 
 			/* hours*/ 4, 
-			/* minutes*/ 59, 
-			/* weeks*/ 0);
+			/* minutes*/ 59);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -1052,17 +1052,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test040__01119701200AmLONG_TERM_SURFACE_PARKING_weeks0Days1Hours4Minutes0() throws Exception {
+	public void test040_lONG_TERM_SURFACE_PARKING_01119701200AmWeeks0Days1Hours4Minutes0() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ LONG_TERM_SURFACE_PARKING);
+		driver.selectLot(/* parking lot*/ LONG_TERM_SURFACE_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "01/1/1970 12:00 am");
+		driver.setEntryTime(/* entry time*/ "01/1/1970 12:00 am");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 1, 
+		driver.setParkingDuration(/* weeks*/ 0, 
+			/* days*/ 1, 
 			/* hours*/ 4, 
-			/* minutes*/ 0, 
-			/* weeks*/ 0);
+			/* minutes*/ 0);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -1077,17 +1077,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test041__123119991200PmLONG_TERM_SURFACE_PARKING_weeks0Days6Hours5Minutes59() throws Exception {
+	public void test041_lONG_TERM_SURFACE_PARKING_123119991200PmWeeks0Days6Hours5Minutes59() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ LONG_TERM_SURFACE_PARKING);
+		driver.selectLot(/* parking lot*/ LONG_TERM_SURFACE_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "12/31/1999 12:00 pm");
+		driver.setEntryTime(/* entry time*/ "12/31/1999 12:00 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 6, 
+		driver.setParkingDuration(/* weeks*/ 0, 
+			/* days*/ 6, 
 			/* hours*/ 5, 
-			/* minutes*/ 59, 
-			/* weeks*/ 0);
+			/* minutes*/ 59);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -1102,17 +1102,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test042__022820162359PmLONG_TERM_SURFACE_PARKING_weeks1Days6Hours5Minutes0() throws Exception {
+	public void test042_lONG_TERM_SURFACE_PARKING_022820162359PmWeeks1Days6Hours5Minutes0() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ LONG_TERM_SURFACE_PARKING);
+		driver.selectLot(/* parking lot*/ LONG_TERM_SURFACE_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "02/28/2016 23:59 pm");
+		driver.setEntryTime(/* entry time*/ "02/28/2016 23:59 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 6, 
+		driver.setParkingDuration(/* weeks*/ 1, 
+			/* days*/ 6, 
 			/* hours*/ 5, 
-			/* minutes*/ 0, 
-			/* weeks*/ 1);
+			/* minutes*/ 0);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -1127,17 +1127,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test043__01119701200AmLONG_TERM_SURFACE_PARKING_weeks1Days1Hours5Minutes1() throws Exception {
+	public void test043_lONG_TERM_SURFACE_PARKING_01119701200AmWeeks1Days1Hours5Minutes1() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ LONG_TERM_SURFACE_PARKING);
+		driver.selectLot(/* parking lot*/ LONG_TERM_SURFACE_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "01/1/1970 12:00 am");
+		driver.setEntryTime(/* entry time*/ "01/1/1970 12:00 am");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 1, 
+		driver.setParkingDuration(/* weeks*/ 1, 
+			/* days*/ 1, 
 			/* hours*/ 5, 
-			/* minutes*/ 1, 
-			/* weeks*/ 1);
+			/* minutes*/ 1);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -1152,17 +1152,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test044__123119991200PmLONG_TERM_SURFACE_PARKING_weeks6Days6Hours23Minutes59() throws Exception {
+	public void test044_lONG_TERM_SURFACE_PARKING_123119991200PmWeeks6Days6Hours23Minutes59() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ LONG_TERM_SURFACE_PARKING);
+		driver.selectLot(/* parking lot*/ LONG_TERM_SURFACE_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "12/31/1999 12:00 pm");
+		driver.setEntryTime(/* entry time*/ "12/31/1999 12:00 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 6, 
+		driver.setParkingDuration(/* weeks*/ 6, 
+			/* days*/ 6, 
 			/* hours*/ 23, 
-			/* minutes*/ 59, 
-			/* weeks*/ 6);
+			/* minutes*/ 59);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -1178,17 +1178,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test045__022820162359PmLONG_TERM_SURFACE_PARKING_weeks6Days0Hours23Minutes0() throws Exception {
+	public void test045_lONG_TERM_SURFACE_PARKING_022820162359PmWeeks6Days0Hours23Minutes0() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ LONG_TERM_SURFACE_PARKING);
+		driver.selectLot(/* parking lot*/ LONG_TERM_SURFACE_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "02/28/2016 23:59 pm");
+		driver.setEntryTime(/* entry time*/ "02/28/2016 23:59 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 0, 
+		driver.setParkingDuration(/* weeks*/ 6, 
+			/* days*/ 0, 
 			/* hours*/ 23, 
-			/* minutes*/ 0, 
-			/* weeks*/ 6);
+			/* minutes*/ 0);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -1203,17 +1203,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test046__022820162359PmLONG_TERM_SURFACE_PARKING_weeks26Hours23Minutes1() throws Exception {
+	public void test046_lONG_TERM_SURFACE_PARKING_022820162359PmWeeks26Hours23Minutes1() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ LONG_TERM_SURFACE_PARKING);
+		driver.selectLot(/* parking lot*/ LONG_TERM_SURFACE_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "02/28/2016 23:59 pm");
+		driver.setEntryTime(/* entry time*/ "02/28/2016 23:59 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 4, 
+		driver.setParkingDuration(/* weeks*/ 26, 
+			/* days*/ 4, 
 			/* hours*/ 23, 
-			/* minutes*/ 1, 
-			/* weeks*/ 26);
+			/* minutes*/ 1);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -1231,17 +1231,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test047__01119701200AmECONOMY_LOT_PARKING_weeks26() throws Exception {
+	public void test047_eCONOMY_LOT_PARKING_01119701200AmWeeks26() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ ECONOMY_LOT_PARKING);
+		driver.selectLot(/* parking lot*/ ECONOMY_LOT_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "01/1/1970 12:00 am");
+		driver.setEntryTime(/* entry time*/ "01/1/1970 12:00 am");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 4, 
+		driver.setParkingDuration(/* weeks*/ 26, 
+			/* days*/ 4, 
 			/* hours*/ 0, 
-			/* minutes*/ 0, 
-			/* weeks*/ 26);
+			/* minutes*/ 0);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -1258,17 +1258,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test048__123119991200PmECONOMY_LOT_PARKING_weeks0Days0Hours0Minutes1() throws Exception {
+	public void test048_eCONOMY_LOT_PARKING_123119991200PmWeeks0Days0Hours0Minutes1() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ ECONOMY_LOT_PARKING);
+		driver.selectLot(/* parking lot*/ ECONOMY_LOT_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "12/31/1999 12:00 pm");
+		driver.setEntryTime(/* entry time*/ "12/31/1999 12:00 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 0, 
+		driver.setParkingDuration(/* weeks*/ 0, 
+			/* days*/ 0, 
 			/* hours*/ 0, 
-			/* minutes*/ 1, 
-			/* weeks*/ 0);
+			/* minutes*/ 1);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -1287,17 +1287,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test049__123119991200PmECONOMY_LOT_PARKING_weeks0Days6Hours3Minutes59() throws Exception {
+	public void test049_eCONOMY_LOT_PARKING_123119991200PmWeeks0Days6Hours3Minutes59() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ ECONOMY_LOT_PARKING);
+		driver.selectLot(/* parking lot*/ ECONOMY_LOT_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "12/31/1999 12:00 pm");
+		driver.setEntryTime(/* entry time*/ "12/31/1999 12:00 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 6, 
+		driver.setParkingDuration(/* weeks*/ 0, 
+			/* days*/ 6, 
 			/* hours*/ 3, 
-			/* minutes*/ 59, 
-			/* weeks*/ 0);
+			/* minutes*/ 59);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -1316,17 +1316,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test050__01119701200AmECONOMY_LOT_PARKING_weeks0Days1Hours4Minutes0() throws Exception {
+	public void test050_eCONOMY_LOT_PARKING_01119701200AmWeeks0Days1Hours4Minutes0() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ ECONOMY_LOT_PARKING);
+		driver.selectLot(/* parking lot*/ ECONOMY_LOT_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "01/1/1970 12:00 am");
+		driver.setEntryTime(/* entry time*/ "01/1/1970 12:00 am");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 1, 
+		driver.setParkingDuration(/* weeks*/ 0, 
+			/* days*/ 1, 
 			/* hours*/ 4, 
-			/* minutes*/ 0, 
-			/* weeks*/ 0);
+			/* minutes*/ 0);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -1343,17 +1343,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test051__022820162359PmECONOMY_LOT_PARKING_weeks6Days0Hours4Minutes1() throws Exception {
+	public void test051_eCONOMY_LOT_PARKING_022820162359PmWeeks6Days0Hours4Minutes1() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ ECONOMY_LOT_PARKING);
+		driver.selectLot(/* parking lot*/ ECONOMY_LOT_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "02/28/2016 23:59 pm");
+		driver.setEntryTime(/* entry time*/ "02/28/2016 23:59 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 0, 
+		driver.setParkingDuration(/* weeks*/ 6, 
+			/* days*/ 0, 
 			/* hours*/ 4, 
-			/* minutes*/ 1, 
-			/* weeks*/ 6);
+			/* minutes*/ 1);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -1372,17 +1372,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test052__123119991200PmECONOMY_LOT_PARKING_weeks6Days6Hours23Minutes59() throws Exception {
+	public void test052_eCONOMY_LOT_PARKING_123119991200PmWeeks6Days6Hours23Minutes59() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ ECONOMY_LOT_PARKING);
+		driver.selectLot(/* parking lot*/ ECONOMY_LOT_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "12/31/1999 12:00 pm");
+		driver.setEntryTime(/* entry time*/ "12/31/1999 12:00 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 6, 
+		driver.setParkingDuration(/* weeks*/ 6, 
+			/* days*/ 6, 
 			/* hours*/ 23, 
-			/* minutes*/ 59, 
-			/* weeks*/ 6);
+			/* minutes*/ 59);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -1401,17 +1401,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test053__022820162359PmECONOMY_LOT_PARKING_weeks1Days6Hours0Minutes1() throws Exception {
+	public void test053_eCONOMY_LOT_PARKING_022820162359PmWeeks1Days6Hours0Minutes1() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ ECONOMY_LOT_PARKING);
+		driver.selectLot(/* parking lot*/ ECONOMY_LOT_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "02/28/2016 23:59 pm");
+		driver.setEntryTime(/* entry time*/ "02/28/2016 23:59 pm");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 6, 
+		driver.setParkingDuration(/* weeks*/ 1, 
+			/* days*/ 6, 
 			/* hours*/ 0, 
-			/* minutes*/ 1, 
-			/* weeks*/ 1);
+			/* minutes*/ 1);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1
@@ -1430,17 +1430,17 @@ public class ParkCalculatorTest {
 		}
 	)
 	@Test
-	public void test054__01119701200AmECONOMY_LOT_PARKING_weeks1Days1Hours3Minutes59() throws Exception {
+	public void test054_eCONOMY_LOT_PARKING_01119701200AmWeeks1Days1Hours3Minutes59() throws Exception {
 		
 	// Precondition 1
-		driver.selectLot(/* lot*/ ECONOMY_LOT_PARKING);
+		driver.selectLot(/* parking lot*/ ECONOMY_LOT_PARKING);
 	// Precondition 2
-		driver.setEntryTime(/* entryTime*/ "01/1/1970 12:00 am");
+		driver.setEntryTime(/* entry time*/ "01/1/1970 12:00 am");
 	// Precondition 3
-		driver.setLeavingTime(/* days*/ 1, 
+		driver.setParkingDuration(/* weeks*/ 1, 
+			/* days*/ 1, 
 			/* hours*/ 3, 
-			/* minutes*/ 59, 
-			/* weeks*/ 1);
+			/* minutes*/ 59);
 	// Focus 1
 		driver.calculateParkingCosts();
 	// Verification 1

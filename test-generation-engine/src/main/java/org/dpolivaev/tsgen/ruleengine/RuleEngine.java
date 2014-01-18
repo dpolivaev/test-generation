@@ -184,6 +184,13 @@ public class RuleEngine implements EngineState {
         dependencies.add(name);
 		return (T) assignments.get(name);
 	}
+	
+
+	@Override
+	public Assignment getAssignment(String name) {
+		return assignments.getAssignment(name);
+	}
+
 
     private void executeDefaultRulesForProperty(String name) {
         Rule defaultRule = strategy.getDefaultRulesForProperty(name);

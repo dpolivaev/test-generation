@@ -46,15 +46,20 @@ public class AssignmentFormatter {
 	}
 
 	public String format(PropertyContainer assignments) {
-        StringBuilder assignedPropertiesStringBuilder = new StringBuilder();
-        for (Assignment assignment : assignments.getAssignments()) {
+		final Iterable<Assignment> iterable = assignments.getAssignments();
+        return format(iterable);
+    }
+
+	public String format(final Iterable<Assignment> iterable) {
+		StringBuilder assignedPropertiesStringBuilder = new StringBuilder();
+		for (Assignment assignment : iterable) {
             if(includesAssignment(assignment)){
                 appendSeparator(assignedPropertiesStringBuilder);
                 append(assignedPropertiesStringBuilder, assignment);
             }
         }
         return assignedPropertiesStringBuilder.toString();
-    }
+	}
 
 	private boolean includesAssignment(Assignment assignment) {
 		return  !(shouldFormatIteratingRulesOnly && !assignment.rule.forcesIteration() || excludedByValue(assignment))
