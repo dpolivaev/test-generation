@@ -2,8 +2,6 @@ package org.dpolivaev.tsgen.scriptwriter.internal;
 
 import static java.util.Arrays.asList;
 import static org.dpolivaev.tsgen.testutils.TestUtils.assignmentMock;
-import static org.xmlmatchers.XmlMatchers.isEquivalentTo;
-import static org.xmlmatchers.transform.XmlConverters.the;
 
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
@@ -18,6 +16,7 @@ import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 import org.dpolivaev.tsgen.scriptwriter.ScriptConfiguration;
+import org.dpolivaev.tsgen.testutils.TestUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -67,7 +66,7 @@ public class XmlTestCaseWriterTest {
     }
 
     private void checkOutput(String xml) {
-        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the(xml)));
+        TestUtils.assertXmlEquals(xml, dom.getNode());
     }
 
     @Test
@@ -156,7 +155,7 @@ public class XmlTestCaseWriterTest {
         givenCoverage("requirement id", "description");
         createScript();
         checkOutput("<TestCase>"
-        		+ "<Goal name='name'> <Item name='requirement id' count='1' firstTime = 'true'>description</Item></Goal>"
+        		+ "<Goal name='name'><Item name='requirement id' count='1' firstTime = 'true'>description</Item></Goal>"
         		+ "</TestCase>");
     }
 
@@ -166,7 +165,7 @@ public class XmlTestCaseWriterTest {
         givenCoverage("requirement id", "description");
         createScript();
         checkOutput("<TestCase>"
-        		+ "<Goal name='name'> <Item name='requirement id' count='2' firstTime = 'false'>description</Item></Goal>"
+        		+ "<Goal name='name'><Item name='requirement id' count='2' firstTime = 'false'>description</Item></Goal>"
         		+ "</TestCase>");
     }
 

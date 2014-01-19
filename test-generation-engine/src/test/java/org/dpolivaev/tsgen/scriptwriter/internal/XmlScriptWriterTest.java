@@ -1,8 +1,6 @@
 package org.dpolivaev.tsgen.scriptwriter.internal;
 
 import static org.dpolivaev.tsgen.testutils.TestUtils.assignmentMock;
-import static org.xmlmatchers.XmlMatchers.isEquivalentTo;
-import static org.xmlmatchers.transform.XmlConverters.the;
 
 import javax.xml.transform.dom.DOMResult;
 
@@ -10,9 +8,7 @@ import org.dpolivaev.tsgen.coverage.GoalChecker;
 import org.dpolivaev.tsgen.ruleengine.Assignments;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 import org.dpolivaev.tsgen.scriptwriter.ScriptConfiguration;
-import org.dpolivaev.tsgen.scriptwriter.internal.ResultFactory;
-import org.dpolivaev.tsgen.scriptwriter.internal.SingleScriptWriter;
-import org.junit.Assert;
+import org.dpolivaev.tsgen.testutils.TestUtils;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -80,7 +76,7 @@ public class XmlScriptWriterTest {
     }
 
 	private void checkOutput(final DOMResult dom, String expected) {
-		Assert.assertThat(the(dom.getNode()), isEquivalentTo(the(expected)));
+		TestUtils.assertEqualsXml(expected, dom.getNode());
 	}
 
     @Test
