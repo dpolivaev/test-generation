@@ -3,14 +3,13 @@ package org.dpolivaev.tsgen.scriptwriter;
 import java.io.OutputStreamWriter;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.coverage.Goal;
 import org.dpolivaev.tsgen.coverage.GoalChecker;
-import org.dpolivaev.tsgen.coverage.internal.RequirementsCoverageGoalBuilder;
 import org.dpolivaev.tsgen.coverage.internal.CodeCoverageResetter;
+import org.dpolivaev.tsgen.coverage.internal.RequirementsCoverageGoalBuilder;
 import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
@@ -25,7 +24,7 @@ public class StrategyRunner {
 	private OutputConfiguration reportConfiguration;
 	final private Collection<CoverageTracker> trackers;
 	final private Collection<CoverageEntry> requiredEntries;
-	final private Collection<PropertyHandler> propertyAccessors;
+	final private Collection<PropertyHandler> propertyHandlers;
 
 	public StrategyRunner() {
 		super();
@@ -33,7 +32,7 @@ public class StrategyRunner {
 		this.reportConfiguration = new OutputConfiguration();
 		trackers = new HashSet<>();
 		requiredEntries = new HashSet<>();
-		propertyAccessors = new HashSet<>();
+		propertyHandlers = new HashSet<>();
 	}
 	
 	public StrategyRunner addCoverageTracker(final CoverageTracker coverageTracker) {
@@ -42,22 +41,25 @@ public class StrategyRunner {
 	}
 
 	public StrategyRunner addRequiredItems(
-			final List<CoverageEntry> requiredItems) {
+			final Collection<CoverageEntry> requiredItems) {
 		requiredEntries.addAll(requiredItems);
 		return this;
 	}
 
-	public StrategyRunner addPropertyAccessor(PropertyHandler propertyAccessor){
-		propertyAccessors.add(propertyAccessor);
+	public StrategyRunner addPropertyHandler(PropertyHandler propertyHandler){
+		propertyHandlers.add(propertyHandler);
 		return this;
 	}
 
 	public void run(Strategy strategy){
 		RuleEngine ruleEngine = new RuleEngine();
-		OutputStreamWriter writer = new OutputStreamWriter(System.out);
-		ScriptLogger logger = new ScriptLogger(writer);
-		ruleEngine.addHandler(logger);
-		ruleEngine.addErrorHandler(logger);
+		configureEngine(ruleEngine);
+		ruleEngine.run(strategy);
+	}
+
+	public void configureEngine(RuleEngine ruleEngine) {
+		for(PropertyHandler propertyHandler : propertyHandlers)
+			ruleEngine.addHandler(propertyHandler);
 		StreamResultFactory resultFactory = new StreamResultFactory();
 		GoalChecker goalChecker = createGoalChecker(resultFactory);
 		ruleEngine.addHandler(goalChecker);
@@ -69,9 +71,10 @@ public class StrategyRunner {
 			scriptProducer.setOutputConfiguration(outputConfiguration);
 			ruleEngine.addHandler(scriptProducer);
 		}
-		for(PropertyHandler propertyAccessor : propertyAccessors)
-			ruleEngine.addHandler(propertyAccessor);
-		ruleEngine.run(strategy);
+		OutputStreamWriter writer = new OutputStreamWriter(System.out);
+		ScriptLogger logger = new ScriptLogger(writer);
+		ruleEngine.addHandler(logger);
+		ruleEngine.addErrorHandler(logger);
 	}
 
 	private GoalChecker createGoalChecker(ResultFactory resultFactory) {
