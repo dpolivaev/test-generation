@@ -162,6 +162,7 @@ class ModelCompilationTest {
 			
 			File 1 : MyFile.java
 			
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
 			import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
@@ -178,6 +179,8 @@ class ModelCompilationTest {
 			  public final static MyModel myModel = new MyModel();
 			  
 			  public final static Strategy s = defineStrategyS();
+			  
+			  public final static CoverageEntry[] s_requiredItems = new CoverageEntry[]{};
 			  
 			  private static Strategy defineStrategyS() {
 			    Strategy strategy = new Strategy();

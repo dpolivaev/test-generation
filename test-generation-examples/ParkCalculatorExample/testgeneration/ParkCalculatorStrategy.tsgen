@@ -270,7 +270,7 @@ model LongTermGarageParkingCalculator{
  * run section defines what strategies are executed and configures the output.
  * Strategies to be run and models to be checked for the code coverage must be mentioned here. 
  */	
-run strategy parkCostCalculatorTests 
+run strategy goal parkCostCalculatorTests 
 	with model goal ShortTermParkingCalculator, 
 	model goal LongTermGarageParkingCalculator
 	/*
