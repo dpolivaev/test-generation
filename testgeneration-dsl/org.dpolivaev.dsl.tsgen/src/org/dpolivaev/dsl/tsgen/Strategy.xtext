@@ -77,7 +77,7 @@ ReportConfiguration returns OutputConfiguration:
 	)
 ;
 
-StrategyReference returns StrategyReference: {StrategyReference} 'strategy' expr = XExpression;
+StrategyReference returns StrategyReference: {StrategyReference} 'strategy' goal ?= 'goal'? expr = XExpression;
 ShortFormStrategyReference returns StrategyReference: {StrategyReference} expr = XExpression;
 // GoalReference : 'goal' expr = XExpression;
 ModelReference : 'model' goal ?= 'goal'? expr = XExpression;
