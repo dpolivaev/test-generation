@@ -33,11 +33,14 @@ class StrategyCompilationTest {
 		'''.assertCompilesTo('''
 			package packagename;
 			
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
 			  public final static Strategy first = defineStrategyFirst();
+			  
+			  public final static CoverageEntry[] first_requiredItems = new CoverageEntry[]{};
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
@@ -52,19 +55,22 @@ class StrategyCompilationTest {
 			strategy first
 				let "x y" be 1, 2, 3
 		'''.assertCompilesTo('''
-		import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
-		import org.dpolivaev.tsgen.ruleengine.Strategy;
-		
-		@SuppressWarnings("all")
-		public class MyFile {
-		  public final static Strategy first = defineStrategyFirst();
-		  
-		  private static Strategy defineStrategyFirst() {
-		    Strategy strategy = new Strategy();
-		    strategy.addRule(RuleBuilder.Factory.iterate("x y").over(1, 2, 3).asRule());
-		    return strategy;
-		  }
-		}
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
+			import org.dpolivaev.tsgen.ruleengine.Strategy;
+			
+			@SuppressWarnings("all")
+			public class MyFile {
+			  public final static Strategy first = defineStrategyFirst();
+			  
+			  public final static CoverageEntry[] first_requiredItems = new CoverageEntry[]{};
+			  
+			  private static Strategy defineStrategyFirst() {
+			    Strategy strategy = new Strategy();
+			    strategy.addRule(RuleBuilder.Factory.iterate("x y").over(1, 2, 3).asRule());
+			    return strategy;
+			  }
+			}
 		''')
 	}	
 	
@@ -74,20 +80,23 @@ class StrategyCompilationTest {
 				let "x y" be 1
 				for each "x y" let z be 2
 		'''.assertCompilesTo('''
-		import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
-		import org.dpolivaev.tsgen.ruleengine.Strategy;
-		
-		@SuppressWarnings("all")
-		public class MyFile {
-		  public final static Strategy first = defineStrategyFirst();
-		  
-		  private static Strategy defineStrategyFirst() {
-		    Strategy strategy = new Strategy();
-		    strategy.addRule(RuleBuilder.Factory.iterate("x y").over(1).asRule());
-		    strategy.addRule(RuleBuilder.Factory.when("x y").iterate("z").over(2).asRule());
-		    return strategy;
-		  }
-		}
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
+			import org.dpolivaev.tsgen.ruleengine.Strategy;
+			
+			@SuppressWarnings("all")
+			public class MyFile {
+			  public final static Strategy first = defineStrategyFirst();
+			  
+			  public final static CoverageEntry[] first_requiredItems = new CoverageEntry[]{};
+			  
+			  private static Strategy defineStrategyFirst() {
+			    Strategy strategy = new Strategy();
+			    strategy.addRule(RuleBuilder.Factory.iterate("x y").over(1).asRule());
+			    strategy.addRule(RuleBuilder.Factory.when("x y").iterate("z").over(2).asRule());
+			    return strategy;
+			  }
+			}
 		''')
 	}	
 	
@@ -99,12 +108,15 @@ class StrategyCompilationTest {
 			line3
 			"
 		'''.assertCompilesTo('''
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
 			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
 			  public final static Strategy first = defineStrategyFirst();
+			  
+			  public final static CoverageEntry[] first_requiredItems = new CoverageEntry[]{};
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
@@ -120,19 +132,22 @@ class StrategyCompilationTest {
 			strategy first
 				for each x1, x2 let y be 1, 2, 3
 		'''.assertCompilesTo('''
-		import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
-		import org.dpolivaev.tsgen.ruleengine.Strategy;
-		
-		@SuppressWarnings("all")
-		public class MyFile {
-		  public final static Strategy first = defineStrategyFirst();
-		  
-		  private static Strategy defineStrategyFirst() {
-		    Strategy strategy = new Strategy();
-		    strategy.addRule(RuleBuilder.Factory.when("x1", "x2").iterate("y").over(1, 2, 3).asRule());
-		    return strategy;
-		  }
-		}
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
+			import org.dpolivaev.tsgen.ruleengine.Strategy;
+			
+			@SuppressWarnings("all")
+			public class MyFile {
+			  public final static Strategy first = defineStrategyFirst();
+			  
+			  public final static CoverageEntry[] first_requiredItems = new CoverageEntry[]{};
+			  
+			  private static Strategy defineStrategyFirst() {
+			    Strategy strategy = new Strategy();
+			    strategy.addRule(RuleBuilder.Factory.when("x1", "x2").iterate("y").over(1, 2, 3).asRule());
+			    return strategy;
+			  }
+			}
 		''')
 	}	
 	
@@ -141,6 +156,7 @@ class StrategyCompilationTest {
 			strategy first
 				let y be :x
 		'''.assertCompilesTo('''
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
 			import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
@@ -153,6 +169,8 @@ class StrategyCompilationTest {
 			  }
 			  
 			  public final static Strategy first = defineStrategyFirst();
+			  
+			  public final static CoverageEntry[] first_requiredItems = new CoverageEntry[]{};
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
@@ -170,6 +188,7 @@ class StrategyCompilationTest {
 			strategy first
 				if 1 < 2 let y be 3
 		'''.assertCompilesTo('''
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
 			import org.dpolivaev.tsgen.ruleengine.Condition;
 			import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
@@ -182,6 +201,8 @@ class StrategyCompilationTest {
 			  }
 			  
 			  public final static Strategy first = defineStrategyFirst();
+			  
+			  public final static CoverageEntry[] first_requiredItems = new CoverageEntry[]{};
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
@@ -200,6 +221,7 @@ class StrategyCompilationTest {
 					let y be 3
 				}
 		'''.assertCompilesTo('''
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
 			import org.dpolivaev.tsgen.ruleengine.Condition;
 			import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
@@ -212,6 +234,8 @@ class StrategyCompilationTest {
 			  }
 			  
 			  public final static Strategy first = defineStrategyFirst();
+			  
+			  public final static CoverageEntry[] first_requiredItems = new CoverageEntry[]{};
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
@@ -230,6 +254,7 @@ class StrategyCompilationTest {
 					if 3 < 4 let y be 5
 				}
 			'''.assertCompilesTo('''
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
 			import org.dpolivaev.tsgen.ruleengine.Condition;
 			import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
@@ -247,6 +272,8 @@ class StrategyCompilationTest {
 			  
 			  public final static Strategy first = defineStrategyFirst();
 			  
+			  public final static CoverageEntry[] first_requiredItems = new CoverageEntry[]{};
+			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
 			    strategy.addRule(RuleBuilder.Factory._if(new Condition(){
@@ -262,19 +289,22 @@ class StrategyCompilationTest {
 			strategy first
 				let default x be 1, 2, 3
 		'''.assertCompilesTo('''
-		import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
-		import org.dpolivaev.tsgen.ruleengine.Strategy;
-		
-		@SuppressWarnings("all")
-		public class MyFile {
-		  public final static Strategy first = defineStrategyFirst();
-		  
-		  private static Strategy defineStrategyFirst() {
-		    Strategy strategy = new Strategy();
-		    strategy.addRule(RuleBuilder.Factory.iterate("x").over(1, 2, 3).asDefaultRule());
-		    return strategy;
-		  }
-		}
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
+			import org.dpolivaev.tsgen.ruleengine.Strategy;
+			
+			@SuppressWarnings("all")
+			public class MyFile {
+			  public final static Strategy first = defineStrategyFirst();
+			  
+			  public final static CoverageEntry[] first_requiredItems = new CoverageEntry[]{};
+			  
+			  private static Strategy defineStrategyFirst() {
+			    Strategy strategy = new Strategy();
+			    strategy.addRule(RuleBuilder.Factory.iterate("x").over(1, 2, 3).asDefaultRule());
+			    return strategy;
+			  }
+			}
 		''')
 	}	
 	
@@ -285,19 +315,22 @@ class StrategyCompilationTest {
 					for each x2 let y be 1, 2, 3
 				}
 		'''.assertCompilesTo('''
-		import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
-		import org.dpolivaev.tsgen.ruleengine.Strategy;
-		
-		@SuppressWarnings("all")
-		public class MyFile {
-		  public final static Strategy first = defineStrategyFirst();
-		  
-		  private static Strategy defineStrategyFirst() {
-		    Strategy strategy = new Strategy();
-		    strategy.addRule(RuleBuilder.Factory.when("x1", "x2").iterate("y").over(1, 2, 3).asRule());
-		    return strategy;
-		  }
-		}
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
+			import org.dpolivaev.tsgen.ruleengine.Strategy;
+			
+			@SuppressWarnings("all")
+			public class MyFile {
+			  public final static Strategy first = defineStrategyFirst();
+			  
+			  public final static CoverageEntry[] first_requiredItems = new CoverageEntry[]{};
+			  
+			  private static Strategy defineStrategyFirst() {
+			    Strategy strategy = new Strategy();
+			    strategy.addRule(RuleBuilder.Factory.when("x1", "x2").iterate("y").over(1, 2, 3).asRule());
+			    return strategy;
+			  }
+			}
 		''')
 	}	
 	
@@ -308,12 +341,15 @@ class StrategyCompilationTest {
 					let y be 2
 				}
 		'''.assertCompilesTo('''
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
 			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
 			  public final static Strategy first = defineStrategyFirst();
+			  
+			  public final static CoverageEntry[] first_requiredItems = new CoverageEntry[]{};
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
@@ -334,12 +370,15 @@ class StrategyCompilationTest {
 					let z be 3
 				}
 		'''.assertCompilesTo('''
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
 			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
 			  public final static Strategy first = defineStrategyFirst();
+			  
+			  public final static CoverageEntry[] first_requiredItems = new CoverageEntry[]{};
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
@@ -362,12 +401,15 @@ class StrategyCompilationTest {
 					}
 				}
 		'''.assertCompilesTo('''
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
 			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
 			  public final static Strategy first = defineStrategyFirst();
+			  
+			  public final static CoverageEntry[] first_requiredItems = new CoverageEntry[]{};
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
@@ -386,12 +428,15 @@ class StrategyCompilationTest {
 			let a be listA with 1 {let b be 2}, 3 {}
 			let default d be from listA
 		'''.assertCompilesTo('''
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
 			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
 			  public final static Strategy First = defineStrategyFirst();
+			  
+			  public final static CoverageEntry[] First_requiredItems = new CoverageEntry[]{};
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
@@ -410,12 +455,15 @@ class StrategyCompilationTest {
 			strategy first
 				let x be 2, 3 ordered 		
 		'''.assertCompilesTo('''
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
 			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
 			  public final static Strategy first = defineStrategyFirst();
+			  
+			  public final static CoverageEntry[] first_requiredItems = new CoverageEntry[]{};
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
@@ -431,12 +479,15 @@ class StrategyCompilationTest {
 			strategy first
 				let x be 2, 3 shuffled 		
 		'''.assertCompilesTo('''
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
 			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
 			  public final static Strategy first = defineStrategyFirst();
+			  
+			  public final static CoverageEntry[] first_requiredItems = new CoverageEntry[]{};
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
@@ -452,6 +503,7 @@ class StrategyCompilationTest {
 			strategy first
 				let x be ("a" "b")
 		'''.assertCompilesTo('''
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
 			import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
@@ -460,6 +512,8 @@ class StrategyCompilationTest {
 			@SuppressWarnings("all")
 			public class MyFile {
 			  public final static Strategy first = defineStrategyFirst();
+			  
+			  public final static CoverageEntry[] first_requiredItems = new CoverageEntry[]{};
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
@@ -477,12 +531,15 @@ class StrategyCompilationTest {
 			strategy First
 			run strategy First
 		'''.assertCompilesTo('''
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			import org.dpolivaev.tsgen.scriptwriter.StrategyRunner;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
 			  public final static Strategy First = defineStrategyFirst();
+			  
+			  public final static CoverageEntry[] First_requiredItems = new CoverageEntry[]{};
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
@@ -507,6 +564,7 @@ class StrategyCompilationTest {
 			strategy second
 			run strategy first with strategy second
 		'''.assertCompilesTo('''
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			import org.dpolivaev.tsgen.scriptwriter.StrategyRunner;
 			
@@ -514,7 +572,11 @@ class StrategyCompilationTest {
 			public class MyFile {
 			  public final static Strategy first = defineStrategyFirst();
 			  
+			  public final static CoverageEntry[] first_requiredItems = new CoverageEntry[]{};
+			  
 			  public final static Strategy second = defineStrategySecond();
+			  
+			  public final static CoverageEntry[] second_requiredItems = new CoverageEntry[]{};
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
@@ -543,13 +605,18 @@ class StrategyCompilationTest {
 			strategy first
 			strategy second extends first with first
 		'''.assertCompilesTo('''
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
 			  public final static Strategy first = defineStrategyFirst();
 			  
+			  public final static CoverageEntry[] first_requiredItems = new CoverageEntry[]{};
+			  
 			  public final static Strategy second = defineStrategySecond();
+			  
+			  public final static CoverageEntry[] second_requiredItems = new CoverageEntry[]{};
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
@@ -570,6 +637,7 @@ class StrategyCompilationTest {
 			import org.dpolivaev.tsgen.ruleengine.Strategy
 			strategy first extends new Strategy()
 		'''.assertCompilesTo('''
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			
 			@SuppressWarnings("all")
@@ -580,6 +648,8 @@ class StrategyCompilationTest {
 			  }
 			  
 			  public final static Strategy first = defineStrategyFirst();
+			  
+			  public final static CoverageEntry[] first_requiredItems = new CoverageEntry[]{};
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy().with(externalStrategy1());
@@ -593,12 +663,15 @@ class StrategyCompilationTest {
 			strategy First
 			run strategy First output "testoutput/xml", apply "my.xslt" output "testoutput/java"
 		'''.assertCompilesTo('''
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			import org.dpolivaev.tsgen.scriptwriter.StrategyRunner;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
 			  public final static Strategy First = defineStrategyFirst();
+			  
+			  public final static CoverageEntry[] First_requiredItems = new CoverageEntry[]{};
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
@@ -623,12 +696,15 @@ class StrategyCompilationTest {
 			strategy First
 			run strategy First output "testoutput/xml"
 		'''.assertCompilesTo('''
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			import org.dpolivaev.tsgen.scriptwriter.StrategyRunner;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
 			  public final static Strategy First = defineStrategyFirst();
+			  
+			  public final static CoverageEntry[] First_requiredItems = new CoverageEntry[]{};
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
@@ -653,12 +729,15 @@ class StrategyCompilationTest {
 			strategy First
 			run strategy First report "testoutput/xml", apply "my.xslt" output "testoutput/report"
 		'''.assertCompilesTo('''
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
 			import org.dpolivaev.tsgen.scriptwriter.StrategyRunner;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
 			  public final static Strategy First = defineStrategyFirst();
+			  
+			  public final static CoverageEntry[] First_requiredItems = new CoverageEntry[]{};
 			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
@@ -682,18 +761,36 @@ class StrategyCompilationTest {
 		'''
 			strategy First
 				let [req1] be 123
+			
+			run strategy goal First 	
 		'''.assertCompilesTo('''
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
 			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 			import org.dpolivaev.tsgen.ruleengine.Strategy;
+			import org.dpolivaev.tsgen.scriptwriter.StrategyRunner;
 			
 			@SuppressWarnings("all")
 			public class MyFile {
 			  public final static Strategy First = defineStrategyFirst();
 			  
+			  public final static CoverageEntry[] First_requiredItems = new CoverageEntry[]{new CoverageEntry("[req1]", "123"),};
+			  
 			  private static Strategy defineStrategyFirst() {
 			    Strategy strategy = new Strategy();
 			    strategy.addRule(RuleBuilder.Factory.iterate("[req1]").over(123).asRule());
 			    return strategy;
+			  }
+			  
+			  public static void run1() {
+			    StrategyRunner strategyRunner = new StrategyRunner();
+			    final RequirementChecker __requirementChecker = new RequirementChecker();
+			    __requirementChecker.addItems(First_requiredItems_requiredItems);
+			    __requirementChecker.registerTo(strategyRunner);
+			    strategyRunner.run(First);
+			  }
+			  
+			  public static void main(final String[] args) {
+			    MyFile.run1();
 			  }
 			}
 		''')
@@ -705,28 +802,31 @@ class StrategyCompilationTest {
 				let default a be 123
 				let [req1] be :a
 		'''.assertCompilesTo('''
-				import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-				import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
-				import org.dpolivaev.tsgen.ruleengine.Strategy;
-				import org.dpolivaev.tsgen.ruleengine.ValueProvider;
-				
-				@SuppressWarnings("all")
-				public class MyFile {
-				  private static Object valueProvider1(final PropertyContainer propertyContainer) {
-				    return propertyContainer.get("a");
-				  }
-				  
-				  public final static Strategy First = defineStrategyFirst();
-				  
-				  private static Strategy defineStrategyFirst() {
-				    Strategy strategy = new Strategy();
-				    strategy.addRule(RuleBuilder.Factory.iterate("a").over(123).asDefaultRule());
-				    strategy.addRule(RuleBuilder.Factory.iterate("[req1]").over(new ValueProvider(){
-				      @Override public Object value(PropertyContainer propertyContainer) { return valueProvider1(propertyContainer); }
-				    }).asRule());
-				    return strategy;
-				  }
-				}
+			import org.dpolivaev.tsgen.coverage.CoverageEntry;
+			import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
+			import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
+			import org.dpolivaev.tsgen.ruleengine.Strategy;
+			import org.dpolivaev.tsgen.ruleengine.ValueProvider;
+			
+			@SuppressWarnings("all")
+			public class MyFile {
+			  private static Object valueProvider1(final PropertyContainer propertyContainer) {
+			    return propertyContainer.get("a");
+			  }
+			  
+			  public final static Strategy First = defineStrategyFirst();
+			  
+			  public final static CoverageEntry[] First_requiredItems = new CoverageEntry[]{new CoverageEntry("[req1]", CoverageEntry.ANY),};
+			  
+			  private static Strategy defineStrategyFirst() {
+			    Strategy strategy = new Strategy();
+			    strategy.addRule(RuleBuilder.Factory.iterate("a").over(123).asDefaultRule());
+			    strategy.addRule(RuleBuilder.Factory.iterate("[req1]").over(new ValueProvider(){
+			      @Override public Object value(PropertyContainer propertyContainer) { return valueProvider1(propertyContainer); }
+			    }).asRule());
+			    return strategy;
+			  }
+			}
 		''')
 	}	
 	

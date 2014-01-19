@@ -29,7 +29,8 @@ class CoverageEntriesInferrer{
 				labels += coverageEntries(obj as Rule)
 		}
 		for(label:labels){
-			append('new ')
+			newLine
+			append('  new ')
 			append(sourceObject.newTypeRef(CoverageEntry).type) 
 			append('("') append(label.name) append('", ')
 			if(label.reason == CoverageEntry.ANY)  
@@ -61,7 +62,7 @@ class CoverageEntriesInferrer{
 	
 	def coverageEntries(Rule rule) {
 		val name = rule.name
-		if(name != null && name.startsWith("[")){
+		if(name != null && name.startsWith("[" )&& rule.values?.actions != null){
 			val entries = new HashSet<CoverageEntry>
 			for(action  : rule.values.actions)
 				for(valueProvider  : action.valueProviders)

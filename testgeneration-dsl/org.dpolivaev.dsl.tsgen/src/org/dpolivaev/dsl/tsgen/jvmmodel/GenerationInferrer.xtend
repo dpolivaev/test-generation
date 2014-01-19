@@ -1,9 +1,11 @@
 package org.dpolivaev.dsl.tsgen.jvmmodel
 
+import com.google.inject.Injector
 import java.util.ArrayList
 import java.util.Collection
 import java.util.HashSet
 import java.util.Set
+import javax.inject.Inject
 import org.dpolivaev.dsl.tsgen.strategydsl.Condition
 import org.dpolivaev.dsl.tsgen.strategydsl.Generation
 import org.dpolivaev.dsl.tsgen.strategydsl.ModelReference
@@ -14,6 +16,7 @@ import org.dpolivaev.dsl.tsgen.strategydsl.StrategyReference
 import org.dpolivaev.dsl.tsgen.strategydsl.ValueAction
 import org.dpolivaev.dsl.tsgen.strategydsl.ValueProvider
 import org.dpolivaev.dsl.tsgen.strategydsl.Values
+import org.dpolivaev.tsgen.coverage.CoverageEntry
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory
 import org.dpolivaev.tsgen.ruleengine.Strategy
@@ -34,9 +37,10 @@ import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 
 import static extension org.dpolivaev.dsl.tsgen.jvmmodel.StrategyCompiler.*
-import javax.inject.Inject
+import org.dpolivaev.tsgen.scriptwriter.RequirementChecker
 
 class GenerationInferrer{
+	@Inject Injector injector
 	@Inject extension JvmTypesBuilder jvmTypesBuilder
 	@Inject XbaseCompiler xbaseCompiler
 	val Methods methods
@@ -409,7 +413,20 @@ class GenerationInferrer{
 				visibility = JvmVisibility::PUBLIC
 				static = true
 			]
+			jvmType.members += strategy.toField(strategy.name.requiredItemFieldName, strategy.newTypeRef(CoverageEntry).addArrayTypeDimension)[
+				setInitializer [
+					injector.getInstance(CoverageEntriesInferrer).appendArrayInitializer(it, strategy)
+				]
+				final = true
+				visibility = JvmVisibility::PUBLIC
+				static = true			
+			]
+			
 		}
+	}
+	
+	private def requiredItemFieldName(String name) {
+		name + "_requiredItems"
 	}
 	
 	private def inferRunMethods(){
@@ -442,9 +459,29 @@ class GenerationInferrer{
 							appendReference(it, EXTERNAL_MODEL, model.expr)
 							append('.getRequiredItems())')
 						}
-						append('.addPropertyAccessor(')
+						append('.addPropertyHandler(')
 						appendReference(it, EXTERNAL_MODEL, model.expr)
 						append(');')
+					}
+					var strategyGoalFound = false
+					for(strategyReference : run.strategies){
+						if(strategyReference.goal){
+							if(! strategyGoalFound){
+								strategyGoalFound = true
+								newLine
+								append('final ')
+								append(strategyReference.newTypeRef(RequirementChecker).type)
+								append(' __requirementChecker = new RequirementChecker();')
+							}
+							newLine
+							append('__requirementChecker.addItems(')
+							append(strategyReference.expr.toString.requiredItemFieldName)
+							append(');')
+						}
+					}
+					if(strategyGoalFound){
+						newLine
+						append('__requirementChecker.registerBy(strategyRunner);')
 					}
 					newLine
 					append('strategyRunner.run(')
