@@ -1,8 +1,5 @@
 package org.dpolivaev.tsgen.scriptwriter.internal;
 
-import static org.xmlmatchers.XmlMatchers.isEquivalentTo;
-import static org.xmlmatchers.transform.XmlConverters.the;
-
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -16,6 +13,7 @@ import org.dpolivaev.tsgen.coverage.GoalFunction;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 import org.dpolivaev.tsgen.scriptwriter.ScriptConfiguration;
+import org.dpolivaev.tsgen.testutils.TestUtils;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
@@ -64,16 +62,16 @@ public class XmlReportWriterTest {
 		goals.handlePropertyCombination(null);
 		ReportWriter producer = new ReportWriter(resultFactory, scriptConfiguration);
         producer.createReport(goals);
-        Assert.assertThat(the(dom.getNode()), isEquivalentTo(the(
-        	"<Report>"
-                	+ "<Goal name='goal1' required='0' achieved='0' total='1'>"
-            		+ "<Item name='item' reached='1'>value</Item>"
-            	+ "</Goal>" 
-            	+ "<Goal name='goal2' required='2' achieved='2' total='3'>"
-        		+ "<Item name='item1' reached='1'>value1</Item>"
-        		+ "<Item name='item1' reached='1'>value2</Item>"
-        		+ "<Item name='item2' reached='1'>value</Item>"
-        	+ "</Goal>" 
-        	+ "</Report>")));
+        TestUtils.assertXmlEquals("<Report>"
+		    	+ "<Goal name='goal1' required='0' achieved='0' total='1'>"
+				+ "<Item name='item' reached='1'>value</Item>"
+			+ "</Goal>" 
+			+ "<Goal name='goal2' required='2' achieved='2' total='3'>"
+			+ "<Item name='item1' reached='1'>value1</Item>"
+			+ "<Item name='item1' reached='1'>value2</Item>"
+			+ "<Item name='item2' reached='1'>value</Item>"
+		+ "</Goal>" 
+		+ "</Report>", 
+        	dom.getNode());
     }
 }

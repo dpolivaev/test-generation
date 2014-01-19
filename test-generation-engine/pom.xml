@@ -46,17 +46,5 @@
 			<version>1.9.5</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.xmlmatchers</groupId>
-			<artifactId>xml-matchers</artifactId>
-			<version>1.0-RC1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.saxon</groupId>
-			<artifactId>Saxon-HE</artifactId>
-			<version>9.4</version>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 </project>
