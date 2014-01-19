@@ -703,7 +703,7 @@ class StrategyCompilationTest {
 		'''
 			strategy First
 				let default a be 123
-				let req1 be :a
+				let [req1] be :a
 		'''.assertCompilesTo('''
 				import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 				import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
@@ -721,7 +721,7 @@ class StrategyCompilationTest {
 				  private static Strategy defineStrategyFirst() {
 				    Strategy strategy = new Strategy();
 				    strategy.addRule(RuleBuilder.Factory.iterate("a").over(123).asDefaultRule());
-				    strategy.addRule(RuleBuilder.Factory.iterate("req1").over(new ValueProvider(){
+				    strategy.addRule(RuleBuilder.Factory.iterate("[req1]").over(new ValueProvider(){
 				      @Override public Object value(PropertyContainer propertyContainer) { return valueProvider1(propertyContainer); }
 				    }).asRule());
 				    return strategy;
