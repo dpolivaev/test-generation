@@ -47,6 +47,8 @@ The framework automatically translates tsgen files to java files in directory `s
 
 The test-driven implementation of the parking costs calculator with developer tests allows the execution of the generated tests against this code. The source code is contained in directory src, and the developer tests in directory developer-tests.
 
+For compiling and running the tests the project build path should be added library "Test generation library" which is installed with the framework plug-ins. 
+
 Strategy DSL syntax example
 ============================
 
@@ -56,9 +58,7 @@ Framework and eclipse plug-in compilation from the source code
 =========================================
 1. Install the latest eclipse with XText sdk plugin and maven
 2. Create eclipse classpath variable M2_REPO pointing to your maven repository
-3. Run mvn eclipse:eclipse in folder test-generation-engine to create eclipse project for the engine
-4. Run mvn install in the same folder
-5. Import all projects from folders test-generation-engine and and testgeneration-dsl
-6. Right-click on file `/org.dpolivaev.dsl.tsgen/src/org/dpolivaev/dsl/tsgen/Strategy.xtext` and select "Run As -> Generate XText Artifacts"
-7. Copy jar file `org.dpolivaev.tsgen.engine-1.0-SNAPSHOT.jar` from maven repository directory linked to the project as `/org.dpolivaev.dsl.tsgen/lib/engine` into `/org.dpolivaev.dsl.tsgen/lib`
-8. Run eclipse application
+3. Run mvn test in folder test-generation-engine.
+4. Import all projects from folders test-generation-engine and and testgeneration-dsl
+5. Right-click on file `/org.dpolivaev.dsl.tsgen/src/org/dpolivaev/dsl/tsgen/Strategy.xtext` and select "Run As -> Generate XText Artifacts"
+6. Run eclipse application
