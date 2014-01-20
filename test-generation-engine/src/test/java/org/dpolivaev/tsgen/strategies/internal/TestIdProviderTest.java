@@ -71,7 +71,6 @@ public class TestIdProviderTest {
 		
 	}
 	
-	@Ignore
 	@Test
 	public void includesFocTrue(){
 		givenAssignment("focus", "focus(x)", "");
