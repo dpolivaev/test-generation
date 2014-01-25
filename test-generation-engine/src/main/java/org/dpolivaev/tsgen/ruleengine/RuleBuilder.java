@@ -122,7 +122,7 @@ public class RuleBuilder {
     ValueProviders ruleValues() {
         ValueWithRulesProvider[] valueProviders = this.values.toArray(new ValueWithRulesProvider[values.size()]);
         OrderedValueProviders orderedValueProviders = new OrderedValueProviders(valueProviders);
-        ValueProviders ruleValues = order == Order.ORDERED ? orderedValueProviders : new ShuffledValueProviders(orderedValueProviders, order);
+        ValueProviders ruleValues = order == Order.ORDERED || ! orderedValueProviders.containsMultipleValues() ? orderedValueProviders : new ShuffledValueProviders(orderedValueProviders, order);
         return ruleValues;
     }
 
