@@ -1,8 +1,8 @@
-package org.dpolivaev.tsgen.scriptwriter;
+package org.dpolivaev.tsgen.coverage;
 
-import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
+import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
 import org.dpolivaev.tsgen.scriptwriter.internal.RequirementChecker;
 
 public class RequirementBasedStrategy {
