@@ -36,7 +36,6 @@ import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 
 import static extension org.dpolivaev.dsl.tsgen.jvmmodel.StrategyCompiler.*
-import org.dpolivaev.tsgen.scriptwriter.RequirementChecker
 import org.dpolivaev.tsgen.scriptwriter.WriterFactory
 import org.dpolivaev.tsgen.ruleengine.RuleEngine
 import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy

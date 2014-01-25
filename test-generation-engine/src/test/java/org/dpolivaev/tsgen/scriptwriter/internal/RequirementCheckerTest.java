@@ -1,8 +1,10 @@
-package org.dpolivaev.tsgen.scriptwriter;
+package org.dpolivaev.tsgen.scriptwriter.internal;
 
 import static org.mockito.Mockito.verify;
 
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
+import org.dpolivaev.tsgen.scriptwriter.internal.RequirementChecker;
 import org.dpolivaev.tsgen.utils.internal.Utils;
 import org.junit.Test;
 import org.mockito.Mockito;
