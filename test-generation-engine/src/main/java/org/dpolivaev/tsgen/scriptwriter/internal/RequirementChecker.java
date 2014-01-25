@@ -1,4 +1,4 @@
-package org.dpolivaev.tsgen.scriptwriter;
+package org.dpolivaev.tsgen.scriptwriter.internal;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -7,6 +7,7 @@ import java.util.HashSet;
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
+import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
 
 public class RequirementChecker implements PropertyHandler{
 	final private Collection<CoverageEntry> items;

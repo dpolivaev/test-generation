@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
+import org.dpolivaev.tsgen.scriptwriter.internal.RequirementChecker;
 import org.junit.Before;
 import org.junit.Test;
 
