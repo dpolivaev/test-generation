@@ -10,7 +10,6 @@ import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.CoverageStatus;
 import org.dpolivaev.tsgen.coverage.Goal;
 import org.dpolivaev.tsgen.coverage.GoalChecker;
-import org.dpolivaev.tsgen.scriptwriter.ScriptConfiguration;
 import org.dpolivaev.tsgen.utils.internal.StringWithNumbersComparator;
 
 public class ReportWriter {

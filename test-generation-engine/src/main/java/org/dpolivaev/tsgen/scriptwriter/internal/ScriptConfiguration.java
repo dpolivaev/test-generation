@@ -1,6 +1,8 @@
-package org.dpolivaev.tsgen.scriptwriter;
+package org.dpolivaev.tsgen.scriptwriter.internal;
 
 import java.io.File;
+
+import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 
 
 public class ScriptConfiguration {

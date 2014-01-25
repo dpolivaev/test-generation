@@ -8,8 +8,6 @@ import java.io.FileOutputStream;
 import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
 
-import org.dpolivaev.tsgen.scriptwriter.ScriptConfiguration;
-
 public class StreamResultFactory implements ResultFactory{
      public Result newResult(ScriptConfiguration scriptConfiguration) {
 		final File outputFile = scriptConfiguration.outputFile();

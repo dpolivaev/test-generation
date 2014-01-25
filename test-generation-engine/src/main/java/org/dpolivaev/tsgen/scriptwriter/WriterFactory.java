@@ -14,6 +14,7 @@ import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.scriptwriter.internal.MultipleScriptsWriter;
 import org.dpolivaev.tsgen.scriptwriter.internal.ReportWriter;
 import org.dpolivaev.tsgen.scriptwriter.internal.ResultFactory;
+import org.dpolivaev.tsgen.scriptwriter.internal.ScriptConfiguration;
 import org.dpolivaev.tsgen.scriptwriter.internal.ScriptLogger;
 import org.dpolivaev.tsgen.scriptwriter.internal.StreamResultFactory;
 

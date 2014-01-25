@@ -18,11 +18,6 @@ public class OutputConfiguration {
 	public OutputConfiguration(){
 	}
 	
-	public ScriptConfiguration forScript(String name){
-		final ScriptConfiguration scriptConfiguration = new ScriptConfiguration(this, name);
-		return scriptConfiguration;
-	}
-
 	public Source getXsltSource() {
 		return xsltSource;
 	}

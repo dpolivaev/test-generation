@@ -4,7 +4,6 @@ import org.dpolivaev.tsgen.coverage.GoalChecker;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
-import org.dpolivaev.tsgen.scriptwriter.ScriptConfiguration;
 import org.xml.sax.ContentHandler;
 
 public class SingleScriptWriter implements PropertyHandler {
