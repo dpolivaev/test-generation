@@ -67,7 +67,7 @@ public class MyFile {
   private static RequirementBasedStrategy defineStrategyFirst() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
-    strategy.addRule(RuleBuilder.Factory.iterate("x y").over(1, 2, 3).asRule());
+    __strategy.addRule(RuleBuilder.Factory.iterate("x y").over(1, 2, 3).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
   }
 }
@@ -92,8 +92,8 @@ public class MyFile {
   private static RequirementBasedStrategy defineStrategyFirst() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
-    strategy.addRule(RuleBuilder.Factory.iterate("x y").over(1).asRule());
-    strategy.addRule(RuleBuilder.Factory.when("x y").iterate("z").over(2).asRule());
+    __strategy.addRule(RuleBuilder.Factory.iterate("x y").over(1).asRule());
+    __strategy.addRule(RuleBuilder.Factory.when("x y").iterate("z").over(2).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
   }
 }
@@ -120,7 +120,7 @@ public class MyFile {
   private static RequirementBasedStrategy defineStrategyFirst() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
-    strategy.addRule(RuleBuilder.Factory.iterate("x").over("line1\nline2\nline3\n").asRule());
+    __strategy.addRule(RuleBuilder.Factory.iterate("x").over("line1\nline2\nline3\n").asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
   }
 }
@@ -144,7 +144,7 @@ public class MyFile {
   private static RequirementBasedStrategy defineStrategyFirst() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
-    strategy.addRule(RuleBuilder.Factory.when("x1", "x2").iterate("y").over(1, 2, 3).asRule());
+    __strategy.addRule(RuleBuilder.Factory.when("x1", "x2").iterate("y").over(1, 2, 3).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
   }
 }
@@ -174,7 +174,7 @@ public class MyFile {
   private static RequirementBasedStrategy defineStrategyFirst() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
-    strategy.addRule(RuleBuilder.Factory.iterate("y").over(new ValueProvider(){
+    __strategy.addRule(RuleBuilder.Factory.iterate("y").over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) { return valueProvider1(propertyContainer); }
     }).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
@@ -206,7 +206,7 @@ public class MyFile {
   private static RequirementBasedStrategy defineStrategyFirst() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
-    strategy.addRule(RuleBuilder.Factory._if(new Condition(){
+    __strategy.addRule(RuleBuilder.Factory._if(new Condition(){
       @Override public boolean isSatisfied(PropertyContainer propertyContainer) { return condition1(propertyContainer); }
     }).iterate("y").over(3).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
@@ -239,7 +239,7 @@ public class MyFile {
   private static RequirementBasedStrategy defineStrategyFirst() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
-    strategy.addRule(RuleBuilder.Factory._if(new Condition(){
+    __strategy.addRule(RuleBuilder.Factory._if(new Condition(){
       @Override public boolean isSatisfied(PropertyContainer propertyContainer) { return condition1(propertyContainer); }
     }).iterate("y").over(3).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
@@ -276,7 +276,7 @@ public class MyFile {
   private static RequirementBasedStrategy defineStrategyFirst() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
-    strategy.addRule(RuleBuilder.Factory._if(new Condition(){
+    __strategy.addRule(RuleBuilder.Factory._if(new Condition(){
       @Override public boolean isSatisfied(PropertyContainer propertyContainer) { return condition1(propertyContainer) && condition2(propertyContainer); }
     }).iterate("y").over(5).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
@@ -301,7 +301,7 @@ public class MyFile {
   private static RequirementBasedStrategy defineStrategyFirst() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
-    strategy.addRule(RuleBuilder.Factory.iterate("x").over(1, 2, 3).asDefaultRule());
+    __strategy.addRule(RuleBuilder.Factory.iterate("x").over(1, 2, 3).asDefaultRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
   }
 }
@@ -327,7 +327,7 @@ public class MyFile {
   private static RequirementBasedStrategy defineStrategyFirst() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
-    strategy.addRule(RuleBuilder.Factory.when("x1", "x2").iterate("y").over(1, 2, 3).asRule());
+    __strategy.addRule(RuleBuilder.Factory.when("x1", "x2").iterate("y").over(1, 2, 3).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
   }
 }
@@ -353,7 +353,7 @@ public class MyFile {
   private static RequirementBasedStrategy defineStrategyFirst() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
-    strategy.addRule(RuleBuilder.Factory.iterate("x").over(1).with(
+    __strategy.addRule(RuleBuilder.Factory.iterate("x").over(1).with(
       RuleBuilder.Factory.iterate("y").over(2).asTriggeredRule()
     ).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
@@ -382,7 +382,7 @@ public class MyFile {
   private static RequirementBasedStrategy defineStrategyFirst() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
-    strategy.addRule(RuleBuilder.Factory.iterate("x").over(1).with(
+    __strategy.addRule(RuleBuilder.Factory.iterate("x").over(1).with(
       RuleBuilder.Factory.iterate("y").over(2).asTriggeredRule(),
       RuleBuilder.Factory.iterate("z").over(3).asTriggeredRule()
     ).asRule());
@@ -413,7 +413,7 @@ public class MyFile {
   private static RequirementBasedStrategy defineStrategyFirst() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
-    strategy.addRule(RuleBuilder.Factory.iterate("x").over(1).with(
+    __strategy.addRule(RuleBuilder.Factory.iterate("x").over(1).with(
       RuleBuilder.Factory.when("x").iterate("y").over(2).asTriggeredRule()
     ).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
@@ -440,10 +440,10 @@ public class MyFile {
   private static RequirementBasedStrategy defineStrategyFirst() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
-    strategy.addRule(RuleBuilder.Factory.iterate("a").over(1).with(
+    __strategy.addRule(RuleBuilder.Factory.iterate("a").over(1).with(
       RuleBuilder.Factory.iterate("b").over(2).asTriggeredRule()
     ).over(3).asRule());
-    strategy.addRule(RuleBuilder.Factory.iterate("d").over(1).over(3).asDefaultRule());
+    __strategy.addRule(RuleBuilder.Factory.iterate("d").over(1).over(3).asDefaultRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
   }
 }
@@ -467,7 +467,7 @@ public class MyFile {
   private static RequirementBasedStrategy defineStrategyFirst() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
-    strategy.addRule(RuleBuilder.Factory.iterate("x").over(2, 3).ordered().asRule());
+    __strategy.addRule(RuleBuilder.Factory.iterate("x").over(2, 3).ordered().asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
   }
 }
@@ -491,7 +491,7 @@ public class MyFile {
   private static RequirementBasedStrategy defineStrategyFirst() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
-    strategy.addRule(RuleBuilder.Factory.iterate("x").over(2, 3).shuffled().asRule());
+    __strategy.addRule(RuleBuilder.Factory.iterate("x").over(2, 3).shuffled().asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
   }
 }
@@ -517,7 +517,7 @@ public class MyFile {
   private static RequirementBasedStrategy defineStrategyFirst() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
-    strategy.addRule(RuleBuilder.Factory.iterate("x").over(new ValueProvider(){
+    __strategy.addRule(RuleBuilder.Factory.iterate("x").over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) { return new StringBuilder().append("a").append("b").toString(); }
     }).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
@@ -813,7 +813,7 @@ public class MyFile {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{
       new CoverageEntry("req1", "123"),};
     Strategy __strategy = new Strategy();
-    strategy.addRule(RuleBuilder.Factory.iterate("[req1]").over(123).asRule());
+    __strategy.addRule(RuleBuilder.Factory.iterate("[req1]").over(123).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
   }
   
@@ -860,8 +860,8 @@ public class MyFile {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{
       new CoverageEntry("req1", CoverageEntry.ANY),};
     Strategy __strategy = new Strategy();
-    strategy.addRule(RuleBuilder.Factory.iterate("a").over(123).asDefaultRule());
-    strategy.addRule(RuleBuilder.Factory.iterate("[req1]").over(new ValueProvider(){
+    __strategy.addRule(RuleBuilder.Factory.iterate("a").over(123).asDefaultRule());
+    __strategy.addRule(RuleBuilder.Factory.iterate("[req1]").over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) { return valueProvider1(propertyContainer); }
     }).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);

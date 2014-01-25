@@ -187,7 +187,7 @@ public class MyFile {
   private static RequirementBasedStrategy defineStrategyS() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
-    strategy.addRule(RuleBuilder.Factory.iterate("x").over(new ValueProvider(){
+    __strategy.addRule(RuleBuilder.Factory.iterate("x").over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) { return valueProvider1(propertyContainer); }
     }).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
