@@ -20,7 +20,6 @@ import org.dpolivaev.tsgen.coverage.CoverageEntry
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory
 import org.dpolivaev.tsgen.ruleengine.Strategy
-import org.dpolivaev.tsgen.scriptwriter.StrategyRunner
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.common.types.JvmGenericType
 import org.eclipse.xtext.common.types.JvmType
@@ -38,6 +37,10 @@ import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 
 import static extension org.dpolivaev.dsl.tsgen.jvmmodel.StrategyCompiler.*
 import org.dpolivaev.tsgen.scriptwriter.RequirementChecker
+import org.dpolivaev.tsgen.scriptwriter.WriterFactory
+import org.dpolivaev.tsgen.ruleengine.RuleEngine
+import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy
+import org.eclipse.emf.ecore.EObject
 
 class GenerationInferrer{
 	@Inject Injector injector
@@ -157,17 +160,20 @@ class GenerationInferrer{
 	private def inferStrategyMethods(){
 		for (strategy : script.strategies) {
 			val methodName = "defineStrategy" + strategy.name.toFirstUpper
-			jvmType.members += strategy.toMethod(methodName, strategy.newTypeRef(Strategy)) [
+			jvmType.members += strategy.toMethod(methodName, strategy.newTypeRef(RequirementBasedStrategy)) [
 				body = [
-					
-					append('Strategy strategy = new Strategy()')
-					combinedStrategy(it, strategy.baseStrategies, false)
-					append(';')
+					append(strategy.newTypeRef(CoverageEntry).type) 
+					append('[] __requiredItems = ') injector.getInstance(CoverageEntriesInferrer).appendArrayInitializer(it, strategy) append(';')
+					newLine
+					append(strategy.newTypeRef(Strategy).type) 
+					append(' strategy = new ') append(strategy.newTypeRef(Strategy).type) append('();')
 					newLine
 					for(ruleGroup:strategy.ruleGroups){
 						appendRuleGroup(it, ruleGroup)
 					}
-					append('''return strategy;''')
+					append('''return new ''') append(strategy.newTypeRef(RequirementBasedStrategy).type) append('(__requiredItems)') 
+					combinedStrategy(it, strategy.baseStrategies, false)
+					append('.with(strategy);')
 				]
 				visibility = JvmVisibility::PRIVATE
 				static = true
@@ -405,7 +411,7 @@ class GenerationInferrer{
 	private def inferStrategyFields(){
 		for (strategy : script.strategies) {
 			val methodName = "defineStrategy" + strategy.name.toFirstUpper
-			jvmType.members += strategy.toField(strategy.name, strategy.newTypeRef(Strategy)) [
+			jvmType.members += strategy.toField(strategy.name, strategy.newTypeRef(RequirementBasedStrategy)) [
 				setInitializer [
 					append('''«methodName»()''')
 				]
@@ -413,20 +419,8 @@ class GenerationInferrer{
 				visibility = JvmVisibility::PUBLIC
 				static = true
 			]
-			jvmType.members += strategy.toField(strategy.name.requiredItemFieldName, strategy.newTypeRef(CoverageEntry).addArrayTypeDimension)[
-				setInitializer [
-					injector.getInstance(CoverageEntriesInferrer).appendArrayInitializer(it, strategy)
-				]
-				final = true
-				visibility = JvmVisibility::PUBLIC
-				static = true			
-			]
 			
 		}
-	}
-	
-	private def requiredItemFieldName(String name) {
-		name + "_requiredItems"
 	}
 	
 	private def inferRunMethods(){
@@ -441,52 +435,29 @@ class GenerationInferrer{
 			val methodName = "run" + counter
 			jvmType.members += run.toMethod(methodName, run.newTypeRef(void)) [
 				body = [
-					append(run.newTypeRef(StrategyRunner).type)
-					append(' ')
-					append('strategyRunner = new ')
-					append(run.newTypeRef(StrategyRunner).type)
-					append('();')
-					appendOutputConfiguration(it, "Output", run.outputConfiguration)
-					appendOutputConfiguration(it, "Report", run.reportConfiguration)
+					appendOutputConfiguration(it, "output", run, run.outputConfiguration)
+					appendOutputConfiguration(it, "report", run, run.reportConfiguration)
+					newLine
+					append(run.newTypeRef(WriterFactory).type)
+					append(' __writerFactory = new ')
+					append(run.newTypeRef(WriterFactory).type)
+					append('(__outputConfiguration, __reportConfiguration);')
+					if(! run.strategies.empty && run.strategies.get(0).goal){
+						newLine
+						appendReference(it, EXTERNAL_STRATEGY, run.strategies.get(0).expr)
+						append('.addRequiredItems(__writerFactory);')
+					}
+					
+					newLine
+					append(run.newTypeRef(RuleEngine).type) append(' __ruleEngine = new ') append(run.newTypeRef(RuleEngine).type) append('();')
 					for(model:run.models){
 						newLine
-						append('strategyRunner')
-						if(model.goal){
-							append('.addCoverageTracker(')
-							appendReference(it, EXTERNAL_MODEL, model.expr)
-							append('.getCoverageTracker())')
-							append('.addRequiredItems(')
-							appendReference(it, EXTERNAL_MODEL, model.expr)
-							append('.getRequiredItems())')
-						}
-						append('.addPropertyHandler(')
+						append('__ruleEngine.addHandler(')
 						appendReference(it, EXTERNAL_MODEL, model.expr)
 						append(');')
 					}
-					var strategyGoalFound = false
-					for(strategyReference : run.strategies){
-						if(strategyReference.goal){
-							if(! strategyGoalFound){
-								strategyGoalFound = true
-								newLine
-								append('final ')
-								append(strategyReference.newTypeRef(RequirementChecker).type)
-								append(' __requirementChecker = new RequirementChecker();')
-							}
-							newLine
-							append('__requirementChecker.addItems(')
-							append(strategyReference.expr.toString.requiredItemFieldName)
-							append(');')
-						}
-					}
-					if(strategyGoalFound){
-						newLine
-						append('__requirementChecker.registerBy(strategyRunner);')
-					}
-					newLine
-					append('strategyRunner.run(')
-					combinedStrategy(it, run.strategies, true)
-					append(');')
+					newLine append('__writerFactory.configureEngine(__ruleEngine);')
+					newLine combinedStrategy(it, run.strategies, true) append('.run(__ruleEngine);')
 				]
 				visibility = JvmVisibility::PUBLIC
 				static = true
@@ -494,10 +465,16 @@ class GenerationInferrer{
 		}
 	}
 
-	def private appendOutputConfiguration(ITreeAppendable it, String target, OutputConfiguration outputConfiguration) {
+	def private appendOutputConfiguration(ITreeAppendable it, String target, EObject context, OutputConfiguration outputConfiguration) {
+		newLine
+		append(context.newTypeRef(org.dpolivaev.tsgen.scriptwriter.OutputConfiguration).type)
+		append(''' __«target»Configuration = new ''')
+		append(context.newTypeRef(org.dpolivaev.tsgen.scriptwriter.OutputConfiguration).type)
+		append('();')
+		
 		if(outputConfiguration != null){
 			newLine
-			append('strategyRunner.get' + target + 'Configuration()')
+			append(''' __«target»Configuration''')
 			if(outputConfiguration.xslt != null){
 				appendOutputFile(it, "Xml", outputConfiguration.xml)
 				append('.setXsltSource("')

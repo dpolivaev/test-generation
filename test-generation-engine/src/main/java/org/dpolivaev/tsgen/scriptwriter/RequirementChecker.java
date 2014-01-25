@@ -32,7 +32,6 @@ public class RequirementChecker implements PropertyHandler{
 	public void handlePropertyCombination(PropertyContainer propertyContainer) {
 		for(CoverageEntry item : items)
 			propertyContainer.get(item.getName());
-		
 	}
 
 	@Override
@@ -40,10 +39,16 @@ public class RequirementChecker implements PropertyHandler{
 		
 	}
 	
-	public void registerBy(StrategyRunner runner){
+	public void addRequiredItems(WriterFactory writerFactory){
 		if(! items.isEmpty()){
-			runner.addPropertyHandler(this);
-			runner.addRequiredItems(items);
+			writerFactory.addRequiredItems(items);
 		}
+	}
+	
+	public RequirementChecker with(RequirementChecker anotherChecker){
+		final RequirementChecker requirementChecker = new RequirementChecker();
+		requirementChecker.addItems(items);
+		requirementChecker.addItems(anotherChecker.items);
+		return requirementChecker;
 	}
 }

@@ -62,14 +62,15 @@ class CoverageEntriesInferrer{
 	
 	def coverageEntries(Rule rule) {
 		val name = rule.name
-		if(name != null && name.startsWith("[" )&& rule.values?.actions != null){
+		if(name != null && name.startsWith("[" )  && name.endsWith("]") && rule.values?.actions != null){
+			val requirementId = name.substring(1, name.length - 1)
 			val entries = new HashSet<CoverageEntry>
 			for(action  : rule.values.actions)
 				for(valueProvider  : action.valueProviders)
 					if(valueProvider.expressions.size == 1)
-						entries += coverageEntry(name, valueProvider.expressions.get(0))
+						entries += coverageEntry(requirementId, valueProvider.expressions.get(0))
 			if(entries.isEmpty)
-				entries += new CoverageEntry(name, CoverageEntry.ANY)
+				entries += new CoverageEntry(requirementId, CoverageEntry.ANY)
 			entries
 		}
 		else
