@@ -455,6 +455,11 @@ class GenerationInferrer{
 						append('__ruleEngine.addHandler(')
 						appendReference(it, EXTERNAL_MODEL, model.expr)
 						append(');')
+						if(model.goal){
+							newLine
+							appendReference(it, EXTERNAL_MODEL, model.expr)
+							append('.addCoverageTracker(__writerFactory);')
+						}
 					}
 					newLine append('__writerFactory.configureEngine(__ruleEngine);')
 					newLine combinedStrategy(it, run.strategies, true) append('.run(__ruleEngine);')
