@@ -40,6 +40,7 @@ import org.dpolivaev.tsgen.scriptwriter.WriterFactory
 import org.dpolivaev.tsgen.ruleengine.RuleEngine
 import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy
 import org.eclipse.emf.ecore.EObject
+import org.dpolivaev.tsgen.ruleengine.SpecialValue
 
 class GenerationInferrer{
 	@Inject Injector injector
@@ -170,7 +171,7 @@ class GenerationInferrer{
 					for(ruleGroup:strategy.ruleGroups){
 						appendRuleGroup(it, ruleGroup)
 					}
-					append('''return new ''') append(strategy.newTypeRef(RequirementBasedStrategy).type) append('(__requiredItems)') 
+					append('return new ') append(strategy.newTypeRef(RequirementBasedStrategy).type) append('(__requiredItems)') 
 					combinedStrategy(it, strategy.baseStrategies, false)
 					append('.with(__strategy);')
 				]
@@ -346,7 +347,7 @@ class GenerationInferrer{
 			else
 				append(', ')
 			val expressions = valueProvider.expressions 
-			if(expressions.size == 1 && methods.get(VALUE_PROVIDER, expressions.get(0)) == null)
+			if(valueProvider.condition == null && expressions.size == 1 && methods.get(VALUE_PROVIDER, expressions.get(0)) == null)
 				xbaseCompiler.compileAsJavaExpression(expressions.get(0), it, valueProvider.newTypeRef(Object))
 			else	
 				appendImplementationObject(it, valueAction.newTypeRef(org.dpolivaev.tsgen.ruleengine.ValueProvider).type, "Object value", 
@@ -356,6 +357,12 @@ class GenerationInferrer{
 	}
 
 	def private appendValueExpression(ITreeAppendable it, ValueProvider valueProvider) {
+		val conditional = valueProvider.condition != null
+		if(conditional){
+			val methodName = methods.get(CONDITION, valueProvider.condition.expr)
+			append('''«methodName»(propertyContainer)?''')
+		}
+			
 		val concatenation = valueProvider.expressions.size() > 1
 		if(concatenation)
 			append("new StringBuilder()");
@@ -374,6 +381,9 @@ class GenerationInferrer{
 		}
 		if(concatenation)
 			append(".toString()");
+		if(conditional){
+			append(':') append(valueProvider.newTypeRef(SpecialValue).type) append('.SKIP')
+		}
 	}
 	
 	def private apppendSkip(ITreeAppendable it){

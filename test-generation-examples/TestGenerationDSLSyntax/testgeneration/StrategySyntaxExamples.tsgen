@@ -152,6 +152,17 @@ let example be
 	},
 	
 	/*
+	 * Conditionally skip some values.
+	 */
+	'value conditions'{
+	    let x be 'a', 'b', 'c'{
+	       let y be 'A' only if :x=='a', 
+	       			'B' only if :x=='b', 
+	       			'C' ordered
+		}
+	},
+	
+	/*
 	 * New rules override old rule's content and keep rule evaluation order
 	 */
 	"new rules override old rule's content and keep rule evaluation order" {
