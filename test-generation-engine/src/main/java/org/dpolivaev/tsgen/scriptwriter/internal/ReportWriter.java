@@ -5,11 +5,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Map.Entry;
+
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.CoverageStatus;
 import org.dpolivaev.tsgen.coverage.Goal;
 import org.dpolivaev.tsgen.coverage.GoalChecker;
 import org.dpolivaev.tsgen.scriptwriter.ScriptConfiguration;
+import org.dpolivaev.tsgen.utils.internal.StringWithNumbersComparator;
 
 public class ReportWriter {
 
@@ -30,7 +32,7 @@ public class ReportWriter {
 
 			@Override
 			public int compare(Goal o1, Goal o2) {
-				return o1.name().compareTo(o2.name());
+				return StringWithNumbersComparator.compare(o1.name(), o2.name());
 			}
 		});
 		if(! goals.isEmpty() && reportConfiguration.isFileValid()){
@@ -59,7 +61,7 @@ public class ReportWriter {
 					Entry<CoverageEntry, CoverageStatus> o2) {
 				CoverageEntry entry1 = o1.getKey();
 				CoverageEntry entry2 = o2.getKey();
-				int nameComparison = entry1.getName().compareTo(entry2.getName());
+				int nameComparison = StringWithNumbersComparator.compare(entry1.getName(), entry2.getName());
 				if(nameComparison != 0)
 					return nameComparison;
 				return compareReasons(entry1, entry2);
@@ -74,7 +76,7 @@ public class ReportWriter {
 				else if(reason2 == null)
 					return -1;
 				else 
-					return reason1.compareTo(reason2);
+					return StringWithNumbersComparator.compare(reason1, reason2);
 			}
 		});
 		for (Map.Entry<CoverageEntry, CoverageStatus> entry : coveredEntries)

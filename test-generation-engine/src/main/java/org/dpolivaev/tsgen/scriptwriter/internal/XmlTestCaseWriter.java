@@ -15,6 +15,7 @@ import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 import org.dpolivaev.tsgen.ruleengine.internal.PropertyAccessor;
+import org.dpolivaev.tsgen.utils.internal.StringWithNumbersComparator;
 
 public class XmlTestCaseWriter implements PropertyHandler {
 
@@ -82,7 +83,7 @@ public class XmlTestCaseWriter implements PropertyHandler {
 		Collections.sort(list, new Comparator<CoverageEntry>(){
 			@Override
 			public int compare(CoverageEntry entry1, CoverageEntry entry2) {
-					return entry1.getName().compareTo(entry2.getName());
+					return StringWithNumbersComparator.compare(entry1.getName(), entry2.getName());
 			}});
 		return list;
 	}
