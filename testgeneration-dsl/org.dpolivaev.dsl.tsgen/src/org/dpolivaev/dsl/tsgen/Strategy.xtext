@@ -39,7 +39,7 @@ Trigger:
 	'for' 'each' properties += PROPERTY_ID (',' properties += PROPERTY_ID)*
 ;
 
-Condition:
+Condition: {Condition}
 	'if' expr = XExpression
 ;
 
@@ -53,7 +53,12 @@ ValueAction:{ValueAction}
 ;
 
 ValueProvider:
-	=>'(' expressions += XExpression+ ')' | expressions += XExpression 
+	( =>'(' expressions += XExpression+ ')' | expressions += XExpression) 
+	condition = ValueCondition?   
+;
+
+ValueCondition returns Condition:
+	'only' 'if' expr = XExpression
 ;
 
 Run:
