@@ -164,13 +164,13 @@ MULTIPLE FILES WERE GENERATED
 File 1 : MyFile.java
 
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.ruleengine.ValueProvider;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
-import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
 
 @SuppressWarnings("all")

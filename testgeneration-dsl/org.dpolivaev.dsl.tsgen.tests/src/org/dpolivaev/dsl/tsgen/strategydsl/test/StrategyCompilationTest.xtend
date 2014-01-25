@@ -34,8 +34,8 @@ class StrategyCompilationTest {
 package packagename;
 
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
-import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -56,9 +56,9 @@ public class MyFile {
 				let "x y" be 1, 2, 3
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
-import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -81,9 +81,9 @@ public class MyFile {
 				for each "x y" let z be 2
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
-import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -109,9 +109,9 @@ public class MyFile {
 			"
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
-import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -133,9 +133,9 @@ public class MyFile {
 				for each x1, x2 let y be 1, 2, 3
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
-import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -157,11 +157,11 @@ public class MyFile {
 				let y be :x
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.ruleengine.ValueProvider;
-import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -189,11 +189,11 @@ public class MyFile {
 				if 1 < 2 let y be 3
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.ruleengine.Condition;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
-import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -222,11 +222,11 @@ public class MyFile {
 				}
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.ruleengine.Condition;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
-import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -255,11 +255,11 @@ public class MyFile {
 				}
 			'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.ruleengine.Condition;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
-import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -290,9 +290,9 @@ public class MyFile {
 				let default x be 1, 2, 3
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
-import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -316,9 +316,9 @@ public class MyFile {
 				}
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
-import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -342,9 +342,9 @@ public class MyFile {
 				}
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
-import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -371,9 +371,9 @@ public class MyFile {
 				}
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
-import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -402,9 +402,9 @@ public class MyFile {
 				}
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
-import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -429,9 +429,9 @@ public class MyFile {
 			let default d be from listA
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
-import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -456,9 +456,9 @@ public class MyFile {
 				let x be 2, 3 ordered 		
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
-import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -480,9 +480,9 @@ public class MyFile {
 				let x be 2, 3 shuffled 		
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
-import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -504,11 +504,11 @@ public class MyFile {
 				let x be ("a" "b")
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.ruleengine.ValueProvider;
-import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -532,10 +532,10 @@ public class MyFile {
 			run strategy First
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
-import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
 
 @SuppressWarnings("all")
@@ -572,10 +572,10 @@ public class MyFile {
 			run strategy first with strategy second
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
-import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
 
 @SuppressWarnings("all")
@@ -619,8 +619,8 @@ public class MyFile {
 			strategy second extends first with first
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
-import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -650,8 +650,8 @@ public class MyFile {
 			strategy first extends new Strategy()
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
-import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -676,10 +676,10 @@ public class MyFile {
 			run strategy First output "testoutput/xml", apply "my.xslt" output "testoutput/java"
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
-import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
 
 @SuppressWarnings("all")
@@ -716,10 +716,10 @@ public class MyFile {
 			run strategy First output "testoutput/xml"
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
-import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
 
 @SuppressWarnings("all")
@@ -756,10 +756,10 @@ public class MyFile {
 			run strategy First report "testoutput/xml", apply "my.xslt" output "testoutput/report"
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
-import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
 
 @SuppressWarnings("all")
@@ -798,11 +798,11 @@ public class MyFile {
 			run strategy goal First 	
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
-import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
 
 @SuppressWarnings("all")
@@ -842,11 +842,11 @@ public class MyFile {
 				let [req1] be :a
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.ruleengine.ValueProvider;
-import org.dpolivaev.tsgen.scriptwriter.RequirementBasedStrategy;
 
 @SuppressWarnings("all")
 public class MyFile {
