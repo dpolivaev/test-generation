@@ -20,7 +20,7 @@ public class GoalCheckerTest {
     @Test
 	public void goalCheckerExecutesGoalChecks() throws Exception {
 		Goal goal = Mockito.mock(Goal.class);
-		GoalChecker goalChecker = new GoalChecker(null);
+		GoalChecker goalChecker = new GoalChecker();
 		goalChecker.addGoal(goal);
 		final PropertyContainer propertyContainer = Mockito.mock(PropertyContainer.class);
 		goalChecker.handlePropertyCombination(propertyContainer);
