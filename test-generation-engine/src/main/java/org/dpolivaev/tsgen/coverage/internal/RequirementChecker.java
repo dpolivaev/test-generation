@@ -1,4 +1,4 @@
-package org.dpolivaev.tsgen.scriptwriter.internal;
+package org.dpolivaev.tsgen.coverage.internal;
 
 import java.util.Arrays;
 import java.util.Collection;

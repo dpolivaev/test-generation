@@ -12,7 +12,7 @@ import org.dpolivaev.tsgen.coverage.internal.CodeCoverageResetter;
 import org.dpolivaev.tsgen.coverage.internal.RequirementsCoverageGoalBuilder;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.scriptwriter.internal.MultipleScriptsWriter;
-import org.dpolivaev.tsgen.scriptwriter.internal.ReportWriter;
+import org.dpolivaev.tsgen.scriptwriter.internal.ReportStarter;
 import org.dpolivaev.tsgen.scriptwriter.internal.ResultFactory;
 import org.dpolivaev.tsgen.scriptwriter.internal.ScriptConfiguration;
 import org.dpolivaev.tsgen.scriptwriter.internal.ScriptLogger;
@@ -20,7 +20,7 @@ import org.dpolivaev.tsgen.scriptwriter.internal.StreamResultFactory;
 
 public class WriterFactory {
 	final private OutputConfiguration outputConfiguration;
-	final private OutputConfiguration reportConfiguration;
+	final OutputConfiguration reportConfiguration;
 	final private Collection<CoverageTracker> trackers;
 	final private Collection<CoverageEntry> requiredEntries;
 
@@ -45,9 +45,12 @@ public class WriterFactory {
 	}
 
 	public void configureEngine(RuleEngine ruleEngine) {
-		StreamResultFactory resultFactory = new StreamResultFactory();
-		GoalChecker goalChecker = createGoalChecker(resultFactory);
+		final StreamResultFactory resultFactory = new StreamResultFactory();
+		final GoalChecker goalChecker = createGoalChecker(resultFactory);
 		ruleEngine.addHandler(goalChecker);
+		final ReportStarter propertyHandler = new ReportStarter(goalChecker, resultFactory, new ScriptConfiguration(reportConfiguration, null));
+		ruleEngine.addHandler(propertyHandler);
+
 		for(CoverageTracker tracker :trackers)
 			ruleEngine.addHandler(new CodeCoverageResetter(tracker));
 		MultipleScriptsWriter scriptProducer = null;
@@ -63,8 +66,7 @@ public class WriterFactory {
 	}
 
 	private GoalChecker createGoalChecker(ResultFactory resultFactory) {
-		ReportWriter reportWriter = new ReportWriter(resultFactory, new ScriptConfiguration(reportConfiguration, null));
-		GoalChecker goalChecker = new GoalChecker(reportWriter);
+		GoalChecker goalChecker = new GoalChecker();
 		goalChecker.addGoal(createCoverageGoal());
 		return goalChecker;
 	}

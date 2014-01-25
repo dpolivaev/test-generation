@@ -8,7 +8,7 @@ import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.scriptwriter.internal.ReportWriter;
 
 public class GoalChecker extends PropertyCombinationHandler{
-	public static final GoalChecker NO_GOALS = new GoalChecker(null){
+	public static final GoalChecker NO_GOALS = new GoalChecker(){
 
 		@Override
 		public void addGoal(Goal goal) {
@@ -17,12 +17,10 @@ public class GoalChecker extends PropertyCombinationHandler{
 		
 	};
 	final private Collection<Goal> goals;
-	final private ReportWriter reportWriter;
 
-	public GoalChecker(ReportWriter reportWriter) {
+	public GoalChecker() {
 		super();
 		this.goals = new ArrayList<>();
-		this.reportWriter = reportWriter;
 	}
 
 	@Override
@@ -41,7 +39,5 @@ public class GoalChecker extends PropertyCombinationHandler{
 
 	@Override
 	public void generationFinished() {
-		reportWriter.createReport(this);
-
 	}
 }

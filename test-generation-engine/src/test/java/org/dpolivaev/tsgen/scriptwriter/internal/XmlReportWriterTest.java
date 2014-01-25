@@ -36,7 +36,7 @@ public class XmlReportWriterTest {
         final DOMResult dom = new DOMResult();
         final ScriptConfiguration scriptConfiguration = new ScriptConfiguration(new OutputConfiguration().setFileExtension("report.xml"), "reportName");
 		Mockito.when(resultFactory.newResult(scriptConfiguration)).thenReturn(dom);
-		final GoalChecker goals = new GoalChecker(null);
+		final GoalChecker goals = new GoalChecker();
 		CheckList checkList = new CheckList(); 
 		checkList.addExpected(new CoverageEntry("item2", "value"));
 		checkList.addExpected(new CoverageEntry("item1", CoverageEntry.ANY));
