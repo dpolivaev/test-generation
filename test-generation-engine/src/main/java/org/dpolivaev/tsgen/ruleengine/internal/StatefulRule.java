@@ -68,8 +68,11 @@ public abstract class StatefulRule implements Rule {
         Object value;
         for (;;){
         	value = valueProviders.currentProvider().value(engineState);
-        	if(value == SpecialValue.SKIP && useNextValue)
-        		valueProviders.next();
+        	if(value == SpecialValue.SKIP && useNextValue){
+                if (valueProviders.allValuesUsed())
+                    setBlocksRequiredProperties(false);
+                valueProviders.next();
+        	}
         	else
         		break;
         }
