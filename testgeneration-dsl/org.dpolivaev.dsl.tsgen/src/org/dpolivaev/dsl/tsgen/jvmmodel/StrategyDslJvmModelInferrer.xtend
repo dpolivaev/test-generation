@@ -15,6 +15,7 @@ import org.eclipse.xtext.xbase.jvmmodel.AbstractModelInferrer
 import org.eclipse.xtext.xbase.jvmmodel.IJvmDeclaredTypeAcceptor
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 import java.util.Arrays
+import org.dpolivaev.tsgen.scriptwriter.WriterFactory
 
 /**
  * <p>Infers a JVM model from the source model.</p> 
@@ -92,16 +93,18 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 				]
 			]
 			
-			members += model.toMethod("getCoverageTracker", model.newTypeRef(CoverageTracker)) [
+			members += model.toMethod("addCoverageTracker", model.newTypeRef(Void::TYPE)) [
+				parameters += model.toParameter("writerFactory", model.newTypeRef(WriterFactory))
 				body = [
-						append('return coverageTracker;')
+						append('writerFactory.addCoverageTracker(coverageTracker);')
 				]
 				visibility = JvmVisibility::PUBLIC
 			]
 			
-			members += model.toMethod("getRequiredItems", model.newTypeRef(List, model.newTypeRef(CoverageEntry))) [
+			members += model.toMethod("addRequiredItems", model.newTypeRef(Void::TYPE)) [
+				parameters += model.toParameter("writerFactory", model.newTypeRef(WriterFactory))
 				body = [
-						append('return labels;')
+						append('writerFactory.addRequiredItems(labels);')
 				]
 				visibility = JvmVisibility::PUBLIC
 			]

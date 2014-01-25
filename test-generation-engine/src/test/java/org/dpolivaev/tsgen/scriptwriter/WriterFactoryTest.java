@@ -5,11 +5,12 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 
+import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.strategies.StrategyHelper;
 import org.junit.Test;
 
-public class StrategyRunnerTest {
+public class WriterFactoryTest {
 	private void checkOutputFilesAreCreated(final File expectedOutputFile,
 			final File expectedReportFile) {
 		assertThat(expectedOutputFile.canRead(), equalTo(true));
@@ -31,11 +32,15 @@ public class StrategyRunnerTest {
 		final File expectedReportFile = new File("report.xml");
 		expectedOutputFile.delete();
 		expectedReportFile.delete();
-		final StrategyRunner strategyRunner = new StrategyRunner();
-		strategyRunner.getOutputConfiguration().setFileDirectory("testoutput").setFileExtension("xml");
-		strategyRunner.getReportConfiguration().setFileExtension("report.xml");
+		final OutputConfiguration outputConfiguration = new OutputConfiguration();
+		outputConfiguration.setFileDirectory("testoutput").setFileExtension("xml");
+		final OutputConfiguration reportConfiguration = new OutputConfiguration();
+		reportConfiguration.setFileExtension("report.xml");
+		final WriterFactory writerFactory = new WriterFactory(outputConfiguration, reportConfiguration);
 		
-		strategyRunner.run(strategy.with(StrategyHelper.id("testcase")));
+		RuleEngine ruleEngine = new RuleEngine();
+		writerFactory.configureEngine(ruleEngine);
+		ruleEngine.run(strategy.with(StrategyHelper.id("testcase")));
 		
 		checkOutputFilesAreCreated(expectedOutputFile, expectedReportFile);
 		checkOutputStreamsAreClosed(expectedOutputFile, expectedReportFile);
@@ -45,7 +50,10 @@ public class StrategyRunnerTest {
 	@Test
 	public void outputsNothing() throws Exception {
 		Strategy strategy = new Strategy();
-		final StrategyRunner strategyRunner = new StrategyRunner();
-		strategyRunner.run(strategy.with(StrategyHelper.id("testcase")));
+		final WriterFactory writerFactory = new WriterFactory(new OutputConfiguration(), new OutputConfiguration());
+		RuleEngine ruleEngine = new RuleEngine();
+		writerFactory.configureEngine(ruleEngine);
+		ruleEngine.run(strategy.with(StrategyHelper.id("testcase")));
+
 	}
 }
