@@ -94,6 +94,16 @@ public class RuleEngineAcceptanceTest {
         expect(combination("property", "a").followedBy("property", "b"));
     }
 
+
+    @Test
+    public void singleRuleWithValuesA_SKIP_B() {
+        strategy.addRule(iterate("property").over("a", SpecialValue.SKIP, "b"));
+
+        generateCombinationsForStrategy();
+
+        expect(combination("property", "a").followedBy("property", "b"));
+    }
+
     @Test
     public void twoRulesWithValuesAandB() {
         strategy.addRule(iterate("x").over("a"));
