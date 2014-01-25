@@ -8,6 +8,7 @@ import java.util.Set;
 import org.dpolivaev.tsgen.ruleengine.Condition;
 import org.dpolivaev.tsgen.ruleengine.EngineState;
 import org.dpolivaev.tsgen.ruleengine.Rule;
+import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 
 /**
  * @author Dimitry Polivaev 18.02.2013
@@ -64,7 +65,14 @@ public abstract class StatefulRule implements Rule {
         if (useNextValue) {
             valueProviders.next();
         }
-        Object value = valueProviders.currentProvider().value(engineState);
+        Object value;
+        for (;;){
+        	value = valueProviders.currentProvider().value(engineState);
+        	if(value == SpecialValue.SKIP && useNextValue)
+        		valueProviders.next();
+        	else
+        		break;
+        }
         this.valueAlreadyAddedToCurrentCombination = true;
         if (useNextValue) {
             addRules(engineState);
