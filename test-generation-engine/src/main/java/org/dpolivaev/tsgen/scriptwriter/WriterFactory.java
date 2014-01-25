@@ -8,6 +8,7 @@ import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.coverage.Goal;
 import org.dpolivaev.tsgen.coverage.GoalChecker;
+import org.dpolivaev.tsgen.coverage.RequiredCoverageItemCollector;
 import org.dpolivaev.tsgen.coverage.internal.CodeCoverageResetter;
 import org.dpolivaev.tsgen.coverage.internal.RequirementsCoverageGoalBuilder;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
@@ -18,7 +19,7 @@ import org.dpolivaev.tsgen.scriptwriter.internal.ScriptConfiguration;
 import org.dpolivaev.tsgen.scriptwriter.internal.ScriptLogger;
 import org.dpolivaev.tsgen.scriptwriter.internal.StreamResultFactory;
 
-public class WriterFactory {
+public class WriterFactory implements RequiredCoverageItemCollector{
 	final private OutputConfiguration outputConfiguration;
 	final OutputConfiguration reportConfiguration;
 	final private Collection<CoverageTracker> trackers;
@@ -38,10 +39,9 @@ public class WriterFactory {
 		return this;
 	}
 
-	public WriterFactory addRequiredItems(
+	public void addRequiredItems(
 			final Collection<CoverageEntry> requiredItems) {
 		requiredEntries.addAll(requiredItems);
-		return this;
 	}
 
 	public void configureEngine(RuleEngine ruleEngine) {

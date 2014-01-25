@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequiredCoverageItemCollector;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
@@ -40,9 +41,9 @@ public class RequirementChecker implements PropertyHandler{
 		
 	}
 	
-	public void addRequiredItems(WriterFactory writerFactory){
+	public void addRequiredItems(RequiredCoverageItemCollector requiredCoverageItemCollector){
 		if(! items.isEmpty()){
-			writerFactory.addRequiredItems(items);
+			requiredCoverageItemCollector.addRequiredItems(items);
 		}
 	}
 	
