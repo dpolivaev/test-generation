@@ -166,14 +166,14 @@ class GenerationInferrer{
 					append('[] __requiredItems = ') injector.getInstance(CoverageEntriesInferrer).appendArrayInitializer(it, strategy) append(';')
 					newLine
 					append(strategy.newTypeRef(Strategy).type) 
-					append(' strategy = new ') append(strategy.newTypeRef(Strategy).type) append('();')
+					append(' __strategy = new ') append(strategy.newTypeRef(Strategy).type) append('();')
 					newLine
 					for(ruleGroup:strategy.ruleGroups){
 						appendRuleGroup(it, ruleGroup)
 					}
 					append('''return new ''') append(strategy.newTypeRef(RequirementBasedStrategy).type) append('(__requiredItems)') 
 					combinedStrategy(it, strategy.baseStrategies, false)
-					append('.with(strategy);')
+					append('.with(__strategy);')
 				]
 				visibility = JvmVisibility::PRIVATE
 				static = true
@@ -184,7 +184,7 @@ class GenerationInferrer{
 	def private void appendRuleGroup(ITreeAppendable it, RuleGroup ruleGroup) {
 		val rule = ruleGroup.rule
 		if(rule != null){
-			append('strategy.addRule(')
+			append('__strategy.addRule(')
 			appendRule(it, ruleGroup, false)
 			append(');')
 			newLine
