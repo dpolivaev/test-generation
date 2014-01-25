@@ -12,7 +12,6 @@ import org.dpolivaev.tsgen.coverage.GoalChecker;
 import org.dpolivaev.tsgen.coverage.GoalFunction;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
-import org.dpolivaev.tsgen.scriptwriter.ScriptConfiguration;
 import org.dpolivaev.tsgen.testutils.TestUtils;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
@@ -24,7 +23,7 @@ public class XmlReportWriterTest {
     public void emptyReport() {
         ResultFactory resultFactory = Mockito.mock(ResultFactory.class);
         final DOMResult dom = new DOMResult();
-        final ScriptConfiguration scriptConfiguration = OutputConfiguration.OUTPUT_NOTHING.forScript("reportName");
+        final ScriptConfiguration scriptConfiguration = new ScriptConfiguration(OutputConfiguration.OUTPUT_NOTHING, "reportName");
 		Mockito.when(resultFactory.newResult(scriptConfiguration)).thenReturn(dom);
 		ReportWriter producer = new ReportWriter(resultFactory, scriptConfiguration);
         producer.createReport(GoalChecker.NO_GOALS);
@@ -35,7 +34,7 @@ public class XmlReportWriterTest {
     public void openGoalReport() {
         ResultFactory resultFactory = Mockito.mock(ResultFactory.class);
         final DOMResult dom = new DOMResult();
-        final ScriptConfiguration scriptConfiguration = new OutputConfiguration().setFileExtension("report.xml").forScript("reportName");
+        final ScriptConfiguration scriptConfiguration = new ScriptConfiguration(new OutputConfiguration().setFileExtension("report.xml"), "reportName");
 		Mockito.when(resultFactory.newResult(scriptConfiguration)).thenReturn(dom);
 		final GoalChecker goals = new GoalChecker(null);
 		CheckList checkList = new CheckList(); 

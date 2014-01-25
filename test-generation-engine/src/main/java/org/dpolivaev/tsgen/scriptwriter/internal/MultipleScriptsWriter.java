@@ -46,7 +46,7 @@ public class MultipleScriptsWriter implements PropertyHandler{
     }
 
     private SingleScriptWriter newSingleScriptProducer(String scriptName, PropertyContainer propertyContainer) {
-        return new SingleScriptWriter(propertyContainer, outputConfiguration.forScript(scriptName), 
+        return new SingleScriptWriter(propertyContainer, new ScriptConfiguration(outputConfiguration, scriptName), 
         		resultFactory, goalChecker);
     }
 

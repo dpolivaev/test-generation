@@ -15,7 +15,6 @@ import org.dpolivaev.tsgen.ruleengine.Assignments;
 import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
-import org.dpolivaev.tsgen.scriptwriter.ScriptConfiguration;
 import org.dpolivaev.tsgen.testutils.TestUtils;
 import org.junit.Assert;
 import org.junit.Before;
@@ -43,7 +42,7 @@ public class XmlTestCaseWriterTest {
         dom = new DOMResult();
         ResultFactory resultFactory = Mockito.mock(ResultFactory.class);
         Mockito.when(resultFactory.newResult(Mockito.<ScriptConfiguration>any())).thenReturn(dom);
-        ContentHandler handler = new HandlerFactory(resultFactory).newHandler(OutputConfiguration.OUTPUT_NOTHING.forScript("result"));
+        ContentHandler handler = new HandlerFactory(resultFactory).newHandler(new ScriptConfiguration(OutputConfiguration.OUTPUT_NOTHING, "result"));
         xmlWriter = new SaxXmlWriter(handler);
 		goal = Mockito.mock(Goal.class);
 		Mockito.when(goal.name()).thenReturn("name");
