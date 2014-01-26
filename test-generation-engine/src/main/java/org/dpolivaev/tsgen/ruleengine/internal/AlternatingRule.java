@@ -32,8 +32,8 @@ public class AlternatingRule implements Rule {
     }
 
     @Override
-    public Set<String> requiredProperties(Set<String> dependencies) {
-        return firstRule().requiredProperties(dependencies);
+    public Set<String> calculateRequiredProperties(Set<String> dependencies) {
+        return firstRule().calculateRequiredProperties(dependencies);
     }
 
     @Override

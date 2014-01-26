@@ -23,7 +23,7 @@ public class PropertyAssignedEvent {
 		this.engineState = engineState;
 		this.workingRule = workingRule;
         this.valueChanged = valueChanged;
-        this.requiredProperties = workingRule.requiredProperties(dependencies);
+        this.requiredProperties = workingRule.calculateRequiredProperties(dependencies);
 	}
 
 	public Set<String> getRequiredProperties() {

@@ -43,7 +43,7 @@ public abstract class StatefulRule implements Rule {
     }
 
     @Override
-    public Set<String> requiredProperties(Set<String> dependencies) {
+    public Set<String> calculateRequiredProperties(Set<String> dependencies) {
         Set<String> requiredProperties;
         if (dependencies.isEmpty()) {
             requiredProperties = getTriggeringProperties();
