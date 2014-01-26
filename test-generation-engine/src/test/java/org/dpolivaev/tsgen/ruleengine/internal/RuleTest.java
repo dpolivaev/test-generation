@@ -206,7 +206,7 @@ public class RuleTest {
         StatefulRule topRule = iterate("x").over("1").asRule();
 
         StatefulRule triggeredRule = mock(StatefulRule.class);
-        when(triggeredRule.requiredProperties(any(Set.class))).thenReturn(Utils.set("x"));
+        when(triggeredRule.calculateRequiredProperties(any(Set.class))).thenReturn(Utils.set("x"));
         when(triggeredRule.blocksRequiredProperties()).thenReturn(true);
 
         topRule.propertyCombinationStarted(engineState);

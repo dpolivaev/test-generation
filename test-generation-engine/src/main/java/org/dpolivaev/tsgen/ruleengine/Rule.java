@@ -16,7 +16,7 @@ public interface Rule {
 
 	Set<String> getTriggeringProperties();
 
-    public Set<String> requiredProperties(Set<String> dependencies);
+    public Set<String> calculateRequiredProperties(Set<String> dependencies);
 
     void propertyCombinationStarted(EngineState engineState) throws InvalidCombinationException;
 
