@@ -4,7 +4,7 @@ import com.google.inject.Inject
 import com.google.inject.Injector
 import java.util.List
 import org.dpolivaev.dsl.tsgen.strategydsl.Generation
-import org.dpolivaev.dsl.tsgen.strategydsl.Model
+import org.dpolivaev.dsl.tsgen.strategydsl.Oracle
 import org.dpolivaev.tsgen.coverage.CoverageEntry
 import org.dpolivaev.tsgen.coverage.CoverageTracker
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer
@@ -62,23 +62,23 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 		acceptor.accept(script.toClass(qualifiedClassName)).initializeLater([
 			injector.getInstance(GenerationInferrer).inferGeneration(it, script)
 		])
-		for(model:script.models)
-			inferModel(acceptor, script.package, model)
+		for(oracle:script.oracles)
+			inferOracle(acceptor, script.package, oracle)
 	}
 	
 	static def qualifiedClassName(String classPackage, String className) {
 		if(classPackage != null) classPackage + '.' + className else className
 	}
 	
-	private def inferModel(IJvmDeclaredTypeAcceptor acceptor, String classPackage, Model model) {
-		val qualifiedClassName = qualifiedClassName(classPackage, model.name.toFirstUpper)
-		acceptor.accept(model.toClass(qualifiedClassName)).initializeLater([
-			superTypes += model.newTypeRef(PropertyHandler)
-			members += model.toField("labels", model.newTypeRef(List, model.newTypeRef(CoverageEntry)))[
+	private def inferOracle(IJvmDeclaredTypeAcceptor acceptor, String classPackage, Oracle oracle) {
+		val qualifiedClassName = qualifiedClassName(classPackage, oracle.name.toFirstUpper)
+		acceptor.accept(oracle.toClass(qualifiedClassName)).initializeLater([
+			superTypes += oracle.newTypeRef(PropertyHandler)
+			members += oracle.toField("labels", oracle.newTypeRef(List, oracle.newTypeRef(CoverageEntry)))[
 				setInitializer [
-					append(model.newTypeRef(Arrays).type)
+					append(oracle.newTypeRef(Arrays).type)
 					append('.asList(')
-					injector.getInstance(CoverageEntriesInferrer).appendArrayInitializer(it, model)
+					injector.getInstance(CoverageEntriesInferrer).appendArrayInitializer(it, oracle)
 					append(')')
 				]
 				final = true
@@ -86,62 +86,62 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 				static = true			
 			]
 			
-			members += model.toField("propertyContainer", model.newTypeRef(PropertyContainer))
-			members += model.toField("coverageTracker", model.newTypeRef(CoverageTracker))[
+			members += oracle.toField("propertyContainer", oracle.newTypeRef(PropertyContainer))
+			members += oracle.toField("coverageTracker", oracle.newTypeRef(CoverageTracker))[
 				setInitializer [
 					append('''new CoverageTracker()''')
 				]
 			]
 			
-			members += model.toMethod("addCoverageTracker", model.newTypeRef(Void::TYPE)) [
-				parameters += model.toParameter("writerFactory", model.newTypeRef(WriterFactory))
+			members += oracle.toMethod("addCoverageTracker", oracle.newTypeRef(Void::TYPE)) [
+				parameters += oracle.toParameter("writerFactory", oracle.newTypeRef(WriterFactory))
 				body = [
 						append('writerFactory.addCoverageTracker(coverageTracker);')
 				]
 				visibility = JvmVisibility::PUBLIC
 			]
 			
-			members += model.toMethod("addRequiredItems", model.newTypeRef(Void::TYPE)) [
-				parameters += model.toParameter("writerFactory", model.newTypeRef(WriterFactory))
+			members += oracle.toMethod("addRequiredItems", oracle.newTypeRef(Void::TYPE)) [
+				parameters += oracle.toParameter("writerFactory", oracle.newTypeRef(WriterFactory))
 				body = [
 						append('writerFactory.addRequiredItems(labels);')
 				]
 				visibility = JvmVisibility::PUBLIC
 			]
 			
-			members += model.toMethod("generationStarted", model.newTypeRef(Void::TYPE)) [
-				annotations += model.toAnnotation(Override)
-				parameters += model.toParameter("propertyContainer", model.newTypeRef(PropertyContainer))
+			members += oracle.toMethod("generationStarted", oracle.newTypeRef(Void::TYPE)) [
+				annotations += oracle.toAnnotation(Override)
+				parameters += oracle.toParameter("propertyContainer", oracle.newTypeRef(PropertyContainer))
 				body = [
 						append('this.propertyContainer=propertyContainer;')
 				]
 				visibility = JvmVisibility::PUBLIC
 			]
 			
-			members += model.toMethod("handlePropertyCombination", model.newTypeRef(Void::TYPE)) [
-				annotations += model.toAnnotation(Override)
-				parameters += model.toParameter("propertyContainer", model.newTypeRef(PropertyContainer))
+			members += oracle.toMethod("handlePropertyCombination", oracle.newTypeRef(Void::TYPE)) [
+				annotations += oracle.toAnnotation(Override)
+				parameters += oracle.toParameter("propertyContainer", oracle.newTypeRef(PropertyContainer))
 				body = []
 				visibility = JvmVisibility::PUBLIC
 			]
 			
-			members += model.toMethod("generationFinished", model.newTypeRef(Void::TYPE)) [
-				annotations += model.toAnnotation(Override)
+			members += oracle.toMethod("generationFinished", oracle.newTypeRef(Void::TYPE)) [
+				annotations += oracle.toAnnotation(Override)
 				body = [
 						append('this.propertyContainer=null;')
 				]
 				visibility = JvmVisibility::PUBLIC
 			]
-			for(expr:model.vars){
+			for(expr:oracle.vars){
 				val declaration = expr as XVariableDeclaration
-				members += model.toField(declaration.name, declaration.type)[
+				members += oracle.toField(declaration.name, declaration.type)[
 					setInitializer(declaration.right)
 					final = ! declaration.writeable
 				]
 			}
 			
-			for(method:model.subs){
-				members += model.toMethod(method.name, method.returnType)[
+			for(method:oracle.subs){
+				members += oracle.toMethod(method.name, method.returnType)[
 					for(parameter:method.parameters)
 					parameters += parameter.toParameter(parameter.name, parameter.parameterType)
 					body = method.body

@@ -10,13 +10,13 @@ import org.dpolivaev.dsl.tsgen.StrategyDslInjectorProvider
 
 @RunWith(XtextRunner)
 @InjectWith(StrategyDslInjectorProvider)
-class ModelCompilationTest {
+class OracleCompilationTest {
 
 	@Inject extension CompilationTestHelper
 	
-	@Test def minimalModel() {
+	@Test def minimalOracle() {
 		'''
-			model myModel {}
+			oracle myOracle {}
 		'''.assertCompilesTo('''
 MULTIPLE FILES WERE GENERATED
 
@@ -24,10 +24,10 @@ File 1 : MyFile.java
 
 @SuppressWarnings("all")
 public class MyFile {
-  public final static MyModel myModel = new MyModel();
+  public final static MyOracle myOracle = new MyOracle();
 }
 
-File 2 : MyModel.java
+File 2 : MyOracle.java
 
 import java.util.Arrays;
 import java.util.List;
@@ -38,7 +38,7 @@ import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
 
 @SuppressWarnings("all")
-public class MyModel implements PropertyHandler {
+public class MyOracle implements PropertyHandler {
   public final static List<CoverageEntry> labels = Arrays.asList(new CoverageEntry[]{});
   
   private PropertyContainer propertyContainer;
@@ -71,9 +71,9 @@ public class MyModel implements PropertyHandler {
 
 		''')
 	}	
-	@Test def modelWithLabels() {
+	@Test def oracleWithLabels() {
 		'''
-			model myModel {
+			oracle myOracle {
 				def calculate(int i){
 					["req1" "reason1"] 
 					val x = ["req2"] 2
@@ -87,10 +87,10 @@ File 1 : MyFile.java
 
 @SuppressWarnings("all")
 public class MyFile {
-  public final static MyModel myModel = new MyModel();
+  public final static MyOracle myOracle = new MyOracle();
 }
 
-File 2 : MyModel.java
+File 2 : MyOracle.java
 
 import java.util.Arrays;
 import java.util.List;
@@ -101,7 +101,7 @@ import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
 
 @SuppressWarnings("all")
-public class MyModel implements PropertyHandler {
+public class MyOracle implements PropertyHandler {
   public final static List<CoverageEntry> labels = Arrays.asList(new CoverageEntry[]{
       new CoverageEntry("req1", "reason1"),
       new CoverageEntry("req2", CoverageEntry.ANY),});
@@ -149,15 +149,15 @@ public class MyModel implements PropertyHandler {
 
 		''')
 	}	
-	@Test def registeredModel() {
+	@Test def registeredOracle() {
 		'''
-			model myModel {
+			oracle myOracle {
 				def calculate(int i){0}
 			}
 			strategy s
-				let x be myModel.calculate(0)
+				let x be myOracle.calculate(0)
 				
-			run strategy s with model goal myModel
+			run strategy s with oracle goal myOracle
 		'''.assertCompilesTo('''
 MULTIPLE FILES WERE GENERATED
 
@@ -176,11 +176,11 @@ import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
 @SuppressWarnings("all")
 public class MyFile {
   private static Object valueProvider1(final PropertyContainer propertyContainer) {
-    Object _calculate = MyFile.myModel.calculate(0);
+    Object _calculate = MyFile.myOracle.calculate(0);
     return _calculate;
   }
   
-  public final static MyModel myModel = new MyModel();
+  public final static MyOracle myOracle = new MyOracle();
   
   public final static RequirementBasedStrategy s = defineStrategyS();
   
@@ -199,8 +199,8 @@ public class MyFile {
     OutputConfiguration __reportConfiguration = new OutputConfiguration();
     WriterFactory __writerFactory = new WriterFactory(__outputConfiguration, __reportConfiguration);
     RuleEngine __ruleEngine = new RuleEngine();
-    __ruleEngine.addHandler(myModel);
-    myModel.addCoverageTracker(__writerFactory);
+    __ruleEngine.addHandler(myOracle);
+    myOracle.addCoverageTracker(__writerFactory);
     __writerFactory.configureEngine(__ruleEngine);
     s.run(__ruleEngine);
   }
@@ -210,7 +210,7 @@ public class MyFile {
   }
 }
 
-File 2 : MyModel.java
+File 2 : MyOracle.java
 
 import java.util.Arrays;
 import java.util.List;
@@ -221,7 +221,7 @@ import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
 
 @SuppressWarnings("all")
-public class MyModel implements PropertyHandler {
+public class MyOracle implements PropertyHandler {
   public final static List<CoverageEntry> labels = Arrays.asList(new CoverageEntry[]{});
   
   private PropertyContainer propertyContainer;

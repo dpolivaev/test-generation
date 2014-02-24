@@ -7,7 +7,7 @@ generate strategydsl "http://www.dpolivaev.org/dsl/tsgen/strategydsl"
 Generation: {Generation}
 	('package' package = QualifiedName)?
 	importSection=XImportSection?
-	(strategies+=Strategy | models += Model | /* goals += Goal | */ runs += Run)*
+	(strategies+=Strategy | oracles += Oracle | /* goals += Goal | */ runs += Run)*
 ;
 	
 Strategy:
@@ -63,8 +63,8 @@ ValueCondition returns Condition:
 
 Run:
 	'run' strategies += StrategyReference 
-	('with' (strategies += StrategyReference | /* goals += GoalReference | */ models += ModelReference) 
-	   (',' (strategies += StrategyReference | /* goals += GoalReference | */ models += ModelReference))*
+	('with' (strategies += StrategyReference | /* goals += GoalReference | */ oracles += OracleReference) 
+	   (',' (strategies += StrategyReference | /* goals += GoalReference | */ oracles += OracleReference))*
 	)?
 	outputConfiguration = OutputConfiguration?
 	reportConfiguration = ReportConfiguration?
@@ -85,9 +85,9 @@ ReportConfiguration returns OutputConfiguration:
 StrategyReference returns StrategyReference: {StrategyReference} 'strategy' goal ?= 'goal'? expr = XExpression;
 ShortFormStrategyReference returns StrategyReference: {StrategyReference} expr = XExpression;
 // GoalReference : 'goal' expr = XExpression;
-ModelReference : 'model' goal ?= 'goal'? expr = XExpression;
+OracleReference : 'oracle' goal ?= 'goal'? expr = XExpression;
 
-Model:'model' name = ValidID
+Oracle:'oracle' name = ValidID
 	'{'
 		(vars += XVariableDeclaration | subs += MethodDefinition)*
 	'}'
