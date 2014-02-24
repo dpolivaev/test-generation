@@ -8,7 +8,7 @@ import java.util.Set
 import javax.inject.Inject
 import org.dpolivaev.dsl.tsgen.strategydsl.Condition
 import org.dpolivaev.dsl.tsgen.strategydsl.Generation
-import org.dpolivaev.dsl.tsgen.strategydsl.ModelReference
+import org.dpolivaev.dsl.tsgen.strategydsl.OracleReference
 import org.dpolivaev.dsl.tsgen.strategydsl.OutputConfiguration
 import org.dpolivaev.dsl.tsgen.strategydsl.Rule
 import org.dpolivaev.dsl.tsgen.strategydsl.RuleGroup
@@ -61,19 +61,19 @@ class GenerationInferrer{
 		this.script = script
 		this.jvmType = jvmType
 		inferExpressions()
-		inferModels()
+		inferOracles()
 		inferStrategyFields()
 		inferStrategyMethods()
 		inferRunMethods()
 	}
 	
-	private def inferModels(){
-		for(model:script.models)
-			jvmType.members += model.toField(model.name, model.newTypeRef(StrategyDslJvmModelInferrer.qualifiedClassName(
-				script.package, model.name.toFirstUpper
+	private def inferOracles(){
+		for(oracle:script.oracles)
+			jvmType.members += oracle.toField(oracle.name, oracle.newTypeRef(StrategyDslJvmModelInferrer.qualifiedClassName(
+				script.package, oracle.name.toFirstUpper
 			))) [
 				setInitializer [
-					append('''new «model.name.toFirstUpper»()''')
+					append('''new «oracle.name.toFirstUpper»()''')
 				]
 				final = true
 				visibility = JvmVisibility::PUBLIC
@@ -84,8 +84,8 @@ class GenerationInferrer{
 	private def inferExpressions(){
 		for(strategy : script.strategies)
 			declaredFields += strategy.name
-		for(model : script.models)
-			declaredFields += model.name
+		for(oracle : script.oracles)
+			declaredFields += oracle.name
 		val contents = EcoreUtil2.eAllContents(script)
 		for(obj : contents){
 			if (obj instanceof ValueAction) 
@@ -94,8 +94,8 @@ class GenerationInferrer{
 				appendConditions(obj as Condition)
 			else if (obj instanceof StrategyReference) 
 				appendStrategyReferences(obj as StrategyReference)
-			else if (obj instanceof ModelReference) 
-				appendModelReferences(obj as ModelReference)
+			else if (obj instanceof OracleReference) 
+				appendOracleReferences(obj as OracleReference)
 		}
 	}
 	
@@ -106,10 +106,10 @@ class GenerationInferrer{
 		}
 	}
 	
-	final static val EXTERNAL_MODEL = "externalModel"
-	private def appendModelReferences(ModelReference ref){
+	final static val EXTERNAL_ORACLE = "externalOracle"
+	private def appendOracleReferences(OracleReference ref){
 		if(ref.expr != null && ! declaredFields.contains(ref.expr.toString)) {
-			createMethod(ref.expr, EXTERNAL_MODEL, ref.expr.inferredType, false)
+			createMethod(ref.expr, EXTERNAL_ORACLE, ref.expr.inferredType, false)
 		}
 	}
 	
@@ -459,14 +459,14 @@ class GenerationInferrer{
 					
 					newLine
 					append(run.newTypeRef(RuleEngine).type) append(' __ruleEngine = new ') append(run.newTypeRef(RuleEngine).type) append('();')
-					for(model:run.models){
+					for(oracle:run.oracles){
 						newLine
 						append('__ruleEngine.addHandler(')
-						appendReference(it, EXTERNAL_MODEL, model.expr)
+						appendReference(it, EXTERNAL_ORACLE, oracle.expr)
 						append(');')
-						if(model.goal){
+						if(oracle.goal){
 							newLine
-							appendReference(it, EXTERNAL_MODEL, model.expr)
+							appendReference(it, EXTERNAL_ORACLE, oracle.expr)
 							append('.addCoverageTracker(__writerFactory);')
 						}
 					}
