@@ -175,8 +175,9 @@ public class MyFile {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory.iterate("y").over(new ValueProvider(){
-      @Override public Object value(PropertyContainer propertyContainer) { return valueProvider1(propertyContainer); }
-    }).asRule());
+      @Override public Object value(PropertyContainer propertyContainer) {
+        return valueProvider1(propertyContainer);
+    }}).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
   }
 }
@@ -207,8 +208,9 @@ public class MyFile {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory._if(new Condition(){
-      @Override public boolean isSatisfied(PropertyContainer propertyContainer) { return condition1(propertyContainer); }
-    }).iterate("y").over(3).asRule());
+      @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
+        return condition1(propertyContainer);
+    }}).iterate("y").over(3).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
   }
 }
@@ -240,8 +242,9 @@ public class MyFile {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory._if(new Condition(){
-      @Override public boolean isSatisfied(PropertyContainer propertyContainer) { return condition1(propertyContainer); }
-    }).iterate("y").over(3).asRule());
+      @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
+        return condition1(propertyContainer);
+    }}).iterate("y").over(3).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
   }
 }
@@ -277,8 +280,9 @@ public class MyFile {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory._if(new Condition(){
-      @Override public boolean isSatisfied(PropertyContainer propertyContainer) { return condition1(propertyContainer) && condition2(propertyContainer); }
-    }).iterate("y").over(5).asRule());
+      @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
+        return condition1(propertyContainer) && condition2(propertyContainer);
+    }}).iterate("y").over(5).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
   }
 }
@@ -518,8 +522,9 @@ public class MyFile {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory.iterate("x").over(new ValueProvider(){
-      @Override public Object value(PropertyContainer propertyContainer) { return new StringBuilder().append("a").append("b").toString(); }
-    }).asRule());
+      @Override public Object value(PropertyContainer propertyContainer) {
+        return new StringBuilder().append("a").append("b").toString();
+    }}).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
   }
 }
@@ -532,7 +537,9 @@ public class MyFile {
 			run strategy First
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
+import org.dpolivaev.tsgen.coverage.TrackingRuleEngine;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
@@ -552,8 +559,10 @@ public class MyFile {
     
     OutputConfiguration __outputConfiguration = new OutputConfiguration();
     OutputConfiguration __reportConfiguration = new OutputConfiguration();
+    CoverageTracker __coverageTracker = new CoverageTracker();
     WriterFactory __writerFactory = new WriterFactory(__outputConfiguration, __reportConfiguration);
-    RuleEngine __ruleEngine = new RuleEngine();
+    __writerFactory.addCoverageTracker(__coverageTracker);
+    RuleEngine __ruleEngine = new TrackingRuleEngine(__coverageTracker);
     __writerFactory.configureEngine(__ruleEngine);
     First.run(__ruleEngine);
   }
@@ -572,7 +581,9 @@ public class MyFile {
 			run strategy first with strategy second
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
+import org.dpolivaev.tsgen.coverage.TrackingRuleEngine;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
@@ -600,8 +611,10 @@ public class MyFile {
     
     OutputConfiguration __outputConfiguration = new OutputConfiguration();
     OutputConfiguration __reportConfiguration = new OutputConfiguration();
+    CoverageTracker __coverageTracker = new CoverageTracker();
     WriterFactory __writerFactory = new WriterFactory(__outputConfiguration, __reportConfiguration);
-    RuleEngine __ruleEngine = new RuleEngine();
+    __writerFactory.addCoverageTracker(__coverageTracker);
+    RuleEngine __ruleEngine = new TrackingRuleEngine(__coverageTracker);
     __writerFactory.configureEngine(__ruleEngine);
     first.with(second).run(__ruleEngine);
   }
@@ -676,7 +689,9 @@ public class MyFile {
 			run strategy First output "testoutput/xml", apply "my.xslt" output "testoutput/java"
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
+import org.dpolivaev.tsgen.coverage.TrackingRuleEngine;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
@@ -695,10 +710,12 @@ public class MyFile {
   public static void run1() {
     
     OutputConfiguration __outputConfiguration = new OutputConfiguration();
-     __outputConfiguration.setXmlDirectory("testoutput").setXmlExtension("xml").setXsltSource("my.xslt").setFileDirectory("testoutput").setFileExtension("java");
+    __outputConfiguration.setXmlDirectory("testoutput").setXmlExtension("xml").setXsltSource("my.xslt").setFileDirectory("testoutput").setFileExtension("java");
     OutputConfiguration __reportConfiguration = new OutputConfiguration();
+    CoverageTracker __coverageTracker = new CoverageTracker();
     WriterFactory __writerFactory = new WriterFactory(__outputConfiguration, __reportConfiguration);
-    RuleEngine __ruleEngine = new RuleEngine();
+    __writerFactory.addCoverageTracker(__coverageTracker);
+    RuleEngine __ruleEngine = new TrackingRuleEngine(__coverageTracker);
     __writerFactory.configureEngine(__ruleEngine);
     First.run(__ruleEngine);
   }
@@ -716,7 +733,9 @@ public class MyFile {
 			run strategy First output "testoutput/xml"
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
+import org.dpolivaev.tsgen.coverage.TrackingRuleEngine;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
@@ -735,10 +754,12 @@ public class MyFile {
   public static void run1() {
     
     OutputConfiguration __outputConfiguration = new OutputConfiguration();
-     __outputConfiguration.setFileDirectory("testoutput").setFileExtension("xml");
+    __outputConfiguration.setFileDirectory("testoutput").setFileExtension("xml");
     OutputConfiguration __reportConfiguration = new OutputConfiguration();
+    CoverageTracker __coverageTracker = new CoverageTracker();
     WriterFactory __writerFactory = new WriterFactory(__outputConfiguration, __reportConfiguration);
-    RuleEngine __ruleEngine = new RuleEngine();
+    __writerFactory.addCoverageTracker(__coverageTracker);
+    RuleEngine __ruleEngine = new TrackingRuleEngine(__coverageTracker);
     __writerFactory.configureEngine(__ruleEngine);
     First.run(__ruleEngine);
   }
@@ -756,7 +777,9 @@ public class MyFile {
 			run strategy First report "testoutput/xml", apply "my.xslt" output "testoutput/report"
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
+import org.dpolivaev.tsgen.coverage.TrackingRuleEngine;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
@@ -776,9 +799,11 @@ public class MyFile {
     
     OutputConfiguration __outputConfiguration = new OutputConfiguration();
     OutputConfiguration __reportConfiguration = new OutputConfiguration();
-     __reportConfiguration.setXmlDirectory("testoutput").setXmlExtension("xml").setXsltSource("my.xslt").setFileDirectory("testoutput").setFileExtension("report");
+    __reportConfiguration.setXmlDirectory("testoutput").setXmlExtension("xml").setXsltSource("my.xslt").setFileDirectory("testoutput").setFileExtension("report");
+    CoverageTracker __coverageTracker = new CoverageTracker();
     WriterFactory __writerFactory = new WriterFactory(__outputConfiguration, __reportConfiguration);
-    RuleEngine __ruleEngine = new RuleEngine();
+    __writerFactory.addCoverageTracker(__coverageTracker);
+    RuleEngine __ruleEngine = new TrackingRuleEngine(__coverageTracker);
     __writerFactory.configureEngine(__ruleEngine);
     First.run(__ruleEngine);
   }
@@ -798,7 +823,9 @@ public class MyFile {
 			run strategy goal First 	
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.CoverageTracker;
 import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
+import org.dpolivaev.tsgen.coverage.TrackingRuleEngine;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
@@ -821,9 +848,11 @@ public class MyFile {
     
     OutputConfiguration __outputConfiguration = new OutputConfiguration();
     OutputConfiguration __reportConfiguration = new OutputConfiguration();
+    CoverageTracker __coverageTracker = new CoverageTracker();
     WriterFactory __writerFactory = new WriterFactory(__outputConfiguration, __reportConfiguration);
-    First.addRequiredItems(__writerFactory);
-    RuleEngine __ruleEngine = new RuleEngine();
+    __writerFactory.addCoverageTracker(__coverageTracker);
+    First.registerRequiredItems(__writerFactory);
+    RuleEngine __ruleEngine = new TrackingRuleEngine(__coverageTracker);
     __writerFactory.configureEngine(__ruleEngine);
     First.run(__ruleEngine);
   }
@@ -862,8 +891,9 @@ public class MyFile {
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory.iterate("a").over(123).asDefaultRule());
     __strategy.addRule(RuleBuilder.Factory.iterate("[req1]").over(new ValueProvider(){
-      @Override public Object value(PropertyContainer propertyContainer) { return valueProvider1(propertyContainer); }
-    }).asRule());
+      @Override public Object value(PropertyContainer propertyContainer) {
+        return valueProvider1(propertyContainer);
+    }}).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
   }
 }

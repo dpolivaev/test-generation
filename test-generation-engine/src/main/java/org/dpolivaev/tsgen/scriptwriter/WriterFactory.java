@@ -39,7 +39,7 @@ public class WriterFactory implements RequiredCoverageItemCollector{
 		return this;
 	}
 
-	public void addRequiredItems(
+	public void registerRequiredItems(
 			final Collection<CoverageEntry> requiredItems) {
 		requiredEntries.addAll(requiredItems);
 	}

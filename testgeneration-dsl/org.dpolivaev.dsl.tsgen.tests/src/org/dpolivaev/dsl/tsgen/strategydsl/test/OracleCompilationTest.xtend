@@ -43,14 +43,14 @@ public class MyOracle implements PropertyHandler {
   
   private PropertyContainer propertyContainer;
   
-  private CoverageTracker coverageTracker = new CoverageTracker();
+  private CoverageTracker coverageTracker = null;
   
-  public void addCoverageTracker(final WriterFactory writerFactory) {
-    writerFactory.addCoverageTracker(coverageTracker);
+  public void setCoverageTracker(final CoverageTracker coverageTracker) {
+    this.coverageTracker = coverageTracker;
   }
   
-  public void addRequiredItems(final WriterFactory writerFactory) {
-    writerFactory.addRequiredItems(labels);
+  public void registerRequiredItems(final WriterFactory writerFactory) {
+    writerFactory.registerRequiredItems(labels);
   }
   
   @Override
@@ -108,14 +108,14 @@ public class MyOracle implements PropertyHandler {
   
   private PropertyContainer propertyContainer;
   
-  private CoverageTracker coverageTracker = new CoverageTracker();
+  private CoverageTracker coverageTracker = null;
   
-  public void addCoverageTracker(final WriterFactory writerFactory) {
-    writerFactory.addCoverageTracker(coverageTracker);
+  public void setCoverageTracker(final CoverageTracker coverageTracker) {
+    this.coverageTracker = coverageTracker;
   }
   
-  public void addRequiredItems(final WriterFactory writerFactory) {
-    writerFactory.addRequiredItems(labels);
+  public void registerRequiredItems(final WriterFactory writerFactory) {
+    writerFactory.registerRequiredItems(labels);
   }
   
   @Override
@@ -136,8 +136,8 @@ public class MyOracle implements PropertyHandler {
   public int calculate(final int i) {
     int _xblockexpression = (int) 0;
     {
-      coverageTracker.reach("req1", String.valueOf("reason1"));
-      coverageTracker.reach("req2", "");
+      if(coverageTracker != null) coverageTracker.reach("req1", String.valueOf("reason1"));
+      if(coverageTracker != null) coverageTracker.reach("req2", "");
       int _labeledexpression = (int) 0;
       _labeledexpression = 2;
       final int x = _labeledexpression;
@@ -155,7 +155,7 @@ public class MyOracle implements PropertyHandler {
 				def calculate(int i){0}
 			}
 			strategy s
-				let x be myOracle.calculate(0)
+				let x be traced myOracle.calculate(0)
 				
 			run strategy s with oracle goal myOracle
 		'''.assertCompilesTo('''
@@ -164,7 +164,10 @@ MULTIPLE FILES WERE GENERATED
 File 1 : MyFile.java
 
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.CoverageTracker;
+import org.dpolivaev.tsgen.coverage.CoverageTrackerEnabler;
 import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
+import org.dpolivaev.tsgen.coverage.TrackingRuleEngine;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
@@ -188,8 +191,11 @@ public class MyFile {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory.iterate("x").over(new ValueProvider(){
-      @Override public Object value(PropertyContainer propertyContainer) { return valueProvider1(propertyContainer); }
-    }).asRule());
+      @Override public Object value(PropertyContainer propertyContainer) {
+        ((CoverageTrackerEnabler)propertyContainer).startTrace(); try{
+        return valueProvider1(propertyContainer);
+        } finally{ ((CoverageTrackerEnabler)propertyContainer).stopTrace();}
+    }}).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
   }
   
@@ -197,10 +203,13 @@ public class MyFile {
     
     OutputConfiguration __outputConfiguration = new OutputConfiguration();
     OutputConfiguration __reportConfiguration = new OutputConfiguration();
+    CoverageTracker __coverageTracker = new CoverageTracker();
     WriterFactory __writerFactory = new WriterFactory(__outputConfiguration, __reportConfiguration);
-    RuleEngine __ruleEngine = new RuleEngine();
+    __writerFactory.addCoverageTracker(__coverageTracker);
+    RuleEngine __ruleEngine = new TrackingRuleEngine(__coverageTracker);
     __ruleEngine.addHandler(myOracle);
-    myOracle.addCoverageTracker(__writerFactory);
+    myOracle.setCoverageTracker(__coverageTracker);
+    myOracle.registerRequiredItems(__writerFactory);
     __writerFactory.configureEngine(__ruleEngine);
     s.run(__ruleEngine);
   }
@@ -226,14 +235,14 @@ public class MyOracle implements PropertyHandler {
   
   private PropertyContainer propertyContainer;
   
-  private CoverageTracker coverageTracker = new CoverageTracker();
+  private CoverageTracker coverageTracker = null;
   
-  public void addCoverageTracker(final WriterFactory writerFactory) {
-    writerFactory.addCoverageTracker(coverageTracker);
+  public void setCoverageTracker(final CoverageTracker coverageTracker) {
+    this.coverageTracker = coverageTracker;
   }
   
-  public void addRequiredItems(final WriterFactory writerFactory) {
-    writerFactory.addRequiredItems(labels);
+  public void registerRequiredItems(final WriterFactory writerFactory) {
+    writerFactory.registerRequiredItems(labels);
   }
   
   @Override

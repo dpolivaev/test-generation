@@ -124,14 +124,14 @@ let category be "success"{
 				 * It demonstrates that use of separate models makes strategy more concise because 
 				 * it does not have to implement the calculations itself. 
 				 */
-				let expectedCosts be ShortTermParkingCalculator.calculateCosts(:weeks as int, :days as int, :hours as int, :minutes as int) 
+				let expectedCosts be traced ShortTermParkingCalculator.calculateCosts(:weeks as int, :days as int, :hours as int, :minutes as int)
 			},  
 			"LONG_TERM_GARAGE_PARKING"{
 				let hours be 0, 1, 5, 6, 23 {
 					let minutes be 0, 30, 31, 59
 				}
 				// call oracle just for coverage
-				let modelCallResult be LongTermGarageParkingCalculator.calculateCosts(:weeks as int, :days as int, :hours as int, :minutes as int) 
+				let modelCallResult be traced LongTermGarageParkingCalculator.calculateCosts(:weeks as int, :days as int, :hours as int, :minutes as int) 
 				/*
 				 * Calculation of expected costs here makes use of a oracle called by driver. 
 				 */

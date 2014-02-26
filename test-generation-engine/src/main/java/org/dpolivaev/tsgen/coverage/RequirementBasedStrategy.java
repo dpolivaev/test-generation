@@ -18,8 +18,8 @@ public class RequirementBasedStrategy {
 		requirementChecker.addItems(items);
 	}
 	
-	public void addRequiredItems(WriterFactory runner){
-		requirementChecker.addRequiredItems(runner);
+	public void registerRequiredItems(WriterFactory runner){
+		requirementChecker.registerRequiredItems(runner);
 	}
 	
 	public void run(RuleEngine ruleEngine){

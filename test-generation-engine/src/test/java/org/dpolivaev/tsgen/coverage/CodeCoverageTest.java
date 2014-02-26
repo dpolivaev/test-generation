@@ -27,11 +27,29 @@ public class CodeCoverageTest {
 	}
 	
 	@Test
-	public void codeCoverageCollectsPoints(){
+	public void codeCoverageCollectsPointsWhenEnabled(){
 		final CoverageTracker coverageTracker = new CoverageTracker();
+		coverageTracker.startTrace();
 		coverageTracker.reach("point", "reason");
 		final List<CoverageEntry> coverage = coverageTracker.getReached();
 		assertThat(coverage, equalTo(asList(new CoverageEntry("point", "reason"))));
+	}
+	
+	@Test
+	public void codeCoverageCollectsNoPointsWhenNotEnabled(){
+		final CoverageTracker coverageTracker = new CoverageTracker();
+		coverageTracker.reach("point", "reason");
+		final List<CoverageEntry> coverage = coverageTracker.getReached();
+		assertThat(coverage, equalTo(Arrays.<CoverageEntry>asList()));
+	}
+	
+	@Test
+	public void codeCoverageCollectsNoPointsWhenDisabled(){
+		final CoverageTracker coverageTracker = new CoverageTracker();
+		coverageTracker.stopTrace();
+		coverageTracker.reach("point", "reason");
+		final List<CoverageEntry> coverage = coverageTracker.getReached();
+		assertThat(coverage, equalTo(Arrays.<CoverageEntry>asList()));
 	}
 	
 	@Test
@@ -62,6 +80,7 @@ public class CodeCoverageTest {
 		PropertyContainer propertyContainer = mock(PropertyContainer.class);
 		when(propertyContainer.availableProperties(anyString())).thenReturn(Collections.<String>emptySet());
 		CoverageTracker tracker = new CoverageTracker();
+		tracker.startTrace();
 		final RequirementsCoverageGoalBuilder codeCoverageGoalBuilder = new RequirementsCoverageGoalBuilder(asList(tracker),  Collections.<CoverageEntry>emptyList());
 		final Goal goal = codeCoverageGoalBuilder.createGoal();
 		tracker.reach("item", "reason");

@@ -2,10 +2,12 @@ package org.dpolivaev.tsgen.coverage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 public class CoverageTracker{
 
 	final private List<CoverageEntry> points;
+	private boolean traceActive;
 
 	public CoverageTracker() {
 		points = new ArrayList<>();
@@ -17,12 +19,23 @@ public class CoverageTracker{
 	}
 
 	public void reach(String name, String reason) {
-		points.add(new CoverageEntry(name, reason));
+		if(traceActive)
+			points.add(new CoverageEntry(name, reason));
 	}
 
 
 	public List<CoverageEntry> getReached() {
 		return points;
+	}
+
+
+	public void startTrace() {
+		this.traceActive = true;
+	}
+
+
+	public void stopTrace() {
+		this.traceActive = false;
 	}
 
 }

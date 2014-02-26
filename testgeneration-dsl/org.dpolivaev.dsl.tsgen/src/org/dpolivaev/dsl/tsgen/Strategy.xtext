@@ -53,7 +53,8 @@ ValueAction:{ValueAction}
 ;
 
 ValueProvider:
-	( =>'(' expressions += XExpression+ ')' | expressions += XExpression) 
+	trace ?= 'traced'?  
+	( =>'(' expressions += XExpression+ ')' | expressions += XExpression)
 	condition = ValueCondition?   
 ;
 
