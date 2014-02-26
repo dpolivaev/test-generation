@@ -4,7 +4,7 @@ Strategy-driven test generation
 
 Test suites should systematically and automatically execute and evaluate systems with considerably big state space for systematic testing of complex software systems, It makes their development very challenging and expansive. Testers have to implement or generate test scripts containing thousands of isolated executable test cases. Each single test case should be so simple enough so that test results can be easily evaluated. Often it makes code duplication in the test code unavoidable. If every test script is written by a human the costs for test code maintenance by specification changes can explode. The aim of this project is to give testers a tool for efficient, scalable, flexible and redundancy free implementation of automatically executable test suites. The tool also helps to estimate the test coverage achieved by the generated test suite.
 
-Application of this tool is demonstrated by example of developing a test suite for parking cost calculator. This example was used in numerous testing community activities and testing dojos 
+Application of this tool is demonstrated by example of developing a test suite for parking cost calculator. This example was used in numerous testing community activities and testing dojos
 
 A short introduction to the used approach.
 =========================================
@@ -23,36 +23,41 @@ The generated test script is internally generated as XML first. It can be transf
 Getting started
 ===============
 The test generation framework can be either installed from update site archive or compiled from the source code licensed under LGPL 3 or later. Compilation from the source is explained later.
-  
-1. Run eclipse with the test generation plugin and  import project from folder test-generation-examples into the eclipse workspace. 
-2. Open file /ParkCalculatorExample/testgeneration/ParkCalculatorStrategy.tsgen` in editor. Make sure it is the special editor for the strategy dsl files with syntax highlighting and outline.
+
+1. Run eclipse with the test generation plugin and  import project from folder test-generation-examples into the eclipse workspace.
+2. Open file /ParkCalculatorExample/strategies/ParkCalculatorStrategy.tsgen` in editor. Make sure it is the special editor for the strategy dsl files with syntax highlighting and outline.
 3. Check that derived java files containg strategy classes are created in folder /ParkCalculatorExample/src-gen.
 4. Right-click on `ParkCalculatorStrategy.tsgen` ans select "Generate tests". It should run the generation. Check the output printed on the console
 5. Find generated test script `ParkCalculatorTest.java` in directory `/ParkCalculatorExample/generated-tests` and generated requirement coverage `report.xml` in directory `/ParkCalculatorExample/output/`. There is also a generated test script in xml format `output/parkcalculator/ParkCalculatorTest.xml`.
 
 Strategy definition DSL is explained in the next chapters using two example projects.
 
+Strategy DSL syntax reference
+============================
+
+Project `TestGenerationDSLSyntax` contains basic examples of strategy definition syntax. It demonstrates how to specify different kinds of dependencies between the test properties.
+
+The strategy and is defined in directory `strategies` in file `StrategySyntaxExamples.tsgen`.
+
+Running the strategy generates console output showing generated combinations of property values.
+
 Park calculator example
 ===============================
 
-Application of this tool is demonstrated by example of developing a test suite for parking cost calculator similar to the one from http://www.grr.org/ParkCalc.php. It's specification comes from http://www.grr.org/ParkingRates.php . This example was used in numerous testing community activities and testing dojos e.g. http://www.shino.de/2010/06/20/parkcalc-automation-getting-started/.  It is a web application. For demonstration purposes I implemented its logic in java and used only strings as parameters so that it feels very close to calls of internet URLs. To emulate a web page where all values can be entered separately there are setter methods corresponding to each input. 
+Application of this tool is demonstrated by example of developing a test suite for parking cost calculator similar to the one from http://www.grr.org/ParkCalc.php. It's specification comes from http://www.grr.org/ParkingRates.php . This example was used in numerous testing community activities and testing dojos e.g. http://www.shino.de/2010/06/20/parkcalc-automation-getting-started/.  It is a web application. For demonstration purposes I implemented its logic in java and used only strings as parameters so that it feels very close to calls of internet URLs. To emulate a web page where all values can be entered separately there are setter methods corresponding to each input.
 
 The complete tests should check all subsystems of the calculator and consider date and time parsing. They should also make sure that the calculator correctly handles winter and summer time. It makes not only the difference between the entry and leaving times but also the absolute time values and their format relevant for the test.
 
 This project defines test strategy using one test model and the corresponding test driver. It tracks model code coverage and requirement coverage and outputs the tests as JUnit tests. The parking rate specification is given in file `requirements/parkingRates.md`
 
-The strategy and the model are defined in directory `testgeneration` in file `ParkCalculatorStrategy.tsgen`, the test driver in directory `test-driver/parkcalculator`.
+The strategy and the model are defined in directory `strategies` in file `ParkCalculatorStrategy.tsgen`, the test driver in directory `test-driver/parkcalculator`.
 
 The framework automatically translates tsgen files to java files in directory `src-gen`. The last are run to generate the tests. The generation result is placed in directory `generated-tests` . It is also under version control that allows to see the generation results without executing the generation.
 
 The test-driven implementation of the parking costs calculator with developer tests allows the execution of the generated tests against this code. The source code is contained in directory src, and the developer tests in directory developer-tests.
 
-For compiling and running the tests the project build path should be added library "Test generation library" which is installed with the framework plug-ins. 
+For compiling and running the tests the project build path should be added library "Test generation library" which is installed with the framework plug-ins.
 
-Strategy DSL syntax example
-============================
-
-Project `TestGenerationDSLSyntax` contains further examples of strategy definitions. It demonstrates how to specify different kinds of dependencies between the test properties.
 
 Framework and eclipse plug-in compilation from the source code
 =========================================
