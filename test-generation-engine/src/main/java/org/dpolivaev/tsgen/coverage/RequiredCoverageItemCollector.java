@@ -4,6 +4,6 @@ import java.util.Collection;
 
 public interface RequiredCoverageItemCollector {
 
-	void addRequiredItems(Collection<CoverageEntry> items);
+	void registerRequiredItems(Collection<CoverageEntry> items);
 
 }

@@ -89,22 +89,22 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 			members += oracle.toField("propertyContainer", oracle.newTypeRef(PropertyContainer))
 			members += oracle.toField("coverageTracker", oracle.newTypeRef(CoverageTracker))[
 				setInitializer [
-					append('''new CoverageTracker()''')
+					append('''null''')
 				]
 			]
 			
-			members += oracle.toMethod("addCoverageTracker", oracle.newTypeRef(Void::TYPE)) [
-				parameters += oracle.toParameter("writerFactory", oracle.newTypeRef(WriterFactory))
+			members += oracle.toMethod("setCoverageTracker", oracle.newTypeRef(Void::TYPE)) [
+				parameters += oracle.toParameter("coverageTracker", oracle.newTypeRef(CoverageTracker))
 				body = [
-						append('writerFactory.addCoverageTracker(coverageTracker);')
+						append('this.coverageTracker = coverageTracker;')
 				]
 				visibility = JvmVisibility::PUBLIC
 			]
 			
-			members += oracle.toMethod("addRequiredItems", oracle.newTypeRef(Void::TYPE)) [
+			members += oracle.toMethod("registerRequiredItems", oracle.newTypeRef(Void::TYPE)) [
 				parameters += oracle.toParameter("writerFactory", oracle.newTypeRef(WriterFactory))
 				body = [
-						append('writerFactory.addRequiredItems(labels);')
+						append('writerFactory.registerRequiredItems(labels);')
 				]
 				visibility = JvmVisibility::PUBLIC
 			]

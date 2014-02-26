@@ -30,7 +30,7 @@ class StrategyCompiler extends XbaseCompiler {
 				doInternalToJavaStatement(expr.reason, b, true)
 			val it = b.trace(expr, false);
 			newLine
-			append('coverageTracker.reach("') append(expr.label) append('", ')
+			append('if(coverageTracker != null) coverageTracker.reach("') append(expr.label) append('", ')
 			if(expr.reason != null){
 				append('String.valueOf(')
 				internalToConvertedExpression(expr.reason, it, expr.reason.getType())

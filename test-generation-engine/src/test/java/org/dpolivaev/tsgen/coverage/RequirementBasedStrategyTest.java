@@ -36,8 +36,8 @@ public class RequirementBasedStrategyTest {
 		when(requirementChecker.with(anotherRequirementChecker)).thenReturn(combinedRequirementChecker);
 		RequirementBasedStrategy combinedRequirementBasedStrategy = requirementBasedStrategy.with(anotherRequirementBasedStrategy);
 		WriterFactory writerFactory = mock(WriterFactory.class);
-		combinedRequirementBasedStrategy.addRequiredItems(writerFactory);
-		verify(combinedRequirementChecker).addRequiredItems(writerFactory);
+		combinedRequirementBasedStrategy.registerRequiredItems(writerFactory);
+		verify(combinedRequirementChecker).registerRequiredItems(writerFactory);
 	}
 
 	@Test

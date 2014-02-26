@@ -26,9 +26,9 @@ public class RequirementCheckerTest {
 		requirementChecker.addItems(coverageEntry2);
 		final RequirementChecker compositeChecker = requirementChecker.with(otherRequirementChecker);
 		WriterFactory runner = Mockito.mock(WriterFactory.class);
-		compositeChecker.addRequiredItems(runner);
+		compositeChecker.registerRequiredItems(runner);
 		
-		verify(runner).addRequiredItems(Utils.set(coverageEntry1, coverageEntry2));
+		verify(runner).registerRequiredItems(Utils.set(coverageEntry1, coverageEntry2));
 		 
 	}
 

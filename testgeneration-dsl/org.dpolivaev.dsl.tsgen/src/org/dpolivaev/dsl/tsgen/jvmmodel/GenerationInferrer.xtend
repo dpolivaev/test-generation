@@ -41,6 +41,9 @@ import org.dpolivaev.tsgen.ruleengine.RuleEngine
 import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy
 import org.eclipse.emf.ecore.EObject
 import org.dpolivaev.tsgen.ruleengine.SpecialValue
+import org.dpolivaev.tsgen.coverage.CoverageTracker
+import org.dpolivaev.tsgen.coverage.TrackingRuleEngine
+import org.dpolivaev.tsgen.coverage.CoverageTrackerEnabler
 
 class GenerationInferrer{
 	@Inject Injector injector
@@ -360,9 +363,18 @@ class GenerationInferrer{
 		val conditional = valueProvider.condition != null
 		if(conditional){
 			val methodName = methods.get(CONDITION, valueProvider.condition.expr)
-			append('''«methodName»(propertyContainer)?''')
+			append('''if(«methodName»(propertyContainer)) return ''')
+			append(valueProvider.newTypeRef(SpecialValue).type) append('.SKIP;')
+			newLine
 		}
-			
+		val trace = valueProvider.trace
+		if(trace){
+			append('((')
+			append(valueProvider.newTypeRef(CoverageTrackerEnabler).type) 
+			append(')propertyContainer).startTrace(); try{')
+			newLine
+		}	
+		append('return ')
 		val concatenation = valueProvider.expressions.size() > 1
 		if(concatenation)
 			append("new StringBuilder()");
@@ -371,8 +383,9 @@ class GenerationInferrer{
 			if(concatenation)
 				append(".append(");
 			val methodName = methods.get(VALUE_PROVIDER, expr)
-			if(methodName == null)
+			if(methodName == null){
 				xbaseCompiler.compileAsJavaExpression(expr, it, valueProvider.newTypeRef(Object))
+			}
 			else{
 				append('''«methodName»(propertyContainer)''')
 			}
@@ -381,9 +394,13 @@ class GenerationInferrer{
 		}
 		if(concatenation)
 			append(".toString()");
-		if(conditional){
-			append(':') append(valueProvider.newTypeRef(SpecialValue).type) append('.SKIP')
-		}
+		append(';')
+		if(trace){
+			newLine
+			append('} finally{ ((')
+			append(valueProvider.newTypeRef(CoverageTrackerEnabler).type) 
+			append(')propertyContainer).stopTrace();}')
+		}	
 	}
 	
 	def private apppendSkip(ITreeAppendable it){
@@ -398,15 +415,19 @@ class GenerationInferrer{
 		newLine
 		append('''@Override public «interfaceMethodName»(''')
 		.append(script.newTypeRef(PropertyContainer).type)
-		.append(''' propertyContainer) { return ''')
+		.append(''' propertyContainer) {''')
+		increaseIndentation
+		newLine
 		expression.exec(it)
-		append('; }')
+		decreaseIndentation
 		decreaseIndentation
 		newLine
+		append('}')
 		append('}')
 	}
 
 	def private appendCalledMethods(String[] calledMethodNames, ITreeAppendable it) {
+		append('return ')
 		var first = true
 		for(calledMethodName:calledMethodNames){
 			if(first)
@@ -415,6 +436,7 @@ class GenerationInferrer{
 				append(' && ')
 			append('''«calledMethodName»(propertyContainer)''')
 		}
+		append(';')
 	}
 	
 	private def inferStrategyFields(){
@@ -433,6 +455,7 @@ class GenerationInferrer{
 	}
 	
 	private def inferRunMethods(){
+		if(! script.runs.empty)
 		inferRunMethodImplementations();
 		inferMainMethod();
 	}
@@ -447,18 +470,26 @@ class GenerationInferrer{
 					appendOutputConfiguration(it, "output", run, run.outputConfiguration)
 					appendOutputConfiguration(it, "report", run, run.reportConfiguration)
 					newLine
+					append(run.newTypeRef(CoverageTracker).type)
+					append(' __coverageTracker = new ')
+					append(run.newTypeRef(CoverageTracker).type)
+					append('();')
+					
+					newLine
 					append(run.newTypeRef(WriterFactory).type)
 					append(' __writerFactory = new ')
 					append(run.newTypeRef(WriterFactory).type)
 					append('(__outputConfiguration, __reportConfiguration);')
+					newLine
+					append('__writerFactory.addCoverageTracker(__coverageTracker);')
 					if(! run.strategies.empty && run.strategies.get(0).goal){
 						newLine
 						appendReference(it, EXTERNAL_STRATEGY, run.strategies.get(0).expr)
-						append('.addRequiredItems(__writerFactory);')
+						append('.registerRequiredItems(__writerFactory);')
 					}
 					
-					newLine
-					append(run.newTypeRef(RuleEngine).type) append(' __ruleEngine = new ') append(run.newTypeRef(RuleEngine).type) append('();')
+					newLine 
+					append(run.newTypeRef(RuleEngine).type) append(' __ruleEngine = new ') append(run.newTypeRef(TrackingRuleEngine).type) append('(__coverageTracker);')
 					for(oracle:run.oracles){
 						newLine
 						append('__ruleEngine.addHandler(')
@@ -467,7 +498,10 @@ class GenerationInferrer{
 						if(oracle.goal){
 							newLine
 							appendReference(it, EXTERNAL_ORACLE, oracle.expr)
-							append('.addCoverageTracker(__writerFactory);')
+							append('.setCoverageTracker(__coverageTracker);')
+							newLine
+							appendReference(it, EXTERNAL_ORACLE, oracle.expr)
+							append('.registerRequiredItems(__writerFactory);')
 						}
 					}
 					newLine append('__writerFactory.configureEngine(__ruleEngine);')
@@ -488,7 +522,7 @@ class GenerationInferrer{
 		
 		if(outputConfiguration != null){
 			newLine
-			append(''' __«target»Configuration''')
+			append('''__«target»Configuration''')
 			if(outputConfiguration.xslt != null){
 				appendOutputFile(it, "Xml", outputConfiguration.xml)
 				append('.setXsltSource("')

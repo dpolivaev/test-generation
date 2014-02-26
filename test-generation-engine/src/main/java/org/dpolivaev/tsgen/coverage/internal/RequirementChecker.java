@@ -41,9 +41,9 @@ public class RequirementChecker implements PropertyHandler{
 		
 	}
 	
-	public void addRequiredItems(RequiredCoverageItemCollector requiredCoverageItemCollector){
+	public void registerRequiredItems(RequiredCoverageItemCollector requiredCoverageItemCollector){
 		if(! items.isEmpty()){
-			requiredCoverageItemCollector.addRequiredItems(items);
+			requiredCoverageItemCollector.registerRequiredItems(items);
 		}
 	}
 	
