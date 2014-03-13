@@ -40,7 +40,7 @@ public class WriterFactoryTest {
 		
 		RuleEngine ruleEngine = new RuleEngine();
 		writerFactory.configureEngine(ruleEngine);
-		ruleEngine.run(strategy.with(StrategyHelper.id("testcase")));
+		ruleEngine.run(strategy);
 		
 		checkOutputFilesAreCreated(expectedOutputFile, expectedReportFile);
 		checkOutputStreamsAreClosed(expectedOutputFile, expectedReportFile);
@@ -53,7 +53,7 @@ public class WriterFactoryTest {
 		final WriterFactory writerFactory = new WriterFactory(new OutputConfiguration(), new OutputConfiguration());
 		RuleEngine ruleEngine = new RuleEngine();
 		writerFactory.configureEngine(ruleEngine);
-		ruleEngine.run(strategy.with(StrategyHelper.id("testcase")));
+		ruleEngine.run(strategy);
 
 	}
 }

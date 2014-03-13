@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThat;
 
 import org.dpolivaev.tsgen.ruleengine.Assignment;
 import org.dpolivaev.tsgen.ruleengine.Assignments;
+import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -14,6 +15,7 @@ import org.mockito.Mockito;
 public class TestIdProviderTest {
 	private Assignments assignments;
 	private TestIdProvider testIdProvider;
+	private OutputConfiguration outputConfiguration;
 	
 	private void givenAssignment(String name, Object value, String reason) {
 		final Assignment assignmentMock = assignmentMock(name, value, reason);
@@ -24,7 +26,9 @@ public class TestIdProviderTest {
 	@Before
 	public void setup(){
 		assignments = new Assignments();
-		testIdProvider = new TestIdProvider("=", " ");
+		outputConfiguration = new OutputConfiguration();
+		outputConfiguration.setTestCasePropertyNames("precondition", "when", "verification", "postprocessing");
+		testIdProvider = new TestIdProvider(outputConfiguration, "=", " ");
 	}
 
 	@Test
@@ -36,13 +40,13 @@ public class TestIdProviderTest {
 
 	@Test
 	public void includesFoc(){
-		givenAssignment("focus", "value", "");
+		givenAssignment("when", "value", "");
 		assertThat((String)testIdProvider.value(assignments), equalTo("value"));
 		
 	}
 	@Test
 	public void includesFoc1(){
-		givenAssignment("focus1", "value", "");
+		givenAssignment("when1", "value", "");
 		assertThat((String)testIdProvider.value(assignments), equalTo("value"));
 		
 	}
@@ -56,8 +60,8 @@ public class TestIdProviderTest {
 	}
 	
 	@Test
-	public void keepsFocus(){
-		final Assignment assignmentMock = assignmentMock("focus", "value", "");
+	public void keepswhen(){
+		final Assignment assignmentMock = assignmentMock("when", "value", "");
 		Mockito.when(assignmentMock.rule.forcesIteration()).thenReturn(false);
 		assignments.add(assignmentMock);
 		assertThat((String)testIdProvider.value(assignments), equalTo("value"));
@@ -65,25 +69,25 @@ public class TestIdProviderTest {
 	
 	@Test
 	public void excludesFocFalse(){
-		givenAssignment("focus", "focus(x)", "");
+		givenAssignment("when", "when(x)", "");
 		givenAssignment("x", false, "");
-		assertThat((String)testIdProvider.value(assignments), equalTo("focus"));
+		assertThat((String)testIdProvider.value(assignments), equalTo("when"));
 		
 	}
 	
 	@Test
 	public void includesFocTrue(){
-		givenAssignment("focus", "focus(x)", "");
+		givenAssignment("when", "when(x)", "");
 		givenAssignment("x", true, "");
-		assertThat((String)testIdProvider.value(assignments), equalTo("focus x"));
+		assertThat((String)testIdProvider.value(assignments), equalTo("when x"));
 		
 	}
 	
 	@Test
 	public void includesFocNumber(){
-		givenAssignment("focus", "focus(x)", "");
+		givenAssignment("when", "when(x)", "");
 		givenAssignment("x", 6, "");
-		assertThat((String)testIdProvider.value(assignments), equalTo("focus x=6"));
+		assertThat((String)testIdProvider.value(assignments), equalTo("when x=6"));
 		
 	}
 	@Test

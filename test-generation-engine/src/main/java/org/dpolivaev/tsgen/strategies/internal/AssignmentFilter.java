@@ -8,14 +8,17 @@ import java.util.regex.Pattern;
 
 import org.dpolivaev.tsgen.ruleengine.Assignment;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
+import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 import org.dpolivaev.tsgen.scriptwriter.internal.PartValueParser;
 
 public class AssignmentFilter {
-	private static final Pattern TEST_CASE_PARTS_REGEX =  Pattern.compile("(?:precondition|focus|verification|postprocessing)(?:\\d+)?");
+	private static final Pattern NUMBER_REGEX =  Pattern.compile("\\d*");
 	final private PropertyContainer propertyContainer;
+	final private String[] testCaseParts;
 
-	public AssignmentFilter(PropertyContainer propertyContainer) {
+	public AssignmentFilter(OutputConfiguration outputConfiguration, PropertyContainer propertyContainer) {
 		this.propertyContainer = propertyContainer;
+		testCaseParts = outputConfiguration.getTestCaseParts();
 	}
 
 	public Collection<Assignment> testPartRelevantAssignments() {
@@ -27,7 +30,7 @@ public class AssignmentFilter {
 		Map<String, Assignment> testPartProperties = new LinkedHashMap<>();
 		for(Assignment assignment : propertyContainer.getAssignments()){
 			final String targetedPropertyName = assignment.getTargetedPropertyName();
-			if(TEST_CASE_PARTS_REGEX.matcher(targetedPropertyName).matches()){
+			if(isTestPartRelevantProperty(targetedPropertyName)){
 				final PartValueParser partValueParser = new PartValueParser(assignment.value.toString());
 				testPartProperties.put(targetedPropertyName, new Assignment(assignment.rule, partValueParser.getCalledMethod(), assignment.reason));
 				if(partValueParser.isArgumentListFound()){
@@ -42,6 +45,16 @@ public class AssignmentFilter {
 			}
 		}
 		return testPartProperties;
+	}
+
+	private boolean isTestPartRelevantProperty(final String propertyName) {
+		int i = 0;
+		for(String testCasePart : testCaseParts)
+			if(i++ % 2 == 0 && propertyName.startsWith(testCasePart)) {
+				final String numberCandidate = propertyName.substring(testCasePart.length());
+				return numberCandidate.isEmpty() || NUMBER_REGEX.matcher(numberCandidate).matches();
+			}
+		return false;
 	}
 
 	public Collection<Assignment> descriptionRelevantAssignments() {

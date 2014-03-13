@@ -5,16 +5,19 @@ import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.ruleengine.ValueProvider;
+import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 
 public class DescriptionProvider  implements ValueProvider{
 
 	private AssignmentFormatter formatter;
+	final private OutputConfiguration outputConfiguration;
 
 	public DescriptionProvider() {
-		this(": ", "\n");
+		this(new OutputConfiguration(), ": ", "\n");
 	}
 
-	public DescriptionProvider(String nameValueSeparator, String propertySeparator) {
+	public DescriptionProvider(OutputConfiguration outputConfiguration, String nameValueSeparator, String propertySeparator) {
+		this.outputConfiguration = outputConfiguration;
 		formatter = AssignmentFormatter.create(nameValueSeparator, propertySeparator);
 		formatter.exclude("\\[.*");
 		formatter.exclude("(?:script)(?:\\..+)?");
@@ -24,13 +27,13 @@ public class DescriptionProvider  implements ValueProvider{
 	}
 
 	public String describe(PropertyContainer assignments) {
-		final AssignmentFilter assignmentFilter = new AssignmentFilter(assignments);
+		final AssignmentFilter assignmentFilter = new AssignmentFilter(outputConfiguration, assignments);
 		return formatter.format(assignmentFilter.descriptionRelevantAssignments());
 	}
 
-	public static Strategy strategy(String propertyName){
+	public static Strategy strategy(OutputConfiguration outputConfiguration, String propertyName){
 		Strategy strategy = new Strategy();
-		DescriptionProvider instance = new DescriptionProvider(": ", "\n");
+		DescriptionProvider instance = new DescriptionProvider(outputConfiguration, ": ", "\n");
 		strategy.addDefaultRule(RuleBuilder.Factory.iterate(propertyName).over(instance));
 		return strategy;
 
