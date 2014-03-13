@@ -175,6 +175,7 @@ import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.ruleengine.ValueProvider;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
+import org.dpolivaev.tsgen.strategies.StrategyHelper;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -211,7 +212,7 @@ public class MyFile {
     myOracle.setCoverageTracker(__coverageTracker);
     myOracle.registerRequiredItems(__writerFactory);
     __writerFactory.configureEngine(__ruleEngine);
-    s.run(__ruleEngine);
+    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcaseDescription")).with(s).run(__ruleEngine);
   }
   
   public static void main(final String[] args) {
