@@ -7,14 +7,9 @@ import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 
 public class SingleScriptWriter implements PropertyHandler {
 
-    private XmlWriter xmlWriter;
+    XmlWriter xmlWriter;
     private PropertyHandler scriptProducer;
-    private static final String[] scriptParts = {
-        "scriptprecondition", "ScriptPrecondition",
-        "scriptpostprocessing", "ScriptPostprocessing",
-    };
-
-	@Override
+    @Override
 	public void generationStarted(PropertyContainer propertyContainer) {}
 	
     @Override
@@ -25,7 +20,7 @@ public class SingleScriptWriter implements PropertyHandler {
     public SingleScriptWriter(PropertyContainer propertyContainer, ScriptConfiguration scriptConfiguration, ResultFactory resultFactory, GoalChecker goalChecker) {
     	xmlWriter = scriptConfiguration.xmlWriter(resultFactory);
         xmlWriter.startDocument();
-        XmlTestCaseWriter testCaseProducer = new XmlTestCaseWriter(xmlWriter, goalChecker);
+        XmlTestCaseWriter testCaseProducer = scriptConfiguration.testCaseWriter(xmlWriter, goalChecker);
         xmlWriter.beginElement("Script");
         Object scriptValue = propertyContainer.get("script");
         if(scriptValue.equals(SpecialValue.UNDEFINED)){
@@ -37,7 +32,7 @@ public class SingleScriptWriter implements PropertyHandler {
         	driverValue = scriptValue + "Driver";
         xmlWriter.setAttribute("driver", driverValue.toString());
         testCaseProducer.addAttributes(propertyContainer, "script");
-        testCaseProducer.addParts(propertyContainer, scriptParts);
+        testCaseProducer.addParts(propertyContainer, scriptConfiguration.scriptParts);
         scriptProducer = testCaseProducer;
     }
 

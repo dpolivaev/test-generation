@@ -2,6 +2,7 @@ package org.dpolivaev.tsgen.scriptwriter.internal;
 
 import java.io.File;
 
+import org.dpolivaev.tsgen.coverage.GoalChecker;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 import org.xml.sax.ContentHandler;
 
@@ -9,6 +10,16 @@ import org.xml.sax.ContentHandler;
 public class ScriptConfiguration {
 	final public OutputConfiguration outputConfiguration;
 	final public String scriptName;
+	final String[] testCaseParts = {
+	    "precondition", "Precondition",
+	    "focus", "Focus",
+	    "verification", "Verification",
+	    "postprocessing", "Postprocessing",
+	};
+	final String[] scriptParts = {
+	    "scriptprecondition", "ScriptPrecondition",
+	    "scriptpostprocessing", "ScriptPostprocessing",
+	};
 
 	public ScriptConfiguration(OutputConfiguration outputConfiguration, String scriptName) {
 		super();
@@ -33,5 +44,9 @@ public class ScriptConfiguration {
 	XmlWriter xmlWriter(ResultFactory resultFactory) {
 		ContentHandler handler = new HandlerFactory(resultFactory).newHandler(this);
 	    return new SaxXmlWriter(handler);
+	}
+
+	XmlTestCaseWriter testCaseWriter(XmlWriter xmlWriter, GoalChecker goalChecker) {
+		return new XmlTestCaseWriter(xmlWriter, testCaseParts, goalChecker);
 	}
 }
