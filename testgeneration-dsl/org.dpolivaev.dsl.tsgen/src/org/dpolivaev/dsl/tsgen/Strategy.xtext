@@ -67,8 +67,17 @@ Run:
 	('with' (strategies += StrategyReference | /* goals += GoalReference | */ oracles += OracleReference) 
 	   (',' (strategies += StrategyReference | /* goals += GoalReference | */ oracles += OracleReference))*
 	)?
+	testStructure = TestStructure?
 	outputConfiguration = OutputConfiguration?
 	reportConfiguration = ReportConfiguration?
+	
+;
+
+TestStructure:
+	'keywords'
+	scriptPrecondition = PROPERTY_ID ','
+	precondition = PROPERTY_ID ',' focus=PROPERTY_ID ',' verification=PROPERTY_ID ',' postprocessing = PROPERTY_ID ','  
+	scriptPostprocessing = PROPERTY_ID 
 	
 ;
 

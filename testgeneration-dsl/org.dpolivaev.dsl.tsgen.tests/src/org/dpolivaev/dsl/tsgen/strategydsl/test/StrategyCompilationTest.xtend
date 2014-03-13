@@ -771,6 +771,54 @@ public class MyFile {
 		''')
 	}	
 
+	@Test def runWithKeywords() {
+		'''
+			strategy First
+			run strategy First
+			keywords beforeAll, given, when, then, after, afterAll  
+			output "testoutput/xml"
+		'''.assertCompilesTo('''
+import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.CoverageTracker;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
+import org.dpolivaev.tsgen.coverage.TrackingRuleEngine;
+import org.dpolivaev.tsgen.ruleengine.RuleEngine;
+import org.dpolivaev.tsgen.ruleengine.Strategy;
+import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
+import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
+
+@SuppressWarnings("all")
+public class MyFile {
+  public final static RequirementBasedStrategy First = defineStrategyFirst();
+  
+  private static RequirementBasedStrategy defineStrategyFirst() {
+    CoverageEntry[] __requiredItems = new CoverageEntry[]{};
+    Strategy __strategy = new Strategy();
+    return new RequirementBasedStrategy(__requiredItems).with(__strategy);
+  }
+  
+  public static void run1() {
+    
+    OutputConfiguration __outputConfiguration = new OutputConfiguration();
+    __outputConfiguration.setFileDirectory("testoutput").setFileExtension("xml");
+    __output.setScriptPropertyNames("beforeAll", "afterAll");
+    __output.setTestCasePropertyNames("given", "when", "then", "after");
+    OutputConfiguration __reportConfiguration = new OutputConfiguration();
+    CoverageTracker __coverageTracker = new CoverageTracker();
+    WriterFactory __writerFactory = new WriterFactory(__outputConfiguration, __reportConfiguration);
+    __writerFactory.addCoverageTracker(__coverageTracker);
+    RuleEngine __ruleEngine = new TrackingRuleEngine(__coverageTracker);
+    __writerFactory.configureEngine(__ruleEngine);
+    First.run(__ruleEngine);
+  }
+  
+  public static void main(final String[] args) {
+    MyFile.run1();
+  }
+}
+		''')
+	}	
+
 	@Test def runWithReport() {
 		'''
 			strategy First
