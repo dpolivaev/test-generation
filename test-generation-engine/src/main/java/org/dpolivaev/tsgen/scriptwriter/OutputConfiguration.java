@@ -15,9 +15,20 @@ public class OutputConfiguration {
 	
 	public static final OutputConfiguration OUTPUT_NOTHING = new OutputConfiguration();
 
+	private String[] testCaseParts = {
+			"precondition", "Precondition",
+			"focus", "Focus",
+			"verification", "Verification",
+			"postprocessing", "Postprocessing",
+	};
+	private String[] scriptParts = {
+			"scriptprecondition", "ScriptPrecondition",
+			"scriptpostprocessing", "ScriptPostprocessing",
+	};
+
 	public OutputConfiguration(){
 	}
-	
+
 	public Source getXsltSource() {
 		return xsltSource;
 	}
@@ -81,4 +92,22 @@ public class OutputConfiguration {
 	public boolean isFileValid() {
 		return  getFileExtension() != null;
 	}
+
+	public String[] getTestCaseParts() {
+		return testCaseParts;
+	}
+
+	public void setTestCaseParts(String[] testCaseParts) {
+		this.testCaseParts = testCaseParts;
+	}
+
+	public String[] getScriptParts() {
+		return scriptParts;
+	}
+
+	public void setScriptParts(String[] scriptParts) {
+		this.scriptParts = scriptParts;
+	}
+	
+	
 }
