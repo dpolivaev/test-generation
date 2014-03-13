@@ -25,6 +25,7 @@ public class OutputConfiguration {
 			"scriptprecondition", "ScriptPrecondition",
 			"scriptpostprocessing", "ScriptPostprocessing",
 	};
+	public static final int FOCUS_INDEX = 2;
 
 	public OutputConfiguration(){
 	}
@@ -118,6 +119,11 @@ public class OutputConfiguration {
 		propertyIndex += 2;
 		scriptParts[propertyIndex] = scriptPostprocessing;
 	}
+	
+	public String getFocusPropertyName() {
+		return getTestCaseParts()[FOCUS_INDEX];
+	}
+
 	
 	
 }

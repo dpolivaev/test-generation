@@ -13,9 +13,6 @@ import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 
 public class TestIdProvider implements ValueProvider{
 	
-	private static final int FOCUS_INDEX = 2;
-
-
 	public static Strategy strategy(OutputConfiguration outputConfiguration, String propertyName){
 		Strategy strategy = new Strategy();
 		TestIdProvider instance = new TestIdProvider(outputConfiguration, "=", " ");
@@ -42,7 +39,7 @@ public class TestIdProvider implements ValueProvider{
 
 			@Override
 			protected boolean includesAssignment(Assignment assignment) {
-				return assignment.rule.forcesIteration() || assignment.getTargetedPropertyName().equals(outputConfiguration.getTestCaseParts()[FOCUS_INDEX]);
+				return assignment.rule.forcesIteration() || assignment.getTargetedPropertyName().equals(outputConfiguration.getFocusPropertyName());
 			}
 
 			@Override
