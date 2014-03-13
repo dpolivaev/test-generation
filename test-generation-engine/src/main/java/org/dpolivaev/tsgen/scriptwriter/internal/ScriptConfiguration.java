@@ -10,17 +10,6 @@ import org.xml.sax.ContentHandler;
 public class ScriptConfiguration {
 	final public OutputConfiguration outputConfiguration;
 	final public String scriptName;
-	final String[] testCaseParts = {
-	    "precondition", "Precondition",
-	    "focus", "Focus",
-	    "verification", "Verification",
-	    "postprocessing", "Postprocessing",
-	};
-	final String[] scriptParts = {
-	    "scriptprecondition", "ScriptPrecondition",
-	    "scriptpostprocessing", "ScriptPostprocessing",
-	};
-
 	public ScriptConfiguration(OutputConfiguration outputConfiguration, String scriptName) {
 		super();
 		this.outputConfiguration = outputConfiguration;
@@ -47,6 +36,14 @@ public class ScriptConfiguration {
 	}
 
 	XmlTestCaseWriter testCaseWriter(XmlWriter xmlWriter, GoalChecker goalChecker) {
-		return new XmlTestCaseWriter(xmlWriter, testCaseParts, goalChecker);
+		return new XmlTestCaseWriter(xmlWriter, getTestCaseParts(), goalChecker);
+	}
+
+	String[] getScriptParts() {
+		return outputConfiguration.getScriptParts();
+	}
+
+	String[] getTestCaseParts() {
+		return outputConfiguration.getTestCaseParts();
 	}
 }

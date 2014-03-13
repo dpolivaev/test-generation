@@ -32,7 +32,7 @@ public class SingleScriptWriter implements PropertyHandler {
         	driverValue = scriptValue + "Driver";
         xmlWriter.setAttribute("driver", driverValue.toString());
         testCaseProducer.addAttributes(propertyContainer, "script");
-        testCaseProducer.addParts(propertyContainer, scriptConfiguration.scriptParts);
+        testCaseProducer.addParts(propertyContainer, scriptConfiguration.getScriptParts());
         scriptProducer = testCaseProducer;
     }
 

@@ -50,7 +50,7 @@ public class XmlTestCaseWriterTest {
 		Mockito.when(goal.checkList()).thenReturn(checkList);
 		GoalChecker goalChecker = new GoalChecker();
 		goalChecker.addGoal(goal);
-        writer = new ScriptConfiguration(null, null).testCaseWriter(xmlWriter, goalChecker);
+        writer = new ScriptConfiguration(new OutputConfiguration(), null).testCaseWriter(xmlWriter, goalChecker);
         propertyContainer = new Assignments();
     }
 
