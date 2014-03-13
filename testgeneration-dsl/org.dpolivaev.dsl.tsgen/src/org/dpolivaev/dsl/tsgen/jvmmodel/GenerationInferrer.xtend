@@ -44,6 +44,8 @@ import org.dpolivaev.tsgen.ruleengine.SpecialValue
 import org.dpolivaev.tsgen.coverage.CoverageTracker
 import org.dpolivaev.tsgen.coverage.TrackingRuleEngine
 import org.dpolivaev.tsgen.coverage.CoverageTrackerEnabler
+import org.dpolivaev.dsl.tsgen.strategydsl.Run
+import org.dpolivaev.dsl.tsgen.strategydsl.TestStructure
 
 class GenerationInferrer{
 	@Inject Injector injector
@@ -468,6 +470,7 @@ class GenerationInferrer{
 			jvmType.members += run.toMethod(methodName, run.newTypeRef(void)) [
 				body = [
 					appendOutputConfiguration(it, "output", run, run.outputConfiguration)
+					configureTestProperties(it, run.testStructure)
 					appendOutputConfiguration(it, "report", run, run.reportConfiguration)
 					newLine
 					append(run.newTypeRef(CoverageTracker).type)
@@ -512,7 +515,14 @@ class GenerationInferrer{
 			]
 		}
 	}
-
+def private configureTestProperties(ITreeAppendable it, TestStructure testStructure){
+	if(testStructure != null){
+		newLine
+		append('''__output.setScriptPropertyNames("«testStructure.scriptPrecondition»", "«testStructure.scriptPostprocessing»");''')
+		newLine
+		append('''__output.setTestCasePropertyNames("«testStructure.precondition»", "«testStructure.focus»", "«testStructure.verification»", "«testStructure.postprocessing»");''')
+	}
+}
 	def private appendOutputConfiguration(ITreeAppendable it, String target, EObject context, OutputConfiguration outputConfiguration) {
 		newLine
 		append(context.newTypeRef(org.dpolivaev.tsgen.scriptwriter.OutputConfiguration).type)
