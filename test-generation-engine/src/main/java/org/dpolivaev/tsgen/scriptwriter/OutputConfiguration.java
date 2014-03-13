@@ -100,13 +100,17 @@ public class OutputConfiguration {
 
 	public void setTestCasePropertyNames(String precondition, String focus, String verification, String postprocessing) {
 		int propertyIndex = 0;
-		testCaseParts[propertyIndex] = precondition;
+		if (precondition != null )
+			testCaseParts[propertyIndex] = precondition;
 		propertyIndex += 2;
-		testCaseParts[propertyIndex] = focus;
+		if (focus != null )
+			testCaseParts[propertyIndex] = focus;
 		propertyIndex += 2;
-		testCaseParts[propertyIndex] = verification;
+		if (verification != null )
+			testCaseParts[propertyIndex] = verification;
 		propertyIndex += 2;
-		testCaseParts[propertyIndex] = postprocessing;
+		if (postprocessing != null )
+			testCaseParts[propertyIndex] = postprocessing;
 	}
 
 	public String[] getScriptParts() {
@@ -115,9 +119,11 @@ public class OutputConfiguration {
 
 	public void setScriptPropertyNames(String scriptPrecondition, String scriptPostprocessing) {
 		int propertyIndex = 0;
-		scriptParts[propertyIndex] = scriptPrecondition;
+		if (scriptPrecondition != null )
+			scriptParts[propertyIndex] = scriptPrecondition;
 		propertyIndex += 2;
-		scriptParts[propertyIndex] = scriptPostprocessing;
+		if (scriptPostprocessing != null )
+			scriptParts[propertyIndex] = scriptPostprocessing;
 	}
 	
 	public String getFocusPropertyName() {

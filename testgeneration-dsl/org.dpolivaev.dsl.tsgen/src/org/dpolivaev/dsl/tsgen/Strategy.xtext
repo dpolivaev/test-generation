@@ -74,10 +74,13 @@ Run:
 ;
 
 TestStructure:
-	'keywords'
-	scriptPrecondition = PROPERTY_ID ','
-	precondition = PROPERTY_ID ',' focus=PROPERTY_ID ',' verification=PROPERTY_ID ',' postprocessing = PROPERTY_ID ','  
-	scriptPostprocessing = PROPERTY_ID 
+	dummy = 'use'
+	(scriptPrecondition = PROPERTY_ID 'as script precondition')
+	?& (precondition = PROPERTY_ID 'as precondition') 
+	?& (focus = PROPERTY_ID 'as focus') 
+	?& (verification = PROPERTY_ID 'as verification') 
+	?& (postprocessing = PROPERTY_ID 'as postprocessing') 
+	?& (scriptPostprocessing = PROPERTY_ID 'as script postprocessing')?
 	
 ;
 
