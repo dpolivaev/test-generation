@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 
 import org.dpolivaev.tsgen.coverage.CheckList;
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
@@ -22,18 +21,14 @@ public class XmlTestCaseWriter implements PropertyHandler {
 	private static final String TESTCASE_PROPERTY = "testcase";
     private static final String TESTCASE_ELEMENT = "TestCase";
     
-    private static final String[] testCaseParts = {
-        "precondition", "Precondition",
-        "focus", "Focus",
-        "verification", "Verification",
-        "postprocessing", "Postprocessing",
-    };
     private final XmlWriter xmlWriter;
 	private GoalChecker goalChecker;
+	final private String[] testCaseParts;
 
-    public XmlTestCaseWriter(XmlWriter xmlWriter, GoalChecker goalChecker) {
+    public XmlTestCaseWriter(XmlWriter xmlWriter, String[] testCaseParts, GoalChecker goalChecker) {
     	this.xmlWriter = xmlWriter;
 		this.goalChecker = goalChecker;
+		this.testCaseParts = testCaseParts;
 	}
 
 	@Override
