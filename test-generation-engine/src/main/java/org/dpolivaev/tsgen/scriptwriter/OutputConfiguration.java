@@ -15,13 +15,13 @@ public class OutputConfiguration {
 	
 	public static final OutputConfiguration OUTPUT_NOTHING = new OutputConfiguration();
 
-	private String[] testCaseParts = {
+	final private String[] testCaseParts = {
 			"precondition", "Precondition",
 			"focus", "Focus",
 			"verification", "Verification",
 			"postprocessing", "Postprocessing",
 	};
-	private String[] scriptParts = {
+	final private String[] scriptParts = {
 			"scriptprecondition", "ScriptPrecondition",
 			"scriptpostprocessing", "ScriptPostprocessing",
 	};
@@ -97,16 +97,26 @@ public class OutputConfiguration {
 		return testCaseParts;
 	}
 
-	public void setTestCaseParts(String[] testCaseParts) {
-		this.testCaseParts = testCaseParts;
+	public void setTestCasePropertyNames(String precondition, String focus, String verification, String postprocessing) {
+		int propertyIndex = 0;
+		testCaseParts[propertyIndex] = precondition;
+		propertyIndex += 2;
+		testCaseParts[propertyIndex] = focus;
+		propertyIndex += 2;
+		testCaseParts[propertyIndex] = verification;
+		propertyIndex += 2;
+		testCaseParts[propertyIndex] = postprocessing;
 	}
 
 	public String[] getScriptParts() {
 		return scriptParts;
 	}
 
-	public void setScriptParts(String[] scriptParts) {
-		this.scriptParts = scriptParts;
+	public void setScriptPropertyNames(String scriptPrecondition, String scriptPostprocessing) {
+		int propertyIndex = 0;
+		scriptParts[propertyIndex] = scriptPrecondition;
+		propertyIndex += 2;
+		scriptParts[propertyIndex] = scriptPostprocessing;
 	}
 	
 	
