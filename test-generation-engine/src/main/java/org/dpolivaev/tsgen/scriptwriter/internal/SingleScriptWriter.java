@@ -4,7 +4,6 @@ import org.dpolivaev.tsgen.coverage.GoalChecker;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
-import org.xml.sax.ContentHandler;
 
 public class SingleScriptWriter implements PropertyHandler {
 
@@ -24,8 +23,7 @@ public class SingleScriptWriter implements PropertyHandler {
     }
 
     public SingleScriptWriter(PropertyContainer propertyContainer, ScriptConfiguration scriptConfiguration, ResultFactory resultFactory, GoalChecker goalChecker) {
-        ContentHandler handler = new HandlerFactory(resultFactory).newHandler(scriptConfiguration);
-        xmlWriter = new SaxXmlWriter(handler);
+    	xmlWriter = scriptConfiguration.xmlWriter(resultFactory);
         xmlWriter.startDocument();
         XmlTestCaseWriter testCaseProducer = new XmlTestCaseWriter(xmlWriter, goalChecker);
         xmlWriter.beginElement("Script");
@@ -42,8 +40,8 @@ public class SingleScriptWriter implements PropertyHandler {
         testCaseProducer.addParts(propertyContainer, scriptParts);
         scriptProducer = testCaseProducer;
     }
-    
-     public void generationFinished() {
+
+	public void generationFinished() {
         xmlWriter.endElement("Script");
         xmlWriter.endDocument();
     }

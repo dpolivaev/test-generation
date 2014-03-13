@@ -3,6 +3,7 @@ package org.dpolivaev.tsgen.scriptwriter.internal;
 import java.io.File;
 
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
+import org.xml.sax.ContentHandler;
 
 
 public class ScriptConfiguration {
@@ -27,5 +28,10 @@ public class ScriptConfiguration {
 
 	public boolean isFileValid() {
 		return outputConfiguration.isFileValid();
+	}
+
+	XmlWriter xmlWriter(ResultFactory resultFactory) {
+		ContentHandler handler = new HandlerFactory(resultFactory).newHandler(this);
+	    return new SaxXmlWriter(handler);
 	}
 }
