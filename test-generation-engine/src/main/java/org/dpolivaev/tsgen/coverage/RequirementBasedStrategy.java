@@ -13,11 +13,10 @@ public class RequirementBasedStrategy {
 		this.strategy = strategy;
 	}
 	
-	public RequirementBasedStrategy(CoverageEntry[] items) {
+	public RequirementBasedStrategy(CoverageEntry... items) {
 		this(new RequirementChecker(), new Strategy());
 		requirementChecker.addItems(items);
 	}
-	
 	public void registerRequiredItems(WriterFactory runner){
 		requirementChecker.registerRequiredItems(runner);
 	}
