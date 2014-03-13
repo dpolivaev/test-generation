@@ -7,8 +7,7 @@ import org.dpolivaev.tsgen.strategies.StrategyHelper
  * using predefined rules for test case id and test case description
  * available as StrategyHelper method
  */
-strategy parkCostCalculatorTests 
-	extends StrategyHelper.id("testcase") with StrategyHelper.description("testcaseDescription")
+strategy parkCostCalculatorTests
 
 /*
  * Set properties used by the writer as generated test class, 
