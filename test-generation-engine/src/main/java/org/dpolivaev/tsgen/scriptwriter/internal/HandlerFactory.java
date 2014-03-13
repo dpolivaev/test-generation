@@ -26,19 +26,21 @@ public class HandlerFactory {
             SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", null);
             final OutputConfiguration outputConfiguration = scriptConfiguration.outputConfiguration;
 			Source xsltSource = outputConfiguration.getXsltSource();
-            final TransformerHandler transformerHandler = xsltSource != null ? tf.newTransformerHandler(xsltSource) :  tf.newTransformerHandler();
-			final TransformerHandler xsltHandler = autoCloseStream(transformerHandler);
-            if(xsltSource == null){
-            	setOutputProperties(autoCloseStream(xsltHandler));
-            }
-            autoCloseStream(xsltHandler).setResult(result);
+            final TransformerHandler xsltHandler = xsltSource != null ? tf.newTransformerHandler(xsltSource) :  tf.newTransformerHandler();
+            if(xsltSource == null)
+				setOutputProperties(xsltHandler);
+            else
+            	xsltHandler.getTransformer().setParameter("scriptConfiguration", this);
+            final TransformerHandler closingXsltHandler = autoCloseStream(xsltHandler);
+			closingXsltHandler.setResult(result);
             if(xsltSource == null || outputConfiguration.getXmlExtension() == null)
-            	return autoCloseStream(xsltHandler);
+            	return closingXsltHandler;
 			TransformerHandler plainXmlHandler = tf.newTransformerHandler();
 			final File xmlFile = scriptConfiguration.xmlFile();
-        	setOutputProperties(autoCloseStream(plainXmlHandler));
-			autoCloseStream(plainXmlHandler).setResult(new StreamResultFactory().streamResult(xmlFile));
-            return new ContentHandlerMultiplier(autoCloseStream(plainXmlHandler), autoCloseStream(xsltHandler));
+        	setOutputProperties(plainXmlHandler);
+			final TransformerHandler closingXmlHandler = autoCloseStream(plainXmlHandler);
+			closingXmlHandler.setResult(new StreamResultFactory().streamResult(xmlFile));
+            return new ContentHandlerMultiplier(closingXmlHandler, closingXsltHandler);
             
         }
         catch (Exception e) {
@@ -52,7 +54,7 @@ public class HandlerFactory {
 	}
 
 	public void setOutputProperties(final TransformerHandler xsltHandler) {
-		Transformer transformer = autoCloseStream(xsltHandler).getTransformer();
+		Transformer transformer = xsltHandler.getTransformer();
 		transformer.setOutputProperty(OutputKeys.INDENT,"yes");
 		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 	}
