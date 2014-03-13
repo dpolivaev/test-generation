@@ -46,6 +46,7 @@ import org.dpolivaev.tsgen.coverage.TrackingRuleEngine
 import org.dpolivaev.tsgen.coverage.CoverageTrackerEnabler
 import org.dpolivaev.dsl.tsgen.strategydsl.Run
 import org.dpolivaev.dsl.tsgen.strategydsl.TestStructure
+import org.dpolivaev.tsgen.strategies.StrategyHelper
 
 class GenerationInferrer{
 	@Inject Injector injector
@@ -508,7 +509,11 @@ class GenerationInferrer{
 						}
 					}
 					newLine append('__writerFactory.configureEngine(__ruleEngine);')
-					newLine combinedStrategy(it, run.strategies, true) append('.run(__ruleEngine);')
+					newLine append('new ') append(run.newTypeRef(RequirementBasedStrategy).type) append('()')
+					append('.with(') append(run.newTypeRef(StrategyHelper).type) append('.id(__outputConfiguration, "testcase"))')
+					append('.with(') append(run.newTypeRef(StrategyHelper).type) append('.description(__outputConfiguration, "testcaseDescription"))')
+					append('.with(') 
+					combinedStrategy(it, run.strategies, true) append(').run(__ruleEngine);')
 				]
 				visibility = JvmVisibility::PUBLIC
 				static = true

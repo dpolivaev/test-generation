@@ -544,6 +544,7 @@ import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
+import org.dpolivaev.tsgen.strategies.StrategyHelper;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -564,7 +565,7 @@ public class MyFile {
     __writerFactory.addCoverageTracker(__coverageTracker);
     RuleEngine __ruleEngine = new TrackingRuleEngine(__coverageTracker);
     __writerFactory.configureEngine(__ruleEngine);
-    First.run(__ruleEngine);
+    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcaseDescription")).with(First).run(__ruleEngine);
   }
   
   public static void main(final String[] args) {
@@ -588,6 +589,7 @@ import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
+import org.dpolivaev.tsgen.strategies.StrategyHelper;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -616,7 +618,7 @@ public class MyFile {
     __writerFactory.addCoverageTracker(__coverageTracker);
     RuleEngine __ruleEngine = new TrackingRuleEngine(__coverageTracker);
     __writerFactory.configureEngine(__ruleEngine);
-    first.with(second).run(__ruleEngine);
+    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcaseDescription")).with(first.with(second)).run(__ruleEngine);
   }
   
   public static void main(final String[] args) {
@@ -696,6 +698,7 @@ import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
+import org.dpolivaev.tsgen.strategies.StrategyHelper;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -717,7 +720,7 @@ public class MyFile {
     __writerFactory.addCoverageTracker(__coverageTracker);
     RuleEngine __ruleEngine = new TrackingRuleEngine(__coverageTracker);
     __writerFactory.configureEngine(__ruleEngine);
-    First.run(__ruleEngine);
+    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcaseDescription")).with(First).run(__ruleEngine);
   }
   
   public static void main(final String[] args) {
@@ -740,6 +743,7 @@ import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
+import org.dpolivaev.tsgen.strategies.StrategyHelper;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -761,7 +765,7 @@ public class MyFile {
     __writerFactory.addCoverageTracker(__coverageTracker);
     RuleEngine __ruleEngine = new TrackingRuleEngine(__coverageTracker);
     __writerFactory.configureEngine(__ruleEngine);
-    First.run(__ruleEngine);
+    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcaseDescription")).with(First).run(__ruleEngine);
   }
   
   public static void main(final String[] args) {
@@ -786,6 +790,7 @@ import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
+import org.dpolivaev.tsgen.strategies.StrategyHelper;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -809,7 +814,7 @@ public class MyFile {
     __writerFactory.addCoverageTracker(__coverageTracker);
     RuleEngine __ruleEngine = new TrackingRuleEngine(__coverageTracker);
     __writerFactory.configureEngine(__ruleEngine);
-    First.run(__ruleEngine);
+    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcaseDescription")).with(First).run(__ruleEngine);
   }
   
   public static void main(final String[] args) {
@@ -832,6 +837,7 @@ import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
+import org.dpolivaev.tsgen.strategies.StrategyHelper;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -853,7 +859,7 @@ public class MyFile {
     __writerFactory.addCoverageTracker(__coverageTracker);
     RuleEngine __ruleEngine = new TrackingRuleEngine(__coverageTracker);
     __writerFactory.configureEngine(__ruleEngine);
-    First.run(__ruleEngine);
+    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcaseDescription")).with(First).run(__ruleEngine);
   }
   
   public static void main(final String[] args) {
@@ -879,6 +885,7 @@ import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
+import org.dpolivaev.tsgen.strategies.StrategyHelper;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -902,7 +909,7 @@ public class MyFile {
     First.registerRequiredItems(__writerFactory);
     RuleEngine __ruleEngine = new TrackingRuleEngine(__coverageTracker);
     __writerFactory.configureEngine(__ruleEngine);
-    First.run(__ruleEngine);
+    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcaseDescription")).with(First).run(__ruleEngine);
   }
   
   public static void main(final String[] args) {
