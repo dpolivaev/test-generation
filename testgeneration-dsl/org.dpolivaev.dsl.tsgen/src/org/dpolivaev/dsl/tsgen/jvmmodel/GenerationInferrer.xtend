@@ -518,9 +518,9 @@ class GenerationInferrer{
 def private configureTestProperties(ITreeAppendable it, TestStructure testStructure){
 	if(testStructure != null){
 		newLine
-		append('''__output.setScriptPropertyNames("«testStructure.scriptPrecondition»", "«testStructure.scriptPostprocessing»");''')
+		append('''__outputConfiguration.setScriptPropertyNames("«testStructure.scriptPrecondition»", "«testStructure.scriptPostprocessing»");''')
 		newLine
-		append('''__output.setTestCasePropertyNames("«testStructure.precondition»", "«testStructure.focus»", "«testStructure.verification»", "«testStructure.postprocessing»");''')
+		append('''__outputConfiguration.setTestCasePropertyNames("«testStructure.precondition»", "«testStructure.focus»", "«testStructure.verification»", "«testStructure.postprocessing»");''')
 	}
 }
 	def private appendOutputConfiguration(ITreeAppendable it, String target, EObject context, OutputConfiguration outputConfiguration) {

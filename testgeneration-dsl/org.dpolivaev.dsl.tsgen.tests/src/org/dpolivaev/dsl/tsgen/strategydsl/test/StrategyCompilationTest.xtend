@@ -801,8 +801,8 @@ public class MyFile {
     
     OutputConfiguration __outputConfiguration = new OutputConfiguration();
     __outputConfiguration.setFileDirectory("testoutput").setFileExtension("xml");
-    __output.setScriptPropertyNames("beforeAll", "afterAll");
-    __output.setTestCasePropertyNames("given", "when", "then", "after");
+    __outputConfiguration.setScriptPropertyNames("beforeAll", "afterAll");
+    __outputConfiguration.setTestCasePropertyNames("given", "when", "then", "after");
     OutputConfiguration __reportConfiguration = new OutputConfiguration();
     CoverageTracker __coverageTracker = new CoverageTracker();
     WriterFactory __writerFactory = new WriterFactory(__outputConfiguration, __reportConfiguration);
