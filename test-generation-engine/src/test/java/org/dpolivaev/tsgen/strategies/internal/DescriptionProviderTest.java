@@ -56,7 +56,7 @@ public class DescriptionProviderTest {
 		givenAssignment("precondition", "precondition","");
 		givenAssignment("focus", "focus(x)","");
 		givenAssignment("x", "x","");
-		givenAssignment("focus1", "focus1","");
+		givenAssignment("focus#1", "focus1","");
 		givenAssignment("verification", "verification","");
 		givenAssignment("postprocessing", "postprocessing","");
 		givenAssignment("script", "script","");

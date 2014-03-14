@@ -12,7 +12,7 @@ import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 import org.dpolivaev.tsgen.scriptwriter.internal.PartValueParser;
 
 public class AssignmentFilter {
-	private static final Pattern NUMBER_REGEX =  Pattern.compile("\\d*");
+	private static final Pattern NUMBER_REGEX =  Pattern.compile("#\\d*");
 	final private PropertyContainer propertyContainer;
 	final private String[] testCaseParts;
 

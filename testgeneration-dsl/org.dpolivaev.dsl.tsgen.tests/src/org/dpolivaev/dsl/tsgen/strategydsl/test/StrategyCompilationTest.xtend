@@ -777,14 +777,10 @@ public class MyFile {
 
 	@Test def runWithKeywords() {
 		'''
+			use beforeAll as scriptPrecondition, given as precondition, when as focus,
+			then as verification, after as postprocessing, afterAll as scriptPostprocessing
 			strategy First
 			run strategy First
-			use beforeAll as script precondition 
-			given as precondition 
-			when as focus
-			then as verification 
-			after as postprocessing
-			afterAll as script postprocessing  
 			output "testoutput/xml"
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
