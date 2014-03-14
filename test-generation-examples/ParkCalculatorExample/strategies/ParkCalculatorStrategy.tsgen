@@ -1,5 +1,12 @@
 package parkcalculator.testgeneration
 
+/*
+ * Default test part property names 
+ * (scriptPrecondition, precondition, focus, verification, postcondition, scriptPostcondition) 
+ * can be replaced by the others applying directive "use" like this.
+ */
+use assert as verification
+
 /* 
  * Declare strategy parkCostCalculatorTests 
  * using predefined rules for test case id and test case description
@@ -29,16 +36,16 @@ let category be "success"{
 	let focus be "calculate parking costs"{
 		
 		/*
-		 * For this focus define preconditions and verification steps
+		 * For this focus define preconditions and assert steps
 		 */		
 		let precondition#1 be "select lot (parking lot)"
 		let precondition#2 be "set entry time (entry time)"
 		let precondition#3 be "set parking duration (weeks, days, hours, minutes)"
 		
-		/* Keyword "default" means that property “verification” is lasily evaluated 
+		/* Keyword "default" means that property “assert” is lasily evaluated 
 		 * and can be redefined adding another value to the rule set.
 		 */
-		let default verification be "verify parking costs (expectedCosts)"
+		let default assert be "verify parking costs (expectedCosts)"
 		
 		/* 
 		 * Define multiple values for parameter “entryTime” of the second precondition.
@@ -136,7 +143,7 @@ let category be "success"{
 			}, 
 			"LONG_TERM_SURFACE_PARKING"{
 				// verification performed by driver
-				let verification be ("verify parking costs for lot ":"parking lot")
+				let assert be ("verify parking costs for lot ":"parking lot")
 				let hours be 0, 4, 5, 23 {
 					let minutes be 0,1, 59
 				}
