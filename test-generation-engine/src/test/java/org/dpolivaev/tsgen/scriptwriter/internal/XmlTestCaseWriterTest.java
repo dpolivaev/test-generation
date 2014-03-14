@@ -118,7 +118,7 @@ public class XmlTestCaseWriterTest {
     public void createsTestCaseElementWithTwoFocusPartsAndContent() throws Exception{
         givenProperty("testcase", "testcase");
         givenProperty("focus", "focus");
-        givenProperty("focus1", "focus1");
+        givenProperty("focus#1", "focus1");
         createScript();
         checkOutput("<TestCase id='testcase'><Focus id='focus'/><Focus id='focus1'/></TestCase>");
     }
@@ -127,8 +127,8 @@ public class XmlTestCaseWriterTest {
     public void createsTestCaseElementWithThreeFocusPartsAndContent() throws Exception{
         givenProperty("testcase", "testcase");
         givenProperty("focus", "focus");
-        givenProperty("focus1", "focus1");
-        givenProperty("focus3", "focus3");
+        givenProperty("focus#1", "focus1");
+        givenProperty("focus#3", "focus3");
         createScript();
         checkOutput("<TestCase id='testcase'><Focus id='focus'/><Focus id='focus1'/><Focus id='focus3'/></TestCase>");
     }

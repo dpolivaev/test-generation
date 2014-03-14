@@ -46,7 +46,7 @@ public class TestIdProviderTest {
 	}
 	@Test
 	public void includesFoc1(){
-		givenAssignment("when1", "value", "");
+		givenAssignment("when#1", "value", "");
 		assertThat((String)testIdProvider.value(assignments), equalTo("value"));
 		
 	}

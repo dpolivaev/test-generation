@@ -90,8 +90,8 @@ public class XmlScriptWriterTest {
     @Test
     public void createsScriptWithAllPartsAndContent() throws Exception{
         givenProperty("script", "scriptName");
-        givenProperty("scriptprecondition", "global precondition");
-        givenProperty("scriptpostprocessing", "global postprocessing");
+        givenProperty("scriptPrecondition#2", "global precondition");
+        givenProperty("scriptPostprocessing", "global postprocessing");
         givenProperty("testcase", "testcase 1");
         final DOMResult dom = createScript();
         checkOutput(dom, "<Script id='scriptName' driver='scriptNameDriver'>" +

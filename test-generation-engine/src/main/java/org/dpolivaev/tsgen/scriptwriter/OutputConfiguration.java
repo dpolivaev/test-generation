@@ -2,6 +2,7 @@ package org.dpolivaev.tsgen.scriptwriter;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Arrays;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
@@ -22,8 +23,8 @@ public class OutputConfiguration {
 			"postprocessing", "Postprocessing",
 	};
 	final private String[] scriptParts = {
-			"scriptprecondition", "ScriptPrecondition",
-			"scriptpostprocessing", "ScriptPostprocessing",
+			"scriptPrecondition", "ScriptPrecondition",
+			"scriptPostprocessing", "ScriptPostprocessing",
 	};
 	public static final int FOCUS_INDEX = 2;
 
@@ -128,6 +129,10 @@ public class OutputConfiguration {
 	
 	public String getFocusPropertyName() {
 		return getTestCaseParts()[FOCUS_INDEX];
+	}
+	
+	public boolean isPart(String name){
+		return Arrays.asList(testCaseParts).contains(name) || Arrays.asList(scriptParts).contains(name);
 	}
 
 	

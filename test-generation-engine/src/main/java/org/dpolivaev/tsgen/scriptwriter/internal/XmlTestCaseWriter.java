@@ -99,8 +99,8 @@ public class XmlTestCaseWriter implements PropertyHandler {
         if(propertyContainer.containsPropertyValue(property))
             addPart(propertyContainer, property, element);
         for(int i = 1; i <= 99; i++)
-            if(propertyContainer.containsPropertyValue(property + i))
-                addPart(propertyContainer, property + i, element);
+            if(propertyContainer.containsPropertyValue(property + '#' + i))
+                addPart(propertyContainer, property + '#' + i, element);
     }
 
     private void addPart(PropertyContainer propertyContainer, String property, String element) {

@@ -45,8 +45,10 @@ import org.dpolivaev.tsgen.coverage.CoverageTracker
 import org.dpolivaev.tsgen.coverage.TrackingRuleEngine
 import org.dpolivaev.tsgen.coverage.CoverageTrackerEnabler
 import org.dpolivaev.dsl.tsgen.strategydsl.Run
-import org.dpolivaev.dsl.tsgen.strategydsl.TestStructure
+//import org.dpolivaev.dsl.tsgen.strategydsl.TestStructure
 import org.dpolivaev.tsgen.strategies.StrategyHelper
+import org.dpolivaev.dsl.tsgen.strategydsl.PropertyMapping
+import java.util.HashMap
 
 class GenerationInferrer{
 	@Inject Injector injector
@@ -471,7 +473,7 @@ class GenerationInferrer{
 			jvmType.members += run.toMethod(methodName, run.newTypeRef(void)) [
 				body = [
 					appendOutputConfiguration(it, "output", run, run.outputConfiguration)
-					configureTestProperties(it, run.testStructure)
+					configureTestProperties(it, script.propertyMapping)
 					appendOutputConfiguration(it, "report", run, run.reportConfiguration)
 					newLine
 					append(run.newTypeRef(CoverageTracker).type)
@@ -520,12 +522,18 @@ class GenerationInferrer{
 			]
 		}
 	}
-def private configureTestProperties(ITreeAppendable it, TestStructure testStructure){
-	if(testStructure != null){
+def private configureTestProperties(ITreeAppendable it, PropertyMapping propertyMapping){
+	if(propertyMapping != null){
+		val propertyMap = new HashMap<String, String>
+		var i = 0;
+		for(replacedName : propertyMapping.defaultNames){
+			propertyMap.put(replacedName, propertyMapping.userNames.get(i));
+			i=i+1;	
+		}
 		newLine
-		append('''__outputConfiguration.setScriptPropertyNames("«testStructure.scriptPrecondition»", "«testStructure.scriptPostprocessing»");''')
+		append('''__outputConfiguration.setScriptPropertyNames("«propertyMap.get("scriptPrecondition")»", "«propertyMap.get("scriptPostprocessing")»");''')
 		newLine
-		append('''__outputConfiguration.setTestCasePropertyNames("«testStructure.precondition»", "«testStructure.focus»", "«testStructure.verification»", "«testStructure.postprocessing»");''')
+		append('''__outputConfiguration.setTestCasePropertyNames("«propertyMap.get("precondition")»", "«propertyMap.get("focus")»", "«propertyMap.get("verification")»", "«propertyMap.get("postprocessing")»");''')
 	}
 }
 	def private appendOutputConfiguration(ITreeAppendable it, String target, EObject context, OutputConfiguration outputConfiguration) {

@@ -7,9 +7,26 @@ generate strategydsl "http://www.dpolivaev.org/dsl/tsgen/strategydsl"
 Generation: {Generation}
 	('package' package = QualifiedName)?
 	importSection=XImportSection?
+	propertyMapping = PropertyMapping?
 	(strategies+=Strategy | oracles += Oracle | /* goals += Goal | */ runs += Run)*
 ;
+
+
+
+PropertyMapping:{PropertyMapping}
+	'use' userNames += PROPERTY_ID 'as' defaultNames += PROPERTY_ID (','  userNames += PROPERTY_ID 'as' defaultNames += PROPERTY_ID)*
+;
+
 	
+
+ID_REST hidden():
+	'.' ID | '#' INT
+;
+
+PROPERTY_ID hidden():
+	ID =>ID_REST* | STRING | '['ID =>ID_REST*']' | '[' STRING ']'
+;
+
 Strategy:
 	'strategy' name=ID ('extends' baseStrategies += ShortFormStrategyReference ('with' baseStrategies += ShortFormStrategyReference)* )?
 		ruleGroups += RuleGroup* 
@@ -67,23 +84,10 @@ Run:
 	('with' (strategies += StrategyReference | /* goals += GoalReference | */ oracles += OracleReference) 
 	   (',' (strategies += StrategyReference | /* goals += GoalReference | */ oracles += OracleReference))*
 	)?
-	testStructure = TestStructure?
 	outputConfiguration = OutputConfiguration?
 	reportConfiguration = ReportConfiguration?
 	
 ;
-
-TestStructure:
-	dummy = 'use'
-	(scriptPrecondition = PROPERTY_ID 'as script precondition')
-	?& (precondition = PROPERTY_ID 'as precondition') 
-	?& (focus = PROPERTY_ID 'as focus') 
-	?& (verification = PROPERTY_ID 'as verification') 
-	?& (postprocessing = PROPERTY_ID 'as postprocessing') 
-	?& (scriptPostprocessing = PROPERTY_ID 'as script postprocessing')?
-	
-;
-
 OutputConfiguration:
 	('output' xml = STRING ',')? 'apply' xslt=STRING 'output' fileExtension = STRING
 	| 'output' xml = STRING
@@ -154,8 +158,4 @@ PropertyCall returns xbase::XExpression hidden():
 LabeledExpression returns xbase::XExpression:
 	=>({LabeledExpression}
 	'[' label = STRING) reason = XExpression?']' (=>expr = XExpression)?
-;
-
-PROPERTY_ID hidden():
-	ID (=> '.' ID)* | STRING | '['ID (=> '.' ID)*']' | '[' STRING ']'
 ;
