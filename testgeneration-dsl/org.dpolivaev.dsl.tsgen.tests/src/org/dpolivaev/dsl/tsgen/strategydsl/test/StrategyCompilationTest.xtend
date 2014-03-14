@@ -779,7 +779,12 @@ public class MyFile {
 		'''
 			strategy First
 			run strategy First
-			keywords beforeAll, given, when, then, after, afterAll  
+			use beforeAll as script precondition 
+			given as precondition 
+			when as focus
+			then as verification 
+			after as postprocessing
+			afterAll as script postprocessing  
 			output "testoutput/xml"
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
