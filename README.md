@@ -32,6 +32,10 @@ The test generation framework can be either installed from update site archive o
 
 Strategy definition DSL is explained in the next chapters using two example projects.
 
+Test generation tutorial
+==========================
+A tutorial demonstrating the test generation on an easy example of testing a log-in page is available in a separate repository at https://github.com/dpolivaev/test-generation-tutorial 
+
 Strategy DSL syntax reference
 ============================
 
