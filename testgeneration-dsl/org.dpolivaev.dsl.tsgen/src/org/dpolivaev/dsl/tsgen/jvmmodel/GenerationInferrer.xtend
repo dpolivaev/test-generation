@@ -513,7 +513,7 @@ class GenerationInferrer{
 					newLine append('__writerFactory.configureEngine(__ruleEngine);')
 					newLine append('new ') append(run.newTypeRef(RequirementBasedStrategy).type) append('()')
 					append('.with(') append(run.newTypeRef(StrategyHelper).type) append('.id(__outputConfiguration, "testcase"))')
-					append('.with(') append(run.newTypeRef(StrategyHelper).type) append('.description(__outputConfiguration, "testcaseDescription"))')
+					append('.with(') append(run.newTypeRef(StrategyHelper).type) append('.description(__outputConfiguration, "testcase.description"))')
 					append('.with(') 
 					combinedStrategy(it, run.strategies, true) append(').run(__ruleEngine);')
 				]

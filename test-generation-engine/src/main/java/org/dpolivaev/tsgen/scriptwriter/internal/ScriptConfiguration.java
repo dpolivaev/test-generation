@@ -36,7 +36,7 @@ public class ScriptConfiguration {
 	}
 
 	XmlTestCaseWriter testCaseWriter(XmlWriter xmlWriter, GoalChecker goalChecker) {
-		return new XmlTestCaseWriter(xmlWriter, getTestCaseParts(), goalChecker);
+		return new XmlTestCaseWriter(xmlWriter, outputConfiguration, goalChecker);
 	}
 
 	String[] getScriptParts() {
