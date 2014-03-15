@@ -73,10 +73,4 @@ public class TestIdProvider implements ValueProvider{
 		final String values = assignmentFormatter.format(testPartProperties);
 		return values.trim();
 	}
-
-	public Collection<Assignment> testPartRelevantAssignments(
-			PropertyContainer propertyContainer) {
-		return new AssignmentFilter(outputConfiguration, propertyContainer).testPartRelevantAssignments();
-	}
-
 }
