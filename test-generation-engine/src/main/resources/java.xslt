@@ -112,8 +112,7 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.scriptw
 	</xsl:template>
 	
 	<xsl:template name="imports">
-		<xsl:text>import static org.junit.Assert.*;
-import org.junit.BeforeClass;
+		<xsl:text>import org.junit.BeforeClass;
 import org.junit.AfterClass;
 import org.junit.Test;
 
