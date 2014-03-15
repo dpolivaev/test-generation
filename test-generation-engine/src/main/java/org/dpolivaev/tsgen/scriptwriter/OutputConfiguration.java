@@ -23,8 +23,8 @@ public class OutputConfiguration {
 			"postprocessing", "Postprocessing",
 	};
 	final private String[] scriptParts = {
-			"scriptPrecondition", "ScriptPrecondition",
-			"scriptPostprocessing", "ScriptPostprocessing",
+			"script.precondition", "ScriptPrecondition",
+			"script.postprocessing", "ScriptPostprocessing",
 	};
 	public static final int FOCUS_INDEX = 2;
 

@@ -531,7 +531,7 @@ def private configureTestProperties(ITreeAppendable it, PropertyMapping property
 			i=i+1;	
 		}
 		newLine
-		append('''__outputConfiguration.setScriptPropertyNames("«propertyMap.get("scriptPrecondition")»", "«propertyMap.get("scriptPostprocessing")»");''')
+		append('''__outputConfiguration.setScriptPropertyNames("«propertyMap.get("script.precondition")»", "«propertyMap.get("script.postprocessing")»");''')
 		newLine
 		append('''__outputConfiguration.setTestCasePropertyNames("«propertyMap.get("precondition")»", "«propertyMap.get("focus")»", "«propertyMap.get("verification")»", "«propertyMap.get("postprocessing")»");''')
 	}
