@@ -6,11 +6,11 @@
 #include "testdriver/call_price_driver.h"
 
 static void global_precondition() {
-
+	// ScriptPrecondition 1
+		call_price_driver_script_precondition(/* some_parameter*/ "12345");
 }
 
 static void global_postprocessing(){
-
 }
 
 /*!

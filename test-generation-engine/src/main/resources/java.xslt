@@ -77,19 +77,44 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.scriptw
 		<xsl:apply-templates/>
 	</xsl:template>
 	
-	<xsl:template match="Script">
-	<xsl:variable name="package" select="java:substring-before-last(@id, '/')"/>
-	<xsl:variable name="class" select="java:upper-first-camel-case-id(java:substring-after-last(@id, '/'))"/>
-	<xsl:variable name="driverpackage" select="java:substring-before-last(@driver, '/')"/>
-	<xsl:variable name="driver" select="java:upper-first-camel-case-id(java:substring-after-last(@driver, '/'))"/>
-	<xsl:if test="$package != ''">
-		<xsl:text>package </xsl:text>
-		<xsl:value-of select="$package"/>
-		<xsl:text>;</xsl:text>
-		<xsl:call-template name="eol"/>
-		<xsl:call-template name="eol"/>
-	</xsl:if>
-	<xsl:text>import static org.junit.Assert.*;
+	<xsl:template name="driver">
+		<xsl:value-of select="java:upper-first-camel-case-id(java:substring-after-last(@driver, '/'))"/>
+	</xsl:template>
+	
+	<xsl:template name="driverPackage">
+		<xsl:variable name="driverpackage" select="java:substring-before-last(@driver, '/')"/>
+		<xsl:if test="$driverpackage != ''">
+			<xsl:text>import </xsl:text>
+			<xsl:value-of select="$driverpackage"/>
+			<xsl:text>.</xsl:text>
+			<xsl:call-template name="driver"/>
+			<xsl:text>;</xsl:text>
+			<xsl:call-template name="eol"/>
+			<xsl:text>import static </xsl:text>
+			<xsl:value-of select="$driverpackage"/>
+			<xsl:text>.</xsl:text>
+			<xsl:call-template name="driver"/>
+			<xsl:text>.*;</xsl:text>
+			<xsl:call-template name="eol"/>
+			<xsl:call-template name="eol"/>
+		</xsl:if>
+	</xsl:template>
+	
+	<xsl:template name="package">
+		<xsl:variable name="package" select="java:substring-before-last(@id, '/')"/>
+		<xsl:if test="$package != ''">
+			<xsl:text>package </xsl:text>
+			<xsl:value-of select="$package"/>
+			<xsl:text>;</xsl:text>
+			<xsl:call-template name="eol"/>
+			<xsl:call-template name="eol"/>
+		</xsl:if>
+	</xsl:template>
+	
+	<xsl:template name="imports">
+		<xsl:text>import static org.junit.Assert.*;
+import org.junit.BeforeClass;
+import org.junit.AfterClass;
 import org.junit.Test;
 
 import org.dpolivaev.tsgen.java.Description;
@@ -97,38 +122,60 @@ import org.dpolivaev.tsgen.java.Coverage;
 import org.dpolivaev.tsgen.java.GoalCoverage;
 
 </xsl:text>
-	<xsl:if test="$driverpackage != ''">
-		<xsl:text>import </xsl:text>
-		<xsl:value-of select="$driverpackage"/>
-		<xsl:text>.</xsl:text>
-		<xsl:value-of select="$driver"/>
-		<xsl:text>;</xsl:text>
+		<xsl:if test="Parameter[@name='imports']">
+			<xsl:value-of select="Parameter[@name='imports']"/>
+			<xsl:call-template name="eol"/>
+		</xsl:if>
+		<xsl:call-template name="driverPackage" />
+	</xsl:template>
+	
+	<xsl:template name="driverReference">
+		<xsl:call-template name="driver"/>
+		<xsl:text> driver = new </xsl:text>
+		<xsl:call-template name="driver"/>
+		<xsl:text>();</xsl:text>
+		<xsl:call-template name="eol1"/>
+	</xsl:template>
+	
+	<xsl:template name="scriptPrecondition">
+		<xsl:if test="ScriptPrecondition">
+			<xsl:text>
+	@BeforeClass
+	static public void __setup(){</xsl:text>
+			<xsl:apply-templates select="ScriptPrecondition"/>
+			<xsl:call-template name="eol1"/>
+			<xsl:text>}</xsl:text>
+			<xsl:call-template name="eol1"/>
+		</xsl:if>
+	</xsl:template>	
+	
+	<xsl:template name="scriptPostcondition">
+		<xsl:if test="ScriptPostcondition">
+			<xsl:text>
+	@AfterClass
+	static public void __tearDown(){</xsl:text>
+			<xsl:apply-templates select="ScriptPostcondition"/>
+			<xsl:call-template name="eol1"/>
+			<xsl:text>}</xsl:text>
+			<xsl:call-template name="eol1"/>
+		</xsl:if>
+	</xsl:template>	
+	
+	<xsl:template match="Script">
+		<xsl:call-template name="package" />
+		<xsl:variable name="class" select="java:upper-first-camel-case-id(java:substring-after-last(@id, '/'))"/>
+		<xsl:call-template name="imports" />
+		<xsl:text>@SuppressWarnings("unused")</xsl:text>
 		<xsl:call-template name="eol"/>
-		<xsl:text>import static </xsl:text>
-		<xsl:value-of select="$driverpackage"/>
-		<xsl:text>.</xsl:text>
-		<xsl:value-of select="$driver"/>
-		<xsl:text>.*;</xsl:text>
-		<xsl:call-template name="eol"/>
-		<xsl:call-template name="eol"/>
-	</xsl:if>
-	<xsl:if test="Parameter[@name='imports']">
-		<xsl:value-of select="Parameter[@name='imports']"/>
-		<xsl:call-template name="eol"/>
-	</xsl:if>
-	<xsl:text>@SuppressWarnings("unused")</xsl:text>
-	<xsl:call-template name="eol"/>
-	<xsl:text>public class </xsl:text>
-	<xsl:value-of select="$class"/>
-	<xsl:text> {</xsl:text>
-	<xsl:call-template name="eol1"/>
-	<xsl:value-of select="$driver"/>
-	<xsl:text> driver = new </xsl:text>
-	<xsl:value-of select="$driver"/>
-	<xsl:text>();</xsl:text>
-	<xsl:call-template name="eol1"/>
-	<xsl:apply-templates select="TestCase[@id]"/>
-	<xsl:text>
+		<xsl:text>public class </xsl:text>
+		<xsl:value-of select="$class"/>
+		<xsl:text> {</xsl:text>
+		<xsl:call-template name="eol1"/>
+		<xsl:call-template name="driverReference"/>
+		<xsl:call-template name="scriptPrecondition"/>
+		<xsl:call-template name="scriptPostcondition"/>
+		<xsl:apply-templates select="TestCase[@id]"/>
+		<xsl:text>
 }
 </xsl:text>
 	</xsl:template>
@@ -136,21 +183,21 @@ import org.dpolivaev.tsgen.java.GoalCoverage;
 	<xsl:template match="TestCase"/> 
 	
 	<xsl:template match="TestCase[@id]">
-	<xsl:variable name="method" select="java:lower-first-camel-case-id(@id)"/>
-	<xsl:apply-templates select="Description"/>
-	<xsl:call-template name="Coverage"/>	
-	<xsl:call-template name="eol1"/>
-	<xsl:text>@Test
+		<xsl:variable name="method" select="java:lower-first-camel-case-id(@id)"/>
+		<xsl:apply-templates select="Description"/>
+		<xsl:call-template name="Coverage"/>	
+		<xsl:call-template name="eol1"/>
+		<xsl:text>@Test
 	public void test</xsl:text>
-	<xsl:number format="001"/>
-	<xsl:text>_</xsl:text>
-	<xsl:value-of select="$method"/>
-	<xsl:text>() throws Exception {</xsl:text>
-	<xsl:call-template name="eol2"/>
-	<xsl:apply-templates select="child::*[name() != 'Description' and name() != 'Goal']"/>
-	<xsl:call-template name="eol1"/>
-	<xsl:text>}</xsl:text>
-	<xsl:call-template name="eol1"/>
+		<xsl:number format="001"/>
+		<xsl:text>_</xsl:text>
+		<xsl:value-of select="$method"/>
+		<xsl:text>() throws Exception {</xsl:text>
+		<xsl:call-template name="eol2"/>
+		<xsl:apply-templates select="child::*[name() != 'Description' and name() != 'Goal']"/>
+		<xsl:call-template name="eol1"/>
+		<xsl:text>}</xsl:text>
+		<xsl:call-template name="eol1"/>
 	</xsl:template>
 	
 	<xsl:template match="ScriptPrecondition|Precondition|Focus|Verification|Postprocessing|ScriptPostprocessing">
@@ -175,7 +222,7 @@ import org.dpolivaev.tsgen.java.GoalCoverage;
 		</xsl:if>
 		<xsl:text>/* </xsl:text>
 		<xsl:value-of select="@name"/>
-		<xsl:text>*/ </xsl:text>
+		<xsl:text> */ </xsl:text>
 		<xsl:value-of select="text()"/>
 	</xsl:template>
 	
