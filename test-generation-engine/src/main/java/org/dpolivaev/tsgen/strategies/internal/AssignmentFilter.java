@@ -14,11 +14,11 @@ import org.dpolivaev.tsgen.scriptwriter.internal.PartValueParser;
 public class AssignmentFilter {
 	private static final Pattern NUMBER_REGEX =  Pattern.compile("#\\d*");
 	final private PropertyContainer propertyContainer;
-	final private String[] testCaseParts;
+	final private OutputConfiguration outputConfiguration;
 
 	public AssignmentFilter(OutputConfiguration outputConfiguration, PropertyContainer propertyContainer) {
+		this.outputConfiguration = outputConfiguration;
 		this.propertyContainer = propertyContainer;
-		testCaseParts = outputConfiguration.getTestCaseParts();
 	}
 
 	public Collection<Assignment> testPartRelevantAssignments() {
@@ -27,10 +27,18 @@ public class AssignmentFilter {
 	}
 
 	public Map<String, Assignment> testPartRelevantAssignmentMap() {
+		return testPartRelevantAssignmentMap(outputConfiguration.getTestCaseParts());
+	}
+
+	public Map<String, Assignment> scriptPartRelevantAssignmentMap() {
+		return testPartRelevantAssignmentMap(outputConfiguration.getScriptParts());
+	}
+
+	private Map<String, Assignment> testPartRelevantAssignmentMap(final String[] parts) {
 		Map<String, Assignment> testPartProperties = new LinkedHashMap<>();
 		for(Assignment assignment : propertyContainer.getAssignments()){
 			final String targetedPropertyName = assignment.getTargetedPropertyName();
-			if(isTestPartRelevantProperty(targetedPropertyName)){
+			if(isTestPartRelevantProperty(parts, targetedPropertyName)){
 				final PartValueParser partValueParser = new PartValueParser(assignment.value.toString());
 				testPartProperties.put(targetedPropertyName, new Assignment(assignment.rule, partValueParser.getCalledMethod(), assignment.reason));
 				if(partValueParser.isArgumentListFound()){
@@ -47,9 +55,9 @@ public class AssignmentFilter {
 		return testPartProperties;
 	}
 
-	private boolean isTestPartRelevantProperty(final String propertyName) {
+	private boolean isTestPartRelevantProperty(String[] parts, final String propertyName) {
 		int i = 0;
-		for(String testCasePart : testCaseParts)
+		for(String testCasePart : parts)
 			if(i++ % 2 == 0 && propertyName.startsWith(testCasePart)) {
 				final String numberCandidate = propertyName.substring(testCasePart.length());
 				return numberCandidate.isEmpty() || NUMBER_REGEX.matcher(numberCandidate).matches();
@@ -61,8 +69,11 @@ public class AssignmentFilter {
 		final Collection<Assignment> allAssignments = propertyContainer.getAssignments();
 		final ArrayList<Assignment> descriptionRelevantAssignments = new ArrayList<>(allAssignments.size());
 		final Map<String, Assignment> testPartRelevantAssignmentMap = testPartRelevantAssignmentMap();
+		final Map<String, Assignment> scriptPartRelevantAssignmentMap = scriptPartRelevantAssignmentMap();
 		for(Assignment assignment : allAssignments){
-			if(! testPartRelevantAssignmentMap.containsKey(assignment.getTargetedPropertyName()))
+			final String targetedPropertyName = assignment.getTargetedPropertyName();
+			if(! testPartRelevantAssignmentMap.containsKey(targetedPropertyName)
+					&& ! scriptPartRelevantAssignmentMap.containsKey(targetedPropertyName))
 				descriptionRelevantAssignments.add(assignment);
 		}
 		return descriptionRelevantAssignments;
