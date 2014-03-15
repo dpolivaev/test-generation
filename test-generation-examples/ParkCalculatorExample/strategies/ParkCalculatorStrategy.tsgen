@@ -2,7 +2,7 @@ package parkcalculator.testgeneration
 
 /*
  * Default test part property names 
- * (scriptPrecondition, precondition, focus, verification, postcondition, scriptPostcondition) 
+ * (script.precondition, precondition, focus, verification, postcondition, script.postcondition) 
  * can be replaced by the others applying directive "use" like this.
  */
 use assert as verification
