@@ -101,17 +101,21 @@ public class OutputConfiguration {
 
 	public void setTestCasePropertyNames(String precondition, String focus, String verification, String postprocessing) {
 		int propertyIndex = 0;
-		if (precondition != null )
+		if (containsText(precondition))
 			testCaseParts[propertyIndex] = precondition;
 		propertyIndex += 2;
-		if (focus != null )
+		if (containsText(focus))
 			testCaseParts[propertyIndex] = focus;
 		propertyIndex += 2;
-		if (verification != null )
+		if (containsText(verification))
 			testCaseParts[propertyIndex] = verification;
 		propertyIndex += 2;
-		if (postprocessing != null )
+		if (containsText(postprocessing))
 			testCaseParts[propertyIndex] = postprocessing;
+	}
+
+	private boolean containsText(String string) {
+		return string != null  && ! string.isEmpty();
 	}
 
 	public String[] getScriptParts() {
@@ -120,10 +124,10 @@ public class OutputConfiguration {
 
 	public void setScriptPropertyNames(String scriptPrecondition, String scriptPostprocessing) {
 		int propertyIndex = 0;
-		if (scriptPrecondition != null )
+		if (containsText(scriptPrecondition))
 			scriptParts[propertyIndex] = scriptPrecondition;
 		propertyIndex += 2;
-		if (scriptPostprocessing != null )
+		if (containsText(scriptPostprocessing))
 			scriptParts[propertyIndex] = scriptPostprocessing;
 	}
 	
