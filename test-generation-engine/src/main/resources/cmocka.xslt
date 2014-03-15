@@ -101,13 +101,11 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.scriptw
 	<xsl:call-template name="eol"/>
 	<xsl:call-template name="eol"/>
 	<xsl:text>static void global_precondition() {</xsl:text>
-	<xsl:call-template name="eol"/>
 	<xsl:apply-templates select="ScriptPrecondition"/>
 	<xsl:text>
 }
 
 static void global_postprocessing(){</xsl:text>
-	<xsl:call-template name="eol"/>
 	<xsl:apply-templates select="ScriptPostprocessing"/>
 	<xsl:text>
 }
