@@ -777,8 +777,8 @@ public class MyFile {
 
 	@Test def runWithKeywords() {
 		'''
-			use beforeAll as scriptPrecondition, given as precondition, when as focus,
-			then as verification, after as postprocessing, afterAll as scriptPostprocessing
+			use beforeAll as script.precondition, given as precondition, when as focus,
+			then as verification, after as postprocessing, afterAll as script.postprocessing
 			strategy First
 			run strategy First
 			output "testoutput/xml"
