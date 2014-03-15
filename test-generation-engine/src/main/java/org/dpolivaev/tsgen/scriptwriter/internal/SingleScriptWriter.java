@@ -27,10 +27,6 @@ public class SingleScriptWriter implements PropertyHandler {
         	scriptValue = "script";
         	xmlWriter.setAttribute("id", "script");
         }
-        Object driverValue = propertyContainer.get("driver");
-        if(driverValue.equals(SpecialValue.UNDEFINED))
-        	driverValue = scriptValue + "Driver";
-        xmlWriter.setAttribute("driver", driverValue.toString());
         testCaseProducer.addAttributes(propertyContainer, "script");
         testCaseProducer.addParts(propertyContainer, scriptConfiguration.getScriptParts());
         scriptProducer = testCaseProducer;

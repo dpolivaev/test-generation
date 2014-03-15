@@ -82,17 +82,8 @@ public class XmlTestCaseWriterTest {
     }
 
      @Test
-    public void createsTestCaseElementWithArbitraryAttribute() throws Exception{
-        givenProperty("testcase.attribute", "attribute");
-        createScript();
-        checkOutput("<TestCase>"
-        		+ "<Parameter name='attribute'>attribute</Parameter>"
-        		+ "</TestCase>");
-    }
-    
-     @Test
     public void createsTestCaseElementWithDescription() throws Exception{
-        givenProperty("testcaseDescription", "attribute");
+        givenProperty("testcase.description", "attribute");
         createScript();
         checkOutput("<TestCase>"
         		+ "<Description>attribute</Description>"

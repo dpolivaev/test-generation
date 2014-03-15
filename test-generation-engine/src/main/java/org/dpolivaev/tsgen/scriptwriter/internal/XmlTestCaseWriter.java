@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.dpolivaev.tsgen.coverage.CheckList;
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
@@ -14,6 +16,7 @@ import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 import org.dpolivaev.tsgen.ruleengine.internal.PropertyAccessor;
+import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 import org.dpolivaev.tsgen.utils.internal.StringWithNumbersComparator;
 
 public class XmlTestCaseWriter implements PropertyHandler {
@@ -23,12 +26,12 @@ public class XmlTestCaseWriter implements PropertyHandler {
     
     private final XmlWriter xmlWriter;
 	private GoalChecker goalChecker;
-	final private String[] testCaseParts;
+	final private OutputConfiguration outputConfiguration;
 
-    public XmlTestCaseWriter(XmlWriter xmlWriter, String[] testCaseParts, GoalChecker goalChecker) {
+    public XmlTestCaseWriter(XmlWriter xmlWriter, OutputConfiguration outputConfiguration, GoalChecker goalChecker) {
     	this.xmlWriter = xmlWriter;
 		this.goalChecker = goalChecker;
-		this.testCaseParts = testCaseParts;
+		this.outputConfiguration = outputConfiguration;
 	}
 
 	@Override
@@ -36,7 +39,7 @@ public class XmlTestCaseWriter implements PropertyHandler {
         xmlWriter.beginElement(TESTCASE_ELEMENT);
         addAttribute(propertyContainer, TESTCASE_PROPERTY, "id");
 		addParameters(propertyContainer, TESTCASE_PROPERTY);
-        addParts(propertyContainer, testCaseParts);
+        addParts(propertyContainer, outputConfiguration.getTestCaseParts());
         addDescription(propertyContainer, TESTCASE_PROPERTY);
         for(Goal goal : goalChecker.goals())
         	addCoverage(goal.name(), goal.checkList());
@@ -139,12 +142,20 @@ public class XmlTestCaseWriter implements PropertyHandler {
 		final String prefix = property + '.';
         List<String> sortedProperties = new PropertyAccessor(propertyContainer).sortedPropertiesForPrefix(prefix);
         for(String attributeProperty : sortedProperties){
-            Object attributeValue = propertyContainer.get(attributeProperty);
-            if(attributeValue != SpecialValue.UNDEFINED){
-                String attributeName = attributeProperty.substring(prefix.length());
-                addParameterElement(attributeName, attributeValue);
-            }
+        	if(! attributeProperty.equals(prefix + "description") && ! isPart(attributeProperty)){
+        		Object attributeValue = propertyContainer.get(attributeProperty);
+        		if(attributeValue != SpecialValue.UNDEFINED){
+        			String attributeName = attributeProperty.substring(prefix.length());
+        			addParameterElement(attributeName, attributeValue);
+        		}
+        	}
         }
+	}
+
+	static private Pattern PART_PATERN = Pattern.compile("(.*?)(?:#\\d{1,2})?"); 
+	private boolean isPart(String attributeProperty) {
+		final Matcher matcher = PART_PATERN.matcher(attributeProperty);
+		return matcher.matches() && outputConfiguration.isPart(matcher.group(1));
 	}
 
 	private void addParameterElement(String attributeName, Object attributeValue) {
@@ -156,7 +167,7 @@ public class XmlTestCaseWriter implements PropertyHandler {
 
 	private void addDescription(PropertyContainer propertyContainer,
 			String property) {
-		Object value = propertyContainer.get(property+"Description");
+		Object value = propertyContainer.get(property+".description");
         if(!value.equals(SpecialValue.UNDEFINED)) {
         	xmlWriter.beginElement("Description");
         	xmlWriter.addTextContent(value.toString());

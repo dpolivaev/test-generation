@@ -78,11 +78,11 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.scriptw
 	</xsl:template>
 	
 	<xsl:template name="driver">
-		<xsl:value-of select="java:upper-first-camel-case-id(java:substring-after-last(@driver, '/'))"/>
+		<xsl:value-of select="java:upper-first-camel-case-id(java:substring-after-last(Parameter[@name='driver'], '/'))"/>
 	</xsl:template>
 	
 	<xsl:template name="driverPackage">
-		<xsl:variable name="driverpackage" select="java:substring-before-last(@driver, '/')"/>
+		<xsl:variable name="driverpackage" select="java:substring-before-last(Parameter[@name='driver'], '/')"/>
 		<xsl:if test="$driverpackage != ''">
 			<xsl:text>import </xsl:text>
 			<xsl:value-of select="$driverpackage"/>

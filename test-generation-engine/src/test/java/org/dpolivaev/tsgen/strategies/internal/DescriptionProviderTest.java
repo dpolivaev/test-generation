@@ -59,7 +59,7 @@ public class DescriptionProviderTest {
 		givenAssignment("focus#1", "focus1","");
 		givenAssignment("verification", "verification","");
 		givenAssignment("postprocessing", "postprocessing","");
-		givenAssignment("scriptPostprocessing", "script postprocessing","");
+		givenAssignment("script.postprocessing", "script postprocessing","");
 		givenAssignment("script", "script","");
 
 		String description = new DescriptionProvider()

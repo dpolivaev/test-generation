@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Script id="tests/call price" driver="testdriver/call price driver">
+<Script id="tests/call price">
+  <Parameter name="driver">testdriver/call price driver</Parameter>
   <Parameter name="imports">import somepackage.subpackage.Class1;
 import somepackage.subpackage.Class2;
 </Parameter>

@@ -33,7 +33,7 @@ public class XmlScriptWriterTest {
         givenProperty("script", "scriptName");
         givenProperty("testcase", "testcase 1");
         final DOMResult dom = createScript();
-        checkOutput(dom, "<Script id='scriptName' driver='scriptNameDriver'>" +
+        checkOutput(dom, "<Script id='scriptName'>" +
                 "<TestCase id='testcase 1'/>" +
         "</Script>");
     }
@@ -42,9 +42,10 @@ public class XmlScriptWriterTest {
     public void explicitDriverTestcase() {
         givenProperty("script", "scriptName");
         givenProperty("testcase", "testcase 1");
-        givenProperty("driver", "driver1");
+        givenProperty("script.driver", "driver1");
         final DOMResult dom = createScript();
-        checkOutput(dom, "<Script id='scriptName' driver='driver1'>" +
+        checkOutput(dom, "<Script id='scriptName'>"
+        		+ "<Parameter name='driver'>driver1</Parameter>" +
                 "<TestCase id='testcase 1'/>" +
         		"</Script>");
     }
@@ -68,7 +69,7 @@ public class XmlScriptWriterTest {
         producer.handlePropertyCombination(propertyContainer);
         producer.generationFinished();
         
-        checkOutput(dom, "<Script id='scriptName'  driver='scriptNameDriver'>" +
+        checkOutput(dom, "<Script id='scriptName'>" +
 		            "<TestCase id='testcase 1'/>" +
 		            "<TestCase id='testcase 2'/>" +
 		        "</Script>");
@@ -82,7 +83,7 @@ public class XmlScriptWriterTest {
     public void implicitScriptName() {
     	givenProperty("testcase", "testcase 1");
     	final DOMResult dom = createScript();
-    	checkOutput(dom, "<Script id='script' driver='scriptDriver'>" +
+    	checkOutput(dom, "<Script id='script'>" +
                 "<TestCase id='testcase 1'/>" +
         "</Script>");
     }
@@ -90,11 +91,11 @@ public class XmlScriptWriterTest {
     @Test
     public void createsScriptWithAllPartsAndContent() throws Exception{
         givenProperty("script", "scriptName");
-        givenProperty("scriptPrecondition#2", "global precondition");
-        givenProperty("scriptPostprocessing", "global postprocessing");
+        givenProperty("script.precondition#2", "global precondition");
+        givenProperty("script.postprocessing", "global postprocessing");
         givenProperty("testcase", "testcase 1");
         final DOMResult dom = createScript();
-        checkOutput(dom, "<Script id='scriptName' driver='scriptNameDriver'>" +
+        checkOutput(dom, "<Script id='scriptName'>" +
                 "<ScriptPrecondition id='global precondition'/>" +
                 "<ScriptPostprocessing id='global postprocessing'/>" +
                 "<TestCase id='testcase 1'/>" +

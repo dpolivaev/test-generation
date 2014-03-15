@@ -23,11 +23,11 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.scriptw
 	</xsl:template>
 	
 	<xsl:template name="driver">
-		<xsl:value-of select="java:snake-lower-case-id(java:substring-after-last(ancestor-or-self::Script/@driver, '/'))"/>
+		<xsl:value-of select="java:snake-lower-case-id(java:substring-after-last(ancestor-or-self::Script/Parameter[@name='driver'], '/'))"/>
 	</xsl:template>	
 	
 	<xsl:template name="driver-directory">
-		<xsl:variable name="directory" select="java:substring-before-last(ancestor-or-self::Script/@driver, '/')"/>
+		<xsl:variable name="directory" select="java:substring-before-last(ancestor-or-self::Script/Parameter[@name='driver'], '/')"/>
 		<xsl:if test="$directory != ''">
 			<xsl:value-of select="$directory"/>
 			<xsl:text>/</xsl:text>
