@@ -4,9 +4,11 @@
 package org.dpolivaev.dsl.tsgen;
 
 import org.dpolivaev.dsl.tsgen.jvmmodel.StrategyCompiler;
+import org.dpolivaev.dsl.tsgen.jvmmodel.StrategyEarlyExitComputer;
 import org.dpolivaev.dsl.tsgen.naming.ValuesXBaseNameProvider;
 import org.dpolivaev.dsl.tsgen.typesystem.StrategyTypeComputer;
 import org.eclipse.xtext.xbase.compiler.XbaseCompiler;
+import org.eclipse.xtext.xbase.controlflow.IEarlyExitComputer;
 import org.eclipse.xtext.xbase.typesystem.computation.ITypeComputer;
 
 /**
@@ -30,4 +32,9 @@ public class StrategyDslRuntimeModule extends org.dpolivaev.dsl.tsgen.AbstractSt
 	public Class<? extends org.eclipse.xtext.formatting.IFormatter> bindIFormatter() {
 		return org.dpolivaev.dsl.tsgen.formatting.StrategyDslFormatter.class;
 	}
+	
+	public Class<? extends IEarlyExitComputer> bindIEarlyExitComputer() {
+		return StrategyEarlyExitComputer.class;
+	}
+
 }
