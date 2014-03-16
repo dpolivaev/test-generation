@@ -212,7 +212,7 @@ public class MyFile {
     myOracle.setCoverageTracker(__coverageTracker);
     myOracle.registerRequiredItems(__writerFactory);
     __writerFactory.configureEngine(__ruleEngine);
-    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcaseDescription")).with(s).run(__ruleEngine);
+    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcase.description")).with(s).run(__ruleEngine);
   }
   
   public static void main(final String[] args) {
@@ -268,4 +268,125 @@ public class MyOracle implements PropertyHandler {
 
 		''')
 	}	
+
+	@Test def registeredOracleInCondition() {
+		'''
+			oracle myOracle {
+				def calculate(){true}
+			}
+			strategy s
+				if traced myOracle.calculate() let x be 1
+				
+			run strategy s with oracle goal myOracle
+		'''.assertCompilesTo('''
+MULTIPLE FILES WERE GENERATED
+
+File 1 : MyFile.java
+
+import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.CoverageTracker;
+import org.dpolivaev.tsgen.coverage.CoverageTrackerEnabler;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
+import org.dpolivaev.tsgen.coverage.TrackingRuleEngine;
+import org.dpolivaev.tsgen.ruleengine.Condition;
+import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
+import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
+import org.dpolivaev.tsgen.ruleengine.RuleEngine;
+import org.dpolivaev.tsgen.ruleengine.Strategy;
+import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
+import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
+import org.dpolivaev.tsgen.strategies.StrategyHelper;
+
+@SuppressWarnings("all")
+public class MyFile {
+  private static Boolean condition1(final PropertyContainer propertyContainer) {
+    Boolean _calculate = MyFile.myOracle.calculate();
+    return _calculate;
+  }
+  
+  public final static MyOracle myOracle = new MyOracle();
+  
+  public final static RequirementBasedStrategy s = defineStrategyS();
+  
+  private static RequirementBasedStrategy defineStrategyS() {
+    CoverageEntry[] __requiredItems = new CoverageEntry[]{};
+    Strategy __strategy = new Strategy();
+    __strategy.addRule(RuleBuilder.Factory._if(new Condition(){
+      @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
+        ((CoverageTrackerEnabler)propertyContainer).startTrace(); try{
+        if (!condition1(propertyContainer)) return false;
+        } finally{ ((CoverageTrackerEnabler)propertyContainer).stopTrace();}
+        return true;
+    }}).iterate("x").over(1).asRule());
+    return new RequirementBasedStrategy(__requiredItems).with(__strategy);
+  }
+  
+  public static void run1() {
+    
+    OutputConfiguration __outputConfiguration = new OutputConfiguration();
+    OutputConfiguration __reportConfiguration = new OutputConfiguration();
+    CoverageTracker __coverageTracker = new CoverageTracker();
+    WriterFactory __writerFactory = new WriterFactory(__outputConfiguration, __reportConfiguration);
+    __writerFactory.addCoverageTracker(__coverageTracker);
+    RuleEngine __ruleEngine = new TrackingRuleEngine(__coverageTracker);
+    __ruleEngine.addHandler(myOracle);
+    myOracle.setCoverageTracker(__coverageTracker);
+    myOracle.registerRequiredItems(__writerFactory);
+    __writerFactory.configureEngine(__ruleEngine);
+    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcase.description")).with(s).run(__ruleEngine);
+  }
+  
+  public static void main(final String[] args) {
+    MyFile.run1();
+  }
+}
+
+File 2 : MyOracle.java
+
+import java.util.Arrays;
+import java.util.List;
+import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.CoverageTracker;
+import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
+import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
+import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
+
+@SuppressWarnings("all")
+public class MyOracle implements PropertyHandler {
+  public final static List<CoverageEntry> labels = Arrays.asList(new CoverageEntry[]{});
+  
+  private PropertyContainer propertyContainer;
+  
+  private CoverageTracker coverageTracker = null;
+  
+  public void setCoverageTracker(final CoverageTracker coverageTracker) {
+    this.coverageTracker = coverageTracker;
+  }
+  
+  public void registerRequiredItems(final WriterFactory writerFactory) {
+    writerFactory.registerRequiredItems(labels);
+  }
+  
+  @Override
+  public void generationStarted(final PropertyContainer propertyContainer) {
+    this.propertyContainer=propertyContainer;
+  }
+  
+  @Override
+  public void handlePropertyCombination(final PropertyContainer propertyContainer) {
+    
+  }
+  
+  @Override
+  public void generationFinished() {
+    this.propertyContainer=null;
+  }
+  
+  public boolean calculate() {
+    return true;
+  }
+}
+
+''')
+	}
 }

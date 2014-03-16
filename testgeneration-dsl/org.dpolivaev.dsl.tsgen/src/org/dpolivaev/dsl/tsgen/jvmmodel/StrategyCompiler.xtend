@@ -44,8 +44,8 @@ class StrategyCompiler extends XbaseCompiler {
 					declareSyntheticVariable(expr, it);
 				}
 				val canBeReferenced = isReferenced && !isPrimitiveVoid(expr.expr);
-				internalToJavaStatement(expr.expr, it, canBeReferenced);
 				if (canBeReferenced) {
+					internalToJavaStatement(expr.expr, it, canBeReferenced);
 					newLine
 					append(getVarName(expr, it)).append(" = ")
 					internalToConvertedExpression(expr.expr, it, getType(expr));
