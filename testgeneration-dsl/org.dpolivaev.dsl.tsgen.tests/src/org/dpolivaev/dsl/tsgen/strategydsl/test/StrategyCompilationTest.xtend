@@ -622,7 +622,7 @@ public class MyFile {
     __writerFactory.addCoverageTracker(__coverageTracker);
     RuleEngine __ruleEngine = new TrackingRuleEngine(__coverageTracker);
     __writerFactory.configureEngine(__ruleEngine);
-    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcase.description")).with(first.with(second)).run(__ruleEngine);
+    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcase.description")).with(first).with(second).run(__ruleEngine);
   }
   
   public static void main(final String[] args) {

@@ -14,7 +14,6 @@ import org.dpolivaev.dsl.tsgen.strategydsl.OutputConfiguration
 import org.dpolivaev.dsl.tsgen.strategydsl.PropertyMapping
 import org.dpolivaev.dsl.tsgen.strategydsl.Rule
 import org.dpolivaev.dsl.tsgen.strategydsl.RuleGroup
-import org.dpolivaev.dsl.tsgen.strategydsl.Run
 import org.dpolivaev.dsl.tsgen.strategydsl.StrategyReference
 import org.dpolivaev.dsl.tsgen.strategydsl.ValueAction
 import org.dpolivaev.dsl.tsgen.strategydsl.ValueProvider
@@ -109,7 +108,7 @@ class GenerationInferrer{
 	final static val EXTERNAL_STRATEGY = "externalStrategy"
 	private def appendStrategyReferences(StrategyReference ref){
 		if(ref.expr != null && ! declaredFields.contains(ref.expr.toString)) {
-			createMethod(ref.expr, EXTERNAL_STRATEGY, ref.expr.newTypeRef(Strategy), false)
+			createMethod(ref.expr, EXTERNAL_STRATEGY, ref.expr.inferredType, false)
 		}
 	}
 	
@@ -179,7 +178,7 @@ class GenerationInferrer{
 						appendRuleGroup(it, ruleGroup)
 					}
 					append('return new ') append(strategy.newTypeRef(RequirementBasedStrategy).type) append('(__requiredItems)') 
-					combinedStrategy(it, strategy.baseStrategies, false)
+					combinedStrategy(it, strategy.baseStrategies)
 					append('.with(__strategy);')
 				]
 				visibility = JvmVisibility::PRIVATE
@@ -529,8 +528,8 @@ class GenerationInferrer{
 					newLine append('new ') append(run.newTypeRef(RequirementBasedStrategy).type) append('()')
 					append('.with(') append(run.newTypeRef(StrategyHelper).type) append('.id(__outputConfiguration, "testcase"))')
 					append('.with(') append(run.newTypeRef(StrategyHelper).type) append('.description(__outputConfiguration, "testcase.description"))')
-					append('.with(') 
-					combinedStrategy(it, run.strategies, true) append(').run(__ruleEngine);')
+					combinedStrategy(it, run.strategies) 
+					append('.run(__ruleEngine);')
 				]
 				visibility = JvmVisibility::PUBLIC
 				static = true
@@ -594,18 +593,11 @@ def private configureTestProperties(ITreeAppendable it, PropertyMapping property
 		}
 	}
 	
-	private def combinedStrategy(ITreeAppendable it, Collection<StrategyReference> strategies, boolean startWithStrategyName){
-		var first = startWithStrategyName
+	private def combinedStrategy(ITreeAppendable it, Collection<StrategyReference> strategies){
 		for(strategy : strategies){
-			if(first){
-				first = false
-				appendReference(it, EXTERNAL_STRATEGY, strategy.expr)
-			}
-			else{
-				append(".with(")
-				appendReference(it, EXTERNAL_STRATEGY, strategy.expr)
-				append(")")
-			}
+			append(".with(")
+			appendReference(it, EXTERNAL_STRATEGY, strategy.expr)
+			append(")")
 		}
 		return it.toString
 	}
