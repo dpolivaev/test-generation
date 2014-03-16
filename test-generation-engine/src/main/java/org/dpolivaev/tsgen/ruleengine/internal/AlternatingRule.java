@@ -55,11 +55,9 @@ public class AlternatingRule implements Rule {
     private void propagateUntilActiveRuleFound(RuleEventPropagator propertyCombinationStarter) {
     	Rule newActiveRule = activeRule(propertyCombinationStarter);
     	if(newActiveRule != null){
-    		if (activeRule != null) {
-    			if (!activeRule.equals(newActiveRule)) {
-    				throw new InconsistentRuleException("Inconsistent rules for property " + getTargetedPropertyName());
-    			}
-    		}
+    		if (activeRule != null && activeRule.blocksRequiredProperties() && !activeRule.equals(newActiveRule)) {
+				throw new InconsistentRuleException("Inconsistent rules for property " + getTargetedPropertyName());
+			}
     		activeRule = newActiveRule;
     	}
     }
@@ -81,9 +79,8 @@ public class AlternatingRule implements Rule {
 
     @Override
     public void propertyCombinationFinished(EngineState engineState) {
-        activeRule.propertyCombinationFinished(engineState);
-        if (!activeRule.blocksRequiredProperties())
-            activeRule = null;
+    	if(activeRule != null)
+    		activeRule.propertyCombinationFinished(engineState);
     }
 
     @Override
