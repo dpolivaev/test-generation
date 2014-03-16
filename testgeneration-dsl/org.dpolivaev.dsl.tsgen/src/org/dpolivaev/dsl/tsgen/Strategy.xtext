@@ -57,7 +57,7 @@ Trigger:
 ;
 
 Condition: {Condition}
-	'if' expr = XExpression
+	'if' trace ?= 'traced'? expr = XExpression
 ;
 
 SkipAction : {SkipAction}

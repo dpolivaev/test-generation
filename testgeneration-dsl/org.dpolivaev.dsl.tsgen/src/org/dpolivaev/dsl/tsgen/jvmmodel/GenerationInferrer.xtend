@@ -3,6 +3,7 @@ package org.dpolivaev.dsl.tsgen.jvmmodel
 import com.google.inject.Injector
 import java.util.ArrayList
 import java.util.Collection
+import java.util.HashMap
 import java.util.HashSet
 import java.util.Set
 import javax.inject.Inject
@@ -10,16 +11,27 @@ import org.dpolivaev.dsl.tsgen.strategydsl.Condition
 import org.dpolivaev.dsl.tsgen.strategydsl.Generation
 import org.dpolivaev.dsl.tsgen.strategydsl.OracleReference
 import org.dpolivaev.dsl.tsgen.strategydsl.OutputConfiguration
+import org.dpolivaev.dsl.tsgen.strategydsl.PropertyMapping
 import org.dpolivaev.dsl.tsgen.strategydsl.Rule
 import org.dpolivaev.dsl.tsgen.strategydsl.RuleGroup
+import org.dpolivaev.dsl.tsgen.strategydsl.Run
 import org.dpolivaev.dsl.tsgen.strategydsl.StrategyReference
 import org.dpolivaev.dsl.tsgen.strategydsl.ValueAction
 import org.dpolivaev.dsl.tsgen.strategydsl.ValueProvider
 import org.dpolivaev.dsl.tsgen.strategydsl.Values
 import org.dpolivaev.tsgen.coverage.CoverageEntry
+import org.dpolivaev.tsgen.coverage.CoverageTracker
+import org.dpolivaev.tsgen.coverage.CoverageTrackerEnabler
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy
+import org.dpolivaev.tsgen.coverage.TrackingRuleEngine
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory
+import org.dpolivaev.tsgen.ruleengine.RuleEngine
+import org.dpolivaev.tsgen.ruleengine.SpecialValue
 import org.dpolivaev.tsgen.ruleengine.Strategy
+import org.dpolivaev.tsgen.scriptwriter.WriterFactory
+import org.dpolivaev.tsgen.strategies.StrategyHelper
+import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.common.types.JvmGenericType
 import org.eclipse.xtext.common.types.JvmType
@@ -36,19 +48,6 @@ import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 
 import static extension org.dpolivaev.dsl.tsgen.jvmmodel.StrategyCompiler.*
-import org.dpolivaev.tsgen.scriptwriter.WriterFactory
-import org.dpolivaev.tsgen.ruleengine.RuleEngine
-import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy
-import org.eclipse.emf.ecore.EObject
-import org.dpolivaev.tsgen.ruleengine.SpecialValue
-import org.dpolivaev.tsgen.coverage.CoverageTracker
-import org.dpolivaev.tsgen.coverage.TrackingRuleEngine
-import org.dpolivaev.tsgen.coverage.CoverageTrackerEnabler
-import org.dpolivaev.dsl.tsgen.strategydsl.Run
-//import org.dpolivaev.dsl.tsgen.strategydsl.TestStructure
-import org.dpolivaev.tsgen.strategies.StrategyHelper
-import org.dpolivaev.dsl.tsgen.strategydsl.PropertyMapping
-import java.util.HashMap
 
 class GenerationInferrer{
 	@Inject Injector injector
@@ -266,14 +265,28 @@ class GenerationInferrer{
 		}
 	}
 
+	def private appendCalledMethods(Condition[] conditions, ITreeAppendable it) {
+		for(condition:conditions){
+			val calledMethodName = methods.get(CONDITION, condition.expr)
+			val trace = condition.trace
+			newLine
+			if(trace)
+				appendTraceStart(it, condition)
+			append('''if (!«calledMethodName»(propertyContainer)) return false;''')
+			if(trace)
+				appendTraceEnd(it, condition)
+		}
+		newLine
+		append('return true;')
+	}
+	
 	def private conditions(RuleGroup ruleGroup) {
-		val methodNames = new ArrayList<String>()
+		val methodNames = new ArrayList<Condition>()
 		var group = ruleGroup
 		do {
 			val condition = group.condition
 			if(condition != null && condition.expr != null){
-				val methodName = methods.get(CONDITION, condition.expr)
-				methodNames.add(methodName) 
+				methodNames.add(condition) 
 			}
 			val container = group.eContainer
 			if(container instanceof RuleGroup){
@@ -365,20 +378,11 @@ class GenerationInferrer{
 	}
 
 	def private appendValueExpression(ITreeAppendable it, ValueProvider valueProvider) {
-		val conditional = valueProvider.condition != null
-		if(conditional){
-			val methodName = methods.get(CONDITION, valueProvider.condition.expr)
-			append('''if(«methodName»(propertyContainer)) return ''')
-			append(valueProvider.newTypeRef(SpecialValue).type) append('.SKIP;')
-			newLine
-		}
+		newLine
+		appendValueCondition(it, valueProvider)
 		val trace = valueProvider.trace
-		if(trace){
-			append('((')
-			append(valueProvider.newTypeRef(CoverageTrackerEnabler).type) 
-			append(')propertyContainer).startTrace(); try{')
-			newLine
-		}	
+		if(trace)
+			appendTraceStart(it, valueProvider)
 		append('return ')
 		val concatenation = valueProvider.expressions.size() > 1
 		if(concatenation)
@@ -400,12 +404,37 @@ class GenerationInferrer{
 		if(concatenation)
 			append(".toString()");
 		append(';')
-		if(trace){
+		if(trace)
+			appendTraceEnd(it, valueProvider)
+	}
+	
+	private def appendTraceEnd(ITreeAppendable it, EObject object) {
+		newLine
+		append('} finally{ ((')
+		append(object.newTypeRef(CoverageTrackerEnabler).type) 
+		append(')propertyContainer).stopTrace();}')
+	}
+	
+	private def appendTraceStart(ITreeAppendable it, EObject object) {
+		append('((')
+		append(object.newTypeRef(CoverageTrackerEnabler).type) 
+		append(')propertyContainer).startTrace(); try{')
+		newLine
+	}
+	
+	private def appendValueCondition(ITreeAppendable it, ValueProvider valueProvider) {
+		val conditional = valueProvider.condition != null
+		if(conditional){
+			val methodName = methods.get(CONDITION, valueProvider.condition.expr)
+			if(valueProvider.condition.trace)
+				appendTraceStart(it, valueProvider)
+			
+			append('''if(«methodName»(propertyContainer)) return ''')
+			append(valueProvider.newTypeRef(SpecialValue).type) append('.SKIP;')
+			if(valueProvider.condition.trace)
+				appendTraceEnd(it, valueProvider)
 			newLine
-			append('} finally{ ((')
-			append(valueProvider.newTypeRef(CoverageTrackerEnabler).type) 
-			append(')propertyContainer).stopTrace();}')
-		}	
+		}
 	}
 	
 	def private apppendSkip(ITreeAppendable it){
@@ -422,7 +451,6 @@ class GenerationInferrer{
 		.append(script.newTypeRef(PropertyContainer).type)
 		.append(''' propertyContainer) {''')
 		increaseIndentation
-		newLine
 		expression.exec(it)
 		decreaseIndentation
 		decreaseIndentation
@@ -431,19 +459,6 @@ class GenerationInferrer{
 		append('}')
 	}
 
-	def private appendCalledMethods(String[] calledMethodNames, ITreeAppendable it) {
-		append('return ')
-		var first = true
-		for(calledMethodName:calledMethodNames){
-			if(first)
-				first = false
-			else
-				append(' && ')
-			append('''«calledMethodName»(propertyContainer)''')
-		}
-		append(';')
-	}
-	
 	private def inferStrategyFields(){
 		for (strategy : script.strategies) {
 			val methodName = "defineStrategy" + strategy.name.toFirstUpper

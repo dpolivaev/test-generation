@@ -209,7 +209,8 @@ public class MyFile {
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory._if(new Condition(){
       @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
-        return condition1(propertyContainer);
+        if (!condition1(propertyContainer)) return false;
+        return true;
     }}).iterate("y").over(3).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
   }
@@ -243,7 +244,8 @@ public class MyFile {
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory._if(new Condition(){
       @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
-        return condition1(propertyContainer);
+        if (!condition1(propertyContainer)) return false;
+        return true;
     }}).iterate("y").over(3).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
   }
@@ -281,7 +283,9 @@ public class MyFile {
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory._if(new Condition(){
       @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
-        return condition1(propertyContainer) && condition2(propertyContainer);
+        if (!condition1(propertyContainer)) return false;
+        if (!condition2(propertyContainer)) return false;
+        return true;
     }}).iterate("y").over(5).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
   }
@@ -565,7 +569,7 @@ public class MyFile {
     __writerFactory.addCoverageTracker(__coverageTracker);
     RuleEngine __ruleEngine = new TrackingRuleEngine(__coverageTracker);
     __writerFactory.configureEngine(__ruleEngine);
-    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcaseDescription")).with(First).run(__ruleEngine);
+    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcase.description")).with(First).run(__ruleEngine);
   }
   
   public static void main(final String[] args) {
@@ -618,7 +622,7 @@ public class MyFile {
     __writerFactory.addCoverageTracker(__coverageTracker);
     RuleEngine __ruleEngine = new TrackingRuleEngine(__coverageTracker);
     __writerFactory.configureEngine(__ruleEngine);
-    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcaseDescription")).with(first.with(second)).run(__ruleEngine);
+    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcase.description")).with(first.with(second)).run(__ruleEngine);
   }
   
   public static void main(final String[] args) {
@@ -720,7 +724,7 @@ public class MyFile {
     __writerFactory.addCoverageTracker(__coverageTracker);
     RuleEngine __ruleEngine = new TrackingRuleEngine(__coverageTracker);
     __writerFactory.configureEngine(__ruleEngine);
-    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcaseDescription")).with(First).run(__ruleEngine);
+    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcase.description")).with(First).run(__ruleEngine);
   }
   
   public static void main(final String[] args) {
@@ -765,7 +769,7 @@ public class MyFile {
     __writerFactory.addCoverageTracker(__coverageTracker);
     RuleEngine __ruleEngine = new TrackingRuleEngine(__coverageTracker);
     __writerFactory.configureEngine(__ruleEngine);
-    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcaseDescription")).with(First).run(__ruleEngine);
+    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcase.description")).with(First).run(__ruleEngine);
   }
   
   public static void main(final String[] args) {
@@ -815,7 +819,7 @@ public class MyFile {
     __writerFactory.addCoverageTracker(__coverageTracker);
     RuleEngine __ruleEngine = new TrackingRuleEngine(__coverageTracker);
     __writerFactory.configureEngine(__ruleEngine);
-    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcaseDescription")).with(First).run(__ruleEngine);
+    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcase.description")).with(First).run(__ruleEngine);
   }
   
   public static void main(final String[] args) {
@@ -860,7 +864,7 @@ public class MyFile {
     __writerFactory.addCoverageTracker(__coverageTracker);
     RuleEngine __ruleEngine = new TrackingRuleEngine(__coverageTracker);
     __writerFactory.configureEngine(__ruleEngine);
-    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcaseDescription")).with(First).run(__ruleEngine);
+    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcase.description")).with(First).run(__ruleEngine);
   }
   
   public static void main(final String[] args) {
@@ -910,7 +914,7 @@ public class MyFile {
     First.registerRequiredItems(__writerFactory);
     RuleEngine __ruleEngine = new TrackingRuleEngine(__coverageTracker);
     __writerFactory.configureEngine(__ruleEngine);
-    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcaseDescription")).with(First).run(__ruleEngine);
+    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcase.description")).with(First).run(__ruleEngine);
   }
   
   public static void main(final String[] args) {
