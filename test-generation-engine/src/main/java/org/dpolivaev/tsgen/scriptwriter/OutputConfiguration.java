@@ -8,7 +8,7 @@ import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 
 public class OutputConfiguration {
-	private Source xsltSource;
+	private String xsltSource;
 	private String fileExtension;
 	private String xmlExtension;
 	private String fileDirectory;
@@ -32,12 +32,20 @@ public class OutputConfiguration {
 	}
 
 	public Source getXsltSource() {
-		return xsltSource;
-	}
-
-	public OutputConfiguration setXsltSource(Source xsltSource) {
-		this.xsltSource = xsltSource;
-		return this;
+		if(xsltSource == null)
+			return null;
+		File xsltFile = new File(xsltSource);
+		if(xsltFile.canRead()) {
+			return new StreamSource(xsltFile);
+		}
+		else{
+			InputStream resource = getClass().getResourceAsStream(xsltSource);
+			if(resource != null) {
+				return new StreamSource(resource);
+			}
+			else
+				throw new IllegalArgumentException("source " + xsltSource + " not available");
+		}
 	}
 
 	public String getFileExtension() {
@@ -54,18 +62,8 @@ public class OutputConfiguration {
 	}
 	
 	public OutputConfiguration setXsltSource(String xsltSource) {
-		File xsltFile = new File(xsltSource);
-		if(xsltFile.canRead()) {
-			return setXsltSource(new StreamSource(xsltFile));
-		}
-		else{
-			InputStream resource = getClass().getResourceAsStream(xsltSource);
-			if(resource != null) {
-				return setXsltSource(new StreamSource(resource));
-			}
-			else
-				throw new IllegalArgumentException("source " + xsltSource + " not available");
-		}
+		this.xsltSource = xsltSource;
+		return this;
 	}
 
 	public OutputConfiguration setXmlExtension(String xmlFileExtension) {
