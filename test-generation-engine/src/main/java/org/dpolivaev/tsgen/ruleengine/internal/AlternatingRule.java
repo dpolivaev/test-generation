@@ -55,9 +55,9 @@ public class AlternatingRule implements Rule {
     private void propagateUntilActiveRuleFound(RuleEventPropagator propertyCombinationStarter) {
     	Rule newActiveRule = activeRule(propertyCombinationStarter);
     	if(newActiveRule != null){
-    		final boolean consistentWithCurrentState = activeRule == null 
-    				|| ! (activeRule.blocksRequiredProperties() || activeRule.isValueAddedToCurrentCombination()) 
-    				|| activeRule.equals(newActiveRule);
+    		final boolean activeRuleCanBeReplaced = activeRule == null 
+			    	|| ! (activeRule.blocksRequiredProperties() || activeRule.isValueAddedToCurrentCombination());
+			final boolean consistentWithCurrentState = activeRuleCanBeReplaced || activeRule.equals(newActiveRule);
 			if (!consistentWithCurrentState)
 				throw new InconsistentRuleException("Inconsistent rules for property " + getTargetedPropertyName());
     		activeRule = newActiveRule;
