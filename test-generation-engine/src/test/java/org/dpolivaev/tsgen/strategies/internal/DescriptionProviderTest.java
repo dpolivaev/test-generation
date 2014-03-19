@@ -53,12 +53,12 @@ public class DescriptionProviderTest {
 
 	@Test
 	public void excludesTestPartsAndParams() {
-		givenAssignment("precondition", "precondition","");
-		givenAssignment("focus", "focus(x)","");
+		givenAssignment("testcase.precondition", "precondition","");
+		givenAssignment("testcase.focus", "focus(x)","");
 		givenAssignment("x", "x","");
-		givenAssignment("focus#1", "focus1","");
-		givenAssignment("verification", "verification","");
-		givenAssignment("postprocessing", "postprocessing","");
+		givenAssignment("testcase.focus#1", "focus1","");
+		givenAssignment("testcase.verification", "verification","");
+		givenAssignment("testcase.postprocessing", "postprocessing","");
 		givenAssignment("script.postprocessing", "script postprocessing","");
 		givenAssignment("script", "script","");
 

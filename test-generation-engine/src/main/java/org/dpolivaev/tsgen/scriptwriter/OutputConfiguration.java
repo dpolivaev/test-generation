@@ -17,16 +17,21 @@ public class OutputConfiguration {
 	public static final OutputConfiguration OUTPUT_NOTHING = new OutputConfiguration();
 
 	final private String[] testCaseParts = {
-			"precondition", "Precondition",
-			"focus", "Focus",
-			"verification", "Verification",
-			"postprocessing", "Postprocessing",
+			"testcase.precondition", "Precondition",
+			"testcase.focus", "Focus",
+			"testcase.verification", "Verification",
+			"testcase.postprocessing", "Postprocessing",
 	};
 	final private String[] scriptParts = {
 			"script.precondition", "ScriptPrecondition",
 			"script.postprocessing", "ScriptPostprocessing",
 	};
-	public static final int FOCUS_INDEX = 2;
+	private static final int PRECONDITION_INDEX = 0;
+	private static final int FOCUS_INDEX = 2;
+	private static final int VERIFICATION_INDEX = 4;
+	private static final int POSTPOCESSING_INDEX = 6;
+	private static final int SCRIPT_PRECONDITION_INDEX = 0;
+	private static final int SCRIPT_POSTPOCESSING_INDEX = 2;
 
 	public OutputConfiguration(){
 	}
@@ -129,8 +134,28 @@ public class OutputConfiguration {
 			scriptParts[propertyIndex] = scriptPostprocessing;
 	}
 	
+	public String getPreconditionPropertyName() {
+		return getTestCaseParts()[PRECONDITION_INDEX];
+	}
+	
 	public String getFocusPropertyName() {
 		return getTestCaseParts()[FOCUS_INDEX];
+	}
+	
+	public String getVerificationPropertyName() {
+		return getTestCaseParts()[VERIFICATION_INDEX];
+	}
+	
+	public String getPostprocessingPropertyName() {
+		return getTestCaseParts()[POSTPOCESSING_INDEX];
+	}
+	
+	public String getScriptPreconditionPropertyName() {
+		return getScriptParts()[SCRIPT_PRECONDITION_INDEX];
+	}
+	
+	public String getScriptPostprocessingPropertyName() {
+		return getScriptParts()[SCRIPT_POSTPOCESSING_INDEX];
 	}
 	
 	public boolean isPart(String name){

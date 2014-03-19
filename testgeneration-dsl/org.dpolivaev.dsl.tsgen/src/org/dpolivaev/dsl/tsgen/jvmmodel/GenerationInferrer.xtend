@@ -545,9 +545,16 @@ def private configureTestProperties(ITreeAppendable it, PropertyMapping property
 			i=i+1;	
 		}
 		newLine
-		append('''__outputConfiguration.setScriptPropertyNames("«propertyMap.get("script.precondition")»", "«propertyMap.get("script.postprocessing")»");''')
+		val defaultOutputConfiguration = new org.dpolivaev.tsgen.scriptwriter.OutputConfiguration
+		append('__outputConfiguration.setScriptPropertyNames(') 
+		append('''"«propertyMap.get(defaultOutputConfiguration.scriptPreconditionPropertyName)»", ''') 
+		append('''"«propertyMap.get(defaultOutputConfiguration.scriptPostprocessingPropertyName)»");''')
 		newLine
-		append('''__outputConfiguration.setTestCasePropertyNames("«propertyMap.get("precondition")»", "«propertyMap.get("focus")»", "«propertyMap.get("verification")»", "«propertyMap.get("postprocessing")»");''')
+		append('__outputConfiguration.setTestCasePropertyNames(') 
+		append('''"«propertyMap.get(defaultOutputConfiguration.preconditionPropertyName)»", ''') 
+		append('''"«propertyMap.get(defaultOutputConfiguration.focusPropertyName)»", ''') 
+		append('''"«propertyMap.get(defaultOutputConfiguration.verificationPropertyName)»", ''') 
+		append('''"«propertyMap.get(defaultOutputConfiguration.postprocessingPropertyName)»");''')
 	}
 }
 	def private appendOutputConfiguration(ITreeAppendable it, String target, EObject context, OutputConfiguration outputConfiguration) {
