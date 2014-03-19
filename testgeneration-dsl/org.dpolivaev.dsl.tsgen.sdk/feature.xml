@@ -2,7 +2,7 @@
 <feature
       id="org.dpolivaev.dsl.tsgen.sdk"
       label="Strategy-driven Test Generation Kit"
-      version="0.0.4.qualifier">
+      version="0.0.5.qualifier">
 
    <description url="https://github.com/dpolivaev/test-generation">
       Test suites should systematically and automatically execute and
