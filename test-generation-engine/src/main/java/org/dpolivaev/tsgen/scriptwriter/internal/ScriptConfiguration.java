@@ -40,12 +40,4 @@ public class ScriptConfiguration {
 	XmlTestCaseWriter testCaseWriter(XmlWriter xmlWriter, GoalChecker goalChecker) {
 		return new XmlTestCaseWriter(xmlWriter, goalChecker);
 	}
-
-	String[] getScriptParts(PropertyContainer propertyContainer) {
-		return new AliasedPropertyAccessor(propertyContainer).getScriptParts();
-	}
-
-	String[] getTestCaseParts(PropertyContainer propertyContainer) {
-		return new AliasedPropertyAccessor(propertyContainer).getTestCaseParts();
-	}
 }

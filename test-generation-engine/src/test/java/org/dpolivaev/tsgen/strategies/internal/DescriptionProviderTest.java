@@ -54,9 +54,10 @@ public class DescriptionProviderTest {
 	@Test
 	public void excludesTestPartsAndParams() {
 		givenAssignment("testcase.precondition", "precondition","");
-		givenAssignment("testcase.focus", "focus(x)","");
+		givenAssignment("testcase.focus.alias", "focus","");
+		givenAssignment("focus", "focus(x)","");
 		givenAssignment("x", "x","");
-		givenAssignment("testcase.focus#1", "focus1","");
+		givenAssignment("focus#1", "focus1","");
 		givenAssignment("testcase.verification", "verification","");
 		givenAssignment("testcase.postprocessing", "postprocessing","");
 		givenAssignment("script.postprocessing", "script postprocessing","");

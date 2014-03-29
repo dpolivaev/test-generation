@@ -1,7 +1,9 @@
 package org.dpolivaev.tsgen.strategies.internal;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -20,16 +22,8 @@ public class AssignmentFilter {
 	}
 
 	public Collection<Assignment> testPartRelevantAssignments() {
-		Map<String, Assignment> testPartProperties = testPartRelevantAssignmentMap();
+		Map<String, Assignment> testPartProperties = testPartRelevantAssignmentMap(new AliasedPropertyAccessor(propertyContainer).getTestCaseParts());
 		return testPartProperties.values();
-	}
-
-	public Map<String, Assignment> testPartRelevantAssignmentMap() {
-		return testPartRelevantAssignmentMap(new AliasedPropertyAccessor(propertyContainer).getTestCaseParts());
-	}
-
-	public Map<String, Assignment> scriptPartRelevantAssignmentMap() {
-		return testPartRelevantAssignmentMap(new AliasedPropertyAccessor(propertyContainer).getScriptParts());
 	}
 
 	private Map<String, Assignment> testPartRelevantAssignmentMap(final String[] parts) {
@@ -66,12 +60,17 @@ public class AssignmentFilter {
 	public Collection<Assignment> descriptionRelevantAssignments() {
 		final Collection<Assignment> allAssignments = propertyContainer.getAssignments();
 		final ArrayList<Assignment> descriptionRelevantAssignments = new ArrayList<>(allAssignments.size());
-		final Map<String, Assignment> testPartRelevantAssignmentMap = testPartRelevantAssignmentMap();
-		final Map<String, Assignment> scriptPartRelevantAssignmentMap = scriptPartRelevantAssignmentMap();
+		final AliasedPropertyAccessor aliasedPropertyAccessor = new AliasedPropertyAccessor(propertyContainer);
+		final Map<String, Assignment> testPartRelevantAssignmentMap = testPartRelevantAssignmentMap(aliasedPropertyAccessor.getTestCaseParts());
+		final Map<String, Assignment> scriptPartRelevantAssignmentMap = testPartRelevantAssignmentMap(aliasedPropertyAccessor.getScriptParts());
+		final HashSet<String> aliasNames = new HashSet<String>();
+		aliasNames.addAll(Arrays.asList(aliasedPropertyAccessor.getScriptAliasPropertyNames()));
+		aliasNames.addAll(Arrays.asList(aliasedPropertyAccessor.getTestCaseAliasNames()));
 		for(Assignment assignment : allAssignments){
 			final String targetedPropertyName = assignment.getTargetedPropertyName();
 			if(! testPartRelevantAssignmentMap.containsKey(targetedPropertyName)
-					&& ! scriptPartRelevantAssignmentMap.containsKey(targetedPropertyName))
+					&& ! scriptPartRelevantAssignmentMap.containsKey(targetedPropertyName)
+					&& ! aliasNames.contains(targetedPropertyName))
 				descriptionRelevantAssignments.add(assignment);
 		}
 		return descriptionRelevantAssignments;
