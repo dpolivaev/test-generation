@@ -6,16 +6,17 @@ import static org.junit.Assert.assertThat;
 
 import org.dpolivaev.tsgen.ruleengine.Assignment;
 import org.dpolivaev.tsgen.ruleengine.Assignments;
-import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 public class TestIdProviderTest {
 	private Assignments assignments;
 	private TestIdProvider testIdProvider;
-	private OutputConfiguration outputConfiguration;
+	
+	private void givenAssignment(String name, Object value) {
+		givenAssignment(name, value, "");
+	}
 	
 	private void givenAssignment(String name, Object value, String reason) {
 		final Assignment assignmentMock = assignmentMock(name, value, reason);
@@ -26,9 +27,11 @@ public class TestIdProviderTest {
 	@Before
 	public void setup(){
 		assignments = new Assignments();
-		outputConfiguration = new OutputConfiguration();
-		outputConfiguration.setTestCasePropertyNames("precondition", "when", "verification", "postprocessing");
-		testIdProvider = new TestIdProvider(outputConfiguration, "=", " ");
+		givenAssignment("testcase.precondition.alias", "precondition");
+		givenAssignment("testcase.focus.alias", "when");
+		givenAssignment("testcase.verification.alias", "verification");
+		givenAssignment("testcase.postprocessing.alias", "postprocessing");
+		testIdProvider = new TestIdProvider("=", " ");
 	}
 
 	@Test

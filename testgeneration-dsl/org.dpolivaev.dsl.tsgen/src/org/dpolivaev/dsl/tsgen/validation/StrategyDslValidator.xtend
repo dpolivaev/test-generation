@@ -6,10 +6,6 @@ package org.dpolivaev.dsl.tsgen.validation
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.xbase.XExpression
 import org.dpolivaev.dsl.tsgen.strategydsl.LabeledExpression
-import org.dpolivaev.dsl.tsgen.strategydsl.PropertyMapping
-import org.dpolivaev.dsl.tsgen.strategydsl.StrategydslPackage
-import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration
-import java.util.HashSet
 
 //import org.eclipse.xtext.validation.Check
 
@@ -26,18 +22,5 @@ class StrategyDslValidator extends AbstractStrategyDslValidator {
 			 LabeledExpression case container.reason == expr: return
 		} 
 		super.checkInnerExpressions(expr)
-	}
-	
-	static private val defaultOutputConfiguration = new OutputConfiguration
-	
-	@Check
-	def checkPropertyMapping(PropertyMapping mapping){
-		for(item:mapping.defaultNames){
-			if(! defaultOutputConfiguration.isPart(item))
-				error("Unknown item " + item, StrategydslPackage.Literals.PROPERTY_MAPPING__DEFAULT_NAMES)
-		}
-		val defaultNameSet = new HashSet(mapping.defaultNames)
-		if(defaultNameSet.size != mapping.defaultNames.size)
-			error("Duplicated items ", StrategydslPackage.Literals.PROPERTY_MAPPING__DEFAULT_NAMES)
 	}
 }

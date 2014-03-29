@@ -779,56 +779,6 @@ public class MyFile {
 		''')
 	}	
 
-	@Test def runWithKeywords() {
-		'''
-			use beforeAll as script.precondition, given as testcase.precondition, when as testcase.focus,
-			then as testcase.verification, after as testcase.postprocessing, afterAll as script.postprocessing
-			strategy First
-			run strategy First
-			output "testoutput/xml"
-		'''.assertCompilesTo('''
-import org.dpolivaev.tsgen.coverage.CoverageEntry;
-import org.dpolivaev.tsgen.coverage.CoverageTracker;
-import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
-import org.dpolivaev.tsgen.coverage.TrackingRuleEngine;
-import org.dpolivaev.tsgen.ruleengine.RuleEngine;
-import org.dpolivaev.tsgen.ruleengine.Strategy;
-import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
-import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
-import org.dpolivaev.tsgen.strategies.StrategyHelper;
-
-@SuppressWarnings("all")
-public class MyFile {
-  public final static RequirementBasedStrategy First = defineStrategyFirst();
-  
-  private static RequirementBasedStrategy defineStrategyFirst() {
-    CoverageEntry[] __requiredItems = new CoverageEntry[]{};
-    Strategy __strategy = new Strategy();
-    return new RequirementBasedStrategy(__requiredItems).with(__strategy);
-  }
-  
-  public static void run1() {
-    
-    OutputConfiguration __outputConfiguration = new OutputConfiguration();
-    __outputConfiguration.setFileDirectory("testoutput").setFileExtension("xml");
-    __outputConfiguration.setScriptPropertyNames("beforeAll", "afterAll");
-    __outputConfiguration.setTestCasePropertyNames("given", "when", "then", "after");
-    OutputConfiguration __reportConfiguration = new OutputConfiguration();
-    CoverageTracker __coverageTracker = new CoverageTracker();
-    WriterFactory __writerFactory = new WriterFactory(__outputConfiguration, __reportConfiguration);
-    __writerFactory.addCoverageTracker(__coverageTracker);
-    RuleEngine __ruleEngine = new TrackingRuleEngine(__coverageTracker);
-    __writerFactory.configureEngine(__ruleEngine);
-    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcase.description")).with(First).run(__ruleEngine);
-  }
-  
-  public static void main(final String[] args) {
-    MyFile.run1();
-  }
-}
-		''')
-	}	
-
 	@Test def runWithReport() {
 		'''
 			strategy First

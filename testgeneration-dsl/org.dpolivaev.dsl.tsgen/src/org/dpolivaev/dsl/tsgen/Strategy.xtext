@@ -7,17 +7,8 @@ generate strategydsl "http://www.dpolivaev.org/dsl/tsgen/strategydsl"
 Generation: {Generation}
 	('package' package = QualifiedName)?
 	importSection=XImportSection?
-	propertyMapping = PropertyMapping?
 	(strategies+=Strategy | oracles += Oracle | /* goals += Goal | */ runs += Run)*
 ;
-
-
-
-PropertyMapping:{PropertyMapping}
-	'use' userNames += PROPERTY_ID 'as' defaultNames += PROPERTY_ID (','  userNames += PROPERTY_ID 'as' defaultNames += PROPERTY_ID)*
-;
-
-	
 
 ID_REST hidden():
 	'.' ID | '#' INT
