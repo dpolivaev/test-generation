@@ -1,5 +1,6 @@
 package org.dpolivaev.tsgen.scriptwriter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
@@ -31,17 +32,24 @@ public class AliasedPropertyAccessor {
 	}
 
 	public String[] getTestCaseParts() {
-		return getAliasedParts(AliasedPropertyAccessor.testCaseParts);
+		return getAliasedParts(AliasedPropertyAccessor.testCaseParts, false);
 	}
 
-	private String[] getAliasedParts(final String[] parts) {
-		String[] aliasedParts = new String[parts.length];
-		int index = 0;
+	private String[] getAliasedParts(final String[] parts, boolean includeAliasNames) {
+		ArrayList<String> aliasedParts = new ArrayList<>(parts.length*2);
 		for(String part : parts){
-			final String alias = getAlias(part);
-			aliasedParts[index++] = alias;
+			if(includeAliasNames) {
+				final String aliasName = part + ".alias";
+				if (! propertyContainer.get(aliasName).equals(SpecialValue.UNDEFINED)) {
+					aliasedParts.add(aliasName);
+				}
+			}
+			else{
+				final String alias = getAlias(part);
+				aliasedParts.add(alias);
+			}
 		}
-		return aliasedParts;
+		return aliasedParts.toArray(new String[aliasedParts.size()]);
 	}
 
 	public String getAlias(String property) {
@@ -55,35 +63,23 @@ public class AliasedPropertyAccessor {
 	}
 
 	public String[] getScriptParts() {
-		return getAliasedParts(AliasedPropertyAccessor.scriptParts);
+		return getAliasedParts(AliasedPropertyAccessor.scriptParts, false);
 	}
 
-	public String getPreconditionPropertyName() {
-		return getTestCaseParts()[PRECONDITION_INDEX];
-	}
-	
 	public String getFocusPropertyName() {
-		return getTestCaseParts()[FOCUS_INDEX];
-	}
-	
-	public String getVerificationPropertyName() {
-		return getTestCaseParts()[VERIFICATION_INDEX];
-	}
-	
-	public String getPostprocessingPropertyName() {
-		return getTestCaseParts()[POSTPOCESSING_INDEX];
-	}
-	
-	public String getScriptPreconditionPropertyName() {
-		return getScriptParts()[SCRIPT_PRECONDITION_INDEX];
-	}
-	
-	public String getScriptPostprocessingPropertyName() {
-		return getScriptParts()[SCRIPT_POSTPOCESSING_INDEX];
+		return getAlias(testCaseParts[FOCUS_INDEX]);
 	}
 	
 	public boolean isPart(String name){
 		return Arrays.asList(AliasedPropertyAccessor.testCaseParts).contains(name) || Arrays.asList(AliasedPropertyAccessor.scriptParts).contains(name);
+	}
+
+	public String[] getTestCaseAliasNames() {
+		return getAliasedParts(AliasedPropertyAccessor.testCaseParts, true);
+	}
+
+	public String[] getScriptAliasPropertyNames() {
+		return getAliasedParts(AliasedPropertyAccessor.scriptParts, true);
 	}
 	
 }

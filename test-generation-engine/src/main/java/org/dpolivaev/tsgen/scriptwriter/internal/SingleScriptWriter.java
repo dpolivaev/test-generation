@@ -4,6 +4,7 @@ import org.dpolivaev.tsgen.coverage.GoalChecker;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
+import org.dpolivaev.tsgen.scriptwriter.AliasedPropertyAccessor;
 
 public class SingleScriptWriter implements PropertyHandler {
 
@@ -28,7 +29,7 @@ public class SingleScriptWriter implements PropertyHandler {
         	xmlWriter.setAttribute("id", "script");
         }
         testCaseProducer.addAttributes(propertyContainer, "script");
-        testCaseProducer.addParts(propertyContainer, scriptConfiguration.getScriptParts(propertyContainer));
+        testCaseProducer.addParts(propertyContainer, new AliasedPropertyAccessor(propertyContainer).getScriptParts());
         scriptProducer = testCaseProducer;
     }
 
