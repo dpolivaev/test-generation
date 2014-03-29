@@ -91,7 +91,7 @@ public class XmlTestCaseWriterTest {
      
     @Test
     public void ignoresUndefinedProperties() throws Exception{
-        givenProperty("testcase.attribute", SpecialValue.UNDEFINED);
+        givenProperty("testcase.focus", SpecialValue.UNDEFINED);
         createScript();
         checkOutput("<TestCase/>");
     }

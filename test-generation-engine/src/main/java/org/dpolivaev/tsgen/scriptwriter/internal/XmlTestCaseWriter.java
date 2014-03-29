@@ -105,9 +105,11 @@ public class XmlTestCaseWriter implements PropertyHandler {
     }
 
     private void addPart(PropertyContainer propertyContainer, String property, String element) {
-        xmlWriter.beginElement(element);
-        addPartAttributes(propertyContainer, property);
-        xmlWriter.endElement(element);
+    	if(! propertyContainer.get(property).equals(SpecialValue.UNDEFINED)){
+    		xmlWriter.beginElement(element);
+    		addPartAttributes(propertyContainer, property);
+    		xmlWriter.endElement(element);
+    	}
     }
 
      public void addPartAttributes(PropertyContainer propertyContainer, String property) {
