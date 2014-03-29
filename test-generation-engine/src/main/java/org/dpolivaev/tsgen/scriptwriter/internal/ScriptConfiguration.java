@@ -3,6 +3,8 @@ package org.dpolivaev.tsgen.scriptwriter.internal;
 import java.io.File;
 
 import org.dpolivaev.tsgen.coverage.GoalChecker;
+import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
+import org.dpolivaev.tsgen.scriptwriter.AliasedPropertyAccessor;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 import org.xml.sax.ContentHandler;
 
@@ -36,14 +38,14 @@ public class ScriptConfiguration {
 	}
 
 	XmlTestCaseWriter testCaseWriter(XmlWriter xmlWriter, GoalChecker goalChecker) {
-		return new XmlTestCaseWriter(xmlWriter, outputConfiguration, goalChecker);
+		return new XmlTestCaseWriter(xmlWriter, goalChecker);
 	}
 
-	String[] getScriptParts() {
-		return outputConfiguration.getScriptParts();
+	String[] getScriptParts(PropertyContainer propertyContainer) {
+		return new AliasedPropertyAccessor(propertyContainer).getScriptParts();
 	}
 
-	String[] getTestCaseParts() {
-		return outputConfiguration.getTestCaseParts();
+	String[] getTestCaseParts(PropertyContainer propertyContainer) {
+		return new AliasedPropertyAccessor(propertyContainer).getTestCaseParts();
 	}
 }

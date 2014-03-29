@@ -3,7 +3,6 @@ package org.dpolivaev.dsl.tsgen.jvmmodel
 import com.google.inject.Injector
 import java.util.ArrayList
 import java.util.Collection
-import java.util.HashMap
 import java.util.HashSet
 import java.util.Set
 import javax.inject.Inject
@@ -11,7 +10,6 @@ import org.dpolivaev.dsl.tsgen.strategydsl.Condition
 import org.dpolivaev.dsl.tsgen.strategydsl.Generation
 import org.dpolivaev.dsl.tsgen.strategydsl.OracleReference
 import org.dpolivaev.dsl.tsgen.strategydsl.OutputConfiguration
-import org.dpolivaev.dsl.tsgen.strategydsl.PropertyMapping
 import org.dpolivaev.dsl.tsgen.strategydsl.Rule
 import org.dpolivaev.dsl.tsgen.strategydsl.RuleGroup
 import org.dpolivaev.dsl.tsgen.strategydsl.StrategyReference
@@ -487,7 +485,6 @@ class GenerationInferrer{
 			jvmType.members += run.toMethod(methodName, run.newTypeRef(void)) [
 				body = [
 					appendOutputConfiguration(it, "output", run, run.outputConfiguration)
-					configureTestProperties(it, script.propertyMapping)
 					appendOutputConfiguration(it, "report", run, run.reportConfiguration)
 					newLine
 					append(run.newTypeRef(CoverageTracker).type)
@@ -536,27 +533,7 @@ class GenerationInferrer{
 			]
 		}
 	}
-def private configureTestProperties(ITreeAppendable it, PropertyMapping propertyMapping){
-	if(propertyMapping != null){
-		val propertyMap = new HashMap<String, String>
-		var i = 0;
-		for(replacedName : propertyMapping.defaultNames){
-			propertyMap.put(replacedName, propertyMapping.userNames.get(i));
-			i=i+1;	
-		}
-		newLine
-		val defaultOutputConfiguration = new org.dpolivaev.tsgen.scriptwriter.OutputConfiguration
-		append('__outputConfiguration.setScriptPropertyNames(') 
-		append('''"«propertyMap.get(defaultOutputConfiguration.scriptPreconditionPropertyName)»", ''') 
-		append('''"«propertyMap.get(defaultOutputConfiguration.scriptPostprocessingPropertyName)»");''')
-		newLine
-		append('__outputConfiguration.setTestCasePropertyNames(') 
-		append('''"«propertyMap.get(defaultOutputConfiguration.preconditionPropertyName)»", ''') 
-		append('''"«propertyMap.get(defaultOutputConfiguration.focusPropertyName)»", ''') 
-		append('''"«propertyMap.get(defaultOutputConfiguration.verificationPropertyName)»", ''') 
-		append('''"«propertyMap.get(defaultOutputConfiguration.postprocessingPropertyName)»");''')
-	}
-}
+	
 	def private appendOutputConfiguration(ITreeAppendable it, String target, EObject context, OutputConfiguration outputConfiguration) {
 		newLine
 		append(context.newTypeRef(org.dpolivaev.tsgen.scriptwriter.OutputConfiguration).type)

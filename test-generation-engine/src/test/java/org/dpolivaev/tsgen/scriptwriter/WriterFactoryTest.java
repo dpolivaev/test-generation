@@ -7,7 +7,6 @@ import java.io.File;
 
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
-import org.dpolivaev.tsgen.strategies.StrategyHelper;
 import org.junit.Test;
 
 public class WriterFactoryTest {

@@ -8,6 +8,7 @@ import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.ruleengine.ValueProvider;
+import org.dpolivaev.tsgen.scriptwriter.AliasedPropertyAccessor;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 
 
@@ -15,7 +16,7 @@ public class TestIdProvider implements ValueProvider{
 	
 	public static Strategy strategy(OutputConfiguration outputConfiguration, String propertyName){
 		Strategy strategy = new Strategy();
-		TestIdProvider instance = new TestIdProvider(outputConfiguration, "=", " ");
+		TestIdProvider instance = new TestIdProvider("=", " ");
 		strategy.addDefaultRule(RuleBuilder.Factory.iterate(propertyName).over(instance));
 		return strategy;
 
@@ -23,23 +24,21 @@ public class TestIdProvider implements ValueProvider{
 	
 	final String propertySeparator;
 	final String valueNameSeparator;
-	final private OutputConfiguration outputConfiguration;
 
 	
-	public TestIdProvider(OutputConfiguration outputConfiguration, String valueNameSeparator, String propertySeparator) {
+	public TestIdProvider(String valueNameSeparator, String propertySeparator) {
 		super();
-		this.outputConfiguration = outputConfiguration;
 		this.valueNameSeparator = valueNameSeparator;
 		this.propertySeparator = propertySeparator;
 	}
 	
 	@Override
-	public Object value(PropertyContainer propertyContainer) {
+	public Object value(final PropertyContainer propertyContainer) {
 		AssignmentFormatter assignmentFormatter = new AssignmentFormatter(propertySeparator, valueNameSeparator){
 
 			@Override
 			protected boolean includesAssignment(Assignment assignment) {
-				return assignment.rule.forcesIteration() || assignment.getTargetedPropertyName().equals(outputConfiguration.getFocusPropertyName());
+				return assignment.rule.forcesIteration() || assignment.getTargetedPropertyName().equals(new AliasedPropertyAccessor(propertyContainer).getFocusPropertyName());
 			}
 
 			@Override
@@ -69,7 +68,7 @@ public class TestIdProvider implements ValueProvider{
 			}
 		};
 		assignmentFormatter.appendReasons(false);
-		Collection<Assignment> testPartProperties = new AssignmentFilter(outputConfiguration, propertyContainer).testPartRelevantAssignments();
+		Collection<Assignment> testPartProperties = new AssignmentFilter(propertyContainer).testPartRelevantAssignments();
 		final String values = assignmentFormatter.format(testPartProperties);
 		return values.trim();
 	}

@@ -28,7 +28,7 @@ public class SingleScriptWriter implements PropertyHandler {
         	xmlWriter.setAttribute("id", "script");
         }
         testCaseProducer.addAttributes(propertyContainer, "script");
-        testCaseProducer.addParts(propertyContainer, scriptConfiguration.getScriptParts());
+        testCaseProducer.addParts(propertyContainer, scriptConfiguration.getScriptParts(propertyContainer));
         scriptProducer = testCaseProducer;
     }
 

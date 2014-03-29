@@ -8,16 +8,14 @@ import java.util.regex.Pattern;
 
 import org.dpolivaev.tsgen.ruleengine.Assignment;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
+import org.dpolivaev.tsgen.scriptwriter.AliasedPropertyAccessor;
 import org.dpolivaev.tsgen.scriptwriter.internal.PartValueParser;
 
 public class AssignmentFilter {
 	private static final Pattern NUMBER_REGEX =  Pattern.compile("#\\d*");
 	final private PropertyContainer propertyContainer;
-	final private OutputConfiguration outputConfiguration;
 
-	public AssignmentFilter(OutputConfiguration outputConfiguration, PropertyContainer propertyContainer) {
-		this.outputConfiguration = outputConfiguration;
+	public AssignmentFilter(PropertyContainer propertyContainer) {
 		this.propertyContainer = propertyContainer;
 	}
 
@@ -27,11 +25,11 @@ public class AssignmentFilter {
 	}
 
 	public Map<String, Assignment> testPartRelevantAssignmentMap() {
-		return testPartRelevantAssignmentMap(outputConfiguration.getTestCaseParts());
+		return testPartRelevantAssignmentMap(new AliasedPropertyAccessor(propertyContainer).getTestCaseParts());
 	}
 
 	public Map<String, Assignment> scriptPartRelevantAssignmentMap() {
-		return testPartRelevantAssignmentMap(outputConfiguration.getScriptParts());
+		return testPartRelevantAssignmentMap(new AliasedPropertyAccessor(propertyContainer).getScriptParts());
 	}
 
 	private Map<String, Assignment> testPartRelevantAssignmentMap(final String[] parts) {

@@ -10,14 +10,12 @@ import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 public class DescriptionProvider  implements ValueProvider{
 
 	private AssignmentFormatter formatter;
-	final private OutputConfiguration outputConfiguration;
 
 	public DescriptionProvider() {
-		this(new OutputConfiguration(), ": ", "\n");
+		this(": ", "\n");
 	}
 
-	public DescriptionProvider(OutputConfiguration outputConfiguration, String nameValueSeparator, String propertySeparator) {
-		this.outputConfiguration = outputConfiguration;
+	public DescriptionProvider(String nameValueSeparator, String propertySeparator) {
 		formatter = AssignmentFormatter.create(nameValueSeparator, propertySeparator);
 		formatter.exclude("\\[.*");
 		formatter.exclude("(?:script)(?:\\..+)?");
@@ -27,13 +25,13 @@ public class DescriptionProvider  implements ValueProvider{
 	}
 
 	public String describe(PropertyContainer assignments) {
-		final AssignmentFilter assignmentFilter = new AssignmentFilter(outputConfiguration, assignments);
+		final AssignmentFilter assignmentFilter = new AssignmentFilter(assignments);
 		return formatter.format(assignmentFilter.descriptionRelevantAssignments());
 	}
 
 	public static Strategy strategy(OutputConfiguration outputConfiguration, String propertyName){
 		Strategy strategy = new Strategy();
-		DescriptionProvider instance = new DescriptionProvider(outputConfiguration, ": ", "\n");
+		DescriptionProvider instance = new DescriptionProvider(": ", "\n");
 		strategy.addDefaultRule(RuleBuilder.Factory.iterate(propertyName).over(instance));
 		return strategy;
 

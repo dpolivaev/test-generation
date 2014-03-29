@@ -16,7 +16,7 @@ import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 import org.dpolivaev.tsgen.ruleengine.internal.PropertyAccessor;
-import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
+import org.dpolivaev.tsgen.scriptwriter.AliasedPropertyAccessor;
 import org.dpolivaev.tsgen.utils.internal.StringWithNumbersComparator;
 
 public class XmlTestCaseWriter implements PropertyHandler {
@@ -26,12 +26,10 @@ public class XmlTestCaseWriter implements PropertyHandler {
     
     private final XmlWriter xmlWriter;
 	private GoalChecker goalChecker;
-	final private OutputConfiguration outputConfiguration;
 
-    public XmlTestCaseWriter(XmlWriter xmlWriter, OutputConfiguration outputConfiguration, GoalChecker goalChecker) {
+    public XmlTestCaseWriter(XmlWriter xmlWriter, GoalChecker goalChecker) {
     	this.xmlWriter = xmlWriter;
 		this.goalChecker = goalChecker;
-		this.outputConfiguration = outputConfiguration;
 	}
 
 	@Override
@@ -39,7 +37,7 @@ public class XmlTestCaseWriter implements PropertyHandler {
         xmlWriter.beginElement(TESTCASE_ELEMENT);
         addAttribute(propertyContainer, TESTCASE_PROPERTY, "id");
 		addParameters(propertyContainer, TESTCASE_PROPERTY);
-        addParts(propertyContainer, outputConfiguration.getTestCaseParts());
+        addParts(propertyContainer, new AliasedPropertyAccessor(propertyContainer).getTestCaseParts());
         addDescription(propertyContainer, TESTCASE_PROPERTY);
         for(Goal goal : goalChecker.goals())
         	addCoverage(goal.name(), goal.checkList());
@@ -142,7 +140,7 @@ public class XmlTestCaseWriter implements PropertyHandler {
 		final String prefix = property + '.';
         List<String> sortedProperties = new PropertyAccessor(propertyContainer).sortedPropertiesForPrefix(prefix);
         for(String attributeProperty : sortedProperties){
-        	if(! attributeProperty.equals(prefix + "description") && ! isPart(attributeProperty)){
+        	if(! attributeProperty.equals(prefix + "description") && ! isPart(propertyContainer, attributeProperty)){
         		Object attributeValue = propertyContainer.get(attributeProperty);
         		if(attributeValue != SpecialValue.UNDEFINED){
         			String attributeName = attributeProperty.substring(prefix.length());
@@ -153,9 +151,9 @@ public class XmlTestCaseWriter implements PropertyHandler {
 	}
 
 	static private Pattern PART_PATERN = Pattern.compile("(.*?)(?:#\\d{1,2})?"); 
-	private boolean isPart(String attributeProperty) {
+	private boolean isPart(PropertyContainer propertyContainer, String attributeProperty) {
 		final Matcher matcher = PART_PATERN.matcher(attributeProperty);
-		return matcher.matches() && outputConfiguration.isPart(matcher.group(1));
+		return matcher.matches() && new AliasedPropertyAccessor(propertyContainer).isPart(matcher.group(1));
 	}
 
 	private void addParameterElement(String attributeName, Object attributeValue) {
