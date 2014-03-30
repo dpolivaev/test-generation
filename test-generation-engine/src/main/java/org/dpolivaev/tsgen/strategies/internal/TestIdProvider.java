@@ -5,11 +5,8 @@ import java.util.Collection;
 import org.dpolivaev.tsgen.ruleengine.Assignment;
 import org.dpolivaev.tsgen.ruleengine.AssignmentFormatter;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
-import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.ruleengine.ValueProvider;
 import org.dpolivaev.tsgen.scriptwriter.AliasedPropertyAccessor;
-import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 
 
 public class TestIdProvider implements ValueProvider{

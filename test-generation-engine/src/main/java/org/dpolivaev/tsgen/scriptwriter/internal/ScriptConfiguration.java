@@ -3,8 +3,6 @@ package org.dpolivaev.tsgen.scriptwriter.internal;
 import java.io.File;
 
 import org.dpolivaev.tsgen.coverage.GoalChecker;
-import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-import org.dpolivaev.tsgen.scriptwriter.AliasedPropertyAccessor;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 import org.xml.sax.ContentHandler;
 
