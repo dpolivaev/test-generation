@@ -175,11 +175,10 @@ import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.ruleengine.ValueProvider;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
-import org.dpolivaev.tsgen.strategies.StrategyHelper;
 
 @SuppressWarnings("all")
 public class MyFile {
-  private static Object valueProvider1(final PropertyContainer propertyContainer) {
+  private static Object value1(final PropertyContainer propertyContainer) {
     Object _calculate = MyFile.myOracle.calculate(0);
     return _calculate;
   }
@@ -194,7 +193,8 @@ public class MyFile {
     __strategy.addRule(RuleBuilder.Factory.iterate("x").over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {
         ((CoverageTrackerEnabler)propertyContainer).startTrace(); try{
-        return valueProvider1(propertyContainer);
+        Object __value = value1(propertyContainer);
+        return (__value instanceof ValueProvider) ? ((ValueProvider)__value).value(propertyContainer) : __value;
         } finally{ ((CoverageTrackerEnabler)propertyContainer).stopTrace();}
     }}).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
@@ -212,7 +212,7 @@ public class MyFile {
     myOracle.setCoverageTracker(__coverageTracker);
     myOracle.registerRequiredItems(__writerFactory);
     __writerFactory.configureEngine(__ruleEngine);
-    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcase.description")).with(s).run(__ruleEngine);
+    new RequirementBasedStrategy().with(s).run(__ruleEngine);
   }
   
   public static void main(final String[] args) {
@@ -295,7 +295,6 @@ import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
-import org.dpolivaev.tsgen.strategies.StrategyHelper;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -333,7 +332,7 @@ public class MyFile {
     myOracle.setCoverageTracker(__coverageTracker);
     myOracle.registerRequiredItems(__writerFactory);
     __writerFactory.configureEngine(__ruleEngine);
-    new RequirementBasedStrategy().with(StrategyHelper.id(__outputConfiguration, "testcase")).with(StrategyHelper.description(__outputConfiguration, "testcase.description")).with(s).run(__ruleEngine);
+    new RequirementBasedStrategy().with(s).run(__ruleEngine);
   }
   
   public static void main(final String[] args) {

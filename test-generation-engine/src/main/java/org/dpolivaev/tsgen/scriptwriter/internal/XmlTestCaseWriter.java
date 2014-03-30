@@ -21,8 +21,7 @@ import org.dpolivaev.tsgen.utils.internal.StringWithNumbersComparator;
 
 public class XmlTestCaseWriter implements PropertyHandler {
 
-	private static final String TESTCASE_PROPERTY = "testcase";
-    private static final String TESTCASE_ELEMENT = "TestCase";
+	private static final String TESTCASE_ELEMENT = "TestCase";
     
     private final XmlWriter xmlWriter;
 	private GoalChecker goalChecker;
@@ -34,14 +33,17 @@ public class XmlTestCaseWriter implements PropertyHandler {
 
 	@Override
     public void handlePropertyCombination(PropertyContainer propertyContainer) {
-        xmlWriter.beginElement(TESTCASE_ELEMENT);
-        addAttribute(propertyContainer, TESTCASE_PROPERTY, "id");
-		addParameters(propertyContainer, TESTCASE_PROPERTY);
-        addParts(propertyContainer, new AliasedPropertyAccessor(propertyContainer).getTestCaseParts());
-        addDescription(propertyContainer, TESTCASE_PROPERTY);
+		final AliasedPropertyAccessor aliasedPropertyAccessor = new AliasedPropertyAccessor(propertyContainer);
+        final String testcaseElementAlias = aliasedPropertyAccessor.getAlias(TESTCASE_ELEMENT);
+		xmlWriter.beginElement(testcaseElementAlias);
+        final String testcaseProperty = aliasedPropertyAccessor.getAlias(AliasedPropertyAccessor.DEFAULT_TESTCASE_PROPERTY);
+		addAttribute(propertyContainer, testcaseProperty, "id");
+		addParameters(propertyContainer, testcaseProperty);
+		addParts(propertyContainer, aliasedPropertyAccessor.getTestCaseParts());
+        addDescription(propertyContainer, testcaseProperty);
         for(Goal goal : goalChecker.goals())
         	addCoverage(goal.name(), goal.checkList());
-        xmlWriter.endElement(TESTCASE_ELEMENT);
+        xmlWriter.endElement(testcaseElementAlias);
 
 	}
 	
@@ -139,10 +141,11 @@ public class XmlTestCaseWriter implements PropertyHandler {
 
 	private void addParameters(PropertyContainer propertyContainer,
 			String property) {
+		final AliasedPropertyAccessor aliasedPropertyAccessor = new AliasedPropertyAccessor(propertyContainer);
 		final String prefix = property + '.';
         List<String> sortedProperties = new PropertyAccessor(propertyContainer).sortedPropertiesForPrefix(prefix);
         for(String attributeProperty : sortedProperties){
-        	if(! attributeProperty.equals(prefix + "description") && ! isPart(propertyContainer, attributeProperty)){
+        	if(! attributeProperty.equals(aliasedPropertyAccessor.getAlias(property + ".description")) && isParameter(propertyContainer, attributeProperty)){
         		Object attributeValue = propertyContainer.get(attributeProperty);
         		if(attributeValue != SpecialValue.UNDEFINED){
         			String attributeName = attributeProperty.substring(prefix.length());
@@ -153,9 +156,10 @@ public class XmlTestCaseWriter implements PropertyHandler {
 	}
 
 	static private Pattern PART_PATERN = Pattern.compile("(.*?)(?:#\\d{1,2})?"); 
-	private boolean isPart(PropertyContainer propertyContainer, String attributeProperty) {
+	private boolean isParameter(PropertyContainer propertyContainer, String attributeProperty) {
 		final Matcher matcher = PART_PATERN.matcher(attributeProperty);
-		return matcher.matches() && new AliasedPropertyAccessor(propertyContainer).isPart(matcher.group(1));
+		final AliasedPropertyAccessor aliasedPropertyAccessor = new AliasedPropertyAccessor(propertyContainer);
+		return ! aliasedPropertyAccessor.isAlias(attributeProperty) &&  ! (matcher.matches() && aliasedPropertyAccessor.isPart(matcher.group(1)));
 	}
 
 	private void addParameterElement(String attributeName, Object attributeValue) {
@@ -167,11 +171,14 @@ public class XmlTestCaseWriter implements PropertyHandler {
 
 	private void addDescription(PropertyContainer propertyContainer,
 			String property) {
-		Object value = propertyContainer.get(property+".description");
+		final AliasedPropertyAccessor aliasedPropertyAccessor = new AliasedPropertyAccessor(propertyContainer);
+		final String descriptionPropertyName = aliasedPropertyAccessor.getAlias(property+".description");
+		Object value = propertyContainer.get(descriptionPropertyName);
         if(!value.equals(SpecialValue.UNDEFINED)) {
-        	xmlWriter.beginElement("Description");
+			final String descriptionElementName = aliasedPropertyAccessor.getAlias("Description");
+			xmlWriter.beginElement(descriptionElementName);
         	xmlWriter.addTextContent(value.toString());
-        	xmlWriter.endElement("Description");
+        	xmlWriter.endElement(descriptionElementName);
 		}
 	}
 

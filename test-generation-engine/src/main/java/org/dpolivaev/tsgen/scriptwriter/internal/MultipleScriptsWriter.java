@@ -7,6 +7,7 @@ import org.dpolivaev.tsgen.coverage.GoalChecker;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
+import org.dpolivaev.tsgen.scriptwriter.AliasedPropertyAccessor;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 
 public class MultipleScriptsWriter implements PropertyHandler{
@@ -33,10 +34,13 @@ public class MultipleScriptsWriter implements PropertyHandler{
 
      @Override
     public void handlePropertyCombination(PropertyContainer propertyContainer) {
-        Object scriptValue = propertyContainer.get("script");
+    	
+        final AliasedPropertyAccessor aliasedPropertyAccessor = new AliasedPropertyAccessor(propertyContainer);
+		final String scriptPropertyName = aliasedPropertyAccessor.getAlias(AliasedPropertyAccessor.DEFAULT_SCRIPT_PROPERTY_NAME);
+		Object scriptValue = propertyContainer.get(scriptPropertyName);
         String scriptName;
         if(scriptValue == SpecialValue.UNDEFINED)
-        	scriptName = "script";
+        	scriptName = AliasedPropertyAccessor.DEFAULT_SCRIPT_PROPERTY_NAME;
         else
         	scriptName =(String) scriptValue;
         if(! singleScriptProducers.containsKey(scriptName)) {

@@ -26,7 +26,7 @@ public class DescriptionProviderTest {
 		givenAssignment("name2", "value2", "name->");
 		givenAssignment("[id1]", "reason", "");
 
-		String description = new DescriptionProvider()
+		String description = new DescriptionProvider(": ", "\n")
 				.describe((PropertyContainer) assignments);
 		Assert.assertEquals("name: value\n" + "name2: value2",
 				description);
@@ -37,7 +37,7 @@ public class DescriptionProviderTest {
 	public void excludesRequirements() {
 		givenAssignment("[id1]", "reason", "");
 
-		String description = new DescriptionProvider()
+		String description = new DescriptionProvider(": ", "\n")
 				.describe((PropertyContainer) assignments);
 		Assert.assertEquals("", description);
 	}
@@ -46,7 +46,7 @@ public class DescriptionProviderTest {
 	public void excludesUndefinedValues() {
 		givenAssignment("name", SpecialValue.UNDEFINED,"");
 
-		String description = new DescriptionProvider()
+		String description = new DescriptionProvider(": ", "\n")
 				.describe((PropertyContainer) assignments);
 		Assert.assertEquals("", description);
 	}
@@ -63,9 +63,27 @@ public class DescriptionProviderTest {
 		givenAssignment("script.postprocessing", "script postprocessing","");
 		givenAssignment("script", "script","");
 
-		String description = new DescriptionProvider()
+		String description = new DescriptionProvider(": ", "\n")
 				.describe((PropertyContainer) assignments);
 		Assert.assertEquals("", description);
 	}
 
+	@Test
+	public void excludesAliasedTestPartsAndParams() {
+		givenAssignment("script.alias", "myscript","");
+		givenAssignment("testcase.alias", "mytestcase","");
+		givenAssignment("mytestcase.precondition", "precondition","");
+		givenAssignment("mytestcase.focus.alias", "focus","");
+		givenAssignment("focus", "focus(x)","");
+		givenAssignment("x", "x","");
+		givenAssignment("focus#1", "focus1","");
+		givenAssignment("mytestcase.verification", "verification","");
+		givenAssignment("mytestcase.postprocessing", "postprocessing","");
+		givenAssignment("myscript.postprocessing", "myscript postprocessing","");
+		givenAssignment("myscript", "myscript","");
+
+		String description = new DescriptionProvider(": ", "\n")
+				.describe((PropertyContainer) assignments);
+		Assert.assertEquals("", description);
+	}
 }
