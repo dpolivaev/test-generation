@@ -3,3 +3,4 @@ plugin.xml_gen
 backups
 model
 backups
+*._trace
