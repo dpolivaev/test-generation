@@ -63,14 +63,11 @@ public class AssignmentFilter {
 		final AliasedPropertyAccessor aliasedPropertyAccessor = new AliasedPropertyAccessor(propertyContainer);
 		final Map<String, Assignment> testPartRelevantAssignmentMap = testPartRelevantAssignmentMap(aliasedPropertyAccessor.getTestCaseParts());
 		final Map<String, Assignment> scriptPartRelevantAssignmentMap = testPartRelevantAssignmentMap(aliasedPropertyAccessor.getScriptParts());
-		final HashSet<String> aliasNames = new HashSet<String>();
-		aliasNames.addAll(Arrays.asList(aliasedPropertyAccessor.getScriptAliasPropertyNames()));
-		aliasNames.addAll(Arrays.asList(aliasedPropertyAccessor.getTestCaseAliasNames()));
 		for(Assignment assignment : allAssignments){
 			final String targetedPropertyName = assignment.getTargetedPropertyName();
 			if(! testPartRelevantAssignmentMap.containsKey(targetedPropertyName)
 					&& ! scriptPartRelevantAssignmentMap.containsKey(targetedPropertyName)
-					&& ! aliasNames.contains(targetedPropertyName))
+					&& ! aliasedPropertyAccessor.isAlias(targetedPropertyName))
 				descriptionRelevantAssignments.add(assignment);
 		}
 		return descriptionRelevantAssignments;

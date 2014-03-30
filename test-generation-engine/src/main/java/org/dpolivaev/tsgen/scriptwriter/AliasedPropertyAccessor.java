@@ -7,47 +7,46 @@ import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 
 public class AliasedPropertyAccessor {
-	private static final int PRECONDITION_INDEX = 0;
 	private static final int FOCUS_INDEX = 2;
-	private static final int VERIFICATION_INDEX = 4;
-	private static final int POSTPOCESSING_INDEX = 6;
-	private static final int SCRIPT_PRECONDITION_INDEX = 0;
-	private static final int SCRIPT_POSTPOCESSING_INDEX = 2;
 
 
 	final static String[] testCaseParts = {
-			"testcase.precondition", "Precondition",
-			"testcase.focus", "Focus",
-			"testcase.verification", "Verification",
-			"testcase.postprocessing", "Postprocessing",
+			"precondition", "Precondition",
+			"focus", "Focus",
+			"verification", "Verification",
+			"postprocessing", "Postprocessing",
 	};
 	final static String[] scriptParts = {
-			"script.precondition", "ScriptPrecondition",
-			"script.postprocessing", "ScriptPostprocessing",
+			"precondition", "ScriptPrecondition",
+			"postprocessing", "ScriptPostprocessing",
 	};
 	final private PropertyContainer propertyContainer;
+
+
+	public static final String DEFAULT_TESTCASE_PROPERTY = "testcase";
+
+
+	public static final String DEFAULT_SCRIPT_PROPERTY_NAME = "script";
 
 	public AliasedPropertyAccessor(PropertyContainer propertyContainer) {
 		this.propertyContainer = propertyContainer;
 	}
 
 	public String[] getTestCaseParts() {
-		return getAliasedParts(AliasedPropertyAccessor.testCaseParts, false);
+		return getAliasedParts(getAlias(DEFAULT_TESTCASE_PROPERTY) + '.', AliasedPropertyAccessor.testCaseParts);
 	}
 
-	private String[] getAliasedParts(final String[] parts, boolean includeAliasNames) {
-		ArrayList<String> aliasedParts = new ArrayList<>(parts.length*2);
+	private String[] getAliasedParts(String prefix, final String[] parts) {
+		ArrayList<String> aliasedParts = new ArrayList<>(parts.length);
+		int index = 0;
 		for(String part : parts){
-			if(includeAliasNames) {
-				final String aliasName = part + ".alias";
-				if (! propertyContainer.get(aliasName).equals(SpecialValue.UNDEFINED)) {
-					aliasedParts.add(aliasName);
-				}
-			}
-			else{
-				final String alias = getAlias(part);
-				aliasedParts.add(alias);
-			}
+			final String completePropertyName;
+			if(index++%2==0)
+				completePropertyName = prefix + part;
+			else
+				completePropertyName = part;
+			final String alias = getAlias(completePropertyName);
+			aliasedParts.add(alias);
 		}
 		return aliasedParts.toArray(new String[aliasedParts.size()]);
 	}
@@ -63,23 +62,18 @@ public class AliasedPropertyAccessor {
 	}
 
 	public String[] getScriptParts() {
-		return getAliasedParts(AliasedPropertyAccessor.scriptParts, false);
+		return getAliasedParts(getAlias(DEFAULT_SCRIPT_PROPERTY_NAME) + '.', AliasedPropertyAccessor.scriptParts);
 	}
 
 	public String getFocusPropertyName() {
-		return getAlias(testCaseParts[FOCUS_INDEX]);
+		return getAlias(getAlias(DEFAULT_TESTCASE_PROPERTY) + '.' + testCaseParts[FOCUS_INDEX]);
 	}
 	
 	public boolean isPart(String name){
-		return Arrays.asList(AliasedPropertyAccessor.testCaseParts).contains(name) || Arrays.asList(AliasedPropertyAccessor.scriptParts).contains(name);
-	}
-
-	public String[] getTestCaseAliasNames() {
-		return getAliasedParts(AliasedPropertyAccessor.testCaseParts, true);
-	}
-
-	public String[] getScriptAliasPropertyNames() {
-		return getAliasedParts(AliasedPropertyAccessor.scriptParts, true);
+		return Arrays.asList(getTestCaseParts()).contains(name) || Arrays.asList(getScriptParts()).contains(name);
 	}
 	
+	public boolean isAlias(final String propertyName) {
+		return propertyName.endsWith(".alias");
+	}
 }

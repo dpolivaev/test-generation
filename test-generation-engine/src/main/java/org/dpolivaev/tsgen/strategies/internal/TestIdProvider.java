@@ -14,14 +14,6 @@ import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 
 public class TestIdProvider implements ValueProvider{
 	
-	public static Strategy strategy(OutputConfiguration outputConfiguration, String propertyName){
-		Strategy strategy = new Strategy();
-		TestIdProvider instance = new TestIdProvider("=", " ");
-		strategy.addDefaultRule(RuleBuilder.Factory.iterate(propertyName).over(instance));
-		return strategy;
-
-	}; 
-	
 	final String propertySeparator;
 	final String valueNameSeparator;
 

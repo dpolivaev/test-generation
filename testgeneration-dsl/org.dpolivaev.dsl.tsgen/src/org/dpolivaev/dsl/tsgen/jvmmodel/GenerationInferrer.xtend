@@ -27,7 +27,6 @@ import org.dpolivaev.tsgen.ruleengine.RuleEngine
 import org.dpolivaev.tsgen.ruleengine.SpecialValue
 import org.dpolivaev.tsgen.ruleengine.Strategy
 import org.dpolivaev.tsgen.scriptwriter.WriterFactory
-import org.dpolivaev.tsgen.strategies.StrategyHelper
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.common.types.JvmGenericType
@@ -117,12 +116,12 @@ class GenerationInferrer{
 		}
 	}
 	
-    final static val VALUE_PROVIDER = "valueProvider"
+    final static val VALUE = "value"
 	private def appendValueProviders(ValueAction action){
 		for(valueProvider:action.valueProviders)
 			for(expr:valueProvider.expressions)
 				if(shouldCreateMethodFor(expr)) {
-					createMethod(expr, VALUE_PROVIDER, valueProvider.newTypeRef(Object), true)
+					createMethod(expr, VALUE, expr.inferredType, true)
 				}
 		
 	}
@@ -365,7 +364,7 @@ class GenerationInferrer{
 			else
 				append(', ')
 			val expressions = valueProvider.expressions 
-			if(valueProvider.condition == null && expressions.size == 1 && methods.get(VALUE_PROVIDER, expressions.get(0)) == null)
+			if(valueProvider.condition == null && expressions.size == 1 && methods.get(VALUE, expressions.get(0)) == null)
 				xbaseCompiler.compileAsJavaExpression(expressions.get(0), it, valueProvider.newTypeRef(Object))
 			else	
 				appendImplementationObject(it, valueAction.newTypeRef(org.dpolivaev.tsgen.ruleengine.ValueProvider).type, "Object value", 
@@ -380,7 +379,7 @@ class GenerationInferrer{
 		val trace = valueProvider.trace
 		if(trace)
 			appendTraceStart(it, valueProvider)
-		append('return ')
+		append('Object __value = ')
 		val concatenation = valueProvider.expressions.size() > 1
 		if(concatenation)
 			append("new StringBuilder()");
@@ -388,7 +387,7 @@ class GenerationInferrer{
 		for (expr : valueProvider.expressions){	
 			if(concatenation)
 				append(".append(");
-			val methodName = methods.get(VALUE_PROVIDER, expr)
+			val methodName = methods.get(VALUE, expr)
 			if(methodName == null){
 				xbaseCompiler.compileAsJavaExpression(expr, it, valueProvider.newTypeRef(Object))
 			}
@@ -401,6 +400,14 @@ class GenerationInferrer{
 		if(concatenation)
 			append(".toString()");
 		append(';')
+		newLine
+		append('return ') 
+		if(concatenation)
+			append("__value;")
+		else {
+			append("(__value instanceof ") append(valueProvider.newTypeRef(org.dpolivaev.tsgen.ruleengine.ValueProvider).type) append(") ? ")
+			append("((") append(valueProvider.newTypeRef(org.dpolivaev.tsgen.ruleengine.ValueProvider).type) append(")__value).value(propertyContainer) : __value;")
+		}
 		if(trace)
 			appendTraceEnd(it, valueProvider)
 	}
@@ -523,8 +530,6 @@ class GenerationInferrer{
 					}
 					newLine append('__writerFactory.configureEngine(__ruleEngine);')
 					newLine append('new ') append(run.newTypeRef(RequirementBasedStrategy).type) append('()')
-					append('.with(') append(run.newTypeRef(StrategyHelper).type) append('.id(__outputConfiguration, "testcase"))')
-					append('.with(') append(run.newTypeRef(StrategyHelper).type) append('.description(__outputConfiguration, "testcase.description"))')
 					combinedStrategy(it, run.strategies) 
 					append('.run(__ruleEngine);')
 				]

@@ -1,11 +1,20 @@
 package parkcalculator.testgeneration
-
+import org.dpolivaev.tsgen.strategies.StrategyHelper;  
 /*
  * Default test part property names 
  * (script.precondition, precondition, focus, verification, postcondition, script.postcondition) 
  * can be replaced by the others applying directive "use" like this.
  */
-use precondition as testcase.precondition, focus as testcase.focus, assert as testcase.verification, postprocessing as testcase.postprocessing 
+strategy structure
+	let script.precondition.alias be "beforeAll"
+	let script.postprocessing.alias be "afterAll"
+	let testcase.precondition.alias be "precondition"
+	let testcase.focus.alias be "focus"
+	let testcase.verification.alias be "assert"
+	let testcase.postprocessing.alias be "postprocessing"
+	
+	let default testcase be StrategyHelper.idProvider
+	let default testcase.description be StrategyHelper.descriptionProvider
 
 /* 
  * Declare strategy parkCostCalculatorTests 
@@ -275,7 +284,8 @@ oracle LongTermGarageParkingCalculator{
  * Strategies to be run and models to be checked for the code coverage must be mentioned here. 
  */	
 run strategy goal parkCostCalculatorTests 
-	with oracle goal ShortTermParkingCalculator, 
+	with strategy structure, 
+	oracle goal ShortTermParkingCalculator, 
 	oracle goal LongTermGarageParkingCalculator
 	
 //	use focus as focus

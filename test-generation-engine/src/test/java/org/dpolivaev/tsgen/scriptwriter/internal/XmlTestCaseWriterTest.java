@@ -97,7 +97,7 @@ public class XmlTestCaseWriterTest {
     }
     
     @Test
-    public void createsTestCaseElementWithFocusPartAndContent() throws Exception{
+    public void createsTestCaseElementWithFocusPart() throws Exception{
         givenProperty("testcase", "testcase");
         givenProperty("testcase.focus", "focus");
         createScript();
@@ -105,7 +105,40 @@ public class XmlTestCaseWriterTest {
     }
 
     @Test
-    public void createsTestCaseElementWithTwoFocusPartsAndContent() throws Exception{
+    public void createsTestCaseElementWithFocusElementAlias() throws Exception{
+        givenProperty("testcase", "testcase");
+        givenProperty("Focus.alias", "Alias");
+        givenProperty("testcase.focus", "focus");
+        createScript();
+        checkOutput("<TestCase id='testcase'><Alias id='focus'/></TestCase>");
+    }
+    @Test
+    public void createsTestCaseElementWithTestCaseElementAlias() throws Exception{
+        givenProperty("testcase", "testcase");
+        givenProperty("TestCase.alias", "Alias");
+        createScript();
+        checkOutput("<Alias id='testcase'/>");
+    }
+
+    @Test
+    public void createsTestCaseElementWithTestCaseAlias() throws Exception{
+        givenProperty("testcase.alias", "scenario");
+        givenProperty("TestCase.alias", "Scenario");
+        givenProperty("scenario", "scenario");
+        createScript();
+        checkOutput("<Scenario id='scenario'/>");
+    }
+
+    @Test
+    public void ignoredTestPartAlias() throws Exception{
+        givenProperty("testcase.focus.alias", "focus");
+        givenProperty("testcase", "testcase");
+        createScript();
+        checkOutput("<TestCase id='testcase'/>");
+    }
+
+    @Test
+    public void createsTestCaseElementWithTwoFocusParts() throws Exception{
         givenProperty("testcase", "testcase");
         givenProperty("testcase.focus", "focus");
         givenProperty("testcase.focus#1", "focus1");

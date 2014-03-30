@@ -8,9 +8,11 @@ import org.dpolivaev.tsgen.scriptwriter.AliasedPropertyAccessor;
 
 public class SingleScriptWriter implements PropertyHandler {
 
-    XmlWriter xmlWriter;
+    private static final String SCRIPT_ELEMENT_NAME = "Script";
+	XmlWriter xmlWriter;
     private PropertyHandler scriptProducer;
-    @Override
+	final private String scriptElementPropertyName;
+	@Override
 	public void generationStarted(PropertyContainer propertyContainer) {}
 	
     @Override
@@ -22,19 +24,23 @@ public class SingleScriptWriter implements PropertyHandler {
     	xmlWriter = scriptConfiguration.xmlWriter(resultFactory);
         xmlWriter.startDocument();
         XmlTestCaseWriter testCaseProducer = scriptConfiguration.testCaseWriter(xmlWriter, goalChecker);
-        xmlWriter.beginElement("Script");
-        Object scriptValue = propertyContainer.get("script");
+        final AliasedPropertyAccessor aliasedPropertyAccessor = new AliasedPropertyAccessor(propertyContainer);
+		scriptElementPropertyName = aliasedPropertyAccessor.getAlias(SCRIPT_ELEMENT_NAME);
+        xmlWriter.beginElement(scriptElementPropertyName);
+		final String scriptPropertyName = aliasedPropertyAccessor.getAlias(AliasedPropertyAccessor.DEFAULT_SCRIPT_PROPERTY_NAME);
+
+        Object scriptValue = propertyContainer.get(scriptPropertyName);
         if(scriptValue.equals(SpecialValue.UNDEFINED)){
-        	scriptValue = "script";
-        	xmlWriter.setAttribute("id", "script");
+        	scriptValue = scriptPropertyName;
+        	xmlWriter.setAttribute("id", scriptPropertyName);
         }
-        testCaseProducer.addAttributes(propertyContainer, "script");
+        testCaseProducer.addAttributes(propertyContainer, scriptPropertyName);
         testCaseProducer.addParts(propertyContainer, new AliasedPropertyAccessor(propertyContainer).getScriptParts());
         scriptProducer = testCaseProducer;
     }
 
 	public void generationFinished() {
-        xmlWriter.endElement("Script");
+        xmlWriter.endElement(scriptElementPropertyName);
         xmlWriter.endDocument();
     }
 }
