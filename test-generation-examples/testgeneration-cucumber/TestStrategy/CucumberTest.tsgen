@@ -1,0 +1,41 @@
+package login.testgeneration
+import org.dpolivaev.tsgen.strategies.StrategyHelper;  
+
+strategy loginPageTests
+
+let script.precondition.alias be "background"
+let testcase.alias be "scenario"
+let scenario.precondition.alias be "given"
+let scenario.focus.alias be "when"
+let scenario.verification.alias be "then"
+let default scenario be StrategyHelper.idProvider
+let default scenario.description be StrategyHelper.descriptionProvider
+
+let script be "login/LoginTest"	
+let script.feature be "Log in"
+let script.description be "I want to be logged if after 
+submitting correct credentials" 
+
+ let background be "go to page <page> (page)"
+ let page be "login"
+ 
+ let given#1 be "<email> mail address is entered (email)"
+ let given#2 be "<password> password is entered (password)"
+ let email be "valid"{ 
+ 	let password be "valid", "invalid", "empty"
+ }, 
+ "invalid" {
+ 	let password be "valid"
+ }, 
+ "empty" {
+ 	let password be "valid", "empty"
+ }
+ let when be "submit is clicked"
+ let then be "page <pageAfterSubmit> is opened(pageAfterSubmit)"
+ let pageAfterSubmit be :page
+ if(:email == "valid" && :password == "valid") let pageAfterSubmit be "loggedIn"
+ 
+ let default testcase be (:password  " password and " :email " email entered")
+ 
+run strategy goal loginPageTests 
+	output "output/xml" , apply "/cucumber.xslt" output "generated-tests/feature"
