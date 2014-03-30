@@ -1,4 +1,5 @@
 package login.testgeneration
+
 import org.dpolivaev.tsgen.strategies.StrategyHelper;  
 
 import static login.testgeneration.LoginOracles.*;
