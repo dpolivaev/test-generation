@@ -100,4 +100,13 @@ public class IdConverter{
 	public String snakeUpperCaseId(String invalidId) {
 		return snakeLowerCaseId(invalidId).toUpperCase();
 	}
+
+	final static Pattern VALID_LITERAL = Pattern.compile("true|false|\\d+(?:.\\d*)|0x[a-fA-F\\d]+|\".*\"");
+	public String literal(String input){
+		if(VALID_LITERAL.matcher(input).matches())
+			return input;
+		else
+			return snakeUpperCaseId(input);
+	}
+
 }

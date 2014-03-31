@@ -1,5 +1,7 @@
 package org.dpolivaev.tsgen.scriptwriter;
 
+import java.util.regex.Pattern;
+
 import org.dpolivaev.tsgen.utils.internal.IdConverter;
 import org.dpolivaev.tsgen.utils.internal.StringConverter;
 
@@ -28,6 +30,10 @@ public class TransformationHelper {
 		return new StringConverter().javaString(input);
 	}
 	
+	public static String literal(String input){
+		return new IdConverter().literal(input);
+	}
+
 	public static String substringBeforeLast(String input, String delimiter){
 		final int lastIndexOfDelimiter = input.lastIndexOf(delimiter);
 		if(lastIndexOfDelimiter <= 0)

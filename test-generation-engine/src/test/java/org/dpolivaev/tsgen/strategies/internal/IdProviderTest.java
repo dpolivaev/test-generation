@@ -25,6 +25,11 @@ public class IdProviderTest {
 		assertThat(javaId, CoreMatchers.equalTo(validId));
 	}
 
+	private void checkLiteral(String input) {
+		String javaLiteral = new IdConverter().literal(input);
+		assertThat(javaLiteral, CoreMatchers.equalTo(input));
+	}
+
 	@Test
 	public void givenValidJavaId_camelCaseId_returnsSameString() throws Exception {
 		String validId = "abc123_";
@@ -81,6 +86,26 @@ public class IdProviderTest {
 	@Test
 	public void insertsUnderscoreIfStartsWithNumber() throws Exception {
 		checkCamelCaseId("1", "_1");
+	}
+
+	@Test
+	public void literalMakerLetsStringsThrough(){
+		checkLiteral("\"abc\"");
+	}
+
+	@Test
+	public void literalMakerLetsBooleansThrough(){
+		checkLiteral("true");
+	}
+
+	@Test
+	public void literalMakerLetsNumbersThrough(){
+		checkLiteral("123");
+	}
+
+	@Test
+	public void literalMakerLetsFloatingNumbersThrough(){
+		checkLiteral("123.45");
 	}
 
 }
