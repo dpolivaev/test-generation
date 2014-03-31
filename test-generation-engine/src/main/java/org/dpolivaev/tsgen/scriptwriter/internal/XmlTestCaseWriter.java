@@ -23,7 +23,7 @@ public class XmlTestCaseWriter implements PropertyHandler {
 
 	private static final String TESTCASE_ELEMENT = "TestCase";
     
-    private final XmlWriter xmlWriter;
+    private XmlWriter xmlWriter;
 	private GoalChecker goalChecker;
 
     public XmlTestCaseWriter(XmlWriter xmlWriter, GoalChecker goalChecker) {
@@ -36,6 +36,7 @@ public class XmlTestCaseWriter implements PropertyHandler {
 		final AliasedPropertyAccessor aliasedPropertyAccessor = new AliasedPropertyAccessor(propertyContainer);
         final String testcaseElementAlias = aliasedPropertyAccessor.getAlias(TESTCASE_ELEMENT);
 		xmlWriter.beginElement(testcaseElementAlias);
+		calculateParts(propertyContainer, aliasedPropertyAccessor);
         final String testcaseProperty = aliasedPropertyAccessor.getAlias(AliasedPropertyAccessor.DEFAULT_TESTCASE_PROPERTY);
 		addAttribute(propertyContainer, testcaseProperty, "id");
 		addParameters(propertyContainer, testcaseProperty);
@@ -45,6 +46,18 @@ public class XmlTestCaseWriter implements PropertyHandler {
         	addCoverage(goal.name(), goal.checkList());
         xmlWriter.endElement(testcaseElementAlias);
 
+	}
+
+	private void calculateParts(PropertyContainer propertyContainer,
+			final AliasedPropertyAccessor aliasedPropertyAccessor) {
+		final XmlWriter xmlWriter = this.xmlWriter;
+		this.xmlWriter = null;
+		try{
+			addParts(propertyContainer, aliasedPropertyAccessor.getTestCaseParts());
+		}
+		finally{
+			this.xmlWriter = xmlWriter;
+		}
 	}
 	
 	@Override
@@ -108,17 +121,19 @@ public class XmlTestCaseWriter implements PropertyHandler {
 
     private void addPart(PropertyContainer propertyContainer, String property, String element) {
     	if(! propertyContainer.get(property).equals(SpecialValue.UNDEFINED)){
-    		xmlWriter.beginElement(element);
+		if (xmlWriter != null) xmlWriter.beginElement(element);
     		addPartAttributes(propertyContainer, property);
-    		xmlWriter.endElement(element);
+		if (xmlWriter != null) xmlWriter.endElement(element);
     	}
     }
 
      public void addPartAttributes(PropertyContainer propertyContainer, String property) {
         String value = propertyContainer.get(property).toString().trim();
         final PartValueParser partValueParser = new PartValueParser(value);
-        xmlWriter.setAttribute("id", partValueParser.getCalledMethod());
-        addDescription(propertyContainer, property);
+        if (xmlWriter != null) {
+		xmlWriter.setAttribute("id", partValueParser.getCalledMethod());
+		addDescription(propertyContainer, property);
+        }
         if(partValueParser.isArgumentListFound()){
         	addPartArguments(propertyContainer, partValueParser.getArgumentList());
         }
@@ -128,7 +143,7 @@ public class XmlTestCaseWriter implements PropertyHandler {
     		 String[] arguments ) {
 		for(String argumentName:arguments){
 			Object argumentValue = propertyContainer.get(argumentName);
-			if(!argumentValue.equals(SpecialValue.UNDEFINED))
+			if(xmlWriter != null && !argumentValue.equals(SpecialValue.UNDEFINED))
 				addParameterElement(argumentName, argumentValue.toString());
 		}
 	}
@@ -147,7 +162,7 @@ public class XmlTestCaseWriter implements PropertyHandler {
         for(String attributeProperty : sortedProperties){
         	if(! attributeProperty.equals(aliasedPropertyAccessor.getAlias(property + ".description")) && isParameter(propertyContainer, attributeProperty)){
         		Object attributeValue = propertyContainer.get(attributeProperty);
-        		if(attributeValue != SpecialValue.UNDEFINED){
+			if(attributeValue != SpecialValue.UNDEFINED && xmlWriter != null){
         			String attributeName = attributeProperty.substring(prefix.length());
         			addParameterElement(attributeName, attributeValue);
         		}
