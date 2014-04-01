@@ -73,6 +73,48 @@ public class MyFile {
 }
 		''')
 	}	
+	@Test def withConditionForSingleValue() {
+		'''
+			strategy first
+				let x be 'a', 'b'{
+					let y be 'A' only if :x=='a',
+							'B' ordered
+				}
+		'''.assertCompilesTo('''
+import com.google.common.base.Objects;
+import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
+import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
+import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
+import org.dpolivaev.tsgen.ruleengine.SpecialValue;
+import org.dpolivaev.tsgen.ruleengine.Strategy;
+import org.dpolivaev.tsgen.ruleengine.ValueProvider;
+
+@SuppressWarnings("all")
+public class MyFile {
+  private static Boolean condition1(final PropertyContainer propertyContainer) {
+    boolean _equals = Objects.equal(propertyContainer.get("x"), "a");
+    return Boolean.valueOf(_equals);
+  }
+
+  public final static RequirementBasedStrategy first = defineStrategyFirst();
+
+  private static RequirementBasedStrategy defineStrategyFirst() {
+    CoverageEntry[] __requiredItems = new CoverageEntry[]{};
+    Strategy __strategy = new Strategy();
+    __strategy.addRule(RuleBuilder.Factory.iterate("x").over("a", "b").with(
+      RuleBuilder.Factory.iterate("y").over(new ValueProvider(){
+        @Override public Object value(PropertyContainer propertyContainer) {
+          if(!condition1(propertyContainer)) return SpecialValue.SKIP;
+          Object __value = "A";
+          return (__value instanceof ValueProvider) ? ((ValueProvider)__value).value(propertyContainer) : __value;
+      }}, "B").ordered().asTriggeredRule()
+    ).asRule());
+    return new RequirementBasedStrategy(__requiredItems).with(__strategy);
+  }
+}
+		''')
+	}
 	
 	@Test def withValueProvider() {
 		'''

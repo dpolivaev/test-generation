@@ -433,7 +433,7 @@ class GenerationInferrer{
 			if(valueProvider.condition.trace)
 				appendTraceStart(it, valueProvider)
 			
-			append('''if(«methodName»(propertyContainer)) return ''')
+			append('''if(!«methodName»(propertyContainer)) return ''')
 			append(valueProvider.newTypeRef(SpecialValue).type) append('.SKIP;')
 			if(valueProvider.condition.trace)
 				appendTraceEnd(it, valueProvider)
