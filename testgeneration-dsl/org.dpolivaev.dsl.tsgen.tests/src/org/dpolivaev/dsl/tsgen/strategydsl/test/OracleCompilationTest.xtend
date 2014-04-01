@@ -141,7 +141,7 @@ public class MyOracle implements PropertyHandler {
       int _labeledexpression = (int) 0;
       _labeledexpression = 2;
       final int x = _labeledexpression;
-      _xblockexpression = (x);
+      _xblockexpression = x;
     }
     return _xblockexpression;
   }
