@@ -13,6 +13,9 @@ import org.eclipse.xtext.xbase.compiler.XbaseCompiler
 import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
 import org.eclipse.xtext.common.types.JvmDeclaredType
 import org.dpolivaev.tsgen.coverage.CoverageTracker
+import org.eclipse.xtext.common.types.JvmTypeReference
+import org.eclipse.xtext.xbase.XNumberLiteral
+import java.math.BigInteger
 
 class StrategyCompiler extends XbaseCompiler {
 	@Inject Primitives primitives
@@ -132,4 +135,14 @@ class StrategyCompiler extends XbaseCompiler {
 		output = output.replaceAll("\"", "\\\\\\\"")
 		return output
 	}
+
+	override protected JvmTypeReference getType(XExpression expr) {
+		val type = typeProvider.getType(expr)
+		if(type != null)
+			return type
+		if (expr instanceof XNumberLiteral && (expr as XNumberLiteral).value.toLowerCase.endsWith("#bi"))
+			return 	typeReferences.getTypeForName(BigInteger, expr)
+		return null
+	}
+
 }
