@@ -107,7 +107,7 @@ public class MyFile {
         @Override public Object value(PropertyContainer propertyContainer) {
           if(!condition1(propertyContainer)) return SpecialValue.SKIP;
           Object __value = "A";
-          return (__value instanceof ValueProvider) ? ((ValueProvider)__value).value(propertyContainer) : __value;
+          return __value;
       }}, "B").ordered().asTriggeredRule()
     ).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
@@ -128,6 +128,7 @@ import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.ruleengine.ValueProvider;
+import org.dpolivaev.tsgen.ruleengine.ValueProviderHelper;
 import org.dpolivaev.tsgen.strategies.StrategyHelper;
 
 @SuppressWarnings("all")
@@ -143,8 +144,8 @@ public class MyFile {
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory.iterate("testcase").over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {
-        Object __value = value1(propertyContainer);
-        return (__value instanceof ValueProvider) ? ((ValueProvider)__value).value(propertyContainer) : __value;
+        Object __value = ValueProviderHelper.toValue(value1(propertyContainer), propertyContainer);
+        return __value;
     }}).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
   }
@@ -241,6 +242,7 @@ import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.ruleengine.ValueProvider;
+import org.dpolivaev.tsgen.ruleengine.ValueProviderHelper;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -255,8 +257,8 @@ public class MyFile {
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory.iterate("y").over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {
-        Object __value = value1(propertyContainer);
-        return (__value instanceof ValueProvider) ? ((ValueProvider)__value).value(propertyContainer) : __value;
+        Object __value = ValueProviderHelper.toValue(value1(propertyContainer), propertyContainer);
+        return __value;
     }}).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
   }
@@ -961,6 +963,7 @@ import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.ruleengine.ValueProvider;
+import org.dpolivaev.tsgen.ruleengine.ValueProviderHelper;
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -977,8 +980,8 @@ public class MyFile {
     __strategy.addRule(RuleBuilder.Factory.iterate("a").over(123).asDefaultRule());
     __strategy.addRule(RuleBuilder.Factory.iterate("[req1]").over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {
-        Object __value = value1(propertyContainer);
-        return (__value instanceof ValueProvider) ? ((ValueProvider)__value).value(propertyContainer) : __value;
+        Object __value = ValueProviderHelper.toValue(value1(propertyContainer), propertyContainer);
+        return __value;
     }}).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
   }

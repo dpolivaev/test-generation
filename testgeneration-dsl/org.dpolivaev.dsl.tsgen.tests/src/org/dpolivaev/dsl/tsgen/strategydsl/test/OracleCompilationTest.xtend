@@ -173,6 +173,7 @@ import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.ruleengine.ValueProvider;
+import org.dpolivaev.tsgen.ruleengine.ValueProviderHelper;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
 
@@ -193,8 +194,8 @@ public class MyFile {
     __strategy.addRule(RuleBuilder.Factory.iterate("x").over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {
         ((CoverageTrackerEnabler)propertyContainer).startTrace(); try{
-        Object __value = value1(propertyContainer);
-        return (__value instanceof ValueProvider) ? ((ValueProvider)__value).value(propertyContainer) : __value;
+        Object __value = ValueProviderHelper.toValue(value1(propertyContainer), propertyContainer);
+        return __value;
         } finally{ ((CoverageTrackerEnabler)propertyContainer).stopTrace();}
     }}).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);

@@ -44,6 +44,7 @@ import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 
 import static extension org.dpolivaev.dsl.tsgen.jvmmodel.StrategyCompiler.*
+import org.dpolivaev.tsgen.ruleengine.ValueProviderHelper
 
 class GenerationInferrer{
 	@Inject Injector injector
@@ -100,6 +101,7 @@ class GenerationInferrer{
 			else if (obj instanceof OracleReference) 
 				appendOracleReferences(obj as OracleReference)
 		}
+
 	}
 	
 	final static val EXTERNAL_STRATEGY = "externalStrategy"
@@ -151,6 +153,7 @@ class GenerationInferrer{
 	}
 	
    final static val CONDITION = "condition"
+
 	private def appendConditions(Condition condition){
 		if(condition != null){
 			val expr = condition.expr
@@ -392,7 +395,7 @@ class GenerationInferrer{
 				xbaseCompiler.compileAsJavaExpression(expr, it, valueProvider.newTypeRef(Object))
 			}
 			else{
-				append('''«methodName»(propertyContainer)''')
+				append(valueProvider.newTypeRef(ValueProviderHelper).type) append('''.toValue(«methodName»(propertyContainer), propertyContainer)''')
 			}
 			if(concatenation)
 				append(")");
@@ -401,13 +404,7 @@ class GenerationInferrer{
 			append(".toString()");
 		append(';')
 		newLine
-		append('return ') 
-		if(concatenation)
-			append("__value;")
-		else {
-			append("(__value instanceof ") append(valueProvider.newTypeRef(org.dpolivaev.tsgen.ruleengine.ValueProvider).type) append(") ? ")
-			append("((") append(valueProvider.newTypeRef(org.dpolivaev.tsgen.ruleengine.ValueProvider).type) append(")__value).value(propertyContainer) : __value;")
-		}
+		append('return __value;')
 		if(trace)
 			appendTraceEnd(it, valueProvider)
 	}
