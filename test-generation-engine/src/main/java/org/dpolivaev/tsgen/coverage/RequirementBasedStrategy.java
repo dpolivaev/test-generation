@@ -1,11 +1,13 @@
 package org.dpolivaev.tsgen.coverage;
 
+import java.util.Collection;
+
 import org.dpolivaev.tsgen.coverage.internal.RequirementChecker;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
 
-public class RequirementBasedStrategy {
+public class RequirementBasedStrategy{
 	final private RequirementChecker requirementChecker;
 	final private Strategy strategy;
 	RequirementBasedStrategy(RequirementChecker requirementChecker, Strategy strategy) {
@@ -35,5 +37,14 @@ public class RequirementBasedStrategy {
 
 	public Strategy getStrategy() {
 		return strategy;
+	}
+
+	public void addRequiredItemsTo(final RequirementBasedStrategy otherStrategy) {
+		requirementChecker.registerRequiredItems(new RequiredCoverageItemCollector() {
+			@Override
+			public void registerRequiredItems(Collection<CoverageEntry> items) {
+				otherStrategy.requirementChecker.addItems(items);
+			}
+		});
 	}
 }
