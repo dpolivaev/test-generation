@@ -32,4 +32,8 @@ public class RequirementBasedStrategy {
 	public RequirementBasedStrategy with(Strategy anotherStrategy) {
 		return new RequirementBasedStrategy(requirementChecker, strategy.with(anotherStrategy));
 	}
+
+	public Strategy getStrategy() {
+		return strategy;
+	}
 }
