@@ -226,6 +226,30 @@ public class RuleTest {
     }
 
     @Test
+    public void ruleWithTwoTemporaryRules_addsThemRule() {
+        StatefulRule temporaryRule1 = iterate("y1").over("b").asTriggeredRule();
+        StatefulRule temporaryRule2 = iterate("y2").over("b").asTriggeredRule();
+        StatefulRule statefulRule = iterate("x").over("a").with(temporaryRule1).with(temporaryRule2).asRule();
+
+        statefulRule.propertyCombinationStarted(engineState);
+        verify(strategy).addRule(temporaryRule1);
+        verify(strategy).addRule(temporaryRule2);
+    }
+
+
+    @Test
+    public void ruleWithStrategy_addsStrategy() {
+        StatefulRule temporaryRule1 = iterate("y1").over("b").asTriggeredRule();
+        Strategy includedStrategy = new Strategy();
+        includedStrategy.addRule(temporaryRule1);
+        StatefulRule statefulRule = iterate("x").over("a").with(includedStrategy).asRule();
+
+        statefulRule.propertyCombinationStarted(engineState);
+        verify(strategy).addRule(temporaryRule1);
+
+    }
+
+    @Test
     public void ruleWithTemporaryRule_removesItsRule() {
         StatefulRule temporaryRule = mock(StatefulRule.class);
         when(temporaryRule.blocksRequiredProperties()).thenReturn(false);

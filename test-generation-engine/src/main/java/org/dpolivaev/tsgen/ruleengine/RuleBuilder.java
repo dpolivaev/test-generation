@@ -23,6 +23,7 @@ import org.dpolivaev.tsgen.utils.internal.Utils;
 public class RuleBuilder {
     private String targetedPropertyName = null;
     final private List<ValueWithRulesProvider> values = new ArrayList<>();
+    private List<Rule> rules;
     private Set<String> triggeringProperties = Collections.emptySet();
     private Condition condition = Condition.TRUE;
     private Order order = Order.defaultOrder;
@@ -37,6 +38,7 @@ public class RuleBuilder {
     }
 
 	public RuleBuilder over(Object... valueObjects) {
+		rules = null;
         previousValueCount = this.values.size();
         for(Object valueObject : valueObjects)
         	if(valueObject instanceof ValueWithRulesProvider)
@@ -68,12 +70,22 @@ public class RuleBuilder {
         return with(rules);
     }
 
+	public RuleBuilder with(Strategy includedStrategy) {
+		return with(includedStrategy.topRules()).with(includedStrategy.defaultRules()).with(includedStrategy.triggeredRules());
+	}
+
+
     private RuleBuilder with(Collection<Rule> rules) {
-        ListIterator<ValueWithRulesProvider> listIterator = values.listIterator(previousValueCount);
-        while (listIterator.hasNext()) {
-            ValueWithRulesProvider valueProvider = listIterator.next();
-            listIterator.set(new ValueWithRules(valueProvider, rules));
-        }
+	if(this.rules == null){
+		this.rules = new ArrayList<>(rules);
+            ListIterator<ValueWithRulesProvider> listIterator = values.listIterator(previousValueCount);
+            while (listIterator.hasNext()) {
+                ValueWithRulesProvider valueProvider = listIterator.next();
+                listIterator.set(new ValueWithRules(valueProvider, this.rules));
+            }
+	}
+	else
+		this.rules.addAll(rules);
         return this;
     }
 
