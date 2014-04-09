@@ -23,9 +23,13 @@ Strategy:
 		ruleGroups += RuleGroup* 
 	;
 
+StrategyReference returns StrategyReference: {StrategyReference} 'strategy' goal ?= 'goal'? expr = XExpression;
+AppliedStrategy returns StrategyReference: {StrategyReference} 'apply' expr = XExpression;
+ShortFormStrategyReference returns StrategyReference: {StrategyReference} expr = XExpression;
+
 RuleGroup : {RuleGroup}
-	(trigger = Trigger condition = Condition? | condition = Condition) (rule = Rule | '{' ruleGroups += RuleGroup* '}') 
-	| rule = Rule
+	(trigger = Trigger condition = Condition? | condition = Condition) (rule = Rule | strategy = AppliedStrategy | '{' ruleGroups += RuleGroup* '}')
+	| rule = Rule | strategy = AppliedStrategy
 ;
 
 Rule returns Rule:
@@ -90,8 +94,6 @@ ReportConfiguration returns OutputConfiguration:
 	)
 ;
 
-StrategyReference returns StrategyReference: {StrategyReference} 'strategy' goal ?= 'goal'? expr = XExpression;
-ShortFormStrategyReference returns StrategyReference: {StrategyReference} expr = XExpression;
 // GoalReference : 'goal' expr = XExpression;
 OracleReference : 'oracle' goal ?= 'goal'? expr = XExpression;
 

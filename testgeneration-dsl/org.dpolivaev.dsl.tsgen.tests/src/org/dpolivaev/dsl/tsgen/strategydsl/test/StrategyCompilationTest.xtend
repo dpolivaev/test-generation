@@ -452,6 +452,88 @@ public class MyFile {
 		''')
 	}	
 	
+	@Test def withAppliedStrategyForValue() {
+		'''
+			strategy other
+				let y be 2
+			strategy first
+				let x be 1 {
+					apply other
+				}
+		'''.assertCompilesTo('''
+import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
+import org.dpolivaev.tsgen.coverage.StrategyConverter;
+import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
+import org.dpolivaev.tsgen.ruleengine.Strategy;
+
+@SuppressWarnings("all")
+public class MyFile {
+  public final static RequirementBasedStrategy other = defineStrategyOther();
+
+  public final static RequirementBasedStrategy first = defineStrategyFirst();
+
+  private static RequirementBasedStrategy defineStrategyOther() {
+    CoverageEntry[] __requiredItems = new CoverageEntry[]{};
+    Strategy __strategy = new Strategy();
+    __strategy.addRule(RuleBuilder.Factory.iterate("y").over(2).asRule());
+    return new RequirementBasedStrategy(__requiredItems).with(__strategy);
+  }
+
+  private static RequirementBasedStrategy defineStrategyFirst() {
+    CoverageEntry[] __requiredItems = new CoverageEntry[]{};
+    Strategy __strategy = new Strategy();
+    __strategy.addRule(RuleBuilder.Factory.iterate("x").over(1).with(StrategyConverter.toStrategy(other)).asRule());
+    return new RequirementBasedStrategy(__requiredItems).with(__strategy).addRequiredItemsFrom(StrategyConverter.toRequirementBasedStrategy(other));
+  }
+}
+		''')
+	}
+
+	@Test def withAppliedStrategyAndRulesForValue() {
+		'''
+			strategy other
+				let y be 2
+			strategy first
+				let x be 1 {
+					let z1 be 3
+					apply other
+					let z2 be 4
+				}
+		'''.assertCompilesTo('''
+import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
+import org.dpolivaev.tsgen.coverage.StrategyConverter;
+import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
+import org.dpolivaev.tsgen.ruleengine.Strategy;
+
+@SuppressWarnings("all")
+public class MyFile {
+  public final static RequirementBasedStrategy other = defineStrategyOther();
+
+  public final static RequirementBasedStrategy first = defineStrategyFirst();
+
+  private static RequirementBasedStrategy defineStrategyOther() {
+    CoverageEntry[] __requiredItems = new CoverageEntry[]{};
+    Strategy __strategy = new Strategy();
+    __strategy.addRule(RuleBuilder.Factory.iterate("y").over(2).asRule());
+    return new RequirementBasedStrategy(__requiredItems).with(__strategy);
+  }
+
+  private static RequirementBasedStrategy defineStrategyFirst() {
+    CoverageEntry[] __requiredItems = new CoverageEntry[]{};
+    Strategy __strategy = new Strategy();
+    __strategy.addRule(RuleBuilder.Factory.iterate("x").over(1).with(
+      RuleBuilder.Factory.iterate("z1").over(3).asTriggeredRule()
+    ).with(StrategyConverter.toStrategy(other)).with(
+      RuleBuilder.Factory.iterate("z2").over(4).asTriggeredRule()
+    ).asRule());
+    return new RequirementBasedStrategy(__requiredItems).with(__strategy).addRequiredItemsFrom(StrategyConverter.toRequirementBasedStrategy(other));
+  }
+}
+		''')
+	}
+
 	@Test def withTwoRuleForValue() {
 		'''
 			strategy first

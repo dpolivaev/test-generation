@@ -39,12 +39,13 @@ public class RequirementBasedStrategy{
 		return strategy;
 	}
 
-	public void addRequiredItemsTo(final RequirementBasedStrategy otherStrategy) {
-		requirementChecker.registerRequiredItems(new RequiredCoverageItemCollector() {
+	public RequirementBasedStrategy addRequiredItemsFrom(final RequirementBasedStrategy otherStrategy) {
+		otherStrategy.requirementChecker.registerRequiredItems(new RequiredCoverageItemCollector() {
 			@Override
 			public void registerRequiredItems(Collection<CoverageEntry> items) {
-				otherStrategy.requirementChecker.addItems(items);
+				requirementChecker.addItems(items);
 			}
 		});
+		return this;
 	}
 }

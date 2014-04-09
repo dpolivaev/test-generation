@@ -2,7 +2,7 @@ package org.dpolivaev.tsgen.coverage;
 
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 
-public class StrategyTypeConverter {
+public class StrategyConverter {
 	public static Strategy toStrategy(Strategy from) {
 		return from;
 	}

@@ -45,6 +45,7 @@ import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 
 import static extension org.dpolivaev.dsl.tsgen.jvmmodel.StrategyCompiler.*
 import org.dpolivaev.tsgen.ruleengine.ValueProviderHelper
+import org.dpolivaev.tsgen.coverage.StrategyConverter
 
 class GenerationInferrer{
 	@Inject Injector injector
@@ -179,11 +180,27 @@ class GenerationInferrer{
 					}
 					append('return new ') append(strategy.newTypeRef(RequirementBasedStrategy).type) append('(__requiredItems)') 
 					combinedStrategy(it, strategy.baseStrategies)
-					append('.with(__strategy);')
+					append('.with(__strategy)')
+					addAppliedStrategyItems(it, strategy)
+					append(';')
 				]
 				visibility = JvmVisibility::PRIVATE
 				static = true
 			]
+		}
+	}
+
+	def private void addAppliedStrategyItems(ITreeAppendable it, org.dpolivaev.dsl.tsgen.strategydsl.Strategy strategy){
+		val contents = EcoreUtil2.eAllContents(strategy)
+		for(obj : contents){
+			if (obj instanceof StrategyReference){
+				if(! (obj.eContainer instanceof org.dpolivaev.dsl.tsgen.strategydsl.Strategy)){
+					append('.addRequiredItemsFrom(')
+					append(strategy.newTypeRef(StrategyConverter).type) append('.toRequirementBasedStrategy(')
+					appendReference(it, EXTERNAL_STRATEGY, obj.expr)
+					append('))')
+				}
+			}
 		}
 	}
 
@@ -325,33 +342,45 @@ class GenerationInferrer{
 	}
 	
 	 def private appendActionRuleGroups(ITreeAppendable it, ValueAction valueAction){
-				val innerGroups =  valueAction.ruleGroups
-			if(! innerGroups.empty){
-				append('.with(')
-				var first = true
-				increaseIndentation
-				newLine
-				appendInnerGroups(it, innerGroups, first)
-				decreaseIndentation
-				newLine
-				append(')')
-				
-			}
+			val innerGroups =  valueAction.ruleGroups
+			appendInnerGroups(it, innerGroups, true)
 	}
 
 		def private void appendInnerGroups(ITreeAppendable it, Collection<RuleGroup> innerGroups, boolean first) {
 			var firstLine = first
 			for(group:innerGroups){
 				if(group.rule != null){	
-					if(firstLine)
+					if(firstLine){
 						firstLine = false
+						append('.with(')
+						increaseIndentation
+						newLine
+					}
 					else{
 						append(',')
 						newLine
 					}
 					appendRule(it, group, true)
 				}
+				else if(group.strategy != null){
+					if(! firstLine){
+						decreaseIndentation
+						newLine
+						append(')')
+						firstLine = true
+					}
+					append('.with(')
+					append(group.newTypeRef(StrategyConverter).type)
+					append('.toStrategy(')
+					appendReference(it, EXTERNAL_STRATEGY, group.strategy.expr)
+					append('))')
+				}
 				appendInnerGroups(it, group.ruleGroups, firstLine)
+			}
+			if(first && ! firstLine){
+				decreaseIndentation
+				newLine
+				append(')')
 			}
 		}
 	def private apppendValueAction(ITreeAppendable it, ValueAction valueAction) {

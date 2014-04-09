@@ -3,6 +3,7 @@ package org.dpolivaev.tsgen.coverage.internal;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.RequiredCoverageItemCollector;
@@ -10,7 +11,7 @@ import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 
 public class RequirementChecker implements PropertyHandler{
-	final private Collection<CoverageEntry> items;
+	final private Set<CoverageEntry> items;
 
 	public RequirementChecker(){
 		this.items = new HashSet<CoverageEntry>();

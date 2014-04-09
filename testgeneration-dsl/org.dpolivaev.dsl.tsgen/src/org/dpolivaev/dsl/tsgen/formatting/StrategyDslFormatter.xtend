@@ -70,10 +70,10 @@ class StrategyDslFormatter extends AbstractDeclarativeFormatter {
 	def private configureFormatting(FormattingConfig c, RuleGroupElements ruleGroupAccess) {
 		c.setLinewrap.before(ruleGroupAccess.rule)
 		c.setLinewrap.before(ruleGroupAccess.alternatives_0_1)
-		val Keyword leftCurlyBracketKeyword = ruleGroupAccess.leftCurlyBracketKeyword_0_2_1_0
+		val Keyword leftCurlyBracketKeyword = ruleGroupAccess.leftCurlyBracketKeyword_0_2_2_0
 		c.setLinewrap.after(leftCurlyBracketKeyword)
 		c.setIndentationIncrement.after(leftCurlyBracketKeyword)
-		val Keyword rightCurlyBracket = ruleGroupAccess.rightCurlyBracketKeyword_0_2_1_2
+		val Keyword rightCurlyBracket = ruleGroupAccess.rightCurlyBracketKeyword_0_2_2_2
 		c.setIndentationDecrement.before(rightCurlyBracket)
 		c.setLinewrap.before(rightCurlyBracket)
 	}
