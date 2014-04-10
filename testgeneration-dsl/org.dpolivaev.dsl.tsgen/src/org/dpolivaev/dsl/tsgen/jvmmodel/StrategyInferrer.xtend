@@ -77,8 +77,10 @@ class StrategyInferrer{
 				for(parameter:strategy.parameters)
 					parameters += parameter.toParameter(parameter.name, parameter.parameterType)
 				body = [
-					for(parameter:strategy.parameters)
-						append('''this.«parameter.name» = «parameter.name»''')
+					for(parameter:strategy.parameters){
+						append('''this.«parameter.name» = «parameter.name»;''')
+						newLine
+					}
 				]
 				visibility = JvmVisibility::PUBLIC
 			]
