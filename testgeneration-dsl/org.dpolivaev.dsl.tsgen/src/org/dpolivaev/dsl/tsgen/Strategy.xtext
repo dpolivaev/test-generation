@@ -19,8 +19,13 @@ PROPERTY_ID hidden():
 ;
 
 Strategy:
-	'strategy' name=ID
-		ruleGroups += RuleGroup*
+	'strategy' name=ID ('('
+		(parameters+=FullJvmFormalParameter
+			(',' parameters+=FullJvmFormalParameter)*
+		)?
+	')')?
+
+	ruleGroups += RuleGroup*
 	;
 
 StrategyReference returns StrategyReference: {StrategyReference} 'strategy' goal ?= 'goal'? expr = XExpression;

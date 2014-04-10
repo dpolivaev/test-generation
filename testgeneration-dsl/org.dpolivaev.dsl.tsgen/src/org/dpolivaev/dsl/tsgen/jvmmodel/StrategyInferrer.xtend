@@ -58,8 +58,28 @@ class StrategyInferrer{
 	def void inferStrategy(JvmGenericType jvmType, org.dpolivaev.dsl.tsgen.strategydsl.Strategy strategy){
 		this.strategy = strategy
 		this.jvmType = jvmType
+		if(!strategy.parameters.empty)
+			inferConstructor()
 		inferExpressions()
 		inferStrategyMethods()
+	}
+
+	def inferConstructor() {
+			for(parameter:strategy.parameters)
+				jvmType.members += parameter.toField(parameter.name, parameter.parameterType)[
+					visibility = JvmVisibility::PRIVATE
+					final = true
+				]
+
+			jvmType.members += strategy.toConstructor[
+				for(parameter:strategy.parameters)
+					parameters += parameter.toParameter(parameter.name, parameter.parameterType)
+				body = [
+					for(parameter:strategy.parameters)
+						append('''this.«parameter.name» = «parameter.name»''')
+				]
+				visibility = JvmVisibility::PUBLIC
+			]
 	}
 
 

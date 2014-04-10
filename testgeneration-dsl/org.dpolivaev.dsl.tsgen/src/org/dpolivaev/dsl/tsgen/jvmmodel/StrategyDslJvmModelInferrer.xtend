@@ -154,7 +154,7 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 			for(method:oracle.subs){
 				members += oracle.toMethod(method.name, method.returnType)[
 					for(parameter:method.parameters)
-					parameters += parameter.toParameter(parameter.name, parameter.parameterType)
+						parameters += parameter.toParameter(parameter.name, parameter.parameterType)
 					body = method.body
 				]
 			}

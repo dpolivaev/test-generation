@@ -109,9 +109,20 @@ class GenerationInferrer{
 		for (strategy : script.strategies) {
 			val methodName = strategy.name
 			jvmType.members += strategy.toMethod(methodName, strategy.newTypeRef(RequirementBasedStrategy)) [
+				for(parameter:strategy.parameters)
+					parameters += parameter.toParameter(parameter.name, parameter.parameterType)
 				body = [
 					val className = StrategyInferrer.strategyClassName(strategy.name)
-					append('''return new «className»().«methodName»();''')
+					append('''return new «className»(''')
+					var firstParameter = true
+					for(parameter:strategy.parameters){
+						if(firstParameter)
+							firstParameter = false
+						else
+							append(', ')
+						append(parameter.name)
+					}
+					append(''').«methodName»();''')
 				]
 				visibility = JvmVisibility::PUBLIC
 				static = true
@@ -121,19 +132,20 @@ class GenerationInferrer{
 
 	private def inferStrategyFields(){
 		for (strategy : script.strategies) {
-			val methodName = strategy.name
-			jvmType.members += strategy.toField(strategy.name, strategy.newTypeRef(RequirementBasedStrategy)) [
-				setInitializer [
-					append('''«methodName»()''')
+			if(strategy.parameters.empty){
+				val methodName = strategy.name
+				jvmType.members += strategy.toField(strategy.name, strategy.newTypeRef(RequirementBasedStrategy)) [
+					setInitializer [
+						append('''«methodName»()''')
+					]
+					final = true
+					visibility = JvmVisibility::PUBLIC
+					static = true
 				]
-				final = true
-				visibility = JvmVisibility::PUBLIC
-				static = true
-			]
-			
+			}
 		}
 	}
-	
+
 	private def inferRunMethods(){
 		if(! script.runs.empty)
 		inferRunMethodImplementations();
