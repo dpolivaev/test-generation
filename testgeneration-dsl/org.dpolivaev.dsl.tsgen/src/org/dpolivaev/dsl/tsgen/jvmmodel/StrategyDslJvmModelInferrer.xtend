@@ -16,6 +16,7 @@ import org.eclipse.xtext.xbase.jvmmodel.IJvmDeclaredTypeAcceptor
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 import java.util.Arrays
 import org.dpolivaev.tsgen.scriptwriter.WriterFactory
+import org.dpolivaev.dsl.tsgen.strategydsl.Strategy
 
 /**
  * <p>Infers a JVM model from the source model.</p> 
@@ -62,6 +63,8 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 		acceptor.accept(script.toClass(qualifiedClassName)).initializeLater([
 			injector.getInstance(GenerationInferrer).inferGeneration(it, script)
 		])
+		for(strategy:script.strategies)
+			inferStrategy(acceptor, script.package, strategy)
 		for(oracle:script.oracles)
 			inferOracle(acceptor, script.package, oracle)
 	}
@@ -70,6 +73,14 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 		if(classPackage != null) classPackage + '.' + className else className
 	}
 	
+	private def inferStrategy(IJvmDeclaredTypeAcceptor acceptor, String classPackage, Strategy strategy) {
+		val qualifiedClassName = qualifiedClassName(classPackage, StrategyInferrer.strategyClassName(strategy.name))
+		acceptor.accept(strategy.toClass(qualifiedClassName)).initializeLater([
+			visibility = JvmVisibility::DEFAULT
+			injector.getInstance(StrategyInferrer).inferStrategy(it, strategy)
+		])
+	}
+
 	private def inferOracle(IJvmDeclaredTypeAcceptor acceptor, String classPackage, Oracle oracle) {
 		val qualifiedClassName = qualifiedClassName(classPackage, oracle.name.toFirstUpper)
 		acceptor.accept(oracle.toClass(qualifiedClassName)).initializeLater([

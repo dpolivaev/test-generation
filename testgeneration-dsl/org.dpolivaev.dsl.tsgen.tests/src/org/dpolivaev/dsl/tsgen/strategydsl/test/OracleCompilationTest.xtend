@@ -163,42 +163,21 @@ MULTIPLE FILES WERE GENERATED
 
 File 1 : MyFile.java
 
-import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.CoverageTracker;
-import org.dpolivaev.tsgen.coverage.CoverageTrackerEnabler;
 import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.coverage.TrackingRuleEngine;
-import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
-import org.dpolivaev.tsgen.ruleengine.Strategy;
-import org.dpolivaev.tsgen.ruleengine.ValueProvider;
-import org.dpolivaev.tsgen.ruleengine.ValueProviderHelper;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
 
 @SuppressWarnings("all")
 public class MyFile {
-  private static Object value1(final PropertyContainer propertyContainer) {
-    Object _calculate = MyFile.myOracle.calculate(0);
-    return _calculate;
-  }
-  
   public final static MyOracle myOracle = new MyOracle();
   
   public final static RequirementBasedStrategy s = s();
   
-  private static RequirementBasedStrategy s() {
-    CoverageEntry[] __requiredItems = new CoverageEntry[]{};
-    Strategy __strategy = new Strategy();
-    __strategy.addRule(RuleBuilder.Factory.iterate("x").over(new ValueProvider(){
-      @Override public Object value(PropertyContainer propertyContainer) {
-        ((CoverageTrackerEnabler)propertyContainer).startTrace(); try{
-        Object __value = ValueProviderHelper.toValue(value1(propertyContainer), propertyContainer);
-        return __value;
-        } finally{ ((CoverageTrackerEnabler)propertyContainer).stopTrace();}
-    }}).asRule());
-    return new RequirementBasedStrategy(__requiredItems).with(__strategy);
+  public static RequirementBasedStrategy s() {
+    return new _s_StrategyFactory().s();
   }
   
   public static void run1() {
@@ -267,6 +246,38 @@ public class MyOracle implements PropertyHandler {
   }
 }
 
+File 3 : _s_StrategyFactory.java
+
+import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.CoverageTrackerEnabler;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
+import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
+import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
+import org.dpolivaev.tsgen.ruleengine.Strategy;
+import org.dpolivaev.tsgen.ruleengine.ValueProvider;
+import org.dpolivaev.tsgen.ruleengine.ValueProviderHelper;
+
+@SuppressWarnings("all")
+class _s_StrategyFactory {
+  private Object value1(final PropertyContainer propertyContainer) {
+    Object _calculate = MyFile.myOracle.calculate(0);
+    return _calculate;
+  }
+
+  RequirementBasedStrategy s() {
+    CoverageEntry[] __requiredItems = new CoverageEntry[]{};
+    Strategy __strategy = new Strategy();
+    __strategy.addRule(RuleBuilder.Factory.iterate("x").over(new ValueProvider(){
+      @Override public Object value(PropertyContainer propertyContainer) {
+        ((CoverageTrackerEnabler)propertyContainer).startTrace(); try{
+        Object __value = ValueProviderHelper.toValue(value1(propertyContainer), propertyContainer);
+        return __value;
+        } finally{ ((CoverageTrackerEnabler)propertyContainer).stopTrace();}
+    }}).asRule());
+    return new RequirementBasedStrategy(__requiredItems).with(__strategy);
+  }
+}
+
 		''')
 	}	
 
@@ -284,41 +295,21 @@ MULTIPLE FILES WERE GENERATED
 
 File 1 : MyFile.java
 
-import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.CoverageTracker;
-import org.dpolivaev.tsgen.coverage.CoverageTrackerEnabler;
 import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.coverage.TrackingRuleEngine;
-import org.dpolivaev.tsgen.ruleengine.Condition;
-import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
-import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
-import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.scriptwriter.OutputConfiguration;
 import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
 
 @SuppressWarnings("all")
 public class MyFile {
-  private static Boolean condition1(final PropertyContainer propertyContainer) {
-    Boolean _calculate = MyFile.myOracle.calculate();
-    return _calculate;
-  }
-  
   public final static MyOracle myOracle = new MyOracle();
   
   public final static RequirementBasedStrategy s = s();
   
-  private static RequirementBasedStrategy s() {
-    CoverageEntry[] __requiredItems = new CoverageEntry[]{};
-    Strategy __strategy = new Strategy();
-    __strategy.addRule(RuleBuilder.Factory._if(new Condition(){
-      @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
-        ((CoverageTrackerEnabler)propertyContainer).startTrace(); try{
-        if (!condition1(propertyContainer)) return false;
-        } finally{ ((CoverageTrackerEnabler)propertyContainer).stopTrace();}
-        return true;
-    }}).iterate("x").over(1).asRule());
-    return new RequirementBasedStrategy(__requiredItems).with(__strategy);
+  public static RequirementBasedStrategy s() {
+    return new _s_StrategyFactory().s();
   }
   
   public static void run1() {
@@ -384,6 +375,37 @@ public class MyOracle implements PropertyHandler {
   
   public boolean calculate() {
     return true;
+  }
+}
+
+File 3 : _s_StrategyFactory.java
+
+import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.CoverageTrackerEnabler;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
+import org.dpolivaev.tsgen.ruleengine.Condition;
+import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
+import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
+import org.dpolivaev.tsgen.ruleengine.Strategy;
+
+@SuppressWarnings("all")
+class _s_StrategyFactory {
+  private Boolean condition1(final PropertyContainer propertyContainer) {
+    Boolean _calculate = MyFile.myOracle.calculate();
+    return _calculate;
+  }
+
+  RequirementBasedStrategy s() {
+    CoverageEntry[] __requiredItems = new CoverageEntry[]{};
+    Strategy __strategy = new Strategy();
+    __strategy.addRule(RuleBuilder.Factory._if(new Condition(){
+      @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
+        ((CoverageTrackerEnabler)propertyContainer).startTrace(); try{
+        if (!condition1(propertyContainer)) return false;
+        } finally{ ((CoverageTrackerEnabler)propertyContainer).stopTrace();}
+        return true;
+    }}).iterate("x").over(1).asRule());
+    return new RequirementBasedStrategy(__requiredItems).with(__strategy);
   }
 }
 
