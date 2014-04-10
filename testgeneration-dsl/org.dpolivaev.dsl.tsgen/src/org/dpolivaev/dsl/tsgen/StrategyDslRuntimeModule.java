@@ -6,9 +6,11 @@ package org.dpolivaev.dsl.tsgen;
 import org.dpolivaev.dsl.tsgen.jvmmodel.StrategyCompiler;
 import org.dpolivaev.dsl.tsgen.jvmmodel.StrategyEarlyExitComputer;
 import org.dpolivaev.dsl.tsgen.naming.ValuesXBaseNameProvider;
+import org.dpolivaev.dsl.tsgen.scoping.StrategyDslImplicitlyImportedTypes;
 import org.dpolivaev.dsl.tsgen.typesystem.StrategyTypeComputer;
 import org.eclipse.xtext.xbase.compiler.XbaseCompiler;
 import org.eclipse.xtext.xbase.controlflow.IEarlyExitComputer;
+import org.eclipse.xtext.xbase.scoping.batch.ImplicitlyImportedTypes;
 import org.eclipse.xtext.xbase.typesystem.computation.ITypeComputer;
 
 /**
@@ -35,6 +37,10 @@ public class StrategyDslRuntimeModule extends org.dpolivaev.dsl.tsgen.AbstractSt
 	
 	public Class<? extends IEarlyExitComputer> bindIEarlyExitComputer() {
 		return StrategyEarlyExitComputer.class;
+	}
+
+	public Class<? extends ImplicitlyImportedTypes> bindImplicitlyImportedTypes() {
+		return StrategyDslImplicitlyImportedTypes.class;
 	}
 
 }
