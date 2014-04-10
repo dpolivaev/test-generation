@@ -84,10 +84,12 @@ public class AssignmentFormatterTest {
     public void excludesRules() {
         Rule rule1 = ruleMock("name");
         Rule rule2 = ruleMock("name2");
+        Rule rule3 = ruleMock(" nameAfterSpace");
         
         Assignments assignments = new Assignments();
         assignments.add(new Assignment(rule1, "value", ""));
         assignments.add(new Assignment(rule2, "value2", ""));
+        assignments.add(new Assignment(rule3, "value3", ""));
         
         formatter.exclude("name2");
         assertThat(formatter.format(assignments), equalTo("name=value"));

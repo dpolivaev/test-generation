@@ -183,4 +183,8 @@ public abstract class StatefulRule implements Rule {
     public boolean forcesIteration() {
         return valueProviders.containsMultipleValues();
     }
+
+    public Rule toTriggeredRule(){
+	return new TriggeredStatefulRule(new HashSet<String>(), condition, targetedPropertyName, valueProviders);
+    }
 }

@@ -40,6 +40,7 @@ import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 
 import static extension org.dpolivaev.dsl.tsgen.jvmmodel.StrategyCompiler.*
+import org.eclipse.emf.ecore.util.EcoreUtil
 
 class StrategyInferrer{
 	@Inject Injector injector
@@ -192,18 +193,10 @@ class StrategyInferrer{
 
 	def private void appendRuleGroup(ITreeAppendable it, RuleGroup ruleGroup) {
 		val rule = ruleGroup.rule
-		if(rule != null){
+		if(rule != null || ruleGroup.strategy != null){
 			append('__strategy.addRule(')
 			appendRule(it, ruleGroup, false)
 			append(');')
-			newLine
-		}
-		else if(ruleGroup.strategy != null){
-			append('__strategy.include(')
-			append(ruleGroup.newTypeRef(StrategyConverter).type)
-					append('.toStrategy(')
-			appendReference(it, EXTERNAL_STRATEGY, ruleGroup.strategy.expr)
-			append('));')
 			newLine
 		}
 		else{
@@ -213,24 +206,43 @@ class StrategyInferrer{
 	}
 
 	def private void appendRule(ITreeAppendable it, RuleGroup ruleGroup, boolean temporaryRule) {
-		val rule = ruleGroup.rule
 		append(strategy.newTypeRef(Factory).type)
 		appendTriggers(it, ruleGroup)
 		appendConditions(it, ruleGroup)
-		if(rule.skip){
-			apppendSkip(it)
+		val rule = ruleGroup.rule
+		if(rule !=null){
+			if(rule.skip){
+				apppendSkip(it)
+			}
+			else{
+				appendRuleName(it, rule)
+				appendRuleValues(it, rule.values, true)
+				appendRuleOrder(it, rule)
+			}
 		}
-		else{
-			appendRuleName(it, rule)
-			appendRuleValues(it, rule.values, true)
-			appendRuleOrder(it, rule)
+		else if(ruleGroup.strategy !=null){
+			appendStrategyRule(it, ruleGroup.strategy)
 		}
-		if(rule.isDefault)
+		if(rule != null && rule.isDefault)
 			append('.asDefaultRule()')
 		else if(temporaryRule)
 			append('.asTriggeredRule()')
 		else
 			append('.asRule()')
+	}
+
+	private def appendStrategyRule(ITreeAppendable it, StrategyReference strategyReference){
+		append('.iterate(" ')
+		append(EcoreUtil.getURI(strategyReference).toString)
+		append('")')
+		append('.over(')
+		append(strategyReference.newTypeRef(SpecialValue).type)
+		append('.UNDEFINED)')
+		append('.with(')
+		append(strategyReference.newTypeRef(StrategyConverter).type)
+		append('.toStrategy(')
+		appendReference(it, EXTERNAL_STRATEGY, strategyReference.expr)
+		append('))')
 	}
 
 	private def appendTriggers(ITreeAppendable it, RuleGroup ruleGroup) {
@@ -365,7 +377,7 @@ class StrategyInferrer{
 		def private void appendInnerGroups(ITreeAppendable it, Collection<RuleGroup> innerGroups, boolean first) {
 			var firstLine = first
 			for(group:innerGroups){
-				if(group.rule != null){
+				if(group.rule != null || group.strategy != null){
 					if(firstLine){
 						firstLine = false
 						append('.with(')
@@ -377,19 +389,6 @@ class StrategyInferrer{
 						newLine
 					}
 					appendRule(it, group, true)
-				}
-				else if(group.strategy != null){
-					if(! firstLine){
-						decreaseIndentation
-						newLine
-						append(')')
-						firstLine = true
-					}
-					append('.with(')
-					append(group.newTypeRef(StrategyConverter).type)
-					append('.toStrategy(')
-					appendReference(it, EXTERNAL_STRATEGY, group.strategy.expr)
-					append('))')
 				}
 				appendInnerGroups(it, group.ruleGroups, firstLine)
 			}

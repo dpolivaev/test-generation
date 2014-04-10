@@ -63,9 +63,13 @@ public class AssignmentFormatter {
 
 	protected boolean includesAssignment(Assignment assignment) {
 		return  !(shouldFormatIteratingRulesOnly && !assignment.rule.forcesIteration() || excludedByValue(assignment))
-				&& ! isExcludedByExcludePatterns(assignment) && isIncludedByIncludePatterns(assignment);
+				&& ! isHidden(assignment)&& ! isExcludedByExcludePatterns(assignment) && isIncludedByIncludePatterns(assignment);
 	}
 	
+	private boolean isHidden(Assignment assignment) {
+		return assignment.getTargetedPropertyName().startsWith(" ");
+	}
+
 	private boolean excludedByValue(Assignment assignment) {
 		return excludeUndefined && SpecialValue.UNDEFINED.equals(assignment.value);
 	}
