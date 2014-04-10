@@ -795,13 +795,14 @@ public class MyFile {
 		''')
 	}	
 	
-	@Test def extendStrategies() {
+	@Test def appliesStrategies() {
 		'''
 			strategy first
-			strategy second extends first with first
+			strategy second apply first
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
+import org.dpolivaev.tsgen.coverage.StrategyConverter;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 
 @SuppressWarnings("all")
@@ -819,7 +820,8 @@ public class MyFile {
   private static RequirementBasedStrategy second() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
-    return new RequirementBasedStrategy(__requiredItems).with(first).with(first).with(__strategy);
+    __strategy.include(StrategyConverter.toStrategy(first));
+    return new RequirementBasedStrategy(__requiredItems).with(__strategy).addRequiredItemsFrom(StrategyConverter.toRequirementBasedStrategy(first));
   }
 }
 		''')
@@ -829,10 +831,11 @@ public class MyFile {
 	@Test def extendExternalStrategies() {
 		'''
 			import org.dpolivaev.tsgen.ruleengine.Strategy
-			strategy first extends new Strategy()
+			strategy first apply new Strategy()
 		'''.assertCompilesTo('''
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
+import org.dpolivaev.tsgen.coverage.StrategyConverter;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 
 @SuppressWarnings("all")
@@ -847,7 +850,8 @@ public class MyFile {
   private static RequirementBasedStrategy first() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
-    return new RequirementBasedStrategy(__requiredItems).with(externalStrategy1()).with(__strategy);
+    __strategy.include(StrategyConverter.toStrategy(externalStrategy1()));
+    return new RequirementBasedStrategy(__requiredItems).with(__strategy).addRequiredItemsFrom(StrategyConverter.toRequirementBasedStrategy(externalStrategy1()));
   }
 }
 		''')

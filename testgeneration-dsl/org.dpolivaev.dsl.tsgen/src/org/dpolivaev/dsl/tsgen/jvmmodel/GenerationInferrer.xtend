@@ -179,7 +179,6 @@ class GenerationInferrer{
 						appendRuleGroup(it, ruleGroup)
 					}
 					append('return new ') append(strategy.newTypeRef(RequirementBasedStrategy).type) append('(__requiredItems)') 
-					combinedStrategy(it, strategy.baseStrategies)
 					append('.with(__strategy)')
 					addAppliedStrategyItems(it, strategy)
 					append(';')
@@ -194,12 +193,10 @@ class GenerationInferrer{
 		val contents = EcoreUtil2.eAllContents(strategy)
 		for(obj : contents){
 			if (obj instanceof StrategyReference){
-				if(! (obj.eContainer instanceof org.dpolivaev.dsl.tsgen.strategydsl.Strategy)){
-					append('.addRequiredItemsFrom(')
-					append(strategy.newTypeRef(StrategyConverter).type) append('.toRequirementBasedStrategy(')
-					appendReference(it, EXTERNAL_STRATEGY, obj.expr)
-					append('))')
-				}
+				append('.addRequiredItemsFrom(')
+				append(strategy.newTypeRef(StrategyConverter).type) append('.toRequirementBasedStrategy(')
+				appendReference(it, EXTERNAL_STRATEGY, obj.expr)
+				append('))')
 			}
 		}
 	}
@@ -210,6 +207,14 @@ class GenerationInferrer{
 			append('__strategy.addRule(')
 			appendRule(it, ruleGroup, false)
 			append(');')
+			newLine
+		}
+		else if(ruleGroup.strategy != null){
+			append('__strategy.include(')
+			append(ruleGroup.newTypeRef(StrategyConverter).type)
+					append('.toStrategy(')
+			appendReference(it, EXTERNAL_STRATEGY, ruleGroup.strategy.expr)
+			append('));')
 			newLine
 		}
 		else{
@@ -618,13 +623,15 @@ class GenerationInferrer{
 	}
 
 	def private appendReference(ITreeAppendable it, String prefix, XExpression expr) {
-		val methodName = methods.get(prefix, expr)
-		if(methodName != null){
-			append(methodName)
-			append('()')
+		if(expr != null){
+			val methodName = methods.get(prefix, expr)
+			if(methodName != null){
+				append(methodName)
+				append('()')
+			}
+			else
+				append(expr.toString)
 		}
-		else
-			append(expr.toString)
 	}
 	
 	private def inferMainMethod(){

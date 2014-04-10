@@ -102,11 +102,21 @@ public class Strategy {
     private <T> void combineRules(Strategy combinedStrategy, Map<T, Rule> rules, Map<T, Rule> anotherRules,
         Map<T, Rule> combinedRules) {
         combinedRules.putAll(rules);
-        for(Rule rule : anotherRules.values())
-            combinedStrategy.addRule(rule);
+        combinedStrategy.addRules(anotherRules.values());
     }
 
-    public Set<String> availableDefaultProperties() {
+    public void include(Strategy anotherStrategy) {
+	addRules(anotherStrategy.topRules.values());
+	addRules(anotherStrategy.defaultRules.values());
+	addRules(anotherStrategy.triggeredRules.values());
+    }
+
+    private void addRules(Collection<Rule> rules) {
+        for(Rule rule : rules)
+            addRule(rule);
+	}
+
+	public Set<String> availableDefaultProperties() {
         return defaultRules.keySet();
     }
     

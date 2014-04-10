@@ -19,13 +19,12 @@ PROPERTY_ID hidden():
 ;
 
 Strategy:
-	'strategy' name=ID ('extends' baseStrategies += ShortFormStrategyReference ('with' baseStrategies += ShortFormStrategyReference)* )?
-		ruleGroups += RuleGroup* 
+	'strategy' name=ID
+		ruleGroups += RuleGroup*
 	;
 
 StrategyReference returns StrategyReference: {StrategyReference} 'strategy' goal ?= 'goal'? expr = XExpression;
 AppliedStrategy returns StrategyReference: {StrategyReference} 'apply' expr = XExpression;
-ShortFormStrategyReference returns StrategyReference: {StrategyReference} expr = XExpression;
 
 RuleGroup : {RuleGroup}
 	(trigger = Trigger condition = Condition? | condition = Condition) (rule = Rule | strategy = AppliedStrategy | '{' ruleGroups += RuleGroup* '}')
