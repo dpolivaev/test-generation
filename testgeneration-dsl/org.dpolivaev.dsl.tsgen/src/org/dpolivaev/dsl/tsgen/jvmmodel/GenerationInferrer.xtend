@@ -166,7 +166,7 @@ class GenerationInferrer{
 	
 	private def inferStrategyMethods(){
 		for (strategy : script.strategies) {
-			val methodName = "defineStrategy" + strategy.name.toFirstUpper
+			val methodName = strategy.name
 			jvmType.members += strategy.toMethod(methodName, strategy.newTypeRef(RequirementBasedStrategy)) [
 				body = [
 					append(strategy.newTypeRef(CoverageEntry).type) 
@@ -491,7 +491,7 @@ class GenerationInferrer{
 
 	private def inferStrategyFields(){
 		for (strategy : script.strategies) {
-			val methodName = "defineStrategy" + strategy.name.toFirstUpper
+			val methodName = strategy.name
 			jvmType.members += strategy.toField(strategy.name, strategy.newTypeRef(RequirementBasedStrategy)) [
 				setInitializer [
 					append('''«methodName»()''')

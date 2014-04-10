@@ -39,9 +39,9 @@ import org.dpolivaev.tsgen.ruleengine.Strategy;
 
 @SuppressWarnings("all")
 public class MyFile {
-  public final static RequirementBasedStrategy first = defineStrategyFirst();
+  public final static RequirementBasedStrategy first = first();
   
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy first() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
@@ -62,9 +62,9 @@ import org.dpolivaev.tsgen.ruleengine.Strategy;
 
 @SuppressWarnings("all")
 public class MyFile {
-  public final static RequirementBasedStrategy first = defineStrategyFirst();
+  public final static RequirementBasedStrategy first = first();
   
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy first() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory.iterate("x y").over(1, 2, 3).asRule());
@@ -97,9 +97,9 @@ public class MyFile {
     return Boolean.valueOf(_equals);
   }
 
-  public final static RequirementBasedStrategy first = defineStrategyFirst();
+  public final static RequirementBasedStrategy first = first();
 
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy first() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory.iterate("x").over("a", "b").with(
@@ -137,9 +137,9 @@ public class MyFile {
     return StrategyHelper.idProvider;
   }
   
-  public final static RequirementBasedStrategy first = defineStrategyFirst();
+  public final static RequirementBasedStrategy first = first();
   
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy first() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory.iterate("testcase").over(new ValueProvider(){
@@ -167,9 +167,9 @@ import org.dpolivaev.tsgen.ruleengine.Strategy;
 
 @SuppressWarnings("all")
 public class MyFile {
-  public final static RequirementBasedStrategy first = defineStrategyFirst();
+  public final static RequirementBasedStrategy first = first();
   
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy first() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory.iterate("x y").over(1).asRule());
@@ -195,9 +195,9 @@ import org.dpolivaev.tsgen.ruleengine.Strategy;
 
 @SuppressWarnings("all")
 public class MyFile {
-  public final static RequirementBasedStrategy first = defineStrategyFirst();
+  public final static RequirementBasedStrategy first = first();
   
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy first() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory.iterate("x").over("line1\nline2\nline3\n").asRule());
@@ -219,9 +219,9 @@ import org.dpolivaev.tsgen.ruleengine.Strategy;
 
 @SuppressWarnings("all")
 public class MyFile {
-  public final static RequirementBasedStrategy first = defineStrategyFirst();
+  public final static RequirementBasedStrategy first = first();
   
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy first() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory.when("x1", "x2").iterate("y").over(1, 2, 3).asRule());
@@ -250,9 +250,9 @@ public class MyFile {
     return propertyContainer.get("x");
   }
   
-  public final static RequirementBasedStrategy first = defineStrategyFirst();
+  public final static RequirementBasedStrategy first = first();
   
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy first() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory.iterate("y").over(new ValueProvider(){
@@ -284,9 +284,9 @@ public class MyFile {
     return Boolean.valueOf((1 < 2));
   }
   
-  public final static RequirementBasedStrategy first = defineStrategyFirst();
+  public final static RequirementBasedStrategy first = first();
   
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy first() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory._if(new Condition(){
@@ -319,9 +319,9 @@ public class MyFile {
     return Boolean.valueOf((1 < 2));
   }
   
-  public final static RequirementBasedStrategy first = defineStrategyFirst();
+  public final static RequirementBasedStrategy first = first();
   
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy first() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory._if(new Condition(){
@@ -358,9 +358,9 @@ public class MyFile {
     return Boolean.valueOf((3 < 4));
   }
   
-  public final static RequirementBasedStrategy first = defineStrategyFirst();
+  public final static RequirementBasedStrategy first = first();
   
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy first() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory._if(new Condition(){
@@ -386,9 +386,9 @@ import org.dpolivaev.tsgen.ruleengine.Strategy;
 
 @SuppressWarnings("all")
 public class MyFile {
-  public final static RequirementBasedStrategy first = defineStrategyFirst();
+  public final static RequirementBasedStrategy first = first();
   
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy first() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory.iterate("x").over(1, 2, 3).asDefaultRule());
@@ -412,9 +412,9 @@ import org.dpolivaev.tsgen.ruleengine.Strategy;
 
 @SuppressWarnings("all")
 public class MyFile {
-  public final static RequirementBasedStrategy first = defineStrategyFirst();
+  public final static RequirementBasedStrategy first = first();
   
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy first() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory.when("x1", "x2").iterate("y").over(1, 2, 3).asRule());
@@ -438,9 +438,9 @@ import org.dpolivaev.tsgen.ruleengine.Strategy;
 
 @SuppressWarnings("all")
 public class MyFile {
-  public final static RequirementBasedStrategy first = defineStrategyFirst();
+  public final static RequirementBasedStrategy first = first();
   
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy first() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory.iterate("x").over(1).with(
@@ -469,18 +469,18 @@ import org.dpolivaev.tsgen.ruleengine.Strategy;
 
 @SuppressWarnings("all")
 public class MyFile {
-  public final static RequirementBasedStrategy other = defineStrategyOther();
+  public final static RequirementBasedStrategy other = other();
 
-  public final static RequirementBasedStrategy first = defineStrategyFirst();
+  public final static RequirementBasedStrategy first = first();
 
-  private static RequirementBasedStrategy defineStrategyOther() {
+  private static RequirementBasedStrategy other() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory.iterate("y").over(2).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
   }
 
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy first() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory.iterate("x").over(1).with(StrategyConverter.toStrategy(other)).asRule());
@@ -509,18 +509,18 @@ import org.dpolivaev.tsgen.ruleengine.Strategy;
 
 @SuppressWarnings("all")
 public class MyFile {
-  public final static RequirementBasedStrategy other = defineStrategyOther();
+  public final static RequirementBasedStrategy other = other();
 
-  public final static RequirementBasedStrategy first = defineStrategyFirst();
+  public final static RequirementBasedStrategy first = first();
 
-  private static RequirementBasedStrategy defineStrategyOther() {
+  private static RequirementBasedStrategy other() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory.iterate("y").over(2).asRule());
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
   }
 
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy first() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory.iterate("x").over(1).with(
@@ -549,9 +549,9 @@ import org.dpolivaev.tsgen.ruleengine.Strategy;
 
 @SuppressWarnings("all")
 public class MyFile {
-  public final static RequirementBasedStrategy first = defineStrategyFirst();
+  public final static RequirementBasedStrategy first = first();
   
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy first() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory.iterate("x").over(1).with(
@@ -580,9 +580,9 @@ import org.dpolivaev.tsgen.ruleengine.Strategy;
 
 @SuppressWarnings("all")
 public class MyFile {
-  public final static RequirementBasedStrategy first = defineStrategyFirst();
+  public final static RequirementBasedStrategy first = first();
   
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy first() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory.iterate("x").over(1).with(
@@ -607,9 +607,9 @@ import org.dpolivaev.tsgen.ruleengine.Strategy;
 
 @SuppressWarnings("all")
 public class MyFile {
-  public final static RequirementBasedStrategy First = defineStrategyFirst();
+  public final static RequirementBasedStrategy First = First();
   
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy First() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory.iterate("a").over(1).with(
@@ -634,9 +634,9 @@ import org.dpolivaev.tsgen.ruleengine.Strategy;
 
 @SuppressWarnings("all")
 public class MyFile {
-  public final static RequirementBasedStrategy first = defineStrategyFirst();
+  public final static RequirementBasedStrategy first = first();
   
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy first() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory.iterate("x").over(2, 3).ordered().asRule());
@@ -658,9 +658,9 @@ import org.dpolivaev.tsgen.ruleengine.Strategy;
 
 @SuppressWarnings("all")
 public class MyFile {
-  public final static RequirementBasedStrategy first = defineStrategyFirst();
+  public final static RequirementBasedStrategy first = first();
   
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy first() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory.iterate("x").over(2, 3).shuffled().asRule());
@@ -684,9 +684,9 @@ import org.dpolivaev.tsgen.ruleengine.ValueProvider;
 
 @SuppressWarnings("all")
 public class MyFile {
-  public final static RequirementBasedStrategy first = defineStrategyFirst();
+  public final static RequirementBasedStrategy first = first();
   
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy first() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory.iterate("x").over(new ValueProvider(){
@@ -716,9 +716,9 @@ import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
 
 @SuppressWarnings("all")
 public class MyFile {
-  public final static RequirementBasedStrategy First = defineStrategyFirst();
+  public final static RequirementBasedStrategy First = First();
   
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy First() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
@@ -760,17 +760,17 @@ import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
 
 @SuppressWarnings("all")
 public class MyFile {
-  public final static RequirementBasedStrategy first = defineStrategyFirst();
+  public final static RequirementBasedStrategy first = first();
   
-  public final static RequirementBasedStrategy second = defineStrategySecond();
+  public final static RequirementBasedStrategy second = second();
   
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy first() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
   }
   
-  private static RequirementBasedStrategy defineStrategySecond() {
+  private static RequirementBasedStrategy second() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
@@ -806,17 +806,17 @@ import org.dpolivaev.tsgen.ruleengine.Strategy;
 
 @SuppressWarnings("all")
 public class MyFile {
-  public final static RequirementBasedStrategy first = defineStrategyFirst();
+  public final static RequirementBasedStrategy first = first();
   
-  public final static RequirementBasedStrategy second = defineStrategySecond();
+  public final static RequirementBasedStrategy second = second();
   
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy first() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
   }
   
-  private static RequirementBasedStrategy defineStrategySecond() {
+  private static RequirementBasedStrategy second() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     return new RequirementBasedStrategy(__requiredItems).with(first).with(first).with(__strategy);
@@ -842,9 +842,9 @@ public class MyFile {
     return _strategy;
   }
   
-  public final static RequirementBasedStrategy first = defineStrategyFirst();
+  public final static RequirementBasedStrategy first = first();
   
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy first() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     return new RequirementBasedStrategy(__requiredItems).with(externalStrategy1()).with(__strategy);
@@ -868,9 +868,9 @@ import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
 
 @SuppressWarnings("all")
 public class MyFile {
-  public final static RequirementBasedStrategy First = defineStrategyFirst();
+  public final static RequirementBasedStrategy First = First();
   
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy First() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
@@ -912,9 +912,9 @@ import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
 
 @SuppressWarnings("all")
 public class MyFile {
-  public final static RequirementBasedStrategy First = defineStrategyFirst();
+  public final static RequirementBasedStrategy First = First();
   
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy First() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
@@ -956,9 +956,9 @@ import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
 
 @SuppressWarnings("all")
 public class MyFile {
-  public final static RequirementBasedStrategy First = defineStrategyFirst();
+  public final static RequirementBasedStrategy First = First();
   
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy First() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     return new RequirementBasedStrategy(__requiredItems).with(__strategy);
@@ -1003,9 +1003,9 @@ import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
 
 @SuppressWarnings("all")
 public class MyFile {
-  public final static RequirementBasedStrategy First = defineStrategyFirst();
+  public final static RequirementBasedStrategy First = First();
   
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy First() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{
       new CoverageEntry("req1", "123"),};
     Strategy __strategy = new Strategy();
@@ -1053,9 +1053,9 @@ public class MyFile {
     return propertyContainer.get("a");
   }
   
-  public final static RequirementBasedStrategy First = defineStrategyFirst();
+  public final static RequirementBasedStrategy First = First();
   
-  private static RequirementBasedStrategy defineStrategyFirst() {
+  private static RequirementBasedStrategy First() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{
       new CoverageEntry("req1", CoverageEntry.ANY),};
     Strategy __strategy = new Strategy();

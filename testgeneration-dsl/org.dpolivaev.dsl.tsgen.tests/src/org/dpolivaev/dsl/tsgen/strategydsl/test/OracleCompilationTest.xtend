@@ -186,9 +186,9 @@ public class MyFile {
   
   public final static MyOracle myOracle = new MyOracle();
   
-  public final static RequirementBasedStrategy s = defineStrategyS();
+  public final static RequirementBasedStrategy s = s();
   
-  private static RequirementBasedStrategy defineStrategyS() {
+  private static RequirementBasedStrategy s() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory.iterate("x").over(new ValueProvider(){
@@ -306,9 +306,9 @@ public class MyFile {
   
   public final static MyOracle myOracle = new MyOracle();
   
-  public final static RequirementBasedStrategy s = defineStrategyS();
+  public final static RequirementBasedStrategy s = s();
   
-  private static RequirementBasedStrategy defineStrategyS() {
+  private static RequirementBasedStrategy s() {
     CoverageEntry[] __requiredItems = new CoverageEntry[]{};
     Strategy __strategy = new Strategy();
     __strategy.addRule(RuleBuilder.Factory._if(new Condition(){
