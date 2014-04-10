@@ -65,16 +65,20 @@ class GenerationInferrer{
 			declaredFields += strategy.name
 		for(oracle : script.oracles)
 			declaredFields += oracle.name
-		val contents = EcoreUtil2.eAllContents(script)
-		for(obj : contents){
-			if (obj instanceof StrategyReference)
-				appendStrategyReferences(obj as StrategyReference)
-			else if (obj instanceof OracleReference) 
+		val scriptContents = EcoreUtil2.eAllContents(script)
+		for(obj : scriptContents){
+			if (obj instanceof OracleReference)
 				appendOracleReferences(obj as OracleReference)
 		}
-
+		for(run : script.runs){
+			val runContents = EcoreUtil2.eAllContents(run)
+			for(obj : runContents){
+				if (obj instanceof StrategyReference)
+					appendStrategyReferences(obj as StrategyReference)
+			}
+		}
 	}
-	
+
 	final static val EXTERNAL_STRATEGY = "externalStrategy"
 	private def appendStrategyReferences(StrategyReference ref){
 		if(ref.expr != null && ! declaredFields.contains(ref.expr.toString)) {
