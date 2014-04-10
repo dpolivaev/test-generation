@@ -39,7 +39,7 @@ RuleGroup : {RuleGroup}
 Rule returns Rule:
 	(
 		'let'
-		default ?= 'default'? name=PROPERTY_ID
+		default ?= 'default'? (name=PROPERTY_ID | '(' nameExpressions += XExpression+ ')')
 		'be' 
 		values = PropertyValues
 		(ordered ?= 'ordered' | shuffled ?= 'shuffled')? 

@@ -1696,4 +1696,63 @@ class _first_StrategyFactory {
 		''')
 	}
 
+	@Test def withParameterizedRuleName() {
+		'''
+			strategy first(int p)
+				let default ("x#" p) be p
+		'''.assertCompilesTo('''
+MULTIPLE FILES WERE GENERATED
+
+File 1 : MyFile.java
+
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
+
+@SuppressWarnings("all")
+public class MyFile {
+  public static RequirementBasedStrategy first(final int p) {
+    return new _first_StrategyFactory(p).first();
+  }
+}
+
+File 2 : _first_StrategyFactory.java
+
+import org.dpolivaev.tsgen.coverage.CoverageEntry;
+import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
+import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
+import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
+import org.dpolivaev.tsgen.ruleengine.Strategy;
+import org.dpolivaev.tsgen.ruleengine.ValueProvider;
+import org.dpolivaev.tsgen.ruleengine.ValueProviderHelper;
+
+@SuppressWarnings("all")
+class _first_StrategyFactory {
+  private final int p;
+
+  public _first_StrategyFactory(final int p) {
+    this.p = p
+  }
+
+  private int name1() {
+    return this.p;
+  }
+
+  private int value2(final PropertyContainer propertyContainer) {
+    return this.p;
+  }
+
+  RequirementBasedStrategy first() {
+    CoverageEntry[] __requiredItems = new CoverageEntry[]{};
+    Strategy __strategy = new Strategy();
+    __strategy.addRule(RuleBuilder.Factory.iterate(new StringBuilder().append("x#").append(name1()).toString()).over(new ValueProvider(){
+      @Override public Object value(PropertyContainer propertyContainer) {
+        Object __value = ValueProviderHelper.toValue(value2(propertyContainer), propertyContainer);
+        return __value;
+    }}).asDefaultRule());
+    return new RequirementBasedStrategy(__requiredItems).with(__strategy);
+  }
+}
+
+		''')
+	}
+
 }

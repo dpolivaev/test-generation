@@ -22,6 +22,7 @@ import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory
 import org.dpolivaev.tsgen.ruleengine.SpecialValue
 import org.dpolivaev.tsgen.ruleengine.Strategy
 import org.dpolivaev.tsgen.ruleengine.ValueProviderHelper
+import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.common.types.JvmGenericType
@@ -87,11 +88,13 @@ class StrategyInferrer{
 		val contents = EcoreUtil2.eAllContents(strategy)
 		for(obj : contents){
 			if (obj instanceof ValueAction)
-				appendValueProviders(obj as ValueAction)
+				appendValueProviders(obj)
+			if (obj instanceof Rule)
+				appendRuleNameProviders(obj)
 			else if (obj instanceof Condition)
-				appendConditions(obj as Condition)
+				appendConditions(obj)
 			if (obj instanceof StrategyReference)
-				appendStrategyReferences(obj as StrategyReference)
+				appendStrategyReferences(obj)
 		}
 	}
 
@@ -110,6 +113,13 @@ class StrategyInferrer{
 					createMethod(expr, VALUE, expr.inferredType, true)
 				}
 
+	}
+
+	final static val NAME = "name"
+	private def appendRuleNameProviders(Rule rule){
+			for(expr:rule.nameExpressions)
+				if(shouldCreateMethodFor(expr))
+					createMethod(expr, NAME, expr.inferredType, false)
 	}
 
 	private def createMethod(XExpression expr, String prefix, JvmTypeReference resultTypeRef, boolean useParameters){
@@ -299,10 +309,32 @@ class StrategyInferrer{
 
 
 	def private appendRuleName(ITreeAppendable it, Rule rule) {
-		val name = rule.name.escapeQuotes;
-		append('.iterate("')
-		append(name)
-		append('")')
+		append('.iterate(')
+		if(rule.name != null) {
+			val name = rule.name.escapeQuotes;
+			append('"') append(name) append('"')
+		}
+		else{
+			appendNameExpressions(it, rule.nameExpressions)
+		}
+		append(')')
+	}
+
+	private def appendNameExpressions(ITreeAppendable it, EList<XExpression> expressions) {
+			append("new StringBuilder()");
+
+		for (expr : expressions){
+			append(".append(");
+			val methodName = methods.get(NAME, expr)
+			if(methodName == null){
+				xbaseCompiler.compileAsJavaExpression(expr, it, strategy.newTypeRef(Object))
+			}
+			else{
+				append('''«methodName»()''')
+			}
+			append(")");
+		}
+			append(".toString()")
 	}
 
 	def  private void appendRuleValues(ITreeAppendable it, Values values, boolean appendActionRuleGroups) {
@@ -396,30 +428,35 @@ class StrategyInferrer{
 		if(trace)
 			appendTraceStart(it, valueProvider)
 		append('Object __value = ')
-		val concatenation = valueProvider.expressions.size() > 1
-		if(concatenation)
-			append("new StringBuilder()");
-
-		for (expr : valueProvider.expressions){
-			if(concatenation)
-				append(".append(");
-			val methodName = methods.get(VALUE, expr)
-			if(methodName == null){
-				xbaseCompiler.compileAsJavaExpression(expr, it, valueProvider.newTypeRef(Object))
-			}
-			else{
-				append(valueProvider.newTypeRef(ValueProviderHelper).type) append('''.toValue(«methodName»(propertyContainer), propertyContainer)''')
-			}
-			if(concatenation)
-				append(")");
-		}
-		if(concatenation)
-			append(".toString()");
+		val expressions = valueProvider.expressions
+		appendValueExpressions(it, expressions);
 		append(';')
 		newLine
 		append('return __value;')
 		if(trace)
 			appendTraceEnd(it, valueProvider)
+	}
+
+	private def appendValueExpressions(ITreeAppendable it, EList<XExpression> expressions) {
+		val concatenation = expressions.size() > 1
+		if(concatenation)
+			append("new StringBuilder()");
+
+		for (expr : expressions){
+			if(concatenation)
+				append(".append(");
+			val methodName = methods.get(VALUE, expr)
+			if(methodName == null){
+				xbaseCompiler.compileAsJavaExpression(expr, it, strategy.newTypeRef(Object))
+			}
+			else{
+				append(strategy.newTypeRef(ValueProviderHelper).type) append('''.toValue(«methodName»(propertyContainer), propertyContainer)''')
+			}
+			if(concatenation)
+				append(")");
+		}
+		if(concatenation)
+			append(".toString()")
 	}
 
 	private def appendTraceEnd(ITreeAppendable it, EObject object) {
