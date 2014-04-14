@@ -62,7 +62,7 @@ public class ScriptLogger implements PropertyHandler, ErrorHandler {
 	@Override
 	public void generationFinished() {
 		try {
-			log.close();
+			log.flush();
 		} catch (IOException e) {
 			throw Utils.runtimeException(e);
 		}
