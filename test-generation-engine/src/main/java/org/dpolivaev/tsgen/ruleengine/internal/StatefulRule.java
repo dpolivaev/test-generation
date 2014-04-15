@@ -185,6 +185,6 @@ public abstract class StatefulRule implements Rule {
     }
 
     public Rule toTriggeredRule(){
-	return new TriggeredStatefulRule(new HashSet<String>(), condition, targetedPropertyName, valueProviders);
+    	return new TriggeredStatefulRule(new HashSet<String>(), condition, targetedPropertyName, valueProviders);
     }
 }
