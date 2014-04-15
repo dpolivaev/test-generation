@@ -3,7 +3,9 @@
  */
 package org.dpolivaev.dsl.tsgen.ui;
 
+import org.dpolivaev.dsl.tsgen.ui.autoedit.StrategyDslAutoEditStrategyProvider;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.xtext.ui.editor.autoedit.AbstractEditStrategyProvider;
 
 /**
  * Use this class to register components to be used within the IDE.
@@ -12,4 +14,10 @@ public class StrategyDslUiModule extends org.dpolivaev.dsl.tsgen.ui.AbstractStra
 	public StrategyDslUiModule(AbstractUIPlugin plugin) {
 		super(plugin);
 	}
+
+	public Class<? extends AbstractEditStrategyProvider>
+    bindAbstractEditStrategyProvider() {
+		return StrategyDslAutoEditStrategyProvider.class;
+	}
+
 }
