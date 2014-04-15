@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.dpolivaev.tsgen.ruleengine.Condition;
 import org.dpolivaev.tsgen.ruleengine.EngineState;
+import org.dpolivaev.tsgen.ruleengine.Rule;
 
 public class TriggeredStatefulRule extends StatefulRule {
     final private Set<String> triggeringProperties;
@@ -41,5 +42,9 @@ public class TriggeredStatefulRule extends StatefulRule {
     @Override
     public boolean isDefaultRule() {
         return false;
+    }
+    
+    public Rule toTriggeredRule(){
+    	return this;
     }
 }
