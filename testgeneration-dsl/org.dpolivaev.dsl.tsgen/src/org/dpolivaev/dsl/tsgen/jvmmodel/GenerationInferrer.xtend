@@ -26,13 +26,11 @@ import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 class GenerationInferrer{
 	@Inject extension JvmTypesBuilder jvmTypesBuilder
 	val Methods methods
-	val Set<String> declaredFields
 	var JvmGenericType jvmType
 	var Generation script
 
 	new(){
 		this.methods = new Methods
-		this.declaredFields = new HashSet<String>
 	}
 	
 	
@@ -41,7 +39,6 @@ class GenerationInferrer{
 		this.jvmType = jvmType
 		inferExpressions()
 		inferOracles()
-		inferStrategyFields()
 		inferStrategyMethods()
 		inferRunMethods()
 	}
@@ -59,12 +56,8 @@ class GenerationInferrer{
 				static = true
 			]
 	}
-	
+
 	private def inferExpressions(){
-		for(strategy : script.strategies)
-			declaredFields += strategy.name
-		for(oracle : script.oracles)
-			declaredFields += oracle.name
 		val scriptContents = EcoreUtil2.eAllContents(script)
 		for(obj : scriptContents){
 			if (obj instanceof OracleReference)
@@ -79,20 +72,20 @@ class GenerationInferrer{
 		}
 	}
 
-	final static val EXTERNAL_STRATEGY = "externalStrategy"
+	final static val STRATEGY = "_strategy"
 	private def appendStrategyReferences(StrategyReference ref){
-		if(ref.expr != null && ! declaredFields.contains(ref.expr.toString)) {
-			createMethod(ref.expr, EXTERNAL_STRATEGY, ref.expr.inferredType, false)
+		if(ref.expr != null) {
+			createMethod(ref.expr, STRATEGY, ref.expr.inferredType, false)
 		}
 	}
-	
-	final static val EXTERNAL_ORACLE = "externalOracle"
+
+	final static val ORACLE = "_oracle"
 	private def appendOracleReferences(OracleReference ref){
-		if(ref.expr != null && ! declaredFields.contains(ref.expr.toString)) {
-			createMethod(ref.expr, EXTERNAL_ORACLE, ref.expr.inferredType, false)
+		if(ref.expr != null) {
+			createMethod(ref.expr, ORACLE, ref.expr.inferredType, false)
 		}
 	}
-	
+
 	
 	private def createMethod(XExpression expr, String prefix, JvmTypeReference resultTypeRef, boolean useParameters){
 				if(methods.contains(prefix, expr))
@@ -134,22 +127,6 @@ class GenerationInferrer{
 		}
 	}
 
-	private def inferStrategyFields(){
-		for (strategy : script.strategies) {
-			if(strategy.parameters.empty){
-				val methodName = strategy.name
-				jvmType.members += strategy.toField(strategy.name, strategy.newTypeRef(RequirementBasedStrategy)) [
-					setInitializer [
-						append('''«methodName»()''')
-					]
-					final = true
-					visibility = JvmVisibility::PUBLIC
-					static = true
-				]
-			}
-		}
-	}
-
 	private def inferRunMethods(){
 		if(! script.runs.empty)
 		inferRunMethodImplementations();
@@ -167,43 +144,43 @@ class GenerationInferrer{
 					appendOutputConfiguration(it, "report", run, run.reportConfiguration)
 					newLine
 					append(run.newTypeRef(CoverageTracker).type)
-					append(' __coverageTracker = new ')
+					append(' _coverageTracker = new ')
 					append(run.newTypeRef(CoverageTracker).type)
 					append('();')
 					
 					newLine
 					append(run.newTypeRef(WriterFactory).type)
-					append(' __writerFactory = new ')
+					append(' _writerFactory = new ')
 					append(run.newTypeRef(WriterFactory).type)
-					append('(__outputConfiguration, __reportConfiguration);')
+					append('(_outputConfiguration, _reportConfiguration);')
 					newLine
-					append('__writerFactory.addCoverageTracker(__coverageTracker);')
+					append('_writerFactory.addCoverageTracker(_coverageTracker);')
 					if(! run.strategies.empty && run.strategies.get(0).goal){
 						newLine
-						appendReference(it, EXTERNAL_STRATEGY, run.strategies.get(0).expr)
-						append('.registerRequiredItems(__writerFactory);')
+						appendReference(it, STRATEGY, run.strategies.get(0).expr)
+						append('.registerRequiredItems(_writerFactory);')
 					}
 					
 					newLine 
-					append(run.newTypeRef(RuleEngine).type) append(' __ruleEngine = new ') append(run.newTypeRef(TrackingRuleEngine).type) append('(__coverageTracker);')
+					append(run.newTypeRef(RuleEngine).type) append(' _ruleEngine = new ') append(run.newTypeRef(TrackingRuleEngine).type) append('(_coverageTracker);')
 					for(oracle:run.oracles){
 						newLine
-						append('__ruleEngine.addHandler(')
-						appendReference(it, EXTERNAL_ORACLE, oracle.expr)
+						append('_ruleEngine.addHandler(')
+						appendReference(it, ORACLE, oracle.expr)
 						append(');')
 						if(oracle.goal){
 							newLine
-							appendReference(it, EXTERNAL_ORACLE, oracle.expr)
-							append('.setCoverageTracker(__coverageTracker);')
+							appendReference(it, ORACLE, oracle.expr)
+							append('.setCoverageTracker(_coverageTracker);')
 							newLine
-							appendReference(it, EXTERNAL_ORACLE, oracle.expr)
-							append('.registerRequiredItems(__writerFactory);')
+							appendReference(it, ORACLE, oracle.expr)
+							append('.registerRequiredItems(_writerFactory);')
 						}
 					}
-					newLine append('__writerFactory.configureEngine(__ruleEngine);')
+					newLine append('_writerFactory.configureEngine(_ruleEngine);')
 					newLine append('new ') append(run.newTypeRef(RequirementBasedStrategy).type) append('()')
 					combinedStrategy(it, run.strategies) 
-					append('.run(__ruleEngine);')
+					append('.run(_ruleEngine);')
 				]
 				visibility = JvmVisibility::PUBLIC
 				static = true
@@ -214,13 +191,13 @@ class GenerationInferrer{
 	def private appendOutputConfiguration(ITreeAppendable it, String target, EObject context, OutputConfiguration outputConfiguration) {
 		newLine
 		append(context.newTypeRef(org.dpolivaev.tsgen.scriptwriter.OutputConfiguration).type)
-		append(''' __«target»Configuration = new ''')
+		append(''' _«target»Configuration = new ''')
 		append(context.newTypeRef(org.dpolivaev.tsgen.scriptwriter.OutputConfiguration).type)
 		append('();')
 		
 		if(outputConfiguration != null){
 			newLine
-			append('''__«target»Configuration''')
+			append('''_«target»Configuration''')
 			if(outputConfiguration.xslt != null){
 				appendOutputFile(it, "Xml", outputConfiguration.xml)
 				append('.setXsltSource("')
@@ -257,7 +234,7 @@ class GenerationInferrer{
 	private def combinedStrategy(ITreeAppendable it, Collection<StrategyReference> strategies){
 		for(strategy : strategies){
 			append(".with(")
-			appendReference(it, EXTERNAL_STRATEGY, strategy.expr)
+			appendReference(it, STRATEGY, strategy.expr)
 			append(")")
 		}
 		return it.toString

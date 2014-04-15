@@ -3,8 +3,6 @@ package org.dpolivaev.dsl.tsgen.jvmmodel
 import com.google.inject.Injector
 import java.util.ArrayList
 import java.util.Collection
-import java.util.HashSet
-import java.util.Set
 import javax.inject.Inject
 import org.dpolivaev.dsl.tsgen.strategydsl.Condition
 import org.dpolivaev.dsl.tsgen.strategydsl.Rule
@@ -47,13 +45,11 @@ class StrategyInferrer{
 	@Inject extension JvmTypesBuilder jvmTypesBuilder
 	@Inject XbaseCompiler xbaseCompiler
 	val Methods methods
-	val Set<String> declaredFields
 	var JvmGenericType jvmType
 	var org.dpolivaev.dsl.tsgen.strategydsl.Strategy strategy
 
 	new(){
 		this.methods = new Methods
-		this.declaredFields = new HashSet<String>
 	}
 
 
@@ -101,14 +97,14 @@ class StrategyInferrer{
 		}
 	}
 
-	final static val EXTERNAL_STRATEGY = "externalStrategy"
+	final static val STRATEGY = "_strategy"
 	private def appendStrategyReferences(StrategyReference ref){
 		if(ref.expr != null) {
-			createMethod(ref.expr, EXTERNAL_STRATEGY, ref.expr.inferredType, false)
+			createMethod(ref.expr, STRATEGY, ref.expr.inferredType, false)
 		}
 	}
 
-    final static val VALUE = "value"
+    final static val VALUE = "_value"
 	private def appendValueProviders(ValueAction action){
 		for(valueProvider:action.valueProviders)
 			for(expr:valueProvider.expressions)
@@ -118,7 +114,7 @@ class StrategyInferrer{
 
 	}
 
-	final static val NAME = "name"
+	final static val NAME = "_name"
 	private def appendRuleNameProviders(Rule rule){
 			for(expr:rule.nameExpressions)
 				if(shouldCreateMethodFor(expr))
@@ -164,16 +160,16 @@ class StrategyInferrer{
 		jvmType.members += strategy.toMethod(methodName, strategy.newTypeRef(RequirementBasedStrategy)) [
 			body = [
 				append(strategy.newTypeRef(CoverageEntry).type)
-				append('[] __requiredItems = ') injector.getInstance(CoverageEntriesInferrer).appendArrayInitializer(it, strategy) append(';')
+				append('[] _requiredItems = ') injector.getInstance(CoverageEntriesInferrer).appendArrayInitializer(it, strategy) append(';')
 				newLine
 				append(strategy.newTypeRef(Strategy).type)
-				append(' __strategy = new ') append(strategy.newTypeRef(Strategy).type) append('();')
+				append(' _strategy = new ') append(strategy.newTypeRef(Strategy).type) append('();')
 				newLine
 				for(ruleGroup:strategy.ruleGroups){
 					appendRuleGroup(it, ruleGroup)
 				}
-				append('return new ') append(strategy.newTypeRef(RequirementBasedStrategy).type) append('(__requiredItems)')
-				append('.with(__strategy)')
+				append('return new ') append(strategy.newTypeRef(RequirementBasedStrategy).type) append('(_requiredItems)')
+				append('.with(_strategy)')
 				addAppliedStrategyItems(it, strategy)
 				append(';')
 			]
@@ -187,7 +183,7 @@ class StrategyInferrer{
 			if (obj instanceof StrategyReference){
 				append('.addRequiredItemsFrom(')
 				append(strategy.newTypeRef(StrategyConverter).type) append('.toRequirementBasedStrategy(')
-				appendReference(it, EXTERNAL_STRATEGY, obj.expr)
+				appendReference(it, STRATEGY, obj.expr)
 				append('))')
 			}
 		}
@@ -196,7 +192,7 @@ class StrategyInferrer{
 	def private void appendRuleGroup(ITreeAppendable it, RuleGroup ruleGroup) {
 		val rule = ruleGroup.rule
 		if(rule != null || ruleGroup.strategy != null){
-			append('__strategy.addRule(')
+			append('_strategy.addRule(')
 			appendRule(it, ruleGroup, false)
 			append(');')
 			newLine
@@ -243,7 +239,7 @@ class StrategyInferrer{
 		append('.with(')
 		append(strategyReference.newTypeRef(StrategyConverter).type)
 		append('.toStrategy(')
-		appendReference(it, EXTERNAL_STRATEGY, strategyReference.expr)
+		appendReference(it, STRATEGY, strategyReference.expr)
 		append('))')
 	}
 
@@ -428,12 +424,12 @@ class StrategyInferrer{
 		val trace = valueProvider.trace
 		if(trace)
 			appendTraceStart(it, valueProvider)
-		append('Object __value = ')
+		append('Object _value = ')
 		val expressions = valueProvider.expressions
 		appendValueExpressions(it, expressions);
 		append(';')
 		newLine
-		append('return __value;')
+		append('return _value;')
 		if(trace)
 			appendTraceEnd(it, valueProvider)
 	}
