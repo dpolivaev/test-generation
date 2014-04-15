@@ -26,6 +26,7 @@ import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
+import org.dpolivaev.tsgen.ruleengine.ValueProvider;
 
 @SuppressWarnings("all")
 class _first_StrategyFactory {
@@ -43,10 +44,14 @@ class _first_StrategyFactory {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
     Strategy _strategy = new Strategy();
     _strategy.addRule(RuleBuilder.Factory.iterate("x").over(1).asRule());
+    _strategy.addRule(RuleBuilder.Factory.iterate(" /MyFile.tsgen#/0/@strategies.1/@ruleGroups.1/@condition/@expr").over(new ValueProvider(){
+      @Override public Object value(PropertyContainer propertyContainer) {
+        Boolean _condition = condition1(propertyContainer);
+        return _condition;
+    }}).asDefaultRule());
     _strategy.addRule(RuleBuilder.Factory._if(new Condition(){
       @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
-        if (!condition1(propertyContainer)) return false;
-        return true;
+        return propertyContainer.<Boolean>get(" /MyFile.tsgen#/0/@strategies.1/@ruleGroups.1/@condition/@expr");
     }}).iterate(" /MyFile.tsgen#/0/@strategies.1/@ruleGroups.1/@strategy").over(SpecialValue.UNDEFINED).with(StrategyConverter.toStrategy(_strategy2())).asRule());
     return new RequirementBasedStrategy(_requiredItems).with(_strategy).addRequiredItemsFrom(StrategyConverter.toRequirementBasedStrategy(_strategy2()));
   }

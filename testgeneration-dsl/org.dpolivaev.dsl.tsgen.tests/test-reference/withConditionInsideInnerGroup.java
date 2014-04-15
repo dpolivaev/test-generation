@@ -35,12 +35,10 @@ class _first_StrategyFactory {
         @Override public Object value(PropertyContainer propertyContainer) {
           Boolean _condition = condition1(propertyContainer);
           return _condition;
-      }}).asDefaultRule()
+      }}).asDefaultRule(),
       RuleBuilder.Factory._if(new Condition(){
-        @Override public boolean isSatisfied(PropertyContainer propertyContainer) {propertyContainer.<Boolean>get(" /MyFile.tsgen#/0/@strategies.0/@ruleGroups.0/@rule/@values/@actions.0/@ruleGroups.0/@condition/@expr")
-      }}).asTriggeredRule(),
-      RuleBuilder.Factory._if(new Condition(){
-        @Override public boolean isSatisfied(PropertyContainer propertyContainer) {propertyContainer.<Boolean>get(" /MyFile.tsgen#/0/@strategies.0/@ruleGroups.0/@rule/@values/@actions.0/@ruleGroups.0/@condition/@expr")
+        @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
+          return propertyContainer.<Boolean>get(" /MyFile.tsgen#/0/@strategies.0/@ruleGroups.0/@rule/@values/@actions.0/@ruleGroups.0/@condition/@expr");
       }}).iterate("y").over(3).asTriggeredRule()
     ).asRule());
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
