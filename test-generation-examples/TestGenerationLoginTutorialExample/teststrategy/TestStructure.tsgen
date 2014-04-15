@@ -1,0 +1,13 @@
+package login.testgeneration
+import org.dpolivaev.tsgen.strategies.StrategyHelper;
+
+strategy structure
+	let script.precondition.alias be "beforeAll"
+	let script.postprocessing.alias be "afterAll"
+	let testcase.precondition.alias be "arrange"
+	let testcase.focus.alias be "act"
+	let testcase.verification.alias be "assert"
+	let testcase.postprocessing.alias be "after"
+
+	let default testcase be StrategyHelper.idProvider
+	let default testcase.description be StrategyHelper.descriptionProvider

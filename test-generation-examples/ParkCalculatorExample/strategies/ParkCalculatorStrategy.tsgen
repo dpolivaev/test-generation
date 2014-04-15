@@ -1,5 +1,7 @@
 package parkcalculator.testgeneration
 import org.dpolivaev.tsgen.strategies.StrategyHelper;  
+
+
 /*
  * Default test part property names 
  * (script.precondition, precondition, focus, verification, postcondition, script.postcondition) 
@@ -16,34 +18,42 @@ strategy structure
 	let default testcase be StrategyHelper.idProvider
 	let default testcase.description be StrategyHelper.descriptionProvider
 
+
 /* 
  * Declare strategy parkCostCalculatorTests 
  * using predefined rules for test case id and test case description
  * available as StrategyHelper method
  */
 strategy parkCostCalculatorTests
+	/*
+	 * Set properties used by the writer as generated test class,
+	 * its imports and the test driver class.
+	 * Their values remains the same all the time.
+	 */
+	let script be "parkcalculator/ParkCalculatorTest"
+	let script.imports be "import static parkcalculator.Lots.*;
+	import static parkcalculator.BadValues.*;
+	import parkcalculator.testgeneration.LongTermGarageParkingCalculator;"
+	let script.driver be "parkcalculator/ParkCalculatorTestDriver"
 
-/*
- * Set properties used by the writer as generated test class, 
- * its imports and the test driver class.
- * Their values remains the same all the time.
- */
-let script be "parkcalculator/ParkCalculatorTest"
-let script.imports be "import static parkcalculator.Lots.*;
-import static parkcalculator.BadValues.*;
-import parkcalculator.testgeneration.LongTermGarageParkingCalculator;"
-let script.driver be "parkcalculator/ParkCalculatorTestDriver"
+	apply structure
 
-/*
- * Declare property "category" with values "success" and "failure".
- */
-let category be "success"{
+	/*
+	 * Declare property "category" with values "success" and "failure".
+	 */
+	let category be "success"{
+		apply testsForSuccess
+	},
+	"failure"{
+		apply testsForFailure
+	}
 
+strategy testsForSuccess
 	/*
 	 * In this category define test focus as "calculate parking costs"
 	 */
 	let focus be "calculate parking costs"{
-		
+
 		/*
 		 * For this focus define preconditions and assert steps
 		 */		
@@ -67,7 +77,6 @@ let category be "success"{
 		 * there are eight values of weeks and days which must be tried by the test.
 		 */
 		
-		
 		for each "parking lot" {
 			let weeks be 
 				0  { let days be 0, 1, 6}, 
@@ -82,51 +91,7 @@ let category be "success"{
 		 */
 		let "parking lot" be listOfValidLots with 
 			"VALET_PARKING"{
-				/*
-				 * Costs for completed days required for calculation of expected costs for the verification
-				 * are calculated as a concatenation of strings put in the round brackets.
-				 * 
-				 * Operator ':' is an accessor of another property value.
-				 * 
-				 */
-				let dayCosts be ("(7 * ":weeks" + ":days") * 18")
-				
-				/*
-				 * "parking time" is a helper property. 
-				 * Arbitrary quoted strings can be used as property names too.
-				 */
-				let "parking time" be 
-					"0 hours"{
-						let hours be 0
-						let minutes be 0
-						let expectedCosts be :dayCosts
-						let [Req2] be (:"parking lot"" costs ":expectedCosts)
-						let [Req3] be (:"parking lot"" costs ":expectedCosts)
-					},
-					"5 hours or less"{
-						/*
-						 * Iteration over the following properties takes place simultaneously.
-						 * Keyword "ordered" means that the following two properties are assigned their values in the given order
-						 * so that they build pairs (0:1, 4:59 and 5:0)
-						 */
-						let hours be 0, 4, 5 ordered
-						let minutes be 1, 59, 0 ordered
-						let expectedCosts be (:dayCosts " + 12")
-						
-						/*
-						 * Properties with names put in rectangular brackets are interpreted as requirements 
-						 * satisfied by the test where they occur. This information can be collected in report and 
-						 * additionally be written into the generated test file. 
-						 */
-						let [Req3] be (:"parking lot"" costs ":expectedCosts)
-					},
-					"more than 5 hours"{
-						let hours be 5, 22, 23 ordered
-						let minutes be 1, 0, 59 ordered
-						let expectedCosts be (:dayCosts  " + 18")
-						let [Req2] be (:"parking lot"" costs ":expectedCosts)
-					}
-				let [Req1] be (:"parking lot" " costs " :"parking time")
+				apply valetParkingTests
 			}, 
 			"SHORT_TERM_PARKING"{
 				let hours be 0, 1, 11, 12, 23 {
@@ -162,38 +127,89 @@ let category be "success"{
 				if :days  == 0 let [Req14] be (:"parking lot"" ":weeks" weeks " :days" days")
 			}, 
 			"ECONOMY_LOT_PARKING"{
-				/*
-				 * In this example the dayCosts and expectedCosts are calculated completely by the strategy.
-				 */
-				let default dayCosts be :weeks as int * 54 + :days as int * 9
-				let "parking time" be 
-					"0 hours"{
-						let hours be 0
-						let minutes be 0
-						let expectedCosts be :dayCosts
-						let [Req16] be (:"parking lot"" costs ":expectedCosts)
-						let [Req18] be (:"parking lot"" costs ":expectedCosts)
-					},
-					"4 hour or less"{
-						let hours be 0, 3, 4 ordered
-						let minutes be 1, 59, 0 ordered
-						/*
-						 * All expressions are xbase expressions. They can include e.g. an if statement.
-						 */
-						let expectedCosts be :dayCosts as int + :hours as int * 2 + if(:minutes != 0) 2 else 0
-						let [Req16] be (:"parking lot"" costs ":expectedCosts)
-					},
-					"more than 4 hours"{
-						let hours be 4, 23 ordered
-						let minutes be 1, 59 ordered
-						let expectedCosts be :dayCosts as int + 9
-						let [Req17] be (:"parking lot"" costs ":expectedCosts)
-					} 
-				let [Req15] be (:"parking lot"" ":"parking time")	 
+				apply economyParkingTests
 			}
+	}
+
+strategy valetParkingTests
+	/*
+	 * Costs for completed days required for calculation of expected costs for the verification
+	 * are calculated as a concatenation of strings put in the round brackets.
+	 *
+	 * Operator ':' is an accessor of another property value.
+	 *
+	 */
+	let dayCosts be ("(7 * ":weeks" + ":days") * 18")
+
+	/*
+	 * "parking time" is a helper property.
+	 * Arbitrary quoted strings can be used as property names too.
+	 */
+	let "parking time" be
+		"0 hours"{
+			let hours be 0
+			let minutes be 0
+			let expectedCosts be :dayCosts
+			let [Req2] be (:"parking lot"" costs ":expectedCosts)
+			let [Req3] be (:"parking lot"" costs ":expectedCosts)
+		},
+		"5 hours or less"{
+			/*
+			 * Iteration over the following properties takes place simultaneously.
+			 * Keyword "ordered" means that the following two properties are assigned their values in the given order
+			 * so that they build pairs (0:1, 4:59 and 5:0)
+			 */
+			let hours be 0, 4, 5 ordered
+			let minutes be 1, 59, 0 ordered
+			let expectedCosts be (:dayCosts " + 12")
+
+			/*
+			 * Properties with names put in rectangular brackets are interpreted as requirements
+			 * satisfied by the test where they occur. This information can be collected in report and
+			 * additionally be written into the generated test file.
+			 */
+			let [Req3] be (:"parking lot"" costs ":expectedCosts)
+		},
+		"more than 5 hours"{
+			let hours be 5, 22, 23 ordered
+			let minutes be 1, 0, 59 ordered
+			let expectedCosts be (:dayCosts  " + 18")
+			let [Req2] be (:"parking lot"" costs ":expectedCosts)
 		}
-	},
-"failure"{
+	let [Req1] be (:"parking lot" " costs " :"parking time")
+
+strategy economyParkingTests
+	/*
+	 * In this example the dayCosts and expectedCosts are calculated completely by the strategy.
+	 */
+	let default dayCosts be :weeks as int * 54 + :days as int * 9
+	let "parking time" be
+		"0 hours"{
+			let hours be 0
+			let minutes be 0
+			let expectedCosts be :dayCosts
+			let [Req16] be (:"parking lot"" costs ":expectedCosts)
+			let [Req18] be (:"parking lot"" costs ":expectedCosts)
+		},
+		"4 hour or less"{
+			let hours be 0, 3, 4 ordered
+			let minutes be 1, 59, 0 ordered
+			/*
+			 * All expressions are xbase expressions. They can include e.g. an if statement.
+			 */
+			let expectedCosts be :dayCosts as int + :hours as int * 2 + if(:minutes != 0) 2 else 0
+			let [Req16] be (:"parking lot"" costs ":expectedCosts)
+		},
+		"more than 4 hours"{
+			let hours be 4, 23 ordered
+			let minutes be 1, 59 ordered
+			let expectedCosts be :dayCosts as int + 9
+			let [Req17] be (:"parking lot"" costs ":expectedCosts)
+		}
+	let [Req15] be (:"parking lot"" ":"parking time")
+
+
+strategy testsForFailure
 	let focus be  
 		"select illegal lot (wrongValue)"{
 			let wrongValue be "NULL_VALUE", "BAD_VALUE"
@@ -213,7 +229,7 @@ let category be "success"{
 			let precondition#1 be "select lot(lot)"
 			let default lot be from listOfValidLots
 		}
-}
+
 
 /*
  * Models can implement methods called by strategies.
@@ -283,8 +299,7 @@ oracle LongTermGarageParkingCalculator{
  * run section defines what strategies are executed and configures the output.
  * Strategies to be run and models to be checked for the code coverage must be mentioned here. 
  */	
-run strategy goal parkCostCalculatorTests 
-	with strategy structure, 
+run strategy goal parkCostCalculatorTests with
 	oracle goal ShortTermParkingCalculator, 
 	oracle goal LongTermGarageParkingCalculator
 	
