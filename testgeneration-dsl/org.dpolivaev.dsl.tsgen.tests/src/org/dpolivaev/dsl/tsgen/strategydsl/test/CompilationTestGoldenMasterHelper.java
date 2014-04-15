@@ -9,6 +9,7 @@ import java.io.Writer;
 
 import org.eclipse.xtext.util.IAcceptor;
 import org.eclipse.xtext.xbase.compiler.CompilationTestHelper;
+import org.eclipse.xtext.xbase.compiler.CompilationTestHelper.Result;
 import org.junit.Assert;
 import org.junit.rules.TestName;
 
@@ -30,7 +31,7 @@ public class CompilationTestGoldenMasterHelper extends CompilationTestHelper{
 	public void assertCompilesTo(CharSequence source, final File expectedResult) throws IOException {
 		if(expectedResult.canRead()){
 			String expectedCompilationResult = Resources.toString(expectedResult.toURI().toURL(), Charsets.UTF_8);
-			super.assertCompilesTo(source, expectedCompilationResult);
+			assertCompilesTo(source, expectedCompilationResult);
 		}
 		else{
 			final boolean[] called = {false};
@@ -44,6 +45,21 @@ public class CompilationTestGoldenMasterHelper extends CompilationTestHelper{
 		}
 	}
 
+	public void assertCompilesTo(CharSequence source, final CharSequence expected) throws IOException {
+		final boolean[] called = {false};
+		compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			public void accept(Result r) {
+				Assert.assertEquals(removeEndWhiteSpace(expected), removeEndWhiteSpace(r.getSingleGeneratedCode()));
+				called[0] = true;
+			}
+
+			public String removeEndWhiteSpace(final CharSequence text) {
+				return text.toString().trim().replaceAll("[ \t]+(\r?\n)", "$1");
+			}
+		});
+		Assert.assertTrue("Nothing was generated but the expectation was :\n"+expected, called[0]);
+	}
+	
 	private void writeResultToFile(Result r, File outputFile) {
 		try(Writer out = new BufferedWriter(new OutputStreamWriter(
 			    new FileOutputStream(outputFile), "UTF-8"))){
