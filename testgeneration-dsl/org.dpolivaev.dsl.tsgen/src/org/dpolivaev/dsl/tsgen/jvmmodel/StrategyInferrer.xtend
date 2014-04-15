@@ -22,6 +22,7 @@ import org.dpolivaev.tsgen.ruleengine.Strategy
 import org.dpolivaev.tsgen.ruleengine.ValueProviderHelper
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.common.types.JvmGenericType
 import org.eclipse.xtext.common.types.JvmType
@@ -38,7 +39,6 @@ import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 
 import static extension org.dpolivaev.dsl.tsgen.jvmmodel.StrategyCompiler.*
-import org.eclipse.emf.ecore.util.EcoreUtil
 
 class StrategyInferrer{
 	@Inject Injector injector
@@ -189,24 +189,60 @@ class StrategyInferrer{
 		}
 	}
 
-	def private void appendRuleGroup(ITreeAppendable it, RuleGroup ruleGroup) {
-		val rule = ruleGroup.rule
-		if(rule != null || ruleGroup.strategy != null){
-			append('_strategy.addRule(')
-			appendRule(it, ruleGroup, false)
-			append(');')
-			newLine
+	def appendConditionDefaultRule(ITreeAppendable it, RuleGroup ruleGroup){
+		val expr = ruleGroup.condition.expr
+		append(strategy.newTypeRef(Factory).type)
+		appendCondition(it, ruleGroup.eContainer)
+		append('.iterate("')
+		append(propertyName(expr))
+		append('")')
+		append('.over(')
+			appendImplementationObject(it, expr.newTypeRef(org.dpolivaev.tsgen.ruleengine.ValueProvider).type, "Object value",
+				[appendConditionExpression(it, ruleGroup.condition)])
+		append(')')
+		append('.asDefaultRule()')
+	}
+
+	def propertyName(EObject expr) {
+		' ' + EcoreUtil.getURI(expr).toString
+	}
+
+	def void appendCondition(ITreeAppendable it, EObject ruleGroup){
+		if(ruleGroup instanceof RuleGroup){
+			val expr = ruleGroup?.condition?.expr
+			if(expr != null){
+				append('._if(')
+					appendImplementationObject(it, ruleGroup.newTypeRef(org.dpolivaev.tsgen.ruleengine.Condition).type, "boolean isSatisfied",
+						[
+							newLine
+							append('''return propertyContainer.<Boolean>get("«propertyName(expr)»");''')
+						])
+				append(')')
+			}
+			else
+				appendCondition(it, ruleGroup.eContainer)
 		}
-		else{
-			for(innerRuleGroup : ruleGroup.ruleGroups)
-				appendRuleGroup(it, innerRuleGroup)
-		}
+	}
+
+	def private appendConditionExpression(ITreeAppendable it, Condition condition) {
+		newLine
+		val trace = condition.trace
+		if(trace)
+			appendTraceStart(it, condition)
+		append('Boolean _condition = ')
+		val methodName = methods.get(CONDITION, condition.expr)
+		append('''«methodName»(propertyContainer)''')
+		append(';')
+		newLine
+		append('return _condition;')
+		if(trace)
+			appendTraceEnd(it, condition)
 	}
 
 	def private void appendRule(ITreeAppendable it, RuleGroup ruleGroup, boolean temporaryRule) {
 		append(strategy.newTypeRef(Factory).type)
 		appendTriggers(it, ruleGroup)
-		appendConditions(it, ruleGroup)
+		appendCondition(it, ruleGroup)
 		val rule = ruleGroup.rule
 		if(rule !=null){
 			if(rule.skip){
@@ -230,8 +266,8 @@ class StrategyInferrer{
 	}
 
 	private def appendStrategyRule(ITreeAppendable it, StrategyReference strategyReference){
-		append('.iterate(" ')
-		append(EcoreUtil.getURI(strategyReference).toString)
+		append('.iterate("')
+		append(propertyName(strategyReference))
 		append('")')
 		append('.over(')
 		append(strategyReference.newTypeRef(SpecialValue).type)
@@ -272,51 +308,6 @@ class StrategyInferrer{
 		}
 		return triggers
 	}
-
-	private def appendConditions(ITreeAppendable it, RuleGroup ruleGroup) {
-		val conditions = conditions(ruleGroup)
-		if(! conditions.isEmpty){
-			conditions.reverse
-			append('._if(')
-			appendImplementationObject(it, ruleGroup.newTypeRef(org.dpolivaev.tsgen.ruleengine.Condition).type, "boolean isSatisfied",
-				[appendCalledMethods(conditions, it)]
-			)
-			append(')')
-		}
-	}
-
-	def private appendCalledMethods(Condition[] conditions, ITreeAppendable it) {
-		for(condition:conditions){
-			val calledMethodName = methods.get(CONDITION, condition.expr)
-			val trace = condition.trace
-			newLine
-			if(trace)
-				appendTraceStart(it, condition)
-			append('''if (!«calledMethodName»(propertyContainer)) return false;''')
-			if(trace)
-				appendTraceEnd(it, condition)
-		}
-		newLine
-		append('return true;')
-	}
-
-	def private conditions(RuleGroup ruleGroup) {
-		val methodNames = new ArrayList<Condition>()
-		var group = ruleGroup
-		do {
-			val condition = group.condition
-			if(condition != null && condition.expr != null){
-				methodNames.add(condition)
-			}
-			val container = group.eContainer
-			if(container instanceof RuleGroup){
-				group = container as RuleGroup
-			}
-			else
-				return methodNames
-		} while(true)
-	}
-
 
 	def private appendRuleName(ITreeAppendable it, Rule rule) {
 		append('.iterate(')
@@ -372,30 +363,61 @@ class StrategyInferrer{
 			appendInnerGroups(it, innerGroups, true)
 	}
 
-		def private void appendInnerGroups(ITreeAppendable it, Collection<RuleGroup> innerGroups, boolean first) {
-			var firstLine = first
-			for(group:innerGroups){
-				if(group.rule != null || group.strategy != null){
-					if(firstLine){
-						firstLine = false
-						append('.with(')
-						increaseIndentation
-						newLine
-					}
-					else{
-						append(',')
-						newLine
-					}
-					appendRule(it, group, true)
-				}
-				appendInnerGroups(it, group.ruleGroups, firstLine)
-			}
-			if(first && ! firstLine){
-				decreaseIndentation
-				newLine
-				append(')')
-			}
+	def private void appendRuleGroup(ITreeAppendable it, RuleGroup ruleGroup) {
+		if(ruleGroup?.condition?.expr != null){
+			append('_strategy.addRule(')
+			appendConditionDefaultRule(it, ruleGroup)
+			append(');')
+			newLine
 		}
+		val rule = ruleGroup.rule
+		if(rule != null || ruleGroup.strategy != null){
+			append('_strategy.addRule(')
+			appendRule(it, ruleGroup, false)
+			append(');')
+			newLine
+		}
+		else{
+			for(innerRuleGroup : ruleGroup.ruleGroups)
+				appendRuleGroup(it, innerRuleGroup)
+		}
+	}
+
+
+
+	def private void appendInnerGroups(ITreeAppendable it, Collection<RuleGroup> innerGroups, boolean first) {
+		var firstLine = first
+		for(group:innerGroups){
+			if(group.rule != null || group.strategy != null|| group?.condition?.expr != null){
+				if(firstLine){
+					firstLine = false
+					append('.with(')
+					increaseIndentation
+					newLine
+				}
+				else{
+					append(',')
+					newLine
+				}
+				if(group?.condition?.expr != null){
+					appendConditionDefaultRule(it, group)
+					if(group.rule != null || group.strategy != null){
+						append(', ')
+						newLine
+					}
+				}
+				if(group.rule != null || group.strategy != null)
+					appendRule(it, group, true)
+			}
+			appendInnerGroups(it, group.ruleGroups, firstLine)
+		}
+		if(first && ! firstLine){
+			decreaseIndentation
+			newLine
+			append(')')
+		}
+	}
+
 	def private apppendValueAction(ITreeAppendable it, ValueAction valueAction) {
 			appendValueAction(it, valueAction)
 	}

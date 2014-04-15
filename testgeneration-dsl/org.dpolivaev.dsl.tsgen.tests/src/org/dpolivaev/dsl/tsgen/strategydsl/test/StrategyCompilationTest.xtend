@@ -92,6 +92,7 @@ class StrategyCompilationTest {
 				if 1 < 2 let y be 3
 		'''.assertCompilesToFile(testName)
 	}
+
 	@Test def withConditionalGroup() {
 		'''
 			strategy first
@@ -100,6 +101,27 @@ class StrategyCompilationTest {
 				}
 		'''.assertCompilesToFile(testName)
 	}
+
+	@Test def withTracedConditionalGroup() {
+		'''
+			strategy first
+				if traced 1 < 2 {
+					let y be 3
+				}
+		'''.assertCompilesToFile(testName)
+	}
+
+	@Test def withConditionInsideInnerGroup() {
+		'''
+			strategy first
+				let x be 1 {
+					if 1 < 2 {
+						let y be 3
+					}
+				}
+		'''.assertCompilesToFile(testName)
+	}
+
 	@Test def withConditionalGroupAndCondition() {
 		'''
 			strategy first
@@ -108,6 +130,16 @@ class StrategyCompilationTest {
 				}
 			'''.assertCompilesToFile(testName)
 	}
+
+	@Test def withConditionalGroupAndTrigger() {
+		'''
+			strategy first
+				if 1 < 2 {
+					for each x let y be 5
+				}
+			'''.assertCompilesToFile(testName)
+	}
+
 	@Test def withOneDefaultRule() {
 		'''
 			strategy first
