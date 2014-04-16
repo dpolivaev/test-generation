@@ -132,6 +132,17 @@ class StrategyCompilationTest {
 		'''.assertCompilesToFile(testName)
 	}
 
+	@Test def withConditionInsideInnerGroupInCondition() {
+		'''
+			strategy first
+				if 1 < 2  let x be 1 {
+					if 2 < 3 {
+						let y be 3
+					}
+				}
+		'''.assertCompilesToFile(testName)
+	}
+
 	@Test def withConditionalGroupAndCondition() {
 		'''
 			strategy first
