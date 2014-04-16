@@ -201,6 +201,16 @@ public class XmlTestCaseWriterTest {
     }
     
     @Test
+    public void createsTestCaseElementWithUndefinedFocusParameters() throws Exception{
+        givenProperty("testcase", "testcase");
+        givenProperty("testcase.focus", "focus (x)");
+        createScript();
+        checkOutput("<TestCase id='testcase'><Focus id='focus'>"
+        		+ "<Parameter name='x'  type='org.dpolivaev.tsgen.ruleengine.SpecialValue'>UNDEFINED</Parameter>"
+        		+ "</Focus></TestCase>");
+    }
+    
+    @Test
     public void createsTestCaseElementWithOneFocusParameter() throws Exception{
         givenProperty("testcase", "testcase");
         givenProperty("testcase.focus", "focus (x)");
