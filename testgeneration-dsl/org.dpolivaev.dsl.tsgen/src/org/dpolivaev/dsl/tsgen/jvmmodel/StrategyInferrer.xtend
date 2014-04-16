@@ -39,6 +39,7 @@ import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 
 import static extension org.dpolivaev.dsl.tsgen.jvmmodel.StrategyCompiler.*
+import org.dpolivaev.dsl.tsgen.strategydsl.Generation
 
 class StrategyInferrer{
 	@Inject Injector injector
@@ -192,7 +193,6 @@ class StrategyInferrer{
 	def appendConditionDefaultRule(ITreeAppendable it, RuleGroup ruleGroup){
 		val expr = ruleGroup.condition.expr
 		append(strategy.newTypeRef(Factory).type)
-		appendCondition(it, ruleGroup.eContainer)
 		append('.iterate("')
 		append(propertyName(expr))
 		append('")')
@@ -203,25 +203,10 @@ class StrategyInferrer{
 		append('.asDefaultRule()')
 	}
 
-	def propertyName(EObject expr) {
-		' ' + EcoreUtil.getURI(expr).toString
-	}
-
-	def void appendCondition(ITreeAppendable it, EObject ruleGroup){
-		if(ruleGroup instanceof RuleGroup){
-			val expr = ruleGroup?.condition?.expr
-			if(expr != null){
-				append('._if(')
-					appendImplementationObject(it, ruleGroup.newTypeRef(org.dpolivaev.tsgen.ruleengine.Condition).type, "boolean isSatisfied",
-						[
-							newLine
-							append('''return propertyContainer.<Boolean>get("«propertyName(expr)»");''')
-						])
-				append(')')
-			}
-			else
-				appendCondition(it, ruleGroup.eContainer)
-		}
+	def private propertyName(EObject expr) {
+		val generation = expr.eResource.contents.get(0) as Generation
+		val packageId = generation.package?:""
+		' ' + packageId + EcoreUtil.getURI(expr).toString
 	}
 
 	def private appendConditionExpression(ITreeAppendable it, Condition condition) {
@@ -230,6 +215,7 @@ class StrategyInferrer{
 		if(trace)
 			appendTraceStart(it, condition)
 		append('Boolean _condition = ')
+		appendAncestorCondition(it, condition.eContainer.eContainer)
 		val methodName = methods.get(CONDITION, condition.expr)
 		append('''«methodName»(propertyContainer)''')
 		append(';')
@@ -237,6 +223,16 @@ class StrategyInferrer{
 		append('return _condition;')
 		if(trace)
 			appendTraceEnd(it, condition)
+	}
+
+	def void appendAncestorCondition(ITreeAppendable it, EObject ruleGroup){
+		if(ruleGroup instanceof RuleGroup){
+			val expr = ruleGroup?.condition?.expr
+			if(expr != null)
+				append('''propertyContainer.<Boolean>get("«propertyName(expr)»") && ''')
+			else
+				appendAncestorCondition(it, ruleGroup.eContainer)
+		}
 	}
 
 	def private void appendRule(ITreeAppendable it, RuleGroup ruleGroup, boolean temporaryRule) {
@@ -263,6 +259,23 @@ class StrategyInferrer{
 			append('.asTriggeredRule()')
 		else
 			append('.asRule()')
+	}
+
+	def private void appendCondition(ITreeAppendable it, EObject ruleGroup){
+		if(ruleGroup instanceof RuleGroup){
+			val expr = ruleGroup?.condition?.expr
+			if(expr != null){
+				append('._if(')
+					appendImplementationObject(it, ruleGroup.newTypeRef(org.dpolivaev.tsgen.ruleengine.Condition).type, "boolean isSatisfied",
+						[
+							newLine
+							append('''return propertyContainer.<Boolean>get("«propertyName(expr)»");''')
+						])
+				append(')')
+			}
+			else
+				appendCondition(it, ruleGroup.eContainer)
+		}
 	}
 
 	private def appendStrategyRule(ITreeAppendable it, StrategyReference strategyReference){

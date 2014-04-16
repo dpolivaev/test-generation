@@ -21,8 +21,10 @@ class StrategyTypeComputer extends XbaseTypeComputer {
 		}
 	}
 	
-	protected def _computeTypes(PropertyCall expression, ITypeComputationState state) {
-		val container = expression.eContainer
+	protected def _computeTypes(PropertyCall propertyCall, ITypeComputationState state) {
+		for(expr:propertyCall.expressions)
+			state.computeTypes(expr)
+		val container = propertyCall.eContainer
 		if(container instanceof XCastedExpression){
 			val type = (container as XCastedExpression).type
 			if(type.type instanceof JvmPrimitiveType){
@@ -33,8 +35,8 @@ class StrategyTypeComputer extends XbaseTypeComputer {
 		}
 		state.acceptActualType(getTypeForName(Object, state))
 	}
-	protected def _computeTypes(LabeledExpression expression, ITypeComputationState state) {
-		val type = state.computeTypes(expression.expr).actualExpressionType?:new AnyTypeReference(state.getReferenceOwner())
+	protected def _computeTypes(LabeledExpression labeledExpression, ITypeComputationState state) {
+		val type = state.computeTypes(labeledExpression.expr).actualExpressionType?:new AnyTypeReference(state.getReferenceOwner())
 		state.acceptActualType(type)
 	}
 	

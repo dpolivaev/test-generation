@@ -1,6 +1,8 @@
 MULTIPLE FILES WERE GENERATED
 
-File 1 : MyFile.java
+File 1 : somepackage/MyFile.java
+
+package somepackage;
 
 import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 
@@ -11,7 +13,9 @@ public class MyFile {
   }
 }
 
-File 2 : _first_StrategyFactory.java
+File 2 : somepackage/_first_StrategyFactory.java
+
+package somepackage;
 
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
@@ -27,27 +31,18 @@ class _first_StrategyFactory {
     return Boolean.valueOf((1 < 2));
   }
 
-  private Boolean condition2(final PropertyContainer propertyContainer) {
-    return Boolean.valueOf((3 < 4));
-  }
-
   RequirementBasedStrategy first() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
     Strategy _strategy = new Strategy();
-    _strategy.addRule(RuleBuilder.Factory.iterate(" /MyFile.tsgen#/0/@strategies.0/@ruleGroups.0/@condition/@expr").over(new ValueProvider(){
+    _strategy.addRule(RuleBuilder.Factory.iterate(" somepackage/MyFile.tsgen#/0/@strategies.0/@ruleGroups.0/@condition/@expr").over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {
         Boolean _condition = condition1(propertyContainer);
         return _condition;
     }}).asDefaultRule());
-    _strategy.addRule(RuleBuilder.Factory.iterate(" /MyFile.tsgen#/0/@strategies.0/@ruleGroups.0/@ruleGroups.0/@condition/@expr").over(new ValueProvider(){
-      @Override public Object value(PropertyContainer propertyContainer) {
-        Boolean _condition = propertyContainer.<Boolean>get(" /MyFile.tsgen#/0/@strategies.0/@ruleGroups.0/@condition/@expr") && condition2(propertyContainer);
-        return _condition;
-    }}).asDefaultRule());
     _strategy.addRule(RuleBuilder.Factory._if(new Condition(){
       @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
-        return propertyContainer.<Boolean>get(" /MyFile.tsgen#/0/@strategies.0/@ruleGroups.0/@ruleGroups.0/@condition/@expr");
-    }}).iterate("y").over(5).asRule());
+        return propertyContainer.<Boolean>get(" somepackage/MyFile.tsgen#/0/@strategies.0/@ruleGroups.0/@condition/@expr");
+    }}).iterate("y").over(3).asRule());
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }
 }
