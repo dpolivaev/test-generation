@@ -144,7 +144,7 @@ public class XmlTestCaseWriter implements PropertyHandler {
 		for(String argumentName:arguments){
 			Object argumentValue = propertyContainer.get(argumentName);
 			if(xmlWriter != null && !argumentValue.equals(SpecialValue.UNDEFINED))
-				addParameterElement(argumentName, argumentValue.toString());
+				addParameterElement(argumentName, argumentValue);
 		}
 	}
 
@@ -179,6 +179,7 @@ public class XmlTestCaseWriter implements PropertyHandler {
 
 	private void addParameterElement(String attributeName, Object attributeValue) {
 		xmlWriter.beginElement("Parameter");
+		xmlWriter.setAttribute("type", attributeValue.getClass().getName());
 		xmlWriter.setAttribute("name", attributeName);
 		xmlWriter.addTextContent(attributeValue.toString());
 		xmlWriter.endElement("Parameter");

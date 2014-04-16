@@ -204,10 +204,10 @@ public class XmlTestCaseWriterTest {
     public void createsTestCaseElementWithOneFocusParameter() throws Exception{
         givenProperty("testcase", "testcase");
         givenProperty("testcase.focus", "focus (x)");
-        givenProperty("x", "1");
+        givenProperty("x", 1);
         createScript();
         checkOutput("<TestCase id='testcase'><Focus id='focus'>"
-        		+ "<Parameter name='x'>1</Parameter>"
+        		+ "<Parameter type='java.lang.Integer' name='x'>1</Parameter>"
         		+ "</Focus></TestCase>");
     }
 
@@ -220,8 +220,8 @@ public class XmlTestCaseWriterTest {
         givenProperty("y", "2");
         createScript();
         checkOutput("<TestCase id='testcase'><Focus id='focus'>"
-        		+ "<Parameter name='x'>1</Parameter>"
-        		+ "<Parameter name='y'>2</Parameter>"
+        		+ "<Parameter type='java.lang.String' name='x'>1</Parameter>"
+        		+ "<Parameter type='java.lang.String' name='y'>2</Parameter>"
         		+ "</Focus></TestCase>");
     }
 }

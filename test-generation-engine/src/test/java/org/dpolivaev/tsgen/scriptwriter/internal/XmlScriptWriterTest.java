@@ -45,7 +45,7 @@ public class XmlScriptWriterTest {
         givenProperty("script.driver", "driver1");
         final DOMResult dom = createScript();
         checkOutput(dom, "<Script id='scriptName'>"
-        		+ "<Parameter name='driver'>driver1</Parameter>" +
+        		+ "<Parameter type='java.lang.String' name='driver'>driver1</Parameter>" +
                 "<TestCase id='testcase 1'/>" +
         		"</Script>");
     }
