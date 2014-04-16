@@ -39,6 +39,7 @@ import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 
 import static extension org.dpolivaev.dsl.tsgen.jvmmodel.StrategyCompiler.*
+import org.dpolivaev.dsl.tsgen.strategydsl.Generation
 
 class StrategyInferrer{
 	@Inject Injector injector
@@ -203,7 +204,9 @@ class StrategyInferrer{
 	}
 
 	def private propertyName(EObject expr) {
-		' ' + EcoreUtil.getURI(expr).toString
+		val generation = expr.eResource.contents.get(0) as Generation
+		val packageId = generation.package?:""
+		' ' + packageId + EcoreUtil.getURI(expr).toString
 	}
 
 	def private appendConditionExpression(ITreeAppendable it, Condition condition) {

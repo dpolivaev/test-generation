@@ -102,6 +102,16 @@ class StrategyCompilationTest {
 		'''.assertCompilesToFile(testName)
 	}
 
+	@Test def withConditionalGroupInPackage() {
+		'''
+			package somepackage
+			strategy first
+				if 1 < 2 {
+					let y be 3
+				}
+		'''.assertCompilesToFile(testName)
+	}
+
 	@Test def withTracedConditionalGroup() {
 		'''
 			strategy first
