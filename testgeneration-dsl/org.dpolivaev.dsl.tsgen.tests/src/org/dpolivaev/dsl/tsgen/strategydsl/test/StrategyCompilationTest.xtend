@@ -341,6 +341,20 @@ class StrategyCompilationTest {
 		'''.assertCompilesToFile(testName)
 	}
 
+	@Test def withParameterizedRuleValue() {
+		'''
+			strategy first(boolean p)
+				let default x be if (p) 1 else 0
+		'''.assertCompilesToFile(testName)
+	}
+
+	@Test def withParameterizedRuleNameReference() {
+		'''
+			strategy first(int p)
+				let default y be :("x#"  p)
+		'''.assertCompilesToFile(testName)
+	}
+
 	@Test def withConditionallyAppliedStrategy() {
 		'''
 			strategy other

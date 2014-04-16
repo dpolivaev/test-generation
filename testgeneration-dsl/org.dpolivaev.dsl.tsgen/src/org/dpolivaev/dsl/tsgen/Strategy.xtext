@@ -149,7 +149,11 @@ XPrimaryExpression returns xbase::XExpression:
 
 PropertyCall returns xbase::XExpression hidden():
 	{PropertyCall}
-	':' name = PROPERTY_ID 
+	':' (name = PROPERTY_ID | '(' expressions += ExpressionInside+ ')')
+;
+
+ExpressionInside returns xbase::XExpression  hidden(WS, SL_COMMENT, ML_COMMENT):
+	XExpression
 ;
 
 LabeledExpression returns xbase::XExpression:

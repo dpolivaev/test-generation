@@ -21,45 +21,87 @@ class StrategyCompiler extends XbaseCompiler {
 	@Inject Primitives primitives
 	override protected doInternalToJavaStatement(XExpression expr, ITreeAppendable it, boolean isReferenced) {
 		switch expr {
-			PropertyCall: generateComment(expr, it, isReferenced)
+			PropertyCall: _internalToJavaStatement(expr, it, isReferenced)
 			LabeledExpression: _internalToJavaStatement(expr, it, isReferenced)
 			default : super.doInternalToJavaStatement(expr, it, isReferenced)
 		}
 	}
 	
-	def _internalToJavaStatement(LabeledExpression expr, ITreeAppendable b, boolean isReferenced) {
-		if(expr.label != null && hasCodeTracker(b)) {
-			if(expr.reason != null)
-				doInternalToJavaStatement(expr.reason, b, true)
-			val it = b.trace(expr, false);
+	def _internalToJavaStatement(PropertyCall propertyCall, ITreeAppendable it, boolean isReferenced) {
+		if(propertyCall.name != null)
+			generateComment(propertyCall, it, isReferenced)
+		else{
+			for(expr : propertyCall.expressions){
+				internalToJavaStatement(expr, it, isReferenced)
+			}
+			if(isReferenced){
+				declareSyntheticVariable(propertyCall, it);
+				newLine
+				append(getVarName(propertyCall, it)) append(" = propertyContainer.get(new StringBuilder()")
+				for(expr : propertyCall.expressions){
+					append('.append(')
+					internalToConvertedExpression(expr, it, expr.type)
+					append(')')
+				}
+				append('.toString());')
+			}
+
+		}
+	}
+
+	protected def _internalToConvertedExpression(PropertyCall expr, ITreeAppendable it) {
+		if(expr.name != null) {
+			append('propertyContainer.')
+			val container = expr.eContainer
+			if(container instanceof XCastedExpression){
+				val type = (container as XCastedExpression).type.type
+				if(type instanceof JvmPrimitiveType){
+					append('<')
+					append(primitives.getWrapperType(type))
+					append('>')
+				}
+			}
+			append('''get("«expr.name.escapeQuotes»")''')
+		}
+		else
+			trace(expr, false).append(getVarName(expr, it))
+	}
+
+	def _internalToJavaStatement(LabeledExpression labeledExpression, ITreeAppendable b, boolean isReferenced) {
+		if(labeledExpression.label != null && hasCodeTracker(b)) {
+			if(labeledExpression.reason != null)
+				doInternalToJavaStatement(labeledExpression.reason, b, true)
+			val it = b.trace(labeledExpression, false);
 			newLine
-			append('if(coverageTracker != null) coverageTracker.reach("') append(expr.label) append('", ')
-			if(expr.reason != null){
+			append('if(coverageTracker != null) coverageTracker.reach("') append(labeledExpression.label) append('", ')
+			if(labeledExpression.reason != null){
 				append('String.valueOf(')
-				internalToConvertedExpression(expr.reason, it, expr.reason.getType())
+				internalToConvertedExpression(labeledExpression.reason, it, labeledExpression.reason.type)
 				append(')')
 				}
 			else
 				append('""')				
 			append(");");
-			if(expr.expr != null){
-				if (isReferenced && !isPrimitiveVoid(expr)) {
-					declareSyntheticVariable(expr, it);
+			if(labeledExpression.expr != null){
+				if (isReferenced && !isPrimitiveVoid(labeledExpression)) {
+					declareSyntheticVariable(labeledExpression, it);
 				}
-				val canBeReferenced = isReferenced && !isPrimitiveVoid(expr.expr);
+				val canBeReferenced = isReferenced && !isPrimitiveVoid(labeledExpression.expr);
 				if (canBeReferenced) {
-					internalToJavaStatement(expr.expr, it, canBeReferenced);
+					internalToJavaStatement(labeledExpression.expr, it, canBeReferenced);
 					newLine
-					append(getVarName(expr, it)).append(" = ")
-					internalToConvertedExpression(expr.expr, it, getType(expr));
+					append(getVarName(labeledExpression, it)).append(" = ")
+					internalToConvertedExpression(labeledExpression.expr, it, labeledExpression.type);
 					append(";")
 				}
 			}
 		}
-		if(expr.expr != null)
-			doInternalToJavaStatement(expr.expr, b, isReferenced)
+		if(labeledExpression.expr != null)
+			doInternalToJavaStatement(labeledExpression.expr, b, isReferenced)
 	}
 	
+
+
 	def hasCodeTracker(ITreeAppendable it) {
 		if (hasObject("this")) {
 			val thisElement = getObject("this");
@@ -81,20 +123,6 @@ class StrategyCompiler extends XbaseCompiler {
 			LabeledExpression: _internalToConvertedExpression(expr, it)
 			default : super.internalToConvertedExpression(expr, it)
 		}
-	}
-	
-	protected def _internalToConvertedExpression(PropertyCall expr, ITreeAppendable it) {
-		append('propertyContainer.')
-		val container = expr.eContainer
-		if(container instanceof XCastedExpression){
-			val type = (container as XCastedExpression).type.type
-			if(type instanceof JvmPrimitiveType){
-				append('<')
-				append(primitives.getWrapperType(type))
-				append('>')
-			}
-		}
-		append('''get("«expr.name.escapeQuotes»")''')
 	}
 	
 	protected def _internalToConvertedExpression(LabeledExpression expr, ITreeAppendable it){
