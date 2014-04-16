@@ -1,8 +1,6 @@
 package org.dpolivaev.dsl.tsgen.jvmmodel
 
 import java.util.Collection
-import java.util.HashSet
-import java.util.Set
 import javax.inject.Inject
 import org.dpolivaev.dsl.tsgen.strategydsl.Generation
 import org.dpolivaev.dsl.tsgen.strategydsl.OracleReference

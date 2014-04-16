@@ -20,6 +20,14 @@ class OracleCompilationTest {
 			oracle myOracle {}
 		'''.assertCompilesToFile(testName)
 	}	
+	
+	@Test def parameterizedOracle() {
+		'''
+			oracle myOracle(String x, boolean b) {}
+		'''.assertCompilesToFile(testName)
+	}	
+	
+
 	@Test def oracleWithLabels() {
 		'''
 			oracle myOracle {
@@ -31,6 +39,7 @@ class OracleCompilationTest {
 			}
 		'''.assertCompilesToFile(testName)
 	}	
+
 	@Test def registeredOracle() {
 		'''
 			oracle myOracle {

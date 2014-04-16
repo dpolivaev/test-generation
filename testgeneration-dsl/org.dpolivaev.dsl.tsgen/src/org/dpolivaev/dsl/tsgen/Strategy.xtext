@@ -101,7 +101,11 @@ ReportConfiguration returns OutputConfiguration:
 // GoalReference : 'goal' expr = XExpression;
 OracleReference : 'oracle' goal ?= 'goal'? expr = XExpression;
 
-Oracle:'oracle' name = ValidID
+Oracle:'oracle' name = ValidID('('
+		(parameters+=FullJvmFormalParameter
+			(',' parameters+=FullJvmFormalParameter)*
+		)?
+	')')?
 	'{'
 		(vars += XVariableDeclaration | subs += MethodDefinition)*
 	'}'

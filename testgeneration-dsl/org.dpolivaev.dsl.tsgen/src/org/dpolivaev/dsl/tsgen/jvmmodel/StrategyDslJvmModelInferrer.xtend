@@ -30,6 +30,7 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
      */
      
     @Inject Injector injector 
+    @Inject ConstructorInferrer constructorInferrer
 	@Inject extension JvmTypesBuilder jvmTypesBuilder
 
 	/**
@@ -83,8 +84,11 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 
 	private def inferOracle(IJvmDeclaredTypeAcceptor acceptor, String classPackage, Oracle oracle) {
 		val qualifiedClassName = qualifiedClassName(classPackage, oracle.name.toFirstUpper)
-		acceptor.accept(oracle.toClass(qualifiedClassName)).initializeLater([
+		val oracleClass =oracle.toClass(qualifiedClassName)
+		acceptor.accept(oracleClass).initializeLater([
 			superTypes += oracle.newTypeRef(PropertyHandler)
+			if(!oracle.parameters.empty)
+				constructorInferrer.inferConstructor(oracleClass, oracle, oracle.parameters)
 			members += oracle.toField("labels", oracle.newTypeRef(List, oracle.newTypeRef(CoverageEntry)))[
 				setInitializer [
 					append(oracle.newTypeRef(Arrays).type)

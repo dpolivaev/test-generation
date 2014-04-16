@@ -5,6 +5,7 @@ import java.util.ArrayList
 import java.util.Collection
 import javax.inject.Inject
 import org.dpolivaev.dsl.tsgen.strategydsl.Condition
+import org.dpolivaev.dsl.tsgen.strategydsl.Generation
 import org.dpolivaev.dsl.tsgen.strategydsl.Rule
 import org.dpolivaev.dsl.tsgen.strategydsl.RuleGroup
 import org.dpolivaev.dsl.tsgen.strategydsl.StrategyReference
@@ -39,11 +40,11 @@ import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 
 import static extension org.dpolivaev.dsl.tsgen.jvmmodel.StrategyCompiler.*
-import org.dpolivaev.dsl.tsgen.strategydsl.Generation
 
 class StrategyInferrer{
 	@Inject Injector injector
 	@Inject extension JvmTypesBuilder jvmTypesBuilder
+	@Inject ConstructorInferrer constructorInferrer
 	@Inject XbaseCompiler xbaseCompiler
 	val Methods methods
 	var JvmGenericType jvmType
@@ -58,31 +59,10 @@ class StrategyInferrer{
 		this.strategy = strategy
 		this.jvmType = jvmType
 		if(!strategy.parameters.empty)
-			inferConstructor()
+			constructorInferrer.inferConstructor(jvmType, strategy, strategy.parameters)
 		inferExpressions()
 		inferStrategyMethods()
 	}
-
-	def inferConstructor() {
-			for(parameter:strategy.parameters)
-				jvmType.members += parameter.toField(parameter.name, parameter.parameterType)[
-					visibility = JvmVisibility::PRIVATE
-					final = true
-				]
-
-			jvmType.members += strategy.toConstructor[
-				for(parameter:strategy.parameters)
-					parameters += parameter.toParameter(parameter.name, parameter.parameterType)
-				body = [
-					for(parameter:strategy.parameters){
-						append('''this.«parameter.name» = «parameter.name»;''')
-						newLine
-					}
-				]
-				visibility = JvmVisibility::PUBLIC
-			]
-	}
-
 
 	private def inferExpressions(){
 		val contents = EcoreUtil2.eAllContents(strategy)
