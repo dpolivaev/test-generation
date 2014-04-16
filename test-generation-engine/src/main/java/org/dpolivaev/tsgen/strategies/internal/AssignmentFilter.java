@@ -31,15 +31,13 @@ public class AssignmentFilter {
 			if(isTestPartRelevantProperty(parts, targetedPropertyName)){
 				final PartValueParser partValueParser = new PartValueParser(assignment.value.toString());
 				testPartProperties.put(targetedPropertyName, new Assignment(assignment.rule, partValueParser.getCalledMethod(), assignment.reason));
-				if(partValueParser.isArgumentListFound()){
-					final String[] argumentList = partValueParser.getArgumentList();
-					for(String argument:argumentList)
-						if(! testPartProperties.containsKey(argument)) {
-							final Assignment argumentAssignment = propertyContainer.getAssignment(argument);
-							if(argumentAssignment != null)
-								testPartProperties.put(argument, argumentAssignment);
-						}
-				}
+				final String[] argumentList = partValueParser.getArgumentList();
+				for(String argument:argumentList)
+					if(! testPartProperties.containsKey(argument)) {
+						final Assignment argumentAssignment = propertyContainer.getAssignment(argument);
+						if(argumentAssignment != null)
+							testPartProperties.put(argument, argumentAssignment);
+					}
 			}
 		}
 		return testPartProperties;

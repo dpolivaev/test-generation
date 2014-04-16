@@ -3,12 +3,11 @@ package org.dpolivaev.tsgen.scriptwriter.internal;
 public class PartValueParser {
 	final private int argumentListStartPosition;
 	final private String calledMethod;
-	final private boolean isArgumentListFound;
 	final private String argumentList;
 
 	public PartValueParser(String value) {
 		argumentListStartPosition = value.indexOf('(');
-		isArgumentListFound = value.endsWith(")")
+		boolean isArgumentListFound = value.endsWith(")")
 				&& argumentListStartPosition != -1;
 
 		if (isArgumentListFound) {
@@ -29,11 +28,10 @@ public class PartValueParser {
 		return calledMethod;
 	}
 
-	public boolean isArgumentListFound() {
-		return isArgumentListFound;
-	}
-
 	public String[] getArgumentList() {
-		return argumentList.split("\\s*,\\s*");
+		if(argumentList != null && ! argumentList.isEmpty())
+			return argumentList.split("\\s*,\\s*");
+		else
+			return new String[]{};
 	}
 }

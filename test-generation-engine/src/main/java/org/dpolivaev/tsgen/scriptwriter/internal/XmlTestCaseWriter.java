@@ -134,16 +134,14 @@ public class XmlTestCaseWriter implements PropertyHandler {
 		xmlWriter.setAttribute("id", partValueParser.getCalledMethod());
 		addDescription(propertyContainer, property);
         }
-        if(partValueParser.isArgumentListFound()){
-        	addPartArguments(propertyContainer, partValueParser.getArgumentList());
-        }
+        addPartArguments(propertyContainer, partValueParser.getArgumentList());
     }
 
      private void addPartArguments(PropertyContainer propertyContainer,
     		 String[] arguments ) {
 		for(String argumentName:arguments){
 			Object argumentValue = propertyContainer.get(argumentName);
-			if(xmlWriter != null && !argumentValue.equals(SpecialValue.UNDEFINED))
+			if(xmlWriter != null)
 				addParameterElement(argumentName, argumentValue);
 		}
 	}
