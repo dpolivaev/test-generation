@@ -91,18 +91,18 @@ file LoginTestSuite.tsgen:
 		let script.driver be "login/LoginTestDriver"
 
 		let page be "LOGIN_PAGE"
-		let arrange#1 be "go to page(page)"
+		let arrange#1 be "go to page(:page)"
 
 		let email be "VALID_MAIL"
-		let arrange#2 be "enter mail address(email)"
+		let arrange#2 be "enter mail address(:email)"
 
 		let password be "VALID_PASSWORD"
-		let arrange#3 be "enter password(password)"
+		let arrange#3 be "enter password(:password)"
 
 		let act be "submit"
 
 		let pageAfterSubmit be "LOGIN_SUCCESS_PAGE"
-		let assert be "checkPage(pageAfterSubmit)"
+		let assert be "checkPage(:pageAfterSubmit)"
 
 - Run generation task.
 - Observe reported problems because of missing method and constant declarations. 
@@ -153,11 +153,11 @@ file LoginTestDriver.java:
 
 file LoginTestSuite.tsgen:
 
-	let arrange#1 be "go to page(page)"
-	let arrange#2 be "enter mail address(email)"
-	let arrange#3 be "enter password(password)"
+	let arrange#1 be "go to page(:page)"
+	let arrange#2 be "enter mail address(:email)"
+	let arrange#3 be "enter password(:password)"
 	let act be "submit"
-	let assert be "checkPage(pageAfterSubmit)"
+	let assert be "checkPage(:pageAfterSubmit)"
 
 	let page be "LOGIN_PAGE"
 
@@ -245,7 +245,7 @@ file LoginTestSuite.tsgen, script imports:
 
 file LoginTestSuite.tsgen, strategy definition:
 
-	let act be "submit(protocol)"
+	let act be "submit(:protocol)"
 
 ...
 
@@ -318,14 +318,14 @@ It produces following element in the test coverage report:
 
 Requirement R2 should be checked before the log-in is submitted. Therefore we need a new group of tests not performing the log - in pressing submit button. Fortunately building the new group is easy.
 
-	let arrange#1 be "go to page(page)"
+	let arrange#1 be "go to page(:page)"
 	let page be LOGIN_PAGE
 
 	let act be 
 	"submit(protocol)"{
-		let arrange#2 be "enter mail address(email)"
-		let arrange#3 be "enter password(password)"
-		let assert be "checkPage(pageAfterSubmit)"
+		let arrange#2 be "enter mail address(:email)"
+		let arrange#3 be "enter password(:password)"
+		let assert be "checkPage(:pageAfterSubmit)"
 
 		let protocol be HTTP{
 			let email be VALID_MAIL 
@@ -372,7 +372,7 @@ The strategy:
 
 	let pageAfterSubmit be :page{
 		let assert#2 be "password field is empty"
-		let assert#3 be "email field equals to (email)"
+		let assert#3 be "email field equals to (:email)"
 		let [R4] be "check email and password fields after failed log-in"
 	}
 
@@ -392,10 +392,10 @@ Here default values for properties `password` and `email` are set:
 	let default email be VALID_MAIL
 
 	let act be 
-	"submit(protocol)"{
-		let arrange#2 be "enter mail address(email)"
-		let arrange#3 be "enter password(password)"
-		let assert be "checkPage(pageAfterSubmit)"
+	"submit(:protocol)"{
+		let arrange#2 be "enter mail address(:email)"
+		let arrange#3 be "enter password(:password)"
+		let assert be "checkPage(:pageAfterSubmit)"
 
 		let protocol be HTTP{
 			let [R1] be "logging in with protocol HTTP not allowed"
@@ -426,13 +426,13 @@ If property script has different values for different test cases they are output
 and add set individual values for different actions:
 
 	let act be 
-	"submit(protocol)"{
+	"submit(:protocol)"{
 		let script be "login/LoginSubmit"
-		let arrange#2 be "enter mail address(email)"
+		let arrange#2 be "enter mail address(:email)"
 
 and
 
-	"enter password(password)"{
+	"enter password(:password)"{
 		let script be "login/LoginFormat"
 		let assert be "entered password is not visible"
 
@@ -447,12 +447,12 @@ Strategies can include rules defined in other strategies defined in the same fil
 							   import static login.LoginTestDriver.Password.*;
 							   import static login.LoginTestDriver.Protocol.*;"
 
-		let arrange#1 be "go to page(page)"
+		let arrange#1 be "go to page(:page)"
 		let page be LOGIN_PAGE
 		let default password be VALID_PASSWORD
 		let default email be VALID_MAIL
 
-		let act be "submit(protocol)"{
+		let act be "submit(:protocol)"{
 			apply submitTest
 		},
 		"enter password(password)"{
@@ -461,7 +461,7 @@ Strategies can include rules defined in other strategies defined in the same fil
 
 	strategy submitTest
 		let script be "login/LoginSubmit"
-		let arrange#2 be "enter mail address(email)"
+		let arrange#2 be "enter mail address(:email)"
 		let arrange#3 be "enter password(password)"
 		let assert be "checkPage(pageAfterSubmit)"
 
@@ -476,7 +476,7 @@ Strategies can include rules defined in other strategies defined in the same fil
 
 		let pageAfterSubmit be :page{
 			let assert#2 be "password field is empty"
-			let assert#3 be "email field equals to (email)"
+			let assert#3 be "email field equals to (:email)"
 			let [R4] be "check email and password fields after failed log-in"
 		}
 

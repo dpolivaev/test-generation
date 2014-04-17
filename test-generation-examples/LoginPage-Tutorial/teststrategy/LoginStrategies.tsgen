@@ -20,7 +20,7 @@ strategy loginTests
 						   import static login.LoginTestDriver.Password.*;
 						   import static login.LoginTestDriver.Protocol.*;"
 
-	let arrange#1 be "go to page(page)"
+	let arrange#1 be "go to page(:page)"
 	let page be LOGIN_PAGE
 	let default password be VALID_PASSWORD
 	let default email be VALID_MAIL
