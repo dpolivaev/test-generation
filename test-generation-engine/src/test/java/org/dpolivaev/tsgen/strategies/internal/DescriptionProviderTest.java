@@ -55,7 +55,7 @@ public class DescriptionProviderTest {
 	public void excludesTestPartsAndParams() {
 		givenAssignment("testcase.precondition", "precondition","");
 		givenAssignment("testcase.focus.alias", "focus","");
-		givenAssignment("focus", "focus(x)","");
+		givenAssignment("focus", "focus(:x)","");
 		givenAssignment("x", "x","");
 		givenAssignment("focus#1", "focus1","");
 		givenAssignment("testcase.verification", "verification","");
@@ -74,7 +74,7 @@ public class DescriptionProviderTest {
 		givenAssignment("testcase.alias", "mytestcase","");
 		givenAssignment("mytestcase.precondition", "precondition","");
 		givenAssignment("mytestcase.focus.alias", "focus","");
-		givenAssignment("focus", "focus(x)","");
+		givenAssignment("focus", "focus(:x)","");
 		givenAssignment("x", "x","");
 		givenAssignment("focus#1", "focus1","");
 		givenAssignment("mytestcase.verification", "verification","");

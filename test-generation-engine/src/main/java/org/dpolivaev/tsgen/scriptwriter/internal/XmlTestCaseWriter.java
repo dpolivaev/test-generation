@@ -139,10 +139,30 @@ public class XmlTestCaseWriter implements PropertyHandler {
 
      private void addPartArguments(PropertyContainer propertyContainer,
     		 String[] arguments ) {
-		for(String argumentName:arguments){
-			Object argumentValue = propertyContainer.get(argumentName);
+		for(String propertyName:arguments){
+			String name;
+			Object value;
+			String type;
+			String separator = ":";
+			if(propertyName.startsWith(separator)){
+				name = propertyName.substring(1);
+				value = propertyContainer.get(name);
+				type = value.getClass().getName();
+			}
+			else {
+				type = "";
+				if(propertyName.contains(separator)){
+					int separatorPosition = propertyName.indexOf(':');
+					name = propertyName.substring(0, separatorPosition).trim();
+					value = propertyName.substring(separatorPosition + 1).trim();
+				}
+				else {
+					value = name = propertyName;
+				}
+			}
 			if(xmlWriter != null)
-				addParameterElement(argumentName, argumentValue);
+				addParameterElement(type, name, value);
+
 		}
 	}
 
@@ -176,10 +196,15 @@ public class XmlTestCaseWriter implements PropertyHandler {
 	}
 
 	private void addParameterElement(String attributeName, Object attributeValue) {
+		String type = attributeValue.getClass().getName();
+		addParameterElement(type, attributeName, attributeValue);
+	}
+
+	private void addParameterElement(String type, String name, Object value) {
 		xmlWriter.beginElement("Parameter");
-		xmlWriter.setAttribute("type", attributeValue.getClass().getName());
-		xmlWriter.setAttribute("name", attributeName);
-		xmlWriter.addTextContent(attributeValue.toString());
+		xmlWriter.setAttribute("type", type);
+		xmlWriter.setAttribute("name", name);
+		xmlWriter.addTextContent(value.toString());
 		xmlWriter.endElement("Parameter");
 	}
 

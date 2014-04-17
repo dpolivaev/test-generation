@@ -33,10 +33,13 @@ public class AssignmentFilter {
 				testPartProperties.put(targetedPropertyName, new Assignment(assignment.rule, partValueParser.getCalledMethod(), assignment.reason));
 				final String[] argumentList = partValueParser.getArgumentList();
 				for(String argument:argumentList)
-					if(! testPartProperties.containsKey(argument)) {
-						final Assignment argumentAssignment = propertyContainer.getAssignment(argument);
-						if(argumentAssignment != null)
-							testPartProperties.put(argument, argumentAssignment);
+					if(argument.startsWith(":")){
+						String propertyName = argument.substring(1);
+						if(! testPartProperties.containsKey(propertyName)) {
+							final Assignment argumentAssignment = propertyContainer.getAssignment(propertyName);
+							if(argumentAssignment != null)
+								testPartProperties.put(propertyName, argumentAssignment);
+						}
 					}
 			}
 		}

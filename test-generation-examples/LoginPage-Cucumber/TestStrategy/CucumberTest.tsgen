@@ -16,11 +16,11 @@ let script.feature be "Log in"
 let script.description be "I want to be logged if after 
 submitting correct credentials" 
 
- let background be "go to page <page> (page)"
+ let background be "go to page <page> (:page)"
  let page be "login"
  
- let given#1 be "<email> mail address is entered (email)"
- let given#2 be "<password> password is entered (password)"
+ let given#1 be "<email> mail address is entered (:email)"
+ let given#2 be "<password> password is entered (:password)"
  let email be "valid"{ 
  	let password be "valid", "invalid", "empty"
  }, 
@@ -31,7 +31,7 @@ submitting correct credentials"
  	let password be "valid", "empty"
  }
  let when be "submit is clicked"
- let then be "page <pageAfterSubmit> is opened(pageAfterSubmit)"
+ let then be "page <pageAfterSubmit> is opened(:pageAfterSubmit)"
  let pageAfterSubmit be :page
  if(:email == "valid" && :password == "valid") let pageAfterSubmit be "loggedIn"
  

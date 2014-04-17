@@ -72,7 +72,7 @@ public class TestIdProviderTest {
 	
 	@Test
 	public void excludesFocFalse(){
-		givenAssignment("when", "when(x)", "");
+		givenAssignment("when", "when(:x)", "");
 		givenAssignment("x", false, "");
 		assertThat((String)testIdProvider.value(assignments), equalTo("when"));
 		
@@ -80,7 +80,7 @@ public class TestIdProviderTest {
 	
 	@Test
 	public void includesFocTrue(){
-		givenAssignment("when", "when(x)", "");
+		givenAssignment("when", "when(:x)", "");
 		givenAssignment("x", true, "");
 		assertThat((String)testIdProvider.value(assignments), equalTo("when x"));
 		
@@ -88,7 +88,7 @@ public class TestIdProviderTest {
 	
 	@Test
 	public void includesFocNumber(){
-		givenAssignment("when", "when(x)", "");
+		givenAssignment("when", "when(:x)", "");
 		givenAssignment("x", 6, "");
 		assertThat((String)testIdProvider.value(assignments), equalTo("when x=6"));
 		

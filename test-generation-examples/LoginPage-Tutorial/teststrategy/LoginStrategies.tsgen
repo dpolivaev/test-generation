@@ -25,18 +25,18 @@ strategy loginTests
 	let default password be VALID_PASSWORD
 	let default email be VALID_MAIL
 
-	let act be "submit(protocol)"{
+	let act be "submit(:protocol)"{
 		apply submitTest
 	},
-	"enter password(password)"{
+	"enter password(:password)"{
 		apply formatTest
 	}
 
 strategy submitTest
 	let script be "login/LoginSubmit"
-	let arrange#2 be "enter mail address(email)"
-	let arrange#3 be "enter password(password)"
-	let assert be "checkPage(pageAfterSubmit)"
+	let arrange#2 be "enter mail address(:email)"
+	let arrange#3 be "enter password(:password)"
+	let assert be "checkPage(:pageAfterSubmit)"
 
 	let protocol be HTTP{
 		let [R1] be "logging in with protocol HTTP not allowed"
@@ -49,7 +49,7 @@ strategy submitTest
 
 	let pageAfterSubmit be :page{
 		let assert#2 be "password field is empty"
-		let assert#3 be "email field equals to (email)"
+		let assert#3 be "email field equals to (:email)"
 		let [R4] be "check email and password fields after failed log-in"
 	}
 
