@@ -106,9 +106,7 @@ Oracle:'oracle' name = ValidID('('
 			(',' parameters+=FullJvmFormalParameter)*
 		)?
 	')')?
-	'{'
-		(vars += XVariableDeclaration | subs += MethodDefinition)*
-	'}'
+	(vars += XVariableDeclaration | subs += MethodDefinition)*
 ;
 
 /*

@@ -235,7 +235,7 @@ strategy testsForFailure
  * Models can implement methods called by strategies.
  * Model code coverage is evaluated using requirement references defined in the code.
  */
-oracle ShortTermParkingCalculator{
+oracle ShortTermParkingCalculator
 	def calculateCosts(int weeks, int days, int hours, int minutes){
 		val DAILY_MAX = 24
 		val COSTS_PER_HOUR = 2
@@ -271,9 +271,8 @@ oracle ShortTermParkingCalculator{
 							0
 		costsForCompletedDays + costsForHours
 	}
-}
 
-oracle LongTermGarageParkingCalculator{
+oracle LongTermGarageParkingCalculator
 	def calculateCosts(int weeks, int days, int hours, int minutes){
 		val WEEKLY_MAX = 78
 		val DAILY_MAX = 13
@@ -294,7 +293,6 @@ oracle LongTermGarageParkingCalculator{
 			else 
 				["Req9"] DAILY_MAX
 	}
-}
 /*
  * run section defines what strategies are executed and configures the output.
  * Strategies to be run and models to be checked for the code coverage must be mentioned here. 

@@ -17,34 +17,33 @@ class OracleCompilationTest {
 	
 	@Test def minimalOracle() {
 		'''
-			oracle myOracle {}
+			oracle myOracle
 		'''.assertCompilesToFile(testName)
 	}	
 	
 	@Test def parameterizedOracle() {
 		'''
-			oracle myOracle(String x, boolean b) {}
+			oracle myOracle(String x, boolean b)
 		'''.assertCompilesToFile(testName)
 	}	
 	
 
 	@Test def oracleWithLabels() {
 		'''
-			oracle myOracle {
+			oracle myOracle
 				def calculate(int i){
 					["req1" "reason1"] 
 					val x = ["req2"] 2
 					x
 				}
-			}
 		'''.assertCompilesToFile(testName)
 	}	
 
 	@Test def registeredOracle() {
 		'''
-			oracle myOracle {
+			oracle myOracle
 				def calculate(int i){0}
-			}
+
 			strategy s
 				let x be traced myOracle.calculate(0)
 
@@ -54,9 +53,9 @@ class OracleCompilationTest {
 
 	@Test def registeredOracleInCondition() {
 		'''
-			oracle myOracle {
+			oracle myOracle
 				def calculate(){true}
-			}
+
 			strategy s
 				if traced myOracle.calculate() let x be 1
 
@@ -66,13 +65,13 @@ class OracleCompilationTest {
 
 	@Test def referencingOracles() {
 		'''
-			oracle myOracle1 {
+			oracle myOracle1
 				def calculate(){1}
-			}
 
-			oracle myOracle2 {
+
+			oracle myOracle2
 				def calculate(){myOracle1.calculate()}
-			}
+
 		'''.assertCompilesToFile(testName)
 	}
 

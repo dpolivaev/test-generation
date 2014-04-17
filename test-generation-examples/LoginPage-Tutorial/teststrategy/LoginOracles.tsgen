@@ -8,10 +8,8 @@ import login.LoginTestDriver.EMail;
 import login.LoginTestDriver.Password;
 import login.LoginTestDriver.Protocol;
 
-oracle loginOracle{
+oracle loginOracle
 	def isLoginSuccessful(Protocol protocol, EMail email, Password password){
 		return :protocol == HTTPS && :email == VALID_MAIL
 			&& :password == VALID_PASSWORD && ["R3" "log in successful"] true;
 	}
-}
-

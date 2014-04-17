@@ -495,11 +495,10 @@ Better separation of concerns and reuse can be achieved if calculation of expect
 
 After adding oracle definition like
 
-	oracle loginOracle{
+	oracle loginOracle
 		def isLoginSuccessful(){
 			return :protocol == HTTPS && :email == VALID_MAIL && :password == VALID_PASSWORD;
 		}
-	}
 
 and registering the oracle in the run section
 
@@ -518,23 +517,21 @@ the login successful condition in the strategy can be expressed as
 
 Requirements can be tracked in oracle implementation like
 
-	oracle loginOracle{
+	oracle loginOracle
 		def isLoginSuccessful(){
 			if(:protocol == HTTPS && :email == VALID_MAIL && :password == VALID_PASSWORD)
 				["R3" "log in successful"] return true
 			else
 				return false
 		}
-	}
 
 or in a short form
 
-	oracle loginOracle{
+	oracle loginOracle
 		def isLoginSuccessful(){
 			return :protocol == HTTPS && :email == VALID_MAIL
 				&& :password == VALID_PASSWORD && ["R3" "log in successful"] true;
 		}
-	}
 
 The strategy changes to
 
@@ -560,12 +557,11 @@ Imports:
 
 Oracle implementation:
 
-	oracle loginOracle{
+	oracle loginOracle
 		def isLoginSuccessful(Protocol protocol, EMail email, Password password){
 			return :protocol == HTTPS && :email == VALID_MAIL
 				&& :password == VALID_PASSWORD && ["R3" "log in successful"] true;
 		}
-	}
 
 Strategy:
 
