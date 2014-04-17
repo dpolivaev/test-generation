@@ -1,6 +1,7 @@
 package org.dpolivaev.tsgen.ruleengine.internal;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -9,12 +10,17 @@ import org.dpolivaev.tsgen.ruleengine.InconsistentRuleException;
 import org.dpolivaev.tsgen.ruleengine.Rule;
 
 public class AlternatingRule implements Rule {
-    private final List<Rule> rules = new ArrayList<>();
+    private final List<Rule> rules;
     private Rule activeRule = null;
 
     public AlternatingRule(Rule oldRule, Rule newRule) {
+	rules = new ArrayList<>();
         rules.add(oldRule);
         combineWith(newRule);
+    }
+
+    private AlternatingRule(List<Rule> rules){
+	this.rules = rules;
     }
 
     @Override
@@ -98,6 +104,10 @@ public class AlternatingRule implements Rule {
     @Override
     public Rule combineWith(Rule rule) {
         checkRuleCompatibility(rule);
+        if(rule instanceof TriggeredStatefulRule) {
+			Set<String> triggeringProperties = getTriggeringProperties();
+			((TriggeredStatefulRule)rule).setTriggeringProperties(triggeringProperties);
+		}
         rules.add(rule);
         return this;
     }
@@ -117,6 +127,9 @@ public class AlternatingRule implements Rule {
     	if(activeRule == rule)
     		activeRule = null;
         rules.remove(rule);
+        if(rule instanceof TriggeredStatefulRule){
+		((TriggeredStatefulRule)rule).setTriggeringProperties(new HashSet<String>(getTriggeringProperties()));
+        }
         if (rules.size() == 1)
             return firstRule();
         return this;
@@ -136,6 +149,21 @@ public class AlternatingRule implements Rule {
 	public void clearDependentRules(EngineState engineState) {
 		activeRule.clearDependentRules(engineState);
 		
+	}
+
+	@Override
+	public Rule toTriggeredRule() {
+		Rule firstRule = firstRule();
+		Rule triggeredRule = firstRule.toTriggeredRule();
+		if(firstRule == triggeredRule)
+			return this;
+		ArrayList<Rule> triggeredRules = new ArrayList<>(rules.size());
+		for(Rule rule : rules){
+			Rule nextTriggeredRule = rule.toTriggeredRule();
+			((TriggeredStatefulRule)nextTriggeredRule).setTriggeringProperties(triggeredRule.getTriggeringProperties());
+			triggeredRules.add(nextTriggeredRule);
+		}
+		return new AlternatingRule(triggeredRules);
 	}
 
 }

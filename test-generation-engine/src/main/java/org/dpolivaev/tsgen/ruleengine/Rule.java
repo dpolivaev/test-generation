@@ -41,4 +41,6 @@ public interface Rule {
     boolean forcesIteration();
 
 	void clearDependentRules(EngineState engineState);
+
+	Rule toTriggeredRule();
 }

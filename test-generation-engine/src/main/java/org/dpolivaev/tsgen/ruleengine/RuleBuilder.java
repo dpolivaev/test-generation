@@ -78,7 +78,7 @@ public class RuleBuilder {
     private Collection<Rule> asTriggeredRules(Collection<Rule> topRules) {
 		ArrayList<Rule> triggeredRules = new ArrayList<>(topRules.size());
 		for(Rule rule : topRules)
-			triggeredRules.add(((StatefulRule)rule).toTriggeredRule());
+			triggeredRules.add(rule.toTriggeredRule());
 		return triggeredRules;
 	}
 
