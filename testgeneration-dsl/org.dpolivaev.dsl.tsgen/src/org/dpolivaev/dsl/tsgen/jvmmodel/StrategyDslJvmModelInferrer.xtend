@@ -152,6 +152,7 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 				members += oracle.toField(declaration.name, declaration.type)[
 					setInitializer(declaration.right)
 					final = ! declaration.writeable
+					visibility = JvmVisibility::PUBLIC
 				]
 			}
 			
