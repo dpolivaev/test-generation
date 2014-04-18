@@ -71,16 +71,9 @@ public class RuleBuilder {
     }
 
 	public RuleBuilder with(Strategy includedStrategy) {
-		return with(asTriggeredRules(includedStrategy.topRules())).with(includedStrategy.defaultRules()).with(includedStrategy.triggeredRules());
+		return with(includedStrategy.topRules()).with(includedStrategy.defaultRules()).with(includedStrategy.triggeredRules());
 	}
 
-
-    private Collection<Rule> asTriggeredRules(Collection<Rule> topRules) {
-		ArrayList<Rule> triggeredRules = new ArrayList<>(topRules.size());
-		for(Rule rule : topRules)
-			triggeredRules.add(rule.toTriggeredRule());
-		return triggeredRules;
-	}
 
 	private RuleBuilder with(Collection<Rule> rules) {
 	if(this.rules == null){

@@ -150,20 +150,4 @@ public class AlternatingRule implements Rule {
 		activeRule.clearDependentRules(engineState);
 		
 	}
-
-	@Override
-	public Rule toTriggeredRule() {
-		Rule firstRule = firstRule();
-		Rule triggeredRule = firstRule.toTriggeredRule();
-		if(firstRule == triggeredRule)
-			return this;
-		ArrayList<Rule> triggeredRules = new ArrayList<>(rules.size());
-		for(Rule rule : rules){
-			Rule nextTriggeredRule = rule.toTriggeredRule();
-			((TriggeredStatefulRule)nextTriggeredRule).setTriggeringProperties(triggeredRule.getTriggeringProperties());
-			triggeredRules.add(nextTriggeredRule);
-		}
-		return new AlternatingRule(triggeredRules);
-	}
-
 }

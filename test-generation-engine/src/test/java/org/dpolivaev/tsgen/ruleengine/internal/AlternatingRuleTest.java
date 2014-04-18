@@ -203,22 +203,4 @@ public class AlternatingRuleTest {
         verify(first).forcesIteration();
         verify(second, never()).forcesIteration();
     }
-
-    @Test
-    public void givenNonTriggerRules_returnsTriggeredRules() {
-        Rule first = ruleMock(false);
-        Rule second = ruleMock(false);
-        Rule firstTriggered = Mockito.mock(TriggeredStatefulRule.class);
-        Rule secondTriggered = Mockito.mock(TriggeredStatefulRule.class);
-
-        when(first.toTriggeredRule()).thenReturn(firstTriggered);
-        when(second.toTriggeredRule()).thenReturn(secondTriggered);
-
-        EngineState state = mock(EngineState.class);
-
-        Rule triggeredRule = new AlternatingRule(first, second).toTriggeredRule();
-        triggeredRule.propertyCombinationStarted(state);
-        verify(firstTriggered).propertyCombinationStarted(state);
-        verify(secondTriggered).propertyCombinationStarted(state);
-    }
 }
