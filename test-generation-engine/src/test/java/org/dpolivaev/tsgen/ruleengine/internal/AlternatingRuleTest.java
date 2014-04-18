@@ -18,6 +18,7 @@ import org.dpolivaev.tsgen.ruleengine.internal.AlternatingRule;
 import org.dpolivaev.tsgen.ruleengine.internal.PropertyAssignedEvent;
 import org.dpolivaev.tsgen.ruleengine.internal.StatefulRule;
 import org.junit.Test;
+import org.mockito.Mockito;
 public class AlternatingRuleTest {
 
     @SuppressWarnings("unchecked")
@@ -207,8 +208,8 @@ public class AlternatingRuleTest {
     public void givenNonTriggerRules_returnsTriggeredRules() {
         Rule first = ruleMock(false);
         Rule second = ruleMock(false);
-        Rule firstTriggered = ruleMock(false);
-        Rule secondTriggered = ruleMock(false);
+        Rule firstTriggered = Mockito.mock(TriggeredStatefulRule.class);
+        Rule secondTriggered = Mockito.mock(TriggeredStatefulRule.class);
 
         when(first.toTriggeredRule()).thenReturn(firstTriggered);
         when(second.toTriggeredRule()).thenReturn(secondTriggered);
