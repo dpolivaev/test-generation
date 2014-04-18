@@ -9,7 +9,6 @@ import java.io.Writer;
 
 import org.eclipse.xtext.util.IAcceptor;
 import org.eclipse.xtext.xbase.compiler.CompilationTestHelper;
-import org.eclipse.xtext.xbase.compiler.CompilationTestHelper.Result;
 import org.junit.Assert;
 import org.junit.rules.TestName;
 
