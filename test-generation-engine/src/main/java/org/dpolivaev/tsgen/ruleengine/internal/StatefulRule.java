@@ -37,8 +37,7 @@ public abstract class StatefulRule implements Rule {
         return targetedPropertyName;
     }
 
-    @Override
-    public Set<String> getTriggeringProperties() {
+    protected Set<String> getTriggeringProperties() {
         return Collections.<String> emptySet();
     }
 
@@ -87,7 +86,7 @@ public abstract class StatefulRule implements Rule {
         Collection<Rule> rules = valueProviders.currentProvider().rules(engineState);
         for (Rule rule : rules) {
             if (!rule.isDefaultRule())
-                rule.getTriggeringProperties().add(targetedPropertyName);
+                rule.addTriggeringProperty(targetedPropertyName);
             engineState.currentStrategy().addRule(rule);
         }
     }
@@ -186,5 +185,15 @@ public abstract class StatefulRule implements Rule {
 
     public Rule toTriggeredRule(){
     	return new TriggeredStatefulRule(new HashSet<String>(), condition, targetedPropertyName, valueProviders);
+    }
+    
+    @Override
+    public void checkRuleCompatibility(Rule rule){
+    	if (isDefaultRule() != rule.isDefaultRule())
+    		throw new IllegalArgumentException("triggering and not triggering rules can not be combined");
+    	if (!getTargetedPropertyName().equals(rule.getTargetedPropertyName()))
+    		throw new IllegalArgumentException("rules with different targeted property names can not be combined");
+    	if (!rule.hasTriggeringProperties(getTriggeringProperties()))
+    		throw new IllegalArgumentException("rules with different triggering property names can not be combined");
     }
 }

@@ -26,10 +26,10 @@ public class Strategy {
             addRule(defaultRules, rule.getTargetedPropertyName(), rule);
         }
         else {
-            if (rule.getTriggeringProperties().isEmpty())
+            if (rule.isTopRule())
                 addRule(topRules, rule.getTargetedPropertyName(), rule);
             else {
-                addRule(triggeredRules, TriggeredRuleKey.from(rule), rule);
+                addRule(triggeredRules, rule.getTriggeredRuleKey(), rule);
             }
         }
     }
@@ -60,10 +60,10 @@ public class Strategy {
             removeRule(defaultRules, rule.getTargetedPropertyName(), rule);
         }
         else {
-            if (rule.getTriggeringProperties().isEmpty())
+            if (rule.isTopRule())
                 removeRule(topRules, rule.getTargetedPropertyName(), rule);
             else {
-                removeRule(triggeredRules, TriggeredRuleKey.from(rule), rule);
+                removeRule(triggeredRules, rule.getTriggeredRuleKey(), rule);
             }
         }
     }

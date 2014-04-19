@@ -14,10 +14,6 @@ public class TriggeredRuleKey{
         this.targetedProperty = targetedProperty;
     }
 
-    public static TriggeredRuleKey from(Rule rule) {
-        return new TriggeredRuleKey(rule.getTriggeringProperties(), rule.getTargetedPropertyName());
-    }
-
     @Override
     public int hashCode() {
         final int prime = 31;

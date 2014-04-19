@@ -45,4 +45,24 @@ public class DefaultStatefulRule extends StatefulRule {
         return false;
     }
 
+	@Override
+	public boolean isTopRule() {
+		return false;
+	}
+
+	@Override
+	public void addTriggeringProperty(String targetedPropertyName) {
+		throw new IllegalStateException();
+	}
+
+	@Override
+	public boolean hasTriggeringProperties(Set<String> triggeringProperties) {
+		return triggeringProperties.isEmpty();
+	}
+
+	@Override
+	public TriggeredRuleKey getTriggeredRuleKey() {
+		return null;
+	}
+
 }

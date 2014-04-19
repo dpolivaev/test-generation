@@ -13,8 +13,7 @@ public class TriggeredStatefulRule extends StatefulRule {
         this.triggeringProperties = triggeredBy;
     }
 
-    @Override
-    public Set<String> getTriggeringProperties() {
+    protected Set<String> getTriggeringProperties() {
         return triggeringProperties;
     }
 
@@ -31,7 +30,8 @@ public class TriggeredStatefulRule extends StatefulRule {
             setBlocksRequiredProperties(false);
     }
 
-	private boolean isTopRule() {
+    @Override
+	public boolean isTopRule() {
 		return getTriggeringProperties().isEmpty();
 	}
     
@@ -61,4 +61,20 @@ public class TriggeredStatefulRule extends StatefulRule {
     public boolean isDefaultRule() {
         return false;
     }
+
+	@Override
+	public void addTriggeringProperty(String trigger) {
+		triggeringProperties.add(trigger);
+		
+	}
+
+	@Override
+	public boolean hasTriggeringProperties(Set<String> triggeringProperties) {
+		return this.triggeringProperties.equals(triggeringProperties);
+	}
+
+	@Override
+	public TriggeredRuleKey getTriggeredRuleKey() {
+		return  new TriggeredRuleKey(getTriggeringProperties(), getTargetedPropertyName());
+	}
 }

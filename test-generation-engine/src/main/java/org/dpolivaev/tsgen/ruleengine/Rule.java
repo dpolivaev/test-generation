@@ -3,6 +3,7 @@ package org.dpolivaev.tsgen.ruleengine;
 import java.util.Set;
 
 import org.dpolivaev.tsgen.ruleengine.internal.PropertyAssignedEvent;
+import org.dpolivaev.tsgen.ruleengine.internal.TriggeredRuleKey;
 
 // triggered A <- default B
 // default B <- default A
@@ -13,8 +14,6 @@ import org.dpolivaev.tsgen.ruleengine.internal.PropertyAssignedEvent;
 public interface Rule {
 
 	String getTargetedPropertyName();
-
-	Set<String> getTriggeringProperties();
 
     public Set<String> calculateRequiredProperties(Set<String> dependencies);
 
@@ -41,4 +40,14 @@ public interface Rule {
     boolean forcesIteration();
 
 	void clearDependentRules(EngineState engineState);
+
+	boolean isTopRule();
+
+	void addTriggeringProperty(String trigger);
+
+	void checkRuleCompatibility(Rule rule);
+
+	boolean hasTriggeringProperties(Set<String> triggeringProperties);
+	
+	TriggeredRuleKey getTriggeredRuleKey();
 }

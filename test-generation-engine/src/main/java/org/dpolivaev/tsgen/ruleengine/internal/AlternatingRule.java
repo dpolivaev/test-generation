@@ -19,10 +19,6 @@ public class AlternatingRule implements Rule {
         combineWith(newRule);
     }
 
-    private AlternatingRule(List<Rule> rules){
-	this.rules = rules;
-    }
-
     @Override
     public String getTargetedPropertyName() {
         return firstRule().getTargetedPropertyName();
@@ -30,11 +26,6 @@ public class AlternatingRule implements Rule {
 
     private Rule firstRule() {
         return rules.get(0);
-    }
-
-    @Override
-    public Set<String> getTriggeringProperties() {
-        return firstRule().getTriggeringProperties();
     }
 
     @Override
@@ -103,19 +94,9 @@ public class AlternatingRule implements Rule {
 
     @Override
     public Rule combineWith(Rule rule) {
-        checkRuleCompatibility(rule);
+        firstRule().checkRuleCompatibility(rule);
         rules.add(rule);
         return this;
-    }
-
-    private void checkRuleCompatibility(Rule rule) {
-        if (isDefaultRule() != rule.isDefaultRule())
-            throw new IllegalArgumentException("triggering and not triggering rules can not be combined");
-        if (!getTargetedPropertyName().equals(rule.getTargetedPropertyName()))
-            throw new IllegalArgumentException("rules with different targeted property names can not be combined");
-        if (!getTriggeringProperties().equals(rule.getTriggeringProperties()))
-            throw new IllegalArgumentException("rules with different triggering property names can not be combined");
-
     }
 
     @Override
@@ -142,5 +123,31 @@ public class AlternatingRule implements Rule {
 	public void clearDependentRules(EngineState engineState) {
 		activeRule.clearDependentRules(engineState);
 		
+	}
+
+	@Override
+	public boolean isTopRule() {
+		return firstRule().isTopRule();
+	}
+
+	@Override
+	public void addTriggeringProperty(String trigger) {
+		for(Rule rule:rules)
+			rule.addTriggeringProperty(trigger);
+	}
+
+	@Override
+	public void checkRuleCompatibility(Rule rule) {
+		firstRule().checkRuleCompatibility(rule);
+	}
+
+	@Override
+	public boolean hasTriggeringProperties(Set<String> triggeringProperties) {
+		return firstRule().hasTriggeringProperties(triggeringProperties);
+	}
+
+	@Override
+	public TriggeredRuleKey getTriggeredRuleKey() {
+		return firstRule().getTriggeredRuleKey();
 	}
 }

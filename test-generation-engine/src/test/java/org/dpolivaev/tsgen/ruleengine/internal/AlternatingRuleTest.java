@@ -17,6 +17,8 @@ import org.dpolivaev.tsgen.ruleengine.Rule;
 import org.dpolivaev.tsgen.ruleengine.internal.AlternatingRule;
 import org.dpolivaev.tsgen.ruleengine.internal.PropertyAssignedEvent;
 import org.dpolivaev.tsgen.ruleengine.internal.StatefulRule;
+import org.dpolivaev.tsgen.testutils.TestUtils;
+import org.dpolivaev.tsgen.utils.internal.Utils;
 import org.junit.Test;
 import org.mockito.Mockito;
 public class AlternatingRuleTest {
@@ -26,7 +28,6 @@ public class AlternatingRuleTest {
         Rule ruleMock = mock(Rule.class);
         when(ruleMock.isValueAddedToCurrentCombination()).thenReturn(active);
         when(ruleMock.getTargetedPropertyName()).thenReturn("x");
-        when(ruleMock.getTriggeringProperties()).thenReturn(Collections.EMPTY_SET);
         return ruleMock;
     }
 
@@ -130,7 +131,17 @@ public class AlternatingRuleTest {
         StatefulRule first = iterate("a").when("b", "c").asTriggeredRule();
         StatefulRule second = iterate("a").when("b", "c").asTriggeredRule();
         AlternatingRule alternatingRule = new AlternatingRule(first, second);
-        assertThat(alternatingRule.getTriggeringProperties(), is(first.getTriggeringProperties()));
+        assertThat(alternatingRule.hasTriggeringProperties(Utils.set("b", "c")), is(true));
+    }
+
+    @Test
+    public void triggeringPropertiesAreAddedToAllRules() {
+        StatefulRule first = iterate("a").when("b", "c").asTriggeredRule();
+        StatefulRule second = iterate("a").when("b", "c").asTriggeredRule();
+        AlternatingRule alternatingRule = new AlternatingRule(first, second);
+        alternatingRule.addTriggeringProperty("d");
+        assertThat(first.hasTriggeringProperties(Utils.set("b", "c", "d")), is(true));
+        assertThat(second.hasTriggeringProperties(Utils.set("b", "c", "d")), is(true));
     }
 
     @Test(expected = IllegalArgumentException.class)
