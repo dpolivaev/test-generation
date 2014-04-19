@@ -229,16 +229,15 @@ class StrategyInferrer{
 				appendRuleValues(it, rule.values, true)
 				appendRuleOrder(it, rule)
 			}
+			if(rule.isDefault)
+				append('.asDefaultRule()')
+			else
+				append('.asTriggeredRule()')
 		}
 		else if(ruleGroup.strategy !=null){
 			appendStrategyRule(it, ruleGroup.strategy)
+			append('.asRules()')
 		}
-		if(rule != null && rule.isDefault)
-			append('.asDefaultRule()')
-		else if(temporaryRule)
-			append('.asTriggeredRule()')
-		else
-			append('.asRule()')
 	}
 
 	def private void appendCondition(ITreeAppendable it, EObject ruleGroup){
@@ -259,12 +258,6 @@ class StrategyInferrer{
 	}
 
 	private def appendStrategyRule(ITreeAppendable it, StrategyReference strategyReference){
-		append('.iterate("')
-		append(propertyName(strategyReference))
-		append('")')
-		append('.over(')
-		append(strategyReference.newTypeRef(SpecialValue).type)
-		append('.UNDEFINED)')
 		append('.with(')
 		append(strategyReference.newTypeRef(StrategyConverter).type)
 		append('.toStrategy(')
@@ -365,7 +358,10 @@ class StrategyInferrer{
 		}
 		val rule = ruleGroup.rule
 		if(rule != null || ruleGroup.strategy != null){
-			append('_strategy.addRule(')
+			if(rule != null)
+				append('_strategy.addRule(')
+			else
+				append('_strategy.addRules(')
 			appendRule(it, ruleGroup, false)
 			append(');')
 			newLine
@@ -379,11 +375,17 @@ class StrategyInferrer{
 
 
 	def private void appendInnerGroups(ITreeAppendable it, Collection<RuleGroup> innerGroups, boolean first) {
-		var firstLine = first
+		var startMethodCall = first
 		for(group:innerGroups){
+			if(! startMethodCall && group.strategy != null){
+				decreaseIndentation
+				newLine
+				append(')')
+				startMethodCall = true
+			}
 			if(group.rule != null || group.strategy != null|| group?.condition?.expr != null){
-				if(firstLine){
-					firstLine = false
+				if(startMethodCall){
+					startMethodCall = false
 					append('.with(')
 					increaseIndentation
 					newLine
@@ -402,9 +404,16 @@ class StrategyInferrer{
 				if(group.rule != null || group.strategy != null)
 					appendRule(it, group, true)
 			}
-			appendInnerGroups(it, group.ruleGroups, firstLine)
+			if(group.strategy != null){
+				decreaseIndentation
+				newLine
+				append(')')
+				startMethodCall = true
+			}
+			else
+				appendInnerGroups(it, group.ruleGroups, startMethodCall)
 		}
-		if(first && ! firstLine){
+		if(first && ! startMethodCall){
 			decreaseIndentation
 			newLine
 			append(')')

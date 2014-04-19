@@ -15,13 +15,13 @@ public class MyFile {
     RequirementBasedStrategy _First = MyFile.First();
     return _First;
   }
-
+  
   public static RequirementBasedStrategy First() {
     return new _First_StrategyFactory().First();
   }
-
+  
   public static void run1() {
-
+    
     OutputConfiguration _outputConfiguration = new OutputConfiguration();
     OutputConfiguration _reportConfiguration = new OutputConfiguration();
     CoverageTracker _coverageTracker = new CoverageTracker();
@@ -32,7 +32,7 @@ public class MyFile {
     _writerFactory.configureEngine(_ruleEngine);
     new RequirementBasedStrategy().with(_strategy1()).run(_ruleEngine);
   }
-
+  
   public static void main(final String[] args) {
     MyFile.run1();
   }
@@ -51,7 +51,8 @@ class _First_StrategyFactory {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{
       new CoverageEntry("req1", "123"),};
     Strategy _strategy = new Strategy();
-    _strategy.addRule(RuleBuilder.Factory.iterate("[req1]").over(123).asRule());
+    _strategy.addRule(RuleBuilder.Factory.iterate("[req1]").over(123).asTriggeredRule());
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }
 }
+

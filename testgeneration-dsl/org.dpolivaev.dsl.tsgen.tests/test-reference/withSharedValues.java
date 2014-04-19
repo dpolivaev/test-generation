@@ -25,8 +25,9 @@ class _First_StrategyFactory {
     Strategy _strategy = new Strategy();
     _strategy.addRule(RuleBuilder.Factory.iterate("a").over(1).with(
       RuleBuilder.Factory.iterate("b").over(2).asTriggeredRule()
-    ).over(3).asRule());
+    ).over(3).asTriggeredRule());
     _strategy.addRule(RuleBuilder.Factory.iterate("d").over(1).over(3).asDefaultRule());
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }
 }
+

@@ -28,7 +28,7 @@ class _first_StrategyFactory {
     boolean _equals = Objects.equal(propertyContainer.get("x"), "a");
     return Boolean.valueOf(_equals);
   }
-
+  
   RequirementBasedStrategy first() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
     Strategy _strategy = new Strategy();
@@ -39,7 +39,8 @@ class _first_StrategyFactory {
           Object _value = "A";
           return _value;
       }}, "B").ordered().asTriggeredRule()
-    ).asRule());
+    ).asTriggeredRule());
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }
 }
+

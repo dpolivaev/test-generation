@@ -29,7 +29,8 @@ class _first_StrategyFactory {
       @Override public Object value(PropertyContainer propertyContainer) {
         Object _value = new StringBuilder().append("a").append("b").toString();
         return _value;
-    }}).asRule());
+    }}).asTriggeredRule());
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }
 }
+

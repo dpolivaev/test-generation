@@ -17,7 +17,6 @@ import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.coverage.StrategyConverter;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
-import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 
 @SuppressWarnings("all")
@@ -26,11 +25,12 @@ class _first_StrategyFactory {
     Strategy _strategy = new Strategy();
     return _strategy;
   }
-
+  
   RequirementBasedStrategy first() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
     Strategy _strategy = new Strategy();
-    _strategy.addRule(RuleBuilder.Factory.iterate(" /MyFile.tsgen#/0/@strategies.0/@ruleGroups.0/@strategy").over(SpecialValue.UNDEFINED).with(StrategyConverter.toStrategy(_strategy1())).asRule());
+    _strategy.addRules(RuleBuilder.Factory.with(StrategyConverter.toStrategy(_strategy1())).asRules());
     return new RequirementBasedStrategy(_requiredItems).with(_strategy).addRequiredItemsFrom(StrategyConverter.toRequirementBasedStrategy(_strategy1()));
   }
 }
+

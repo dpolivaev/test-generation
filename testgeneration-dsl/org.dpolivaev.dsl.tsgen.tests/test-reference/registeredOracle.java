@@ -14,20 +14,20 @@ public class MyFile {
   private static MyOracle _oracle1() {
     return MyFile.myOracle;
   }
-
+  
   private static RequirementBasedStrategy _strategy2() {
     RequirementBasedStrategy _s = MyFile.s();
     return _s;
   }
-
+  
   public final static MyOracle myOracle = new MyOracle();
-
+  
   public static RequirementBasedStrategy s() {
     return new _s_StrategyFactory().s();
   }
-
+  
   public static void run1() {
-
+    
     OutputConfiguration _outputConfiguration = new OutputConfiguration();
     OutputConfiguration _reportConfiguration = new OutputConfiguration();
     CoverageTracker _coverageTracker = new CoverageTracker();
@@ -40,7 +40,7 @@ public class MyFile {
     _writerFactory.configureEngine(_ruleEngine);
     new RequirementBasedStrategy().with(_strategy2()).run(_ruleEngine);
   }
-
+  
   public static void main(final String[] args) {
     MyFile.run1();
   }
@@ -59,34 +59,34 @@ import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
 @SuppressWarnings("all")
 public class MyOracle implements PropertyHandler {
   public final static List<CoverageEntry> labels = Arrays.asList(new CoverageEntry[]{});
-
+  
   private PropertyContainer propertyContainer;
-
+  
   private CoverageTracker coverageTracker = null;
-
+  
   public void setCoverageTracker(final CoverageTracker coverageTracker) {
     this.coverageTracker = coverageTracker;
   }
-
+  
   public void registerRequiredItems(final WriterFactory writerFactory) {
     writerFactory.registerRequiredItems(labels);
   }
-
+  
   @Override
   public void generationStarted(final PropertyContainer propertyContainer) {
     this.propertyContainer=propertyContainer;
   }
-
+  
   @Override
   public void handlePropertyCombination(final PropertyContainer propertyContainer) {
-
+    
   }
-
+  
   @Override
   public void generationFinished() {
     this.propertyContainer=null;
   }
-
+  
   public int calculate(final int i) {
     return 0;
   }
@@ -109,7 +109,7 @@ class _s_StrategyFactory {
     Object _calculate = MyFile.myOracle.calculate(0);
     return _calculate;
   }
-
+  
   RequirementBasedStrategy s() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
     Strategy _strategy = new Strategy();
@@ -119,7 +119,8 @@ class _s_StrategyFactory {
         Object _value = ValueProviderHelper.toValue(_value1(propertyContainer), propertyContainer);
         return _value;
         } finally{ ((CoverageTrackerEnabler)propertyContainer).stopTrace();}
-    }}).asRule());
+    }}).asTriggeredRule());
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }
 }
+

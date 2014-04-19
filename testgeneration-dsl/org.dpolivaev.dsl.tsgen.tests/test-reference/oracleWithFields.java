@@ -20,35 +20,36 @@ import org.dpolivaev.tsgen.scriptwriter.WriterFactory;
 @SuppressWarnings("all")
 public class MyOracle implements PropertyHandler {
   public final static List<CoverageEntry> labels = Arrays.asList(new CoverageEntry[]{});
-
+  
   private PropertyContainer propertyContainer;
-
+  
   private CoverageTracker coverageTracker = null;
-
+  
   public void setCoverageTracker(final CoverageTracker coverageTracker) {
     this.coverageTracker = coverageTracker;
   }
-
+  
   public void registerRequiredItems(final WriterFactory writerFactory) {
     writerFactory.registerRequiredItems(labels);
   }
-
+  
   @Override
   public void generationStarted(final PropertyContainer propertyContainer) {
     this.propertyContainer=propertyContainer;
   }
-
+  
   @Override
   public void handlePropertyCombination(final PropertyContainer propertyContainer) {
-
+    
   }
-
+  
   @Override
   public void generationFinished() {
     this.propertyContainer=null;
   }
-
+  
   public final int x = 0;
-
+  
   public int y = 2;
 }
+

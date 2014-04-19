@@ -15,22 +15,22 @@ public class MyFile {
     RequirementBasedStrategy _first = MyFile.first();
     return _first;
   }
-
+  
   private static RequirementBasedStrategy _strategy2() {
     RequirementBasedStrategy _second = MyFile.second();
     return _second;
   }
-
+  
   public static RequirementBasedStrategy first() {
     return new _first_StrategyFactory().first();
   }
-
+  
   public static RequirementBasedStrategy second() {
     return new _second_StrategyFactory().second();
   }
-
+  
   public static void run1() {
-
+    
     OutputConfiguration _outputConfiguration = new OutputConfiguration();
     OutputConfiguration _reportConfiguration = new OutputConfiguration();
     CoverageTracker _coverageTracker = new CoverageTracker();
@@ -40,7 +40,7 @@ public class MyFile {
     _writerFactory.configureEngine(_ruleEngine);
     new RequirementBasedStrategy().with(_strategy1()).with(_strategy2()).run(_ruleEngine);
   }
-
+  
   public static void main(final String[] args) {
     MyFile.run1();
   }
@@ -75,3 +75,4 @@ class _second_StrategyFactory {
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }
 }
+

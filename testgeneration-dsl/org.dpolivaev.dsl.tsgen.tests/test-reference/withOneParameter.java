@@ -24,16 +24,16 @@ import org.dpolivaev.tsgen.ruleengine.ValueProviderHelper;
 @SuppressWarnings("all")
 class _first_StrategyFactory {
   private final int p;
-
+  
   public _first_StrategyFactory(final int p) {
     this.p = p;
-
+    
   }
-
+  
   private int _value1(final PropertyContainer propertyContainer) {
     return this.p;
   }
-
+  
   RequirementBasedStrategy first() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
     Strategy _strategy = new Strategy();
@@ -45,3 +45,4 @@ class _first_StrategyFactory {
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }
 }
+

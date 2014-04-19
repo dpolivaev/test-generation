@@ -2,6 +2,7 @@ package org.dpolivaev.tsgen.ruleengine;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
 
 public class StrategyMerger {
 
@@ -44,6 +45,10 @@ public class StrategyMerger {
 		}
 	}
 
+	public StrategyMerger withTrigger(Collection<String> triggers) {
+		return withTrigger(triggers.toArray(new String[]{}));
+	}
+
 	public StrategyMerger withTrigger(String... triggers) {
 		this.triggers = triggers;
 		return this;
@@ -55,7 +60,7 @@ public class StrategyMerger {
 	}
 
 	public void to(RuleBuilder target) {
-		target.with(rules.toArray(new Rule[]{}));
+		target.with(rules);
 	}
 
 }

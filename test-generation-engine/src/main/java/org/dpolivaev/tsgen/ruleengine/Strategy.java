@@ -105,13 +105,7 @@ public class Strategy {
         combinedStrategy.addRules(anotherRules.values());
     }
 
-    public void addRules(Strategy anotherStrategy) {
-    	addRules(anotherStrategy.topRules.values());
-    	addRules(anotherStrategy.defaultRules.values());
-    	addRules(anotherStrategy.triggeredRules.values());
-     }
-
-    private void addRules(Collection<Rule> rules) {
+    public void addRules(Collection<Rule> rules) {
         for(Rule rule : rules)
             addRule(rule);
 	}

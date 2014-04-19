@@ -22,34 +22,34 @@ public class MyOracle implements PropertyHandler {
   public final static List<CoverageEntry> labels = Arrays.asList(new CoverageEntry[]{
       new CoverageEntry("req1", "reason1"),
       new CoverageEntry("req2", CoverageEntry.ANY),});
-
+  
   private PropertyContainer propertyContainer;
-
+  
   private CoverageTracker coverageTracker = null;
-
+  
   public void setCoverageTracker(final CoverageTracker coverageTracker) {
     this.coverageTracker = coverageTracker;
   }
-
+  
   public void registerRequiredItems(final WriterFactory writerFactory) {
     writerFactory.registerRequiredItems(labels);
   }
-
+  
   @Override
   public void generationStarted(final PropertyContainer propertyContainer) {
     this.propertyContainer=propertyContainer;
   }
-
+  
   @Override
   public void handlePropertyCombination(final PropertyContainer propertyContainer) {
-
+    
   }
-
+  
   @Override
   public void generationFinished() {
     this.propertyContainer=null;
   }
-
+  
   public int calculate(final int i) {
     int _xblockexpression = (int) 0;
     {
@@ -63,3 +63,4 @@ public class MyOracle implements PropertyHandler {
     return _xblockexpression;
   }
 }
+

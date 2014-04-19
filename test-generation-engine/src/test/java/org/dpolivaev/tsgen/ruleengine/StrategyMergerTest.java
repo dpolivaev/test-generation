@@ -13,6 +13,7 @@ import org.dpolivaev.tsgen.ruleengine.StrategyMerger;
 import org.dpolivaev.tsgen.utils.internal.Utils;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 public class StrategyMergerTest {
 	
@@ -82,6 +83,6 @@ public class StrategyMergerTest {
 		source.addRule(triggeredRule);
 		RuleBuilder target = mock(RuleBuilder.class);
 		new StrategyMerger().moveRuleFrom(source).to(target);
-		verify(target).with(triggeredRule);
+		verify(target).with(Mockito.anyCollectionOf(Rule.class));
 	}
 }

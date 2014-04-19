@@ -15,13 +15,13 @@ public class MyFile {
     RequirementBasedStrategy _First = MyFile.First();
     return _First;
   }
-
+  
   public static RequirementBasedStrategy First() {
     return new _First_StrategyFactory().First();
   }
-
+  
   public static void run1() {
-
+    
     OutputConfiguration _outputConfiguration = new OutputConfiguration();
     _outputConfiguration.setXmlDirectory("testoutput").setXmlExtension("xml").setXsltSource("my.xslt").setFileDirectory("testoutput").setFileExtension("java");
     OutputConfiguration _reportConfiguration = new OutputConfiguration();
@@ -32,7 +32,7 @@ public class MyFile {
     _writerFactory.configureEngine(_ruleEngine);
     new RequirementBasedStrategy().with(_strategy1()).run(_ruleEngine);
   }
-
+  
   public static void main(final String[] args) {
     MyFile.run1();
   }
@@ -52,3 +52,4 @@ class _First_StrategyFactory {
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }
 }
+

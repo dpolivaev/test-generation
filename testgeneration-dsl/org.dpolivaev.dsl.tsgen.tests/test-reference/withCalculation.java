@@ -26,7 +26,7 @@ class _first_StrategyFactory {
   private Object _value1(final PropertyContainer propertyContainer) {
     return propertyContainer.get("x");
   }
-
+  
   RequirementBasedStrategy first() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
     Strategy _strategy = new Strategy();
@@ -34,7 +34,8 @@ class _first_StrategyFactory {
       @Override public Object value(PropertyContainer propertyContainer) {
         Object _value = ValueProviderHelper.toValue(_value1(propertyContainer), propertyContainer);
         return _value;
-    }}).asRule());
+    }}).asTriggeredRule());
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }
 }
+

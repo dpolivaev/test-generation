@@ -27,3 +27,4 @@ class _first_StrategyFactory {
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }
 }
+

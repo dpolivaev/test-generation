@@ -69,7 +69,7 @@ public class RuleBuilder {
         return with(rules);
     }
 
-	private RuleBuilder with(Collection<Rule> rules) {
+    public RuleBuilder with(Collection<Rule> rules) {
 	if(this.rules == null){
 		this.rules = new ArrayList<>(rules);
             ListIterator<ValueWithRulesProvider> listIterator = values.listIterator(previousValueCount);
@@ -81,6 +81,11 @@ public class RuleBuilder {
 	else
 		this.rules.addAll(rules);
         return this;
+    }
+    
+    public RuleBuilder with(Strategy strategy){
+    	new StrategyMerger().withTrigger(triggeringProperties).withCondition(condition).moveRuleFrom(strategy).to(this);
+    	return this;
     }
 
     public RuleBuilder iterate(
@@ -115,6 +120,10 @@ public class RuleBuilder {
         return new DefaultStatefulRule(triggeringProperties, this.condition, this.targetedPropertyName, //
             ruleValues());
     }
+    
+    public Collection<Rule> asRules(){
+    	return rules;
+    }
 
     ValueProviders ruleValues() {
         ValueWithRulesProvider[] valueProviders = this.values.toArray(new ValueWithRulesProvider[values.size()]);
@@ -134,6 +143,10 @@ public class RuleBuilder {
     public static class Factory {
         static public RuleBuilder when(String... triggeringProperties) {
             return new RuleBuilder().when(triggeringProperties);
+        }
+
+        static public RuleBuilder with(Strategy strategy) {
+            return new RuleBuilder().with(strategy);
         }
 
         static public RuleBuilder iterate(String property) {

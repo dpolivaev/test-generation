@@ -197,15 +197,17 @@ class StrategyCompilationTest {
 		'''.assertCompilesToFile(testName)
 	}
 
-	@Test def withAppliedStrategyAndRulesForValue() {
+	@Test def withAppliedStrategyAndConditions() {
 		'''
 			strategy other
 				let y be 2
 			strategy first
-				let x be 1 {
-					let z1 be 3
-					apply other
-					let z2 be 4
+				for each z if (:z as int) > 0 {
+					for each z2 if (:z2 as int) <0 {
+						let x be 1 
+						apply other
+						let z2 be 4
+					}
 				}
 		'''.assertCompilesToFile(testName)
 	}
@@ -282,6 +284,28 @@ class StrategyCompilationTest {
 		'''.assertCompilesToFile(testName)
 	}
 
+	@Test def appliesStrategiesMixedWithRules() {
+		'''
+			strategy first
+			strategy second
+				let x be 1 
+				apply first
+				let y be 2 
+		'''.assertCompilesToFile(testName)
+	}
+
+	@Test def appliesStrategiesMixedWithRulesForValue() {
+		'''
+			strategy first
+			strategy second
+				let x be 1 {
+					let y be 2 
+					apply first
+					let y be 2 
+				}
+		'''.assertCompilesToFile(testName)
+	}
+
 
 	@Test def extendExternalStrategies() {
 		'''
@@ -289,6 +313,7 @@ class StrategyCompilationTest {
 			strategy first apply new Strategy()
 		'''.assertCompilesToFile(testName)
 	}
+	
 	@Test def runWithXslt() {
 		'''
 			strategy First
