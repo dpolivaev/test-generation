@@ -1,7 +1,7 @@
 package org.dpolivaev.tsgen.ruleengine.internal;
 
 import static org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory.iterate;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anySetOf;
 import static org.mockito.Mockito.mock;
@@ -128,7 +128,7 @@ public class AlternatingRuleTest {
     @Test
     public void targetedPropertyNameIsTakenFromTheFirstRules() {
         AlternatingRule alternatingRule = new AlternatingRule(iterate("a").asTriggeredRule(), iterate("a").asTriggeredRule());
-        assertThat(alternatingRule.getTargetedPropertyName(), is("a"));
+        assertThat(alternatingRule.getTargetedPropertyName(), equalTo("a"));
     }
     
     @Test
@@ -136,7 +136,7 @@ public class AlternatingRuleTest {
         StatefulRule first = iterate("a").when("b", "c").asTriggeredRule();
         StatefulRule second = iterate("a").when("b", "c").asTriggeredRule();
         AlternatingRule alternatingRule = new AlternatingRule(first, second);
-        assertThat(alternatingRule.hasTriggeringProperties(Utils.set("b", "c")), is(true));
+        assertThat(alternatingRule.hasTriggeringProperties(Utils.set("b", "c")), equalTo(true));
     }
 
     @Test
@@ -145,8 +145,8 @@ public class AlternatingRuleTest {
         StatefulRule second = iterate("a").when("b", "c").asTriggeredRule();
         AlternatingRule alternatingRule = new AlternatingRule(first, second);
         alternatingRule.addTriggeringProperty("d");
-        assertThat(first.hasTriggeringProperties(Utils.set("b", "c", "d")), is(true));
-        assertThat(second.hasTriggeringProperties(Utils.set("b", "c", "d")), is(true));
+        assertThat(first.hasTriggeringProperties(Utils.set("b", "c", "d")), equalTo(true));
+        assertThat(second.hasTriggeringProperties(Utils.set("b", "c", "d")), equalTo(true));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -168,7 +168,7 @@ public class AlternatingRuleTest {
         AlternatingRule alternatingRule = new AlternatingRule(first, second);
         alternatingRule.combineWith(third);
 
-        assertThat(alternatingRule.without(third), is((Rule) alternatingRule));
+        assertThat(alternatingRule.without(third), equalTo((Rule) alternatingRule));
     }
 
     @Test
@@ -178,7 +178,7 @@ public class AlternatingRuleTest {
 
         AlternatingRule alternatingRule = new AlternatingRule(first, second);
 
-        assertThat(alternatingRule.without(first), is(second));
+        assertThat(alternatingRule.without(first), equalTo(second));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -218,5 +218,24 @@ public class AlternatingRuleTest {
 
         verify(first).forcesIteration();
         verify(second, never()).forcesIteration();
+    }
+
+    @Test
+    public void alternatingRuleRemovesItself() {
+        Rule first = ruleMock(true);
+        Rule second = ruleMock(true);
+
+        AlternatingRule alternatingRule = new AlternatingRule(first, second);
+        assertThat(alternatingRule.without(alternatingRule), equalTo(null));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void alternatingRuleCanNotRemoveUnknownRule() {
+        Rule first = ruleMock(true);
+        Rule second = ruleMock(true);
+        Rule third = ruleMock(true);
+
+        AlternatingRule alternatingRule = new AlternatingRule(first, second);
+        alternatingRule.without(third);
     }
 }

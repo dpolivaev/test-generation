@@ -101,9 +101,12 @@ public class AlternatingRule implements Rule {
 
     @Override
     public Rule without(Rule rule) {
+    	if(this == rule)
+    		return null;
     	if(activeRule == rule)
     		activeRule = null;
-        rules.remove(rule);
+        if (!rules.remove(rule))
+        	throw new IllegalArgumentException();
         if (rules.size() == 1)
             return firstRule();
         return this;

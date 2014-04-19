@@ -163,6 +163,8 @@ public abstract class StatefulRule implements Rule {
 
     @Override
     public Rule without(Rule rule) {
+    	if(this != rule)
+    		throw new IllegalArgumentException();
         return null;
     }
 
