@@ -9,18 +9,12 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.Collections;
-
+import org.dpolivaev.tsgen.ruleengine.Condition;
 import org.dpolivaev.tsgen.ruleengine.EngineState;
 import org.dpolivaev.tsgen.ruleengine.InconsistentRuleException;
 import org.dpolivaev.tsgen.ruleengine.Rule;
-import org.dpolivaev.tsgen.ruleengine.internal.AlternatingRule;
-import org.dpolivaev.tsgen.ruleengine.internal.PropertyAssignedEvent;
-import org.dpolivaev.tsgen.ruleengine.internal.StatefulRule;
-import org.dpolivaev.tsgen.testutils.TestUtils;
 import org.dpolivaev.tsgen.utils.internal.Utils;
 import org.junit.Test;
-import org.mockito.Mockito;
 public class AlternatingRuleTest {
 
     @SuppressWarnings("unchecked")
@@ -78,6 +72,18 @@ public class AlternatingRuleTest {
 
         verify(second).propertyValueSet(event);
         verify(first).propertyValueSet(event);
+    }
+
+    @Test
+    public void givenNoActiveRules_propagatesAddedConditionToAllRules() {
+        Rule first = ruleMock(false);
+        Rule second = ruleMock(false);
+        Condition condition = mock(Condition.class);
+
+        new AlternatingRule(first, second).addCondition(condition);
+
+        verify(first).addCondition(condition);
+        verify(second).addCondition(condition);
     }
 
     @Test

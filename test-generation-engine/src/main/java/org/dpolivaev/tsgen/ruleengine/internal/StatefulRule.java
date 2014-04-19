@@ -15,10 +15,10 @@ import org.dpolivaev.tsgen.ruleengine.SpecialValue;
  */
 public abstract class StatefulRule implements Rule {
 
-    final private String targetedPropertyName;
+	final private String targetedPropertyName;
     final private ValueProviders valueProviders;
     final private Set<Rule> dependentRules;
-    final private Condition condition;
+    private Condition condition;
 
     private boolean valueAlreadyAddedToCurrentCombination;
     private boolean blocksRequiredProperties;
@@ -196,4 +196,15 @@ public abstract class StatefulRule implements Rule {
     	if (!rule.hasTriggeringProperties(getTriggeringProperties()))
     		throw new IllegalArgumentException("rules with different triggering property names can not be combined");
     }
+
+    @Override
+	public void addCondition(final Condition newCondition) {
+    	if(! newCondition.equals(Condition.TRUE)){
+    		if(condition.equals(Condition.TRUE))
+    			this.condition = newCondition;
+    		else
+    			this.condition =  new ConjunctCondition(newCondition, condition);
+    	}
+	}
+
 }

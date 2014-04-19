@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.dpolivaev.tsgen.ruleengine.Condition;
 import org.dpolivaev.tsgen.ruleengine.EngineState;
 import org.dpolivaev.tsgen.ruleengine.InconsistentRuleException;
 import org.dpolivaev.tsgen.ruleengine.Rule;
@@ -149,5 +150,11 @@ public class AlternatingRule implements Rule {
 	@Override
 	public TriggeredRuleKey getTriggeredRuleKey() {
 		return firstRule().getTriggeredRuleKey();
+	}
+
+	@Override
+	public void addCondition(Condition condition) {
+		for(Rule rule : rules)
+			rule.addCondition(condition);
 	}
 }
