@@ -2,8 +2,6 @@ package org.dpolivaev.tsgen.ruleengine.internal;
 
 import java.util.Set;
 
-import org.dpolivaev.tsgen.ruleengine.Rule;
-
 public class TriggeredRuleKey{
     final public Set<String> triggeringProperties;
     final public String targetedProperty;

@@ -13,7 +13,6 @@ import org.dpolivaev.tsgen.ruleengine.StrategyMerger;
 import org.dpolivaev.tsgen.utils.internal.Utils;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 public class StrategyMergerTest {
 	

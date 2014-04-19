@@ -1,7 +1,5 @@
 package org.dpolivaev.tsgen.scriptwriter;
 
-import java.util.regex.Pattern;
-
 import org.dpolivaev.tsgen.utils.internal.IdConverter;
 import org.dpolivaev.tsgen.utils.internal.StringConverter;
 

@@ -17,7 +17,6 @@ import org.dpolivaev.tsgen.utils.internal.Utils;
 import org.junit.Test;
 public class AlternatingRuleTest {
 
-    @SuppressWarnings("unchecked")
     private Rule ruleMock(boolean active) {
         Rule ruleMock = mock(Rule.class);
         when(ruleMock.isValueAddedToCurrentCombination()).thenReturn(active);
