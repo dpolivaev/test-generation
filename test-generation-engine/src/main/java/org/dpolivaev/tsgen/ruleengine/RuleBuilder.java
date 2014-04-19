@@ -13,7 +13,6 @@ import org.dpolivaev.tsgen.ruleengine.internal.DefaultStatefulRule;
 import org.dpolivaev.tsgen.ruleengine.internal.OrderedValueProviders;
 import org.dpolivaev.tsgen.ruleengine.internal.ShuffledValueProviders;
 import org.dpolivaev.tsgen.ruleengine.internal.StatefulRule;
-import org.dpolivaev.tsgen.ruleengine.internal.TopStatefulRule;
 import org.dpolivaev.tsgen.ruleengine.internal.TriggeredStatefulRule;
 import org.dpolivaev.tsgen.ruleengine.internal.ValueProviders;
 import org.dpolivaev.tsgen.ruleengine.internal.ValueWithRules;
@@ -70,11 +69,6 @@ public class RuleBuilder {
         return with(rules);
     }
 
-	public RuleBuilder with(Strategy includedStrategy) {
-		return with(includedStrategy.topRules()).with(includedStrategy.defaultRules()).with(includedStrategy.triggeredRules());
-	}
-
-
 	private RuleBuilder with(Collection<Rule> rules) {
 	if(this.rules == null){
 		this.rules = new ArrayList<>(rules);
@@ -108,15 +102,6 @@ public class RuleBuilder {
     public RuleBuilder shuffled() {
         order = Order.SHUFFLED;
         return this;
-    }
-
-    public StatefulRule asRule() {
-        ValueProviders ruleValues = ruleValues();
-        if (triggeringProperties.isEmpty())
-            return new TopStatefulRule(this.condition, this.targetedPropertyName, ruleValues);
-        else
-            return new TriggeredStatefulRule(triggeringProperties, this.condition, this.targetedPropertyName, //
-                ruleValues);
     }
 
     public StatefulRule asTriggeredRule() {

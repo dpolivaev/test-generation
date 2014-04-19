@@ -46,7 +46,7 @@ public class RuleEngineTest {
 			
 			@Override
 			public void handlePropertyCombination(PropertyContainer propertyContainer) {
-				StatefulRule triggeredRule = iterate("name").over("value2").when("triggeredBy").asRule();
+				StatefulRule triggeredRule = iterate("name").over("value2").when("triggeredBy").asTriggeredRule();
 				RuleEngine ruleEngine = (RuleEngine) propertyContainer;
 				ruleEngine.setPropertyValue(triggeredRule, "value2", true);
 				assertThat(ruleEngine.getAssignmentReason(), equalTo("->"));

@@ -19,7 +19,7 @@ public class AssignmentsTest {
 	Assignments assignments;
 
     private StatefulRule ruleForProperty(String propertyName) {
-        return iterate(propertyName).asRule();
+        return iterate(propertyName).asTriggeredRule();
     }
 
 

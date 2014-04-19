@@ -121,26 +121,26 @@ public class AlternatingRuleTest {
 
     @Test
     public void targetedPropertyNameIsTakenFromTheFirstRules() {
-        AlternatingRule alternatingRule = new AlternatingRule(iterate("a").asRule(), iterate("a").asRule());
+        AlternatingRule alternatingRule = new AlternatingRule(iterate("a").asTriggeredRule(), iterate("a").asTriggeredRule());
         assertThat(alternatingRule.getTargetedPropertyName(), is("a"));
     }
     
     @Test
     public void triggeringPropertiesAreTakenFromTheFirstRules() {
-        StatefulRule first = iterate("a").when("b", "c").asRule();
-        StatefulRule second = iterate("a").when("b", "c").asRule();
+        StatefulRule first = iterate("a").when("b", "c").asTriggeredRule();
+        StatefulRule second = iterate("a").when("b", "c").asTriggeredRule();
         AlternatingRule alternatingRule = new AlternatingRule(first, second);
         assertThat(alternatingRule.getTriggeringProperties(), is(first.getTriggeringProperties()));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void combinedRuleForDifferentTargetedPropertiesAreNotAllowed() {
-        new AlternatingRule(iterate("a").asRule(), iterate("b").asRule());
+        new AlternatingRule(iterate("a").asTriggeredRule(), iterate("b").asTriggeredRule());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void combinedRuleForDifferentTriggeringPropertiesAreNotAllowed() {
-        new AlternatingRule(iterate("y").asRule(), iterate("y").when("x").asRule());
+        new AlternatingRule(iterate("y").asTriggeredRule(), iterate("y").when("x").asTriggeredRule());
     }
 
     @Test
@@ -167,7 +167,7 @@ public class AlternatingRuleTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void combinedRuleForDefaultRuleAndTriggeringRuleAreNotAllowed() {
-        new AlternatingRule(iterate("a").asRule(), iterate("a").asDefaultRule());
+        new AlternatingRule(iterate("a").asTriggeredRule(), iterate("a").asDefaultRule());
     }
 
     @Test(expected = InconsistentRuleException.class)

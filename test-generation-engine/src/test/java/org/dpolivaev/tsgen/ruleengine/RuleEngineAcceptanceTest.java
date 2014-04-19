@@ -285,7 +285,7 @@ public class RuleEngineAcceptanceTest {
 
     @Test
     public void removedRuleDoesIsNotConsidered() {
-        StatefulRule ruleToBeRemoved = iterate("x").over("b").asRule();
+        StatefulRule ruleToBeRemoved = iterate("x").over("b").asTriggeredRule();
         strategy.addRule(ruleToBeRemoved);
         strategy.removeRule(ruleToBeRemoved);
 
@@ -297,7 +297,7 @@ public class RuleEngineAcceptanceTest {
     @Test
     public void removedRuleDoesNotHideOtherRules() {
         strategy.addRule(iterate("x").over("a"));
-        StatefulRule ruleToBeRemoved = iterate("x").over("b").asRule();
+        StatefulRule ruleToBeRemoved = iterate("x").over("b").asTriggeredRule();
         strategy.addRule(ruleToBeRemoved);
         strategy.removeRule(ruleToBeRemoved);
 
@@ -320,7 +320,7 @@ public class RuleEngineAcceptanceTest {
     @Test
     public void valueSpecificTemporaryRulesAreRemovedAfterTheRelatedValueIsFinished() {
         RuleBuilder temporaryRule = iterate("y").over("1").when("x");
-        strategy.addRule(iterate("x").over("a").with(temporaryRule.asRule()).over("b"));
+        strategy.addRule(iterate("x").over("a").with(temporaryRule.asTriggeredRule()).over("b"));
 
         generateCombinationsForStrategy();
 
@@ -440,11 +440,11 @@ public class RuleEngineAcceptanceTest {
         scriptProducerMock.appendReasons(true);
         strategy.addRule(iterate("x").over("1").asDefaultRule());
         strategy.addRule(iterate("y").over(new ValueProvider() {
-            @Override
-            public Object value(PropertyContainer propertyContainer) {
-                return propertyContainer.get("x");
-            }
-        }).asRule());
+		    @Override
+		    public Object value(PropertyContainer propertyContainer) {
+		        return propertyContainer.get("x");
+		    }
+		}).asTriggeredRule());
         generateCombinationsForStrategy();
 
         expect(combination("y<-x", "1", "->y", "1"));

@@ -4,7 +4,6 @@ import java.util.Set;
 
 import org.dpolivaev.tsgen.ruleengine.Condition;
 import org.dpolivaev.tsgen.ruleengine.EngineState;
-import org.dpolivaev.tsgen.ruleengine.Rule;
 
 public class TriggeredStatefulRule extends StatefulRule {
     private Set<String> triggeringProperties;
@@ -20,17 +19,36 @@ public class TriggeredStatefulRule extends StatefulRule {
     }
 
     @Override
-    public void propertyValueSet(PropertyAssignedEvent event) {
-        if (isValueAddedToCurrentCombination())
-            addDependencies(event);
-        else if (triggeringProperties.contains(event.getTargetedPropertyName()) && event.containsPropertyValues(triggeringProperties)) {
-            EngineState engineState = event.getState();
-            if (getCondition().isSatisfied(engineState)) {
+    public void propertyCombinationStarted(EngineState engineState) {
+    	if(! isTopRule())
+    		return;
+        if(engineState.getCombinationCounter() == 1)
+            setBlocksRequiredProperties(true);
+        if (getCondition().isSatisfied(engineState)) {
             addValueWithRules(engineState);
-            if (event.isValueChanged())
-                setBlocksRequiredProperties(true);
         }
-        }
+        else
+            setBlocksRequiredProperties(false);
+    }
+
+	private boolean isTopRule() {
+		return getTriggeringProperties().isEmpty();
+	}
+    
+    @Override
+    public void propertyValueSet(PropertyAssignedEvent event) {
+    	if (isValueAddedToCurrentCombination())
+    		addDependencies(event);
+    	else if (! isTopRule() 
+    			&& triggeringProperties.contains(event.getTargetedPropertyName()) 
+    			&& event.containsPropertyValues(triggeringProperties)) {
+    		EngineState engineState = event.getState();
+    		if (getCondition().isSatisfied(engineState)) {
+    			addValueWithRules(engineState);
+    			if (event.isValueChanged())
+    				setBlocksRequiredProperties(true);
+    		}
+    	}
     }
 
     @Override
@@ -43,12 +61,4 @@ public class TriggeredStatefulRule extends StatefulRule {
     public boolean isDefaultRule() {
         return false;
     }
-    
-    public Rule toTriggeredRule(){
-    	return this;
-    }
-
-	public void setTriggeringProperties(Set<String> triggeringProperties) {
-		this.triggeringProperties = triggeringProperties;
-	}
 }

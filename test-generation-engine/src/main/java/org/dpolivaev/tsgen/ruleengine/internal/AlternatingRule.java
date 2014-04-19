@@ -104,10 +104,6 @@ public class AlternatingRule implements Rule {
     @Override
     public Rule combineWith(Rule rule) {
         checkRuleCompatibility(rule);
-        if(rule instanceof TriggeredStatefulRule) {
-			Set<String> triggeringProperties = getTriggeringProperties();
-			((TriggeredStatefulRule)rule).setTriggeringProperties(triggeringProperties);
-		}
         rules.add(rule);
         return this;
     }
@@ -127,9 +123,6 @@ public class AlternatingRule implements Rule {
     	if(activeRule == rule)
     		activeRule = null;
         rules.remove(rule);
-        if(rule instanceof TriggeredStatefulRule){
-		((TriggeredStatefulRule)rule).setTriggeringProperties(new HashSet<String>(getTriggeringProperties()));
-        }
         if (rules.size() == 1)
             return firstRule();
         return this;

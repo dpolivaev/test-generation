@@ -23,14 +23,14 @@ public class StrategyTest {
 
     @Test
     public void afterAddingTopRule_returnsTopRule() throws Exception {
-        StatefulRule rule = iterate("x").over("a").asRule();
+        StatefulRule rule = iterate("x").over("a").asTriggeredRule();
         strategy.addRule(rule);
         assertThat(strategy.topRules(), hasItem(rule));
     }
 
     @Test
     public void afterRemovingTopRule_doesNotReturnIt() throws Exception {
-        StatefulRule rule = iterate("x").over("a").asRule();
+        StatefulRule rule = iterate("x").over("a").asTriggeredRule();
         strategy.addRule(rule);
         strategy.removeRule(rule);
         assertThat(strategy.topRules(), not(hasItem(rule)));
@@ -38,15 +38,15 @@ public class StrategyTest {
 
     @Test
     public void afterAddingTopRule_doesNotReturnDefaultRule() throws Exception {
-        StatefulRule rule = iterate("x").over("a").asRule();
+        StatefulRule rule = iterate("x").over("a").asTriggeredRule();
         strategy.addRule(rule);
         assertThat(strategy.defaultRules(), not(hasItem(rule)));
     }
 
     @Test
     public void afterAddingSecondTopRuleForTheSameProperty_containsAlternatingRule() throws Exception {
-        StatefulRule rule1 = iterate("x").over("a").asRule();
-        StatefulRule rule2 = iterate("x").over("a").asRule();
+        StatefulRule rule1 = iterate("x").over("a").asTriggeredRule();
+        StatefulRule rule2 = iterate("x").over("a").asTriggeredRule();
         strategy.addRule(rule1);
         strategy.addRule(rule2);
         assertThat(strategy.topRules(), hasItem(isA(AlternatingRule.class)));
@@ -68,9 +68,9 @@ public class StrategyTest {
 
     @Test
     public void afterAddingTriggeringRulesWithDifferentTriggeringProperties_returnsBothRules() throws Exception {
-        StatefulRule ruleP = iterate("x").over("a").when("p").asRule();
+        StatefulRule ruleP = iterate("x").over("a").when("p").asTriggeredRule();
         strategy.addRule(ruleP);
-        StatefulRule ruleQ = iterate("x").over("a").when("q").asRule();
+        StatefulRule ruleQ = iterate("x").over("a").when("q").asTriggeredRule();
         strategy.addRule(ruleQ);
         assertThat(strategy.triggeredRules(), hasItem(ruleP));
         assertThat(strategy.triggeredRules(), hasItem(ruleQ));
@@ -84,11 +84,11 @@ public class StrategyTest {
     @Test
     public void stategyCombination(){
         Strategy strategy2 = new Strategy();
-        StatefulRule ruleP = iterate("p").over("a").asRule();
+        StatefulRule ruleP = iterate("p").over("a").asTriggeredRule();
         strategy.addRule(ruleP);
         StatefulRule defaultRuleP = iterate("p").over("a").asDefaultRule();
         strategy2.addRule(defaultRuleP);
-        StatefulRule ruleQ = iterate("x").over("a").when("q").asRule();
+        StatefulRule ruleQ = iterate("x").over("a").when("q").asTriggeredRule();
         strategy2.addRule(ruleQ);
         
         Strategy combinedStrategy = strategy.with(strategy2);

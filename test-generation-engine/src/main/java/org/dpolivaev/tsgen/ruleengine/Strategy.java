@@ -14,7 +14,7 @@ public class Strategy {
     private Map<TriggeredRuleKey, Rule> triggeredRules = new LinkedHashMap<>();
 
     public void addRule(RuleBuilder builder) {
-        addRule(builder.asRule());
+        addRule(builder.asTriggeredRule());
     }
 
     public void addDefaultRule(RuleBuilder builder) {
@@ -104,6 +104,12 @@ public class Strategy {
         combinedRules.putAll(rules);
         combinedStrategy.addRules(anotherRules.values());
     }
+
+    public void addRules(Strategy anotherStrategy) {
+    	addRules(anotherStrategy.topRules.values());
+    	addRules(anotherStrategy.defaultRules.values());
+    	addRules(anotherStrategy.triggeredRules.values());
+     }
 
     private void addRules(Collection<Rule> rules) {
         for(Rule rule : rules)
