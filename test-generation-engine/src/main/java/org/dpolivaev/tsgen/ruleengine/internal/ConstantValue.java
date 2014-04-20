@@ -5,6 +5,7 @@ import java.util.Collections;
 
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.Rule;
+import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 
 public class ConstantValue implements ValueWithRulesProvider{
     private final Object value;
@@ -18,8 +19,8 @@ public class ConstantValue implements ValueWithRulesProvider{
      * @see ruleengine.Value#rules()
      */
     @Override
-    public Collection<Rule> rules(PropertyContainer propertyContainer) {
-        return Collections.<Rule> emptyList();
+    public Collection<RuleBuilder> rules(PropertyContainer propertyContainer) {
+        return Collections.<RuleBuilder> emptyList();
     }
 
     /* (non-Javadoc)

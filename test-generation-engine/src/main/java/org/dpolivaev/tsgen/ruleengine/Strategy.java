@@ -12,13 +12,22 @@ public class Strategy {
     private Map<String, Rule> defaultRules = new LinkedHashMap<>();
     private Map<String, Rule> topRules = new LinkedHashMap<>();
     private Map<TriggeredRuleKey, Rule> triggeredRules = new LinkedHashMap<>();
+    private Collection<RuleBuilder> ruleBuilders = new ArrayList<RuleBuilder>();
+    
+    public void initialize(){
+    	defaultRules.clear();
+    	topRules.clear();
+    	triggeredRules.clear();
+    	for(RuleBuilder ruleBuilder : ruleBuilders)
+    		addRule(ruleBuilder.create());
+    }
 
     public void addRule(RuleBuilder builder) {
-        addRule(builder.asTriggeredRule());
+    	ruleBuilders.add(builder);
     }
 
     public void addDefaultRule(RuleBuilder builder) {
-        addRule(builder.asDefaultRule());
+    	ruleBuilders.add(builder.asDefaultRule());
     }
 
 	public void addRule(Rule rule) {
@@ -51,7 +60,7 @@ public class Strategy {
     public Rule getDefaultRulesForProperty(String propertyName) {
         Rule rule = defaultRules.get(propertyName);
         if(rule == null)
-            return RuleBuilder.Factory.iterate(propertyName).over(SpecialValue.UNDEFINED).asDefaultRule();
+            return RuleBuilder.Factory.iterate(propertyName).over(SpecialValue.UNDEFINED).asDefaultRule().create();
         return rule;
     }
 
@@ -93,26 +102,25 @@ public class Strategy {
 
     public Strategy with(Strategy anotherStrategy) {
         Strategy combinedStrategy = new Strategy();
-        combineRules(combinedStrategy, this.topRules, anotherStrategy.topRules, combinedStrategy.topRules);
-        combineRules(combinedStrategy, this.defaultRules, anotherStrategy.defaultRules, combinedStrategy.defaultRules);
-        combineRules(combinedStrategy, this.triggeredRules, anotherStrategy.triggeredRules, combinedStrategy.triggeredRules);
+        combinedStrategy.addRules(ruleBuilders);
+        combinedStrategy.addRules(anotherStrategy.ruleBuilders);
         return combinedStrategy;
     }
 
-    private <T> void combineRules(Strategy combinedStrategy, Map<T, Rule> rules, Map<T, Rule> anotherRules,
-        Map<T, Rule> combinedRules) {
-        combinedRules.putAll(rules);
-        combinedStrategy.addRules(anotherRules.values());
-    }
-
-    public void addRules(Collection<Rule> rules) {
-        for(Rule rule : rules)
+    public void addRules(Collection<RuleBuilder> rules) {
+        for(RuleBuilder rule : rules)
             addRule(rule);
 	}
 
 	public Set<String> availableDefaultProperties() {
         return defaultRules.keySet();
     }
+
+	public Collection<RuleBuilder> giveBuilders() {
+		Collection<RuleBuilder> ruleBuilders = this.ruleBuilders;
+		this.ruleBuilders = new ArrayList<RuleBuilder>();
+		return ruleBuilders;
+	}
     
     
 }

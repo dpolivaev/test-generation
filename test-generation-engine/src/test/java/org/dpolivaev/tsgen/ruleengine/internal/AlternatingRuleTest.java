@@ -73,18 +73,7 @@ public class AlternatingRuleTest {
         verify(first).propertyValueSet(event);
     }
 
-    @Test
-    public void givenNoActiveRules_propagatesAddedConditionToAllRules() {
-        Rule first = ruleMock(false);
-        Rule second = ruleMock(false);
-        Condition condition = mock(Condition.class);
-
-        new AlternatingRule(first, second).addCondition(condition);
-
-        verify(first).addCondition(condition);
-        verify(second).addCondition(condition);
-    }
-
+ 
     @Test
     public void givenActiveRule_propagatesPropertyValueSetUntilActiveRuleIsFound() {
         Rule first = ruleMock(false);
@@ -127,36 +116,26 @@ public class AlternatingRuleTest {
 
     @Test
     public void targetedPropertyNameIsTakenFromTheFirstRules() {
-        AlternatingRule alternatingRule = new AlternatingRule(iterate("a").asTriggeredRule(), iterate("a").asTriggeredRule());
+        AlternatingRule alternatingRule = new AlternatingRule(iterate("a").create(), iterate("a").create());
         assertThat(alternatingRule.getTargetedPropertyName(), equalTo("a"));
     }
     
     @Test
     public void triggeringPropertiesAreTakenFromTheFirstRules() {
-        StatefulRule first = iterate("a").when("b", "c").asTriggeredRule();
-        StatefulRule second = iterate("a").when("b", "c").asTriggeredRule();
+        Rule first = iterate("a").when("b", "c").create();
+        Rule second = iterate("a").when("b", "c").create();
         AlternatingRule alternatingRule = new AlternatingRule(first, second);
         assertThat(alternatingRule.hasTriggeringProperties(Utils.set("b", "c")), equalTo(true));
     }
 
-    @Test
-    public void triggeringPropertiesAreAddedToAllRules() {
-        StatefulRule first = iterate("a").when("b", "c").asTriggeredRule();
-        StatefulRule second = iterate("a").when("b", "c").asTriggeredRule();
-        AlternatingRule alternatingRule = new AlternatingRule(first, second);
-        alternatingRule.addTriggeringProperty("d");
-        assertThat(first.hasTriggeringProperties(Utils.set("b", "c", "d")), equalTo(true));
-        assertThat(second.hasTriggeringProperties(Utils.set("b", "c", "d")), equalTo(true));
-    }
-
     @Test(expected = IllegalArgumentException.class)
     public void combinedRuleForDifferentTargetedPropertiesAreNotAllowed() {
-        new AlternatingRule(iterate("a").asTriggeredRule(), iterate("b").asTriggeredRule());
+        new AlternatingRule(iterate("a").create(), iterate("b").create());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void combinedRuleForDifferentTriggeringPropertiesAreNotAllowed() {
-        new AlternatingRule(iterate("y").asTriggeredRule(), iterate("y").when("x").asTriggeredRule());
+        new AlternatingRule(iterate("y").create(), iterate("y").when("x").create());
     }
 
     @Test
@@ -183,7 +162,7 @@ public class AlternatingRuleTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void combinedRuleForDefaultRuleAndTriggeringRuleAreNotAllowed() {
-        new AlternatingRule(iterate("a").asTriggeredRule(), iterate("a").asDefaultRule());
+        new AlternatingRule(iterate("a").create(), iterate("a").asDefaultRule().create());
     }
 
     @Test(expected = InconsistentRuleException.class)

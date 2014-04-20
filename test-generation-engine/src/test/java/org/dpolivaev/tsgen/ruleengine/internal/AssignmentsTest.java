@@ -8,8 +8,8 @@ import static org.junit.Assert.assertThat;
 import org.dpolivaev.tsgen.ruleengine.Assignment;
 import org.dpolivaev.tsgen.ruleengine.AssignmentFormatter;
 import org.dpolivaev.tsgen.ruleengine.Assignments;
+import org.dpolivaev.tsgen.ruleengine.Rule;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
-import org.dpolivaev.tsgen.ruleengine.internal.StatefulRule;
 import org.dpolivaev.tsgen.utils.internal.Utils;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,8 +18,8 @@ public class AssignmentsTest {
 
 	Assignments assignments;
 
-    private StatefulRule ruleForProperty(String propertyName) {
-        return iterate(propertyName).asTriggeredRule();
+    private Rule ruleForProperty(String propertyName) {
+        return iterate(propertyName).create();
     }
 
 

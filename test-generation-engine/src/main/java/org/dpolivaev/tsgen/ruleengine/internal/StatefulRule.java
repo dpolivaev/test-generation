@@ -8,6 +8,7 @@ import java.util.Set;
 import org.dpolivaev.tsgen.ruleengine.Condition;
 import org.dpolivaev.tsgen.ruleengine.EngineState;
 import org.dpolivaev.tsgen.ruleengine.Rule;
+import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 
 /**
@@ -18,6 +19,7 @@ public abstract class StatefulRule implements Rule {
 	final private String targetedPropertyName;
     final private ValueProviders valueProviders;
     final private Set<Rule> dependentRules;
+    final private Set<Rule> createdRules;
     private Condition condition;
 
     private boolean valueAlreadyAddedToCurrentCombination;
@@ -30,6 +32,7 @@ public abstract class StatefulRule implements Rule {
         this.blocksRequiredProperties = false;
         this.valueAlreadyAddedToCurrentCombination = false;
         dependentRules = new HashSet<>();
+        createdRules = new HashSet<>();
     }
 
     @Override
@@ -83,11 +86,12 @@ public abstract class StatefulRule implements Rule {
     }
 
     private void addRules(EngineState engineState) {
-        Collection<Rule> rules = valueProviders.currentProvider().rules(engineState);
-        for (Rule rule : rules) {
-            if (!rule.isDefaultRule())
-                rule.addTriggeringProperty(targetedPropertyName);
+        Collection<RuleBuilder> rules = valueProviders.currentProvider().rules(engineState);
+        for (RuleBuilder ruleCreator : rules) {
+        	ruleCreator.addTriggeringProperty(targetedPropertyName);
+        	Rule rule = ruleCreator.create();
             engineState.currentStrategy().addRule(rule);
+            createdRules.add(rule);
         }
     }
 
@@ -129,9 +133,9 @@ public abstract class StatefulRule implements Rule {
         for (Rule dependentRule : dependentRules){
         	dependentRule.clearDependentRules(engineState);
         }
-        Collection<Rule> valueRelatedRules = valueProviders.currentProvider().rules(engineState);
-        for (Rule removedRule : valueRelatedRules)
+        for (Rule removedRule : createdRules)
             engineState.currentStrategy().removeRule(removedRule);
+        createdRules.clear();
         dependentRules.clear();
     }
 
@@ -198,15 +202,5 @@ public abstract class StatefulRule implements Rule {
     	if (!rule.hasTriggeringProperties(getTriggeringProperties()))
     		throw new IllegalArgumentException("rules with different triggering property names can not be combined");
     }
-
-    @Override
-	public void addCondition(final Condition newCondition) {
-    	if(! newCondition.equals(Condition.TRUE)){
-    		if(condition.equals(Condition.TRUE))
-    			this.condition = newCondition;
-    		else
-    			this.condition =  new ConjunctCondition(newCondition, condition);
-    	}
-	}
 
 }

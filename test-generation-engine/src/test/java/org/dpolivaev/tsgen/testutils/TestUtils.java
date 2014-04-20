@@ -16,6 +16,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.dpolivaev.tsgen.ruleengine.Assignment;
 import org.dpolivaev.tsgen.ruleengine.Rule;
 import org.junit.Assert;
+import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -80,5 +81,14 @@ public class TestUtils {
 		} catch (Exception e) {
 			throw runtimeException(e);
 		}
+	}
+
+	static public ArgumentMatcher<Rule> rulePropertyNameMatches(final String name) {
+		return new ArgumentMatcher<Rule>() {
+			@Override
+			public boolean matches(Object argument) {
+				return ((Rule)argument).getTargetedPropertyName().equals(name);
+			}
+		};
 	}
 }

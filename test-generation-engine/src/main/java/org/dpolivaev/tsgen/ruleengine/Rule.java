@@ -43,10 +43,6 @@ public interface Rule {
 
 	boolean isTopRule();
 
-	void addTriggeringProperty(String trigger);
-	
-	void addCondition(Condition condition);
-
 	void checkRuleCompatibility(Rule rule);
 
 	boolean hasTriggeringProperties(Set<String> triggeringProperties);

@@ -4,13 +4,15 @@ import java.util.Collection;
 
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.Rule;
+import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
+import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.ValueProvider;
 
 public class ValueWithRules implements ValueWithRulesProvider {
-    private final Collection<Rule> rules;
+    private final Collection<RuleBuilder> rules;
     private final ValueProvider valueProvider;
 
-    public ValueWithRules(ValueProvider valueProvider, Collection<Rule> rules) {
+    public ValueWithRules(ValueProvider valueProvider, Collection<RuleBuilder> rules) {
         super();
         this.rules = rules;
         this.valueProvider = valueProvider(valueProvider);
@@ -29,7 +31,7 @@ public class ValueWithRules implements ValueWithRulesProvider {
     }
 
     @Override
-    public Collection<Rule> rules(PropertyContainer propertyContainer) {
+    public Collection<RuleBuilder> rules(PropertyContainer propertyContainer) {
         return rules;
     }
 

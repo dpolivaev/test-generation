@@ -63,12 +63,6 @@ public class TriggeredStatefulRule extends StatefulRule {
     }
 
 	@Override
-	public void addTriggeringProperty(String trigger) {
-		triggeringProperties.add(trigger);
-		
-	}
-
-	@Override
 	public boolean hasTriggeringProperties(Set<String> triggeringProperties) {
 		return this.triggeringProperties.equals(triggeringProperties);
 	}

@@ -18,7 +18,6 @@ import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.ruleengine.ValueProvider;
-import org.dpolivaev.tsgen.ruleengine.internal.StatefulRule;
 import org.dpolivaev.tsgen.testutils.CollectingScriptProducer;
 import org.dpolivaev.tsgen.testutils.Combinations;
 import org.dpolivaev.tsgen.utils.internal.Utils;
@@ -285,7 +284,7 @@ public class RuleEngineAcceptanceTest {
 
     @Test
     public void removedRuleDoesIsNotConsidered() {
-        StatefulRule ruleToBeRemoved = iterate("x").over("b").asTriggeredRule();
+        Rule ruleToBeRemoved = iterate("x").over("b").create();
         strategy.addRule(ruleToBeRemoved);
         strategy.removeRule(ruleToBeRemoved);
 
@@ -297,7 +296,7 @@ public class RuleEngineAcceptanceTest {
     @Test
     public void removedRuleDoesNotHideOtherRules() {
         strategy.addRule(iterate("x").over("a"));
-        StatefulRule ruleToBeRemoved = iterate("x").over("b").asTriggeredRule();
+        Rule ruleToBeRemoved = iterate("x").over("b").create();
         strategy.addRule(ruleToBeRemoved);
         strategy.removeRule(ruleToBeRemoved);
 
@@ -320,7 +319,7 @@ public class RuleEngineAcceptanceTest {
     @Test
     public void valueSpecificTemporaryRulesAreRemovedAfterTheRelatedValueIsFinished() {
         RuleBuilder temporaryRule = iterate("y").over("1").when("x");
-        strategy.addRule(iterate("x").over("a").with(temporaryRule.asTriggeredRule()).over("b"));
+        strategy.addRule(iterate("x").over("a").with(temporaryRule).over("b"));
 
         generateCombinationsForStrategy();
 
@@ -444,7 +443,7 @@ public class RuleEngineAcceptanceTest {
 		    public Object value(PropertyContainer propertyContainer) {
 		        return propertyContainer.get("x");
 		    }
-		}).asTriggeredRule());
+		}));
         generateCombinationsForStrategy();
 
         expect(combination("y<-x", "1", "->y", "1"));

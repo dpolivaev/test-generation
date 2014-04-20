@@ -4,29 +4,32 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 
+import org.dpolivaev.tsgen.ruleengine.internal.ConjunctCondition;
 import org.dpolivaev.tsgen.ruleengine.internal.ConstantValue;
 import org.dpolivaev.tsgen.ruleengine.internal.DefaultStatefulRule;
 import org.dpolivaev.tsgen.ruleengine.internal.OrderedValueProviders;
 import org.dpolivaev.tsgen.ruleengine.internal.ShuffledValueProviders;
-import org.dpolivaev.tsgen.ruleengine.internal.StatefulRule;
 import org.dpolivaev.tsgen.ruleengine.internal.TriggeredStatefulRule;
 import org.dpolivaev.tsgen.ruleengine.internal.ValueProviders;
 import org.dpolivaev.tsgen.ruleengine.internal.ValueWithRules;
 import org.dpolivaev.tsgen.ruleengine.internal.ValueWithRulesProvider;
 import org.dpolivaev.tsgen.utils.internal.Utils;
 
-public class RuleBuilder {
+
+public class RuleBuilder{
     private String targetedPropertyName = null;
     final private List<ValueWithRulesProvider> values = new ArrayList<>();
-    private List<Rule> rules;
+    private List<RuleBuilder> rules;
     private Set<String> triggeringProperties = Collections.emptySet();
     private Condition condition = Condition.TRUE;
     private Order order = Order.defaultOrder;
     private int previousValueCount;
+	private boolean asDefaultRule;
 
     public RuleBuilder when(
         String... triggeringProperties) {
@@ -55,21 +58,14 @@ public class RuleBuilder {
     }
 
     private ValueWithRulesProvider valueProvider(ValueProvider value) {
-    	return new ValueWithRules(value, Collections.<Rule> emptyList());
+    	return new ValueWithRules(value, Collections.<RuleBuilder> emptyList());
     }
 
-    public RuleBuilder with(Rule... rules) {
+    public RuleBuilder with(RuleBuilder... rules) {
         return with(Arrays.asList(rules));
     }
 
-    public RuleBuilder with(RuleBuilder... ruleBuilders) {
-        Collection<Rule> rules = new ArrayList<>(ruleBuilders.length);
-        for (RuleBuilder builder : ruleBuilders)
-            rules.add(builder.asTriggeredRule());
-        return with(rules);
-    }
-
-    public RuleBuilder with(Collection<Rule> rules) {
+    public RuleBuilder with(Collection<? extends RuleBuilder> rules) {
 	if(this.rules == null){
 		this.rules = new ArrayList<>(rules);
             ListIterator<ValueWithRulesProvider> listIterator = values.listIterator(previousValueCount);
@@ -109,19 +105,28 @@ public class RuleBuilder {
         return this;
     }
 
-    public StatefulRule asTriggeredRule() {
+    public RuleBuilder asDefaultRule() {
+    	asDefaultRule = true;
+    	return this;
+    }
+    
+    public RuleBuilder asTriggeredRule() {
+    	asDefaultRule = false;
+    	return this;
+    }
+    
+    public Rule create(){
+    	if(asDefaultRule)
+    		return new DefaultStatefulRule(triggeringProperties, this.condition, this.targetedPropertyName, //
+    				ruleValues());
         if (triggeringProperties.isEmpty())
             this.triggeringProperties = Utils.set();
         return new TriggeredStatefulRule(triggeringProperties, this.condition, this.targetedPropertyName, //
             ruleValues());
-    }
-
-    public StatefulRule asDefaultRule() {
-        return new DefaultStatefulRule(triggeringProperties, this.condition, this.targetedPropertyName, //
-            ruleValues());
+    	
     }
     
-    public Collection<Rule> asRules(){
+    public Collection<RuleBuilder> asRules(){
     	return rules;
     }
 
@@ -170,6 +175,21 @@ public class RuleBuilder {
 				throw new InvalidCombinationException();
 			}
 		});
+	}
+	
+	public void addCondition(final Condition newCondition) {
+    	if(! newCondition.equals(Condition.TRUE)){
+    		if(condition.equals(Condition.TRUE))
+    			this.condition = newCondition;
+    		else
+    			this.condition =  new ConjunctCondition(newCondition, condition);
+    	}
+	}
+
+	public void addTriggeringProperty(String trigger) {
+		if(triggeringProperties.isEmpty())
+			triggeringProperties = new HashSet<String>();
+		triggeringProperties.add(trigger);
 	}
 
 }

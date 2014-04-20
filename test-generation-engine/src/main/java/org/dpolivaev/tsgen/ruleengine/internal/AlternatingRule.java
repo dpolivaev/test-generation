@@ -134,12 +134,6 @@ public class AlternatingRule implements Rule {
 	}
 
 	@Override
-	public void addTriggeringProperty(String trigger) {
-		for(Rule rule:rules)
-			rule.addTriggeringProperty(trigger);
-	}
-
-	@Override
 	public void checkRuleCompatibility(Rule rule) {
 		firstRule().checkRuleCompatibility(rule);
 	}
@@ -154,9 +148,4 @@ public class AlternatingRule implements Rule {
 		return firstRule().getTriggeredRuleKey();
 	}
 
-	@Override
-	public void addCondition(Condition condition) {
-		for(Rule rule : rules)
-			rule.addCondition(condition);
-	}
 }

@@ -303,11 +303,11 @@ public class RuleEngineExamples {
             .over("b").with(iterate("y").over("A"))
             .over("c").with(iterate("y").over("B").asDefaultRule(), 
                 iterate("y'").over(new ValueProvider() {
-                @Override
-                public Object value(PropertyContainer propertyContainer) {
-                    return propertyContainer.get("y");
-                }
-            }).asTriggeredRule())
+				    @Override
+				    public Object value(PropertyContainer propertyContainer) {
+				        return propertyContainer.get("y");
+				    }
+				}))
         );
         
         strategy.addRule(iterate("y").over("C").asDefaultRule());

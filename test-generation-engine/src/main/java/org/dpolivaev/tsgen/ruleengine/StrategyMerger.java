@@ -1,47 +1,30 @@
 package org.dpolivaev.tsgen.ruleengine;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
 
 public class StrategyMerger {
 
 	private String[] triggers = {};
 	private Condition condition = Condition.TRUE;
-	private Collection<Rule> rules;
+	private Collection<RuleBuilder> rules;
 
 	public StrategyMerger moveRuleFrom(Strategy source) {
-		Collection<Rule> topRules = source.topRules();
-		Collection<Rule> triggeredRules = source.triggeredRules();
-		Collection<Rule> defaultRules = source.defaultRules();
-		rules = new ArrayList<Rule>(topRules.size() + triggeredRules.size() + defaultRules.size());
-		rules.addAll(topRules);
-		rules.addAll(triggeredRules);
-		rules.addAll(defaultRules);
-		cutRules(source, rules);
+		rules = source.giveBuilders();
 		transformRules(rules);
 		return this;
 	}
 
 	public void to(Strategy target) {
-		for(Rule rule : rules){
+		for(RuleBuilder rule : rules){
 			target.addRule(rule);
 		}
 	}
 
-	private void transformRules(final Collection<Rule> rules) {
-		for(Rule rule : rules){
-			if(! rule.isDefaultRule())
-				for(String trigger : triggers){
-					rule.addTriggeringProperty(trigger);
-				}
+	private void transformRules(final Collection<RuleBuilder> rules) {
+		for(RuleBuilder rule : rules){
+			for(String trigger : triggers)
+				rule.addTriggeringProperty(trigger);
 			rule.addCondition(condition);
-		}
-	}
-
-	private void cutRules(Strategy source, final Collection<Rule> rules) {
-		for(Rule rule : rules){
-			source.removeRule(rule);
 		}
 	}
 

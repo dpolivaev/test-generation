@@ -1,6 +1,7 @@
 package org.dpolivaev.tsgen.ruleengine;
 
 import static org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory.iterate;
+import static org.dpolivaev.tsgen.testutils.TestUtils.rulePropertyNameMatches;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -9,7 +10,7 @@ import static org.junit.Assert.assertThat;
 
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.ruleengine.internal.AlternatingRule;
-import org.dpolivaev.tsgen.ruleengine.internal.StatefulRule;
+import org.dpolivaev.tsgen.testutils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,14 +24,14 @@ public class StrategyTest {
 
     @Test
     public void afterAddingTopRule_returnsTopRule() throws Exception {
-        StatefulRule rule = iterate("x").over("a").asTriggeredRule();
+        Rule rule = iterate("x").over("a").create();
         strategy.addRule(rule);
         assertThat(strategy.topRules(), hasItem(rule));
     }
 
     @Test
     public void afterRemovingTopRule_doesNotReturnIt() throws Exception {
-        StatefulRule rule = iterate("x").over("a").asTriggeredRule();
+        Rule rule = iterate("x").over("a").create();
         strategy.addRule(rule);
         strategy.removeRule(rule);
         assertThat(strategy.topRules(), not(hasItem(rule)));
@@ -38,15 +39,15 @@ public class StrategyTest {
 
     @Test
     public void afterAddingTopRule_doesNotReturnDefaultRule() throws Exception {
-        StatefulRule rule = iterate("x").over("a").asTriggeredRule();
+        Rule rule = iterate("x").over("a").create();
         strategy.addRule(rule);
         assertThat(strategy.defaultRules(), not(hasItem(rule)));
     }
 
     @Test
     public void afterAddingSecondTopRuleForTheSameProperty_containsAlternatingRule() throws Exception {
-        StatefulRule rule1 = iterate("x").over("a").asTriggeredRule();
-        StatefulRule rule2 = iterate("x").over("a").asTriggeredRule();
+        Rule rule1 = iterate("x").over("a").create();
+        Rule rule2 = iterate("x").over("a").create();
         strategy.addRule(rule1);
         strategy.addRule(rule2);
         assertThat(strategy.topRules(), hasItem(isA(AlternatingRule.class)));
@@ -54,23 +55,23 @@ public class StrategyTest {
 
     @Test
     public void afterAddingDefaultRule_returnsDefaultRule() throws Exception {
-        StatefulRule rule = iterate("x").over("a").asDefaultRule();
+        Rule rule = iterate("x").over("a").asDefaultRule().create();
         strategy.addRule(rule);
         assertThat(strategy.defaultRules(), hasItem(rule));
     }
 
     @Test
     public void afterAddingDefaultRule_doesNotReturnTopRule() throws Exception {
-        StatefulRule rule = iterate("x").over("a").asDefaultRule();
+        Rule rule = iterate("x").over("a").asDefaultRule().create();
         strategy.addRule(rule);
         assertThat(strategy.topRules(), not(hasItem(rule)));
     }
 
     @Test
     public void afterAddingTriggeringRulesWithDifferentTriggeringProperties_returnsBothRules() throws Exception {
-        StatefulRule ruleP = iterate("x").over("a").when("p").asTriggeredRule();
+        Rule ruleP = iterate("x").over("a").when("p").create();
         strategy.addRule(ruleP);
-        StatefulRule ruleQ = iterate("x").over("a").when("q").asTriggeredRule();
+        Rule ruleQ = iterate("x").over("a").when("q").create();
         strategy.addRule(ruleQ);
         assertThat(strategy.triggeredRules(), hasItem(ruleP));
         assertThat(strategy.triggeredRules(), hasItem(ruleQ));
@@ -84,16 +85,17 @@ public class StrategyTest {
     @Test
     public void stategyCombination(){
         Strategy strategy2 = new Strategy();
-        StatefulRule ruleP = iterate("p").over("a").asTriggeredRule();
+        RuleBuilder ruleP = iterate("p").over("a");
         strategy.addRule(ruleP);
-        StatefulRule defaultRuleP = iterate("p").over("a").asDefaultRule();
+        RuleBuilder defaultRuleP = iterate("p").over("a").asDefaultRule();
         strategy2.addRule(defaultRuleP);
-        StatefulRule ruleQ = iterate("x").over("a").when("q").asTriggeredRule();
+        RuleBuilder ruleQ = iterate("x").over("a").when("q");
         strategy2.addRule(ruleQ);
         
         Strategy combinedStrategy = strategy.with(strategy2);
-        assertThat(combinedStrategy.topRules(), hasItem(ruleP));
-        assertThat(combinedStrategy.triggeredRules(), hasItem(ruleQ));
-        assertThat(combinedStrategy.defaultRules(), hasItem(defaultRuleP));
+        combinedStrategy.initialize();
+        assertThat(combinedStrategy.topRules(), hasItem(rulePropertyNameMatches("p")));
+        assertThat(combinedStrategy.triggeredRules(), hasItem(rulePropertyNameMatches("x")));
+        assertThat(combinedStrategy.defaultRules(), hasItem(rulePropertyNameMatches("p")));
     }
 }

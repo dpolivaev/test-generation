@@ -52,6 +52,7 @@ public class RuleEngine implements EngineState {
 
     public void run(Strategy strategy) {
         this.strategy = strategy;
+        strategy.initialize();
         assignments.resetCounter();
         try {
         	fireGenerationStarted();

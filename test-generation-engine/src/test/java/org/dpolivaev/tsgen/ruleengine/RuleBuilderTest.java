@@ -3,12 +3,16 @@ package org.dpolivaev.tsgen.ruleengine;
 import org.dpolivaev.tsgen.ruleengine.Condition;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
+import org.dpolivaev.tsgen.ruleengine.internal.DefaultStatefulRule;
 import org.dpolivaev.tsgen.ruleengine.internal.OrderedValueProviders;
 import org.dpolivaev.tsgen.ruleengine.internal.ShuffledValueProviders;
+import org.dpolivaev.tsgen.ruleengine.internal.StatefulRule;
 import org.dpolivaev.tsgen.ruleengine.internal.ValueProviders;
 import org.hamcrest.CoreMatchers;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
 
@@ -50,4 +54,24 @@ public class RuleBuilderTest {
 		assertThat(ruleValues.getOrder(), CoreMatchers.equalTo(Order.ORDERED_THEN_SHUFFLED));
 	}
 
+//
+//	@Test
+//	public void addConditionToTrueCondition() {
+//		final StatefulRule statefulRule = new DefaultStatefulRule(Condition.TRUE, null, null);
+//		Condition condition = mock(Condition.class);
+//		statefulRule.addCondition(condition);
+//		statefulRule.propertyRequired(null);
+//		verify(condition).isSatisfied(null);
+//	}
+//
+//	@Test
+//	public void addConditionToOtherCondition() {
+//		Condition condition = mock(Condition.class);
+//		Condition otherCondition = mock(Condition.class);
+//		final StatefulRule statefulRule = new DefaultStatefulRule(condition, null, null);
+//		statefulRule.addCondition(otherCondition);
+//		statefulRule.propertyRequired(null);
+//		verify(otherCondition).isSatisfied(null);
+//	}
+	
 }
