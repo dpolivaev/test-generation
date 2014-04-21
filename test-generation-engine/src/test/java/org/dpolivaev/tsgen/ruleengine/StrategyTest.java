@@ -8,9 +8,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
 
-import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.ruleengine.internal.AlternatingRule;
-import org.dpolivaev.tsgen.testutils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,14 +21,14 @@ public class StrategyTest {
     }
 
     @Test
-    public void afterAddingTopRule_returnsTopRule() throws Exception {
+    public void afterAddingTopRule_returnsTopRule(){
         Rule rule = iterate("x").over("a").create();
         strategy.addRule(rule);
         assertThat(strategy.topRules(), hasItem(rule));
     }
 
     @Test
-    public void afterRemovingTopRule_doesNotReturnIt() throws Exception {
+    public void afterRemovingTopRule_doesNotReturnIt(){
         Rule rule = iterate("x").over("a").create();
         strategy.addRule(rule);
         strategy.removeRule(rule);
@@ -38,14 +36,14 @@ public class StrategyTest {
     }
 
     @Test
-    public void afterAddingTopRule_doesNotReturnDefaultRule() throws Exception {
+    public void afterAddingTopRule_doesNotReturnDefaultRule(){
         Rule rule = iterate("x").over("a").create();
         strategy.addRule(rule);
         assertThat(strategy.defaultRules(), not(hasItem(rule)));
     }
 
     @Test
-    public void afterAddingSecondTopRuleForTheSameProperty_containsAlternatingRule() throws Exception {
+    public void afterAddingSecondTopRuleForTheSameProperty_containsAlternatingRule(){
         Rule rule1 = iterate("x").over("a").create();
         Rule rule2 = iterate("x").over("a").create();
         strategy.addRule(rule1);
@@ -54,21 +52,21 @@ public class StrategyTest {
     }
 
     @Test
-    public void afterAddingDefaultRule_returnsDefaultRule() throws Exception {
+    public void afterAddingDefaultRule_returnsDefaultRule(){
         Rule rule = iterate("x").over("a").asDefaultRule().create();
         strategy.addRule(rule);
         assertThat(strategy.defaultRules(), hasItem(rule));
     }
 
     @Test
-    public void afterAddingDefaultRule_doesNotReturnTopRule() throws Exception {
+    public void afterAddingDefaultRule_doesNotReturnTopRule(){
         Rule rule = iterate("x").over("a").asDefaultRule().create();
         strategy.addRule(rule);
         assertThat(strategy.topRules(), not(hasItem(rule)));
     }
 
     @Test
-    public void afterAddingTriggeringRulesWithDifferentTriggeringProperties_returnsBothRules() throws Exception {
+    public void afterAddingTriggeringRulesWithDifferentTriggeringProperties_returnsBothRules(){
         Rule ruleP = iterate("x").over("a").when("p").create();
         strategy.addRule(ruleP);
         Rule ruleQ = iterate("x").over("a").when("q").create();
@@ -78,7 +76,7 @@ public class StrategyTest {
     }
     
     @Test
-    public void requestedUnknownDefaultProperty_returnsSpecialRule() throws Exception {
+    public void requestedUnknownDefaultProperty_returnsSpecialRule(){
         assertThat(strategy.getDefaultRulesForProperty("unknownProperty"), notNullValue());
     }
     
