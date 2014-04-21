@@ -35,6 +35,21 @@ class StrategyCompilationTest {
 				let "x y" be 1, 2, 3
 		'''.assertCompilesToFile(testName)
 	}	
+
+	@Test def withSkip() {
+		'''
+			strategy first
+				skip 
+		'''.assertCompilesToFile(testName)
+	}	
+
+	@Test def withDisable() {
+		'''
+			strategy first
+				disable x 
+		'''.assertCompilesToFile(testName)
+	}	
+
 	@Test def withConditionForSingleValue() {
 		'''
 			strategy first

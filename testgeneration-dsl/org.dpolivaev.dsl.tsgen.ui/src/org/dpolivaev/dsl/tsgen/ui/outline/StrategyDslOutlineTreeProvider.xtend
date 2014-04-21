@@ -15,7 +15,6 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.ui.editor.outline.IOutlineNode
 import org.dpolivaev.dsl.tsgen.strategydsl.Rule
 import org.dpolivaev.dsl.tsgen.strategydsl.ValueAction
-import org.dpolivaev.dsl.tsgen.strategydsl.SkipAction
 import org.dpolivaev.dsl.tsgen.strategydsl.Run
 
 /**
@@ -28,8 +27,10 @@ public class StrategyDslOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	protected def _text(XExpression expr) { return expr.text}
 	protected def _text(Rule rule) {
 		return 
-		(if (rule.isDefault) "default :" else ":") 
-		+ rule.name 
+		(if (rule.isDefault) "default :" else ":")
+		+ rule.specialValue?:"" 
+		+ if(rule.specialValue!= null) " " else ""
+		+ rule.name?:""
 		+ (if (rule.ordered) "(ordered)" else if (rule.shuffled) "(shuffled)" else "")
 	}
 	protected def _text(ValueAction values) { return values.valueProviders.map[text].toString}
@@ -40,7 +41,6 @@ public class StrategyDslOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			createNode(parentNode, group)
 	}
 	
-	protected def _text(SkipAction values) { return "skip"}
 	protected def _isLeaf(Condition condition){return true}
 	protected def _isLeaf(Trigger trigger){return true}
 	protected def _isLeaf(Run run){return true}

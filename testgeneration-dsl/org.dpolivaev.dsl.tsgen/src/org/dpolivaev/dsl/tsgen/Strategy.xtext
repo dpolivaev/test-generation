@@ -44,7 +44,8 @@ Rule returns Rule:
 		values = PropertyValues
 		(ordered ?= 'ordered' | shuffled ?= 'shuffled')? 
 	)
-	| skip ?= SkipAction
+	| specialValue = 'skip'
+	| specialValue = 'disable' (name=PROPERTY_ID | '(' nameExpressions += XExpression+ ')')
 ;
 
 PropertyValues returns Values:
@@ -57,10 +58,6 @@ Trigger:
 
 Condition: {Condition}
 	'if' trace ?= 'traced'? expr = XExpression
-;
-
-SkipAction : {SkipAction}
-	'skip'
 ;
 
 ValueAction:{ValueAction}

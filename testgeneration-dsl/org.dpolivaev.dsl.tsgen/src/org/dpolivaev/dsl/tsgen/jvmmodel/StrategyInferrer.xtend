@@ -221,8 +221,11 @@ class StrategyInferrer{
 		appendCondition(it, ruleGroup)
 		val rule = ruleGroup.rule
 		if(rule !=null){
-			if(rule.skip){
-				apppendSkip(it)
+			val specialValue = rule.specialValue
+			if(specialValue != null){
+				if(specialValue == "disable")
+					appendRuleName(it, rule)
+				append('''.«specialValue»()''')
 			}
 			else{
 				appendRuleName(it, rule)
@@ -507,10 +510,6 @@ class StrategyInferrer{
 				appendTraceEnd(it, valueProvider)
 			newLine
 		}
-	}
-
-	def private apppendSkip(ITreeAppendable it){
-		append('.skip()')
 	}
 
 	private def appendImplementationObject(ITreeAppendable it, JvmType interfaceName, String interfaceMethodName, Later expression) {
