@@ -34,7 +34,7 @@ Strategy definition DSL is explained in the next chapters using two example proj
 
 Test generation tutorial
 ==========================
-A tutorial demonstrating the test generation on an easy example of testing a log-in page is available in a separate repository at https://github.com/dpolivaev/test-generation-tutorial 
+A tutorial demonstrating the test generation on an easy example of testing a log-in page is available in a at https://github.com/dpolivaev/test-generation/tree/master/test-generation-examples/LoginPage-Tutorial
 
 Strategy DSL syntax reference
 ============================
