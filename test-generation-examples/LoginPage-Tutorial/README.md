@@ -164,8 +164,8 @@ file LoginTestSuite.tsgen:
 	let email be "VALID_MAIL", "INVALID_MAIL", "NOT_ENTERED_MAIL"
 	let password be "VALID_PASSWORD", "INVALID_PASSWORD", "NOT_ENTERED_PASSWORD"
 
-	let pageAfterSubmit be :page
-	if :email == "VALID_MAIL" && :password == "VALID_PASSWORD"
+	rule pageAfterSubmit let pageAfterSubmit be :page
+	rule pageAfterSubmit if :email == "VALID_MAIL" && :password == "VALID_PASSWORD"
 		let pageAfterSubmit be "LOGIN_SUCCESS_PAGE"
 
 - Run the generation and inspect the output.
@@ -197,8 +197,8 @@ Now all quotes can be removed
 	let email be VALID_MAIL, INVALID_MAIL, NOT_ENTERED_MAIL
 	let password be VALID_PASSWORD, INVALID_PASSWORD, NOT_ENTERED_PASSWORD
 
-	let pageAfterSubmit be :page
-	if :email == VALID_MAIL && :password == VALID_PASSWORD
+	rule pageAfterSubmit let pageAfterSubmit be :page
+	rule pageAfterSubmit if :email == VALID_MAIL && :password == VALID_PASSWORD
 		let pageAfterSubmit be LOGIN_SUCCESS_PAGE
 
 ##Step 7: 9 test cases covering all input combinations
@@ -259,8 +259,8 @@ file LoginTestSuite.tsgen, strategy definition:
 		NOT_ENTERED_MAIL { let password be VALID_PASSWORD, NOT_ENTERED_PASSWORD}
 	}
 
-	let pageAfterSubmit be :page
-	if :protocol == HTTPS && :email == VALID_MAIL && :password == VALID_PASSWORD
+	rule pageAfterSubmit let pageAfterSubmit be :page
+	rule pageAfterSubmit if :protocol == HTTPS && :email == VALID_MAIL && :password == VALID_PASSWORD
 		let pageAfterSubmit be LOGIN_SUCCESS_PAGE
 
 Run generation and fix the driver method signature.
@@ -290,7 +290,7 @@ Requirement R1:
 
 Requirement R3:
 
-	if :protocol == HTTPS && :email == VALID_MAIL && :password == VALID_PASSWORD
+	rule pageAfterSubmit if :protocol == HTTPS && :email == VALID_MAIL && :password == VALID_PASSWORD
 		let pageAfterSubmit be LOGIN_SUCCESS_PAGE {
 			let [R3] be "log in successful"
 		}
@@ -338,8 +338,8 @@ Requirement R2 should be checked before the log-in is submitted. Therefore we ne
 			NOT_ENTERED_MAIL { let password be VALID_PASSWORD, NOT_ENTERED_PASSWORD}
 		}
 
-		let pageAfterSubmit be :page
-		if :protocol == HTTPS && :email == VALID_MAIL && :password == VALID_PASSWORD
+		rule pageAfterSubmit let pageAfterSubmit be :page
+		rule pageAfterSubmit if :protocol == HTTPS && :email == VALID_MAIL && :password == VALID_PASSWORD
 			let pageAfterSubmit be LOGIN_SUCCESS_PAGE {
 				let [R3] be "log in successful"
 			}
@@ -370,7 +370,7 @@ Pretty small changes in the strategy and in the driver are required.
 
 The strategy:
 
-	let pageAfterSubmit be :page{
+	rule pageAfterSubmit let pageAfterSubmit be :page{
 		let assert#2 be "password field is empty"
 		let assert#3 be "email field equals to (:email)"
 		let [R4] be "check email and password fields after failed log-in"
@@ -406,8 +406,8 @@ Here default values for properties `password` and `email` are set:
 			NOT_ENTERED_MAIL { let password be VALID_PASSWORD, NOT_ENTERED_PASSWORD}
 		}
 
-		let pageAfterSubmit be :page
-		if :protocol == HTTPS && :email == VALID_MAIL && :password == VALID_PASSWORD
+		rule pageAfterSubmit let pageAfterSubmit be :page
+		rule pageAfterSubmit if :protocol == HTTPS && :email == VALID_MAIL && :password == VALID_PASSWORD
 			let pageAfterSubmit be LOGIN_SUCCESS_PAGE {
 				let [R3] be "log in successful"
 			}
@@ -474,13 +474,13 @@ Strategies can include rules defined in other strategies defined in the same fil
 			NOT_ENTERED_MAIL { let password be VALID_PASSWORD, NOT_ENTERED_PASSWORD}
 		}
 
-		let pageAfterSubmit be :page{
+		rule pageAfterSubmit let pageAfterSubmit be :page{
 			let assert#2 be "password field is empty"
 			let assert#3 be "email field equals to (:email)"
 			let [R4] be "check email and password fields after failed log-in"
 		}
 
-		if traced loginOracle.isLoginSuccessful(:protocol as Protocol, :email as EMail, :password as Password)
+		rule pageAfterSubmit if traced loginOracle.isLoginSuccessful(:protocol as Protocol, :email as EMail, :password as Password)
 			let pageAfterSubmit be LOGIN_SUCCESS_PAGE
 
 	strategy formatTest
@@ -508,7 +508,7 @@ and registering the oracle in the run section
 
 the login successful condition in the strategy can be expressed as
 
-	if loginOracle.isLoginSuccessful()
+	rule pageAfterSubmit if loginOracle.isLoginSuccessful()
 		let pageAfterSubmit be LOGIN_SUCCESS_PAGE {
 			let [R3] be "log in successful"
 		}
@@ -535,7 +535,7 @@ or in a short form
 
 The strategy changes to
 
-	if traced loginOracle.isLoginSuccessful() let pageAfterSubmit be LOGIN_SUCCESS_PAGE
+	rule pageAfterSubmit if traced loginOracle.isLoginSuccessful() let pageAfterSubmit be LOGIN_SUCCESS_PAGE
 
 and the run configuration changes to
 
@@ -565,7 +565,7 @@ Oracle implementation:
 
 Strategy:
 
-	if traced loginOracle.isLoginSuccessful(:protocol as Protocol, :email as EMail, :password as Password)
+	rule pageAfterSubmit if traced loginOracle.isLoginSuccessful(:protocol as Protocol, :email as EMail, :password as Password)
 		let pageAfterSubmit be LOGIN_SUCCESS_PAGE
 
 ##Step 21. Moving strategy and oracle to separate files
