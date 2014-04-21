@@ -34,7 +34,7 @@ class _first_StrategyFactory {
       @Override public Object value(PropertyContainer propertyContainer) {
         Object _value = ValueProviderHelper.toValue(_value1(propertyContainer), propertyContainer);
         return _value;
-    }}).asTriggeredRule());
+    }}));
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }
 }

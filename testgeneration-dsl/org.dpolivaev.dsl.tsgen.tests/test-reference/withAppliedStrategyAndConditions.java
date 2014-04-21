@@ -57,7 +57,7 @@ class _first_StrategyFactory {
     _strategy.addRule(RuleBuilder.Factory.when("z", "z2")._if(new Condition(){
       @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
         return propertyContainer.<Boolean>get(" /MyFile.tsgen#/0/@strategies.1/@ruleGroups.0/@ruleGroups.0/@condition/@expr");
-    }}).iterate("x").over(1).asTriggeredRule());
+    }}).iterate("x").over(1));
     _strategy.addRules(RuleBuilder.Factory.when("z", "z2")._if(new Condition(){
       @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
         return propertyContainer.<Boolean>get(" /MyFile.tsgen#/0/@strategies.1/@ruleGroups.0/@ruleGroups.0/@condition/@expr");
@@ -65,7 +65,7 @@ class _first_StrategyFactory {
     _strategy.addRule(RuleBuilder.Factory.when("z", "z2")._if(new Condition(){
       @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
         return propertyContainer.<Boolean>get(" /MyFile.tsgen#/0/@strategies.1/@ruleGroups.0/@ruleGroups.0/@condition/@expr");
-    }}).iterate("z2").over(4).asTriggeredRule());
+    }}).iterate("z2").over(4));
     return new RequirementBasedStrategy(_requiredItems).with(_strategy).addRequiredItemsFrom(StrategyConverter.toRequirementBasedStrategy(_strategy3()));
   }
 }
@@ -82,7 +82,7 @@ class _other_StrategyFactory {
   RequirementBasedStrategy other() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
     Strategy _strategy = new Strategy();
-    _strategy.addRule(RuleBuilder.Factory.iterate("y").over(2).asTriggeredRule());
+    _strategy.addRule(RuleBuilder.Factory.iterate("y").over(2));
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }
 }

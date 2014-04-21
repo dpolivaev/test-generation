@@ -119,7 +119,7 @@ class _s_StrategyFactory {
         Object _value = ValueProviderHelper.toValue(_value1(propertyContainer), propertyContainer);
         return _value;
         } finally{ ((CoverageTrackerEnabler)propertyContainer).stopTrace();}
-    }}).asTriggeredRule());
+    }}));
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }
 }

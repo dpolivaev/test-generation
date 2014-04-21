@@ -234,8 +234,6 @@ class StrategyInferrer{
 			}
 			if(rule.isDefault)
 				append('.asDefaultRule()')
-			else
-				append('.asTriggeredRule()')
 		}
 		else if(ruleGroup.strategy !=null){
 			appendStrategyRule(it, ruleGroup.strategy)

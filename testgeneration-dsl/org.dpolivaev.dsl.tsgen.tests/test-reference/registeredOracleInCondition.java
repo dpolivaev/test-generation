@@ -123,7 +123,7 @@ class _s_StrategyFactory {
     _strategy.addRule(RuleBuilder.Factory._if(new Condition(){
       @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
         return propertyContainer.<Boolean>get(" /MyFile.tsgen#/0/@strategies.0/@ruleGroups.0/@condition/@expr");
-    }}).iterate("x").over(1).asTriggeredRule());
+    }}).iterate("x").over(1));
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }
 }

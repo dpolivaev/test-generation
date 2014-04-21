@@ -42,7 +42,7 @@ class _first_StrategyFactory {
   RequirementBasedStrategy first() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
     Strategy _strategy = new Strategy();
-    _strategy.addRule(RuleBuilder.Factory.iterate("x").over(1).asTriggeredRule());
+    _strategy.addRule(RuleBuilder.Factory.iterate("x").over(1));
     _strategy.addRule(RuleBuilder.Factory.iterate(" /MyFile.tsgen#/0/@strategies.1/@ruleGroups.1/@condition/@expr").over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {
         Boolean _condition = condition1(propertyContainer);
@@ -68,7 +68,7 @@ class _other_StrategyFactory {
   RequirementBasedStrategy other() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
     Strategy _strategy = new Strategy();
-    _strategy.addRule(RuleBuilder.Factory.iterate("y").over(2).asTriggeredRule());
+    _strategy.addRule(RuleBuilder.Factory.iterate("y").over(2));
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }
 }

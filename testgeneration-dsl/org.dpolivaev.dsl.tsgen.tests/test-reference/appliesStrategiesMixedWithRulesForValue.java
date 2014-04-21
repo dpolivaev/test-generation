@@ -49,12 +49,12 @@ class _second_StrategyFactory {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
     Strategy _strategy = new Strategy();
     _strategy.addRule(RuleBuilder.Factory.iterate("x").over(1).with(
-      RuleBuilder.Factory.iterate("y").over(2).asTriggeredRule()
+      RuleBuilder.Factory.iterate("y").over(2)
     ).with(
       RuleBuilder.Factory.with(StrategyConverter.toStrategy(_strategy1())).asRules()
     ).with(
-      RuleBuilder.Factory.iterate("y").over(2).asTriggeredRule()
-    ).asTriggeredRule());
+      RuleBuilder.Factory.iterate("y").over(2)
+    ));
     return new RequirementBasedStrategy(_requiredItems).with(_strategy).addRequiredItemsFrom(StrategyConverter.toRequirementBasedStrategy(_strategy1()));
   }
 }

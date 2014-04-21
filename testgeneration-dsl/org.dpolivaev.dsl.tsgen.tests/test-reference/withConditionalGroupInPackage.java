@@ -42,7 +42,7 @@ class _first_StrategyFactory {
     _strategy.addRule(RuleBuilder.Factory._if(new Condition(){
       @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
         return propertyContainer.<Boolean>get(" somepackage/MyFile.tsgen#/0/@strategies.0/@ruleGroups.0/@condition/@expr");
-    }}).iterate("y").over(3).asTriggeredRule());
+    }}).iterate("y").over(3));
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }
 }

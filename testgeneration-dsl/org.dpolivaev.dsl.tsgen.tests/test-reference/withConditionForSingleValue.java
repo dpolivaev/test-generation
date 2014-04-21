@@ -38,8 +38,8 @@ class _first_StrategyFactory {
           if(!condition1(propertyContainer)) return SpecialValue.SKIP;
           Object _value = "A";
           return _value;
-      }}, "B").ordered().asTriggeredRule()
-    ).asTriggeredRule());
+      }}, "B").ordered()
+    ));
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }
 }

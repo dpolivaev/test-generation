@@ -23,8 +23,8 @@ class _first_StrategyFactory {
   RequirementBasedStrategy first() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
     Strategy _strategy = new Strategy();
-    _strategy.addRule(RuleBuilder.Factory.iterate("x y").over(1).asTriggeredRule());
-    _strategy.addRule(RuleBuilder.Factory.when("x y").iterate("z").over(2).asTriggeredRule());
+    _strategy.addRule(RuleBuilder.Factory.iterate("x y").over(1));
+    _strategy.addRule(RuleBuilder.Factory.when("x y").iterate("z").over(2));
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }
 }
