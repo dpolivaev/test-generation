@@ -406,6 +406,15 @@ public class RuleEngineAcceptanceTest {
     }
 
     @Test
+    public void overwriteDisabledRule() {
+        strategy.addRule(iterate("x").over("a1"));
+        strategy.addRule(iterate("y").disable());
+        strategy.addRule(iterate("y").over("a1"));
+        generateCombinationsForStrategy();
+        expect(combination("x", "a1", "y", "a1"));
+    }
+
+    @Test
     public void singleRuleWithPropertyNamedXValueAWithReason() {
         scriptProducerMock.appendReasons(true);
         strategy.addRule(iterate("x").over("a"));
