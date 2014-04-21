@@ -390,8 +390,19 @@ public class RuleEngineAcceptanceTest {
     @Test(expected = PropertyAlreadyAssignedException.class)
     public void assigningAlreadyAssignedProperty_throwsException() {
         strategy.addRule(iterate("x").over("a1"));
-        strategy.addRule(when("x").iterate("x").over("a2"));
+        strategy.addRule(iterate("y").over("a1"));
+        strategy.addRule(when("x").iterate("y").over("a2"));
         generateCombinationsForStrategy();
+    }
+
+    @Test
+    public void disableAlreadyAssignedProperty() {
+        strategy.addRule(iterate("x").over("a1"));
+        strategy.addRule(iterate("y").over("a1"));
+        strategy.addRule(iterate("y").disable());
+        strategy.addRule(when("x").iterate("y").over("a2"));
+        generateCombinationsForStrategy();
+        expect(combination("x", "a1", "y", "a2"));
     }
 
     @Test

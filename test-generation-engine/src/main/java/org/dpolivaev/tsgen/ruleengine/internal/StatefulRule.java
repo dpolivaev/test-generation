@@ -79,10 +79,12 @@ public abstract class StatefulRule implements Rule {
         		break;
         }
         this.valueAlreadyAddedToCurrentCombination = true;
-        if (useNextValue) {
-            addRules(engineState);
+        if(value != SpecialValue.DISABLED_RULE){
+        	if (useNextValue) {
+        		addRules(engineState);
+        	}
+        	engineState.setPropertyValue(this, value, useNextValue);
         }
-        engineState.setPropertyValue(this, value, useNextValue);
     }
 
     private void addRules(EngineState engineState) {

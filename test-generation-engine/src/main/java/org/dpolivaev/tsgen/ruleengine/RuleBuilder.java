@@ -177,6 +177,10 @@ public class RuleBuilder{
 		});
 	}
 	
+
+	public RuleBuilder disable() {
+		return over(SpecialValue.DISABLED_RULE);
+	}
 	public void addCondition(final Condition newCondition) {
     	if(! newCondition.equals(Condition.TRUE)){
     		if(condition.equals(Condition.TRUE))
