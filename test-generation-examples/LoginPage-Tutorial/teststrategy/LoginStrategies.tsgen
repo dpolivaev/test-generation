@@ -47,13 +47,13 @@ strategy submitTest
 		NOT_ENTERED_MAIL { let password be VALID_PASSWORD, NOT_ENTERED_PASSWORD}
 	}
 
-	let pageAfterSubmit be :page{
+	rule pageAfterSubmit let pageAfterSubmit be :page{
 		let assert#2 be "password field is empty"
 		let assert#3 be "email field equals to (:email)"
 		let [R4] be "check email and password fields after failed log-in"
 	}
 
-	if traced loginOracle.isLoginSuccessful(:protocol as Protocol, :email as EMail, :password as Password)
+	rule pageAfterSubmit if traced loginOracle.isLoginSuccessful(:protocol as Protocol, :email as EMail, :password as Password)
 		let pageAfterSubmit be LOGIN_SUCCESS_PAGE
 
 strategy formatTest

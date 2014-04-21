@@ -32,20 +32,23 @@ StrategyReference returns StrategyReference: {StrategyReference} 'strategy' goal
 AppliedStrategy returns StrategyReference: {StrategyReference} 'apply' expr = XExpression;
 
 RuleGroup : {RuleGroup}
-	(trigger = Trigger condition = Condition? | condition = Condition) (rule = Rule | strategy = AppliedStrategy | '{' ruleGroups += RuleGroup* '}')
-	| rule = Rule | strategy = AppliedStrategy
+	('rule'  (ruleName=PROPERTY_ID | '(' ruleNameExpressions += XExpression+ ')'))?
+	((trigger = Trigger condition = Condition? | condition = Condition) (rule = Rule | strategy = AppliedStrategy | '{' ruleGroups += RuleGroup* '}')
+	| rule = Rule | strategy = AppliedStrategy)
 ;
 
 Rule returns Rule:
 	(
-		'let'
-		default ?= 'default'? (name=PROPERTY_ID | '(' nameExpressions += XExpression+ ')')
-		'be' 
+		'let' default ?= 'default'? (name=PROPERTY_ID | '(' nameExpressions += XExpression+ ')') 'be' 
 		values = PropertyValues
 		(ordered ?= 'ordered' | shuffled ?= 'shuffled')? 
 	)
 	| specialValue = 'skip'
-	| specialValue = 'disable' (name=PROPERTY_ID | '(' nameExpressions += XExpression+ ')')
+	| specialValue = 'disable' disabledRule = DisabledRule
+;
+
+DisabledRule:
+	'rule'  (ruleName=PROPERTY_ID | '(' ruleNameExpressions += XExpression+ ')')
 ;
 
 PropertyValues returns Values:

@@ -86,8 +86,8 @@ let example be
       */
 	'conditions' {
     	let x be 'a', 'b', 'c'{
-        	let y be 'C'
-            if :x == 'c' let y be 'A', 'B'
+        	rule y let y be 'C'
+            rule y if :x == 'c' let y be 'A', 'B'
         }
     },
     
@@ -166,13 +166,13 @@ let example be
 	 * New rules override old rule's content and keep rule evaluation order
 	 */
 	"new rules override old rule's content and keep rule evaluation order" {
-	    let x be "a"
+	    rule x let x be "a"
 	    let default y be "A"
 	    let default y be "B"
 	    let default y be "C"
 	    let z be :y
-	    let x be "b"
-	    let x be "c"
+	    rule x let x be "b"
+	    rule x let x be "c"
     },
     
     /*

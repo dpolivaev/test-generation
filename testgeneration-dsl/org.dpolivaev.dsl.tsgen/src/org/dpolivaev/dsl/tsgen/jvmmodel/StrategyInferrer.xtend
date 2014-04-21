@@ -40,6 +40,7 @@ import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 
 import static extension org.dpolivaev.dsl.tsgen.jvmmodel.StrategyCompiler.*
+import org.dpolivaev.dsl.tsgen.strategydsl.DisabledRule
 
 class StrategyInferrer{
 	@Inject Injector injector
@@ -69,8 +70,10 @@ class StrategyInferrer{
 		for(obj : contents){
 			if (obj instanceof ValueAction)
 				appendValueProviders(obj)
-			if (obj instanceof Rule)
+			if (obj instanceof RuleGroup)
 				appendRuleNameProviders(obj)
+			if (obj instanceof Rule)
+				appendRulePropertyNameProviders(obj)
 			else if (obj instanceof Condition)
 				appendConditions(obj)
 			if (obj instanceof StrategyReference)
@@ -96,8 +99,14 @@ class StrategyInferrer{
 	}
 
 	final static val NAME = "_name"
-	private def appendRuleNameProviders(Rule rule){
+	private def appendRulePropertyNameProviders(Rule rule){
 			for(expr:rule.nameExpressions)
+				if(shouldCreateMethodFor(expr))
+					createMethod(expr, NAME, expr.inferredType, false)
+	}
+
+	private def appendRuleNameProviders(RuleGroup rule){
+			for(expr:rule.ruleNameExpressions)
 				if(shouldCreateMethodFor(expr))
 					createMethod(expr, NAME, expr.inferredType, false)
 	}
@@ -217,20 +226,25 @@ class StrategyInferrer{
 
 	def private void appendRule(ITreeAppendable it, RuleGroup ruleGroup, boolean temporaryRule) {
 		append(strategy.newTypeRef(Factory).type)
+		appendRuleName(it, ruleGroup)
 		appendTriggers(it, ruleGroup)
 		appendCondition(it, ruleGroup)
 		val rule = ruleGroup.rule
 		if(rule !=null){
 			val specialValue = rule.specialValue
-			if(specialValue != null){
-				if(specialValue == "disable")
-					appendRuleName(it, rule)
+			if(specialValue  == "skip"){
 				append('''.«specialValue»()''')
 			}
 			else{
-				appendRuleName(it, rule)
-				appendRuleValues(it, rule.values, true)
-				appendRuleOrder(it, rule)
+				if(specialValue == "disable"){
+					appendRuleName(it, rule.disabledRule)
+					append('''.«specialValue»()''')
+				}
+				else{	
+					appendRulePropertyName(it, rule)
+					appendRuleValues(it, rule.values, true)
+					appendRuleOrder(it, rule)
+				}
 			}
 			if(rule.isDefault)
 				append('.asDefaultRule()')
@@ -296,14 +310,28 @@ class StrategyInferrer{
 		return triggers
 	}
 
-	def private appendRuleName(ITreeAppendable it, Rule rule) {
-		append('.iterate(')
-		if(rule.name != null) {
-			val name = rule.name.escapeQuotes;
-			append('"') append(name) append('"')
+	def private appendRulePropertyName(ITreeAppendable it, Rule rule) {
+		appendRuleBuilderMethodCall(it, 'iterate', rule.name, rule.nameExpressions)
+	}
+	
+	def private appendRuleName(ITreeAppendable it, RuleGroup rule) {
+		if(rule.ruleName != null ||  ! rule.ruleNameExpressions.empty)
+			appendRuleBuilderMethodCall(it, 'rule', rule.ruleName, rule.ruleNameExpressions)
+	}
+	
+	def private appendRuleName(ITreeAppendable it, DisabledRule rule) {
+		if(rule.ruleName != null ||  ! rule.ruleNameExpressions.empty)
+			appendRuleBuilderMethodCall(it, 'rule', rule.ruleName, rule.ruleNameExpressions)
+	}
+	
+	private def appendRuleBuilderMethodCall(ITreeAppendable it, String method, String name, EList<XExpression> ruleNameExpressions) {
+		append('''.«method»(''')
+		if(name != null) {
+			val effectiveName = name.escapeQuotes;
+			append('"') append(effectiveName) append('"')
 		}
 		else{
-			appendNameExpressions(it, rule.nameExpressions)
+			appendNameExpressions(it, ruleNameExpressions)
 		}
 		append(')')
 	}

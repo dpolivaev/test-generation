@@ -46,9 +46,24 @@ class StrategyCompilationTest {
 	@Test def withDisable() {
 		'''
 			strategy first
-				disable x 
+				disable rule x 
 		'''.assertCompilesToFile(testName)
 	}	
+	
+	@Test def namedRule() {
+		'''
+			strategy first
+				rule y let y be 'A', 'B'
+		'''.assertCompilesToFile(testName)
+	}	
+	
+	@Test def namedConditionalRule() {
+		'''
+			strategy first
+				rule y if :x == 'c' let y be 'A', 'B'
+		'''.assertCompilesToFile(testName)
+	}	
+	
 
 	@Test def withConditionForSingleValue() {
 		'''

@@ -6,6 +6,8 @@ package org.dpolivaev.dsl.tsgen.validation
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.xbase.XExpression
 import org.dpolivaev.dsl.tsgen.strategydsl.LabeledExpression
+import org.dpolivaev.dsl.tsgen.strategydsl.RuleGroup
+import org.dpolivaev.dsl.tsgen.strategydsl.StrategydslPackage
 
 //import org.eclipse.xtext.validation.Check
 
@@ -22,5 +24,24 @@ class StrategyDslValidator extends AbstractStrategyDslValidator {
 			 LabeledExpression case container.reason == expr: return
 		} 
 		super.checkInnerExpressions(expr)
+	}
+	
+	@Check
+	def checkNamedRule(RuleGroup ruleGroup){
+		if (ruleGroup.ruleName != null || ! ruleGroup.ruleNameExpressions.empty) {
+			val feature = if (ruleGroup.ruleName != null) StrategydslPackage.Literals.RULE_GROUP__RULE_NAME else StrategydslPackage.Literals.RULE_GROUP__RULE_NAME_EXPRESSIONS
+			if(ruleGroup.rule == null){
+				error("name without rule", ruleGroup,  feature)			
+				return;
+			}
+			if(ruleGroup.rule.^default){
+				error("named default rule", ruleGroup, feature)			
+				return;
+			}
+			if(ruleGroup.rule.specialValue != null){
+				error("named special rule", ruleGroup, feature)			
+				return;
+			}
+		}
 	}
 }

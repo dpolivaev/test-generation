@@ -32,8 +32,8 @@ submitting correct credentials"
  }
  let when be "submit is clicked"
  let then be "page <pageAfterSubmit> is opened(:pageAfterSubmit)"
- let pageAfterSubmit be :page
- if(:email == "valid" && :password == "valid") let pageAfterSubmit be "loggedIn"
+ rule pageAfterSubmit let pageAfterSubmit be :page
+ rule pageAfterSubmit if(:email == "valid" && :password == "valid") let pageAfterSubmit be "loggedIn"
  
  let default testcase be (:password  " password and " :email " email entered")
  
