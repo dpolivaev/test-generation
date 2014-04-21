@@ -7,11 +7,22 @@ import org.dpolivaev.tsgen.ruleengine.EngineState;
 
 public class TriggeredStatefulRule extends StatefulRule {
     private Set<String> triggeringProperties;
+	final private String ruleName;
     public TriggeredStatefulRule(Set<String> triggeredBy, Condition condition, String targetedPropertyName,
+            ValueProviders ruleValues) {
+       this(null, triggeredBy, condition, targetedPropertyName, ruleValues);
+    }
+    
+    public TriggeredStatefulRule(String ruleName, Set<String> triggeredBy, Condition condition, String targetedPropertyName,
         ValueProviders ruleValues) {
         super(condition, targetedPropertyName, ruleValues);
+        this.ruleName = ruleName != null ? ruleName : " " + defaultRuleName();
         this.triggeringProperties = triggeredBy;
     }
+
+	private int defaultRuleName() {
+		return System.identityHashCode(this);
+	}
 
     protected Set<String> getTriggeringProperties() {
         return triggeringProperties;
@@ -68,7 +79,7 @@ public class TriggeredStatefulRule extends StatefulRule {
 	}
 
 	@Override
-	public TriggeredRuleKey getTriggeredRuleKey() {
-		return  new TriggeredRuleKey(getTriggeringProperties(), getTargetedPropertyName());
+	public String getTriggeredRuleKey() {
+		return  ruleName;
 	}
 }

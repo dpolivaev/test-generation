@@ -1,6 +1,7 @@
 package org.dpolivaev.tsgen.ruleengine;
 
 import static org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory.iterate;
+import static org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory.rule;
 import static org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory.skip;
 import static org.dpolivaev.tsgen.testutils.Combinations.combination;
 import static org.junit.Assert.assertEquals;
@@ -207,8 +208,8 @@ public class RuleEngineExamples {
 //                      :
 //                          'A', 'B'
         strategy.addRule(iterate("x").over("a", "b", "c")
-            .with(iterate("y").over("C"),
-                iterate("y").over("A", "B")._if(new Condition() {
+            .with(rule("y").iterate("y").over("C"),
+            		rule("y").iterate("y").over("A", "B")._if(new Condition() {
                     
                     @Override
                     public boolean isSatisfied(PropertyContainer propertyContainer) {

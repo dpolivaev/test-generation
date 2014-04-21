@@ -128,16 +128,6 @@ public class AlternatingRuleTest {
         assertThat(alternatingRule.hasTriggeringProperties(Utils.set("b", "c")), equalTo(true));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void combinedRuleForDifferentTargetedPropertiesAreNotAllowed() {
-        new AlternatingRule(iterate("a").create(), iterate("b").create());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void combinedRuleForDifferentTriggeringPropertiesAreNotAllowed() {
-        new AlternatingRule(iterate("y").create(), iterate("y").when("x").create());
-    }
-
     @Test
     public void CombinedRuleWithSizeMoreThan2ReturnsItself_AfterContainedRuleIsDeleted() {
         Rule first = ruleMock(true);
@@ -216,5 +206,14 @@ public class AlternatingRuleTest {
 
         AlternatingRule alternatingRule = new AlternatingRule(first, second);
         alternatingRule.without(third);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void doesNotAllowFirstRuleWithoutTargetingPropertyName() {
+        Rule first = mock(Rule.class);
+        Rule second = ruleMock(false);
+        EngineState state = mock(EngineState.class);
+
+        new AlternatingRule(first, second).propertyCombinationStarted(state);
     }
 }

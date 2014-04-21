@@ -30,6 +30,7 @@ public class RuleBuilder{
     private Order order = Order.defaultOrder;
     private int previousValueCount;
 	private boolean asDefaultRule;
+	private String name;
 
     public RuleBuilder when(
         String... triggeringProperties) {
@@ -121,7 +122,7 @@ public class RuleBuilder{
     				ruleValues());
         if (triggeringProperties.isEmpty())
             this.triggeringProperties = Utils.set();
-        return new TriggeredStatefulRule(triggeringProperties, this.condition, this.targetedPropertyName, //
+        return new TriggeredStatefulRule(name, triggeringProperties, this.condition, this.targetedPropertyName, //
             ruleValues());
     	
     }
@@ -158,6 +159,10 @@ public class RuleBuilder{
             return new RuleBuilder().iterate(property);
         }
 
+        static public RuleBuilder rule(String name) {
+            return new RuleBuilder().rule(name);
+        }
+
         static public RuleBuilder skip() {
             return new RuleBuilder().skip();
         }
@@ -177,6 +182,11 @@ public class RuleBuilder{
 		});
 	}
 	
+
+	public RuleBuilder rule(String name) {
+		this.name = name;
+		return this;
+	}
 
 	public RuleBuilder disable() {
 		return over(SpecialValue.DISABLED_RULE);

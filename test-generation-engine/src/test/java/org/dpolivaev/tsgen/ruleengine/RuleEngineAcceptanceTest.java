@@ -1,6 +1,7 @@
 package org.dpolivaev.tsgen.ruleengine;
 
 import static org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory.iterate;
+import static org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory.rule;
 import static org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory.when;
 import static org.dpolivaev.tsgen.ruleengine.SpecialValue.UNDEFINED;
 import static org.dpolivaev.tsgen.testutils.Combinations.combination;
@@ -14,6 +15,7 @@ import org.dpolivaev.tsgen.ruleengine.Condition;
 import org.dpolivaev.tsgen.ruleengine.PropertyAlreadyAssignedException;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
+import org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
@@ -254,9 +256,9 @@ public class RuleEngineAcceptanceTest {
     public void triggeringAndOverwrittenTriggeredRulesWithSingleValues() {
 
         strategy.addRule(iterate("x").over("a"));
-        strategy.addRule(when("x").iterate("y").over("b"));
-        strategy.addRule(when("x").iterate("y").over("c"));
-        strategy.addRule(when("x").iterate("y").over("d"));
+        strategy.addRule(rule("y").when("x").iterate("y").over("b"));
+        strategy.addRule(rule("y").when("x").iterate("y").over("c"));
+        strategy.addRule(rule("y").when("x").iterate("y").over("d"));
 
         generateCombinationsForStrategy();
 

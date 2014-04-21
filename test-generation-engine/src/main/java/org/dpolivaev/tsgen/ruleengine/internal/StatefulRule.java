@@ -153,7 +153,10 @@ public abstract class StatefulRule implements Rule {
 
     @Override
     public Rule combineWith(Rule rule) {
-        return new AlternatingRule(this, rule);
+    	if(getTargetedPropertyName() == null)
+    		return rule;
+    	else
+    		return new AlternatingRule(this, rule);
     }
 
     @Override
@@ -199,10 +202,10 @@ public abstract class StatefulRule implements Rule {
     public void checkRuleCompatibility(Rule rule){
     	if (isDefaultRule() != rule.isDefaultRule())
     		throw new IllegalArgumentException("triggering and not triggering rules can not be combined");
-    	if (!getTargetedPropertyName().equals(rule.getTargetedPropertyName()))
+    	String targetedPropertyName = getTargetedPropertyName();
+    	String otherTargetedPropertyName = rule.getTargetedPropertyName();
+		if (targetedPropertyName != null && otherTargetedPropertyName != null && !targetedPropertyName.equals(otherTargetedPropertyName))
     		throw new IllegalArgumentException("rules with different targeted property names can not be combined");
-    	if (!rule.hasTriggeringProperties(getTriggeringProperties()))
-    		throw new IllegalArgumentException("rules with different triggering property names can not be combined");
     }
 
 }

@@ -56,7 +56,7 @@ public class DefaultStatefulRule extends StatefulRule {
 	}
 
 	@Override
-	public TriggeredRuleKey getTriggeredRuleKey() {
+	public String getTriggeredRuleKey() {
 		return null;
 	}
 

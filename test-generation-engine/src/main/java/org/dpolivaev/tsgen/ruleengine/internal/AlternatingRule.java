@@ -14,7 +14,9 @@ public class AlternatingRule implements Rule {
     private Rule activeRule = null;
 
     public AlternatingRule(Rule oldRule, Rule newRule) {
-	rules = new ArrayList<>();
+    	if(oldRule.getTargetedPropertyName() == null)
+    		throw new IllegalArgumentException();
+    	rules = new ArrayList<>();
         rules.add(oldRule);
         combineWith(newRule);
     }
@@ -144,7 +146,7 @@ public class AlternatingRule implements Rule {
 	}
 
 	@Override
-	public TriggeredRuleKey getTriggeredRuleKey() {
+	public String getTriggeredRuleKey() {
 		return firstRule().getTriggeredRuleKey();
 	}
 

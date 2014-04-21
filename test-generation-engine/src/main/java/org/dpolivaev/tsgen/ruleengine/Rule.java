@@ -3,7 +3,6 @@ package org.dpolivaev.tsgen.ruleengine;
 import java.util.Set;
 
 import org.dpolivaev.tsgen.ruleengine.internal.PropertyAssignedEvent;
-import org.dpolivaev.tsgen.ruleengine.internal.TriggeredRuleKey;
 
 // triggered A <- default B
 // default B <- default A
@@ -47,5 +46,5 @@ public interface Rule {
 
 	boolean hasTriggeringProperties(Set<String> triggeringProperties);
 	
-	TriggeredRuleKey getTriggeredRuleKey();
+	String getTriggeredRuleKey();
 }

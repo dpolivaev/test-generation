@@ -6,12 +6,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.dpolivaev.tsgen.ruleengine.internal.TriggeredRuleKey;
+
 
 public class Strategy {
     private Map<String, Rule> defaultRules = new LinkedHashMap<>();
     private Map<String, Rule> topRules = new LinkedHashMap<>();
-    private Map<TriggeredRuleKey, Rule> triggeredRules = new LinkedHashMap<>();
+    private Map<String, Rule> triggeredRules = new LinkedHashMap<>();
     private Collection<RuleBuilder> ruleBuilders = new ArrayList<RuleBuilder>();
     
     public void initialize(){
