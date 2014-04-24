@@ -28,9 +28,9 @@ public class StrategyDslOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	protected def _text(Rule rule) {
 		return 
 		(if (rule.isDefault) "default :" else ":")
-		+ rule.specialValue?:"" 
-		+ if(rule.specialValue!= null) " " else ""
-		+ rule.name?:""
+		+ (rule.specialValue?:"")
+		+ (if(rule.specialValue!= null) " " else "")
+		+ (rule.name?:"")
 		+ (if (rule.ordered) "(ordered)" else if (rule.shuffled) "(shuffled)" else "")
 	}
 	protected def _text(ValueAction values) { return values.valueProviders.map[text].toString}
