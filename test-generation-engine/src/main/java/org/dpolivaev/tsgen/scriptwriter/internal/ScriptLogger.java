@@ -17,6 +17,7 @@ public class ScriptLogger implements PropertyHandler, ErrorHandler {
 		log = writer;
 		assignmentFormatter = AssignmentFormatter.create("=", ", ");
 		assignmentFormatter.appendReasons(false);
+		assignmentFormatter.excludeUndefined(true);
 	}
 
 	@Override
