@@ -39,9 +39,8 @@ RuleGroup : {RuleGroup}
 
 Rule returns Rule:
 	(
-		'let' default ?= 'default'? (name=PROPERTY_ID | '(' nameExpressions += XExpression+ ')') 'be' 
-		values = PropertyValues
-		(ordered ?= 'ordered' | shuffled ?= 'shuffled')? 
+		'let' (ordered ?= 'ordered' | shuffled ?= 'shuffled')? default ?= 'default'?
+		(name=PROPERTY_ID | '(' nameExpressions += XExpression+ ')') 'be' values = PropertyValues
 	)
 	| specialValue = 'skip'
 	| specialValue = 'disable' disabledRule = DisabledRule
@@ -52,7 +51,7 @@ DisabledRule:
 ;
 
 PropertyValues returns Values:
-	((name=PROPERTY_ID 'with')?  actions += ValueAction (',' actions += ValueAction)* | 'from' valueReference = [Values]) 
+	(name=PROPERTY_ID 'with')?  actions += ValueAction (',' actions += ValueAction)*
 ;
 
 Trigger:
@@ -70,7 +69,7 @@ ValueAction:{ValueAction}
 
 ValueProvider:
 	trace ?= 'traced'?  
-	( =>'(' expressions += XExpression+ ')' | expressions += XExpression)
+	('from' valueReference = [Values] | ( =>'(' expressions += XExpression+ ')' | expressions += XExpression))
 	condition = ValueCondition?   
 ;
 

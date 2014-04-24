@@ -69,8 +69,7 @@ class StrategyCompilationTest {
 		'''
 			strategy first
 				let x be 'a', 'b'{
-					let y be 'A' only if :x=='a',
-							'B' ordered
+					let ordered y be 'A' only if :x=='a', 'B'
 				}
 		'''.assertCompilesToFile(testName)
 	}
@@ -274,14 +273,14 @@ class StrategyCompilationTest {
 	@Test def ordered() {
 		'''
 			strategy first
-				let x be 2, 3 ordered
+				let ordered x be 2, 3
 		'''.assertCompilesToFile(testName)
 	}
 
 	@Test def shuffled() {
 		'''
 			strategy first
-				let x be 2, 3 shuffled
+				let shuffled x be 2, 3
 		'''.assertCompilesToFile(testName)
 	}
 

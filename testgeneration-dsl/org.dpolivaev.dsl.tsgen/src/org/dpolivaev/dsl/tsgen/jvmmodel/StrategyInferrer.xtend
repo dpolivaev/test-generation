@@ -5,6 +5,7 @@ import java.util.ArrayList
 import java.util.Collection
 import javax.inject.Inject
 import org.dpolivaev.dsl.tsgen.strategydsl.Condition
+import org.dpolivaev.dsl.tsgen.strategydsl.DisabledRule
 import org.dpolivaev.dsl.tsgen.strategydsl.Generation
 import org.dpolivaev.dsl.tsgen.strategydsl.Rule
 import org.dpolivaev.dsl.tsgen.strategydsl.RuleGroup
@@ -40,7 +41,6 @@ import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 
 import static extension org.dpolivaev.dsl.tsgen.jvmmodel.StrategyCompiler.*
-import org.dpolivaev.dsl.tsgen.strategydsl.DisabledRule
 
 class StrategyInferrer{
 	@Inject Injector injector
@@ -69,7 +69,7 @@ class StrategyInferrer{
 		val contents = EcoreUtil2.eAllContents(strategy)
 		for(obj : contents){
 			if (obj instanceof ValueAction)
-				appendValueProviders(obj)
+				appendMethodsForValueProviders(obj)
 			if (obj instanceof RuleGroup)
 				appendRuleNameProviders(obj)
 			if (obj instanceof Rule)
@@ -89,7 +89,7 @@ class StrategyInferrer{
 	}
 
     final static val VALUE = "_value"
-	private def appendValueProviders(ValueAction action){
+	private def appendMethodsForValueProviders(ValueAction action){
 		for(valueProvider:action.valueProviders)
 			for(expr:valueProvider.expressions)
 				if(shouldCreateMethodFor(expr)) {
@@ -354,10 +354,6 @@ class StrategyInferrer{
 	}
 
 	def  private void appendRuleValues(ITreeAppendable it, Values values, boolean appendActionRuleGroups) {
-		if(values.valueReference != null){
-			appendRuleValues(it, values.valueReference, false)
-			return
-		}
 		for(action:values.actions){
 			val valueAction = action as ValueAction
 			apppendValueAction(it, valueAction)
@@ -456,19 +452,33 @@ class StrategyInferrer{
 	def private appendValueAction(ITreeAppendable it, ValueAction valueAction) {
 		append('.over(')
 		var firstValue = true
-		for (valueProvider: valueAction.valueProviders){
-			if(firstValue)
-				firstValue = false
-			else
-				append(', ')
-			val expressions = valueProvider.expressions
-			if(valueProvider.condition == null && expressions.size == 1 && methods.get(VALUE, expressions.get(0)) == null)
-				xbaseCompiler.compileAsJavaExpression(expressions.get(0), it, valueProvider.newTypeRef(Object))
-			else
-				appendImplementationObject(it, valueAction.newTypeRef(org.dpolivaev.tsgen.ruleengine.ValueProvider).type, "Object value",
-					[appendValueExpression(it, valueProvider)])
-		}
+		appendValueProviders(it, valueAction, firstValue)
 		append(')')
+	}
+
+	private def boolean  appendValueProviders(ITreeAppendable it, ValueAction valueAction, boolean started) {
+		var firstValue = started
+		for (valueProvider: valueAction.valueProviders){
+			if(valueProvider.valueReference != null){
+				for(referencedValueAction : valueProvider.valueReference.actions){
+					firstValue = appendValueProviders(it, referencedValueAction, firstValue)
+				}
+			}
+			else {
+				if(firstValue)
+					firstValue = false
+				else
+					append(', ')
+				val expressions = valueProvider.expressions
+				if(valueProvider.condition == null && expressions.size == 1 && methods.get(VALUE, expressions.get(0)) == null)
+					xbaseCompiler.compileAsJavaExpression(expressions.get(0), it, valueProvider.newTypeRef(Object))
+				else
+					appendImplementationObject(it, valueAction.newTypeRef(org.dpolivaev.tsgen.ruleengine.ValueProvider).type, "Object value",
+						[appendValueExpression(it, valueProvider)])
+
+			}
+		}
+		return firstValue
 	}
 
 	def private appendValueExpression(ITreeAppendable it, ValueProvider valueProvider) {
