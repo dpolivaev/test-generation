@@ -438,6 +438,25 @@ public class RuleEngineAcceptanceTest {
     }
 
     @Test
+    public void triggeringAndDefaultRules() {
+        scriptProducerMock.appendReasons(true);
+        strategy.addRule(iterate("x").over("a").asDefaultRule());
+        strategy.addRule(iterate("askingX").over(new ValueProvider(){
+
+			@Override
+			public Object value(PropertyContainer propertyContainer) {
+				return propertyContainer.get("x");
+			}
+
+        }));
+        strategy.addRule(iterate("y").over("a"));
+        strategy.addRule(when("x", "y").iterate("z").over("b"));
+
+        generateCombinationsForStrategy();
+        expect(combination("askingX<-x", "a", "->askingX", "a", "->y", "a"));
+    }
+
+    @Test
     public void defaultRuleCalledFromScriptProducerWithReason() {
         strategy.addRule(iterate("x").over("1").asDefaultRule());
         CollectingScriptProducer loggingScriptProducerMock = new CollectingScriptProducer() {

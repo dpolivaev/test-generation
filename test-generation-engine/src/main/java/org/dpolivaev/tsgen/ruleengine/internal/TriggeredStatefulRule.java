@@ -52,7 +52,7 @@ public class TriggeredStatefulRule extends StatefulRule {
     		addDependencies(event);
     	else if (! isTopRule() 
     			&& triggeringProperties.contains(event.getTargetedPropertyName()) 
-    			&& event.containsPropertyValues(triggeringProperties)) {
+			&& event.containsTriggeredProperties(triggeringProperties)) {
     		EngineState engineState = event.getState();
     		if (getCondition().isSatisfied(engineState)) {
     			addValueWithRules(engineState);
