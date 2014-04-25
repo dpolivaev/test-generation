@@ -3,17 +3,12 @@ package org.dpolivaev.tsgen.ruleengine;
 import org.dpolivaev.tsgen.ruleengine.Condition;
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
-import org.dpolivaev.tsgen.ruleengine.internal.DefaultStatefulRule;
 import org.dpolivaev.tsgen.ruleengine.internal.OrderedValueProviders;
 import org.dpolivaev.tsgen.ruleengine.internal.ShuffledValueProviders;
-import org.dpolivaev.tsgen.ruleengine.internal.StatefulRule;
 import org.dpolivaev.tsgen.ruleengine.internal.ValueProviders;
 import org.hamcrest.CoreMatchers;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-
 import org.junit.Test;
 
 public class RuleBuilderTest {

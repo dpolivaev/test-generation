@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.dpolivaev.tsgen.ruleengine.Condition;
 import org.dpolivaev.tsgen.ruleengine.EngineState;
 import org.dpolivaev.tsgen.ruleengine.InconsistentRuleException;
 import org.dpolivaev.tsgen.ruleengine.Rule;

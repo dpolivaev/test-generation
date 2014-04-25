@@ -7,7 +7,6 @@ import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
 import org.dpolivaev.tsgen.ruleengine.PropertyHandler;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
-import org.dpolivaev.tsgen.ruleengine.internal.StatefulRule;
 import org.dpolivaev.tsgen.utils.internal.Utils;
 import org.junit.Before;
 import org.junit.Test;

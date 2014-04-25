@@ -1,7 +1,6 @@
 package org.dpolivaev.tsgen.ruleengine.internal;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
