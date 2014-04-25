@@ -6,7 +6,6 @@ import org.dpolivaev.tsgen.ruleengine.Condition;
 import org.dpolivaev.tsgen.ruleengine.EngineState;
 
 public class TriggeredStatefulRule extends StatefulRule {
-    private Set<String> triggeringProperties;
 	final private String ruleName;
     public TriggeredStatefulRule(Set<String> triggeredBy, Condition condition, String targetedPropertyName,
             ValueProviders ruleValues) {
@@ -15,18 +14,13 @@ public class TriggeredStatefulRule extends StatefulRule {
     
     public TriggeredStatefulRule(String ruleName, Set<String> triggeredBy, Condition condition, String targetedPropertyName,
         ValueProviders ruleValues) {
-        super(condition, targetedPropertyName, ruleValues);
+        super(triggeredBy, condition, targetedPropertyName, ruleValues);
         this.ruleName = ruleName != null ? ruleName : " " + defaultRuleName();
-        this.triggeringProperties = triggeredBy;
     }
 
 	private int defaultRuleName() {
 		return System.identityHashCode(this);
 	}
-
-    protected Set<String> getTriggeringProperties() {
-        return triggeringProperties;
-    }
 
     @Override
     public void propertyCombinationStarted(EngineState engineState) {
@@ -51,8 +45,8 @@ public class TriggeredStatefulRule extends StatefulRule {
     	if (isValueAddedToCurrentCombination())
     		addDependencies(event);
     	else if (! isTopRule() 
-    			&& triggeringProperties.contains(event.getTargetedPropertyName()) 
-			&& event.containsTriggeredProperties(triggeringProperties)) {
+			&& getTriggeringProperties().contains(event.getTargetedPropertyName())
+			&& event.containsTriggeredProperties(getTriggeringProperties())) {
     		EngineState engineState = event.getState();
     		if (getCondition().isSatisfied(engineState)) {
     			addValueWithRules(engineState);
@@ -63,20 +57,9 @@ public class TriggeredStatefulRule extends StatefulRule {
     }
 
     @Override
-    protected void appendTriggeringPropertyList(StringBuilder stringBuilder) {
-        if (!triggeringProperties.isEmpty())
-            stringBuilder.append(triggeringProperties).append(" -> ");
-    }
-
-    @Override
     public boolean isDefaultRule() {
         return false;
     }
-
-	@Override
-	public boolean hasTriggeringProperties(Set<String> triggeringProperties) {
-		return this.triggeringProperties.equals(triggeringProperties);
-	}
 
 	@Override
 	public String getTriggeredRuleKey() {

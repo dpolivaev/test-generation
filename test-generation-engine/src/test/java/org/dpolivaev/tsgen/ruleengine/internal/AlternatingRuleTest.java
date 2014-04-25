@@ -121,14 +121,6 @@ public class AlternatingRuleTest {
     }
     
     @Test
-    public void triggeringPropertiesAreTakenFromTheFirstRules() {
-        Rule first = iterate("a").when("b", "c").create();
-        Rule second = iterate("a").when("b", "c").create();
-        AlternatingRule alternatingRule = new AlternatingRule(first, second);
-        assertThat(alternatingRule.hasTriggeringProperties(Utils.set("b", "c")), equalTo(true));
-    }
-
-    @Test
     public void CombinedRuleWithSizeMoreThan2ReturnsItself_AfterContainedRuleIsDeleted() {
         Rule first = ruleMock(true);
         Rule second = ruleMock(true);

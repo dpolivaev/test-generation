@@ -7,11 +7,9 @@ import org.dpolivaev.tsgen.ruleengine.Condition;
 import org.dpolivaev.tsgen.ruleengine.EngineState;
 
 public class DefaultStatefulRule extends StatefulRule {
-    private Set<String> triggeringProperties;
 
 	public DefaultStatefulRule(Set<String> triggeredBy, Condition condition, String targetedPropertyName, ValueProviders ruleValues) {
-        super(condition, targetedPropertyName, ruleValues);
-		this.triggeringProperties = triggeredBy;
+        super(triggeredBy, condition, targetedPropertyName, ruleValues);
     }
 
 	public DefaultStatefulRule(Condition condition, String targetedPropertyName, ValueProviders ruleValues) {
@@ -28,13 +26,6 @@ public class DefaultStatefulRule extends StatefulRule {
 		return areTriggeringPropertiesSet(engineState) && getCondition().isSatisfied(engineState);
 	}
 
-    private boolean areTriggeringPropertiesSet(EngineState engineState) {
-		for (String name:triggeringProperties)
-			if(! engineState.containsTriggeringPropertyValue(name))
-				return false;
-		return true;
-	}
-
 	@Override
     public boolean isDefaultRule() {
         return true;
@@ -48,11 +39,6 @@ public class DefaultStatefulRule extends StatefulRule {
 	@Override
 	public boolean isTopRule() {
 		return false;
-	}
-
-	@Override
-	public boolean hasTriggeringProperties(Set<String> triggeringProperties) {
-		return triggeringProperties.isEmpty();
 	}
 
 	@Override

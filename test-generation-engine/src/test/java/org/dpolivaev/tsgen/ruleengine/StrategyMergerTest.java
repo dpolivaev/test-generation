@@ -1,5 +1,6 @@
 package org.dpolivaev.tsgen.ruleengine;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -12,7 +13,10 @@ import org.dpolivaev.tsgen.ruleengine.Rule;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.ruleengine.StrategyMerger;
+import org.dpolivaev.tsgen.ruleengine.internal.StatefulRule;
+import org.dpolivaev.tsgen.ruleengine.internal.TriggeredStatefulRule;
 import org.dpolivaev.tsgen.utils.internal.Utils;
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -63,7 +67,7 @@ public class StrategyMergerTest {
 		RuleBuilder triggeredRule = RuleBuilder.Factory.iterate("a").over(1);
 		source.addRule(triggeredRule);
 		new StrategyMerger().withTrigger("b").moveRuleFrom(source).to(target);
-		assertTrue(triggeredRule.create().hasTriggeringProperties(Utils.set("b")));
+		assertThat(((TriggeredStatefulRule)triggeredRule.create()).getTriggeringProperties(), equalTo (Utils.set("b")));
 	}
 
 	@Test

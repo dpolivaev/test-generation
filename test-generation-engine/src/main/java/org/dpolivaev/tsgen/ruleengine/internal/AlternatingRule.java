@@ -141,11 +141,6 @@ public class AlternatingRule implements Rule {
 	}
 
 	@Override
-	public boolean hasTriggeringProperties(Set<String> triggeringProperties) {
-		return firstRule().hasTriggeringProperties(triggeringProperties);
-	}
-
-	@Override
 	public String getTriggeredRuleKey() {
 		return firstRule().getTriggeredRuleKey();
 	}

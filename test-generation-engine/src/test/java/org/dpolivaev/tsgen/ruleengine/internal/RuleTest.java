@@ -171,7 +171,7 @@ public class RuleTest {
 	public void triggeredRuleWithOneValue_whenTriggeredPropertyIsAssigned_assignsItsValue() {
         Rule triggeringRule = iterate("triggeredBy").over("value1").create();
         Rule triggeredRule = iterate("name").over("value2").when("triggeredBy").create();
-        Mockito.when(engineState.containsPropertyValues(Utils.set("triggeredBy"))).thenReturn(true);
+        Mockito.when(engineState.containsTriggeringPropertyValue("triggeredBy")).thenReturn(true);
         triggeredRule.propertyValueSet( //
             new PropertyAssignedEvent(engineState, triggeringRule, Collections.<String> emptySet(), true));
         verify(engineState).setPropertyValue(triggeredRule, "value2", true);
@@ -181,7 +181,7 @@ public class RuleTest {
 	public void triggeredRuleWithOneValue_whenTriggeredPropertyIsAssigned_finishes() {
         Rule triggeringRule = iterate("triggeredBy").over("value1").create();
         Rule triggeredRule = iterate("name").over("value2").when("triggeredBy").create();
-        Mockito.when(engineState.containsPropertyValues(Utils.set("triggeredBy"))).thenReturn(true);
+        Mockito.when(engineState.containsTriggeringPropertyValue("triggeredBy")).thenReturn(true);
         triggeredRule.propertyValueSet(new PropertyAssignedEvent(engineState, triggeringRule, Collections
             .<String> emptySet(), true));
 

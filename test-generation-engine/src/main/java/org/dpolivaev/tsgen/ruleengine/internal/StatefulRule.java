@@ -21,12 +21,14 @@ public abstract class StatefulRule implements Rule {
     final private Set<Rule> dependentRules;
     final private Set<Rule> createdRules;
     private Condition condition;
+    private Set<String> triggeringProperties;
 
     private boolean valueAlreadyAddedToCurrentCombination;
     private boolean blocksRequiredProperties;
 
-    public StatefulRule(Condition condition, String targetedPropertyName, ValueProviders ruleValues) {
-        this.condition = condition;
+    public StatefulRule(Set<String> triggeredBy, Condition condition, String targetedPropertyName, ValueProviders ruleValues) {
+        this.triggeringProperties = triggeredBy;
+		this.condition = condition;
         this.targetedPropertyName = targetedPropertyName;
         this.valueProviders = ruleValues;
         this.blocksRequiredProperties = false;
@@ -40,8 +42,8 @@ public abstract class StatefulRule implements Rule {
         return targetedPropertyName;
     }
 
-    protected Set<String> getTriggeringProperties() {
-        return Collections.<String> emptySet();
+    public Set<String> getTriggeringProperties() {
+        return triggeringProperties;
     }
 
     @Override
@@ -167,9 +169,6 @@ public abstract class StatefulRule implements Rule {
         return stringBuilder.toString();
     }
 
-    protected void appendTriggeringPropertyList(StringBuilder stringBuilder) {
-    }
-
     @Override
     public Rule without(Rule rule) {
     	if(this != rule)
@@ -208,4 +207,15 @@ public abstract class StatefulRule implements Rule {
     		throw new IllegalArgumentException("rules with different targeted property names can not be combined");
     }
 
+    protected void appendTriggeringPropertyList(StringBuilder stringBuilder) {
+        if (!triggeringProperties.isEmpty())
+            stringBuilder.append(triggeringProperties).append(" -> ");
+    }
+
+    protected boolean areTriggeringPropertiesSet(EngineState engineState) {
+		for (String name:triggeringProperties)
+			if(! engineState.containsTriggeringPropertyValue(name))
+				return false;
+		return true;
+	}
 }
