@@ -1,6 +1,5 @@
 package org.dpolivaev.tsgen.ruleengine.internal;
 
-import java.util.Collections;
 import java.util.Set;
 
 import org.dpolivaev.tsgen.ruleengine.Condition;
@@ -12,9 +11,6 @@ public class DefaultStatefulRule extends StatefulRule {
         super(triggeredBy, condition, targetedPropertyName, ruleValues);
     }
 
-	public DefaultStatefulRule(Condition condition, String targetedPropertyName, ValueProviders ruleValues) {
-		this(Collections.<String>emptySet(), condition, targetedPropertyName, ruleValues);
-	}
     @Override
     public void propertyRequired(EngineState engineState) {
         if (isSatisfied(engineState)) {
