@@ -92,7 +92,7 @@ public class IdConverter{
 			if(lastCharacterWasLowerCase && ! lowerCaseCharacterFound)
 				sb.append('_');
 			sb.append(lowerCaseCharacter);
-			lastCharacterWasLowerCase = lowerCaseCharacterFound;
+			lastCharacterWasLowerCase = lowerCaseCharacterFound && c != '_';
 		}
 		return sb.toString();
 	}

@@ -72,6 +72,11 @@ public class IdProviderTest {
 	}
 
 	@Test
+	public void givenUpperCaseAfterUnderscore_snakeUpperCaseId_keepsUnderscore() throws Exception {
+		check_snakeUpperCaseId("a_A", "A_A");
+	}
+
+	@Test
 	public void createsLowerFirstCamelCaseId() throws Exception {
 		String javaId = new IdConverter().lowerFirstCamelCaseId("ABC§abc");
 		assertThat(javaId, CoreMatchers.equalTo("aBC_abc"));
