@@ -6,12 +6,12 @@ import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 
 @SuppressWarnings("all")
 public class MyFile {
-  public static RequirementBasedStrategy First() {
-    return new _First_StrategyFactory().First();
+  public static RequirementBasedStrategy first() {
+    return new _first_StrategyFactory().first();
   }
 }
 
-File 2 : _First_StrategyFactory.java
+File 2 : _first_StrategyFactory.java
 
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
@@ -19,14 +19,11 @@ import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 
 @SuppressWarnings("all")
-class _First_StrategyFactory {
-  RequirementBasedStrategy First() {
+class _first_StrategyFactory {
+  RequirementBasedStrategy first() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
     Strategy _strategy = new Strategy();
-    _strategy.addRule(RuleBuilder.Factory.iterate("a").over(1).with(
-      RuleBuilder.Factory.iterate("b").over(2)
-    ).over(3));
-    _strategy.addRule(RuleBuilder.Factory.iterate("d").over(1, 3).asDefaultRule());
+    _strategy.addRule(RuleBuilder.Factory.rule("y").iterate("y").over("A", "B"));
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }
 }
