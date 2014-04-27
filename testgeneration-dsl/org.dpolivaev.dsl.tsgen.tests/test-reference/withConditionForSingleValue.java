@@ -21,10 +21,27 @@ import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 import org.dpolivaev.tsgen.ruleengine.ValueProvider;
+import org.dpolivaev.tsgen.ruleengine.ValueProviderHelper;
 
 @SuppressWarnings("all")
 class _first_StrategyFactory {
-  private Boolean condition1(final PropertyContainer propertyContainer) {
+  private String _value1(final PropertyContainer propertyContainer) {
+    return "a";
+  }
+  
+  private String _value2(final PropertyContainer propertyContainer) {
+    return "b";
+  }
+  
+  private String _value3(final PropertyContainer propertyContainer) {
+    return "A";
+  }
+  
+  private String _value4(final PropertyContainer propertyContainer) {
+    return "B";
+  }
+  
+  private Boolean condition5(final PropertyContainer propertyContainer) {
     boolean _equals = Objects.equal(propertyContainer.get("x"), "a");
     return Boolean.valueOf(_equals);
   }
@@ -32,13 +49,13 @@ class _first_StrategyFactory {
   RequirementBasedStrategy first() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
     Strategy _strategy = new Strategy();
-    _strategy.addRule(RuleBuilder.Factory.iterate("x").over("a", "b").with(
+    _strategy.addRule(RuleBuilder.Factory.iterate("x").over(_value1(null), _value2(null)).with(
       RuleBuilder.Factory.iterate("y").over(new ValueProvider(){
         @Override public Object value(PropertyContainer propertyContainer) {
-          if(!condition1(propertyContainer)) return SpecialValue.SKIP;
-          Object _value = "A";
+          if(!condition5(propertyContainer)) return SpecialValue.SKIP;
+          Object _value = ValueProviderHelper.toValue(_value3(propertyContainer), propertyContainer);
           return _value;
-      }}, "B").ordered()
+      }}, _value4(null)).ordered()
     ));
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }

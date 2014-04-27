@@ -30,20 +30,24 @@ class _first_StrategyFactory {
     
   }
   
-  private int _name1() {
+  private String _name1() {
+    return "x#";
+  }
+  
+  private int _name2() {
     return this.p;
   }
   
-  private int _value2(final PropertyContainer propertyContainer) {
+  private int _value3(final PropertyContainer propertyContainer) {
     return this.p;
   }
   
   RequirementBasedStrategy first() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
     Strategy _strategy = new Strategy();
-    _strategy.addRule(RuleBuilder.Factory.iterate(new StringBuilder().append("x#").append(_name1()).toString()).over(new ValueProvider(){
+    _strategy.addRule(RuleBuilder.Factory.iterate(new StringBuilder().append(_name1()).append(_name2()).toString()).over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {
-        Object _value = ValueProviderHelper.toValue(_value2(propertyContainer), propertyContainer);
+        Object _value = ValueProviderHelper.toValue(_value3(propertyContainer), propertyContainer);
         return _value;
     }}).asDefaultRule());
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);

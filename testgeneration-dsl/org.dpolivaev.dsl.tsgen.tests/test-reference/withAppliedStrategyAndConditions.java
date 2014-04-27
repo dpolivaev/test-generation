@@ -36,9 +36,17 @@ class _first_StrategyFactory {
     return Boolean.valueOf((((int) (propertyContainer.<Integer>get("z2")).intValue()) < 0));
   }
   
-  private RequirementBasedStrategy _strategy3() {
+  private int _value3(final PropertyContainer propertyContainer) {
+    return 1;
+  }
+  
+  private RequirementBasedStrategy _strategy4() {
     RequirementBasedStrategy _other = MyFile.other();
     return _other;
+  }
+  
+  private int _value5(final PropertyContainer propertyContainer) {
+    return 4;
   }
   
   RequirementBasedStrategy first() {
@@ -57,16 +65,16 @@ class _first_StrategyFactory {
     _strategy.addRule(RuleBuilder.Factory.when("z", "z2")._if(new Condition(){
       @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
         return propertyContainer.<Boolean>get(" /MyFile.tsgen#/0/@strategies.1/@ruleGroups.0/@ruleGroups.0/@condition/@expr");
-    }}).iterate("x").over(1));
+    }}).iterate("x").over(_value3(null)));
     _strategy.addRules(RuleBuilder.Factory.when("z", "z2")._if(new Condition(){
       @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
         return propertyContainer.<Boolean>get(" /MyFile.tsgen#/0/@strategies.1/@ruleGroups.0/@ruleGroups.0/@condition/@expr");
-    }}).with(StrategyConverter.toStrategy(_strategy3())).asRules());
+    }}).with(StrategyConverter.toStrategy(_strategy4())).asRules());
     _strategy.addRule(RuleBuilder.Factory.when("z", "z2")._if(new Condition(){
       @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
         return propertyContainer.<Boolean>get(" /MyFile.tsgen#/0/@strategies.1/@ruleGroups.0/@ruleGroups.0/@condition/@expr");
-    }}).iterate("z2").over(4));
-    return new RequirementBasedStrategy(_requiredItems).with(_strategy).addRequiredItemsFrom(StrategyConverter.toRequirementBasedStrategy(_strategy3()));
+    }}).iterate("z2").over(_value5(null)));
+    return new RequirementBasedStrategy(_requiredItems).with(_strategy).addRequiredItemsFrom(StrategyConverter.toRequirementBasedStrategy(_strategy4()));
   }
 }
 
@@ -74,15 +82,20 @@ File 3 : _other_StrategyFactory.java
 
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
+import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 
 @SuppressWarnings("all")
 class _other_StrategyFactory {
+  private int _value1(final PropertyContainer propertyContainer) {
+    return 2;
+  }
+  
   RequirementBasedStrategy other() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
     Strategy _strategy = new Strategy();
-    _strategy.addRule(RuleBuilder.Factory.iterate("y").over(2));
+    _strategy.addRule(RuleBuilder.Factory.iterate("y").over(_value1(null)));
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }
 }

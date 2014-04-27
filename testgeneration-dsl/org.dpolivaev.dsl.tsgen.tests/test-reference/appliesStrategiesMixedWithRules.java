@@ -35,23 +35,32 @@ File 3 : _second_StrategyFactory.java
 import org.dpolivaev.tsgen.coverage.CoverageEntry;
 import org.dpolivaev.tsgen.coverage.RequirementBasedStrategy;
 import org.dpolivaev.tsgen.coverage.StrategyConverter;
+import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.Strategy;
 
 @SuppressWarnings("all")
 class _second_StrategyFactory {
-  private RequirementBasedStrategy _strategy1() {
+  private int _value1(final PropertyContainer propertyContainer) {
+    return 1;
+  }
+  
+  private RequirementBasedStrategy _strategy2() {
     RequirementBasedStrategy _first = MyFile.first();
     return _first;
+  }
+  
+  private int _value3(final PropertyContainer propertyContainer) {
+    return 2;
   }
   
   RequirementBasedStrategy second() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
     Strategy _strategy = new Strategy();
-    _strategy.addRule(RuleBuilder.Factory.iterate("x").over(1));
-    _strategy.addRules(RuleBuilder.Factory.with(StrategyConverter.toStrategy(_strategy1())).asRules());
-    _strategy.addRule(RuleBuilder.Factory.iterate("y").over(2));
-    return new RequirementBasedStrategy(_requiredItems).with(_strategy).addRequiredItemsFrom(StrategyConverter.toRequirementBasedStrategy(_strategy1()));
+    _strategy.addRule(RuleBuilder.Factory.iterate("x").over(_value1(null)));
+    _strategy.addRules(RuleBuilder.Factory.with(StrategyConverter.toStrategy(_strategy2())).asRules());
+    _strategy.addRule(RuleBuilder.Factory.iterate("y").over(_value3(null)));
+    return new RequirementBasedStrategy(_requiredItems).with(_strategy).addRequiredItemsFrom(StrategyConverter.toRequirementBasedStrategy(_strategy2()));
   }
 }
 

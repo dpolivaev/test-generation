@@ -23,7 +23,11 @@ import org.dpolivaev.tsgen.ruleengine.ValueProviderHelper;
 
 @SuppressWarnings("all")
 class _First_StrategyFactory {
-  private Object _value1(final PropertyContainer propertyContainer) {
+  private int _value1(final PropertyContainer propertyContainer) {
+    return 123;
+  }
+  
+  private Object _value2(final PropertyContainer propertyContainer) {
     return propertyContainer.get("a");
   }
   
@@ -31,10 +35,10 @@ class _First_StrategyFactory {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{
       new CoverageEntry("req1", CoverageEntry.ANY),};
     Strategy _strategy = new Strategy();
-    _strategy.addRule(RuleBuilder.Factory.iterate("a").over(123).asDefaultRule());
+    _strategy.addRule(RuleBuilder.Factory.iterate("a").over(_value1(null)).asDefaultRule());
     _strategy.addRule(RuleBuilder.Factory.iterate("[req1]").over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {
-        Object _value = ValueProviderHelper.toValue(_value1(propertyContainer), propertyContainer);
+        Object _value = ValueProviderHelper.toValue(_value2(propertyContainer), propertyContainer);
         return _value;
     }}));
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
