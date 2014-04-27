@@ -46,7 +46,6 @@ class StrategyInferrer{
 	@Inject Injector injector
 	@Inject extension JvmTypesBuilder jvmTypesBuilder
 	@Inject ConstructorInferrer constructorInferrer
-	@Inject XbaseCompiler xbaseCompiler
 	val Methods methods
 	var JvmGenericType jvmType
 	var org.dpolivaev.dsl.tsgen.strategydsl.Strategy strategy
@@ -92,23 +91,19 @@ class StrategyInferrer{
 	private def appendMethodsForValueProviders(ValueAction action){
 		for(valueProvider:action.valueProviders)
 			for(expr:valueProvider.expressions)
-				if(shouldCreateMethodFor(expr)) {
-					createMethod(expr, VALUE, expr.inferredType, true)
-				}
+				createMethod(expr, VALUE, expr.inferredType, true)
 
 	}
 
 	final static val NAME = "_name"
 	private def appendRulePropertyNameProviders(Rule rule){
 			for(expr:rule.nameExpressions)
-				if(shouldCreateMethodFor(expr))
-					createMethod(expr, NAME, expr.inferredType, false)
+				createMethod(expr, NAME, expr.inferredType, false)
 	}
 
 	private def appendRuleNameProviders(RuleGroup rule){
 			for(expr:rule.ruleNameExpressions)
-				if(shouldCreateMethodFor(expr))
-					createMethod(expr, NAME, expr.inferredType, false)
+				createMethod(expr, NAME, expr.inferredType, false)
 	}
 
 	private def createMethod(XExpression expr, String prefix, JvmTypeReference resultTypeRef, boolean useParameters){
@@ -123,15 +118,6 @@ class StrategyInferrer{
 					body = expr
 					visibility = JvmVisibility::PRIVATE
 				]
-	}
-
-	private def shouldCreateMethodFor(XExpression expr){
-		return !isLiteral(expr);
-	}
-
-	private def isLiteral(XExpression expr) {
-		val isLiteral = expr instanceof XStringLiteral || expr instanceof XNumberLiteral || expr instanceof XBooleanLiteral || expr instanceof XNullLiteral
-		isLiteral
 	}
 
    final static val CONDITION = "condition"
@@ -342,12 +328,7 @@ class StrategyInferrer{
 		for (expr : expressions){
 			append(".append(");
 			val methodName = methods.get(NAME, expr)
-			if(methodName == null){
-				xbaseCompiler.compileAsJavaExpression(expr, it, strategy.newTypeRef(Object))
-			}
-			else{
-				append('''«methodName»()''')
-			}
+			append('''«methodName»()''')
 			append(")");
 		}
 			append(".toString()")
@@ -456,6 +437,11 @@ class StrategyInferrer{
 		append(')')
 	}
 
+	private def isLiteral(XExpression expr) {
+		val isLiteral = expr instanceof XStringLiteral || expr instanceof XNumberLiteral || expr instanceof XBooleanLiteral || expr instanceof XNullLiteral
+		isLiteral
+	}
+
 	private def boolean  appendValueProviders(ITreeAppendable it, ValueAction valueAction, boolean started) {
 		var firstValue = started
 		for (valueProvider: valueAction.valueProviders){
@@ -470,8 +456,12 @@ class StrategyInferrer{
 				else
 					append(', ')
 				val expressions = valueProvider.expressions
-				if(valueProvider.condition == null && expressions.size == 1 && methods.get(VALUE, expressions.get(0)) == null)
-					xbaseCompiler.compileAsJavaExpression(expressions.get(0), it, valueProvider.newTypeRef(Object))
+				if(valueProvider.condition == null && expressions.size == 1 && isLiteral(expressions.get(0))){
+					val expr = expressions.get(0)
+					val methodName = methods.get(VALUE, expr)
+					append('''«methodName»(null)''')
+					
+				}
 				else
 					appendImplementationObject(it, valueAction.newTypeRef(org.dpolivaev.tsgen.ruleengine.ValueProvider).type, "Object value",
 						[appendValueExpression(it, valueProvider)])
@@ -506,12 +496,7 @@ class StrategyInferrer{
 			if(concatenation)
 				append(".append(");
 			val methodName = methods.get(VALUE, expr)
-			if(methodName == null){
-				xbaseCompiler.compileAsJavaExpression(expr, it, strategy.newTypeRef(Object))
-			}
-			else{
-				append(strategy.newTypeRef(ValueProviderHelper).type) append('''.toValue(«methodName»(propertyContainer), propertyContainer)''')
-			}
+			append(strategy.newTypeRef(ValueProviderHelper).type) append('''.toValue(«methodName»(propertyContainer), propertyContainer)''')
 			if(concatenation)
 				append(")");
 		}

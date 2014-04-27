@@ -106,7 +106,8 @@ class GenerationInferrer{
 			jvmType.members += strategy.toMethod(methodName, strategy.newTypeRef(RequirementBasedStrategy)) [
 				for(parameter:strategy.parameters)
 					parameters += parameter.toParameter(parameter.name, parameter.parameterType)
-				body = [
+				body = [appendable |
+					val it = appendable.trace(strategy)
 					val className = StrategyInferrer.strategyClassName(strategy.name)
 					append('''return new «className»(''')
 					var firstParameter = true
@@ -137,7 +138,8 @@ class GenerationInferrer{
 			counter = counter + 1
 			val methodName = "run" + counter
 			jvmType.members += run.toMethod(methodName, run.newTypeRef(void)) [
-				body = [
+				body = [appendable |
+					val it = appendable.trace(run)
 					appendOutputConfiguration(it, "output", run, run.outputConfiguration)
 					appendOutputConfiguration(it, "report", run, run.reportConfiguration)
 					newLine
@@ -255,9 +257,10 @@ class GenerationInferrer{
 			val className = jvmType.simpleName
 			jvmType.members += script.toMethod("main", script.newTypeRef(Void::TYPE)) [
 				parameters += script.toParameter("args", script.newTypeRef(typeof(String)).addArrayTypeDimension)
-				body = [
+				body = [appendable |
 					var counter = 0
 					for (run : script.runs) {
+						val it = appendable.trace(run, true)
 						if(counter != 0)
 							newLine
 						counter = counter + 1

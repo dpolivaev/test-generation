@@ -111,7 +111,7 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 			members += oracle.toMethod("setCoverageTracker", oracle.newTypeRef(Void::TYPE)) [
 				parameters += oracle.toParameter("coverageTracker", oracle.newTypeRef(CoverageTracker))
 				body = [
-						append('this.coverageTracker = coverageTracker;')
+						trace(oracle).append('this.coverageTracker = coverageTracker;')
 				]
 				visibility = JvmVisibility::PUBLIC
 			]
@@ -119,7 +119,7 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 			members += oracle.toMethod("registerRequiredItems", oracle.newTypeRef(Void::TYPE)) [
 				parameters += oracle.toParameter("writerFactory", oracle.newTypeRef(WriterFactory))
 				body = [
-						append('writerFactory.registerRequiredItems(labels);')
+						trace(oracle).append('writerFactory.registerRequiredItems(labels);')
 				]
 				visibility = JvmVisibility::PUBLIC
 			]
@@ -128,7 +128,7 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 				annotations += oracle.toAnnotation(Override)
 				parameters += oracle.toParameter("propertyContainer", oracle.newTypeRef(PropertyContainer))
 				body = [
-						append('this.propertyContainer=propertyContainer;')
+						trace(oracle).append('this.propertyContainer=propertyContainer;')
 				]
 				visibility = JvmVisibility::PUBLIC
 			]
@@ -143,7 +143,7 @@ class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
 			members += oracle.toMethod("generationFinished", oracle.newTypeRef(Void::TYPE)) [
 				annotations += oracle.toAnnotation(Override)
 				body = [
-						append('this.propertyContainer=null;')
+						trace(oracle).append('this.propertyContainer=null;')
 				]
 				visibility = JvmVisibility::PUBLIC
 			]
