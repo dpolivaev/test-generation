@@ -24,9 +24,9 @@ let example be
 	 * z takes values '1', '2', '3', '4', '5' 
 	 */
     'parallel combinations ordered' {
-    	let x be 'a', 'b', 'c' ordered
-    	let y be 'A', 'B' ordered
-    	let z be '1', '2', '3', '4', '5' ordered
+    	let ordered x be 'a', 'b', 'c'
+    	let ordered y be 'A', 'B'
+    	let ordered z be '1', '2', '3', '4', '5'
     },
     
     /*
@@ -34,9 +34,9 @@ let example be
      * Unlike the previous case the combinations are not specified in advance.
      */
 	'parallel combinations shuffled'{
-    	let x be 'a', 'b', 'c' shuffled
-    	let y be 'A', 'B' shuffled
-    	let z be '1', '2', '3', '4', '5' shuffled
+    	let shuffled x be 'a', 'b', 'c'
+    	let shuffled y be 'A', 'B'
+    	let shuffled z be '1', '2', '3', '4', '5' 
     },
     
     /*
@@ -54,8 +54,8 @@ let example be
      * values of z depend on values of x and y
      */
 	'dependent values'{
-    	let x be 'a', 'b', 'c' ordered
-    	let y be 'A', 'B' ordered
+    	let ordered x be 'a', 'b', 'c'
+    	let ordered y be 'A', 'B'
     	let z be :x + " && " + :y,  :x + " || " + :y
     },
     
@@ -156,9 +156,9 @@ let example be
 	 */
 	'value conditions'{
 	    let x be 'a', 'b', 'c'{
-	       let y be 'A' only if :x=='a', 
+	       let ordered y be 'A' only if :x=='a', 
 	       			'B' only if :x=='b', 
-	       			'C' ordered
+	       			'C'
 		}
 	},
 	
@@ -186,7 +186,7 @@ let example be
     
      "named value lists can be reused globally " {
     	let x be from namedListOfXValues
-    	let default y be from namedListOfXValues shuffled
+    	let shuffled default y be from namedListOfXValues
     	let z be :y
     		
     },
