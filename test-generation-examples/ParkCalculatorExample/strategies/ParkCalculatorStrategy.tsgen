@@ -89,7 +89,7 @@ strategy testsForSuccess
 		 * This value list is given a name listOfValidLots.
 		 * It allows to use this list in definitions of other rules and reduce duplication.
 		 */
-		let "parking lot" be listOfValidLots with 
+		let "parking lot" be
 			"VALET_PARKING"{
 				apply valetParkingTests
 			}, 
@@ -220,7 +220,7 @@ strategy testsForFailure
 			 * lot can take values from listOfValidLots defined above
 			 * Default rules do not force iteration.  
 			 */
-			let default lot be from listOfValidLots
+			let default lot be listOfValidLots with "VALET_PARKING", "SHORT_TERM_PARKING", "LONG_TERM_GARAGE_PARKING", "LONG_TERM_SURFACE_PARKING", "ECONOMY_LOT_PARKING"
 			let illegalElement be "entry date", "entry time", "entry day part", "leaving date", "leaving time", "leaving day part"
 			let precondition#2 be ("set illegal " :illegalElement "(:wrongValue)")
 			let wrongValue be "NULL_VALUE", "BAD_VALUE"

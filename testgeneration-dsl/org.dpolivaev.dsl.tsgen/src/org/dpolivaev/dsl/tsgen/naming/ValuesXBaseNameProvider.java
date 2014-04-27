@@ -1,5 +1,6 @@
 package org.dpolivaev.dsl.tsgen.naming;
 
+import org.dpolivaev.dsl.tsgen.strategydsl.Strategy;
 import org.dpolivaev.dsl.tsgen.strategydsl.Values;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.naming.QualifiedName;
@@ -14,9 +15,19 @@ public class ValuesXBaseNameProvider extends XbaseQualifiedNameProvider {
 	
 	public QualifiedName getFullyQualifiedName(EObject obj) {
 		if(obj instanceof Values){
-			return simpleNameProvider.getFullyQualifiedName(obj);
+			return getFullyQualifiedName((Values) obj);
 		}
 		return super.getFullyQualifiedName(obj);
+	}
+
+	private QualifiedName getFullyQualifiedName(Values obj) {
+		QualifiedName lastName = simpleNameProvider.getFullyQualifiedName(obj);
+		if(lastName != null){
+			for(EObject strategy = obj.eContainer(); strategy != null; strategy = strategy.eContainer())
+				if(strategy instanceof Strategy)
+					return super.getFullyQualifiedName(strategy).append(lastName);
+		}
+		return lastName;
 	}
 
 }
