@@ -202,8 +202,8 @@ public class RuleEngineAcceptanceTest {
 
     @Test
     public void newRuleForTheSameProperty_HidesOldRule() {
-        strategy.addRule(iterate("x").over("a"));
-        strategy.addRule(iterate("x").over("b"));
+        strategy.addRule(rule("x").iterate("x").over("a"));
+        strategy.addRule(rule("x").iterate("x").over("b"));
 
         generateCombinationsForStrategy();
 
@@ -231,9 +231,9 @@ public class RuleEngineAcceptanceTest {
 
     @Test
     public void thirdRuleForTheSameProperty_HidesOldRules() {
-        strategy.addRule(iterate("x").over("a"));
-        strategy.addRule(iterate("x").over("b"));
-        strategy.addRule(iterate("x").over("c"));
+        strategy.addRule(rule("x").iterate("x").over("a"));
+        strategy.addRule(rule("x").iterate("x").over("b"));
+        strategy.addRule(rule("x").iterate("x").over("c"));
 
         generateCombinationsForStrategy();
 
@@ -242,9 +242,9 @@ public class RuleEngineAcceptanceTest {
 
     @Test
     public void thirdRuleForTheSamePropertyWithNotFulfilledCondition_IsIgnored() {
-        strategy.addRule(iterate("x").over("a"));
-        strategy.addRule(iterate("x").over("b"));
-        strategy.addRule(iterate("x").over("c")._if(FALSE));
+        strategy.addRule(rule("x").iterate("x").over("a"));
+        strategy.addRule(rule("x").iterate("x").over("b"));
+        strategy.addRule(rule("x").iterate("x").over("c")._if(FALSE));
 
         generateCombinationsForStrategy();
 
@@ -399,9 +399,9 @@ public class RuleEngineAcceptanceTest {
     @Test
     public void disableAlreadyAssignedProperty() {
         strategy.addRule(iterate("x").over("a1"));
-        strategy.addRule(iterate("y").over("a1"));
-        strategy.addRule(iterate("y").disable());
-        strategy.addRule(when("x").iterate("y").over("a2"));
+        strategy.addRule(rule("y").iterate("y").over("a1"));
+        strategy.addRule(rule("y").iterate("y").disable());
+        strategy.addRule(rule("y").when("x").iterate("y").over("a2"));
         generateCombinationsForStrategy();
         expect(combination("x", "a1", "y", "a2"));
     }

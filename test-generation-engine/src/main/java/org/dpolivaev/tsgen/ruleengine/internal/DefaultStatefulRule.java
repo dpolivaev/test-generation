@@ -38,8 +38,8 @@ public class DefaultStatefulRule extends StatefulRule {
 	}
 
 	@Override
-	public String getTriggeredRuleKey() {
-		return null;
+	public String getRuleKey() {
+		return getTargetedPropertyName();
 	}
 
 }

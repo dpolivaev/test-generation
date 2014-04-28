@@ -62,7 +62,7 @@ public class TriggeredStatefulRule extends StatefulRule {
     }
 
 	@Override
-	public String getTriggeredRuleKey() {
+	public String getRuleKey() {
 		return  ruleName;
 	}
 }

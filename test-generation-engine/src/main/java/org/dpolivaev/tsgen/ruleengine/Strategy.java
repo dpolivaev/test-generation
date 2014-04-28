@@ -10,13 +10,11 @@ import org.dpolivaev.tsgen.utils.internal.LinkedMap;
 
 public class Strategy {
     private LinkedMap<String, Rule> defaultRules = new LinkedMap<>();
-    private LinkedMap<String, Rule> topRules = new LinkedMap<>();
     private LinkedMap<String, Rule> triggeredRules = new LinkedMap<>();
     private Collection<RuleBuilder> ruleBuilders = new ArrayList<RuleBuilder>();
     
     public void initialize(){
     	defaultRules.clear();
-    	topRules.clear();
     	triggeredRules.clear();
     	for(RuleBuilder ruleBuilder : ruleBuilders)
     		addRule(ruleBuilder.create());
@@ -31,30 +29,35 @@ public class Strategy {
     }
 
 	public void addRule(Rule rule) {
-        if (rule.isDefaultRule()) {
-            addRule(defaultRules, rule.getTargetedPropertyName(), rule);
-        }
-        else {
-            if (rule.isTopRule())
-                addRule(topRules, rule.getTargetedPropertyName(), rule);
-            else {
-                addRule(triggeredRules, rule.getTriggeredRuleKey(), rule);
-            }
-        }
+		final LinkedMap<String, Rule> rules = rulesLike(rule);
+		addRule(rules, rule);
     }
 
-    private <T> void addRule(LinkedMap<T, Rule> rules, T key, Rule rule) {
-        Rule existingRule = rules.get(key);
+	public void insertRuleAfter(Rule existingRule, Rule newRule) {
+		final LinkedMap<String, Rule> rules = rulesLike(newRule);
+        rules.insertAfter(existingRule.getRuleKey(), newRule.getRuleKey(), newRule);
+	}
+
+	private LinkedMap<String, Rule> rulesLike(Rule newRule) {
+		final LinkedMap<String, Rule> rules;
+        if (newRule.isDefaultRule())
+			rules = defaultRules;
+		else
+			rules = triggeredRules;
+		return rules;
+	}
+
+    private void addRule(LinkedMap<String, Rule> rules, Rule rule) {
+        final String key = rule.getRuleKey();
+		Rule existingRule = rules.get(key);
         if (existingRule != null)
             rules.put(key, existingRule.combineWith(rule));
         else
-            rules.put(key, rule);
+            rules.add(key, rule);
     }
 
     private Collection<Rule> copy(LinkedMap<?, Rule> original) {
-        ArrayList<Rule> arrayList = new ArrayList<Rule>();
-        arrayList.addAll(original.values());
-		return arrayList;
+		return original.copyValues();
     }
 
     public Rule getDefaultRulesForProperty(String propertyName) {
@@ -65,16 +68,7 @@ public class Strategy {
     }
 
     public void removeRule(Rule rule) {
-        if (rule.isDefaultRule()) {
-            removeRule(defaultRules, rule.getTargetedPropertyName(), rule);
-        }
-        else {
-            if (rule.isTopRule())
-                removeRule(topRules, rule.getTargetedPropertyName(), rule);
-            else {
-                removeRule(triggeredRules, rule.getTriggeredRuleKey(), rule);
-            }
-        }
+		removeRule(rulesLike(rule), rule.getRuleKey(), rule);
     }
 
     private <T> void removeRule(LinkedMap<T, Rule> rules, T key, Rule rule) {
@@ -86,10 +80,6 @@ public class Strategy {
             rules.remove(key);
         else
             rules.put(key, reducedRule);
-    }
-
-    public Collection<Rule> topRules() {
-        return copy(topRules);
     }
 
     public Collection<Rule> defaultRules() {
@@ -121,6 +111,8 @@ public class Strategy {
 		this.ruleBuilders = new ArrayList<RuleBuilder>();
 		return ruleBuilders;
 	}
-    
-    
+
+	public boolean containsCompatibleRule(Rule rule) {
+		return rulesLike(rule).containsKey(rule.getRuleKey());
+	}
 }

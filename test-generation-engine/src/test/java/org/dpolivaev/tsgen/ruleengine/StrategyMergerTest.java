@@ -40,7 +40,7 @@ public class StrategyMergerTest {
 		source.addRule(triggeredRule);
 		new StrategyMerger().moveRuleFrom(source).to(target);
 		target.initialize();
-		assertRulesContainRuleForProperty(target.topRules(), "a");
+		assertRulesContainRuleForProperty(target.triggeredRules(), "a");
 	}
 
 	@Test
@@ -57,7 +57,7 @@ public class StrategyMergerTest {
 		RuleBuilder triggeredRule = RuleBuilder.Factory.iterate("a").over(1);
 		source.addRule(triggeredRule);
 		new StrategyMerger().moveRuleFrom(source).to(target);
-		assertFalse(source.topRules().contains(triggeredRule));
+		assertFalse(source.triggeredRules().contains(triggeredRule));
 	}
 
 	@Test

@@ -140,8 +140,8 @@ public class AlternatingRule implements Rule {
 	}
 
 	@Override
-	public String getTriggeredRuleKey() {
-		return firstRule().getTriggeredRuleKey();
+	public String getRuleKey() {
+		return firstRule().getRuleKey();
 	}
 
 }

@@ -1,5 +1,6 @@
 package org.dpolivaev.tsgen.ruleengine;
 
+import static org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory.rule;
 import static org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory.iterate;
 import static org.dpolivaev.tsgen.testutils.TestUtils.rulePropertyNameMatches;
 import static org.hamcrest.CoreMatchers.hasItem;
@@ -24,7 +25,7 @@ public class StrategyTest {
     public void afterAddingTopRule_returnsTopRule(){
         Rule rule = iterate("x").over("a").create();
         strategy.addRule(rule);
-        assertThat(strategy.topRules(), hasItem(rule));
+        assertThat(strategy.triggeredRules(), hasItem(rule));
     }
 
     @Test
@@ -32,7 +33,7 @@ public class StrategyTest {
         Rule rule = iterate("x").over("a").create();
         strategy.addRule(rule);
         strategy.removeRule(rule);
-        assertThat(strategy.topRules(), not(hasItem(rule)));
+        assertThat(strategy.triggeredRules(), not(hasItem(rule)));
     }
 
     @Test
@@ -44,11 +45,11 @@ public class StrategyTest {
 
     @Test
     public void afterAddingSecondTopRuleForTheSameProperty_containsAlternatingRule(){
-        Rule rule1 = iterate("x").over("a").create();
-        Rule rule2 = iterate("x").over("a").create();
+        Rule rule1 = rule("x").iterate("x").over("a").create();
+        Rule rule2 = rule("x").iterate("x").over("a").create();
         strategy.addRule(rule1);
         strategy.addRule(rule2);
-        assertThat(strategy.topRules(), hasItem(isA(AlternatingRule.class)));
+        assertThat(strategy.triggeredRules(), hasItem(isA(AlternatingRule.class)));
     }
 
     @Test
@@ -62,7 +63,7 @@ public class StrategyTest {
     public void afterAddingDefaultRule_doesNotReturnTopRule(){
         Rule rule = iterate("x").over("a").asDefaultRule().create();
         strategy.addRule(rule);
-        assertThat(strategy.topRules(), not(hasItem(rule)));
+        assertThat(strategy.triggeredRules(), not(hasItem(rule)));
     }
 
     @Test
@@ -92,7 +93,7 @@ public class StrategyTest {
         
         Strategy combinedStrategy = strategy.with(strategy2);
         combinedStrategy.initialize();
-        assertThat(combinedStrategy.topRules(), hasItem(rulePropertyNameMatches("p")));
+        assertThat(combinedStrategy.triggeredRules(), hasItem(rulePropertyNameMatches("p")));
         assertThat(combinedStrategy.triggeredRules(), hasItem(rulePropertyNameMatches("x")));
         assertThat(combinedStrategy.defaultRules(), hasItem(rulePropertyNameMatches("p")));
     }

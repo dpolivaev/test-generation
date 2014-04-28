@@ -117,12 +117,12 @@ public class RuleEngine implements EngineState {
         for (Rule rule : assignments.firedRules())
         	if(rule.isDefaultRule())
         		strategy.getDefaultRulesForProperty(rule.getTargetedPropertyName()).propertyCombinationFinished(this);
-        for (Rule rule : strategy.topRules())
+        for (Rule rule : strategy.triggeredRules())
             rule.propertyCombinationFinished(this);
 	}
 
 	private void fireNextCombinationStartedEvent() {
-        Collection<Rule> topRules = strategy.topRules();
+        Collection<Rule> topRules = strategy.triggeredRules();
         RuleEventPropagator propagator = new PropertyCombinationStartedPropagator(this);
         fireEvent(propagator, topRules);
 	}
@@ -159,7 +159,7 @@ public class RuleEngine implements EngineState {
     }
 
 	private boolean topRulesHaveFinished() {
-        for (Rule rule : strategy.topRules())
+        for (Rule rule : strategy.triggeredRules())
             if (rule.blocksRequiredProperties())
 				return false;
 		return true;
@@ -238,5 +238,20 @@ public class RuleEngine implements EngineState {
     
     public String getAssignmentReason() {
 		return assignmentReason;
+	}
+
+	@Override
+	public void addRule(Rule existingRule, Rule newRule) {
+		currentStrategy().insertRuleAfter(existingRule, newRule);
+	}
+
+	@Override
+	public boolean containsCompatibleRule(Rule rule) {
+		return currentStrategy().containsCompatibleRule(rule);
+	}
+
+	@Override
+	public void addCompatibleRule(Rule rule) {
+		currentStrategy().addRule(rule);
 	}
 }

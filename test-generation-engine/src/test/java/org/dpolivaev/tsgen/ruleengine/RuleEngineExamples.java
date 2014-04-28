@@ -431,9 +431,9 @@ public class RuleEngineExamples {
 //        :
 //            "c"
         
-        strategy.addRule(iterate("x").over("a"));
-        strategy.addRule(iterate("x").over("b"));
-        strategy.addRule(iterate("x").over("c"));
+        strategy.addRule(rule("x").iterate("x").over("a"));
+        strategy.addRule(rule("x").iterate("x").over("b"));
+        strategy.addRule(rule("x").iterate("x").over("c"));
         
         generateCombinationsForStrategy();
         expect(combination("x", "c"));

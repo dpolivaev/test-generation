@@ -90,10 +90,16 @@ public abstract class StatefulRule implements Rule {
 
     private void addRules(EngineState engineState) {
         Collection<RuleBuilder> rules = valueProviders.currentProvider().rules(engineState);
+        Rule cursor = this;
         for (RuleBuilder ruleCreator : rules) {
         	ruleCreator.addTriggeringProperty(targetedPropertyName);
         	Rule rule = ruleCreator.create();
-            engineState.currentStrategy().addRule(rule);
+		if(engineState.containsCompatibleRule(rule))
+			engineState.addCompatibleRule(rule);
+		else {
+			engineState.addRule(cursor, rule);
+			cursor = rule;
+		}
             createdRules.add(rule);
         }
     }

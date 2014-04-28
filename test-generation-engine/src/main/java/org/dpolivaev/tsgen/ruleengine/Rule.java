@@ -44,5 +44,5 @@ public interface Rule {
 
 	void checkRuleCompatibility(Rule rule);
 
-	String getTriggeredRuleKey();
+	String getRuleKey();
 }
