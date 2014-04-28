@@ -251,7 +251,7 @@ public class RuleEngine implements EngineState {
 	}
 
 	@Override
-	public void addCompatibleRule(Rule rule) {
+	public void addRule(Rule rule) {
 		currentStrategy().addRule(rule);
 	}
 }

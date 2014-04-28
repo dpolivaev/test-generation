@@ -6,5 +6,5 @@ public interface EngineState extends PropertyContainer{
     void setPropertyValue(Rule rule, Object value, boolean useNextValue);
 	void addRule(Rule existingRule, Rule newRule);
 	boolean containsCompatibleRule(Rule rule);
-	void addCompatibleRule(Rule rule);
+	void addRule(Rule rule);
 }

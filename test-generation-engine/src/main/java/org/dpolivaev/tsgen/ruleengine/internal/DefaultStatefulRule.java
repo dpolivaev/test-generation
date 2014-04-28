@@ -1,9 +1,12 @@
 package org.dpolivaev.tsgen.ruleengine.internal;
 
+import java.util.Collection;
 import java.util.Set;
 
 import org.dpolivaev.tsgen.ruleengine.Condition;
 import org.dpolivaev.tsgen.ruleengine.EngineState;
+import org.dpolivaev.tsgen.ruleengine.Rule;
+import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 
 public class DefaultStatefulRule extends StatefulRule {
 
@@ -40,6 +43,20 @@ public class DefaultStatefulRule extends StatefulRule {
 	@Override
 	public String getRuleKey() {
 		return getTargetedPropertyName();
+	}
+
+	protected void addRules(EngineState engineState) {
+	    Collection<RuleBuilder> rules = valueProviders.currentProvider().rules(engineState);
+	    for (RuleBuilder ruleCreator : rules) {
+		ruleCreator.addTriggeringProperty(targetedPropertyName);
+		Rule rule = ruleCreator.create();
+		if(rule.isDefaultRule())
+			engineState.addRule(rule);
+		else {
+			throw new IllegalArgumentException();
+		}
+	        createdRules.add(rule);
+	    }
 	}
 
 }

@@ -1,13 +1,11 @@
 package org.dpolivaev.tsgen.ruleengine.internal;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.dpolivaev.tsgen.ruleengine.Condition;
 import org.dpolivaev.tsgen.ruleengine.EngineState;
 import org.dpolivaev.tsgen.ruleengine.Rule;
-import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 
 /**
@@ -15,10 +13,10 @@ import org.dpolivaev.tsgen.ruleengine.SpecialValue;
  */
 public abstract class StatefulRule implements Rule {
 
-	final private String targetedPropertyName;
-    final private ValueProviders valueProviders;
+	protected final String targetedPropertyName;
+    protected final ValueProviders valueProviders;
     final private Set<Rule> dependentRules;
-    final private Set<Rule> createdRules;
+    protected final Set<Rule> createdRules;
     private Condition condition;
     private Set<String> triggeringProperties;
 
@@ -88,23 +86,9 @@ public abstract class StatefulRule implements Rule {
         }
     }
 
-    private void addRules(EngineState engineState) {
-        Collection<RuleBuilder> rules = valueProviders.currentProvider().rules(engineState);
-        Rule cursor = this;
-        for (RuleBuilder ruleCreator : rules) {
-        	ruleCreator.addTriggeringProperty(targetedPropertyName);
-        	Rule rule = ruleCreator.create();
-		if(engineState.containsCompatibleRule(rule))
-			engineState.addCompatibleRule(rule);
-		else {
-			engineState.addRule(cursor, rule);
-			cursor = rule;
-		}
-            createdRules.add(rule);
-        }
-    }
+    abstract protected void addRules(EngineState engineState);
 
-    @Override
+	@Override
     public void propertyValueSet(PropertyAssignedEvent event) {
         if (isValueAddedToCurrentCombination())
             addDependencies(event);
