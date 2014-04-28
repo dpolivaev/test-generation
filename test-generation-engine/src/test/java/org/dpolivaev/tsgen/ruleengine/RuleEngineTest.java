@@ -2,6 +2,10 @@ package org.dpolivaev.tsgen.ruleengine;
 import static org.dpolivaev.tsgen.ruleengine.RuleBuilder.Factory.iterate;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.util.Collections;
 
 import org.dpolivaev.tsgen.ruleengine.PropertyContainer;
 import org.dpolivaev.tsgen.ruleengine.RuleEngine;
@@ -21,7 +25,8 @@ public class RuleEngineTest {
 
 	@Before
 	public void setup(){
-		strategy = Mockito.mock(Strategy.class);
+		strategy = mock(Strategy.class);
+		when(strategy.triggeredRules()).thenReturn(Collections.<Rule>emptyList());
 		ruleEngine = new RuleEngine();
 	}
 

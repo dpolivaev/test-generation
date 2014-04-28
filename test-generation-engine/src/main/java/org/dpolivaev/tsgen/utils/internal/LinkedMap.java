@@ -1,12 +1,45 @@
 package org.dpolivaev.tsgen.utils.internal;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 public class LinkedMap <K, V>{
+	private static final class MapIterable<K, V> implements Iterable<V> {
+		private LinkedMapEntry<K, V> beforeFirstEntry;
+
+		MapIterable(LinkedMapEntry<K, V> firstEntry){
+			this.beforeFirstEntry = new LinkedMapEntry<K, V>(null, null);
+			this.beforeFirstEntry.next = firstEntry;
+
+		}
+		@Override
+		public Iterator<V> iterator() {
+			return new Iterator<V>() {
+				LinkedMapEntry<K, V> previousEntry = beforeFirstEntry;
+				@Override
+				public boolean hasNext() {
+					return previousEntry.next != null;
+				}
+
+				@Override
+				public V next() {
+					previousEntry = previousEntry.next;
+					if(previousEntry == null)
+						throw new NoSuchElementException();
+					return previousEntry.value;
+				}
+
+				@Override
+				public void remove() {
+					throw new UnsupportedOperationException();
+				}
+			};
+		}
+	}
+
 	final static class LinkedMapEntry<K, V>{
 		K key;
 		V value;
@@ -66,11 +99,8 @@ public class LinkedMap <K, V>{
 		return map.keySet();
 	}
 
-	public Collection<V> copyValues() {
-        ArrayList<V> arrayList = new ArrayList<V>(map.size());
-        for(LinkedMapEntry<K, V> entry = firstEntry; entry != null; entry = entry.next)
-		arrayList.add(entry.value);
-        return arrayList;
+	public Iterable<V> iterable() {
+		return new MapIterable<K, V>(firstEntry);
 	}
 
 	public boolean equals(Object o) {

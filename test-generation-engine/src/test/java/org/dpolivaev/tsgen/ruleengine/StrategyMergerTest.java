@@ -1,18 +1,12 @@
 package org.dpolivaev.tsgen.ruleengine;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import java.util.Collection;
-
-import org.dpolivaev.tsgen.ruleengine.Condition;
-import org.dpolivaev.tsgen.ruleengine.EngineState;
-import org.dpolivaev.tsgen.ruleengine.Rule;
-import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
-import org.dpolivaev.tsgen.ruleengine.Strategy;
-import org.dpolivaev.tsgen.ruleengine.StrategyMerger;
 import org.dpolivaev.tsgen.ruleengine.internal.TriggeredStatefulRule;
 import org.dpolivaev.tsgen.utils.internal.Utils;
 import org.junit.Before;
@@ -24,7 +18,7 @@ public class StrategyMergerTest {
 	private Strategy source;
 	private Strategy target;
 
-	private void assertRulesContainRuleForProperty(Collection<Rule> rules, String name) {
+	private void assertRulesContainRuleForProperty(Iterable<Rule> rules, String name) {
 		assertTrue(rules.iterator().next().getTargetedPropertyName().equals(name));
 	}
 
@@ -57,7 +51,7 @@ public class StrategyMergerTest {
 		RuleBuilder triggeredRule = RuleBuilder.Factory.iterate("a").over(1);
 		source.addRule(triggeredRule);
 		new StrategyMerger().moveRuleFrom(source).to(target);
-		assertFalse(source.triggeredRules().contains(triggeredRule));
+		assertFalse(source.triggeredRules().iterator().hasNext());
 	}
 
 	@Test

@@ -122,7 +122,7 @@ public class RuleEngine implements EngineState {
 	}
 
 	private void fireNextCombinationStartedEvent() {
-        Collection<Rule> topRules = strategy.triggeredRules();
+        Iterable<Rule> topRules = strategy.triggeredRules();
         RuleEventPropagator propagator = new PropertyCombinationStartedPropagator(this);
         fireEvent(propagator, topRules);
 	}
@@ -137,7 +137,7 @@ public class RuleEngine implements EngineState {
         }
 	}
 
-    private void firePropertyAssignedEvent(Collection<Rule> rules, PropertyAssignedEvent event) {
+    private void firePropertyAssignedEvent(Iterable<Rule> rules, PropertyAssignedEvent event) {
     	String oldAssignmentReason = assignmentReason;
         assignmentReason = event.getTargetedPropertyName() + "->";
         RuleEventPropagator propagator = new PropertyValueSetPropagator(event);
@@ -145,7 +145,7 @@ public class RuleEngine implements EngineState {
         assignmentReason = oldAssignmentReason;
     }
 
-    private void fireEvent(RuleEventPropagator propagator, Collection<Rule> rules) {
+    private void fireEvent(RuleEventPropagator propagator, Iterable<Rule> rules) {
         Set<String> oldDependencies = dependencies;
         String oldProcessedProperty = processedProperty;
         for (Rule rule : rules) {

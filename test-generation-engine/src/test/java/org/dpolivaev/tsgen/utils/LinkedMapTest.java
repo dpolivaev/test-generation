@@ -1,7 +1,10 @@
 package org.dpolivaev.tsgen.utils;
 
+import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
+
+import java.util.ArrayList;
 
 import org.dpolivaev.tsgen.utils.internal.LinkedMap;
 import org.junit.Before;
@@ -9,8 +12,10 @@ import org.junit.Test;
 
 public class LinkedMapTest {
 	private void  assertValuesEqualTo(Integer... values) {
-		Integer[] actualValues = linkedMap.copyValues().toArray(new Integer[]{});
-		assertThat(actualValues, equalTo(values));
+		ArrayList<Integer> actualValues = new ArrayList<>(values.length);
+		for (Integer item : linkedMap.iterable())
+			actualValues.add(item);
+		assertThat(actualValues, equalTo(asList(values)));
 	}
 
 	private void add(Integer value) {

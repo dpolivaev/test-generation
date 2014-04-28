@@ -56,10 +56,6 @@ public class Strategy {
             rules.add(key, rule);
     }
 
-    private Collection<Rule> copy(LinkedMap<?, Rule> original) {
-		return original.copyValues();
-    }
-
     public Rule getDefaultRulesForProperty(String propertyName) {
         Rule rule = defaultRules.get(propertyName);
         if(rule == null)
@@ -82,12 +78,12 @@ public class Strategy {
             rules.put(key, reducedRule);
     }
 
-    public Collection<Rule> defaultRules() {
-        return copy(defaultRules);
+    public Iterable<Rule> defaultRules() {
+        return defaultRules.iterable();
     }
 
-    public Collection<Rule> triggeredRules() {
-        return copy(triggeredRules);
+    public Iterable<Rule> triggeredRules() {
+        return triggeredRules.iterable();
     }
 
     public Strategy with(Strategy anotherStrategy) {
