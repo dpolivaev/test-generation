@@ -2,16 +2,16 @@ package org.dpolivaev.tsgen.ruleengine;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Set;
+
+import org.dpolivaev.tsgen.utils.internal.LinkedMap;
 
 
 
 public class Strategy {
-    private Map<String, Rule> defaultRules = new LinkedHashMap<>();
-    private Map<String, Rule> topRules = new LinkedHashMap<>();
-    private Map<String, Rule> triggeredRules = new LinkedHashMap<>();
+    private LinkedMap<String, Rule> defaultRules = new LinkedMap<>();
+    private LinkedMap<String, Rule> topRules = new LinkedMap<>();
+    private LinkedMap<String, Rule> triggeredRules = new LinkedMap<>();
     private Collection<RuleBuilder> ruleBuilders = new ArrayList<RuleBuilder>();
     
     public void initialize(){
@@ -43,7 +43,7 @@ public class Strategy {
         }
     }
 
-    private <T> void addRule(Map<T, Rule> rules, T key, Rule rule) {
+    private <T> void addRule(LinkedMap<T, Rule> rules, T key, Rule rule) {
         Rule existingRule = rules.get(key);
         if (existingRule != null)
             rules.put(key, existingRule.combineWith(rule));
@@ -51,7 +51,7 @@ public class Strategy {
             rules.put(key, rule);
     }
 
-    private Collection<Rule> copy(Map<?, Rule> original) {
+    private Collection<Rule> copy(LinkedMap<?, Rule> original) {
         ArrayList<Rule> arrayList = new ArrayList<Rule>();
         arrayList.addAll(original.values());
 		return arrayList;
@@ -77,7 +77,7 @@ public class Strategy {
         }
     }
 
-    private <T> void removeRule(Map<T, Rule> rules, T key, Rule rule) {
+    private <T> void removeRule(LinkedMap<T, Rule> rules, T key, Rule rule) {
         Rule containedRule = rules.get(key);
         if(containedRule == null)
         	return;
