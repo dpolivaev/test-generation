@@ -43,12 +43,11 @@ import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 import static extension org.dpolivaev.dsl.tsgen.jvmmodel.StrategyCompiler.*
 
 class StrategyInferrer{
+	static val OPTIMIZE_FOR_DEBUG = true
 	@Inject Injector injector
 	@Inject extension JvmTypesBuilder jvmTypesBuilder
 	@Inject ConstructorInferrer constructorInferrer
-
-	static val COMPILE_FOR_DEBUG = true
-
+	@Inject XbaseCompiler xbaseCompiler
 	val Methods methods
 	var JvmGenericType jvmType
 	var org.dpolivaev.dsl.tsgen.strategydsl.Strategy strategy
@@ -94,19 +93,22 @@ class StrategyInferrer{
 	private def appendMethodsForValueProviders(ValueAction action){
 		for(valueProvider:action.valueProviders)
 			for(expr:valueProvider.expressions)
-				createMethod(expr, VALUE, expr.inferredType, true)
+				if(shouldCreateMethodFor(expr))
+					createMethod(expr, VALUE, expr.inferredType, true)
 
 	}
 
 	final static val NAME = "_name"
 	private def appendRulePropertyNameProviders(Rule rule){
 			for(expr:rule.nameExpressions)
-				createMethod(expr, NAME, expr.inferredType, false)
+				if(shouldCreateMethodFor(expr))
+					createMethod(expr, NAME, expr.inferredType, false)
 	}
 
 	private def appendRuleNameProviders(RuleGroup rule){
 			for(expr:rule.ruleNameExpressions)
-				createMethod(expr, NAME, expr.inferredType, false)
+				if(shouldCreateMethodFor(expr))
+					createMethod(expr, NAME, expr.inferredType, false)
 	}
 
 	private def createMethod(XExpression expr, String prefix, JvmTypeReference resultTypeRef, boolean useParameters){
@@ -121,6 +123,15 @@ class StrategyInferrer{
 					body = expr
 					visibility = JvmVisibility::PRIVATE
 				]
+	}
+
+	private def shouldCreateMethodFor(XExpression expr){
+		return !isLiteral(expr);
+	}
+
+	private def isLiteral(XExpression expr) {
+		val isLiteral = expr instanceof XStringLiteral || expr instanceof XNumberLiteral || expr instanceof XBooleanLiteral || expr instanceof XNullLiteral
+		isLiteral
 	}
 
    final static val CONDITION = "condition"
@@ -331,7 +342,12 @@ class StrategyInferrer{
 		for (expr : expressions){
 			append(".append(");
 			val methodName = methods.get(NAME, expr)
-			append('''«methodName»()''')
+			if(methodName == null){
+				xbaseCompiler.compileAsJavaExpression(expr, it, strategy.newTypeRef(Object))
+			}
+			else{
+				append('''«methodName»()''')
+			}
 			append(")");
 		}
 			append(".toString()")
@@ -356,6 +372,59 @@ class StrategyInferrer{
 	 def private appendActionRuleGroups(ITreeAppendable it, ValueAction valueAction){
 			val innerGroups =  valueAction.ruleGroups
 			appendInnerGroups(it, innerGroups, true)
+	}
+
+	def private boolean appendInnerGroups(ITreeAppendable it, Collection<RuleGroup> innerGroups, boolean first) {
+		var shouldStartMethodCall = first
+		for(group:innerGroups){
+			if(! shouldStartMethodCall && group.strategy != null){
+				decreaseIndentation
+				newLine
+				append(')')
+				shouldStartMethodCall = true
+			}
+			if(group.rule != null || group.strategy != null|| group?.condition?.expr != null){
+				if(shouldStartMethodCall){
+					shouldStartMethodCall = false
+					append('.with(')
+					increaseIndentation
+					newLine
+				}
+				else{
+					append(',')
+					newLine
+				}
+				if(group?.condition?.expr != null){
+					appendConditionDefaultRule(it, group)
+					if(group.rule != null){
+						append(', ')
+						newLine
+					}
+					else if (group.strategy != null){
+						append(')')
+						newLine
+						append('.with(')
+					}
+				}
+				if(group.rule != null || group.strategy != null)
+					appendRule(it, group, true)
+			}
+			if(group.strategy != null){
+				decreaseIndentation
+				newLine
+				append(')')
+				shouldStartMethodCall = true
+			}
+			else
+				shouldStartMethodCall = appendInnerGroups(it, group.ruleGroups, shouldStartMethodCall)
+		}
+		if(first && ! shouldStartMethodCall){
+			decreaseIndentation
+			newLine
+			append(')')
+			shouldStartMethodCall = true
+		}
+		return shouldStartMethodCall
 	}
 
 	def private void appendRuleGroup(ITreeAppendable it, RuleGroup ruleGroup) {
@@ -383,51 +452,6 @@ class StrategyInferrer{
 
 
 
-	def private void appendInnerGroups(ITreeAppendable it, Collection<RuleGroup> innerGroups, boolean first) {
-		var startMethodCall = first
-		for(group:innerGroups){
-			if(! startMethodCall && group.strategy != null){
-				decreaseIndentation
-				newLine
-				append(')')
-				startMethodCall = true
-			}
-			if(group.rule != null || group.strategy != null|| group?.condition?.expr != null){
-				if(startMethodCall){
-					startMethodCall = false
-					append('.with(')
-					increaseIndentation
-					newLine
-				}
-				else{
-					append(',')
-					newLine
-				}
-				if(group?.condition?.expr != null){
-					appendConditionDefaultRule(it, group)
-					if(group.rule != null || group.strategy != null){
-						append(', ')
-						newLine
-					}
-				}
-				if(group.rule != null || group.strategy != null)
-					appendRule(it, group, true)
-			}
-			if(group.strategy != null){
-				decreaseIndentation
-				newLine
-				append(')')
-				startMethodCall = true
-			}
-			else
-				appendInnerGroups(it, group.ruleGroups, startMethodCall)
-		}
-		if(first && ! startMethodCall){
-			decreaseIndentation
-			newLine
-			append(')')
-		}
-	}
 
 	def private apppendValueAction(ITreeAppendable it, ValueAction valueAction) {
 			appendValueAction(it, valueAction)
@@ -438,11 +462,6 @@ class StrategyInferrer{
 		var firstValue = true
 		appendValueProviders(it, valueAction, firstValue)
 		append(')')
-	}
-
-	private def isLiteral(XExpression expr) {
-		val isLiteral = expr instanceof XStringLiteral || expr instanceof XNumberLiteral || expr instanceof XBooleanLiteral || expr instanceof XNullLiteral
-		isLiteral
 	}
 
 	private def boolean  appendValueProviders(ITreeAppendable it, ValueAction valueAction, boolean started) {
@@ -459,11 +478,15 @@ class StrategyInferrer{
 				else
 					append(', ')
 				val expressions = valueProvider.expressions
-				if(! COMPILE_FOR_DEBUG && valueProvider.condition == null && expressions.size == 1 && isLiteral(expressions.get(0))){
-					val expr = expressions.get(0)
-					val methodName = methods.get(VALUE, expr)
-					append('''«methodName»(null)''')
-					
+				if(valueProvider.condition == null && expressions.size == 1 && methods.get(VALUE, expressions.get(0)) == null){
+					if(! OPTIMIZE_FOR_DEBUG)
+						xbaseCompiler.compileAsJavaExpression(expressions.get(0), it, valueProvider.newTypeRef(Object))
+					else{
+					appendImplementationObject(it, valueAction.newTypeRef(org.dpolivaev.tsgen.ruleengine.ValueProvider).type, "Object value",
+						[
+							append('return ') xbaseCompiler.compileAsJavaExpression(expressions.get(0), it, valueProvider.newTypeRef(Object)) append(';')
+						])
+					}
 				}
 				else
 					appendImplementationObject(it, valueAction.newTypeRef(org.dpolivaev.tsgen.ruleengine.ValueProvider).type, "Object value",
@@ -499,7 +522,12 @@ class StrategyInferrer{
 			if(concatenation)
 				append(".append(");
 			val methodName = methods.get(VALUE, expr)
-			append(strategy.newTypeRef(ValueProviderHelper).type) append('''.toValue(«methodName»(propertyContainer), propertyContainer)''')
+			if(methodName == null){
+				xbaseCompiler.compileAsJavaExpression(expr, it, strategy.newTypeRef(Object))
+			}
+			else{
+				append(strategy.newTypeRef(ValueProviderHelper).type) append('''.toValue(«methodName»(propertyContainer), propertyContainer)''')
+			}
 			if(concatenation)
 				append(")");
 		}
