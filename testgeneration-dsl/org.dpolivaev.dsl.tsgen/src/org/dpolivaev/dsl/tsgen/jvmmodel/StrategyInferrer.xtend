@@ -46,6 +46,9 @@ class StrategyInferrer{
 	@Inject Injector injector
 	@Inject extension JvmTypesBuilder jvmTypesBuilder
 	@Inject ConstructorInferrer constructorInferrer
+
+	static val COMPILE_FOR_DEBUG = true
+
 	val Methods methods
 	var JvmGenericType jvmType
 	var org.dpolivaev.dsl.tsgen.strategydsl.Strategy strategy
@@ -456,7 +459,7 @@ class StrategyInferrer{
 				else
 					append(', ')
 				val expressions = valueProvider.expressions
-				if(valueProvider.condition == null && expressions.size == 1 && isLiteral(expressions.get(0))){
+				if(! COMPILE_FOR_DEBUG && valueProvider.condition == null && expressions.size == 1 && isLiteral(expressions.get(0))){
 					val expr = expressions.get(0)
 					val methodName = methods.get(VALUE, expr)
 					append('''«methodName»(null)''')
