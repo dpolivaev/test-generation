@@ -45,18 +45,4 @@ public class DefaultStatefulRule extends StatefulRule {
 		return getTargetedPropertyName();
 	}
 
-	protected void addRules(EngineState engineState) {
-	    Collection<RuleBuilder> rules = valueProviders.currentProvider().rules(engineState);
-	    for (RuleBuilder ruleCreator : rules) {
-		ruleCreator.addTriggeringProperty(targetedPropertyName);
-		Rule rule = ruleCreator.create();
-		if(rule.isDefaultRule())
-			engineState.addRule(rule);
-		else {
-			throw new IllegalArgumentException();
-		}
-	        createdRules.add(rule);
-	    }
-	}
-
 }

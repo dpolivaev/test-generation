@@ -69,21 +69,4 @@ public class TriggeredStatefulRule extends StatefulRule {
 		return  ruleName;
 	}
 
-	protected void addRules(EngineState engineState) {
-	    Collection<RuleBuilder> rules = valueProviders.currentProvider().rules(engineState);
-	    Rule cursor = this;
-	    for (RuleBuilder ruleCreator : rules) {
-		ruleCreator.addTriggeringProperty(targetedPropertyName);
-		Rule rule = ruleCreator.create();
-		if(engineState.containsCompatibleRule(rule))
-			engineState.addRule(rule);
-		else if (rule.isDefaultRule())
-			engineState.addRule(rule);
-		else{
-			engineState.addRule(cursor, rule);
-			cursor = rule;
-		}
-	        createdRules.add(rule);
-	    }
-	}
 }

@@ -33,11 +33,6 @@ public class Strategy {
 		addRule(rules, rule);
     }
 
-	public void insertRuleAfter(Rule existingRule, Rule newRule) {
-		final LinkedMap<String, Rule> rules = rulesLike(newRule);
-        rules.insertAfter(existingRule.getRuleKey(), newRule.getRuleKey(), newRule);
-	}
-
 	private LinkedMap<String, Rule> rulesLike(Rule newRule) {
 		final LinkedMap<String, Rule> rules;
         if (newRule.isDefaultRule())

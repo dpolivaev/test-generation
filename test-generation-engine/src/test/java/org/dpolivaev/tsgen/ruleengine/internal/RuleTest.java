@@ -227,7 +227,7 @@ public class RuleTest {
         Rule statefulRule = iterate("x").over("a").with(temporaryRule).create();
 
         statefulRule.propertyCombinationStarted(engineState);
-        verify(engineState).addRule(argThat(rulePropertyNameMatches("x")), argThat(rulePropertyNameMatches("y")));
+        verify(engineState).addRule(argThat(rulePropertyNameMatches("y")));
     }
 
     @Test
@@ -237,8 +237,8 @@ public class RuleTest {
         Rule statefulRule = iterate("x").over("a").with(temporaryRule1).with(temporaryRule2).create();
 
         statefulRule.propertyCombinationStarted(engineState);
-        verify(engineState).addRule(argThat(rulePropertyNameMatches("x")), argThat(rulePropertyNameMatches("y1")));
-        verify(engineState).addRule(argThat(rulePropertyNameMatches("y1")), argThat(rulePropertyNameMatches("y2")));
+        verify(engineState).addRule(argThat(rulePropertyNameMatches("y1")));
+        verify(engineState).addRule(argThat(rulePropertyNameMatches("y2")));
     }
 
     @Test

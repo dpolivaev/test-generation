@@ -1,11 +1,13 @@
 package org.dpolivaev.tsgen.ruleengine.internal;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.dpolivaev.tsgen.ruleengine.Condition;
 import org.dpolivaev.tsgen.ruleengine.EngineState;
 import org.dpolivaev.tsgen.ruleengine.Rule;
+import org.dpolivaev.tsgen.ruleengine.RuleBuilder;
 import org.dpolivaev.tsgen.ruleengine.SpecialValue;
 
 /**
@@ -86,7 +88,16 @@ public abstract class StatefulRule implements Rule {
         }
     }
 
-    abstract protected void addRules(EngineState engineState);
+	protected void addRules(EngineState engineState) {
+	    Collection<RuleBuilder> rules = valueProviders.currentProvider().rules(engineState);
+	    for (RuleBuilder ruleCreator : rules) {
+		ruleCreator.addTriggeringProperty(targetedPropertyName);
+		Rule rule = ruleCreator.create();
+		engineState.addRule(rule);
+	        createdRules.add(rule);
+	    }
+	}
+
 
 	@Override
     public void propertyValueSet(PropertyAssignedEvent event) {

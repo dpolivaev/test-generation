@@ -241,11 +241,6 @@ public class RuleEngine implements EngineState {
 	}
 
 	@Override
-	public void addRule(Rule existingRule, Rule newRule) {
-		currentStrategy().insertRuleAfter(existingRule, newRule);
-	}
-
-	@Override
 	public boolean containsCompatibleRule(Rule rule) {
 		return currentStrategy().containsCompatibleRule(rule);
 	}
