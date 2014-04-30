@@ -1,0 +1,74 @@
+package org.dpolivaev.testgeneration.engine.ruleengine;
+
+import org.dpolivaev.testgeneration.engine.ruleengine.Condition;
+import org.dpolivaev.testgeneration.engine.ruleengine.Order;
+import org.dpolivaev.testgeneration.engine.ruleengine.PropertyContainer;
+import org.dpolivaev.testgeneration.engine.ruleengine.RuleBuilder;
+import org.dpolivaev.testgeneration.engine.ruleengine.internal.OrderedValueProviders;
+import org.dpolivaev.testgeneration.engine.ruleengine.internal.ShuffledValueProviders;
+import org.dpolivaev.testgeneration.engine.ruleengine.internal.ValueProviders;
+import org.hamcrest.CoreMatchers;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+public class RuleBuilderTest {
+
+	@Test(expected=IllegalStateException.class)
+	public void trigggeringPropertiesSetTwice() {
+		RuleBuilder.Factory.when("x").when("y");
+	}
+	
+	@Test(expected=IllegalStateException.class)
+	public void conditionSetTwice() {
+		Condition falseCondition = new Condition() {
+			@Override
+			public boolean isSatisfied(PropertyContainer propertyContainer) {
+				return false;
+			}
+		};
+		RuleBuilder.Factory._if(falseCondition)._if(falseCondition);
+	}
+	
+	@Test
+	public void forcedOrderedValues(){
+		ValueProviders ruleValues = RuleBuilder.Factory.iterate("x").over("a", "b").ordered().ruleValues();
+		assertTrue(ruleValues instanceof OrderedValueProviders);
+	}
+
+	
+	@Test
+	public void forcedShuffledValues(){
+		ShuffledValueProviders ruleValues = (ShuffledValueProviders) RuleBuilder.Factory.iterate("x").over("a", "b").shuffled().ruleValues();
+		assertThat(ruleValues.getOrder(), CoreMatchers.equalTo(Order.SHUFFLED));
+	}
+
+	
+	@Test
+	public void orderedThanShuffledValues(){
+		ShuffledValueProviders ruleValues = (ShuffledValueProviders) RuleBuilder.Factory.iterate("x").over("a", "b").ruleValues();
+		assertThat(ruleValues.getOrder(), CoreMatchers.equalTo(Order.ORDERED_THEN_SHUFFLED));
+	}
+
+//
+//	@Test
+//	public void addConditionToTrueCondition() {
+//		final StatefulRule statefulRule = new DefaultStatefulRule(Condition.TRUE, null, null);
+//		Condition condition = mock(Condition.class);
+//		statefulRule.addCondition(condition);
+//		statefulRule.propertyRequired(null);
+//		verify(condition).isSatisfied(null);
+//	}
+//
+//	@Test
+//	public void addConditionToOtherCondition() {
+//		Condition condition = mock(Condition.class);
+//		Condition otherCondition = mock(Condition.class);
+//		final StatefulRule statefulRule = new DefaultStatefulRule(condition, null, null);
+//		statefulRule.addCondition(otherCondition);
+//		statefulRule.propertyRequired(null);
+//		verify(otherCondition).isSatisfied(null);
+//	}
+	
+}

@@ -4,9 +4,9 @@ import org.junit.BeforeClass;
 import org.junit.AfterClass;
 import org.junit.Test;
 
-import org.dpolivaev.tsgen.java.Description;
-import org.dpolivaev.tsgen.java.Coverage;
-import org.dpolivaev.tsgen.java.GoalCoverage;
+import org.dpolivaev.testgeneration.engine.java.Description;
+import org.dpolivaev.testgeneration.engine.java.Coverage;
+import org.dpolivaev.testgeneration.engine.java.GoalCoverage;
 
 import static login.LoginTestDriver.Page.*;
 						   import static login.LoginTestDriver.EMail.*;

@@ -8,7 +8,7 @@ import java.util.Date;
 
 import org.junit.Assert;
 
-import static org.dpolivaev.tsgen.java.ExceptionMatcher.throwsException;
+import static org.dpolivaev.testgeneration.engine.java.ExceptionMatcher.throwsException;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 

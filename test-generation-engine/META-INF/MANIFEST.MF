@@ -1,13 +1,13 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Test generation engine
-Bundle-SymbolicName: org.dpolivaev.tsgen.engine
+Bundle-SymbolicName: org.dpolivaev.testgeneration.engine
 Bundle-Version: 0.0.8.qualifier
-Export-Package: org.dpolivaev.tsgen.coverage,
- org.dpolivaev.tsgen.java,
- org.dpolivaev.tsgen.ruleengine,
- org.dpolivaev.tsgen.scriptwriter,
- org.dpolivaev.tsgen.strategies
+Export-Package: org.dpolivaev.testgeneration.engine.coverage,
+ org.dpolivaev.testgeneration.engine.java,
+ org.dpolivaev.testgeneration.engine.ruleengine,
+ org.dpolivaev.testgeneration.engine.scriptwriter,
+ org.dpolivaev.testgeneration.engine.strategies
 Require-Bundle: com.google.guava;bundle-version="10.0.1",
  org.hamcrest.core;bundle-version="1.3.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7

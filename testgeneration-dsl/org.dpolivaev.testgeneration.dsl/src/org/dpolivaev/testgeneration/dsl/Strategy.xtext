@@ -1,0 +1,163 @@
+grammar org.dpolivaev.testgeneration.dsl.StrategyDsl with org.eclipse.xtext.xbase.Xbase
+
+import 'http://www.eclipse.org/xtext/xbase/Xbase' as xbase
+
+generate strategydsl "http://www.dpolivaev.org/testgeneration/dsl/strategydsl"
+
+Generation: {Generation}
+	('package' package = QualifiedName)?
+	importSection=XImportSection?
+	(strategies+=Strategy | oracles += Oracle | /* goals += Goal | */ runs += Run)*
+;
+
+ID_REST hidden():
+	'.' ID | '#' INT
+;
+
+PROPERTY_ID hidden():
+	ID =>ID_REST* | STRING | '['ID =>ID_REST*']' | '[' STRING ']'
+;
+
+Strategy:
+	'strategy' name=ID ('('
+		(parameters+=FullJvmFormalParameter
+			(',' parameters+=FullJvmFormalParameter)*
+		)?
+	')')?
+
+	ruleGroups += RuleGroup*
+	;
+
+StrategyReference returns StrategyReference: {StrategyReference} 'strategy' goal ?= 'goal'? expr = XExpression;
+AppliedStrategy returns StrategyReference: {StrategyReference} 'apply' expr = XExpression;
+
+RuleGroup : {RuleGroup}
+	('rule'  (ruleName=PROPERTY_ID | '(' ruleNameExpressions += XExpression+ ')'))?
+	((trigger = Trigger condition = Condition? | condition = Condition) (rule = Rule | strategy = AppliedStrategy | '{' ruleGroups += RuleGroup* '}')
+	| rule = Rule | strategy = AppliedStrategy)
+;
+
+Rule returns Rule:
+	(
+		'let' (ordered ?= 'ordered' | shuffled ?= 'shuffled')? default ?= 'default'?
+		(name=PROPERTY_ID | '(' nameExpressions += XExpression+ ')') 'be' values = PropertyValues
+	)
+	| specialValue = 'skip'
+	| specialValue = 'disable' disabledRule = DisabledRule
+;
+
+DisabledRule:
+	'rule'  (ruleName=PROPERTY_ID | '(' ruleNameExpressions += XExpression+ ')')
+;
+
+PropertyValues returns Values:
+	(name=PROPERTY_ID 'with')?  actions += ValueAction (',' actions += ValueAction)*
+;
+
+Trigger:
+	'for' 'each' properties += PROPERTY_ID (',' properties += PROPERTY_ID)*
+;
+
+Condition: {Condition}
+	'if' trace ?= 'traced'? expr = XExpression
+;
+
+ValueAction:{ValueAction}
+	valueProviders += ValueProvider (=>',' valueProviders += ValueProvider)*
+	(=>'{' ruleGroups += RuleGroup* '}')?
+;
+
+ValueProvider:
+	trace ?= 'traced'?  
+	('from' valueReference = [Values] | ( =>'(' expressions += XExpression+ ')' | expressions += XExpression))
+	condition = ValueCondition?   
+;
+
+ValueCondition returns Condition:
+	'only' 'if' expr = XExpression
+;
+
+Run:
+	'run' strategies += StrategyReference 
+	('with' (strategies += StrategyReference | /* goals += GoalReference | */ oracles += OracleReference) 
+	   (',' (strategies += StrategyReference | /* goals += GoalReference | */ oracles += OracleReference))*
+	)?
+	outputConfiguration = OutputConfiguration?
+	reportConfiguration = ReportConfiguration?
+	
+;
+OutputConfiguration:
+	('output' xml = STRING ',')? 'apply' xslt=STRING 'output' fileExtension = STRING
+	| 'output' xml = STRING
+;
+
+ReportConfiguration returns OutputConfiguration:
+	'report' (
+		(xml = STRING ',')? 'apply' xslt=STRING 'output' fileExtension = STRING | xml = STRING
+	)
+;
+
+// GoalReference : 'goal' expr = XExpression;
+OracleReference : 'oracle' goal ?= 'goal'? expr = XExpression;
+
+Oracle:'oracle' name = ValidID('('
+		(parameters+=FullJvmFormalParameter
+			(',' parameters+=FullJvmFormalParameter)*
+		)?
+	')')?
+	(vars += XVariableDeclaration | subs += MethodDefinition)*
+;
+
+/*
+Goal: CheckList|OpenGoal;
+
+CheckList:
+'goal' name = ValidID  expr = XExpression 'matches' item += XExpression (',' item += XExpression)*
+;
+
+OpenGoal: 
+'open' 'goal' name = ValidID  expr = XExpression
+;
+ */
+ 
+MethodDefinition:
+'def' returnType=JvmTypeReference? name=ValidID 
+('(' 
+	(parameters+=FullJvmFormalParameter 
+		(',' parameters+=FullJvmFormalParameter)*
+	)? 
+')')? 
+
+(body=XBlockExpression | '=' body = XExpression);
+
+XPrimaryExpression returns xbase::XExpression:
+	PropertyCall |
+	LabeledExpression |
+	XConstructorCall |
+	XBlockExpression |
+	XSwitchExpression |
+	XFeatureCall |
+	XLiteral |
+	XIfExpression |
+	XForLoopExpression |
+	XWhileExpression |
+	XDoWhileExpression |
+	XThrowExpression |
+	XReturnExpression |
+	XTryCatchFinallyExpression |
+	XParenthesizedExpression;
+
+
+PropertyCall returns xbase::XExpression hidden():
+	{PropertyCall}
+	':' (name = PROPERTY_ID | '(' expressions += ExpressionInside+ ')')
+;
+
+ExpressionInside returns xbase::XExpression  hidden(WS, SL_COMMENT, ML_COMMENT):
+	XExpression
+;
+
+LabeledExpression returns xbase::XExpression:
+	=>({LabeledExpression}
+	'[' label = STRING) reason = XExpression?']' (=>expr = XExpression)?
+;

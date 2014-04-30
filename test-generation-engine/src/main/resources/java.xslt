@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.scriptwriter.TransformationHelper"
+xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.testgeneration.engine.scriptwriter.TransformationHelper"
 >
 <xsl:output method="text" encoding="utf-8"/>
 	<xsl:template name="eol">
@@ -116,9 +116,9 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.scriptw
 import org.junit.AfterClass;
 import org.junit.Test;
 
-import org.dpolivaev.tsgen.java.Description;
-import org.dpolivaev.tsgen.java.Coverage;
-import org.dpolivaev.tsgen.java.GoalCoverage;
+import org.dpolivaev.testgeneration.engine.java.Description;
+import org.dpolivaev.testgeneration.engine.java.Coverage;
+import org.dpolivaev.testgeneration.engine.java.GoalCoverage;
 
 </xsl:text>
 		<xsl:if test="Parameter[@name='imports']">

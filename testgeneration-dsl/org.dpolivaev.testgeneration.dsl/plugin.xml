@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<plugin>
+
+  <extension point="org.eclipse.emf.ecore.generated_package">
+    <package 
+       uri = "http://www.dpolivaev.org/testgeneration/dsl/TsGenDsl" 
+       class = "org.dpolivaev.testgeneration.dsl.strategydsl.StrategydslPackage"
+       genModel = "org/dpolivaev/testgeneration/dsl/TsGenDsl.genmodel" /> 
+	
+  </extension>
+  <extension
+        point="org.eclipse.jdt.core.classpathContainerInitializer">
+     <classpathContainerInitializer
+           class="org.dpolivaev.testgeneration.dsl.internal.buildpath.DslStrategyContainerInitializer"
+           id="org.dpolivaev.testgeneration.dsl.TSGEN_CONTAINER">
+     </classpathContainerInitializer>
+  </extension>
+
+
+
+
+</plugin>

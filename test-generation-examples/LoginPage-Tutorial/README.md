@@ -11,8 +11,8 @@ Tutorial : developing tests for a log-in page
 
 (Thanks to Sabine Herrmann for her idea)
 
-The revisions committed to this repository corresponds to the tutorial steps. 
-**Check out or compare different revisions to see how the tutorial goes.**  
+The revisions committed to this repository corresponds to the tutorial steps.
+**Check out or compare different revisions to see how the tutorial goes.**
 
 ## Step 1 : Create test generation project in eclipse
 - Create Java project.
@@ -20,15 +20,15 @@ The revisions committed to this repository corresponds to the tutorial steps.
 - To compile and execute the generated tests in the same project, add JUnit 4 Library.
 
 ## Step 2 : Create a strategy file and run test generation
-- Create new file `teststrategy/LoginTestSuite.tsgen`.
+- Create new file `teststrategy/LoginTestSuite.sdt`.
 - Allow Eclipse to add XText nature to the project.
-- Write following configuration into file `LoginTestSuite.tsgen`.
-  
-file LoginTestSuite.tsgen:
+- Write following configuration into file `LoginTestSuite.sdt`.
+
+file LoginTestSuite.sdt:
 
 	package login.testgeneration
 
-	import org.dpolivaev.tsgen.strategies.StrategyHelper;
+	import org.dpolivaev.testgeneration.engine.strategies.StrategyHelper;
 
 	strategy structure
 		let script.precondition.alias be "beforeAll"
@@ -44,14 +44,14 @@ file LoginTestSuite.tsgen:
 	strategy loginTests
 		apply TestStructure.structure
 
-		let script be "login/LoginTest"	
+		let script be "login/LoginTest"
 		let script.driver be "login/LoginTestDriver"
 
 	run strategy loginTests
-		apply "/java.xslt" output "generated-tests/java" 
- 
+		apply "/java.xslt" output "generated-tests/java"
+
 - Make automatically created directory `src-gen` a project source folder (right-click, use as source folder).
-- Right-click on file `LoginTestSuite.tsgen` in the project explorer or in the file editor context menu
+- Right-click on file `LoginTestSuite.sdt` in the project explorer or in the file editor context menu
 and select "Run As", "Generation Task".
 - Open generated JUnit test file `generated-tests/login/LoginTest.java`.
 
@@ -63,10 +63,10 @@ and select "Run As", "Generation Task".
 ##Step 4: First test case: log in with valid email address and password
 - Add test steps and their parameters to the strategy file.
 
-file TestStructure.tsgen:
+file TestStructure.sdt:
 
 	package login.testgeneration
-	import org.dpolivaev.tsgen.strategies.StrategyHelper;
+	import org.dpolivaev.testgeneration.engine.strategies.StrategyHelper;
 
 	strategy structure
 		let script.precondition.alias be "beforeAll"
@@ -80,7 +80,7 @@ file TestStructure.tsgen:
 		let default testcase.description be StrategyHelper.descriptionProvider
 
 
-file LoginTestSuite.tsgen:
+file LoginTestSuite.sdt:
 
 	package login.testgeneration
 
@@ -105,7 +105,7 @@ file LoginTestSuite.tsgen:
 		let assert be "checkPage(:pageAfterSubmit)"
 
 - Run generation task.
-- Observe reported problems because of missing method and constant declarations. 
+- Observe reported problems because of missing method and constant declarations.
 - Add enum constant declaration to the Driver class
 
 file LoginTestDriver.java:
@@ -119,7 +119,7 @@ file LoginTestDriver.java:
 
 - Add script.imports property to the strategy file
 
-file LoginTestSuite.tsgen:
+file LoginTestSuite.sdt:
 
 	strategy loginTests
 		apply structure
@@ -151,7 +151,7 @@ file LoginTestDriver.java:
 ##Step 5: Test cases: log in with valid, invalid and not entered email address and password
 - Create another two test cases with invalid and empty mails and passwords.
 
-file LoginTestSuite.tsgen:
+file LoginTestSuite.sdt:
 
 	let arrange#1 be "go to page(:page)"
 	let arrange#2 be "enter mail address(:email)"
@@ -184,8 +184,8 @@ After defining enumerations representing protocols, passwords and emails they ca
 
 	package login.testgeneration
 
-	import org.dpolivaev.tsgen.strategies.StrategyHelper;
-	
+	import org.dpolivaev.testgeneration.engine.strategies.StrategyHelper;
+
 	import static login.LoginTestDriver.EMail.*;
 	import static login.LoginTestDriver.Password.*;
 	import static login.LoginTestDriver.Page.*;
@@ -205,7 +205,7 @@ Now all quotes can be removed
 
 - Let the strategy combine all values.
 
-file LoginTestSuite.tsgen:
+file LoginTestSuite.sdt:
 
 	let email be VALID_MAIL, INVALID_MAIL, NOT_ENTERED_MAIL {
 		let password be VALID_PASSWORD, INVALID_PASSWORD, NOT_ENTERED_PASSWORD
@@ -216,11 +216,11 @@ file LoginTestSuite.tsgen:
 
 - Let the strategy combine all values.
 
-file LoginTestSuite.tsgen:
+file LoginTestSuite.sdt:
 
-	let email be 
-	VALID_MAIL { let password be VALID_PASSWORD, INVALID_PASSWORD, NOT_ENTERED_PASSWORD }, 
-	INVALID_MAIL { let password be VALID_PASSWORD }, 
+	let email be
+	VALID_MAIL { let password be VALID_PASSWORD, INVALID_PASSWORD, NOT_ENTERED_PASSWORD },
+	INVALID_MAIL { let password be VALID_PASSWORD },
 	NOT_ENTERED_MAIL { let password be VALID_PASSWORD, NOT_ENTERED_PASSWORD }
 
 - Run the generation and inspect the output.
@@ -231,31 +231,31 @@ file LoginTestDriver.java:
 
 	public enum Protocol{HTTP, HTTPS}
 
-file LoginTestSuite.tsgen, imports:
+file LoginTestSuite.sdt, imports:
 
 	import static login.LoginTestDriver.Protocol.*;
 
 
-file LoginTestSuite.tsgen, script imports:
+file LoginTestSuite.sdt, script imports:
 
 	let script.imports be "import static login.LoginTestDriver.Page.*;
 						   import static login.LoginTestDriver.EMail.*;
 						   import static login.LoginTestDriver.Password.*;
 						   import static login.LoginTestDriver.Protocol.*;"
 
-file LoginTestSuite.tsgen, strategy definition:
+file LoginTestSuite.sdt, strategy definition:
 
 	let act be "submit(:protocol)"
 
 ...
 
 	let protocol be HTTP{
-		let email be VALID_MAIL 
+		let email be VALID_MAIL
 		let password be VALID_PASSWORD
-	}, 
+	},
 	HTTPS {
-		let email be VALID_MAIL { let password be VALID_PASSWORD, INVALID_PASSWORD, NOT_ENTERED_PASSWORD}, 
-		INVALID_MAIL { let password be VALID_PASSWORD}, 
+		let email be VALID_MAIL { let password be VALID_PASSWORD, INVALID_PASSWORD, NOT_ENTERED_PASSWORD},
+		INVALID_MAIL { let password be VALID_PASSWORD},
 		NOT_ENTERED_MAIL { let password be VALID_PASSWORD, NOT_ENTERED_PASSWORD}
 	}
 
@@ -280,13 +280,13 @@ Consider the following requirements:
 
 Currently there are tests for requirements R1. and R3. Test coverage can be evaluated if requirements are referenced by the test strategy as follows:
 
-Requirement R1: 
+Requirement R1:
 
 	let protocol be HTTP{
-		let email be VALID_MAIL 
+		let email be VALID_MAIL
 		let password be VALID_PASSWORD
 		let [R1] be "logging in with protocol HTTP not allowed"
-	}, 
+	},
 
 Requirement R3:
 
@@ -301,16 +301,16 @@ Coverage report can be generated by adding keyword `goal` and subsection `report
 		apply "/java.xslt" output "generated-tests/java"
 		report  "report/testcoverage.xml"
 
-Running the test generation adds test coverage information to the generated tests 
-and produces test coverate report in xml format. 
+Running the test generation adds test coverage information to the generated tests
+and produces test coverate report in xml format.
 
 ##Step 11. Identifying gaps in requirement coverage
-It can be used for identifying gaps in requirement coverage. Particularly if strategy contains requirements which are never assigned they appear in the coverage report.  
+It can be used for identifying gaps in requirement coverage. Particularly if strategy contains requirements which are never assigned they appear in the coverage report.
 
-	if :act == "enter password(password)" && :password != NOT_ENTERED_PASSWORD && :assert == "password is not visible" 
+	if :act == "enter password(password)" && :password != NOT_ENTERED_PASSWORD && :assert == "password is not visible"
 	    let [R2] be "entered password is not visible"
 
-It produces following element in the test coverage report: 
+It produces following element in the test coverage report:
 
 	<Item name="R2" reached="0">entered password is not visible</Item>
 
@@ -321,20 +321,20 @@ Requirement R2 should be checked before the log-in is submitted. Therefore we ne
 	let arrange#1 be "go to page(:page)"
 	let page be LOGIN_PAGE
 
-	let act be 
+	let act be
 	"submit(protocol)"{
 		let arrange#2 be "enter mail address(:email)"
 		let arrange#3 be "enter password(:password)"
 		let assert be "checkPage(:pageAfterSubmit)"
 
 		let protocol be HTTP{
-			let email be VALID_MAIL 
+			let email be VALID_MAIL
 			let password be VALID_PASSWORD
 			let [R1] be "logging in with protocol HTTP not allowed"
-		}, 
+		},
 		HTTPS {
-			let email be VALID_MAIL { let password be VALID_PASSWORD, INVALID_PASSWORD, NOT_ENTERED_PASSWORD}, 
-			INVALID_MAIL { let password be VALID_PASSWORD}, 
+			let email be VALID_MAIL { let password be VALID_PASSWORD, INVALID_PASSWORD, NOT_ENTERED_PASSWORD},
+			INVALID_MAIL { let password be VALID_PASSWORD},
 			NOT_ENTERED_MAIL { let password be VALID_PASSWORD, NOT_ENTERED_PASSWORD}
 		}
 
@@ -349,7 +349,7 @@ Requirement R2 should be checked before the log-in is submitted. Therefore we ne
 		let assert be "entered password is not visible"
 	}
 
-	if :act == "enter password(password)" && :password != NOT_ENTERED_PASSWORD && :assert == "entered password is not visible" 
+	if :act == "enter password(password)" && :password != NOT_ENTERED_PASSWORD && :assert == "entered password is not visible"
 	    let [R2] be "entered password is not visible"
 
 Run test generation and add the new method to the driver class to fix the compile errors.
@@ -391,7 +391,7 @@ Here default values for properties `password` and `email` are set:
 	let default password be VALID_PASSWORD
 	let default email be VALID_MAIL
 
-	let act be 
+	let act be
 	"submit(:protocol)"{
 		let arrange#2 be "enter mail address(:email)"
 		let arrange#3 be "enter password(:password)"
@@ -425,7 +425,7 @@ If property script has different values for different test cases they are output
 
 and add set individual values for different actions:
 
-	let act be 
+	let act be
 	"submit(:protocol)"{
 		let script be "login/LoginSubmit"
 		let arrange#2 be "enter mail address(:email)"
@@ -573,11 +573,11 @@ Strategy:
 Strategies, oracles and generation run sections can be put in separate files.
 All file names should start with capital letters
 
-file LoginTestSuite.tsgen:
+file LoginTestSuite.sdt:
 
 	package login.testgeneration
 
-	import org.dpolivaev.tsgen.strategies.StrategyHelper;
+	import org.dpolivaev.testgeneration.engine.strategies.StrategyHelper;
 
 	import static login.testgeneration.LoginOracles.*;
 	import static login.testgeneration.LoginStrategies.*;
