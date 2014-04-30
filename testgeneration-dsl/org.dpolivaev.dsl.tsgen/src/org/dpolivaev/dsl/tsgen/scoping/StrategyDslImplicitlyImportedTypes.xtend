@@ -5,6 +5,8 @@ import com.google.inject.Singleton
 import java.util.List
 import org.eclipse.xtext.common.types.JvmType
 import org.eclipse.emf.ecore.resource.Resource
+import com.google.common.collect.Lists
+import org.dpolivaev.tsgen.ruleengine.SpecialValue
 
 @Singleton
 class StrategyDslImplicitlyImportedTypes extends ImplicitlyImportedTypes {
@@ -17,5 +19,10 @@ class StrategyDslImplicitlyImportedTypes extends ImplicitlyImportedTypes {
 				types.add(resourceMainType)
 		}
 		return types
+	}
+
+	override protected List<Class<?>> getStaticImportClasses() {
+		return Lists.<Class<?>> newArrayList(
+			ArrayLiterals, CollectionLiterals, InputOutput, SpecialValue);
 	}
 }
