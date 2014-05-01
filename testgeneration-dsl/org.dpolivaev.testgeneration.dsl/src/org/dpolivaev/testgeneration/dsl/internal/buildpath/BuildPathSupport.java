@@ -28,7 +28,7 @@ import org.eclipse.jdt.core.JavaCore;
 
 
 public class BuildPathSupport {
-	public final static IPath CONTAINER_PATH= new Path("org.dpolivaev.testgeneration.dsl.TSGEN_CONTAINER");
+	public final static IPath CONTAINER_PATH= new Path("org.dpolivaev.testgeneration.dsl.TESTGENERATION_CONTAINER");
 	
 	public static class PluginDescription {
 		

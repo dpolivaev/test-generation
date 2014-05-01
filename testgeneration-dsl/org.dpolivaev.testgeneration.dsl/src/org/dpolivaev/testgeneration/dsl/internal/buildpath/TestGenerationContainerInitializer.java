@@ -22,7 +22,7 @@ import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 
-public class DslStrategyContainerInitializer extends ClasspathContainerInitializer {
+public class TestGenerationContainerInitializer extends ClasspathContainerInitializer {
 
 	private static final IStatus NOT_SUPPORTED= new Status(IStatus.ERROR, TestSpecPlugin.PLUGIN_ID, ClasspathContainerInitializer.ATTRIBUTE_NOT_SUPPORTED, new String(), null);
 	private static final IStatus READ_ONLY= new Status(IStatus.ERROR, TestSpecPlugin.PLUGIN_ID, ClasspathContainerInitializer.ATTRIBUTE_READ_ONLY, new String(), null);
@@ -56,7 +56,7 @@ public class DslStrategyContainerInitializer extends ClasspathContainerInitializ
 	}
 
 
-	public DslStrategyContainerInitializer() {
+	public TestGenerationContainerInitializer() {
 	}
 
 	public void initialize(IPath containerPath, IJavaProject project) throws CoreException {

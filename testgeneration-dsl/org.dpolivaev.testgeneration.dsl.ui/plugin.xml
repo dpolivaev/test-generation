@@ -593,8 +593,8 @@
    <extension
          point="org.eclipse.jdt.ui.classpathContainerPage">
       <classpathContainerPage
-            class="org.dpolivaev.testgeneration.dsl.ui.internal.buildpath.StrategyClasspathPage"
-            id="org.dpolivaev.testgeneration.dsl.TSGEN_CONTAINER"
+            class="org.dpolivaev.testgeneration.dsl.ui.internal.buildpath.TestGenerationClasspathPage"
+            id="org.dpolivaev.testgeneration.dsl.TESTGENERATION_CONTAINER"
             name="Test generation library">
       </classpathContainerPage>
    </extension>

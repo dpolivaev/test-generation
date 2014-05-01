@@ -20,10 +20,10 @@ import org.eclipse.swt.widgets.Label;
 
 /**
   */
-public class StrategyClasspathPage extends NewElementWizardPage implements IClasspathContainerPage{
+public class TestGenerationClasspathPage extends NewElementWizardPage implements IClasspathContainerPage{
 
-	public StrategyClasspathPage() {
-		super("StrategyClasspathPage"); //$NON-NLS-1$
+	public TestGenerationClasspathPage() {
+		super("TestGenerationClasspathPage"); //$NON-NLS-1$
 	}
 
 	public void createControl(Composite parent) {
