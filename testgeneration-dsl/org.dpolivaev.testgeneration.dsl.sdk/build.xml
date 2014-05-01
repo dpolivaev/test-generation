@@ -1,12 +1,20 @@
 <project name="ExampleProjects" default="dist" basedir=".">
-	<property name="source" location="../../test-generation-examples"/>
-	<property name="destination" location="../../releases/examples/exampleProjects.zip"/>
+	<property name="example-source" location="../../test-generation-examples"/>
+	<property name="examples" location="../../releases/exampleProjects.zip"/>
+	<property name="update-site-source" location="../../testgeneration-update-site"/>
+	<property name="update-site" location="../../releases/testgeneration-update-site.zip"/>
   <target name="dist">
-  	<delete file="${destination}" failonerror="false"/>
-    <zip destfile="${destination}" 
-         basedir="${source}"
+  	<delete file="${examples}" failonerror="false"/>
+  	<delete file="${update-site}" failonerror="false"/>
+    <zip destfile="${examples}" 
+         basedir="${example-source}"
     	defaultexcludes="no"
     	excludes="**/bin/**, **/backups/**, **/.gitignore"
+    />
+    <zip destfile="${update-site}" 
+         basedir="${update-site-source}"
+    	defaultexcludes="no"
+    	excludes=".gitignore, .project"
     />
       
     </target>
