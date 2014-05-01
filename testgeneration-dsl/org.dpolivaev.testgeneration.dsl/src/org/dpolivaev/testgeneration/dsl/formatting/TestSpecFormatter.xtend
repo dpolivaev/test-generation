@@ -5,19 +5,19 @@ package org.dpolivaev.testgeneration.dsl.formatting
 
 import org.eclipse.xtext.formatting.impl.AbstractDeclarativeFormatter
 import org.eclipse.xtext.formatting.impl.FormattingConfig
-import org.dpolivaev.testgeneration.dsl.services.StrategyDslGrammarAccess
+import org.dpolivaev.testgeneration.dsl.services.TestSpecGrammarAccess
 
 import java.util.List
 
 import com.google.inject.Inject
 
 import org.eclipse.xtext.Keyword
-import org.dpolivaev.testgeneration.dsl.services.StrategyDslGrammarAccess.StrategyElements
-import org.dpolivaev.testgeneration.dsl.services.StrategyDslGrammarAccess.ValueActionElements
-import org.dpolivaev.testgeneration.dsl.services.StrategyDslGrammarAccess.RuleGroupElements
+import org.dpolivaev.testgeneration.dsl.services.TestSpecGrammarAccess.StrategyElements
+import org.dpolivaev.testgeneration.dsl.services.TestSpecGrammarAccess.ValueActionElements
+import org.dpolivaev.testgeneration.dsl.services.TestSpecGrammarAccess.RuleGroupElements
 
 // import com.google.inject.Inject
-// import org.dpolivaev.testgeneration.dsl.services.StrategyDslGrammarAccess
+// import org.dpolivaev.testgeneration.dsl.services.TestSpecGrammarAccess
 /**
  * This class contains custom formatting description.
  * 
@@ -26,9 +26,9 @@ import org.dpolivaev.testgeneration.dsl.services.StrategyDslGrammarAccess.RuleGr
  * 
  * Also see {@link org.eclipse.xtext.xtext.XtextFormattingTokenSerializer} as an example
  */
-class StrategyDslFormatter extends AbstractDeclarativeFormatter {
+class TestSpecFormatter extends AbstractDeclarativeFormatter {
 
-	@Inject extension StrategyDslGrammarAccess
+	@Inject extension TestSpecGrammarAccess
 
 	override protected void configureFormatting(FormattingConfig c) {
 		c.setAutoLinewrap(120);

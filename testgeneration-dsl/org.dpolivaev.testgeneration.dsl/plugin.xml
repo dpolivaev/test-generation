@@ -6,7 +6,7 @@
   <extension point="org.eclipse.emf.ecore.generated_package">
     <package 
        uri = "http://www.dpolivaev.org/testgeneration/dsl/TsGenDsl" 
-       class = "org.dpolivaev.testgeneration.dsl.strategydsl.StrategydslPackage"
+       class = "org.dpolivaev.testgeneration.dsl.testspec.StrategydslPackage"
        genModel = "org/dpolivaev/testgeneration/dsl/TsGenDsl.genmodel" /> 
 	
   </extension>

@@ -2,10 +2,10 @@ package org.dpolivaev.testgeneration.dsl.jvmmodel
 
 import java.util.Collection
 import javax.inject.Inject
-import org.dpolivaev.testgeneration.dsl.strategydsl.Generation
-import org.dpolivaev.testgeneration.dsl.strategydsl.OracleReference
-import org.dpolivaev.testgeneration.dsl.strategydsl.OutputConfiguration
-import org.dpolivaev.testgeneration.dsl.strategydsl.StrategyReference
+import org.dpolivaev.testgeneration.dsl.testspec.Generation
+import org.dpolivaev.testgeneration.dsl.testspec.OracleReference
+import org.dpolivaev.testgeneration.dsl.testspec.OutputConfiguration
+import org.dpolivaev.testgeneration.dsl.testspec.StrategyReference
 import org.dpolivaev.testgeneration.engine.coverage.CoverageTracker
 import org.dpolivaev.testgeneration.engine.coverage.RequirementBasedStrategy
 import org.dpolivaev.testgeneration.engine.coverage.TrackingRuleEngine
@@ -43,7 +43,7 @@ class GenerationInferrer{
 	
 	private def inferOracles(){
 		for(oracle:script.oracles)
-			jvmType.members += oracle.toField(oracle.name, oracle.newTypeRef(StrategyDslJvmModelInferrer.qualifiedClassName(
+			jvmType.members += oracle.toField(oracle.name, oracle.newTypeRef(TestSpecJvmModelInferrer.qualifiedClassName(
 				script.package, oracle.name.toFirstUpper
 			))) [
 				setInitializer [

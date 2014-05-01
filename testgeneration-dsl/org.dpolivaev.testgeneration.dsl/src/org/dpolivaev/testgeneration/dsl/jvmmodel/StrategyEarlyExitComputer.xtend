@@ -1,7 +1,7 @@
 package org.dpolivaev.testgeneration.dsl.jvmmodel
 
 import org.eclipse.xtext.xbase.controlflow.DefaultEarlyExitComputer
-import org.dpolivaev.testgeneration.dsl.strategydsl.LabeledExpression
+import org.dpolivaev.testgeneration.dsl.testspec.LabeledExpression
 import java.util.Collection
 import org.eclipse.xtext.xbase.controlflow.IEarlyExitComputer.ExitPoint
 

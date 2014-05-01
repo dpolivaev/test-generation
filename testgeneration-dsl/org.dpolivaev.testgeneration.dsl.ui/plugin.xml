@@ -6,49 +6,49 @@
     <extension
             point="org.eclipse.ui.editors">
         <editor
-            class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.XtextEditor"
+            class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.ui.editor.XtextEditor"
             contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
             default="true"
             extensions="testspec"
-            id="org.dpolivaev.testgeneration.dsl.StrategyDsl"
-            matchingStrategy="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.xbase.ui.editor.JavaEditorInputMatcher"
-            name="StrategyDsl Editor">
+            id="org.dpolivaev.testgeneration.dsl.TestSpec"
+            matchingStrategy="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.xbase.ui.editor.JavaEditorInputMatcher"
+            name="TestSpec Editor">
         </editor>
     </extension>
     <extension
         point="org.eclipse.ui.handlers">
         <handler
-            class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclarationHandler"
+            class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclarationHandler"
             commandId="org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclaration">
             <activeWhen>
                 <reference
-                    definitionId="org.dpolivaev.testgeneration.dsl.StrategyDsl.Editor.opened">
+                    definitionId="org.dpolivaev.testgeneration.dsl.TestSpec.Editor.opened">
                 </reference>
             </activeWhen>
         </handler>
         <handler
-            class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.handler.ValidateActionHandler"
-            commandId="org.dpolivaev.testgeneration.dsl.StrategyDsl.validate">
+            class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.ui.editor.handler.ValidateActionHandler"
+            commandId="org.dpolivaev.testgeneration.dsl.TestSpec.validate">
          <activeWhen>
             <reference
-                    definitionId="org.dpolivaev.testgeneration.dsl.StrategyDsl.Editor.opened">
+                    definitionId="org.dpolivaev.testgeneration.dsl.TestSpec.Editor.opened">
             </reference>
          </activeWhen>
       	</handler>
       	<!-- copy qualified name -->
         <handler
-            class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedNameHandler"
+            class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedNameHandler"
             commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName">
             <activeWhen>
-				<reference definitionId="org.dpolivaev.testgeneration.dsl.StrategyDsl.Editor.opened" />
+				<reference definitionId="org.dpolivaev.testgeneration.dsl.TestSpec.Editor.opened" />
             </activeWhen>
         </handler>
         <handler
-            class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedNameHandler"
+            class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedNameHandler"
             commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName">
             <activeWhen>
             	<and>
-            		<reference definitionId="org.dpolivaev.testgeneration.dsl.StrategyDsl.XtextEditor.opened" />
+            		<reference definitionId="org.dpolivaev.testgeneration.dsl.TestSpec.XtextEditor.opened" />
 	                <iterate>
 						<adapt type="org.eclipse.xtext.ui.editor.outline.IOutlineNode" />
 					</iterate>
@@ -57,22 +57,22 @@
         </handler>
     </extension>
     <extension point="org.eclipse.core.expressions.definitions">
-        <definition id="org.dpolivaev.testgeneration.dsl.StrategyDsl.Editor.opened">
+        <definition id="org.dpolivaev.testgeneration.dsl.TestSpec.Editor.opened">
             <and>
                 <reference definitionId="isActiveEditorAnInstanceOfXtextEditor"/>
                 <with variable="activeEditor">
                     <test property="org.eclipse.xtext.ui.editor.XtextEditor.languageName" 
-                        value="org.dpolivaev.testgeneration.dsl.StrategyDsl" 
+                        value="org.dpolivaev.testgeneration.dsl.TestSpec" 
                         forcePluginActivation="true"/>
                 </with>        
             </and>
         </definition>
-        <definition id="org.dpolivaev.testgeneration.dsl.StrategyDsl.XtextEditor.opened">
+        <definition id="org.dpolivaev.testgeneration.dsl.TestSpec.XtextEditor.opened">
             <and>
                 <reference definitionId="isXtextEditorActive"/>
                 <with variable="activeEditor">
                     <test property="org.eclipse.xtext.ui.editor.XtextEditor.languageName" 
-                        value="org.dpolivaev.testgeneration.dsl.StrategyDsl" 
+                        value="org.dpolivaev.testgeneration.dsl.TestSpec" 
                         forcePluginActivation="true"/>
                 </with>        
             </and>
@@ -81,33 +81,33 @@
     <extension
             point="org.eclipse.ui.preferencePages">
         <page
-            class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
-            id="org.dpolivaev.testgeneration.dsl.StrategyDsl"
-            name="StrategyDsl">
-            <keywordReference id="org.dpolivaev.testgeneration.dsl.ui.keyword_StrategyDsl"/>
+            class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+            id="org.dpolivaev.testgeneration.dsl.TestSpec"
+            name="TestSpec">
+            <keywordReference id="org.dpolivaev.testgeneration.dsl.ui.keyword_TestSpec"/>
         </page>
         <page
-            category="org.dpolivaev.testgeneration.dsl.StrategyDsl"
-            class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
-            id="org.dpolivaev.testgeneration.dsl.StrategyDsl.coloring"
+            category="org.dpolivaev.testgeneration.dsl.TestSpec"
+            class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
+            id="org.dpolivaev.testgeneration.dsl.TestSpec.coloring"
             name="Syntax Coloring">
-            <keywordReference id="org.dpolivaev.testgeneration.dsl.ui.keyword_StrategyDsl"/>
+            <keywordReference id="org.dpolivaev.testgeneration.dsl.ui.keyword_TestSpec"/>
         </page>
         <page
-            category="org.dpolivaev.testgeneration.dsl.StrategyDsl"
-            class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
-            id="org.dpolivaev.testgeneration.dsl.StrategyDsl.templates"
+            category="org.dpolivaev.testgeneration.dsl.TestSpec"
+            class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
+            id="org.dpolivaev.testgeneration.dsl.TestSpec.templates"
             name="Templates">
-            <keywordReference id="org.dpolivaev.testgeneration.dsl.ui.keyword_StrategyDsl"/>
+            <keywordReference id="org.dpolivaev.testgeneration.dsl.ui.keyword_TestSpec"/>
         </page>
     </extension>
     <extension
             point="org.eclipse.ui.propertyPages">
         <page
-            class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
-            id="org.dpolivaev.testgeneration.dsl.StrategyDsl"
-            name="StrategyDsl">
-            <keywordReference id="org.dpolivaev.testgeneration.dsl.ui.keyword_StrategyDsl"/>
+            class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+            id="org.dpolivaev.testgeneration.dsl.TestSpec"
+            name="TestSpec">
+            <keywordReference id="org.dpolivaev.testgeneration.dsl.ui.keyword_TestSpec"/>
             <enabledWhen>
 	            <adapt type="org.eclipse.core.resources.IProject"/>
 			</enabledWhen>
@@ -117,14 +117,14 @@
     <extension
         point="org.eclipse.ui.keywords">
         <keyword
-            id="org.dpolivaev.testgeneration.dsl.ui.keyword_StrategyDsl"
-            label="StrategyDsl"/>
+            id="org.dpolivaev.testgeneration.dsl.ui.keyword_TestSpec"
+            label="TestSpec"/>
     </extension>
     <extension
          point="org.eclipse.ui.commands">
       <command
             description="Trigger expensive validation"
-            id="org.dpolivaev.testgeneration.dsl.StrategyDsl.validate"
+            id="org.dpolivaev.testgeneration.dsl.TestSpec.validate"
             name="Validate">
       </command>
       <!-- copy qualified name -->
@@ -145,12 +145,12 @@
         <menuContribution
             locationURI="popup:#TextEditorContext?after=group.edit">
              <command
-                 commandId="org.dpolivaev.testgeneration.dsl.StrategyDsl.validate"
+                 commandId="org.dpolivaev.testgeneration.dsl.TestSpec.validate"
                  style="push"
                  tooltip="Trigger expensive validation">
             <visibleWhen checkEnabled="false">
                 <reference
-                    definitionId="org.dpolivaev.testgeneration.dsl.StrategyDsl.Editor.opened">
+                    definitionId="org.dpolivaev.testgeneration.dsl.TestSpec.Editor.opened">
                 </reference>
             </visibleWhen>
          </command>  
@@ -160,7 +160,7 @@
          	<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName" 
          		style="push" tooltip="Copy Qualified Name">
             	<visibleWhen checkEnabled="false">
-                	<reference definitionId="org.dpolivaev.testgeneration.dsl.StrategyDsl.Editor.opened" />
+                	<reference definitionId="org.dpolivaev.testgeneration.dsl.TestSpec.Editor.opened" />
             	</visibleWhen>
          	</command>  
          </menuContribution>
@@ -168,7 +168,7 @@
          	<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
             	style="push" tooltip="Copy Qualified Name">
             	<visibleWhen checkEnabled="false">
-                	<reference definitionId="org.dpolivaev.testgeneration.dsl.StrategyDsl.Editor.opened" />
+                	<reference definitionId="org.dpolivaev.testgeneration.dsl.TestSpec.Editor.opened" />
             	</visibleWhen>
          	</command>  
          </menuContribution>
@@ -177,7 +177,7 @@
 				style="push" tooltip="Copy Qualified Name">
          		<visibleWhen checkEnabled="false">
 	            	<and>
-	            		<reference definitionId="org.dpolivaev.testgeneration.dsl.StrategyDsl.XtextEditor.opened" />
+	            		<reference definitionId="org.dpolivaev.testgeneration.dsl.TestSpec.XtextEditor.opened" />
 						<iterate>
 							<adapt type="org.eclipse.xtext.ui.editor.outline.IOutlineNode" />
 						</iterate>
@@ -190,7 +190,7 @@
 		<menuContribution locationURI="popup:#TextEditorContext?endof=group.find">
 			<command commandId="org.eclipse.xtext.ui.editor.FindReferences">
 				<visibleWhen checkEnabled="false">
-                	<reference definitionId="org.dpolivaev.testgeneration.dsl.StrategyDsl.Editor.opened">
+                	<reference definitionId="org.dpolivaev.testgeneration.dsl.TestSpec.Editor.opened">
                 	</reference>
             	</visibleWhen>
 			</command>
@@ -198,11 +198,11 @@
 	</extension>
 	<extension point="org.eclipse.ui.handlers">
 	    <handler
-            class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.findrefs.FindReferencesHandler"
+            class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.ui.editor.findrefs.FindReferencesHandler"
             commandId="org.eclipse.xtext.ui.editor.FindReferences">
             <activeWhen>
                 <reference
-                    definitionId="org.dpolivaev.testgeneration.dsl.StrategyDsl.Editor.opened">
+                    definitionId="org.dpolivaev.testgeneration.dsl.TestSpec.Editor.opened">
                 </reference>
             </activeWhen>
         </handler>
@@ -213,36 +213,36 @@
 	<extension
 		point="org.eclipse.emf.ecore.extension_parser">
 		<parser
-			class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.resource.IResourceFactory"
+			class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.resource.IResourceFactory"
 			type="testspec">
 		</parser>
 	</extension>
 	<extension point="org.eclipse.xtext.extension_resourceServiceProvider">
         <resourceServiceProvider
-            class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+            class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
             uriExtension="testspec">
         </resourceServiceProvider>
     </extension>
 
 
-	<!-- marker definitions for org.dpolivaev.testgeneration.dsl.StrategyDsl -->
+	<!-- marker definitions for org.dpolivaev.testgeneration.dsl.TestSpec -->
 	<extension
-	        id="StrategyDsl.check.fast"
-	        name="StrategyDsl Problem"
+	        id="TestSpec.check.fast"
+	        name="TestSpec Problem"
 	        point="org.eclipse.core.resources.markers">
 	    <super type="org.eclipse.xtext.ui.check.fast"/>
 	    <persistent value="true"/>
 	</extension>
 	<extension
-	        id="StrategyDsl.check.normal"
-	        name="StrategyDsl Problem"
+	        id="TestSpec.check.normal"
+	        name="TestSpec Problem"
 	        point="org.eclipse.core.resources.markers">
 	    <super type="org.eclipse.xtext.ui.check.normal"/>
 	    <persistent value="true"/>
 	</extension>
 	<extension
-	        id="StrategyDsl.check.expensive"
-	        name="StrategyDsl Problem"
+	        id="TestSpec.check.expensive"
+	        name="TestSpec Problem"
 	        point="org.eclipse.core.resources.markers">
 	    <super type="org.eclipse.xtext.ui.check.expensive"/>
 	    <persistent value="true"/>
@@ -251,27 +251,27 @@
    <extension
          point="org.eclipse.xtext.builder.participant">
       <participant
-            class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant">
+            class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant">
       </participant>
    </extension>
    <extension
             point="org.eclipse.ui.preferencePages">
         <page
-            category="org.dpolivaev.testgeneration.dsl.StrategyDsl"
-            class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
-            id="org.dpolivaev.testgeneration.dsl.StrategyDsl.compiler.preferencePage"
+            category="org.dpolivaev.testgeneration.dsl.TestSpec"
+            class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
+            id="org.dpolivaev.testgeneration.dsl.TestSpec.compiler.preferencePage"
             name="Compiler">
-            <keywordReference id="org.dpolivaev.testgeneration.dsl.ui.keyword_StrategyDsl"/>
+            <keywordReference id="org.dpolivaev.testgeneration.dsl.ui.keyword_TestSpec"/>
         </page>
     </extension>
     <extension
             point="org.eclipse.ui.propertyPages">
         <page
-            category="org.dpolivaev.testgeneration.dsl.StrategyDsl"
-            class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
-            id="org.dpolivaev.testgeneration.dsl.StrategyDsl.compiler.propertyPage"
+            category="org.dpolivaev.testgeneration.dsl.TestSpec"
+            class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
+            id="org.dpolivaev.testgeneration.dsl.TestSpec.compiler.propertyPage"
             name="Compiler">
-            <keywordReference id="org.dpolivaev.testgeneration.dsl.ui.keyword_StrategyDsl"/>
+            <keywordReference id="org.dpolivaev.testgeneration.dsl.ui.keyword_TestSpec"/>
             <enabledWhen>
 	            <adapt type="org.eclipse.core.resources.IProject"/>
 			</enabledWhen>
@@ -283,11 +283,11 @@
 	<extension
 		point="org.eclipse.ui.handlers">
 		<handler 
-			class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.outline.quickoutline.ShowQuickOutlineActionHandler"
+			class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.ui.editor.outline.quickoutline.ShowQuickOutlineActionHandler"
 			commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline">
 			<activeWhen>
 				<reference
-					definitionId="org.dpolivaev.testgeneration.dsl.StrategyDsl.Editor.opened">
+					definitionId="org.dpolivaev.testgeneration.dsl.TestSpec.Editor.opened">
 				</reference>
 			</activeWhen>
 		</handler>
@@ -307,33 +307,33 @@
 				style="push"
 				tooltip="Open Quick Outline">
 				<visibleWhen checkEnabled="false">
-					<reference definitionId="org.dpolivaev.testgeneration.dsl.StrategyDsl.Editor.opened"/>
+					<reference definitionId="org.dpolivaev.testgeneration.dsl.TestSpec.Editor.opened"/>
 				</visibleWhen>
 			</command>
 		</menuContribution>
 	</extension>
-    <!-- quickfix marker resolution generator for org.dpolivaev.testgeneration.dsl.StrategyDsl -->
+    <!-- quickfix marker resolution generator for org.dpolivaev.testgeneration.dsl.TestSpec -->
     <extension
             point="org.eclipse.ui.ide.markerResolution">
         <markerResolutionGenerator
-            class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
-            markerType="org.dpolivaev.testgeneration.dsl.ui.StrategyDsl.check.fast">
+            class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+            markerType="org.dpolivaev.testgeneration.dsl.ui.TestSpec.check.fast">
             <attribute
                 name="FIXABLE_KEY"
                 value="true">
             </attribute>
         </markerResolutionGenerator>
         <markerResolutionGenerator
-            class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
-            markerType="org.dpolivaev.testgeneration.dsl.ui.StrategyDsl.check.normal">
+            class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+            markerType="org.dpolivaev.testgeneration.dsl.ui.TestSpec.check.normal">
             <attribute
                 name="FIXABLE_KEY"
                 value="true">
             </attribute>
         </markerResolutionGenerator>
         <markerResolutionGenerator
-            class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
-            markerType="org.dpolivaev.testgeneration.dsl.ui.StrategyDsl.check.expensive">
+            class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+            markerType="org.dpolivaev.testgeneration.dsl.ui.TestSpec.check.expensive">
             <attribute
                 name="FIXABLE_KEY"
                 value="true">
@@ -343,11 +343,11 @@
    	<!-- Rename Refactoring -->
 	<extension point="org.eclipse.ui.handlers">
 		<handler 
-			class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.DefaultRenameElementHandler"
+			class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.DefaultRenameElementHandler"
 			commandId="org.eclipse.xtext.ui.refactoring.RenameElement">
 			<activeWhen>
 				<reference
-					definitionId="org.dpolivaev.testgeneration.dsl.StrategyDsl.Editor.opened">
+					definitionId="org.dpolivaev.testgeneration.dsl.TestSpec.Editor.opened">
 				</reference>
 			</activeWhen>
 		</handler>
@@ -359,7 +359,7 @@
                style="push">
             <visibleWhen checkEnabled="false">
                <reference
-                     definitionId="org.dpolivaev.testgeneration.dsl.StrategyDsl.Editor.opened">
+                     definitionId="org.dpolivaev.testgeneration.dsl.TestSpec.Editor.opened">
                </reference>
             </visibleWhen>
          </command>
@@ -367,11 +367,11 @@
    </extension>
    <extension point="org.eclipse.ui.preferencePages">
 	    <page
-	        category="org.dpolivaev.testgeneration.dsl.StrategyDsl"
-	        class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.RefactoringPreferencePage"
-	        id="org.dpolivaev.testgeneration.dsl.StrategyDsl.refactoring"
+	        category="org.dpolivaev.testgeneration.dsl.TestSpec"
+	        class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.RefactoringPreferencePage"
+	        id="org.dpolivaev.testgeneration.dsl.TestSpec.refactoring"
 	        name="Refactoring">
-	        <keywordReference id="org.dpolivaev.testgeneration.dsl.ui.keyword_StrategyDsl"/>
+	        <keywordReference id="org.dpolivaev.testgeneration.dsl.ui.keyword_TestSpec"/>
 	    </page>
 	</extension>
 
@@ -379,20 +379,20 @@
 	<extension
 		point="org.eclipse.ui.handlers">
 		<handler 
-			class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.xbase.ui.hierarchy.OpenTypeHierarchyHandler"
+			class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.xbase.ui.hierarchy.OpenTypeHierarchyHandler"
 			commandId="org.eclipse.xtext.xbase.ui.hierarchy.OpenTypeHierarchy">
 			<activeWhen>
 				<reference
-					definitionId="org.dpolivaev.testgeneration.dsl.StrategyDsl.Editor.opened">
+					definitionId="org.dpolivaev.testgeneration.dsl.TestSpec.Editor.opened">
 				</reference>
 			</activeWhen>
 		</handler>
 		<handler 
-			class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.xbase.ui.hierarchy.QuickTypeHierarchyHandler"
+			class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.xbase.ui.hierarchy.QuickTypeHierarchyHandler"
 			commandId="org.eclipse.jdt.ui.edit.text.java.open.hierarchy">
 			<activeWhen>
 				<reference
-					definitionId="org.dpolivaev.testgeneration.dsl.StrategyDsl.Editor.opened">
+					definitionId="org.dpolivaev.testgeneration.dsl.TestSpec.Editor.opened">
 				</reference>
 			</activeWhen>
 		</handler>
@@ -404,7 +404,7 @@
 				style="push"
 				tooltip="Open Type Hierarchy">
 				<visibleWhen checkEnabled="false">
-					<reference definitionId="org.dpolivaev.testgeneration.dsl.StrategyDsl.Editor.opened"/>
+					<reference definitionId="org.dpolivaev.testgeneration.dsl.TestSpec.Editor.opened"/>
 				</visibleWhen>
 			</command>
 		</menuContribution>
@@ -414,7 +414,7 @@
 				style="push"
 				tooltip="Quick Type Hierarchy">
 				<visibleWhen checkEnabled="false">
-					<reference definitionId="org.dpolivaev.testgeneration.dsl.StrategyDsl.Editor.opened"/>
+					<reference definitionId="org.dpolivaev.testgeneration.dsl.TestSpec.Editor.opened"/>
 				</visibleWhen>
 			</command>
 		</menuContribution>
@@ -423,11 +423,11 @@
 	<extension
 		point="org.eclipse.ui.handlers">
 		<handler 
-			class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.xbase.ui.hierarchy.OpenCallHierachyHandler"
+			class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.xbase.ui.hierarchy.OpenCallHierachyHandler"
 			commandId="org.eclipse.xtext.xbase.ui.hierarchy.OpenCallHierarchy">
 			<activeWhen>
 				<reference
-					definitionId="org.dpolivaev.testgeneration.dsl.StrategyDsl.Editor.opened">
+					definitionId="org.dpolivaev.testgeneration.dsl.TestSpec.Editor.opened">
 				</reference>
 			</activeWhen>
 		</handler>
@@ -440,38 +440,38 @@
 				style="push"
 				tooltip="Open Call Hierarchy">
 				<visibleWhen checkEnabled="false">
-					<reference definitionId="org.dpolivaev.testgeneration.dsl.StrategyDsl.Editor.opened"/>
+					<reference definitionId="org.dpolivaev.testgeneration.dsl.TestSpec.Editor.opened"/>
 				</visibleWhen>
 			</command>
 		</menuContribution>
 	</extension>
 	<extension
          point="org.eclipse.core.runtime.adapters">
-      <factory class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.builder.smap.StratumBreakpointAdapterFactory"
+      <factory class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.builder.smap.StratumBreakpointAdapterFactory"
          adaptableType="org.eclipse.xtext.ui.editor.XtextEditor">
          <adapter type="org.eclipse.debug.ui.actions.IToggleBreakpointsTarget"/>
       </factory> 
    </extension>
    <extension point="org.eclipse.ui.editorActions">
-      <editorContribution targetID="org.dpolivaev.testgeneration.dsl.StrategyDsl" 
-                          id="org.dpolivaev.testgeneration.dsl.StrategyDsl.ide.rulerActions">
+      <editorContribution targetID="org.dpolivaev.testgeneration.dsl.TestSpec" 
+                          id="org.dpolivaev.testgeneration.dsl.TestSpec.ide.rulerActions">
 	     <action
 	             label="Not Used"
-	             class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.debug.ui.actions.RulerToggleBreakpointActionDelegate"
+	             class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.debug.ui.actions.RulerToggleBreakpointActionDelegate"
 	             style="push"
 	             actionID="RulerDoubleClick"
-	             id="org.dpolivaev.testgeneration.dsl.StrategyDsl.doubleClickBreakpointAction"/>
+	             id="org.dpolivaev.testgeneration.dsl.TestSpec.doubleClickBreakpointAction"/>
 	  </editorContribution>
    </extension>
    <extension point="org.eclipse.ui.popupMenus">
       <viewerContribution
          targetID="example.rulerContextMenuId"
-         id="org.dpolivaev.testgeneration.dsl.StrategyDsl.ide.RulerPopupActions">
+         id="org.dpolivaev.testgeneration.dsl.TestSpec.ide.RulerPopupActions">
          <action
             label="Toggle Breakpoint"
-            class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.debug.ui.actions.RulerToggleBreakpointActionDelegate"
+            class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.debug.ui.actions.RulerToggleBreakpointActionDelegate"
             menubarPath="additions"
-            id="org.dpolivaev.testgeneration.dsl.StrategyDsl.ide.rulerContextMenu.toggleBreakpointAction">
+            id="org.dpolivaev.testgeneration.dsl.TestSpec.ide.rulerContextMenu.toggleBreakpointAction">
          </action>
       </viewerContribution>
    </extension>
@@ -479,11 +479,11 @@
     <!-- Introduce Local Variable Refactoring -->
 	<extension point="org.eclipse.ui.handlers">
 		<handler 
-			class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.xbase.ui.refactoring.ExtractVariableHandler"
+			class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.xbase.ui.refactoring.ExtractVariableHandler"
 			commandId="org.eclipse.xtext.xbase.ui.refactoring.ExtractLocalVariable">
 			<activeWhen>
 				<reference
-					definitionId="org.dpolivaev.testgeneration.dsl.StrategyDsl.Editor.opened">
+					definitionId="org.dpolivaev.testgeneration.dsl.TestSpec.Editor.opened">
 				</reference>
 			</activeWhen>
 		</handler>
@@ -495,7 +495,7 @@
                style="push">
             <visibleWhen checkEnabled="false">
                <reference
-                     definitionId="org.dpolivaev.testgeneration.dsl.StrategyDsl.Editor.opened">
+                     definitionId="org.dpolivaev.testgeneration.dsl.TestSpec.Editor.opened">
                </reference>
             </visibleWhen>
          </command>
@@ -503,20 +503,20 @@
    </extension>  
 
   <extension point="org.eclipse.compare.contentViewers">
-    <viewer id="org.dpolivaev.testgeneration.dsl.StrategyDsl.compare.contentViewers"
-            class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
+    <viewer id="org.dpolivaev.testgeneration.dsl.TestSpec.compare.contentViewers"
+            class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
             extensions="testspec">
     </viewer>
   </extension>
   <extension point="org.eclipse.compare.contentMergeViewers">
-    <viewer id="org.dpolivaev.testgeneration.dsl.StrategyDsl.compare.contentMergeViewers"
-            class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
-            extensions="testspec" label="StrategyDsl Compare">
+    <viewer id="org.dpolivaev.testgeneration.dsl.TestSpec.compare.contentMergeViewers"
+            class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
+            extensions="testspec" label="TestSpec Compare">
      </viewer>
   </extension>
   <extension point="org.eclipse.ui.editors.documentProviders">
-    <provider id="org.dpolivaev.testgeneration.dsl.StrategyDsl.editors.documentProviders"
-            class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.model.XtextDocumentProvider"
+    <provider id="org.dpolivaev.testgeneration.dsl.TestSpec.editors.documentProviders"
+            class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.eclipse.xtext.ui.editor.model.XtextDocumentProvider"
             extensions="testspec">
     </provider>
   </extension>
@@ -527,7 +527,7 @@
             id="org.dpolivaev.testgeneration.dsl.ui.StrategyLaunchConfigurationType"
             modes="run, debug"
             name="Generation Launch"
-            delegate="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.dpolivaev.testgeneration.dsl.ui.launch.StrategyDSLLaunchDelegate"
+            delegate="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.dpolivaev.testgeneration.dsl.ui.launch.TestSpecLaunchDelegate"
             sourceLocatorId="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector"
             sourcePathComputerId="org.eclipse.jdt.launching.sourceLookup.javaSourcePathComputer"/>
    </extension>
@@ -535,7 +535,7 @@
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTabGroups">
       <launchConfigurationTabGroup
-            class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.dpolivaev.testgeneration.dsl.ui.launch.StrategyDSLLaunchTabGroup"
+            class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.dpolivaev.testgeneration.dsl.ui.launch.TestSpecLaunchTabGroup"
             id="org.dpolivaev.testgeneration.dsl.ui.StrategyLaunchConfigurationTabGroup"
             type="org.dpolivaev.testgeneration.dsl.ui.StrategyLaunchConfigurationType">
             <launchMode 
@@ -562,7 +562,7 @@
    <extension
          point="org.eclipse.debug.ui.launchShortcuts">
       <shortcut
-            class="org.dpolivaev.testgeneration.dsl.ui.StrategyDslExecutableExtensionFactory:org.dpolivaev.testgeneration.dsl.ui.launch.StrategyDSLLaunchShortcut"
+            class="org.dpolivaev.testgeneration.dsl.ui.TestSpecExecutableExtensionFactory:org.dpolivaev.testgeneration.dsl.ui.launch.TestSpecLaunchShortcut"
             description="Launches a Build File"
             icon="icons/buildlaunch16.gif"
             id="org.xtext.builddsl.ui.launch.shortcut1"
@@ -583,10 +583,10 @@
            </enablement>
            <contextLabel
               mode="run"
-              label="Generation Task"/>
+              label="Test Generation"/>
           <contextLabel
               mode="debug"
-              label="Generation Task"/>
+              label="Test Generation"/>
          </contextualLaunch>
       </shortcut>
    </extension>

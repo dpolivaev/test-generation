@@ -6,11 +6,11 @@ import org.eclipse.xtext.junit4.XtextRunner
 import org.junit.Test
 import org.junit.rules.TestName
 import org.junit.runner.RunWith
-import org.dpolivaev.testgeneration.dsl.StrategyDslInjectorProvider
+import org.dpolivaev.testgeneration.dsl.TestSpecInjectorProvider
 import org.junit.Rule
 
 @RunWith(XtextRunner)
-@InjectWith(StrategyDslInjectorProvider)
+@InjectWith(TestSpecInjectorProvider)
 class StrategyCompilationTest {
 	@Rule public val testName = new TestName()
 

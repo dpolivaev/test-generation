@@ -15,7 +15,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 
 import org.osgi.framework.Version;
-import org.dpolivaev.testgeneration.dsl.internal.StrategyDslPlugin;
+import org.dpolivaev.testgeneration.dsl.internal.TestSpecPlugin;
 import org.eclipse.equinox.frameworkadmin.BundleInfo;
 import org.eclipse.osgi.service.resolver.VersionRange;
 import org.eclipse.core.runtime.IPath;
@@ -68,7 +68,7 @@ public class BuildPathSupport {
 				
 				String javadocLocation=  "";
 				if(javadoc != null)
-					javadocLocation = Platform.getPreferencesService().getString(StrategyDslPlugin.PLUGIN_ID, javadoc, "", null); //$NON-NLS-1$
+					javadocLocation = Platform.getPreferencesService().getString(TestSpecPlugin.PLUGIN_ID, javadoc, "", null); //$NON-NLS-1$
 				IClasspathAttribute[] attributes;
 				if (javadocLocation.length() == 0) {
 					attributes= new IClasspathAttribute[0];

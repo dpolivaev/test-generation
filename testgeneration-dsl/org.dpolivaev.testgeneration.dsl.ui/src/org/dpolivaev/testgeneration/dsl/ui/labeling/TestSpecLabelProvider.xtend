@@ -10,7 +10,7 @@ import com.google.inject.Inject
  * 
  * see http://www.eclipse.org/Xtext/documentation.html#labelProvider
  */
-class StrategyDslLabelProvider extends org.eclipse.xtext.xbase.ui.labeling.XbaseLabelProvider {
+class TestSpecLabelProvider extends org.eclipse.xtext.xbase.ui.labeling.XbaseLabelProvider {
 
 	@Inject
 	new(org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider delegate) {

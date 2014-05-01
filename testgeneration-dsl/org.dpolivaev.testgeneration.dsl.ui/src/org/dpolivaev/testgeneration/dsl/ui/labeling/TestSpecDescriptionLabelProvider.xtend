@@ -10,7 +10,7 @@ package org.dpolivaev.testgeneration.dsl.ui.labeling
  * 
  * see http://www.eclipse.org/Xtext/documentation.html#labelProvider
  */
-class StrategyDslDescriptionLabelProvider extends org.eclipse.xtext.xbase.ui.labeling.XbaseDescriptionLabelProvider {
+class TestSpecDescriptionLabelProvider extends org.eclipse.xtext.xbase.ui.labeling.XbaseDescriptionLabelProvider {
 
 	// Labels and icons can be computed like this:
 	

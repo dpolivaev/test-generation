@@ -1,6 +1,6 @@
 package org.dpolivaev.testgeneration.dsl.typesystem
 
-import org.dpolivaev.testgeneration.dsl.strategydsl.PropertyCall
+import org.dpolivaev.testgeneration.dsl.testspec.PropertyCall
 import org.eclipse.xtext.xbase.XExpression
 import org.eclipse.xtext.xbase.typesystem.computation.ITypeComputationState
 import org.eclipse.xtext.xbase.typesystem.computation.XbaseTypeComputer
@@ -8,7 +8,7 @@ import org.eclipse.xtext.xbase.XCastedExpression
 import org.eclipse.xtext.common.types.JvmPrimitiveType
 import com.google.inject.Inject
 import org.eclipse.xtext.common.types.util.Primitives
-import org.dpolivaev.testgeneration.dsl.strategydsl.LabeledExpression
+import org.dpolivaev.testgeneration.dsl.testspec.LabeledExpression
 import org.eclipse.xtext.xbase.typesystem.references.AnyTypeReference
 
 class StrategyTypeComputer extends XbaseTypeComputer {

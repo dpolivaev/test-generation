@@ -4,15 +4,15 @@ import com.google.inject.Injector
 import java.util.ArrayList
 import java.util.Collection
 import javax.inject.Inject
-import org.dpolivaev.testgeneration.dsl.strategydsl.Condition
-import org.dpolivaev.testgeneration.dsl.strategydsl.DisabledRule
-import org.dpolivaev.testgeneration.dsl.strategydsl.Generation
-import org.dpolivaev.testgeneration.dsl.strategydsl.Rule
-import org.dpolivaev.testgeneration.dsl.strategydsl.RuleGroup
-import org.dpolivaev.testgeneration.dsl.strategydsl.StrategyReference
-import org.dpolivaev.testgeneration.dsl.strategydsl.ValueAction
-import org.dpolivaev.testgeneration.dsl.strategydsl.ValueProvider
-import org.dpolivaev.testgeneration.dsl.strategydsl.Values
+import org.dpolivaev.testgeneration.dsl.testspec.Condition
+import org.dpolivaev.testgeneration.dsl.testspec.DisabledRule
+import org.dpolivaev.testgeneration.dsl.testspec.Generation
+import org.dpolivaev.testgeneration.dsl.testspec.Rule
+import org.dpolivaev.testgeneration.dsl.testspec.RuleGroup
+import org.dpolivaev.testgeneration.dsl.testspec.StrategyReference
+import org.dpolivaev.testgeneration.dsl.testspec.ValueAction
+import org.dpolivaev.testgeneration.dsl.testspec.ValueProvider
+import org.dpolivaev.testgeneration.dsl.testspec.Values
 import org.dpolivaev.testgeneration.engine.coverage.CoverageEntry
 import org.dpolivaev.testgeneration.engine.coverage.CoverageTrackerEnabler
 import org.dpolivaev.testgeneration.engine.coverage.RequirementBasedStrategy
@@ -50,14 +50,14 @@ class StrategyInferrer{
 	@Inject XbaseCompiler xbaseCompiler
 	val Methods methods
 	var JvmGenericType jvmType
-	var org.dpolivaev.testgeneration.dsl.strategydsl.Strategy strategy
+	var org.dpolivaev.testgeneration.dsl.testspec.Strategy strategy
 
 	new(){
 		this.methods = new Methods
 	}
 
 
-	def void inferStrategy(JvmGenericType jvmType, org.dpolivaev.testgeneration.dsl.strategydsl.Strategy strategy){
+	def void inferStrategy(JvmGenericType jvmType, org.dpolivaev.testgeneration.dsl.testspec.Strategy strategy){
 		this.strategy = strategy
 		this.jvmType = jvmType
 		if(!strategy.parameters.empty)
@@ -167,7 +167,7 @@ class StrategyInferrer{
 		]
 	}
 
-	def private void addAppliedStrategyItems(ITreeAppendable it, org.dpolivaev.testgeneration.dsl.strategydsl.Strategy strategy){
+	def private void addAppliedStrategyItems(ITreeAppendable it, org.dpolivaev.testgeneration.dsl.testspec.Strategy strategy){
 		val contents = EcoreUtil2.eAllContents(strategy)
 		for(obj : contents){
 			if (obj instanceof StrategyReference){

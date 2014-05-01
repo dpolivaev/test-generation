@@ -12,7 +12,7 @@ package org.dpolivaev.testgeneration.dsl.ui.quickfix
  *
  * see http://www.eclipse.org/Xtext/documentation.html#quickfixes
  */
-class StrategyDslQuickfixProvider extends org.eclipse.xtext.xbase.ui.quickfix.XbaseQuickfixProvider {
+class TestSpecQuickfixProvider extends org.eclipse.xtext.xbase.ui.quickfix.XbaseQuickfixProvider {
 
 //	@Fix(MyDslValidator::INVALID_NAME)
 //	def capitalizeName(Issue issue, IssueResolutionAcceptor acceptor) {

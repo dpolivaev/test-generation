@@ -1,6 +1,6 @@
 package org.dpolivaev.testgeneration.dsl.ui.launch
 
-import org.dpolivaev.testgeneration.dsl.strategydsl.Generation
+import org.dpolivaev.testgeneration.dsl.testspec.Generation
 import org.eclipse.core.runtime.CoreException
 import org.eclipse.debug.core.DebugPlugin
 import org.eclipse.debug.core.ILaunchConfiguration
@@ -23,7 +23,7 @@ import org.eclipse.emf.common.util.URI
 import org.eclipse.xtext.ui.resource.IResourceSetProvider
 import com.google.inject.Inject
 
-class StrategyDSLLaunchShortcut implements ILaunchShortcut {
+class TestSpecLaunchShortcut implements ILaunchShortcut {
 	@Inject
     IResourceSetProvider resourceSetProvider;
     

@@ -5,7 +5,7 @@ package org.dpolivaev.testgeneration.dsl;
 
 import org.dpolivaev.testgeneration.dsl.jvmmodel.StrategyCompiler;
 import org.dpolivaev.testgeneration.dsl.jvmmodel.StrategyEarlyExitComputer;
-import org.dpolivaev.testgeneration.dsl.scoping.StrategyDslImplicitlyImportedTypes;
+import org.dpolivaev.testgeneration.dsl.scoping.TestSpecImplicitlyImportedTypes;
 import org.dpolivaev.testgeneration.dsl.typesystem.StrategyTypeComputer;
 import org.dpolivaev.testgeneration.dsl.naming.ValuesXBaseNameProvider;
 import org.eclipse.xtext.xbase.compiler.XbaseCompiler;
@@ -16,7 +16,7 @@ import org.eclipse.xtext.xbase.typesystem.computation.ITypeComputer;
 /**
  * Use this class to register components to be used at runtime / without the Equinox extension registry.
  */
-public class StrategyDslRuntimeModule extends org.dpolivaev.testgeneration.dsl.AbstractStrategyDslRuntimeModule {
+public class TestSpecRuntimeModule extends org.dpolivaev.testgeneration.dsl.AbstractTestSpecRuntimeModule {
 	public Class<? extends XbaseCompiler> bindXbaseCompiler() {
 		return StrategyCompiler.class;
 	}
@@ -32,7 +32,7 @@ public class StrategyDslRuntimeModule extends org.dpolivaev.testgeneration.dsl.A
 	
 	@Override
 	public Class<? extends org.eclipse.xtext.formatting.IFormatter> bindIFormatter() {
-		return org.dpolivaev.testgeneration.dsl.formatting.StrategyDslFormatter.class;
+		return org.dpolivaev.testgeneration.dsl.formatting.TestSpecFormatter.class;
 	}
 	
 	public Class<? extends IEarlyExitComputer> bindIEarlyExitComputer() {
@@ -40,7 +40,7 @@ public class StrategyDslRuntimeModule extends org.dpolivaev.testgeneration.dsl.A
 	}
 
 	public Class<? extends ImplicitlyImportedTypes> bindImplicitlyImportedTypes() {
-		return StrategyDslImplicitlyImportedTypes.class;
+		return TestSpecImplicitlyImportedTypes.class;
 	}
 
 }

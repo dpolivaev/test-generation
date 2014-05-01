@@ -3,8 +3,8 @@ package org.dpolivaev.testgeneration.dsl.jvmmodel
 import com.google.inject.Inject
 import java.util.Collections
 import java.util.HashSet
-import org.dpolivaev.testgeneration.dsl.strategydsl.LabeledExpression
-import org.dpolivaev.testgeneration.dsl.strategydsl.Rule
+import org.dpolivaev.testgeneration.dsl.testspec.LabeledExpression
+import org.dpolivaev.testgeneration.dsl.testspec.Rule
 import org.dpolivaev.testgeneration.engine.coverage.CoverageEntry
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.EcoreUtil2

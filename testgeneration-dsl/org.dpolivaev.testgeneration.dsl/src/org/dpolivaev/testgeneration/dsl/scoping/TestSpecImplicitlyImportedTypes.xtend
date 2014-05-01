@@ -9,7 +9,7 @@ import com.google.common.collect.Lists
 import org.dpolivaev.testgeneration.engine.ruleengine.SpecialValue
 
 @Singleton
-class StrategyDslImplicitlyImportedTypes extends ImplicitlyImportedTypes {
+class TestSpecImplicitlyImportedTypes extends ImplicitlyImportedTypes {
 	override List<JvmType> getStaticImportClasses(Resource context){
 		val types = super.getStaticImportClasses(context);
 		val objectsInContext = context.contents

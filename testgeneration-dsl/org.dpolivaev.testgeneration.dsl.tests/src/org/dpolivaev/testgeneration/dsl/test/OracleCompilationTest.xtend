@@ -5,12 +5,12 @@ import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.dpolivaev.testgeneration.dsl.StrategyDslInjectorProvider
+import org.dpolivaev.testgeneration.dsl.TestSpecInjectorProvider
 import org.junit.Rule
 import org.junit.rules.TestName
 
 @RunWith(XtextRunner)
-@InjectWith(StrategyDslInjectorProvider)
+@InjectWith(TestSpecInjectorProvider)
 class OracleCompilationTest {
 	@Rule public val testName = new TestName
 	@Inject extension CompilationTestGoldenMasterHelper

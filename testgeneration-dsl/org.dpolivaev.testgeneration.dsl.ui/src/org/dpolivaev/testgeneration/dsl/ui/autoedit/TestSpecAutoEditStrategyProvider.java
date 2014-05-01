@@ -2,7 +2,7 @@ package org.dpolivaev.testgeneration.dsl.ui.autoedit;
 
 import org.eclipse.xtext.ui.editor.autoedit.DefaultAutoEditStrategyProvider;
 
-public class StrategyDslAutoEditStrategyProvider extends DefaultAutoEditStrategyProvider{
+public class TestSpecAutoEditStrategyProvider extends DefaultAutoEditStrategyProvider{
 	@Override
 	protected void configureCurlyBracesBlock(IEditStrategyAcceptor acceptor){}
 	@Override

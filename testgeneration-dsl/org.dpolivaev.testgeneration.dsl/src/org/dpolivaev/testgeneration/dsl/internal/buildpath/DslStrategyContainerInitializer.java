@@ -10,7 +10,7 @@
  *******************************************************************************/
 package org.dpolivaev.testgeneration.dsl.internal.buildpath;
 
-import org.dpolivaev.testgeneration.dsl.internal.StrategyDslPlugin;
+import org.dpolivaev.testgeneration.dsl.internal.TestSpecPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
@@ -24,8 +24,8 @@ import org.eclipse.jdt.core.JavaCore;
 
 public class DslStrategyContainerInitializer extends ClasspathContainerInitializer {
 
-	private static final IStatus NOT_SUPPORTED= new Status(IStatus.ERROR, StrategyDslPlugin.PLUGIN_ID, ClasspathContainerInitializer.ATTRIBUTE_NOT_SUPPORTED, new String(), null);
-	private static final IStatus READ_ONLY= new Status(IStatus.ERROR, StrategyDslPlugin.PLUGIN_ID, ClasspathContainerInitializer.ATTRIBUTE_READ_ONLY, new String(), null);
+	private static final IStatus NOT_SUPPORTED= new Status(IStatus.ERROR, TestSpecPlugin.PLUGIN_ID, ClasspathContainerInitializer.ATTRIBUTE_NOT_SUPPORTED, new String(), null);
+	private static final IStatus READ_ONLY= new Status(IStatus.ERROR, TestSpecPlugin.PLUGIN_ID, ClasspathContainerInitializer.ATTRIBUTE_READ_ONLY, new String(), null);
 
 	private static class TestGenerationContainer implements IClasspathContainer {
 

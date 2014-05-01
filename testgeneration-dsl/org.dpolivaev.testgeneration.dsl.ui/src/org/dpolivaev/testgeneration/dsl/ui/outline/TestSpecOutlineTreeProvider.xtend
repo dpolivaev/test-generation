@@ -5,24 +5,24 @@ package org.dpolivaev.testgeneration.dsl.ui.outline
 import org.eclipse.xtext.ui.editor.outline.impl.DefaultOutlineTreeProvider
 
 ;
-import org.dpolivaev.testgeneration.dsl.strategydsl.Strategy
-import org.dpolivaev.testgeneration.dsl.strategydsl.RuleGroup
-import org.dpolivaev.testgeneration.dsl.strategydsl.Trigger
-import org.dpolivaev.testgeneration.dsl.strategydsl.Condition
+import org.dpolivaev.testgeneration.dsl.testspec.Strategy
+import org.dpolivaev.testgeneration.dsl.testspec.RuleGroup
+import org.dpolivaev.testgeneration.dsl.testspec.Trigger
+import org.dpolivaev.testgeneration.dsl.testspec.Condition
 import static extension org.eclipse.xtext.nodemodel.util.NodeModelUtils.*
 import org.eclipse.xtext.xbase.XExpression
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.ui.editor.outline.IOutlineNode
-import org.dpolivaev.testgeneration.dsl.strategydsl.Rule
-import org.dpolivaev.testgeneration.dsl.strategydsl.ValueAction
-import org.dpolivaev.testgeneration.dsl.strategydsl.Run
+import org.dpolivaev.testgeneration.dsl.testspec.Rule
+import org.dpolivaev.testgeneration.dsl.testspec.ValueAction
+import org.dpolivaev.testgeneration.dsl.testspec.Run
 
 /**
  * Customization of the default outline structure.
  *
  * see http://www.eclipse.org/Xtext/documentation.html#outline
  */
-public class StrategyDslOutlineTreeProvider extends DefaultOutlineTreeProvider {
+public class TestSpecOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	protected def _text(Strategy strategy) {return "Strategy " + strategy.name}
 	protected def _text(XExpression expr) { return expr.text}
 	protected def _text(Rule rule) {

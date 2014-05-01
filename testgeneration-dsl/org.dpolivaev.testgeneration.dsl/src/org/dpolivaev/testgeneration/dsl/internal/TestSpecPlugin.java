@@ -6,18 +6,18 @@ import org.eclipse.core.runtime.Status;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
-public class StrategyDslPlugin extends Plugin {
+public class TestSpecPlugin extends Plugin {
 	public static final String PLUGIN_ID= "org.dpolivaev.testgeneration.dsl";
 
-	private static StrategyDslPlugin plugin;
+	private static TestSpecPlugin plugin;
 	private BundleContext bundleContext;
 
-	public StrategyDslPlugin() {
+	public TestSpecPlugin() {
 		super();
 		plugin = this;
 	}
 
-	public static StrategyDslPlugin getDefault() {
+	public static TestSpecPlugin getDefault() {
 		return plugin;
 	}
 	

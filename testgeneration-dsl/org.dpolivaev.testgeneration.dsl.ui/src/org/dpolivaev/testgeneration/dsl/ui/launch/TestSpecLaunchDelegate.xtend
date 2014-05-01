@@ -13,7 +13,7 @@ import org.eclipse.debug.core.model.IProcess
 import org.eclipse.debug.ui.RefreshTab
 import org.eclipse.jdt.launching.JavaLaunchDelegate
 
-class StrategyDSLLaunchDelegate extends JavaLaunchDelegate {
+class TestSpecLaunchDelegate extends JavaLaunchDelegate {
 	
 	override launch(ILaunchConfiguration configuration, 
 		            String mode,
@@ -39,7 +39,7 @@ class StrategyDSLLaunchDelegate extends JavaLaunchDelegate {
 
 class RefreshJob extends Job {
 
-	static val Logger logger = Logger::getLogger(StrategyDSLLaunchDelegate)
+	static val Logger logger = Logger::getLogger(TestSpecLaunchDelegate)
 	
 	ILaunchConfiguration configuration
 	

@@ -18,7 +18,7 @@ import java.net.URL;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Version;
-import org.dpolivaev.testgeneration.dsl.internal.StrategyDslPlugin;
+import org.dpolivaev.testgeneration.dsl.internal.TestSpecPlugin;
 import org.eclipse.equinox.frameworkadmin.BundleInfo;
 import org.eclipse.equinox.simpleconfigurator.manipulator.SimpleConfiguratorManipulator;
 import org.eclipse.osgi.service.resolver.VersionRange;
@@ -68,7 +68,7 @@ class P2Utils {
 		Assert.isLegal(symbolicName != null);
 		Assert.isLegal(versionRange != null);
 
-		SimpleConfiguratorManipulator manipulator= (SimpleConfiguratorManipulator)StrategyDslPlugin.getDefault().getService(SimpleConfiguratorManipulator.class.getName());
+		SimpleConfiguratorManipulator manipulator= (SimpleConfiguratorManipulator)TestSpecPlugin.getDefault().getService(SimpleConfiguratorManipulator.class.getName());
 		if (manipulator == null)
 			return null;
 
@@ -80,12 +80,12 @@ class P2Utils {
 		if (isSourceBundle)
 			bundleInfoPath= SimpleConfiguratorManipulator.SOURCE_INFO;
 
-		BundleContext context= StrategyDslPlugin.getDefault().getBundle().getBundleContext();
+		BundleContext context= TestSpecPlugin.getDefault().getBundle().getBundleContext();
 		BundleInfo bundles[]= null;
 		try {
 			bundles= manipulator.loadConfiguration(context, bundleInfoPath);
 		} catch (IOException e) {
-			StrategyDslPlugin.log(e);
+			TestSpecPlugin.log(e);
 		}
 		
 		if (bundles != null) {
@@ -128,10 +128,10 @@ class P2Utils {
 			URI localFileURI= new URI(localFileURL.toExternalForm());
 			return new Path(localFileURI.getPath());
 		} catch (IOException e) {
-			StrategyDslPlugin.log(e);
+			TestSpecPlugin.log(e);
 			return null;
 		} catch (URISyntaxException e) {
-			StrategyDslPlugin.log(e);
+			TestSpecPlugin.log(e);
 			return null;
 		}
 	}

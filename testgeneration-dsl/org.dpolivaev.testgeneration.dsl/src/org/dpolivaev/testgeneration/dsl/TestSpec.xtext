@@ -1,8 +1,8 @@
-grammar org.dpolivaev.testgeneration.dsl.StrategyDsl with org.eclipse.xtext.xbase.Xbase
+grammar org.dpolivaev.testgeneration.dsl.TestSpec with org.eclipse.xtext.xbase.Xbase
 
 import 'http://www.eclipse.org/xtext/xbase/Xbase' as xbase
 
-generate strategydsl "http://www.dpolivaev.org/testgeneration/dsl/strategydsl"
+generate testspec "http://www.dpolivaev.org/testgeneration/dsl/testspec"
 
 Generation: {Generation}
 	('package' package = QualifiedName)?

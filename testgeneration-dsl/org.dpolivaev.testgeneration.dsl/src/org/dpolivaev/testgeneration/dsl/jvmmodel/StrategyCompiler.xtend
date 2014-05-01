@@ -1,8 +1,8 @@
 package org.dpolivaev.testgeneration.dsl.jvmmodel
 
 import javax.inject.Inject
-import org.dpolivaev.testgeneration.dsl.strategydsl.LabeledExpression
-import org.dpolivaev.testgeneration.dsl.strategydsl.PropertyCall
+import org.dpolivaev.testgeneration.dsl.testspec.LabeledExpression
+import org.dpolivaev.testgeneration.dsl.testspec.PropertyCall
 import org.eclipse.xtext.common.types.JvmPrimitiveType
 import org.eclipse.xtext.common.types.util.Primitives
 import org.eclipse.xtext.util.Strings

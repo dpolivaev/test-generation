@@ -5,9 +5,9 @@ package org.dpolivaev.testgeneration.dsl.validation
 
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.xbase.XExpression
-import org.dpolivaev.testgeneration.dsl.strategydsl.LabeledExpression
-import org.dpolivaev.testgeneration.dsl.strategydsl.RuleGroup
-import org.dpolivaev.testgeneration.dsl.strategydsl.StrategydslPackage
+import org.dpolivaev.testgeneration.dsl.testspec.LabeledExpression
+import org.dpolivaev.testgeneration.dsl.testspec.RuleGroup
+import org.dpolivaev.testgeneration.dsl.testspec.TestspecPackage
 
 //import org.eclipse.xtext.validation.Check
 
@@ -16,7 +16,7 @@ import org.dpolivaev.testgeneration.dsl.strategydsl.StrategydslPackage
  *
  * see http://www.eclipse.org/Xtext/documentation.html#validation
  */
-class StrategyDslValidator extends AbstractStrategyDslValidator {
+class TestSpecValidator extends AbstractTestSpecValidator {
 	@Check
 	override checkInnerExpressions(XExpression expr) {
 		val container = expr.eContainer
@@ -29,7 +29,7 @@ class StrategyDslValidator extends AbstractStrategyDslValidator {
 	@Check
 	def checkNamedRule(RuleGroup ruleGroup){
 		if (ruleGroup.ruleName != null || ! ruleGroup.ruleNameExpressions.empty) {
-			val feature = if (ruleGroup.ruleName != null) StrategydslPackage.Literals.RULE_GROUP__RULE_NAME else StrategydslPackage.Literals.RULE_GROUP__RULE_NAME_EXPRESSIONS
+			val feature = if (ruleGroup.ruleName != null) TestspecPackage.Literals.RULE_GROUP__RULE_NAME else TestspecPackage.Literals.RULE_GROUP__RULE_NAME_EXPRESSIONS
 			if(ruleGroup.rule == null){
 				error("name without rule", ruleGroup,  feature)			
 				return;

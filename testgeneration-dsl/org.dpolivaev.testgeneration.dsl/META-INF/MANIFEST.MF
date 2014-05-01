@@ -35,9 +35,9 @@ Export-Package: org.dpolivaev.testgeneration.dsl,
  org.dpolivaev.testgeneration.dsl.parser.antlr.internal,
  org.dpolivaev.testgeneration.dsl.serializer,
  org.dpolivaev.testgeneration.dsl.services,
- org.dpolivaev.testgeneration.dsl.strategydsl,
- org.dpolivaev.testgeneration.dsl.strategydsl.impl,
- org.dpolivaev.testgeneration.dsl.strategydsl.util,
+ org.dpolivaev.testgeneration.dsl.testspec,
+ org.dpolivaev.testgeneration.dsl.testspec.impl,
+ org.dpolivaev.testgeneration.dsl.testspec.util,
  org.dpolivaev.testgeneration.dsl.validation
-Bundle-Activator: org.dpolivaev.testgeneration.dsl.internal.StrategyDslPlugin
+Bundle-Activator: org.dpolivaev.testgeneration.dsl.internal.TestSpecPlugin
 

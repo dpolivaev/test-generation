@@ -1,7 +1,7 @@
 package org.dpolivaev.testgeneration.dsl.naming;
 
-import org.dpolivaev.testgeneration.dsl.strategydsl.Strategy;
-import org.dpolivaev.testgeneration.dsl.strategydsl.Values;
+import org.dpolivaev.testgeneration.dsl.testspec.Strategy;
+import org.dpolivaev.testgeneration.dsl.testspec.Values;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.naming.SimpleNameProvider;

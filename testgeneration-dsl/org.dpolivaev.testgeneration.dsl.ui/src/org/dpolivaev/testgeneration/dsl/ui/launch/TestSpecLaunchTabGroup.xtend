@@ -11,7 +11,7 @@ import org.eclipse.jdt.debug.ui.launchConfigurations.JavaClasspathTab
 import org.eclipse.jdt.debug.ui.launchConfigurations.JavaJRETab
 import org.eclipse.jdt.debug.ui.launchConfigurations.JavaMainTab
 
-class StrategyDSLLaunchTabGroup extends AbstractLaunchConfigurationTabGroup {
+class TestSpecLaunchTabGroup extends AbstractLaunchConfigurationTabGroup {
 
 	override createTabs(ILaunchConfigurationDialog dialog, String mode) {
 		val tabs = newArrayList(

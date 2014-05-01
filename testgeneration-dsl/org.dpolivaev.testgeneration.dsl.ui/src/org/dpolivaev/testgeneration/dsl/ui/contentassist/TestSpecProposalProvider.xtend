@@ -3,10 +3,10 @@
  */
 package org.dpolivaev.testgeneration.dsl.ui.contentassist
 
-import org.dpolivaev.testgeneration.dsl.ui.contentassist.AbstractStrategyDslProposalProvider
+import org.dpolivaev.testgeneration.dsl.ui.contentassist.AbstractTestSpecProposalProvider
 
 /**
  * see http://www.eclipse.org/Xtext/documentation.html#contentAssist on how to customize content assistant
  */
-class StrategyDslProposalProvider extends AbstractStrategyDslProposalProvider {
+class TestSpecProposalProvider extends AbstractTestSpecProposalProvider {
 }

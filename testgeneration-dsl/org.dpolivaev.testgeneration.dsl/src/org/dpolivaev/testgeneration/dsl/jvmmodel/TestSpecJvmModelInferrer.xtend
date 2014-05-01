@@ -3,8 +3,8 @@ package org.dpolivaev.testgeneration.dsl.jvmmodel
 import com.google.inject.Inject
 import com.google.inject.Injector
 import java.util.List
-import org.dpolivaev.testgeneration.dsl.strategydsl.Generation
-import org.dpolivaev.testgeneration.dsl.strategydsl.Oracle
+import org.dpolivaev.testgeneration.dsl.testspec.Generation
+import org.dpolivaev.testgeneration.dsl.testspec.Oracle
 import org.dpolivaev.testgeneration.engine.coverage.CoverageEntry
 import org.dpolivaev.testgeneration.engine.coverage.CoverageTracker
 import org.dpolivaev.testgeneration.engine.ruleengine.PropertyContainer
@@ -16,7 +16,7 @@ import org.eclipse.xtext.xbase.jvmmodel.IJvmDeclaredTypeAcceptor
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 import java.util.Arrays
 import org.dpolivaev.testgeneration.engine.scriptwriter.WriterFactory
-import org.dpolivaev.testgeneration.dsl.strategydsl.Strategy
+import org.dpolivaev.testgeneration.dsl.testspec.Strategy
 
 /**
  * <p>Infers a JVM model from the source model.</p> 
@@ -24,7 +24,7 @@ import org.dpolivaev.testgeneration.dsl.strategydsl.Strategy
  * <p>The JVM model should contain all elements that would appear in the Java code 
  * which is generated from the source model. Other models link against the JVM model rather than the source model.</p>     
  */
-class StrategyDslJvmModelInferrer extends AbstractModelInferrer {
+class TestSpecJvmModelInferrer extends AbstractModelInferrer {
 	/**
      * convenience API to build and initialize JVM types and their members.
      */
