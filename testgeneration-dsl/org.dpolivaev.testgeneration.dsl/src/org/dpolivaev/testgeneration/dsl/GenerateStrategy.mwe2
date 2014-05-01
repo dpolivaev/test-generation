@@ -5,7 +5,7 @@ import org.eclipse.xtext.generator.*
 import org.eclipse.xtext.ui.generator.*
 
 var grammarURI = "classpath:/org/dpolivaev/testgeneration/dsl/Strategy.xtext"
-var fileExtensions = "sdt"
+var fileExtensions = "testspec"
 var projectName = "org.dpolivaev.testgeneration.dsl"
 var runtimeProject = "../${projectName}"
 var generateXtendStub = true

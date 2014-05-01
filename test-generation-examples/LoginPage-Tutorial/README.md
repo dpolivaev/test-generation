@@ -24,7 +24,7 @@ The revisions committed to this repository corresponds to the tutorial steps.
 - Allow Eclipse to add XText nature to the project.
 - Write following configuration into file `LoginTestSuite.sdt`.
 
-file LoginTestSuite.sdt:
+file LoginTestSuite.testspec:
 
 	package login.testgeneration
 
@@ -63,7 +63,7 @@ and select "Run As", "Generation Task".
 ##Step 4: First test case: log in with valid email address and password
 - Add test steps and their parameters to the strategy file.
 
-file TestStructure.sdt:
+file TestStructure.testspec:
 
 	package login.testgeneration
 	import org.dpolivaev.testgeneration.engine.strategies.StrategyHelper;
@@ -80,7 +80,7 @@ file TestStructure.sdt:
 		let default testcase.description be StrategyHelper.descriptionProvider
 
 
-file LoginTestSuite.sdt:
+file LoginTestSuite.testspec:
 
 	package login.testgeneration
 
@@ -119,7 +119,7 @@ file LoginTestDriver.java:
 
 - Add script.imports property to the strategy file
 
-file LoginTestSuite.sdt:
+file LoginTestSuite.testspec:
 
 	strategy loginTests
 		apply structure
@@ -151,7 +151,7 @@ file LoginTestDriver.java:
 ##Step 5: Test cases: log in with valid, invalid and not entered email address and password
 - Create another two test cases with invalid and empty mails and passwords.
 
-file LoginTestSuite.sdt:
+file LoginTestSuite.testspec:
 
 	let arrange#1 be "go to page(:page)"
 	let arrange#2 be "enter mail address(:email)"
@@ -205,7 +205,7 @@ Now all quotes can be removed
 
 - Let the strategy combine all values.
 
-file LoginTestSuite.sdt:
+file LoginTestSuite.testspec:
 
 	let email be VALID_MAIL, INVALID_MAIL, NOT_ENTERED_MAIL {
 		let password be VALID_PASSWORD, INVALID_PASSWORD, NOT_ENTERED_PASSWORD
@@ -216,7 +216,7 @@ file LoginTestSuite.sdt:
 
 - Let the strategy combine all values.
 
-file LoginTestSuite.sdt:
+file LoginTestSuite.testspec:
 
 	let email be
 	VALID_MAIL { let password be VALID_PASSWORD, INVALID_PASSWORD, NOT_ENTERED_PASSWORD },
@@ -231,19 +231,19 @@ file LoginTestDriver.java:
 
 	public enum Protocol{HTTP, HTTPS}
 
-file LoginTestSuite.sdt, imports:
+file LoginTestSuite.testspec, imports:
 
 	import static login.LoginTestDriver.Protocol.*;
 
 
-file LoginTestSuite.sdt, script imports:
+file LoginTestSuite.testspec, script imports:
 
 	let script.imports be "import static login.LoginTestDriver.Page.*;
 						   import static login.LoginTestDriver.EMail.*;
 						   import static login.LoginTestDriver.Password.*;
 						   import static login.LoginTestDriver.Protocol.*;"
 
-file LoginTestSuite.sdt, strategy definition:
+file LoginTestSuite.testspec, strategy definition:
 
 	let act be "submit(:protocol)"
 
@@ -573,7 +573,7 @@ Strategy:
 Strategies, oracles and generation run sections can be put in separate files.
 All file names should start with capital letters
 
-file LoginTestSuite.sdt:
+file LoginTestSuite.testspec:
 
 	package login.testgeneration
 

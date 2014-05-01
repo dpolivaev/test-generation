@@ -44,29 +44,29 @@ class _first_StrategyFactory {
   RequirementBasedStrategy first() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
     Strategy _strategy = new Strategy();
-    _strategy.addRule(RuleBuilder.Factory.iterate(" /MyFile.sdt#/0/@strategies.1/@ruleGroups.0/@condition/@expr").over(new ValueProvider(){
+    _strategy.addRule(RuleBuilder.Factory.iterate(" /MyFile.testspec#/0/@strategies.1/@ruleGroups.0/@condition/@expr").over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {
         Boolean _condition = condition1(propertyContainer);
         return _condition;
     }}).asDefaultRule());
-    _strategy.addRule(RuleBuilder.Factory.iterate(" /MyFile.sdt#/0/@strategies.1/@ruleGroups.0/@ruleGroups.0/@condition/@expr").over(new ValueProvider(){
+    _strategy.addRule(RuleBuilder.Factory.iterate(" /MyFile.testspec#/0/@strategies.1/@ruleGroups.0/@ruleGroups.0/@condition/@expr").over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {
-        Boolean _condition = propertyContainer.<Boolean>get(" /MyFile.sdt#/0/@strategies.1/@ruleGroups.0/@condition/@expr") && condition2(propertyContainer);
+        Boolean _condition = propertyContainer.<Boolean>get(" /MyFile.testspec#/0/@strategies.1/@ruleGroups.0/@condition/@expr") && condition2(propertyContainer);
         return _condition;
     }}).asDefaultRule());
     _strategy.addRule(RuleBuilder.Factory.when("z", "z2")._if(new Condition(){
       @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
-        return propertyContainer.<Boolean>get(" /MyFile.sdt#/0/@strategies.1/@ruleGroups.0/@ruleGroups.0/@condition/@expr");
+        return propertyContainer.<Boolean>get(" /MyFile.testspec#/0/@strategies.1/@ruleGroups.0/@ruleGroups.0/@condition/@expr");
     }}).iterate("x").over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {return 1;
     }}));
     _strategy.addRules(RuleBuilder.Factory.when("z", "z2")._if(new Condition(){
       @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
-        return propertyContainer.<Boolean>get(" /MyFile.sdt#/0/@strategies.1/@ruleGroups.0/@ruleGroups.0/@condition/@expr");
+        return propertyContainer.<Boolean>get(" /MyFile.testspec#/0/@strategies.1/@ruleGroups.0/@ruleGroups.0/@condition/@expr");
     }}).with(StrategyConverter.toStrategy(_strategy3())).asRules());
     _strategy.addRule(RuleBuilder.Factory.when("z", "z2")._if(new Condition(){
       @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
-        return propertyContainer.<Boolean>get(" /MyFile.sdt#/0/@strategies.1/@ruleGroups.0/@ruleGroups.0/@condition/@expr");
+        return propertyContainer.<Boolean>get(" /MyFile.testspec#/0/@strategies.1/@ruleGroups.0/@ruleGroups.0/@condition/@expr");
     }}).iterate("z2").over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {return 4;
     }}));

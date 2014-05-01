@@ -45,14 +45,14 @@ class _first_StrategyFactory {
     _strategy.addRule(RuleBuilder.Factory.iterate("x").over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {return 1;
     }}));
-    _strategy.addRule(RuleBuilder.Factory.iterate(" /MyFile.sdt#/0/@strategies.1/@ruleGroups.1/@condition/@expr").over(new ValueProvider(){
+    _strategy.addRule(RuleBuilder.Factory.iterate(" /MyFile.testspec#/0/@strategies.1/@ruleGroups.1/@condition/@expr").over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {
         Boolean _condition = condition1(propertyContainer);
         return _condition;
     }}).asDefaultRule());
     _strategy.addRules(RuleBuilder.Factory._if(new Condition(){
       @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
-        return propertyContainer.<Boolean>get(" /MyFile.sdt#/0/@strategies.1/@ruleGroups.1/@condition/@expr");
+        return propertyContainer.<Boolean>get(" /MyFile.testspec#/0/@strategies.1/@ruleGroups.1/@condition/@expr");
     }}).with(StrategyConverter.toStrategy(_strategy2())).asRules());
     return new RequirementBasedStrategy(_requiredItems).with(_strategy).addRequiredItemsFrom(StrategyConverter.toRequirementBasedStrategy(_strategy2()));
   }
