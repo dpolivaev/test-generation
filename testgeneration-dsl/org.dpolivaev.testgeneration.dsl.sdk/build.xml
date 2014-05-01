@@ -1,0 +1,13 @@
+<project name="ExampleProjects" default="dist" basedir=".">
+	<property name="source" location="../../test-generation-examples"/>
+	<property name="destination" location="../../releases/examples/exampleProjects.zip"/>
+  <target name="dist">
+  	<delete file="${destination}" failonerror="false"/>
+    <zip destfile="${destination}" 
+         basedir="${source}"
+    	defaultexcludes="no"
+    	excludes="**/bin/**, **/backups/**, **/.gitignore"
+    />
+      
+    </target>
+</project>
