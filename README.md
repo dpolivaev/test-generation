@@ -25,9 +25,9 @@ Getting started
 The test generation framework can be either installed from update site archive or compiled from the source code licensed under LGPL 3 or later. Compilation from the source is explained later.
 
 1. Run eclipse with the test generation plugin and  import project from folder test-generation-examples into the eclipse workspace.
-2. Open file /ParkCalculatorExample/strategies/ParkCalculatorStrategy.sdt` in editor. Make sure it is the special editor for the strategy dsl files with syntax highlighting and outline.
+2. Open file /ParkCalculatorExample/strategies/ParkCalculatorStrategy.testspec` in editor. Make sure it is the special editor for the strategy dsl files with syntax highlighting and outline.
 3. Check that derived java files containg strategy classes are created in folder /ParkCalculatorExample/src-gen.
-4. Right-click on `ParkCalculatorStrategy.sdt` ans select "Generate tests". It should run the generation. Check the output printed on the console
+4. Right-click on `ParkCalculatorStrategy.testspec` ans select "Generate tests". It should run the generation. Check the output printed on the console
 5. Find generated test script `ParkCalculatorTest.java` in directory `/ParkCalculatorExample/generated-tests` and generated requirement coverage `report.xml` in directory `/ParkCalculatorExample/output/`. There is also a generated test script in xml format `output/parkcalculator/ParkCalculatorTest.xml`.
 
 Strategy definition DSL is explained in the next chapters using two example projects.
@@ -41,7 +41,7 @@ Strategy DSL syntax reference
 
 Project `TestGenerationDSLSyntax` contains basic examples of strategy definition syntax. It demonstrates how to specify different kinds of dependencies between the test properties.
 
-The strategy and is defined in directory `strategies` in file `StrategySyntaxExamples.sdt`.
+The strategy and is defined in directory `strategies` in file `StrategySyntaxExamples.testspec`.
 
 Running the strategy generates console output showing generated combinations of property values.
 
@@ -54,7 +54,7 @@ The complete tests should check all subsystems of the calculator and consider da
 
 This project defines test strategy using one test model and the corresponding test driver. It tracks model code coverage and requirement coverage and outputs the tests as JUnit tests. The parking rate specification is given in file `requirements/parkingRates.md`
 
-The strategy and the model are defined in directory `strategies` in file `ParkCalculatorStrategy.sdt`, the test driver in directory `test-driver/parkcalculator`.
+The strategy and the model are defined in directory `strategies` in file `ParkCalculatorStrategy.testspec`, the test driver in directory `test-driver/parkcalculator`.
 
 The framework automatically translates testspec files to java files in directory `src-gen`. The last are run to generate the tests. The generation result is placed in directory `generated-tests` . It is also under version control that allows to see the generation results without executing the generation.
 
@@ -69,5 +69,5 @@ Framework and eclipse plug-in compilation from the source code
 2. Create eclipse classpath variable M2_REPO pointing to your maven repository
 3. Run mvn test in folder test-generation-engine.
 4. Import all projects from folders test-generation-engine and and testgeneration-dsl
-5. Right-click on file `/org.dpolivaev.dsl.sdt/src/org/dpolivaev/dsl/sdt/Strategy.xtext` and select "Run As -> Generate XText Artifacts"
+5. Right-click on file `/org.dpolivaev.dsl.testspec/src/org/dpolivaev/dsl/testspec/Strategy.xtext` and select "Run As -> Generate XText Artifacts"
 6. Run eclipse application

@@ -20,9 +20,9 @@ The revisions committed to this repository corresponds to the tutorial steps.
 - To compile and execute the generated tests in the same project, add JUnit 4 Library.
 
 ## Step 2 : Create a strategy file and run test generation
-- Create new file `teststrategy/LoginTestSuite.sdt`.
+- Create new file `teststrategy/LoginTestSuite.testspec`.
 - Allow Eclipse to add XText nature to the project.
-- Write following configuration into file `LoginTestSuite.sdt`.
+- Write following configuration into file `LoginTestSuite.testspec`.
 
 file LoginTestSuite.testspec:
 
@@ -51,7 +51,7 @@ file LoginTestSuite.testspec:
 		apply "/java.xslt" output "generated-tests/java"
 
 - Make automatically created directory `src-gen` a project source folder (right-click, use as source folder).
-- Right-click on file `LoginTestSuite.sdt` in the project explorer or in the file editor context menu
+- Right-click on file `LoginTestSuite.testspec` in the project explorer or in the file editor context menu
 and select "Run As", "Generation Task".
 - Open generated JUnit test file `generated-tests/login/LoginTest.java`.
 
