@@ -1,4 +1,4 @@
-<project name="ExampleProjects" default="dist" basedir=".">
+<project name="Release" default="dist" basedir=".">
 	<property name="example-source" location="../../test-generation-examples"/>
 	<property name="examples" location="../../releases/exampleProjects.zip"/>
 	<property name="update-site-source" location="../../testgeneration-update-site"/>
