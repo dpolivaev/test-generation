@@ -60,8 +60,8 @@ class StrategyInferrer{
 	def void inferStrategy(JvmGenericType jvmType, org.dpolivaev.testgeneration.dsl.testspec.Strategy strategy){
 		this.strategy = strategy
 		this.jvmType = jvmType
-		if(!strategy.parameters.empty)
-			classInferrer.inferConstructor(jvmType, strategy, strategy.parameters)
+		if(! (strategy.parameters.empty && strategy.vars.empty) )
+			classInferrer.inferConstructor(jvmType, strategy, strategy.parameters, strategy.vars)
 		classInferrer.inferMemberVariables(jvmType, strategy, strategy.vars)
 		classInferrer.inferMemberMethods(jvmType, strategy, strategy.subs)
 

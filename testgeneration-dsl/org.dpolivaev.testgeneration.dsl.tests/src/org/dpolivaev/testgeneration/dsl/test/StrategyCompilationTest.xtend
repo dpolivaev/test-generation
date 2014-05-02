@@ -419,4 +419,13 @@ class StrategyCompilationTest {
 		'''.assertCompilesToFile(testName)
 	}
 
+	@Test def withMethodsAndValues() {
+		'''
+			strategy first
+				def a() {return 1}
+				val b = 2
+				let x be a + b
+		'''.assertCompilesToFile(testName)
+	}
+
 }

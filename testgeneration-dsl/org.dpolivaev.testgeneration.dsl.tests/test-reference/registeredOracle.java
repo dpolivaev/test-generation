@@ -58,6 +58,10 @@ import org.dpolivaev.testgeneration.engine.scriptwriter.WriterFactory;
 
 @SuppressWarnings("all")
 public class MyOracle implements PropertyHandler {
+  public int calculate(final int i) {
+    return 0;
+  }
+
   public final static List<CoverageEntry> labels = Arrays.asList(new CoverageEntry[]{});
   
   private PropertyContainer propertyContainer;
@@ -85,10 +89,6 @@ public class MyOracle implements PropertyHandler {
   @Override
   public void generationFinished() {
     this.propertyContainer=null;
-  }
-  
-  public int calculate(final int i) {
-    return 0;
   }
 }
 

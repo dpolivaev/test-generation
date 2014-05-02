@@ -86,8 +86,11 @@ class TestSpecJvmModelInferrer extends AbstractModelInferrer {
 		val oracleClass =oracle.toClass(qualifiedClassName)
 		acceptor.accept(oracleClass).initializeLater([
 			superTypes += oracle.newTypeRef(PropertyHandler)
-			if(!oracle.parameters.empty)
-				classInferrer.inferConstructor(oracleClass, oracle, oracle.parameters)
+			if(! (oracle.parameters.empty && oracle.vars.empty))
+				classInferrer.inferConstructor(oracleClass, oracle, oracle.parameters, oracle.vars)
+			classInferrer.inferMemberVariables(oracleClass, oracle, oracle.vars)
+			classInferrer.inferMemberMethods(oracleClass, oracle, oracle.subs)
+
 			members += oracle.toField("labels", oracle.newTypeRef(List, oracle.newTypeRef(CoverageEntry)))[
 				setInitializer [
 					append(oracle.newTypeRef(Arrays).type)
@@ -146,9 +149,6 @@ class TestSpecJvmModelInferrer extends AbstractModelInferrer {
 				]
 				visibility = JvmVisibility::PUBLIC
 			]
-			
-			classInferrer.inferMemberVariables(oracleClass, oracle, oracle.vars)
-			classInferrer.inferMemberMethods(oracleClass, oracle, oracle.subs)
 			
 		])
 	}

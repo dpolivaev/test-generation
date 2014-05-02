@@ -16,7 +16,7 @@ import org.dpolivaev.testgeneration.dsl.testspec.MethodDefinition
 class ClassInferrer {
 	@Inject extension JvmTypesBuilder jvmTypesBuilder
 
-	def inferConstructor(JvmGenericType jvmType, EObject object,  List<JvmFormalParameter> parameters) {
+	def inferConstructor(JvmGenericType jvmType, EObject object,  List<JvmFormalParameter> parameters,  List<XExpression> vars) {
 		for(parameter:parameters)
 			jvmType.members += parameter.toField(parameter.name, parameter.parameterType)[
 				visibility = JvmVisibility::PRIVATE
@@ -31,6 +31,11 @@ class ClassInferrer {
 					append('''this.«parameter.name» = «parameter.name»;''')
 					newLine
 				}
+				for(expr:vars){
+					val declaration = expr as XVariableDeclaration
+					append('''this.«declaration.name» = _init_«declaration.name»();''')
+					newLine
+				}
 			]
 			visibility = JvmVisibility::PUBLIC
 		]
@@ -39,11 +44,20 @@ class ClassInferrer {
 	def inferMemberVariables(JvmGenericType jvmType, EObject object,  List<XExpression> vars){
 			for(expr:vars){
 				val declaration = expr as XVariableDeclaration
-				jvmType.members += object.toField(declaration.name, declaration.type)[
-					setInitializer(declaration.right)
+				val type = declaration.type?: declaration.right?.inferredType
+				if (declaration.right != null){
+					jvmType.members += object.toMethod('_init_' + declaration.name, type)[
+						body = declaration.right
+						visibility = JvmVisibility::PRIVATE
+					]
+				}
+
+				jvmType.members += object.toField(declaration.name, type)[
 					final = ! declaration.writeable
 					visibility = JvmVisibility::PUBLIC
 				]
+
+
 			}
 	}
 

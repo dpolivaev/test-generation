@@ -19,6 +19,19 @@ import org.dpolivaev.testgeneration.engine.scriptwriter.WriterFactory;
 
 @SuppressWarnings("all")
 public class MyOracle implements PropertyHandler {
+  public int calculate(final int i) {
+    int _xblockexpression = (int) 0;
+    {
+      if(coverageTracker != null) coverageTracker.reach("req1", String.valueOf("reason1"));
+      if(coverageTracker != null) coverageTracker.reach("req2", "");
+      int _labeledexpression = (int) 0;
+      _labeledexpression = 2;
+      final int x = _labeledexpression;
+      _xblockexpression = x;
+    }
+    return _xblockexpression;
+  }
+
   public final static List<CoverageEntry> labels = Arrays.asList(new CoverageEntry[]{
       new CoverageEntry("req1", "reason1"),
       new CoverageEntry("req2", CoverageEntry.ANY),});
@@ -48,19 +61,6 @@ public class MyOracle implements PropertyHandler {
   @Override
   public void generationFinished() {
     this.propertyContainer=null;
-  }
-  
-  public int calculate(final int i) {
-    int _xblockexpression = (int) 0;
-    {
-      if(coverageTracker != null) coverageTracker.reach("req1", String.valueOf("reason1"));
-      if(coverageTracker != null) coverageTracker.reach("req2", "");
-      int _labeledexpression = (int) 0;
-      _labeledexpression = 2;
-      final int x = _labeledexpression;
-      _xblockexpression = x;
-    }
-    return _xblockexpression;
   }
 }
 
