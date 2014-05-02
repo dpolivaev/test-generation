@@ -46,7 +46,7 @@ class StrategyInferrer{
 	static val OPTIMIZE_FOR_DEBUG = true
 	@Inject Injector injector
 	@Inject extension JvmTypesBuilder jvmTypesBuilder
-	@Inject ConstructorInferrer constructorInferrer
+	@Inject ClassInferrer classInferrer
 	@Inject XbaseCompiler xbaseCompiler
 	val Methods methods
 	var JvmGenericType jvmType
@@ -61,7 +61,10 @@ class StrategyInferrer{
 		this.strategy = strategy
 		this.jvmType = jvmType
 		if(!strategy.parameters.empty)
-			constructorInferrer.inferConstructor(jvmType, strategy, strategy.parameters)
+			classInferrer.inferConstructor(jvmType, strategy, strategy.parameters)
+		classInferrer.inferMemberVariables(jvmType, strategy, strategy.vars)
+		classInferrer.inferMemberMethods(jvmType, strategy, strategy.subs)
+
 		inferExpressions()
 		inferStrategyMethods()
 	}

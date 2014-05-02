@@ -25,7 +25,7 @@ Strategy:
 		)?
 	')')?
 
-	ruleGroups += RuleGroup*
+	(ruleGroups += RuleGroup | vars += XVariableDeclaration | subs += MethodDefinition)*
 	;
 
 StrategyReference returns StrategyReference: {StrategyReference} 'strategy' goal ?= 'goal'? expr = XExpression;

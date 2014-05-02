@@ -10,7 +10,6 @@ import org.dpolivaev.testgeneration.engine.coverage.CoverageTracker
 import org.dpolivaev.testgeneration.engine.ruleengine.PropertyContainer
 import org.dpolivaev.testgeneration.engine.ruleengine.PropertyHandler
 import org.eclipse.xtext.common.types.JvmVisibility
-import org.eclipse.xtext.xbase.XVariableDeclaration
 import org.eclipse.xtext.xbase.jvmmodel.AbstractModelInferrer
 import org.eclipse.xtext.xbase.jvmmodel.IJvmDeclaredTypeAcceptor
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
@@ -30,7 +29,7 @@ class TestSpecJvmModelInferrer extends AbstractModelInferrer {
      */
      
     @Inject Injector injector 
-    @Inject ConstructorInferrer constructorInferrer
+    @Inject ClassInferrer classInferrer
 	@Inject extension JvmTypesBuilder jvmTypesBuilder
 
 	/**
@@ -88,7 +87,7 @@ class TestSpecJvmModelInferrer extends AbstractModelInferrer {
 		acceptor.accept(oracleClass).initializeLater([
 			superTypes += oracle.newTypeRef(PropertyHandler)
 			if(!oracle.parameters.empty)
-				constructorInferrer.inferConstructor(oracleClass, oracle, oracle.parameters)
+				classInferrer.inferConstructor(oracleClass, oracle, oracle.parameters)
 			members += oracle.toField("labels", oracle.newTypeRef(List, oracle.newTypeRef(CoverageEntry)))[
 				setInitializer [
 					append(oracle.newTypeRef(Arrays).type)
@@ -147,22 +146,9 @@ class TestSpecJvmModelInferrer extends AbstractModelInferrer {
 				]
 				visibility = JvmVisibility::PUBLIC
 			]
-			for(expr:oracle.vars){
-				val declaration = expr as XVariableDeclaration
-				members += oracle.toField(declaration.name, declaration.type)[
-					setInitializer(declaration.right)
-					final = ! declaration.writeable
-					visibility = JvmVisibility::PUBLIC
-				]
-			}
 			
-			for(method:oracle.subs){
-				members += oracle.toMethod(method.name, method.returnType)[
-					for(parameter:method.parameters)
-						parameters += parameter.toParameter(parameter.name, parameter.parameterType)
-					body = method.body
-				]
-			}
+			classInferrer.inferMemberVariables(oracleClass, oracle, oracle.vars)
+			classInferrer.inferMemberMethods(oracleClass, oracle, oracle.subs)
 			
 		])
 	}
