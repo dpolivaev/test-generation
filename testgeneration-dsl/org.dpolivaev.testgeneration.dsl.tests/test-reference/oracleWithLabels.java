@@ -31,7 +31,7 @@ public class MyOracle implements PropertyHandler {
     }
     return _xblockexpression;
   }
-
+  
   public final static List<CoverageEntry> labels = Arrays.asList(new CoverageEntry[]{
       new CoverageEntry("req1", "reason1"),
       new CoverageEntry("req2", CoverageEntry.ANY),});

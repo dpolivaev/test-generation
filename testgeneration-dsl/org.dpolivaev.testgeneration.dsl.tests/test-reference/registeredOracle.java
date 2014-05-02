@@ -61,7 +61,7 @@ public class MyOracle implements PropertyHandler {
   public int calculate(final int i) {
     return 0;
   }
-
+  
   public final static List<CoverageEntry> labels = Arrays.asList(new CoverageEntry[]{});
   
   private PropertyContainer propertyContainer;

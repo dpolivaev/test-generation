@@ -25,25 +25,25 @@ import org.dpolivaev.testgeneration.engine.ruleengine.ValueProviderHelper;
 class _first_StrategyFactory {
   public _first_StrategyFactory() {
     this.b = _init_b();
-
+    
   }
-
+  
   private int _init_b() {
     return 2;
   }
-
+  
   public final int b;
-
+  
   public int a() {
     return 1;
   }
-
+  
   private int _value1(final PropertyContainer propertyContainer) {
     int _a = this.a();
     int _plus = (_a + this.b);
     return _plus;
   }
-
+  
   RequirementBasedStrategy first() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
     Strategy _strategy = new Strategy();
@@ -55,3 +55,4 @@ class _first_StrategyFactory {
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }
 }
+

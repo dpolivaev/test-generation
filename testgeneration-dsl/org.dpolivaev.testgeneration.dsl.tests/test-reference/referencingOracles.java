@@ -24,7 +24,7 @@ public class MyOracle1 implements PropertyHandler {
   public int calculate() {
     return 1;
   }
-
+  
   public final static List<CoverageEntry> labels = Arrays.asList(new CoverageEntry[]{});
   
   private PropertyContainer propertyContainer;
@@ -70,7 +70,7 @@ public class MyOracle2 implements PropertyHandler {
   public int calculate() {
     return MyFile.myOracle1.calculate();
   }
-
+  
   public final static List<CoverageEntry> labels = Arrays.asList(new CoverageEntry[]{});
   
   private PropertyContainer propertyContainer;
