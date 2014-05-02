@@ -66,7 +66,7 @@ public class Assignments implements PropertyContainer {
         return containsProperties(names);
     }
     
-    public boolean containsPropertyValue(String name) {
+    public boolean isPropertyAvailable(String name) {
         return containsProperty(name);
     }
 

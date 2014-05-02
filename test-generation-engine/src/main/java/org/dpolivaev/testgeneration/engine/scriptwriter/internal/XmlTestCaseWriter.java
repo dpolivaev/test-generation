@@ -112,10 +112,10 @@ public class XmlTestCaseWriter implements PropertyHandler {
 	}
 
 	private void addParts(PropertyContainer propertyContainer, String property, String element) {
-        if(propertyContainer.containsPropertyValue(property))
+        if(propertyContainer.isPropertyAvailable(property))
             addPart(propertyContainer, property, element);
         for(int i = 1; i <= 99; i++)
-            if(propertyContainer.containsPropertyValue(property + '#' + i))
+            if(propertyContainer.isPropertyAvailable(property + '#' + i))
                 addPart(propertyContainer, property + '#' + i, element);
     }
 

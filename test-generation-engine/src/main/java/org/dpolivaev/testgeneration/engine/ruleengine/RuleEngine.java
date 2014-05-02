@@ -170,11 +170,6 @@ public class RuleEngine implements EngineState {
         return assignments.getCombinationCounter();
     }
 
-    @Override
-	public boolean containsPropertyValues(Set<String> names) {
-		return assignments.containsPropertyValues(names);
-	}
-
 	@SuppressWarnings("unchecked")
     @Override
     public <T> T get(String name) {
@@ -215,8 +210,8 @@ public class RuleEngine implements EngineState {
     }
 
     @Override
-    public boolean containsPropertyValue(String name) {
-        return assignments.containsPropertyValue(name) || strategy.availableDefaultProperties().contains(name);
+    public boolean isPropertyAvailable(String name) {
+        return assignments.isPropertyAvailable(name) || strategy.availableDefaultProperties().contains(name);
     }
 
     @Override

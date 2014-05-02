@@ -53,7 +53,6 @@ public class AlternatingRuleTest {
         Rule first = ruleMock(false);
         Rule second = ruleMock(true);
         EngineState state = mock(EngineState.class);
-        when(state.containsPropertyValues(anySetOf(String.class))).thenReturn(true);
 
         new AlternatingRule(first, second).propertyRequired(state);
 

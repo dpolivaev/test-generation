@@ -39,7 +39,7 @@ public class RuleEngineTest {
 			
 			@Override
 			public void handlePropertyCombination(PropertyContainer propertyContainer) {
-				assertThat(propertyContainer.containsPropertyValue("name"), equalTo(true));
+				assertThat(propertyContainer.isPropertyAvailable("name"), equalTo(true));
 				
 			}
 		});

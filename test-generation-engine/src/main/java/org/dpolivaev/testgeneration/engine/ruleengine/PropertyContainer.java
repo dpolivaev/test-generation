@@ -4,8 +4,7 @@ import java.util.Collection;
 import java.util.Set;
 
 public interface PropertyContainer {
-    boolean containsPropertyValues(Set<String> names);
-    boolean containsPropertyValue(String name);
+    boolean isPropertyAvailable(String name);
 	boolean containsTriggeringPropertyValue(String name);
     <T> T get(String name);
     Assignment getAssignment(String name);
