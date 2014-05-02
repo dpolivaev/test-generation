@@ -6,14 +6,14 @@ public class Permutation {
 
     final public static long  RANDOM_SEED = -1;
     private static long initial_seed = 1;
-    private static Random RANDOM = new Random(initial_seed);
+    private static Random SHARED_RANDOM = new Random(initial_seed);
 
 	public Permutation(int size) {
-        this(size, RANDOM);
+        this(size, SHARED_RANDOM);
     }
 
 	void setRandom(long seed){
-		RANDOM = seed == RANDOM_SEED ? new Random() : new Random(seed);
+		SHARED_RANDOM = seed == RANDOM_SEED ? new Random() : new Random(seed);
 	}
 
     public Permutation(int size, Random random) {
@@ -32,7 +32,7 @@ public class Permutation {
     }
 
     public void shuffle() {
-        for (int i = permutationArray.length - 1; i >= 0; i--) {
+        for (int i = permutationArray.length - 1; i > 0; i--) {
             int index = random.nextInt(i + 1);
             int a = permutationArray[index];
             permutationArray[index] = permutationArray[i];
