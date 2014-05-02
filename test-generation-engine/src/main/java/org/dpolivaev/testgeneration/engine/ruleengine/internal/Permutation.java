@@ -4,12 +4,17 @@ import java.util.Random;
 
 public class Permutation {
 
-    public static long seed = 1;
     final public static long  RANDOM_SEED = -1;
+    private static long initial_seed = 1;
+    private static Random RANDOM = new Random(initial_seed);
 
 	public Permutation(int size) {
-        this(size, seed == RANDOM_SEED ? new Random() : new Random(seed));
+        this(size, RANDOM);
     }
+
+	void setRandom(long seed){
+		RANDOM = seed == RANDOM_SEED ? new Random() : new Random(seed);
+	}
 
     public Permutation(int size, Random random) {
         this.random = random;
