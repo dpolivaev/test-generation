@@ -32,7 +32,7 @@ class _first_StrategyFactory {
     return 2;
   }
   
-  public final int b;
+  private final int b;
   
   public int a() {
     return 1;
