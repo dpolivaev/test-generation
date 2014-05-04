@@ -3,11 +3,16 @@
  */
 package org.dpolivaev.testgeneration.dsl.validation
 
-import org.eclipse.xtext.validation.Check
-import org.eclipse.xtext.xbase.XExpression
+import com.google.inject.Inject
 import org.dpolivaev.testgeneration.dsl.testspec.LabeledExpression
 import org.dpolivaev.testgeneration.dsl.testspec.RuleGroup
 import org.dpolivaev.testgeneration.dsl.testspec.TestspecPackage
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.xtext.common.types.JvmField
+import org.eclipse.xtext.common.types.JvmVisibility
+import org.eclipse.xtext.validation.Check
+import org.eclipse.xtext.xbase.XExpression
+import org.eclipse.xtext.xbase.jvmmodel.IJvmModelAssociations
 
 //import org.eclipse.xtext.validation.Check
 
@@ -17,6 +22,9 @@ import org.dpolivaev.testgeneration.dsl.testspec.TestspecPackage
  * see http://www.eclipse.org/Xtext/documentation.html#validation
  */
 class TestSpecValidator extends AbstractTestSpecValidator {
+	
+	@Inject IJvmModelAssociations modelAssociations
+	
 	@Check
 	override checkInnerExpressions(XExpression expr) {
 		val container = expr.eContainer
@@ -42,6 +50,21 @@ class TestSpecValidator extends AbstractTestSpecValidator {
 				error("named special rule", ruleGroup, feature)			
 				return;
 			}
+		}
+	}
+	
+	override isLocallyUsed(EObject target, EObject containerToFindUsage){
+		if (super.isLocallyUsed(target, containerToFindUsage))
+			true
+		else{
+			val jvmElements = modelAssociations.getJvmElements(target)
+			for(jvmElement : jvmElements){
+				if(jvmElement instanceof JvmField){
+					if (jvmElement.visibility != JvmVisibility.PRIVATE || super.isLocallyUsed(jvmElement, containerToFindUsage))
+						return true;
+				}
+			}
+			false
 		}
 	}
 }
