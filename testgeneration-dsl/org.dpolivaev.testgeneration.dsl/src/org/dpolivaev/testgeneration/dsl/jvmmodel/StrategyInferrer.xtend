@@ -62,7 +62,7 @@ class StrategyInferrer{
 		this.jvmType = jvmType
 		if(! (strategy.parameters.empty && strategy.vars.empty) )
 			classInferrer.inferConstructor(jvmType, strategy, strategy.parameters, strategy.vars)
-		classInferrer.inferMemberVariables(jvmType, strategy, strategy.vars)
+		classInferrer.inferMemberVariables(jvmType, strategy, strategy.vars, JvmVisibility::PRIVATE)
 		classInferrer.inferMemberMethods(jvmType, strategy, strategy.subs)
 
 		inferExpressions()

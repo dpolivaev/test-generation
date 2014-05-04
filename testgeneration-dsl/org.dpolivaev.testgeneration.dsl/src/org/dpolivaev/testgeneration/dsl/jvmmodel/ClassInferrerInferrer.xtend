@@ -41,20 +41,20 @@ class ClassInferrer {
 		]
 	}
 
-	def inferMemberVariables(JvmGenericType jvmType, EObject object,  List<XExpression> vars){
+	def inferMemberVariables(JvmGenericType jvmType, EObject object,  List<XExpression> vars, JvmVisibility fieldVisibility){
 			for(expr:vars){
 				val declaration = expr as XVariableDeclaration
 				val type = declaration.type?: declaration.right?.inferredType
 				if (declaration.right != null){
-					jvmType.members += object.toMethod('_init_' + declaration.name, type)[
+					jvmType.members += declaration.toMethod('_init_' + declaration.name, type)[
 						body = declaration.right
 						visibility = JvmVisibility::PRIVATE
 					]
 				}
 
-				jvmType.members += object.toField(declaration.name, type)[
+				jvmType.members += declaration.toField(declaration.name, type)[
 					final = ! declaration.writeable
-					visibility = JvmVisibility::PUBLIC
+					visibility = fieldVisibility
 				]
 
 
