@@ -20,7 +20,7 @@ The revisions committed to this repository corresponds to the tutorial steps.
 - To compile and execute the generated tests in the same project, add JUnit 4 Library.
 
 ## Step 2 : Create a strategy file and run test generation
-- Create new file `teststrategy/LoginTestSuite.testspec`.
+- Create new file `testspec/LoginTestSuite.testspec`.
 - Allow Eclipse to add XText nature to the project.
 - Write following configuration into file `LoginTestSuite.testspec`.
 
