@@ -190,13 +190,19 @@ let example be
     	let z be :y
     		
     },
-	/*
-	 * generate three property combinations with x='a', x='b' and x='c'
-	 */
+    
 	'big integer' {
-	let x be 0xff#BI
+		let x be 0xff#BI
+    },
+    
+    'applying external strategy'{
+    	let x be 1,2,3
+    	for each x if (:x as int) < 2 apply calledStrategy(4)
     }
     
+strategy calledStrategy(int a)
+	val b = 2
+	let z be a + b
 
 run strategy SyntaxExamples
      
