@@ -428,4 +428,12 @@ class StrategyCompilationTest {
 		'''.assertCompilesToFile(testName)
 	}
 
+	@Test def propertyCallTypeCast() {
+		'''
+			strategy first
+				let x be 1
+				if (:("x") as int > 0) let y be 2
+		'''.assertCompilesToFile(testName)
+	}
+
 }
