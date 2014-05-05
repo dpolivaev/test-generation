@@ -169,7 +169,9 @@ class StrategyCompiler extends XbaseCompiler {
 	
 	
 	override protected internalCanCompileToJavaExpression(XExpression expr, ITreeAppendable it) {
-		return expr instanceof PropertyCall || super.internalCanCompileToJavaExpression(expr, it);
+		if(expr instanceof XCastedExpression)
+			return internalCanCompileToJavaExpression(expr.target, it) 
+		return super.internalCanCompileToJavaExpression(expr, it);
 	}
 
 	def public static escapeQuotes(String input) {
@@ -183,12 +185,27 @@ class StrategyCompiler extends XbaseCompiler {
 	}
 
 	override protected JvmTypeReference getType(XExpression expr) {
+		if(expr instanceof PropertyCall){
+			val container = expr.eContainer
+			if(container instanceof XCastedExpression)
+				if(primitives.isPrimitive(container.type))
+					return primitives.asWrapperTypeIfPrimitive(container.type)
+		}
 		val type = typeProvider.getType(expr)
 		if(type != null)
 			return type
 		if (expr instanceof XNumberLiteral && (expr as XNumberLiteral).value.toLowerCase.endsWith("#bi"))
 			return 	typeReferences.getTypeForName(BigInteger, expr)
 		return null
+	}
+	
+	override protected boolean isVariableDeclarationRequired(XExpression expr, ITreeAppendable b){
+		if(expr instanceof XCastedExpression)
+			return isVariableDeclarationRequired(expr.target, b)
+		else if(expr instanceof PropertyCall)
+			return expr.name == null
+		else
+			return super.isVariableDeclarationRequired(expr, b)
 	}
 
 }
