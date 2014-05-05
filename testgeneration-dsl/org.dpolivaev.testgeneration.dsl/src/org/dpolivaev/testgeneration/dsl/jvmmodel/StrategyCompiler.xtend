@@ -1,21 +1,21 @@
 package org.dpolivaev.testgeneration.dsl.jvmmodel
 
+import java.math.BigInteger
 import javax.inject.Inject
 import org.dpolivaev.testgeneration.dsl.testspec.LabeledExpression
 import org.dpolivaev.testgeneration.dsl.testspec.PropertyCall
+import org.dpolivaev.testgeneration.engine.coverage.CoverageTracker
+import org.eclipse.xtext.common.types.JvmDeclaredType
 import org.eclipse.xtext.common.types.JvmPrimitiveType
+import org.eclipse.xtext.common.types.JvmTypeReference
 import org.eclipse.xtext.common.types.util.Primitives
 import org.eclipse.xtext.util.Strings
 import org.eclipse.xtext.xbase.XCastedExpression
 import org.eclipse.xtext.xbase.XExpression
+import org.eclipse.xtext.xbase.XNumberLiteral
 import org.eclipse.xtext.xbase.XStringLiteral
 import org.eclipse.xtext.xbase.compiler.XbaseCompiler
 import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
-import org.eclipse.xtext.common.types.JvmDeclaredType
-import org.dpolivaev.testgeneration.engine.coverage.CoverageTracker
-import org.eclipse.xtext.common.types.JvmTypeReference
-import org.eclipse.xtext.xbase.XNumberLiteral
-import java.math.BigInteger
 
 class StrategyCompiler extends XbaseCompiler {
 	@Inject Primitives primitives
@@ -25,6 +25,18 @@ class StrategyCompiler extends XbaseCompiler {
 			LabeledExpression: _internalToJavaStatement(expr, it, isReferenced)
 			default : super.doInternalToJavaStatement(expr, it, isReferenced)
 		}
+	}
+
+	override protected JvmTypeReference getTypeForVariableDeclaration(XExpression expr){
+		if(expr instanceof PropertyCall){
+			val container = expr.eContainer
+			if(container instanceof XCastedExpression){
+					val type = container.type
+					if (primitives.isPrimitive(type))
+						return primitives.asWrapperTypeIfPrimitive(type)
+			}
+		}
+		return super.getTypeForVariableDeclaration(expr)
 	}
 	
 	def _internalToJavaStatement(PropertyCall propertyCall, ITreeAppendable it, boolean isReferenced) {
@@ -37,7 +49,9 @@ class StrategyCompiler extends XbaseCompiler {
 			if(isReferenced){
 				declareSyntheticVariable(propertyCall, it);
 				newLine
-				append(getVarName(propertyCall, it)) append(" = propertyContainer.get(new StringBuilder()")
+				append(getVarName(propertyCall, it)) append(" = propertyContainer.")
+				addTypeCastForPrimitive(propertyCall, it)
+				append("get(new StringBuilder()")
 				for(expr : propertyCall.expressions){
 					append('.append(')
 					internalToConvertedExpression(expr, it, expr.type)
@@ -49,22 +63,26 @@ class StrategyCompiler extends XbaseCompiler {
 		}
 	}
 
-	protected def _internalToConvertedExpression(PropertyCall expr, ITreeAppendable it) {
-		if(expr.name != null) {
+	protected def _internalToConvertedExpression(PropertyCall propertyCall, ITreeAppendable it) {
+		if(propertyCall.name != null) {
 			append('propertyContainer.')
-			val container = expr.eContainer
-			if(container instanceof XCastedExpression){
-				val type = (container as XCastedExpression).type.type
-				if(type instanceof JvmPrimitiveType){
-					append('<')
-					append(primitives.getWrapperType(type))
-					append('>')
-				}
-			}
-			append('''get("«expr.name.escapeQuotes»")''')
+			addTypeCastForPrimitive(propertyCall, it)
+			append('''get("«propertyCall.name.escapeQuotes»")''')
 		}
 		else
-			trace(expr, false).append(getVarName(expr, it))
+			trace(propertyCall, false).append(getVarName(propertyCall, it))
+	}
+
+	protected def addTypeCastForPrimitive(PropertyCall expr, ITreeAppendable it) {
+		val container = expr.eContainer
+		if(container instanceof XCastedExpression){
+			val type = (container as XCastedExpression).type.type
+			if(type instanceof JvmPrimitiveType){
+				append('<')
+				append(primitives.getWrapperType(type))
+				append('>')
+			}
+		}
 	}
 
 	def _internalToJavaStatement(LabeledExpression labeledExpression, ITreeAppendable b, boolean isReferenced) {
