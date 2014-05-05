@@ -13,6 +13,8 @@ import org.eclipse.xtext.common.types.JvmVisibility
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.xbase.XExpression
 import org.eclipse.xtext.xbase.jvmmodel.IJvmModelAssociations
+import org.eclipse.xtext.xbase.XCastedExpression
+import org.dpolivaev.testgeneration.dsl.testspec.PropertyCall
 
 //import org.eclipse.xtext.validation.Check
 
@@ -67,4 +69,11 @@ class TestSpecValidator extends AbstractTestSpecValidator {
 			false
 		}
 	}
+
+	@Check
+	override checkCasts(XCastedExpression cast) {
+		if(! (cast.target instanceof PropertyCall))
+			super.checkCasts(cast);
+	}
+
 }
