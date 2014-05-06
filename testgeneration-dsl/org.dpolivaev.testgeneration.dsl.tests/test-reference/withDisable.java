@@ -20,6 +20,10 @@ import org.dpolivaev.testgeneration.engine.ruleengine.Strategy;
 
 @SuppressWarnings("all")
 class _first_StrategyFactory {
+  private static int _instanceCounter = 0;
+  
+  private int _instanceId = _instanceCounter++;
+  
   RequirementBasedStrategy first() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
     Strategy _strategy = new Strategy();

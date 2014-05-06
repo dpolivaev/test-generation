@@ -23,6 +23,10 @@ import org.dpolivaev.testgeneration.engine.ruleengine.ValueProviderHelper;
 
 @SuppressWarnings("all")
 class _First_StrategyFactory {
+  private static int _instanceCounter = 0;
+  
+  private int _instanceId = _instanceCounter++;
+  
   private Object _value1(final PropertyContainer propertyContainer) {
     return propertyContainer.get("a");
   }

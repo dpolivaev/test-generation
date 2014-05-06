@@ -61,6 +61,15 @@ class StrategyInferrer{
 	def void inferStrategy(JvmGenericType jvmType, org.dpolivaev.testgeneration.dsl.testspec.Strategy strategy){
 		this.strategy = strategy
 		this.jvmType = jvmType
+		jvmType.members += strategy.toField("_instanceCounter", strategy.newTypeRef(int))[
+			static = true
+			visibility = JvmVisibility.PRIVATE
+			initializer = [append("0")]
+		]
+		jvmType.members += strategy.toField("_instanceId", strategy.newTypeRef(int))[
+			visibility = JvmVisibility.PRIVATE
+			initializer = [append("_instanceCounter++")]
+		]
 		if(! (strategy.parameters.empty && strategy.vars.empty) )
 			classInferrer.inferConstructor(jvmType, strategy, strategy.parameters, strategy.vars)
 		classInferrer.inferMemberVariables(jvmType, strategy, strategy.vars, JvmVisibility::PRIVATE)
@@ -190,9 +199,9 @@ class StrategyInferrer{
 	def appendConditionDefaultRule(ITreeAppendable it, RuleGroup ruleGroup){
 		val expr = ruleGroup.condition.expr
 		append(strategy.newTypeRef(Factory).type)
-		append('.iterate("')
-		append(propertyName(expr))
-		append('")')
+		append('.iterate(')
+		append(defaultConditionPropertyName(expr))
+		append(')')
 		append('.over(')
 			appendImplementationObject(it, expr.newTypeRef(org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider).type, "Object value",
 				[appendConditionExpression(it, ruleGroup.condition)])
@@ -200,10 +209,8 @@ class StrategyInferrer{
 		append('.asDefaultRule()')
 	}
 
-	def private propertyName(EObject expr) {
-		val generation = expr.eResource.contents.get(0) as Generation
-		val packageId = generation.package?:""
-		' ' + packageId + EcoreUtil.getURI(expr).toString
+	def private defaultConditionPropertyName(XExpression expr) {
+		'" ' + jvmType.getQualifiedName() + '.' + methods.get(CONDITION, expr) + '#" +  _instanceId'
 	}
 
 	def private appendConditionExpression(ITreeAppendable it, Condition condition) {
@@ -226,7 +233,7 @@ class StrategyInferrer{
 		if(ruleGroup instanceof RuleGroup){
 			val expr = ruleGroup?.condition?.expr
 			if(expr != null)
-				append('''propertyContainer.<Boolean>get("«propertyName(expr)»") && ''')
+				append('''propertyContainer.<Boolean>get(«defaultConditionPropertyName(expr)») && ''')
 			else
 				appendAncestorCondition(it, ruleGroup.eContainer)
 		}
@@ -271,7 +278,7 @@ class StrategyInferrer{
 					appendImplementationObject(it, ruleGroup.newTypeRef(org.dpolivaev.testgeneration.engine.ruleengine.Condition).type, "boolean isSatisfied",
 						[
 							newLine
-							append('''return propertyContainer.<Boolean>get("«propertyName(expr)»");''')
+							append('''return propertyContainer.<Boolean>get(«defaultConditionPropertyName(expr)»);''')
 						])
 				append(')')
 			}

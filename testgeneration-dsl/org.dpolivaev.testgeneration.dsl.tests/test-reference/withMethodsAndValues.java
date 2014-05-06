@@ -23,6 +23,10 @@ import org.dpolivaev.testgeneration.engine.ruleengine.ValueProviderHelper;
 
 @SuppressWarnings("all")
 class _first_StrategyFactory {
+  private static int _instanceCounter = 0;
+  
+  private int _instanceId = _instanceCounter++;
+  
   public _first_StrategyFactory() {
     this.b = _init_b();
     

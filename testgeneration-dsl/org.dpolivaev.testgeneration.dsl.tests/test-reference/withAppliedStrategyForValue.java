@@ -27,6 +27,10 @@ import org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider;
 
 @SuppressWarnings("all")
 class _first_StrategyFactory {
+  private static int _instanceCounter = 0;
+  
+  private int _instanceId = _instanceCounter++;
+  
   private RequirementBasedStrategy _strategy1() {
     RequirementBasedStrategy _other = MyFile.other();
     return _other;
@@ -55,6 +59,10 @@ import org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider;
 
 @SuppressWarnings("all")
 class _other_StrategyFactory {
+  private static int _instanceCounter = 0;
+  
+  private int _instanceId = _instanceCounter++;
+  
   RequirementBasedStrategy other() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
     Strategy _strategy = new Strategy();

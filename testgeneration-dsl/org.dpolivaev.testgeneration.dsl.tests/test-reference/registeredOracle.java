@@ -105,6 +105,10 @@ import org.dpolivaev.testgeneration.engine.ruleengine.ValueProviderHelper;
 
 @SuppressWarnings("all")
 class _s_StrategyFactory {
+  private static int _instanceCounter = 0;
+  
+  private int _instanceId = _instanceCounter++;
+  
   private Object _value1(final PropertyContainer propertyContainer) {
     Object _calculate = MyFile.myOracle.calculate(0);
     return _calculate;

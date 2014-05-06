@@ -49,6 +49,10 @@ import org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider;
 
 @SuppressWarnings("all")
 class _First_StrategyFactory {
+  private static int _instanceCounter = 0;
+  
+  private int _instanceId = _instanceCounter++;
+  
   RequirementBasedStrategy First() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{
       new CoverageEntry("req1", "123"),};

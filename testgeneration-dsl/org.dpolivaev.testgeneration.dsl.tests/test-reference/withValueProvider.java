@@ -24,6 +24,10 @@ import org.dpolivaev.testgeneration.engine.strategies.StrategyHelper;
 
 @SuppressWarnings("all")
 class _first_StrategyFactory {
+  private static int _instanceCounter = 0;
+  
+  private int _instanceId = _instanceCounter++;
+  
   private ValueProvider _value1(final PropertyContainer propertyContainer) {
     return StrategyHelper.idProvider;
   }

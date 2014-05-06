@@ -24,6 +24,10 @@ import org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider;
 
 @SuppressWarnings("all")
 class _first_StrategyFactory {
+  private static int _instanceCounter = 0;
+  
+  private int _instanceId = _instanceCounter++;
+  
   private Boolean condition1(final PropertyContainer propertyContainer) {
     boolean _equals = Objects.equal(propertyContainer.get("x"), "a");
     return Boolean.valueOf(_equals);

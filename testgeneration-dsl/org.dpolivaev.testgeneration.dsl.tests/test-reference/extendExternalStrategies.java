@@ -21,6 +21,10 @@ import org.dpolivaev.testgeneration.engine.ruleengine.Strategy;
 
 @SuppressWarnings("all")
 class _first_StrategyFactory {
+  private static int _instanceCounter = 0;
+  
+  private int _instanceId = _instanceCounter++;
+  
   private Strategy _strategy1() {
     Strategy _strategy = new Strategy();
     return _strategy;

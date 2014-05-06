@@ -23,6 +23,10 @@ import org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider;
 
 @SuppressWarnings("all")
 class _first_StrategyFactory {
+  private static int _instanceCounter = 0;
+  
+  private int _instanceId = _instanceCounter++;
+  
   private Boolean condition1(final PropertyContainer propertyContainer) {
     Integer _propertycall = null;
     _propertycall = propertyContainer.<Integer>get(new StringBuilder().append("x").toString());
@@ -36,14 +40,14 @@ class _first_StrategyFactory {
     _strategy.addRule(RuleBuilder.Factory.iterate("x").over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {return 1;
     }}));
-    _strategy.addRule(RuleBuilder.Factory.iterate(" /MyFile.testspec#/0/@strategies.0/@ruleGroups.1/@condition/@expr").over(new ValueProvider(){
+    _strategy.addRule(RuleBuilder.Factory.iterate(" _first_StrategyFactory.condition1#" +  _instanceId).over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {
         Boolean _condition = condition1(propertyContainer);
         return _condition;
     }}).asDefaultRule());
     _strategy.addRule(RuleBuilder.Factory._if(new Condition(){
       @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
-        return propertyContainer.<Boolean>get(" /MyFile.testspec#/0/@strategies.0/@ruleGroups.1/@condition/@expr");
+        return propertyContainer.<Boolean>get(" _first_StrategyFactory.condition1#" +  _instanceId);
     }}).iterate("y").over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {return 2;
     }}));
