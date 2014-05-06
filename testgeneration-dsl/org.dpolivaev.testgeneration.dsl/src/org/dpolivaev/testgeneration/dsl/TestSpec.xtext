@@ -32,22 +32,26 @@ StrategyReference returns StrategyReference: {StrategyReference} 'strategy' goal
 AppliedStrategy returns StrategyReference: {StrategyReference} 'apply' expr = XExpression;
 
 RuleGroup : {RuleGroup}
-	('rule'  (ruleName=PROPERTY_ID | '(' ruleNameExpressions += XExpression+ ')'))?
+	('rule'  ruleName=PropertyName)?
 	((trigger = Trigger condition = Condition? | condition = Condition) (rule = Rule | strategy = AppliedStrategy | '{' ruleGroups += RuleGroup* '}')
 	| rule = Rule | strategy = AppliedStrategy)
+;
+
+PropertyName:
+	name=PROPERTY_ID | '(' nameExpressions += ExpressionInside+ ')'
 ;
 
 Rule returns Rule:
 	(
 		'let' (ordered ?= 'ordered' | shuffled ?= 'shuffled')? default ?= 'default'?
-		(name=PROPERTY_ID | '(' nameExpressions += XExpression+ ')') 'be' values = PropertyValues
+		propertyName=PropertyName 'be' values = PropertyValues
 	)
 	| specialValue = 'skip'
 	| specialValue = 'disable' disabledRule = DisabledRule
 ;
 
 DisabledRule:
-	'rule'  (ruleName=PROPERTY_ID | '(' ruleNameExpressions += XExpression+ ')')
+	'rule' ruleName=PropertyName
 ;
 
 PropertyValues returns Values:
@@ -55,7 +59,7 @@ PropertyValues returns Values:
 ;
 
 Trigger:
-	'for' 'each' properties += PROPERTY_ID (',' properties += PROPERTY_ID)*
+	'for' 'each' properties += PropertyName (',' properties += PropertyName)*
 ;
 
 Condition: {Condition}
@@ -150,7 +154,7 @@ XPrimaryExpression returns xbase::XExpression:
 
 PropertyCall returns xbase::XExpression hidden():
 	{PropertyCall}
-	':' (name = PROPERTY_ID | '(' expressions += ExpressionInside+ ')')
+	':' propertyName=PropertyName
 ;
 
 ExpressionInside returns xbase::XExpression  hidden(WS, SL_COMMENT, ML_COMMENT):

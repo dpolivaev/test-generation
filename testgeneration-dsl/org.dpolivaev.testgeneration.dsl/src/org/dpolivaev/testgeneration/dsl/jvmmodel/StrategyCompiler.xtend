@@ -40,10 +40,13 @@ class StrategyCompiler extends XbaseCompiler {
 	}
 	
 	def _internalToJavaStatement(PropertyCall propertyCall, ITreeAppendable it, boolean isReferenced) {
-		if(propertyCall.name != null)
+		val propertyName = propertyCall.propertyName
+		if(propertyName == null)
+			return it
+		if(propertyName.name != null)
 			generateComment(propertyCall, it, isReferenced)
 		else{
-			for(expr : propertyCall.expressions){
+			for(expr : propertyName.nameExpressions){
 				internalToJavaStatement(expr, it, isReferenced)
 			}
 			if(isReferenced){
@@ -52,7 +55,7 @@ class StrategyCompiler extends XbaseCompiler {
 				append(getVarName(propertyCall, it)) append(" = propertyContainer.")
 				addTypeCastForPrimitive(propertyCall, it)
 				append("get(new StringBuilder()")
-				for(expr : propertyCall.expressions){
+				for(expr : propertyName.nameExpressions){
 					append('.append(')
 					internalToConvertedExpression(expr, it, expr.type)
 					append(')')
@@ -64,10 +67,13 @@ class StrategyCompiler extends XbaseCompiler {
 	}
 
 	protected def _internalToConvertedExpression(PropertyCall propertyCall, ITreeAppendable it) {
-		if(propertyCall.name != null) {
+		val propertyName = propertyCall.propertyName
+		if(propertyName == null)
+			return it
+		if(propertyName.name != null) {
 			append('propertyContainer.')
 			addTypeCastForPrimitive(propertyCall, it)
-			append('''get("«propertyCall.name.escapeQuotes»")''')
+			append('''get("«propertyName.name.escapeQuotes»")''')
 		}
 		else
 			trace(propertyCall, false).append(getVarName(propertyCall, it))
@@ -203,7 +209,7 @@ class StrategyCompiler extends XbaseCompiler {
 		if(expr instanceof XCastedExpression)
 			return isVariableDeclarationRequired(expr.target, b)
 		else if(expr instanceof PropertyCall)
-			return expr.name == null
+			return expr.propertyName?.name == null
 		else
 			return super.isVariableDeclarationRequired(expr, b)
 	}

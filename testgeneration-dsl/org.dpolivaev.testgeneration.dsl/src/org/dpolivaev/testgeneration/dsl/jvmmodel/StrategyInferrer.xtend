@@ -7,6 +7,7 @@ import javax.inject.Inject
 import org.dpolivaev.testgeneration.dsl.testspec.Condition
 import org.dpolivaev.testgeneration.dsl.testspec.DisabledRule
 import org.dpolivaev.testgeneration.dsl.testspec.Generation
+import org.dpolivaev.testgeneration.dsl.testspec.PropertyName
 import org.dpolivaev.testgeneration.dsl.testspec.Rule
 import org.dpolivaev.testgeneration.dsl.testspec.RuleGroup
 import org.dpolivaev.testgeneration.dsl.testspec.StrategyReference
@@ -103,13 +104,17 @@ class StrategyInferrer{
 
 	final static val NAME = "_name"
 	private def appendRulePropertyNameProviders(Rule rule){
-			for(expr:rule.nameExpressions)
+		val propertyName = rule.propertyName
+		if (propertyName != null)
+			for(expr:propertyName.nameExpressions)
 				if(shouldCreateMethodFor(expr))
 					createMethod(expr, NAME, expr.inferredType, false)
 	}
 
 	private def appendRuleNameProviders(RuleGroup rule){
-			for(expr:rule.ruleNameExpressions)
+		val ruleName = rule.ruleName
+		if (ruleName != null)
+			for(expr:ruleName.nameExpressions)
 				if(shouldCreateMethodFor(expr))
 					createMethod(expr, NAME, expr.inferredType, false)
 	}
@@ -294,14 +299,14 @@ class StrategyInferrer{
 				}
 				else
 					append(', ')
-				append('''"«name.escapeQuotes»"''')
+				appendPropertyName(it, name)
 			}
 			append(')')
 		}
 	}
 
-	private  def Collection<String> triggers(RuleGroup ruleGroup){
-		val triggers =  new ArrayList<String>()
+	private  def Collection<PropertyName> triggers(RuleGroup ruleGroup){
+		val triggers =  new ArrayList<PropertyName>()
 		var group = ruleGroup
 		val container = group.eContainer
 		if(container instanceof RuleGroup)
@@ -314,21 +319,29 @@ class StrategyInferrer{
 	}
 
 	def private appendRulePropertyName(ITreeAppendable it, Rule rule) {
-		appendRuleBuilderMethodCall(it, 'iterate', rule.name, rule.nameExpressions)
+		val propertyName = rule.propertyName
+		appendRuleBuilderMethodCall(it, 'iterate', propertyName)
 	}
 	
 	def private appendRuleName(ITreeAppendable it, RuleGroup rule) {
-		if(rule.ruleName != null ||  ! rule.ruleNameExpressions.empty)
-			appendRuleBuilderMethodCall(it, 'rule', rule.ruleName, rule.ruleNameExpressions)
+		if(rule.ruleName != null)
+			appendRuleBuilderMethodCall(it, 'rule', rule.ruleName)
 	}
 	
 	def private appendRuleName(ITreeAppendable it, DisabledRule rule) {
-		if(rule.ruleName != null ||  ! rule.ruleNameExpressions.empty)
-			appendRuleBuilderMethodCall(it, 'rule', rule.ruleName, rule.ruleNameExpressions)
+		if(rule.ruleName != null)
+			appendRuleBuilderMethodCall(it, 'rule', rule.ruleName)
 	}
 	
-	private def appendRuleBuilderMethodCall(ITreeAppendable it, String method, String name, EList<XExpression> ruleNameExpressions) {
+	private def appendRuleBuilderMethodCall(ITreeAppendable it, String method, PropertyName propertyName) {
 		append('''.«method»(''')
+		appendPropertyName(it, propertyName)
+		append(')')
+	}
+
+	private def appendPropertyName(ITreeAppendable it, PropertyName propertyName) {
+		val name = propertyName.name
+		val ruleNameExpressions = propertyName.nameExpressions
 		if(name != null) {
 			val effectiveName = name.escapeQuotes;
 			append('"') append(effectiveName) append('"')
@@ -336,7 +349,6 @@ class StrategyInferrer{
 		else{
 			appendNameExpressions(it, ruleNameExpressions)
 		}
-		append(')')
 	}
 
 	private def appendNameExpressions(ITreeAppendable it, EList<XExpression> expressions) {

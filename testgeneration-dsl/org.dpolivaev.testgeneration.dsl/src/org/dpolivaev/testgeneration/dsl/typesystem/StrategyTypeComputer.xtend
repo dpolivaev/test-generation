@@ -22,7 +22,7 @@ class StrategyTypeComputer extends XbaseTypeComputer {
 	}
 	
 	protected def _computeTypes(PropertyCall propertyCall, ITypeComputationState state) {
-		for(expr:propertyCall.expressions)
+		for(expr:propertyCall.propertyName.nameExpressions)
 			state.computeTypes(expr)
 		val container = propertyCall.eContainer
 		if(container instanceof XCastedExpression){

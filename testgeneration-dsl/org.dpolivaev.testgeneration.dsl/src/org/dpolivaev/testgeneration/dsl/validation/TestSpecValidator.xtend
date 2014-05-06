@@ -38,8 +38,8 @@ class TestSpecValidator extends AbstractTestSpecValidator {
 	
 	@Check
 	def checkNamedRule(RuleGroup ruleGroup){
-		if (ruleGroup.ruleName != null || ! ruleGroup.ruleNameExpressions.empty) {
-			val feature = if (ruleGroup.ruleName != null) TestspecPackage.Literals.RULE_GROUP__RULE_NAME else TestspecPackage.Literals.RULE_GROUP__RULE_NAME_EXPRESSIONS
+		if (ruleGroup.ruleName != null) {
+			val feature = TestspecPackage.Literals.RULE_GROUP__RULE_NAME
 			if(ruleGroup.rule == null){
 				error("name without rule", ruleGroup,  feature)			
 				return;

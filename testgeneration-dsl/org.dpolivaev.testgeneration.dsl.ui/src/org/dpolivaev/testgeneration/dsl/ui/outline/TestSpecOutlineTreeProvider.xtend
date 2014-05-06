@@ -30,7 +30,7 @@ public class TestSpecOutlineTreeProvider extends DefaultOutlineTreeProvider {
 		(if (rule.isDefault) "default :" else ":")
 		+ (rule.specialValue?:"")
 		+ (if(rule.specialValue!= null) " " else "")
-		+ (rule.name?:"")
+		+ (rule.propertyName?.name?:"")
 		+ (if (rule.ordered) "(ordered)" else if (rule.shuffled) "(shuffled)" else "")
 	}
 	protected def _text(ValueAction values) { return values.valueProviders.map[text].toString}

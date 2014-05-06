@@ -91,6 +91,14 @@ class StrategyCompilationTest {
 		'''.assertCompilesToFile(testName)
 	}	
 	
+	@Test def withBuildTriggers() {
+		'''
+			strategy first
+				let "x y" be 1
+				for each ("x y") let z be 2
+		'''.assertCompilesToFile(testName)
+	}
+
 	@Test def withMultilineString() {
 		'''
 			strategy first

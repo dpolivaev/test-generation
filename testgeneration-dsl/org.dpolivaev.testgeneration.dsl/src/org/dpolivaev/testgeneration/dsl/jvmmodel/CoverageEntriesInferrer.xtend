@@ -61,7 +61,7 @@ class CoverageEntriesInferrer{
 	}
 	
 	def coverageEntries(Rule rule) {
-		val name = rule.name
+		val name = rule.propertyName?.name
 		if(name != null && name.startsWith("[" )  && name.endsWith("]") && rule.values?.actions != null){
 			val requirementId = name.substring(1, name.length - 1)
 			val entries = new HashSet<CoverageEntry>
