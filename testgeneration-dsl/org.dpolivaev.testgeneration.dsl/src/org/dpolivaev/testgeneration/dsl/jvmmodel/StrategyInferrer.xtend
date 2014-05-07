@@ -617,8 +617,8 @@ class StrategyInferrer{
 		}
 	}
 
-	static def strategyClassName(String strategyName) {
-		"_" + strategyName + "_StrategyFactory"
+	static def strategyClassName(String factoryName, String strategyName) {
+		"_" + factoryName + "_" + strategyName + "_StrategyFactory"
 	}
 
 }

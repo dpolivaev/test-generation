@@ -60,11 +60,12 @@ class TestSpecJvmModelInferrer extends AbstractModelInferrer {
 	def dispatch void infer(Generation script, IJvmDeclaredTypeAcceptor acceptor, boolean isPreIndexingPhase) {
 		val className = script.eResource.URI.trimFileExtension.lastSegment
 		val qualifiedClassName = qualifiedClassName(script.package, className)
-		acceptor.accept(script.toClass(qualifiedClassName)).initializeLater([
+		val type = script.toClass(qualifiedClassName)
+		acceptor.accept(type).initializeLater([
 			injector.getInstance(GenerationInferrer).inferGeneration(it, script)
 		])
 		for(strategy:script.strategies)
-			inferStrategy(acceptor, script.package, strategy)
+			inferStrategy(acceptor, script.package, type.simpleName, strategy)
 		for(oracle:script.oracles)
 			inferOracle(acceptor, script.package, oracle)
 	}
@@ -73,8 +74,8 @@ class TestSpecJvmModelInferrer extends AbstractModelInferrer {
 		if(classPackage != null) classPackage + '.' + className else className
 	}
 	
-	private def inferStrategy(IJvmDeclaredTypeAcceptor acceptor, String classPackage, Strategy strategy) {
-		val qualifiedClassName = qualifiedClassName(classPackage, StrategyInferrer.strategyClassName(strategy.name))
+	private def inferStrategy(IJvmDeclaredTypeAcceptor acceptor, String classPackage, String factoryName, Strategy strategy) {
+		val qualifiedClassName = qualifiedClassName(classPackage, StrategyInferrer.strategyClassName(factoryName, strategy.name))
 		acceptor.accept(strategy.toClass(qualifiedClassName)).initializeLater([
 			visibility = JvmVisibility::DEFAULT
 			injector.getInstance(StrategyInferrer).inferStrategy(it, strategy)
