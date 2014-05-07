@@ -23,7 +23,7 @@ public class MyFile {
   public final static MyOracle myOracle = new MyOracle();
   
   public static RequirementBasedStrategy s() {
-    return new _s_StrategyFactory().s();
+    return new _MyFile_s_StrategyFactory().s();
   }
   
   public static void run1() {
@@ -92,7 +92,7 @@ public class MyOracle implements PropertyHandler {
   }
 }
 
-File 3 : _s_StrategyFactory.java
+File 3 : _MyFile_s_StrategyFactory.java
 
 import org.dpolivaev.testgeneration.engine.coverage.CoverageEntry;
 import org.dpolivaev.testgeneration.engine.coverage.CoverageTrackerEnabler;
@@ -104,7 +104,7 @@ import org.dpolivaev.testgeneration.engine.ruleengine.Strategy;
 import org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider;
 
 @SuppressWarnings("all")
-class _s_StrategyFactory {
+class _MyFile_s_StrategyFactory {
   private static int _instanceCounter = 0;
   
   private int _instanceId = _instanceCounter++;
@@ -117,7 +117,7 @@ class _s_StrategyFactory {
   RequirementBasedStrategy s() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
     Strategy _strategy = new Strategy();
-    _strategy.addRule(RuleBuilder.Factory.iterate(" _s_StrategyFactory.condition1#" +  _instanceId).over(new ValueProvider(){
+    _strategy.addRule(RuleBuilder.Factory.iterate(" _MyFile_s_StrategyFactory.condition1#" +  _instanceId).over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {
         ((CoverageTrackerEnabler)propertyContainer).startTrace(); try{
         Boolean _condition = condition1(propertyContainer);
@@ -126,7 +126,7 @@ class _s_StrategyFactory {
     }}).asDefaultRule());
     _strategy.addRule(RuleBuilder.Factory._if(new Condition(){
       @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
-        return propertyContainer.<Boolean>get(" _s_StrategyFactory.condition1#" +  _instanceId);
+        return propertyContainer.<Boolean>get(" _MyFile_s_StrategyFactory.condition1#" +  _instanceId);
     }}).iterate("x").over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {return 1;
     }}));

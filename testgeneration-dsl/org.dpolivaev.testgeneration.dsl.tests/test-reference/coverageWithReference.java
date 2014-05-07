@@ -7,11 +7,11 @@ import org.dpolivaev.testgeneration.engine.coverage.RequirementBasedStrategy;
 @SuppressWarnings("all")
 public class MyFile {
   public static RequirementBasedStrategy First() {
-    return new _First_StrategyFactory().First();
+    return new _MyFile_First_StrategyFactory().First();
   }
 }
 
-File 2 : _First_StrategyFactory.java
+File 2 : _MyFile_First_StrategyFactory.java
 
 import org.dpolivaev.testgeneration.engine.coverage.CoverageEntry;
 import org.dpolivaev.testgeneration.engine.coverage.RequirementBasedStrategy;
@@ -22,7 +22,7 @@ import org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider;
 import org.dpolivaev.testgeneration.engine.ruleengine.ValueProviderHelper;
 
 @SuppressWarnings("all")
-class _First_StrategyFactory {
+class _MyFile_First_StrategyFactory {
   private static int _instanceCounter = 0;
   
   private int _instanceId = _instanceCounter++;

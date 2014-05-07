@@ -23,7 +23,7 @@ public class MyFile {
   public final static MyOracle myOracle = new MyOracle();
   
   public static RequirementBasedStrategy s() {
-    return new _s_StrategyFactory().s();
+    return new _MyFile_s_StrategyFactory().s();
   }
   
   public static void run1() {
@@ -92,7 +92,7 @@ public class MyOracle implements PropertyHandler {
   }
 }
 
-File 3 : _s_StrategyFactory.java
+File 3 : _MyFile_s_StrategyFactory.java
 
 import org.dpolivaev.testgeneration.engine.coverage.CoverageEntry;
 import org.dpolivaev.testgeneration.engine.coverage.CoverageTrackerEnabler;
@@ -104,7 +104,7 @@ import org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider;
 import org.dpolivaev.testgeneration.engine.ruleengine.ValueProviderHelper;
 
 @SuppressWarnings("all")
-class _s_StrategyFactory {
+class _MyFile_s_StrategyFactory {
   private static int _instanceCounter = 0;
   
   private int _instanceId = _instanceCounter++;
