@@ -11,6 +11,7 @@ import java.util.LinkedHashSet;
 import org.dpolivaev.testgeneration.engine.ruleengine.Assignment;
 import org.dpolivaev.testgeneration.engine.ruleengine.AssignmentFormatter;
 import org.dpolivaev.testgeneration.engine.ruleengine.PropertyContainer;
+import org.dpolivaev.testgeneration.engine.ruleengine.Rule;
 import org.dpolivaev.testgeneration.engine.ruleengine.SpecialValue;
 import org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider;
 import org.dpolivaev.testgeneration.engine.scriptwriter.AliasedPropertyAccessor;
@@ -54,9 +55,13 @@ public class TestIdProvider implements ValueProvider{
 			}
 
 			private boolean propertyCanHaveDifferentValues(Assignment assignment) {
-				if(assignment.rule.forcesIteration())
+				final Rule rule = assignment.rule;
+				if(rule.isDefaultRule())
+					return false;
+				if(rule.forcesIteration())
 					return true;
 				final Collection<String> requiredProperties = new HashSet<>(assignment.requiredProperties);
+				requiredProperties.addAll(assignment.triggeringProperties);
 				for(String requiredProperty : requiredProperties){
 					final Assignment requiredAssignment = propertyContainer.getAssignment(requiredProperty);
 					if(testPartProperties.contains(requiredAssignment)|| new AliasedPropertyAccessor(propertyContainer).isPart(requiredProperty))

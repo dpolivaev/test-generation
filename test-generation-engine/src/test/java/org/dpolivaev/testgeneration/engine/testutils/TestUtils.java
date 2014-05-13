@@ -32,7 +32,7 @@ public class TestUtils {
     }
  
 	static public Assignment assignmentMock(String name, Object value, String reason) {
-		return new Assignment(ruleMock(name), value, reason, Collections.<String>emptySet());
+		return new Assignment(ruleMock(name), value, reason, Collections.<String>emptySet(), Collections.<String>emptySet());
 	}
 
 	public static void assertEqualsXml(String expected, Node actual) {
