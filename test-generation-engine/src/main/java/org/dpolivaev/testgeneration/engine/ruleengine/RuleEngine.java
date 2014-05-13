@@ -129,7 +129,10 @@ public class RuleEngine implements EngineState {
 
 	@Override
     public void setPropertyValue(Rule rule, Object value, boolean valueChanged) {
-        assignments.add(new Assignment(rule, value, assignmentReason, dependencies));
+
+        final Set<String> requiredProperties = new HashSet<>(dependencies);
+        requiredProperties.addAll(rule.getTriggeringProperties());
+		assignments.add(new Assignment(rule, value, assignmentReason, requiredProperties));
         PropertyAssignedEvent event = new PropertyAssignedEvent(this, rule, dependencies, valueChanged);
         firePropertyAssignedEvent(assignments.firedRules(), event);
         if (!rule.isDefaultRule()) {

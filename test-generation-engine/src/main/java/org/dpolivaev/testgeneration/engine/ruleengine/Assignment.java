@@ -4,6 +4,7 @@ import static java.util.Arrays.asList;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 
 
 public class Assignment {
@@ -23,7 +24,7 @@ public class Assignment {
         this.value = value;
         this.rule = rule;
         this.reason = reason;
-		this.requiredProperties = Collections.unmodifiableCollection(requiredProperties);
+		this.requiredProperties = new HashSet<>(requiredProperties);
     }
 
     public String getTargetedPropertyName() {

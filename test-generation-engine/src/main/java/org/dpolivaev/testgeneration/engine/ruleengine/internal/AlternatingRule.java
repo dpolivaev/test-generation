@@ -144,4 +144,9 @@ public class AlternatingRule implements Rule {
 		return firstRule().getRuleKey();
 	}
 
+	@Override
+	public Set<String> getTriggeringProperties() {
+		return activeRule.getTriggeringProperties();
+	}
+
 }

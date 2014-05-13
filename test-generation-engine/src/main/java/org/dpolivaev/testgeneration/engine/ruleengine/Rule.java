@@ -45,4 +45,6 @@ public interface Rule {
 	void checkRuleCompatibility(Rule rule);
 
 	String getRuleKey();
+
+	public Set<String> getTriggeringProperties();
 }

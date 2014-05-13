@@ -3,6 +3,7 @@ package org.dpolivaev.testgeneration.engine.strategies.internal;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 
 import org.dpolivaev.testgeneration.engine.ruleengine.Assignment;
@@ -33,13 +34,36 @@ public class TestIdProvider implements ValueProvider{
 	
 	@Override
 	public Object value(final PropertyContainer propertyContainer) {
+		final Collection<Assignment> testPartProperties = new AssignmentFilter(propertyContainer).testPartRelevantAssignments();
+		final LinkedHashSet<Assignment> relevantProperties = new LinkedHashSet<>(testPartProperties);
+		for(String forcedProperty : forcedNames){
+			if(propertyContainer.get(forcedProperty) != SpecialValue.UNDEFINED){
+				final Assignment assignment = propertyContainer.getAssignment(forcedProperty);
+				relevantProperties.add(assignment);
+			}
+		}
 		AssignmentFormatter assignmentFormatter = new AssignmentFormatter(propertySeparator, valueNameSeparator){
 
 			@Override
 			protected boolean includesAssignment(Assignment assignment) {
-				return assignment.rule.forcesIteration()
+				return propertyCanHaveDifferentValues(assignment)
 						|| assignment.getTargetedPropertyName().equals(new AliasedPropertyAccessor(propertyContainer).getFocusPropertyName())
 						|| Arrays.asList(forcedNames).contains(assignment.getTargetedPropertyName());
+			}
+
+			private boolean propertyCanHaveDifferentValues(Assignment assignment) {
+				if(assignment.rule.forcesIteration())
+					return true;
+				final Collection<String> requiredProperties = new HashSet<>(assignment.requiredProperties);
+				for(String requiredProperty : requiredProperties){
+					final Assignment requiredAssignment = propertyContainer.getAssignment(requiredProperty);
+					if(testPartProperties.contains(requiredAssignment)|| new AliasedPropertyAccessor(propertyContainer).isPart(requiredProperty))
+						return false;
+					if(requiredAssignment.rule.forcesIteration())
+						return true;
+				}
+				return false;
+
 			}
 
 			@Override
@@ -69,14 +93,6 @@ public class TestIdProvider implements ValueProvider{
 			}
 		};
 		assignmentFormatter.appendReasons(false);
-		Collection<Assignment> testPartProperties = new AssignmentFilter(propertyContainer).testPartRelevantAssignments();
-		LinkedHashSet<Assignment> relevantProperties = new LinkedHashSet<>(testPartProperties);
-		for(String forcedProperty : forcedNames){
-			if(propertyContainer.get(forcedProperty) != SpecialValue.UNDEFINED){
-				final Assignment assignment = propertyContainer.getAssignment(forcedProperty);
-				relevantProperties.add(assignment);
-			}
-		}
 		final String values = assignmentFormatter.format(relevantProperties);
 		return values.trim();
 	}
