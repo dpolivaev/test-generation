@@ -1,8 +1,10 @@
 package org.dpolivaev.testgeneration.engine.strategies.internal;
 
 
-import java.util.Arrays;
+import static java.util.Arrays.asList;
+
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 
@@ -18,7 +20,7 @@ public class TestIdProvider implements ValueProvider{
 	
 	final private String propertySeparator;
 	final private String valueNameSeparator;
-	private String[] forcedNames;
+	private Collection<String> forcedNames;
 
 	
 	public TestIdProvider() {
@@ -29,7 +31,7 @@ public class TestIdProvider implements ValueProvider{
 		super();
 		this.valueNameSeparator = valueNameSeparator;
 		this.propertySeparator = propertySeparator;
-		forcedNames  = new String[]{};
+		forcedNames  = Collections.emptyList();
 	}
 	
 	@Override
@@ -48,7 +50,7 @@ public class TestIdProvider implements ValueProvider{
 			protected boolean includesAssignment(Assignment assignment) {
 				return propertyCanHaveDifferentValues(assignment)
 						|| assignment.getTargetedPropertyName().equals(new AliasedPropertyAccessor(propertyContainer).getFocusPropertyName())
-						|| Arrays.asList(forcedNames).contains(assignment.getTargetedPropertyName());
+						|| forcedNames.contains(assignment.getTargetedPropertyName());
 			}
 
 			private boolean propertyCanHaveDifferentValues(Assignment assignment) {
@@ -98,7 +100,7 @@ public class TestIdProvider implements ValueProvider{
 	}
 
 	public TestIdProvider include(String... propertyNames) {
-		forcedNames = propertyNames;
+		forcedNames = asList(propertyNames);
 		return this;
 	}
 }

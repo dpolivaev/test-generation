@@ -33,6 +33,14 @@ public class DescriptionProviderTest {
 				description);
 	}
 
+	@Test
+	public void excludesRules() {
+		givenAssignment("name", "value", "");
+
+		String description = new DescriptionProvider(": ", "\n").exclude("name").describe((PropertyContainer) assignments);
+		Assert.assertEquals("", description);
+	}
+
 
 	@Test
 	public void excludesRequirements() {
