@@ -1,24 +1,34 @@
 package org.dpolivaev.testgeneration.engine.strategies.internal;
 
+
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 
 import org.dpolivaev.testgeneration.engine.ruleengine.Assignment;
 import org.dpolivaev.testgeneration.engine.ruleengine.AssignmentFormatter;
 import org.dpolivaev.testgeneration.engine.ruleengine.PropertyContainer;
+import org.dpolivaev.testgeneration.engine.ruleengine.SpecialValue;
 import org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider;
 import org.dpolivaev.testgeneration.engine.scriptwriter.AliasedPropertyAccessor;
 
 
 public class TestIdProvider implements ValueProvider{
 	
-	final String propertySeparator;
-	final String valueNameSeparator;
+	final private String propertySeparator;
+	final private String valueNameSeparator;
+	private String[] forcedNames;
 
 	
+	public TestIdProvider() {
+		this("=", " ");
+	}
+
 	public TestIdProvider(String valueNameSeparator, String propertySeparator) {
 		super();
 		this.valueNameSeparator = valueNameSeparator;
 		this.propertySeparator = propertySeparator;
+		forcedNames  = new String[]{};
 	}
 	
 	@Override
@@ -27,7 +37,9 @@ public class TestIdProvider implements ValueProvider{
 
 			@Override
 			protected boolean includesAssignment(Assignment assignment) {
-				return assignment.rule.forcesIteration() || assignment.getTargetedPropertyName().equals(new AliasedPropertyAccessor(propertyContainer).getFocusPropertyName());
+				return assignment.rule.forcesIteration()
+						|| assignment.getTargetedPropertyName().equals(new AliasedPropertyAccessor(propertyContainer).getFocusPropertyName())
+						|| Arrays.asList(forcedNames).contains(assignment.getTargetedPropertyName());
 			}
 
 			@Override
@@ -58,7 +70,19 @@ public class TestIdProvider implements ValueProvider{
 		};
 		assignmentFormatter.appendReasons(false);
 		Collection<Assignment> testPartProperties = new AssignmentFilter(propertyContainer).testPartRelevantAssignments();
-		final String values = assignmentFormatter.format(testPartProperties);
+		LinkedHashSet<Assignment> relevantProperties = new LinkedHashSet<>(testPartProperties);
+		for(String forcedProperty : forcedNames){
+			if(propertyContainer.get(forcedProperty) != SpecialValue.UNDEFINED){
+				final Assignment assignment = propertyContainer.getAssignment(forcedProperty);
+				relevantProperties.add(assignment);
+			}
+		}
+		final String values = assignmentFormatter.format(relevantProperties);
 		return values.trim();
+	}
+
+	public TestIdProvider include(String... propertyNames) {
+		forcedNames = propertyNames;
+		return this;
 	}
 }

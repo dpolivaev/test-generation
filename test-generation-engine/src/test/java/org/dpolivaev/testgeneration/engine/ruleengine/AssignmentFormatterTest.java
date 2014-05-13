@@ -6,6 +6,8 @@ import static org.dpolivaev.testgeneration.engine.testutils.TestUtils.ruleMock;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 
+import java.util.Collections;
+
 import org.dpolivaev.testgeneration.engine.ruleengine.Assignment;
 import org.dpolivaev.testgeneration.engine.ruleengine.AssignmentFormatter;
 import org.dpolivaev.testgeneration.engine.ruleengine.Assignments;
@@ -41,8 +43,8 @@ public class AssignmentFormatterTest {
         Rule rule1 = ruleMock("name");
         Rule rule2 = ruleMock("name2");
         Assignments assignments = new Assignments();
-        assignments.add(new Assignment(rule1, "value", ""));
-        assignments.add(new Assignment(rule2, "value2", ""));
+        assignments.add(new Assignment(rule1, "value", "", Collections.<String>emptySet()));
+        assignments.add(new Assignment(rule2, "value2", "", Collections.<String>emptySet()));
         assertThat(formatter.format(assignments), equalTo("name=value,name2=value2"));
     }
 
@@ -63,8 +65,8 @@ public class AssignmentFormatterTest {
         Mockito.when(rule2.forcesIteration()).thenReturn(false);
         
         Assignments assignments = new Assignments();
-        assignments.add(new Assignment(rule1, "value", ""));
-        assignments.add(new Assignment(rule2, "value2", ""));
+        assignments.add(new Assignment(rule1, "value", "", Collections.<String>emptySet()));
+        assignments.add(new Assignment(rule2, "value2", "", Collections.<String>emptySet()));
         
         formatter.shouldFormatIteratingRulesOnly(true);
         assertThat(formatter.format(assignments), equalTo("name=value"));
@@ -76,8 +78,8 @@ public class AssignmentFormatterTest {
         Rule rule2 = ruleMock("name2");
         
         Assignments assignments = new Assignments();
-        assignments.add(new Assignment(rule1, "value", ""));
-        assignments.add(new Assignment(rule2, "value2", ""));
+        assignments.add(new Assignment(rule1, "value", "", Collections.<String>emptySet()));
+        assignments.add(new Assignment(rule2, "value2", "", Collections.<String>emptySet()));
         
         formatter.include("name");
         assertThat(formatter.format(assignments), equalTo("name=value"));
@@ -90,9 +92,9 @@ public class AssignmentFormatterTest {
         Rule rule3 = ruleMock(" nameAfterSpace");
         
         Assignments assignments = new Assignments();
-        assignments.add(new Assignment(rule1, "value", ""));
-        assignments.add(new Assignment(rule2, "value2", ""));
-        assignments.add(new Assignment(rule3, "value3", ""));
+        assignments.add(new Assignment(rule1, "value", "", Collections.<String>emptySet()));
+        assignments.add(new Assignment(rule2, "value2", "", Collections.<String>emptySet()));
+        assignments.add(new Assignment(rule3, "value3", "", Collections.<String>emptySet()));
         
         formatter.exclude("name2");
         assertThat(formatter.format(assignments), equalTo("name=value"));
@@ -105,8 +107,8 @@ public class AssignmentFormatterTest {
         Rule rule2 = ruleMock("name2");
         
         Assignments assignments = new Assignments();
-        assignments.add(new Assignment(rule1, "value", ""));
-        assignments.add(new Assignment(rule2, SpecialValue.UNDEFINED, ""));
+        assignments.add(new Assignment(rule1, "value", "", Collections.<String>emptySet()));
+        assignments.add(new Assignment(rule2, SpecialValue.UNDEFINED, "", Collections.<String>emptySet()));
         
         formatter.excludeUndefined(true);
         assertThat(formatter.format(assignments), equalTo("name=value"));

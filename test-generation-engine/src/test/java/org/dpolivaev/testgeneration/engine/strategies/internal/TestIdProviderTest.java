@@ -43,6 +43,23 @@ public class TestIdProviderTest {
 	}
 
 	@Test
+	public void includesSpecificProperties(){
+		testIdProvider = new TestIdProvider("=", " ").include("name");
+		givenAssignment("name", "value", "");
+		assertThat((String)testIdProvider.value(assignments), equalTo("value"));
+
+	}
+
+	@Test
+	public void includesNonIteratingSpecificProperties(){
+		testIdProvider = new TestIdProvider("=", " ").include("name");
+		givenAssignment("name", "value", "");
+		Mockito.when(assignments.getAssignment("name").rule.forcesIteration()).thenReturn(false);
+		assertThat((String)testIdProvider.value(assignments), equalTo("value"));
+
+	}
+
+	@Test
 	public void includesFoc(){
 		givenAssignment("when", "value", "");
 		assertThat((String)testIdProvider.value(assignments), equalTo("value"));

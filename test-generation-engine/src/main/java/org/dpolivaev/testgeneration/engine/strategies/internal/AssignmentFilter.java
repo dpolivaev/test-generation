@@ -29,8 +29,10 @@ public class AssignmentFilter {
 		for(Assignment assignment : propertyContainer.getAssignments()){
 			final String targetedPropertyName = assignment.getTargetedPropertyName();
 			if(isTestPartRelevantProperty(parts, targetedPropertyName)){
+				for(String requiredProperty : assignment.requiredProperties)
+					testPartProperties.put(requiredProperty, propertyContainer.getAssignment(requiredProperty));
 				final PartValueParser partValueParser = new PartValueParser(assignment.value.toString());
-				testPartProperties.put(targetedPropertyName, new Assignment(assignment.rule, partValueParser.getCalledMethod(), assignment.reason));
+				testPartProperties.put(targetedPropertyName, new Assignment(assignment.rule, partValueParser.getCalledMethod(), assignment.reason, assignment.requiredProperties));
 				final String[] argumentList = partValueParser.getArgumentList();
 				for(String argument:argumentList)
 					if(argument.startsWith(":")){

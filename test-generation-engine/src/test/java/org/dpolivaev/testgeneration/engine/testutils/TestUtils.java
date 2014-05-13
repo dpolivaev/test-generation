@@ -4,6 +4,7 @@ import static org.mockito.Mockito.mock;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.Collections;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -31,7 +32,7 @@ public class TestUtils {
     }
  
 	static public Assignment assignmentMock(String name, Object value, String reason) {
-		return new Assignment(ruleMock(name), value, reason);
+		return new Assignment(ruleMock(name), value, reason, Collections.<String>emptySet());
 	}
 
 	public static void assertEqualsXml(String expected, Node actual) {

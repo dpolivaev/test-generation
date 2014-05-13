@@ -5,6 +5,8 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
+import java.util.Collections;
+
 import org.dpolivaev.testgeneration.engine.ruleengine.Assignment;
 import org.dpolivaev.testgeneration.engine.ruleengine.AssignmentFormatter;
 import org.dpolivaev.testgeneration.engine.ruleengine.Assignments;
@@ -37,7 +39,7 @@ public class AssignmentsTest {
 	public void stateWithOnePropertySetAtFirstCombination() {
 		clearAssignments();
         assignments.add(new Assignment(ruleForProperty("x"), "a",
-            ""));
+            "", Collections.<String>emptySet()));
         String expectedScriptPropertyCombinations = "x=a";
 		assertEquals(expectedScriptPropertyCombinations,
             AssignmentFormatter.create("=", ", ").format(assignments));
@@ -52,7 +54,7 @@ public class AssignmentsTest {
 	public void stateWithOneProperty_containsItsValue() {
 		clearAssignments();
         assignments.add(new Assignment(ruleForProperty("x"), "a",
-            ""));
+            "", Collections.<String>emptySet()));
 		assertThat(assignments.containsProperties(Utils.set("x")), equalTo(true));
 	}
 
@@ -60,9 +62,9 @@ public class AssignmentsTest {
 	public void stateWithTwoPropertiesSetAtFirstCombination() {
 		clearAssignments();
         assignments.add(new Assignment(ruleForProperty("x"), "a",
-            ""));
+            "", Collections.<String>emptySet()));
         assignments.add(new Assignment(ruleForProperty("y"), "b",
-            ""));
+            "", Collections.<String>emptySet()));
         String expectedScriptPropertyCombinations = "x=a, y=b";
 		assertEquals(expectedScriptPropertyCombinations,
 		AssignmentFormatter.create("=", ", ").format(assignments));
@@ -73,7 +75,7 @@ public class AssignmentsTest {
     public void oldPropertiesAreRemovedAfterIterationEnd() {
         clearAssignments();
         assignments.add(new Assignment(ruleForProperty("x"), "a",
-            ""));
+            "", Collections.<String>emptySet()));
         clearAssignments();
         assertThat(assignments.containsProperties(Utils.set("x")), equalTo(false));
     }

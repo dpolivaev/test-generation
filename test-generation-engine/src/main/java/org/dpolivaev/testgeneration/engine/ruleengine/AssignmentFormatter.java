@@ -7,35 +7,21 @@ import java.util.regex.Pattern;
 public class AssignmentFormatter {
     private String propertySeparator;
 
-    public String getPropertySeparator() {
-        return propertySeparator;
-    }
-
-    public AssignmentFormatter setPropertySeparator(String propertySeparator) {
-        this.propertySeparator = propertySeparator;
-        return this;
-    }
-
-    public String getNameValueSeparator() {
-        return nameValueSeparator;
-    }
-
-    public AssignmentFormatter setNameValueSeparator(String keyValueSeparator) {
-        this.nameValueSeparator = keyValueSeparator;
-        return this;
-    }
-
     private String nameValueSeparator;
     private boolean appendsReasons;
 	private boolean shouldFormatIteratingRulesOnly;
 	final private List<Pattern> includePatterns;
 	final private List<Pattern> excludePatterns;
 	private boolean excludeUndefined;
+	private boolean includesHidden;
 
-    private AssignmentFormatter() {
+	private AssignmentFormatter() {
         appendsReasons = true;
         includePatterns = new ArrayList<>();
         excludePatterns = new ArrayList<>();
+        shouldFormatIteratingRulesOnly = false;
+        excludeUndefined = false;
+        excludeUndefined = false;
     }
     
     public AssignmentFormatter(String propertySeparator,
@@ -61,9 +47,35 @@ public class AssignmentFormatter {
         return assignedPropertiesStringBuilder.toString();
 	}
 
+    public String getPropertySeparator() {
+        return propertySeparator;
+    }
+
+    public AssignmentFormatter setPropertySeparator(String propertySeparator) {
+        this.propertySeparator = propertySeparator;
+        return this;
+    }
+
+    public String getNameValueSeparator() {
+        return nameValueSeparator;
+    }
+
+    public AssignmentFormatter setNameValueSeparator(String keyValueSeparator) {
+        this.nameValueSeparator = keyValueSeparator;
+        return this;
+    }
+
+    public boolean includesHidden() {
+		return includesHidden;
+	}
+
+	public void includesHidden(boolean includesHidden) {
+		this.includesHidden = includesHidden;
+	}
+
 	protected boolean includesAssignment(Assignment assignment) {
 		return  !(shouldFormatIteratingRulesOnly && !assignment.rule.forcesIteration() || excludedByValue(assignment))
-				&& ! isHidden(assignment)&& ! isExcludedByExcludePatterns(assignment) && isIncludedByIncludePatterns(assignment);
+				&& (includesHidden || ! isHidden(assignment)) && ! isExcludedByExcludePatterns(assignment) && isIncludedByIncludePatterns(assignment);
 	}
 	
 	private boolean isHidden(Assignment assignment) {
