@@ -1,6 +1,7 @@
 package org.dpolivaev.testgeneration.engine.ruleengine;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -11,12 +12,13 @@ public class PatternBasedAssignmentFilter implements AssignmentFilter {
 		patterns = new ArrayList<>();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.dpolivaev.testgeneration.engine.ruleengine.AssignmentFilter#matches(org.dpolivaev.testgeneration.engine.ruleengine.Assignment)
-	 */
 	@Override
 	public boolean matches(Assignment assignment) {
-		return matches(assignment, patterns);
+		for(Pattern pattern:patterns){
+			if(pattern.matcher(assignment.getTargetedPropertyName()).matches())
+				return true;
+		}
+		return false;
 	}
 
 	public void addPattern(final Pattern pattern) {
@@ -28,13 +30,9 @@ public class PatternBasedAssignmentFilter implements AssignmentFilter {
 		addPattern(pattern);
 	}
 
-	private boolean matches(Assignment assignment,
-			List<Pattern> patterns) {
-		for(Pattern pattern:patterns){
-			if(pattern.matcher(assignment.getTargetedPropertyName()).matches())
-				return true;
-		}
-		return false;
+	public void addPatterns(Collection<String> patterns) {
+		for(String pattern : patterns)
+			addPattern(pattern);
 	}
 
 }
