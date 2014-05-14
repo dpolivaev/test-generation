@@ -7,13 +7,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 
 import org.dpolivaev.testgeneration.engine.ruleengine.Assignment;
 import org.dpolivaev.testgeneration.engine.ruleengine.AssignmentFormatter;
 import org.dpolivaev.testgeneration.engine.ruleengine.PropertyContainer;
 import org.dpolivaev.testgeneration.engine.ruleengine.Rule;
-import org.dpolivaev.testgeneration.engine.ruleengine.SpecialValue;
 import org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider;
 import org.dpolivaev.testgeneration.engine.scriptwriter.AliasedPropertyAccessor;
 import org.dpolivaev.testgeneration.engine.scriptwriter.internal.PartValueParser;

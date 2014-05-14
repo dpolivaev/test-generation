@@ -1,9 +1,11 @@
-package org.dpolivaev.testgeneration.engine.ruleengine;
+package org.dpolivaev.testgeneration.engine.ruleengine.internal;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import org.dpolivaev.testgeneration.engine.ruleengine.Assignment;
 
 public class PatternBasedAssignmentFilter implements AssignmentFilter {
 	private final List<Pattern> patterns;

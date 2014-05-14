@@ -2,6 +2,9 @@ package org.dpolivaev.testgeneration.engine.ruleengine;
 
 import java.util.regex.Pattern;
 
+import org.dpolivaev.testgeneration.engine.ruleengine.internal.PatternBasedAssignmentFilter;
+import org.dpolivaev.testgeneration.engine.ruleengine.internal.PatternBasedIncludingAssignmentFilter;
+
 public class AssignmentFormatter {
     private String propertySeparator;
 

@@ -1,6 +1,8 @@
-package org.dpolivaev.testgeneration.engine.ruleengine;
+package org.dpolivaev.testgeneration.engine.ruleengine.internal;
 
 import java.util.regex.Pattern;
+
+import org.dpolivaev.testgeneration.engine.ruleengine.Assignment;
 
 public class PatternBasedIncludingAssignmentFilter implements AssignmentFilter {
 	private final PatternBasedAssignmentFilter filter = new PatternBasedAssignmentFilter();
