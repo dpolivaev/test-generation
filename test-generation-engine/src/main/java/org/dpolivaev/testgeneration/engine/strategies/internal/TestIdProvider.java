@@ -5,7 +5,10 @@ import static java.util.Arrays.asList;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.dpolivaev.testgeneration.engine.ruleengine.Assignment;
 import org.dpolivaev.testgeneration.engine.ruleengine.AssignmentFormatter;
@@ -21,8 +24,8 @@ public class TestIdProvider implements ValueProvider{
 	
 	final private String propertySeparator;
 	final private String valueNameSeparator;
-	final private PatternBasedAssignmentFilter forcedAssignmentFilter;
 	final private PatternBasedAssignmentFilter excludedAssignmentFilter;
+	private Set<String> forcedProperties;
 
 	
 	public TestIdProvider() {
@@ -33,8 +36,8 @@ public class TestIdProvider implements ValueProvider{
 		super();
 		this.valueNameSeparator = valueNameSeparator;
 		this.propertySeparator = propertySeparator;
-		forcedAssignmentFilter = new PatternBasedAssignmentFilter();
 		excludedAssignmentFilter = new PatternBasedAssignmentFilter();
+		forcedProperties = Collections.<String>emptySet();
 	}
 	
 	private boolean propertyCanHaveDifferentValues(Assignment assignment, AssignmentPartitioner assignmentPartitioner, PropertyContainer propertyContainer) {
@@ -60,9 +63,12 @@ public class TestIdProvider implements ValueProvider{
 		final AssignmentPartitioner assignmentPartitioner = new AssignmentPartitioner(propertyContainer);
 		assignmentPartitioner.run();
 		final Collection<Assignment> relevantProperties = new ArrayList<>();
-		for(Assignment assignment : propertyContainer.getAssignments()){
-			final String targetedPropertyName = assignment.getTargetedPropertyName();
-			if(forcedAssignmentFilter.matches(assignment)
+		final LinkedHashSet<String> assignments = new LinkedHashSet<>(assignmentPartitioner.getTestPartRelevantAssignmens());
+		propertyContainer.getAssignments();
+		assignments.addAll(forcedProperties);
+		for(String targetedPropertyName : assignments){
+			Assignment assignment = propertyContainer.getAssignment(targetedPropertyName);
+			if(forcedProperties.contains(targetedPropertyName)
 					|| assignmentPartitioner.isTestIdRelevant(targetedPropertyName)
 					 && (propertyCanHaveDifferentValues(assignment, assignmentPartitioner, propertyContainer)
 							|| targetedPropertyName.equals(new AliasedPropertyAccessor(propertyContainer).getFocusPropertyName()))
@@ -121,7 +127,7 @@ public class TestIdProvider implements ValueProvider{
 
 
 	public TestIdProvider include(String... propertyNames) {
-		forcedAssignmentFilter.addPatterns(asList(propertyNames));
+		forcedProperties = new LinkedHashSet<>(asList(propertyNames));
 		return this;
 	}
 }

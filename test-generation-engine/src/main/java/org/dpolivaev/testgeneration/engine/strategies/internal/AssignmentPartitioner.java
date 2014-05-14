@@ -1,6 +1,7 @@
 package org.dpolivaev.testgeneration.engine.strategies.internal;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -12,9 +13,9 @@ import org.dpolivaev.testgeneration.engine.scriptwriter.internal.PartValueParser
 class AssignmentPartitioner {
 	private static final Pattern NUMBER_REGEX =  Pattern.compile("#\\d*");
 	final private PropertyContainer propertyContainer;
-	private Set<String> testPartRelevantAssignmentMap;
-	private Set<String> testPartAssignmentMap;
-	private Set<String> scriptPartRelevantAssignmentMap;
+	private Set<String> testPartRelevantAssignmens;
+	private Set<String> testPartAssignments;
+	private Set<String> scriptPartRelevantAssignments;
 	private AliasedPropertyAccessor aliasedPropertyAccessor;
 
 	public AssignmentPartitioner(PropertyContainer propertyContainer) {
@@ -22,11 +23,11 @@ class AssignmentPartitioner {
 	}
 
 	private Set<String> testPartRelevantAssignmentMap(final String[] parts) {
-		Set<String> testPartProperties = new HashSet<>();
+		Set<String> testPartProperties = new LinkedHashSet<>();
 		for(Assignment assignment : propertyContainer.getAssignments()){
 			final String targetedPropertyName = assignment.getTargetedPropertyName();
 			if(isTestPartRelevantProperty(parts, targetedPropertyName)){
-				testPartAssignmentMap.add(targetedPropertyName);
+				testPartAssignments.add(targetedPropertyName);
 				for(String requiredProperty : assignment.requiredProperties)
 					testPartProperties.add(requiredProperty);
 				final PartValueParser partValueParser = new PartValueParser(assignment.value.toString());
@@ -58,23 +59,27 @@ class AssignmentPartitioner {
 
 	public boolean isDescriptionRelevant(final String targetedPropertyName) {
 		final boolean isDescriptionRelevant = ! isTestIdRelevant(targetedPropertyName)
-				&& ! scriptPartRelevantAssignmentMap.contains(targetedPropertyName)
+				&& ! scriptPartRelevantAssignments.contains(targetedPropertyName)
 				&& ! aliasedPropertyAccessor.isAlias(targetedPropertyName);
 		return isDescriptionRelevant;
 	}
 
 	public boolean isTestIdRelevant(String targetedPropertyName) {
-		return testPartRelevantAssignmentMap.contains(targetedPropertyName);
+		return getTestPartRelevantAssignmens().contains(targetedPropertyName);
 	}
 
 	public boolean isTestPartMethodCall(String targetedPropertyName) {
-		return testPartAssignmentMap.contains(targetedPropertyName);
+		return testPartAssignments.contains(targetedPropertyName);
+	}
+
+	public Set<String> getTestPartRelevantAssignmens() {
+		return testPartRelevantAssignmens;
 	}
 
 	public void run() {
-		testPartAssignmentMap = new HashSet<>();
+		testPartAssignments = new HashSet<>();
 		aliasedPropertyAccessor = new AliasedPropertyAccessor(propertyContainer);
-		testPartRelevantAssignmentMap = testPartRelevantAssignmentMap(aliasedPropertyAccessor.getTestCaseParts());
-		scriptPartRelevantAssignmentMap = testPartRelevantAssignmentMap(aliasedPropertyAccessor.getScriptParts());
+		testPartRelevantAssignmens = testPartRelevantAssignmentMap(aliasedPropertyAccessor.getTestCaseParts());
+		scriptPartRelevantAssignments = testPartRelevantAssignmentMap(aliasedPropertyAccessor.getScriptParts());
 	}
 }
