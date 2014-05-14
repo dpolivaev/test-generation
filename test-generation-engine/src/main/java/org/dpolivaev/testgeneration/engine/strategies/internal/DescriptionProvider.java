@@ -4,9 +4,11 @@ import static java.util.Arrays.asList;
 import static org.dpolivaev.testgeneration.engine.scriptwriter.AliasedPropertyAccessor.DEFAULT_SCRIPT_PROPERTY_NAME;
 import static org.dpolivaev.testgeneration.engine.scriptwriter.AliasedPropertyAccessor.DEFAULT_TESTCASE_PROPERTY;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.dpolivaev.testgeneration.engine.ruleengine.Assignment;
 import org.dpolivaev.testgeneration.engine.ruleengine.AssignmentFormatter;
 import org.dpolivaev.testgeneration.engine.ruleengine.PropertyContainer;
 import org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider;
@@ -40,8 +42,15 @@ public class DescriptionProvider  implements ValueProvider{
 		formatter.exclude(testcaseProperty);
 		formatter.excludeUndefined(true);
 		formatter.appendReasons(false);
-		final AssignmentPartitioner assignmentFilter = new AssignmentPartitioner(assignments);
-		return formatter.format(assignmentFilter.descriptionRelevantAssignments());
+		final AssignmentPartitioner assignmentPartitioner = new AssignmentPartitioner(assignments);
+		assignmentPartitioner.run();
+		final Collection<Assignment> allAssignments = assignments.getAssignments();
+		final ArrayList<Assignment> descriptionRelevantAssignments = new ArrayList<>(allAssignments.size());
+		for(Assignment assignment : allAssignments){
+			if(assignmentPartitioner.isDescriptionRelevant(assignment.getTargetedPropertyName()))
+				descriptionRelevantAssignments.add(assignment);
+		}
+		return formatter.format(descriptionRelevantAssignments);
 	}
 	
 	@Override

@@ -3,6 +3,7 @@ package org.dpolivaev.testgeneration.engine.strategies.internal;
 
 import static java.util.Arrays.asList;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -15,6 +16,7 @@ import org.dpolivaev.testgeneration.engine.ruleengine.Rule;
 import org.dpolivaev.testgeneration.engine.ruleengine.SpecialValue;
 import org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider;
 import org.dpolivaev.testgeneration.engine.scriptwriter.AliasedPropertyAccessor;
+import org.dpolivaev.testgeneration.engine.scriptwriter.internal.PartValueParser;
 
 
 public class TestIdProvider implements ValueProvider{
@@ -35,42 +37,47 @@ public class TestIdProvider implements ValueProvider{
 		forcedNames  = Collections.emptyList();
 	}
 	
+	private boolean propertyCanHaveDifferentValues(Assignment assignment, AssignmentPartitioner assignmentPartitioner, PropertyContainer propertyContainer) {
+		final Rule rule = assignment.rule;
+		if(rule.isDefaultRule())
+			return false;
+		if(rule.forcesIteration())
+			return true;
+		final Collection<String> requiredProperties = new HashSet<>(assignment.requiredProperties);
+		requiredProperties.addAll(assignment.triggeringProperties);
+		for(String requiredProperty : requiredProperties){
+			if(assignmentPartitioner.isTestIdRelevant(requiredProperty)|| new AliasedPropertyAccessor(propertyContainer).isPart(requiredProperty))
+				return false;
+			final Assignment requiredAssignment = propertyContainer.getAssignment(requiredProperty);
+			if(requiredAssignment.rule.forcesIteration())
+				return true;
+		}
+		return false;
+
+	}
 	@Override
 	public Object value(final PropertyContainer propertyContainer) {
-		final Collection<Assignment> testPartProperties = new AssignmentPartitioner(propertyContainer).testPartRelevantAssignments();
-		final LinkedHashSet<Assignment> relevantProperties = new LinkedHashSet<>(testPartProperties);
-		for(String forcedProperty : forcedNames){
-			if(propertyContainer.get(forcedProperty) != SpecialValue.UNDEFINED){
-				final Assignment assignment = propertyContainer.getAssignment(forcedProperty);
-				relevantProperties.add(assignment);
+		final AssignmentPartitioner assignmentPartitioner = new AssignmentPartitioner(propertyContainer);
+		assignmentPartitioner.run();
+		final Collection<Assignment> relevantProperties = new ArrayList<>();
+		for(Assignment assignment : propertyContainer.getAssignments()){
+			final String targetedPropertyName = assignment.getTargetedPropertyName();
+			if(forcedNames.contains(targetedPropertyName) || assignmentPartitioner.isTestIdRelevant(targetedPropertyName) && (
+					propertyCanHaveDifferentValues(assignment, assignmentPartitioner, propertyContainer)
+					|| targetedPropertyName.equals(new AliasedPropertyAccessor(propertyContainer).getFocusPropertyName()))){
+				if(assignmentPartitioner.isTestPartMethodCall(targetedPropertyName)){
+					final PartValueParser partValueParser = new PartValueParser(assignment.value.toString());
+					relevantProperties.add(new Assignment(assignment.rule, partValueParser.getCalledMethod(), assignment.reason, assignment.requiredProperties, assignment.triggeringProperties));
+				}
+				else
+					relevantProperties.add(assignment);
 			}
 		}
 		AssignmentFormatter assignmentFormatter = new AssignmentFormatter(propertySeparator, valueNameSeparator){
 
 			@Override
 			protected boolean includesAssignment(Assignment assignment) {
-				return propertyCanHaveDifferentValues(assignment)
-						|| assignment.getTargetedPropertyName().equals(new AliasedPropertyAccessor(propertyContainer).getFocusPropertyName())
-						|| forcedNames.contains(assignment.getTargetedPropertyName());
-			}
-
-			private boolean propertyCanHaveDifferentValues(Assignment assignment) {
-				final Rule rule = assignment.rule;
-				if(rule.isDefaultRule())
-					return false;
-				if(rule.forcesIteration())
-					return true;
-				final Collection<String> requiredProperties = new HashSet<>(assignment.requiredProperties);
-				requiredProperties.addAll(assignment.triggeringProperties);
-				for(String requiredProperty : requiredProperties){
-					final Assignment requiredAssignment = propertyContainer.getAssignment(requiredProperty);
-					if(testPartProperties.contains(requiredAssignment)|| new AliasedPropertyAccessor(propertyContainer).isPart(requiredProperty))
-						return false;
-					if(requiredAssignment.rule.forcesIteration())
-						return true;
-				}
-				return false;
-
+				return true;
 			}
 
 			@Override
