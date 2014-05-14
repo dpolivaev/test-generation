@@ -1,7 +1,5 @@
 package org.dpolivaev.testgeneration.engine.ruleengine;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Pattern;
 
 public class AssignmentFormatter {
@@ -10,15 +8,15 @@ public class AssignmentFormatter {
     private String nameValueSeparator;
     private boolean appendsReasons;
 	private boolean shouldFormatIteratingRulesOnly;
-	final private List<Pattern> includePatterns;
-	final private List<Pattern> excludePatterns;
+	final private PatternBasedAssignmentFilter patternBasedExcludingAssignmentFilter;
+	final private PatternBasedIncludingAssignmentFilter patternBasedIncludingAssignmentFilter;
 	private boolean excludeUndefined;
 	private boolean includesHidden;
 
 	private AssignmentFormatter() {
         appendsReasons = true;
-        includePatterns = new ArrayList<>();
-        excludePatterns = new ArrayList<>();
+        patternBasedExcludingAssignmentFilter = new PatternBasedAssignmentFilter();
+        patternBasedIncludingAssignmentFilter = new PatternBasedIncludingAssignmentFilter();
         shouldFormatIteratingRulesOnly = false;
         excludeUndefined = false;
         excludeUndefined = false;
@@ -75,7 +73,7 @@ public class AssignmentFormatter {
 
 	protected boolean includesAssignment(Assignment assignment) {
 		return  !(shouldFormatIteratingRulesOnly && !assignment.rule.forcesIteration() || excludedByValue(assignment))
-				&& (includesHidden || ! isHidden(assignment)) && ! isExcludedByExcludePatterns(assignment) && isIncludedByIncludePatterns(assignment);
+				&& (includesHidden || ! isHidden(assignment)) && ! patternBasedExcludingAssignmentFilter.matches(assignment) && isIncludedByIncludePatterns(assignment);
 	}
 	
 	private boolean isHidden(Assignment assignment) {
@@ -86,23 +84,10 @@ public class AssignmentFormatter {
 		return excludeUndefined && SpecialValue.UNDEFINED.equals(assignment.value);
 	}
 
-	private boolean isExcludedByExcludePatterns(Assignment assignment) {
-		return matches(assignment, excludePatterns);
-	}
-
 	private boolean isIncludedByIncludePatterns(Assignment assignment) {
-		return includePatterns.isEmpty() || matches(assignment, includePatterns);
+		return patternBasedIncludingAssignmentFilter.matches(assignment);
 	}
 
-	private boolean matches(Assignment assignment,
-			List<Pattern> patterns) {
-		for(Pattern pattern:patterns){
-			if(pattern.matcher(assignment.getTargetedPropertyName()).matches())
-				return true;
-		}
-		return false;
-	}
-	
     protected AssignmentFormatter append(StringBuilder assignedPropertiesStringBuilder,
     		Assignment assignment) {
         appendReason(assignedPropertiesStringBuilder, assignment);
@@ -162,16 +147,15 @@ public class AssignmentFormatter {
 	}
 
 	public void include(final Pattern pattern) {
-		includePatterns.add(pattern);
+		patternBasedIncludingAssignmentFilter.addPattern(pattern);
 	}
 
 	public void exclude(String regex) {
-		final Pattern pattern = Pattern.compile(regex);
-		exclude(pattern);
+		patternBasedExcludingAssignmentFilter.addPattern(regex);
 	}
 
 	public void exclude(final Pattern pattern) {
-		excludePatterns.add(pattern);
+		patternBasedExcludingAssignmentFilter.addPattern(pattern);
 	}
 
 	public void excludeUndefined(boolean exclude) {
