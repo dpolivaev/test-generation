@@ -40,7 +40,7 @@ public class DescriptionProvider  implements ValueProvider{
 		formatter.exclude(testcaseProperty);
 		formatter.excludeUndefined(true);
 		formatter.appendReasons(false);
-		final AssignmentFilter assignmentFilter = new AssignmentFilter(assignments);
+		final AssignmentPartitioner assignmentFilter = new AssignmentPartitioner(assignments);
 		return formatter.format(assignmentFilter.descriptionRelevantAssignments());
 	}
 	

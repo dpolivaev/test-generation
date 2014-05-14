@@ -11,11 +11,11 @@ import org.dpolivaev.testgeneration.engine.ruleengine.PropertyContainer;
 import org.dpolivaev.testgeneration.engine.scriptwriter.AliasedPropertyAccessor;
 import org.dpolivaev.testgeneration.engine.scriptwriter.internal.PartValueParser;
 
-public class AssignmentFilter {
+class AssignmentPartitioner {
 	private static final Pattern NUMBER_REGEX =  Pattern.compile("#\\d*");
 	final private PropertyContainer propertyContainer;
 
-	public AssignmentFilter(PropertyContainer propertyContainer) {
+	public AssignmentPartitioner(PropertyContainer propertyContainer) {
 		this.propertyContainer = propertyContainer;
 	}
 

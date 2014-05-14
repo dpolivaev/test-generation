@@ -37,7 +37,7 @@ public class TestIdProvider implements ValueProvider{
 	
 	@Override
 	public Object value(final PropertyContainer propertyContainer) {
-		final Collection<Assignment> testPartProperties = new AssignmentFilter(propertyContainer).testPartRelevantAssignments();
+		final Collection<Assignment> testPartProperties = new AssignmentPartitioner(propertyContainer).testPartRelevantAssignments();
 		final LinkedHashSet<Assignment> relevantProperties = new LinkedHashSet<>(testPartProperties);
 		for(String forcedProperty : forcedNames){
 			if(propertyContainer.get(forcedProperty) != SpecialValue.UNDEFINED){
