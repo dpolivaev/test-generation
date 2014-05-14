@@ -17,6 +17,7 @@ import org.dpolivaev.testgeneration.engine.ruleengine.PropertyHandler;
 import org.dpolivaev.testgeneration.engine.ruleengine.SpecialValue;
 import org.dpolivaev.testgeneration.engine.ruleengine.internal.PropertyAccessor;
 import org.dpolivaev.testgeneration.engine.scriptwriter.AliasedPropertyAccessor;
+import org.dpolivaev.testgeneration.engine.scriptwriter.OutputConfiguration;
 import org.dpolivaev.testgeneration.engine.utils.internal.StringWithNumbersComparator;
 
 public class XmlTestCaseWriter implements PropertyHandler {
@@ -114,7 +115,7 @@ public class XmlTestCaseWriter implements PropertyHandler {
 	private void addParts(PropertyContainer propertyContainer, String property, String element) {
         if(propertyContainer.isPropertyAvailable(property))
             addPart(propertyContainer, property, element);
-        for(int i = 1; i <= 99; i++)
+        for(int i = 1; i <= OutputConfiguration.TEST_PART_NUMBER_MAXIMUM; i++)
             if(propertyContainer.isPropertyAvailable(property + '#' + i))
                 addPart(propertyContainer, property + '#' + i, element);
     }

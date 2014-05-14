@@ -11,6 +11,7 @@ public class OutputConfiguration {
 	private String xmlExtension;
 	private String fileDirectory;
 	private String xmlDirectory;
+	public static final int TEST_PART_NUMBER_MAXIMUM = 99;
 	
 	public static final OutputConfiguration OUTPUT_NOTHING = new OutputConfiguration();
 
