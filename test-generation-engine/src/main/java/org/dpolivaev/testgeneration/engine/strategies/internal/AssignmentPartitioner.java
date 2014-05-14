@@ -3,14 +3,15 @@ package org.dpolivaev.testgeneration.engine.strategies.internal;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.dpolivaev.testgeneration.engine.ruleengine.Assignment;
 import org.dpolivaev.testgeneration.engine.ruleengine.PropertyContainer;
 import org.dpolivaev.testgeneration.engine.scriptwriter.AliasedPropertyAccessor;
-import org.dpolivaev.testgeneration.engine.scriptwriter.OutputConfiguration;
 import org.dpolivaev.testgeneration.engine.scriptwriter.internal.PartValueParser;
 
 class AssignmentPartitioner {
+	private static final Pattern NUMBER_REGEX =  Pattern.compile("#\\d*");
 	final private PropertyContainer propertyContainer;
 	private Set<String> testPartRelevantAssignmens;
 	private Set<String> testPartAssignments;
@@ -21,42 +22,39 @@ class AssignmentPartitioner {
 		this.propertyContainer = propertyContainer;
 	}
 
-	private void addParts(Set<String> testPartProperties, String property) {
-        if(propertyContainer.isPropertyAvailable(property))
-		addTestPartAssignments(testPartProperties, property);
-        for(int i = 1; i <= OutputConfiguration.TEST_PART_NUMBER_MAXIMUM; i++) {
-			final String numberedPartName = property + '#' + i;
-			if(propertyContainer.isPropertyAvailable(numberedPartName))
-		addTestPartAssignments(testPartProperties, numberedPartName);
-		}
-    }
-
 	private Set<String> testPartRelevantAssignmentMap(final String[] parts) {
 		Set<String> testPartProperties = new LinkedHashSet<>();
-		for(int i = 0; i < parts.length; i+=2)
-			addParts(testPartProperties, parts[i]);
+		for(Assignment assignment : propertyContainer.getAssignments()){
+			final String targetedPropertyName = assignment.getTargetedPropertyName();
+			if(isTestPartRelevantProperty(parts, targetedPropertyName)){
+				testPartAssignments.add(targetedPropertyName);
+				for(String requiredProperty : assignment.requiredProperties)
+					testPartProperties.add(requiredProperty);
+				final PartValueParser partValueParser = new PartValueParser(assignment.value.toString());
+				testPartProperties.add(targetedPropertyName);
+				final String[] argumentList = partValueParser.getArgumentList();
+				for(String argument:argumentList)
+					if(argument.startsWith(":")){
+						String propertyName = argument.substring(1);
+						if(! testPartProperties.contains(propertyName)) {
+							final Assignment argumentAssignment = propertyContainer.getAssignment(propertyName);
+							if(argumentAssignment != null)
+								testPartProperties.add(propertyName);
+						}
+					}
+			}
+		}
 		return testPartProperties;
 	}
 
-	public void addTestPartAssignments(Set<String> testPartProperties, String targetedPropertyName) {
-		testPartAssignments.add(targetedPropertyName);
-		propertyContainer.get(targetedPropertyName);
-		final Assignment assignment = propertyContainer.getAssignment(targetedPropertyName);
-		for(String requiredProperty : assignment.requiredProperties)
-			testPartProperties.add(requiredProperty);
-		final PartValueParser partValueParser = new PartValueParser(assignment.value.toString());
-		testPartProperties.add(targetedPropertyName);
-		final String[] argumentList = partValueParser.getArgumentList();
-		for(String argument:argumentList){
-			if(argument.startsWith(":")){
-				String propertyName = argument.substring(1);
-				if(! testPartProperties.contains(propertyName)) {
-					final Assignment argumentAssignment = propertyContainer.getAssignment(propertyName);
-					if(argumentAssignment != null)
-						testPartProperties.add(propertyName);
-				}
+	private boolean isTestPartRelevantProperty(String[] parts, final String propertyName) {
+		int i = 0;
+		for(String testCasePart : parts)
+			if(i++ % 2 == 0 && propertyName.startsWith(testCasePart)) {
+				final String numberCandidate = propertyName.substring(testCasePart.length());
+				return numberCandidate.isEmpty() || NUMBER_REGEX.matcher(numberCandidate).matches();
 			}
-		}
+		return false;
 	}
 
 	public boolean isDescriptionRelevant(final String targetedPropertyName) {
