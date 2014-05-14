@@ -5,7 +5,6 @@ import static java.util.Arrays.asList;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 
 import org.dpolivaev.testgeneration.engine.ruleengine.Assignment;
@@ -13,6 +12,7 @@ import org.dpolivaev.testgeneration.engine.ruleengine.AssignmentFormatter;
 import org.dpolivaev.testgeneration.engine.ruleengine.PropertyContainer;
 import org.dpolivaev.testgeneration.engine.ruleengine.Rule;
 import org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider;
+import org.dpolivaev.testgeneration.engine.ruleengine.internal.PatternBasedAssignmentFilter;
 import org.dpolivaev.testgeneration.engine.scriptwriter.AliasedPropertyAccessor;
 import org.dpolivaev.testgeneration.engine.scriptwriter.internal.PartValueParser;
 
@@ -21,7 +21,8 @@ public class TestIdProvider implements ValueProvider{
 	
 	final private String propertySeparator;
 	final private String valueNameSeparator;
-	private Collection<String> forcedNames;
+	final private PatternBasedAssignmentFilter forcedAssignmentFilter;
+	final private PatternBasedAssignmentFilter excludedAssignmentFilter;
 
 	
 	public TestIdProvider() {
@@ -32,7 +33,8 @@ public class TestIdProvider implements ValueProvider{
 		super();
 		this.valueNameSeparator = valueNameSeparator;
 		this.propertySeparator = propertySeparator;
-		forcedNames  = Collections.emptyList();
+		forcedAssignmentFilter = new PatternBasedAssignmentFilter();
+		excludedAssignmentFilter = new PatternBasedAssignmentFilter();
 	}
 	
 	private boolean propertyCanHaveDifferentValues(Assignment assignment, AssignmentPartitioner assignmentPartitioner, PropertyContainer propertyContainer) {
@@ -60,9 +62,11 @@ public class TestIdProvider implements ValueProvider{
 		final Collection<Assignment> relevantProperties = new ArrayList<>();
 		for(Assignment assignment : propertyContainer.getAssignments()){
 			final String targetedPropertyName = assignment.getTargetedPropertyName();
-			if(forcedNames.contains(targetedPropertyName) || assignmentPartitioner.isTestIdRelevant(targetedPropertyName) && (
-					propertyCanHaveDifferentValues(assignment, assignmentPartitioner, propertyContainer)
-					|| targetedPropertyName.equals(new AliasedPropertyAccessor(propertyContainer).getFocusPropertyName()))){
+			if(forcedAssignmentFilter.matches(assignment)
+					|| assignmentPartitioner.isTestIdRelevant(targetedPropertyName)
+					 && (propertyCanHaveDifferentValues(assignment, assignmentPartitioner, propertyContainer)
+							|| targetedPropertyName.equals(new AliasedPropertyAccessor(propertyContainer).getFocusPropertyName()))
+					 && ! excludedAssignmentFilter.matches(assignment)){
 				if(assignmentPartitioner.isTestPartMethodCall(targetedPropertyName)){
 					final PartValueParser partValueParser = new PartValueParser(assignment.value.toString());
 					relevantProperties.add(new Assignment(assignment.rule, partValueParser.getCalledMethod(), assignment.reason, assignment.requiredProperties, assignment.triggeringProperties));
@@ -109,8 +113,15 @@ public class TestIdProvider implements ValueProvider{
 		return values.trim();
 	}
 
+	public TestIdProvider exclude(String... propertyNames) {
+		excludedAssignmentFilter.addPatterns(asList(propertyNames));
+		return this;
+	}
+
+
+
 	public TestIdProvider include(String... propertyNames) {
-		forcedNames = asList(propertyNames);
+		forcedAssignmentFilter.addPatterns(asList(propertyNames));
 		return this;
 	}
 }

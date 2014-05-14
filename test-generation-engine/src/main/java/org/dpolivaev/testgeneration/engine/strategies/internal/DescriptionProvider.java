@@ -6,38 +6,38 @@ import static org.dpolivaev.testgeneration.engine.scriptwriter.AliasedPropertyAc
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
 import org.dpolivaev.testgeneration.engine.ruleengine.Assignment;
 import org.dpolivaev.testgeneration.engine.ruleengine.AssignmentFormatter;
 import org.dpolivaev.testgeneration.engine.ruleengine.PropertyContainer;
 import org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider;
+import org.dpolivaev.testgeneration.engine.ruleengine.internal.PatternBasedAssignmentFilter;
 import org.dpolivaev.testgeneration.engine.scriptwriter.AliasedPropertyAccessor;
 
 public class DescriptionProvider  implements ValueProvider{
 
 	final private String nameValueSeparator;
 	final private String propertySeparator;
-	private Collection<String> excludedNames;
+	final private PatternBasedAssignmentFilter forcedAssignmentFilter;
+	final private PatternBasedAssignmentFilter excludedAssignmentFilter;
 
 
 	public DescriptionProvider(String nameValueSeparator, String propertySeparator) {
 		this.nameValueSeparator = nameValueSeparator;
 		this.propertySeparator = propertySeparator;
 		nameValueSeparator = propertySeparator;
-		excludedNames = Collections.emptySet();
+		forcedAssignmentFilter = new PatternBasedAssignmentFilter();
+		excludedAssignmentFilter = new PatternBasedAssignmentFilter();
 	}
 
 	public String describe(PropertyContainer assignments) {
 		AssignmentFormatter formatter;
 		formatter = AssignmentFormatter.create(nameValueSeparator, propertySeparator);
-		formatter.exclude("\\[.*");
+		excludedAssignmentFilter.addPattern("\\[.*");
 		final AliasedPropertyAccessor aliasedPropertyAccessor = new AliasedPropertyAccessor(assignments);
 		final String scriptProperty = aliasedPropertyAccessor.getAlias(DEFAULT_SCRIPT_PROPERTY_NAME);
-		formatter.exclude("(?:" + scriptProperty + ")(?:\\..+)?");
-		formatter.exclude("(" + DEFAULT_SCRIPT_PROPERTY_NAME + "|" + DEFAULT_TESTCASE_PROPERTY + ")\\.alias");
-		for(String excludedName : excludedNames)
-			formatter.exclude(excludedName);
+		excludedAssignmentFilter.addPattern("(?:" + scriptProperty + ")(?:\\..+)?");
+		excludedAssignmentFilter.addPattern("(" + DEFAULT_SCRIPT_PROPERTY_NAME + "|" + DEFAULT_TESTCASE_PROPERTY + ")\\.alias");
 		final String testcaseProperty = aliasedPropertyAccessor.getAlias(DEFAULT_TESTCASE_PROPERTY);
 		formatter.exclude(testcaseProperty);
 		formatter.excludeUndefined(true);
@@ -47,7 +47,9 @@ public class DescriptionProvider  implements ValueProvider{
 		final Collection<Assignment> allAssignments = assignments.getAssignments();
 		final ArrayList<Assignment> descriptionRelevantAssignments = new ArrayList<>(allAssignments.size());
 		for(Assignment assignment : allAssignments){
-			if(assignmentPartitioner.isDescriptionRelevant(assignment.getTargetedPropertyName()))
+			if(forcedAssignmentFilter.matches(assignment)
+					|| assignmentPartitioner.isDescriptionRelevant(assignment.getTargetedPropertyName())
+					&& ! excludedAssignmentFilter.matches(assignment))
 				descriptionRelevantAssignments.add(assignment);
 		}
 		return formatter.format(descriptionRelevantAssignments);
@@ -59,7 +61,12 @@ public class DescriptionProvider  implements ValueProvider{
 	}
 
 	public DescriptionProvider exclude(String... propertyNames) {
-		excludedNames = asList(propertyNames);
+		excludedAssignmentFilter.addPatterns(asList(propertyNames));
+		return this;
+	}
+
+	public DescriptionProvider include(String... propertyNames) {
+		forcedAssignmentFilter.addPatterns(asList(propertyNames));
 		return this;
 	}
 }
