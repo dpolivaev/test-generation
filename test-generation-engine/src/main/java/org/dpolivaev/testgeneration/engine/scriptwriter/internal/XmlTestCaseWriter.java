@@ -135,10 +135,19 @@ public class XmlTestCaseWriter implements PropertyHandler {
 		xmlWriter.setAttribute("id", partValueParser.getCalledMethod());
 		addDescription(propertyContainer, property);
         }
+        addPartComment(propertyContainer, partValueParser.getComment());
         addPartArguments(propertyContainer, partValueParser.getArgumentList());
     }
 
-     private void addPartArguments(PropertyContainer propertyContainer,
+     private void addPartComment(PropertyContainer propertyContainer, String comment) {
+	 if(xmlWriter != null && ! comment.isEmpty()){
+			xmlWriter.beginElement("Comment");
+			xmlWriter.addTextContent(comment);
+			xmlWriter.endElement("Comment");
+	 }
+	}
+
+	private void addPartArguments(PropertyContainer propertyContainer,
     		 String[] arguments ) {
 		for(String propertyName:arguments){
 			String name;

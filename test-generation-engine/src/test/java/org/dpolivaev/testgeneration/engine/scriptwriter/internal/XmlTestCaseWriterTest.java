@@ -110,6 +110,18 @@ public class XmlTestCaseWriterTest {
     }
 
     @Test
+    public void createsTestCaseElementWithCommentedFocusPart() throws Exception{
+        givenProperty("testcase", "testcase");
+        givenProperty("testcase.focus", "focus ; comment");
+        createScript();
+        checkOutput("<TestCase id='testcase'>"
+			+ "<Focus id='focus'>"
+			+ "<Comment>comment</Comment>"
+			+ "</Focus>"
+			+ "</TestCase>");
+    }
+
+    @Test
     public void createsTestCaseElementWithFocusElementAlias() throws Exception{
         givenProperty("testcase", "testcase");
         givenProperty("Focus.alias", "Alias");
