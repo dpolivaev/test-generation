@@ -47,4 +47,26 @@ public class StringConverterTest {
 		assertThat(output, CoreMatchers.equalTo("\"a\\n\"\n+\"b\\\"\""));
 	}
 	
+	@Test
+	public void convertsEmptyStringToComment_returnsEmptyString() {
+		String input = "";
+		String output = new StringConverter().singleLineComment("//", input);
+		assertThat(output, CoreMatchers.equalTo(""));
+	}
+
+	@Test
+	public void convertsOneLineStringToComment() {
+		String input = "comment";
+		String output = new StringConverter().singleLineComment("//", input);
+		assertThat(output, CoreMatchers.equalTo("//comment"));
+	}
+
+	@Test
+	public void convertsTwoLineStringToComment() {
+		String input = "comment1\ncomment2";
+		String output = new StringConverter().singleLineComment("//", input);
+		assertThat(output, CoreMatchers.equalTo("//comment1\n//comment2"));
+	}
+
+
 }

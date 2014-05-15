@@ -28,6 +28,10 @@ public class TransformationHelper {
 		return new StringConverter().javaString(input);
 	}
 	
+	public static String singleLineComment(String prefix, String input){
+		return new StringConverter().singleLineComment(prefix, input);
+	}
+
 	public static String literal(String input){
 		return new IdConverter().literal(input);
 	}
