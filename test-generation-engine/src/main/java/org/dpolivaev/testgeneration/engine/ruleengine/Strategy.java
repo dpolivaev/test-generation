@@ -13,11 +13,11 @@ public class Strategy {
     private LinkedMap<String, Rule> triggeredRules = new LinkedMap<>();
     private Collection<RuleBuilder> ruleBuilders = new ArrayList<RuleBuilder>();
     
-    public void initialize(){
+    public void initialize(PropertyContainer propertyContainer){
     	defaultRules.clear();
     	triggeredRules.clear();
     	for(RuleBuilder ruleBuilder : ruleBuilders)
-    		addRule(ruleBuilder.create());
+		addRule(ruleBuilder.create(propertyContainer));
     }
 
     public void addRule(RuleBuilder builder) {

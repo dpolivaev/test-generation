@@ -9,9 +9,14 @@ import org.dpolivaev.testgeneration.engine.ruleengine.internal.ShuffledValueProv
 import org.dpolivaev.testgeneration.engine.ruleengine.internal.ValueProviders;
 import org.hamcrest.CoreMatchers;
 
+import static org.hamcrest.CoreMatchers.any;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.junit.Test;
+import org.mockito.Mockito;
 
 public class RuleBuilderTest {
 
@@ -50,25 +55,14 @@ public class RuleBuilderTest {
 		ShuffledValueProviders ruleValues = (ShuffledValueProviders) RuleBuilder.Factory.iterate("x").over("a", "b").ruleValues();
 		assertThat(ruleValues.getOrder(), CoreMatchers.equalTo(Order.ORDERED_THEN_SHUFFLED));
 	}
-
-//
-//	@Test
-//	public void addConditionToTrueCondition() {
-//		final StatefulRule statefulRule = new DefaultStatefulRule(Condition.TRUE, null, null);
-//		Condition condition = mock(Condition.class);
-//		statefulRule.addCondition(condition);
-//		statefulRule.propertyRequired(null);
-//		verify(condition).isSatisfied(null);
-//	}
-//
-//	@Test
-//	public void addConditionToOtherCondition() {
-//		Condition condition = mock(Condition.class);
-//		Condition otherCondition = mock(Condition.class);
-//		final StatefulRule statefulRule = new DefaultStatefulRule(condition, null, null);
-//		statefulRule.addCondition(otherCondition);
-//		statefulRule.propertyRequired(null);
-//		verify(otherCondition).isSatisfied(null);
-//	}
 	
+	@Test
+	public void nameProvider(){
+		ValueProvider nameProvider = mock(ValueProvider.class);
+		PropertyContainer propertyContainer = mock(PropertyContainer.class);
+		when(nameProvider.value(Mockito.any(PropertyContainer.class))).thenReturn("x");
+		final Rule rule = new RuleBuilder().iterate(nameProvider).over("a").create(propertyContainer);
+		assertThat(rule.getTargetedPropertyName(), equalTo("x"));
+	}
+
 }

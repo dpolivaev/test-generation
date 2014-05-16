@@ -95,7 +95,7 @@ public class StrategyTest {
         strategy2.addRule(ruleQ);
         
         Strategy combinedStrategy = strategy.with(strategy2);
-        combinedStrategy.initialize();
+        combinedStrategy.initialize(null);
         assertThat(combinedStrategy.triggeredRules(), hasItem(rulePropertyNameMatches("p")));
         assertThat(combinedStrategy.triggeredRules(), hasItem(rulePropertyNameMatches("x")));
         assertThat(combinedStrategy.defaultRules(), hasItem(rulePropertyNameMatches("p")));

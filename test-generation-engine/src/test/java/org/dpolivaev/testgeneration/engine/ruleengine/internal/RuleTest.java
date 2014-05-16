@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.Set;
 
 import org.dpolivaev.testgeneration.engine.ruleengine.EngineState;
+import org.dpolivaev.testgeneration.engine.ruleengine.PropertyContainer;
 import org.dpolivaev.testgeneration.engine.ruleengine.Rule;
 import org.dpolivaev.testgeneration.engine.ruleengine.RuleBuilder;
 import org.dpolivaev.testgeneration.engine.ruleengine.Strategy;
@@ -246,7 +247,7 @@ public class RuleTest {
     	RuleBuilder temporaryRuleCreator = mock(RuleBuilder.class);
         Rule temporaryRule = mock(Rule.class);
         when(temporaryRule.blocksRequiredProperties()).thenReturn(false);
-        when(temporaryRuleCreator.create()).thenReturn(temporaryRule);
+        when(temporaryRuleCreator.create(Mockito.any(PropertyContainer.class))).thenReturn(temporaryRule);
 
         Rule statefulRule = iterate("x").over("a").with(temporaryRuleCreator).create();
         statefulRule.propertyCombinationStarted(engineState);

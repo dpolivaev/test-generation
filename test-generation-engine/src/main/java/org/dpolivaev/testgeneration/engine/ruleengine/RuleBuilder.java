@@ -31,6 +31,7 @@ public class RuleBuilder{
     private int previousValueCount;
 	private boolean asDefaultRule;
 	private String name;
+	private ValueProvider nameProvider;
 
     public RuleBuilder when(
         String... triggeringProperties) {
@@ -159,6 +160,10 @@ public class RuleBuilder{
             return new RuleBuilder().iterate(property);
         }
 
+        static public RuleBuilder iterate(ValueProvider property) {
+            return new RuleBuilder().iterate(property);
+        }
+
         static public RuleBuilder rule(String name) {
             return new RuleBuilder().rule(name);
         }
@@ -204,6 +209,17 @@ public class RuleBuilder{
 		if(triggeringProperties.isEmpty())
 			triggeringProperties = new HashSet<String>();
 		triggeringProperties.add(trigger);
+	}
+
+	public RuleBuilder iterate(ValueProvider nameProvider) {
+		this.nameProvider = nameProvider;
+		return this;
+	}
+
+	public Rule create(PropertyContainer propertyContainer) {
+		if(nameProvider != null)
+			targetedPropertyName = nameProvider.value(propertyContainer).toString();
+		return create();
 	}
 
 }
