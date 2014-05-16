@@ -444,4 +444,11 @@ class StrategyCompilationTest {
 		'''.assertCompilesToFile(testName)
 	}
 
+	@Test def nameBasedOnPropertyValue() {
+		'''
+			strategy first
+				let x be "x"
+				let (:x) be "y"
+		'''.assertCompilesToFile(testName)
+	}
 }

@@ -42,6 +42,7 @@ import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 
 import static extension org.dpolivaev.testgeneration.dsl.jvmmodel.StrategyCompiler.*
+import org.dpolivaev.testgeneration.dsl.testspec.PropertyCall
 
 class StrategyInferrer{
 	static val OPTIMIZE_FOR_DEBUG = true
@@ -117,7 +118,20 @@ class StrategyInferrer{
 		if (propertyName != null)
 			for(expr:propertyName.nameExpressions)
 				if(shouldCreateMethodFor(expr))
-					createMethod(expr, NAME, expr.inferredType, false)
+					createMethod(expr, NAME, expr.inferredType, containsPropertyCall(expr))
+	}
+
+	def containsPropertyCall(EList<XExpression> objects) {
+		for(obj:objects)
+			if (obj.containsPropertyCall) return true
+		return false
+
+	}
+	def containsPropertyCall(EObject object) {
+		val contents = EcoreUtil2.eAllContents(object)
+		for(obj : contents)
+			if (obj instanceof PropertyCall) return true
+		return false
 	}
 
 	private def appendRuleNameProviders(RuleGroup rule){
@@ -125,7 +139,7 @@ class StrategyInferrer{
 		if (ruleName != null)
 			for(expr:ruleName.nameExpressions)
 				if(shouldCreateMethodFor(expr))
-					createMethod(expr, NAME, expr.inferredType, false)
+					createMethod(expr, NAME, expr.inferredType, containsPropertyCall(expr))
 	}
 
 	private def createMethod(XExpression expr, String prefix, JvmTypeReference resultTypeRef, boolean useParameters){
@@ -354,7 +368,13 @@ class StrategyInferrer{
 			append('"') append(effectiveName) append('"')
 		}
 		else{
-			appendNameExpressions(it, ruleNameExpressions)
+			if(ruleNameExpressions.containsPropertyCall)
+				appendImplementationObject(it, propertyName.newTypeRef(org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider).type, "Object value",
+				[
+					append('return ')  appendNameExpressions(it, ruleNameExpressions) append(';')
+				])
+			else
+				appendNameExpressions(it, ruleNameExpressions)
 		}
 	}
 
@@ -368,7 +388,11 @@ class StrategyInferrer{
 				xbaseCompiler.compileAsJavaExpression(expr, it, strategy.newTypeRef(Object))
 			}
 			else{
-				append('''«methodName»()''')
+				append(methodName)
+				if(expr.containsPropertyCall)
+					append('(propertyContainer)')
+				else
+					append('()')
 			}
 			append(")");
 		}
