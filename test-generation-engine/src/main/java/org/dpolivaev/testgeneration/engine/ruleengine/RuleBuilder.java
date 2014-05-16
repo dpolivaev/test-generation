@@ -26,6 +26,7 @@ public class RuleBuilder{
     final private List<ValueWithRulesProvider> values = new ArrayList<>();
     private List<RuleBuilder> rules;
     private Set<String> triggeringProperties = Collections.emptySet();
+    private Set<ValueProvider> triggeringPropertyNameProviders = Collections.emptySet();
     private Condition condition = Condition.TRUE;
     private Order order = Order.defaultOrder;
     private int previousValueCount;
@@ -40,6 +41,13 @@ public class RuleBuilder{
     	this.triggeringProperties = Utils.set(triggeringProperties);
         return this;
     }
+
+	public RuleBuilder when(ValueProvider... nameProviders) {
+	if(! this.triggeringPropertyNameProviders.isEmpty())
+		throw new IllegalStateException("triggering property name providers already set");
+	this.triggeringPropertyNameProviders = Utils.set(nameProviders);
+		return this;
+	}
 
 	public RuleBuilder over(Object... valueObjects) {
 		rules = null;
@@ -152,6 +160,10 @@ public class RuleBuilder{
             return new RuleBuilder().when(triggeringProperties);
         }
 
+        static public RuleBuilder when(ValueProvider... nameProviders) {
+            return new RuleBuilder().when(nameProviders);
+        }
+
         static public RuleBuilder with(Strategy strategy) {
             return new RuleBuilder().with(strategy);
         }
@@ -219,6 +231,8 @@ public class RuleBuilder{
 	public Rule create(PropertyContainer propertyContainer) {
 		if(nameProvider != null)
 			targetedPropertyName = nameProvider.value(propertyContainer).toString();
+		for(ValueProvider valueProvider : triggeringPropertyNameProviders)
+			addTriggeringProperty(valueProvider.value(propertyContainer).toString());
 		return create();
 	}
 

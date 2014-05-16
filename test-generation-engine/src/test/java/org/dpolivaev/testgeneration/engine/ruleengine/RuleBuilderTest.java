@@ -7,6 +7,7 @@ import org.dpolivaev.testgeneration.engine.ruleengine.RuleBuilder;
 import org.dpolivaev.testgeneration.engine.ruleengine.internal.OrderedValueProviders;
 import org.dpolivaev.testgeneration.engine.ruleengine.internal.ShuffledValueProviders;
 import org.dpolivaev.testgeneration.engine.ruleengine.internal.ValueProviders;
+import org.dpolivaev.testgeneration.engine.utils.internal.Utils;
 import org.hamcrest.CoreMatchers;
 
 import static org.hamcrest.CoreMatchers.any;
@@ -65,4 +66,13 @@ public class RuleBuilderTest {
 		assertThat(rule.getTargetedPropertyName(), equalTo("x"));
 	}
 
+
+	@Test
+	public void triggeringPropertyNameProvider(){
+		ValueProvider nameProvider = mock(ValueProvider.class);
+		PropertyContainer propertyContainer = mock(PropertyContainer.class);
+		when(nameProvider.value(Mockito.any(PropertyContainer.class))).thenReturn("x");
+		final Rule rule = new RuleBuilder().when(nameProvider).iterate("y").over("a").create(propertyContainer);
+		assertThat(rule.getTriggeringProperties(), equalTo(Utils.set("x")));
+	}
 }
