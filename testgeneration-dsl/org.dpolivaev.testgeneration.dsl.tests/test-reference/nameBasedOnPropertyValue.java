@@ -23,13 +23,13 @@ import org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider;
 @SuppressWarnings("all")
 class _MyFile_first_StrategyFactory {
   private static int _instanceCounter = 0;
-
+  
   private int _instanceId = _instanceCounter++;
-
+  
   private Object _name1(final PropertyContainer propertyContainer) {
     return propertyContainer.get("x");
   }
-
+  
   RequirementBasedStrategy first() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
     Strategy _strategy = new Strategy();
@@ -44,3 +44,4 @@ class _MyFile_first_StrategyFactory {
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }
 }
+
