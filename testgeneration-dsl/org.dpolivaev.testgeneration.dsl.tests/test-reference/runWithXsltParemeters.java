@@ -15,13 +15,13 @@ public class MyFile {
     RequirementBasedStrategy _First = MyFile.First();
     return _First;
   }
-
+  
   public static RequirementBasedStrategy First() {
     return new _MyFile_First_StrategyFactory().First();
   }
-
+  
   public static void run1() {
-
+    
     OutputConfiguration _outputConfiguration = new OutputConfiguration();
     _outputConfiguration.setXmlDirectory("testoutput").setXmlExtension("xml").setXsltSource("my.xslt").setFileDirectory("testoutput").setFileExtension("java");
     _outputConfiguration.putXsltParameter("key", "value");
@@ -33,7 +33,7 @@ public class MyFile {
     _writerFactory.configureEngine(_ruleEngine);
     new RequirementBasedStrategy().with(_strategy1()).run(_ruleEngine);
   }
-
+  
   public static void main(final String[] args) {
     MyFile.run1();
   }
@@ -48,12 +48,13 @@ import org.dpolivaev.testgeneration.engine.ruleengine.Strategy;
 @SuppressWarnings("all")
 class _MyFile_First_StrategyFactory {
   private static int _instanceCounter = 0;
-
+  
   private int _instanceId = _instanceCounter++;
-
+  
   RequirementBasedStrategy First() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
     Strategy _strategy = new Strategy();
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }
 }
+
