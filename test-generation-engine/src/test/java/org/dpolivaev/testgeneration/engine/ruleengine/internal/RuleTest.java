@@ -228,6 +228,7 @@ public class RuleTest {
         Rule statefulRule = iterate("x").over("a").with(temporaryRule).create();
 
         statefulRule.propertyCombinationStarted(engineState);
+        statefulRule.propertyValueSet(new PropertyAssignedEvent(engineState, statefulRule, Collections.<String>emptySet(), true));
         verify(engineState).addRule(argThat(rulePropertyNameMatches("y")));
     }
 
@@ -238,6 +239,7 @@ public class RuleTest {
         Rule statefulRule = iterate("x").over("a").with(temporaryRule1).with(temporaryRule2).create();
 
         statefulRule.propertyCombinationStarted(engineState);
+        statefulRule.propertyValueSet(new PropertyAssignedEvent(engineState, statefulRule, Collections.<String>emptySet(), true));
         verify(engineState).addRule(argThat(rulePropertyNameMatches("y1")));
         verify(engineState).addRule(argThat(rulePropertyNameMatches("y2")));
     }
@@ -251,6 +253,7 @@ public class RuleTest {
 
         Rule statefulRule = iterate("x").over("a").with(temporaryRuleCreator).create();
         statefulRule.propertyCombinationStarted(engineState);
+        statefulRule.propertyValueSet(new PropertyAssignedEvent(engineState, statefulRule, Collections.<String>emptySet(), true));
         statefulRule.propertyCombinationFinished(engineState);
 
         verify(strategy).removeRule(temporaryRule);

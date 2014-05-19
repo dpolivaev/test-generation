@@ -32,7 +32,7 @@ public class TriggeredStatefulRule extends StatefulRule {
         if(engineState.getCombinationCounter() == 1)
             setBlocksRequiredProperties(true);
         if (getCondition().isSatisfied(engineState)) {
-            addValueWithRules(engineState);
+            addValue(engineState);
         }
         else
             setBlocksRequiredProperties(false);
@@ -46,13 +46,13 @@ public class TriggeredStatefulRule extends StatefulRule {
     @Override
     public void propertyValueSet(PropertyAssignedEvent event) {
     	if (isValueAddedToCurrentCombination())
-    		addDependencies(event);
+		super.propertyValueSet(event);
     	else if (! isTopRule() 
 			&& getTriggeringProperties().contains(event.getTargetedPropertyName())
 			&& event.containsTriggeredProperties(getTriggeringProperties())) {
     		EngineState engineState = event.getState();
     		if (getCondition().isSatisfied(engineState)) {
-    			addValueWithRules(engineState);
+			addValue(engineState);
     			if (event.isValueChanged())
     				setBlocksRequiredProperties(true);
     		}

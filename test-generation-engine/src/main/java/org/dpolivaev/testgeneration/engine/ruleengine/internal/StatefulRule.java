@@ -63,7 +63,7 @@ public abstract class StatefulRule implements Rule {
         return blocksRequiredProperties;
     }
 
-    protected void addValueWithRules(EngineState engineState) {
+    protected void addValue(EngineState engineState) {
         boolean useNextValue = dependentRules.isEmpty();
         if (useNextValue) {
             valueProviders.next();
@@ -80,12 +80,8 @@ public abstract class StatefulRule implements Rule {
         		break;
         }
         this.valueAlreadyAddedToCurrentCombination = true;
-        if(value != SpecialValue.DISABLED_RULE){
-        	if (useNextValue) {
-        		addRules(engineState);
-        	}
+        if(value != SpecialValue.DISABLED_RULE)
         	engineState.setPropertyValue(this, value, useNextValue);
-        }
     }
 
 	protected void addRules(EngineState engineState) {
@@ -101,7 +97,9 @@ public abstract class StatefulRule implements Rule {
 
 	@Override
     public void propertyValueSet(PropertyAssignedEvent event) {
-        if (isValueAddedToCurrentCombination())
+		if(event.getWorkingRule() == this && event.isValueChanged() && createdRules.isEmpty())
+			addRules(event.getState());
+		if (isValueAddedToCurrentCombination())
             addDependencies(event);
     }
 

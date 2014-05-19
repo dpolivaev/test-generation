@@ -17,7 +17,7 @@ public class DefaultStatefulRule extends StatefulRule {
     @Override
     public void propertyRequired(EngineState engineState) {
         if (isSatisfied(engineState)) {
-            addValueWithRules(engineState);
+            addValue(engineState);
         }
     }
 

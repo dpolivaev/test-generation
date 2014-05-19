@@ -523,4 +523,18 @@ public class RuleEngineAcceptanceTest {
         }).when(scriptProducer).handlePropertyCombination(ruleEngine);
         ruleEngine.run(strategy);
     }
- }
+
+    @Test
+    public void temporaryRuleWithPropertyNameDependentOnCreatingRuleValue() {
+        scriptProducerMock.appendReasons(true);
+        strategy.addRule(iterate("x").over("y").with(iterate(new ValueProvider() {
+		    @Override
+		    public Object value(PropertyContainer propertyContainer) {
+		        return propertyContainer.get("x");
+		    }
+		}).over("1")));
+        generateCombinationsForStrategy();
+        expect(combination("->x", "y", "x->y", "1"));
+    }
+
+}
