@@ -208,6 +208,10 @@ class GenerationInferrer{
 			else
 				appendOutputFile(it, "File", outputConfiguration.xml)
 			append(';')
+			for(xsltParameter : outputConfiguration.xsltParamerers){
+				newLine
+				append('''_«target»Configuration.putXsltParameter("«xsltParameter.key»", "«xsltParameter.value»");''')
+			}
 		}
 	}
 

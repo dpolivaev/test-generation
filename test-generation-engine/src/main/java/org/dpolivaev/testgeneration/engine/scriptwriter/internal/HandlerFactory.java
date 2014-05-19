@@ -1,6 +1,7 @@
 package org.dpolivaev.testgeneration.engine.scriptwriter.internal;
 
 import java.io.File;
+import java.util.Map;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
@@ -29,8 +30,12 @@ public class HandlerFactory {
             final TransformerHandler xsltHandler = xsltSource != null ? tf.newTransformerHandler(xsltSource) :  tf.newTransformerHandler();
             if(xsltSource == null)
 				setOutputProperties(xsltHandler);
-            else
-            	xsltHandler.getTransformer().setParameter("scriptConfiguration", this);
+            else{
+		final Transformer transformer = xsltHandler.getTransformer();
+				transformer.setParameter("scriptConfiguration", this);
+				for(Map.Entry<String, String> parameter : outputConfiguration.getXsltParameters().entrySet())
+					transformer.setParameter(parameter.getKey(), parameter.getValue());
+            }
             final TransformerHandler closingXsltHandler = autoCloseStream(xsltHandler);
 			closingXsltHandler.setResult(result);
             if(xsltSource == null || outputConfiguration.getXmlExtension() == null)

@@ -358,6 +358,13 @@ class StrategyCompilationTest {
 		'''.assertCompilesToFile(testName)
 	}
 
+	@Test def runWithXsltParemeters() {
+		'''
+			strategy First
+			run strategy First output "testoutput/xml", apply "my.xslt"(key="value") output "testoutput/java"
+		'''.assertCompilesToFile(testName)
+	}
+
 	@Test def runWithXml() {
 		'''
 			strategy First

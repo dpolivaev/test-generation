@@ -91,8 +91,13 @@ Run:
 	
 ;
 OutputConfiguration:
-	('output' xml = STRING ',')? 'apply' xslt=STRING 'output' fileExtension = STRING
+	('output' xml = STRING ',')? 'apply' xslt=STRING ('(' xsltParamerers += XsltParameter (',' xsltParamerers += XsltParameter)* ')')?
+	'output' fileExtension = STRING
 	| 'output' xml = STRING
+;
+
+XsltParameter:
+	key = ID '=' value=STRING
 ;
 
 ReportConfiguration returns OutputConfiguration:

@@ -2,6 +2,9 @@ package org.dpolivaev.testgeneration.engine.scriptwriter;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 
@@ -11,11 +14,13 @@ public class OutputConfiguration {
 	private String xmlExtension;
 	private String fileDirectory;
 	private String xmlDirectory;
+	final private Map<String, String> xsltParameters;
 	public static final int TEST_PART_NUMBER_MAXIMUM = 99;
 	
 	public static final OutputConfiguration OUTPUT_NOTHING = new OutputConfiguration();
 
 	public OutputConfiguration(){
+		xsltParameters = new HashMap<>();
 	}
 
 	public Source getXsltSource() {
@@ -79,5 +84,15 @@ public class OutputConfiguration {
 	public boolean isFileValid() {
 		return  getFileExtension() != null;
 	}
+
+	public Map<String, String> getXsltParameters() {
+		return xsltParameters;
+	}
+
+	public String putXsltParameter(String key, String value) {
+		return xsltParameters.put(key, value);
+	}
+
+
 	
 }
