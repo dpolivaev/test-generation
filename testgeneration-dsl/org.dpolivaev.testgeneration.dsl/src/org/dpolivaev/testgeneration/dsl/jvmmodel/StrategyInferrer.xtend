@@ -276,7 +276,7 @@ class StrategyInferrer{
 				}
 			}
 			if(rule.isDefault)
-				append('.asDefaultRule()')
+				append('.shuffled().asDefaultRule()')
 		}
 		else if(ruleGroup.strategy !=null){
 			appendStrategyRule(it, ruleGroup.strategy)
