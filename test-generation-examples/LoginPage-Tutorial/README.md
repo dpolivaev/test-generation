@@ -42,7 +42,7 @@ file LoginTestSuite.testspec:
 		let default testcase.description be StrategyHelper.descriptionProvider
 
 	strategy loginTests
-		apply TestStructure.structure
+		apply structure
 
 		let script be "login/LoginTest"
 		let script.driver be "login/LoginTestDriver"
@@ -61,6 +61,7 @@ and select "Run As", "Generation Task".
 - The test should compile without errors now.
 
 ##Step 4: First test case: log in with valid email address and password
+- Move reusable definition of test script related properties in separate file 
 - Add test steps and their parameters to the strategy file.
 
 file TestStructure.testspec:
@@ -85,7 +86,7 @@ file LoginTestSuite.testspec:
 	package login.testgeneration
 
 	strategy loginTests
-		apply structure
+		apply TestStructure.structure
 
 		let script be "login/LoginTest"
 		let script.driver be "login/LoginTestDriver"
@@ -103,6 +104,9 @@ file LoginTestSuite.testspec:
 
 		let pageAfterSubmit be "LOGIN_SUCCESS_PAGE"
 		let assert be "checkPage(:pageAfterSubmit)"
+
+	run strategy loginTests
+		apply "/java.xslt" output "generated-tests/java"
 
 - Run generation task.
 - Observe reported problems because of missing method and constant declarations.
@@ -122,7 +126,7 @@ file LoginTestDriver.java:
 file LoginTestSuite.testspec:
 
 	strategy loginTests
-		apply structure
+		apply TestStructure.structure
 
 		let script be "login/LoginTest"
 		let script.driver be "login/LoginTestDriver"
@@ -322,7 +326,7 @@ Requirement R2 should be checked before the log-in is submitted. Therefore we ne
 	let page be LOGIN_PAGE
 
 	let act be
-	"submit(protocol)"{
+	"submit(:protocol)"{
 		let arrange#2 be "enter mail address(:email)"
 		let arrange#3 be "enter password(:password)"
 		let assert be "checkPage(:pageAfterSubmit)"
@@ -344,12 +348,12 @@ Requirement R2 should be checked before the log-in is submitted. Therefore we ne
 				let [R3] be "log in successful"
 			}
 	},
-	"enter password(password)"{
+	"enter password(:password)"{
 		let password be VALID_PASSWORD
 		let assert be "entered password is not visible"
 	}
 
-	if :act == "enter password(password)" && :password != NOT_ENTERED_PASSWORD && :assert == "entered password is not visible"
+	if :act == "enter password(:password)" && :password != NOT_ENTERED_PASSWORD && :assert == "entered password is not visible"
 	    let [R2] be "entered password is not visible"
 
 Run test generation and add the new method to the driver class to fix the compile errors.
@@ -358,7 +362,7 @@ Run test generation and add the new method to the driver class to fix the compil
 
 The requirement coverage property `[R2]` can be moved up to eliminate the need of the condition.
 
-	"enter password(password)"{
+	"enter password(:password)"{
 		let password be VALID_PASSWORD
 		let assert be "entered password is not visible"
 	    let [R2] be :assert
@@ -386,7 +390,7 @@ The driver:
 Defining default property values allows to avoid duplication and to focus on the relevant test aspects.
 Here default values for properties `password` and `email` are set:
 
-	let arrange#1 be "go to page(page)"
+	let arrange#1 be "go to page(:page)"
 	let page be LOGIN_PAGE
 	let default password be VALID_PASSWORD
 	let default email be VALID_MAIL
@@ -412,7 +416,7 @@ Here default values for properties `password` and `email` are set:
 				let [R3] be "log in successful"
 			}
 	},
-	"enter password(password)"{
+	"enter password(:password)"{
 		let assert be "entered password is not visible"
 		let [R2] be :assert
 	}
@@ -480,7 +484,7 @@ Strategies can include rules defined in other strategies defined in the same fil
 			let [R4] be "check email and password fields after failed log-in"
 		}
 
-		rule pageAfterSubmit if traced loginOracle.isLoginSuccessful(:protocol as Protocol, :email as EMail, :password as Password)
+		rule pageAfterSubmit if :protocol == HTTPS && :email == VALID_MAIL && :password == VALID_PASSWORD
 			let pageAfterSubmit be LOGIN_SUCCESS_PAGE
 
 	strategy formatTest
