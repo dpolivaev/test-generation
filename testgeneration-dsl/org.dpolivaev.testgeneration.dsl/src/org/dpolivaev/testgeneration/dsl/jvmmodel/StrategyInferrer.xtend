@@ -6,7 +6,7 @@ import java.util.Collection
 import javax.inject.Inject
 import org.dpolivaev.testgeneration.dsl.testspec.Condition
 import org.dpolivaev.testgeneration.dsl.testspec.DisabledRule
-import org.dpolivaev.testgeneration.dsl.testspec.Generation
+import org.dpolivaev.testgeneration.dsl.testspec.PropertyCall
 import org.dpolivaev.testgeneration.dsl.testspec.PropertyName
 import org.dpolivaev.testgeneration.dsl.testspec.Rule
 import org.dpolivaev.testgeneration.dsl.testspec.RuleGroup
@@ -25,7 +25,6 @@ import org.dpolivaev.testgeneration.engine.ruleengine.Strategy
 import org.dpolivaev.testgeneration.engine.ruleengine.ValueProviderHelper
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.EObject
-import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.common.types.JvmGenericType
 import org.eclipse.xtext.common.types.JvmType
@@ -37,19 +36,19 @@ import org.eclipse.xtext.xbase.XNullLiteral
 import org.eclipse.xtext.xbase.XNumberLiteral
 import org.eclipse.xtext.xbase.XStringLiteral
 import org.eclipse.xtext.xbase.compiler.Later
-import org.eclipse.xtext.xbase.compiler.XbaseCompiler
 import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 
 import static extension org.dpolivaev.testgeneration.dsl.jvmmodel.StrategyCompiler.*
-import org.dpolivaev.testgeneration.dsl.testspec.PropertyCall
+import org.eclipse.xtext.util.Strings
+import org.eclipse.xtext.xbase.typesystem.computation.NumberLiterals
 
 class StrategyInferrer{
 	static val OPTIMIZE_FOR_DEBUG = true
 	@Inject Injector injector
 	@Inject extension JvmTypesBuilder jvmTypesBuilder
 	@Inject ClassInferrer classInferrer
-	@Inject XbaseCompiler xbaseCompiler
+	@Inject private NumberLiterals numberLiterals;
 	val Methods methods
 	var JvmGenericType jvmType
 	var org.dpolivaev.testgeneration.dsl.testspec.Strategy strategy
@@ -161,7 +160,7 @@ class StrategyInferrer{
 	}
 
 	private def isLiteral(XExpression expr) {
-		val isLiteral = expr instanceof XStringLiteral || expr instanceof XNumberLiteral || expr instanceof XBooleanLiteral || expr instanceof XNullLiteral
+		val isLiteral = expr instanceof XStringLiteral || expr instanceof XNumberLiteral && numberLiterals.getJavaType(expr as XNumberLiteral).isPrimitive() || expr instanceof XBooleanLiteral || expr instanceof XNullLiteral
 		isLiteral
 	}
 
@@ -385,7 +384,7 @@ class StrategyInferrer{
 			append(".append(");
 			val methodName = methods.get(NAME, expr)
 			if(methodName == null){
-				xbaseCompiler.compileAsJavaExpression(expr, it, strategy.newTypeRef(Object))
+				compileAsJavaLiteral(expr, it)
 			}
 			else{
 				append(methodName)
@@ -526,11 +525,11 @@ class StrategyInferrer{
 				val expressions = valueProvider.expressions
 				if(valueProvider.condition == null && expressions.size == 1 && methods.get(VALUE, expressions.get(0)) == null){
 					if(! OPTIMIZE_FOR_DEBUG)
-						xbaseCompiler.compileAsJavaExpression(expressions.get(0), it, valueProvider.newTypeRef(Object))
+						compileAsJavaLiteral(expressions.get(0), it)
 					else{
 					appendImplementationObject(it, valueAction.newTypeRef(org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider).type, "Object value",
 						[
-							append('return ') xbaseCompiler.compileAsJavaExpression(expressions.get(0), it, valueProvider.newTypeRef(Object)) append(';')
+							append('return ') compileAsJavaLiteral(expressions.get(0), it) append(';')
 						])
 					}
 				}
@@ -569,7 +568,7 @@ class StrategyInferrer{
 				append(".append(");
 			val methodName = methods.get(VALUE, expr)
 			if(methodName == null){
-				xbaseCompiler.compileAsJavaExpression(expr, it, strategy.newTypeRef(Object))
+				compileAsJavaLiteral(expr, it)
 			}
 			else{
 				append(strategy.newTypeRef(ValueProviderHelper).type) append('''.toValue(«methodName»(propertyContainer), propertyContainer)''')
@@ -579,6 +578,17 @@ class StrategyInferrer{
 		}
 		if(concatenation)
 			append(".toString()")
+	}
+	
+	private def compileAsJavaLiteral(XExpression expression, ITreeAppendable appendable) {
+		appendable.append(
+		switch(expression){
+			XStringLiteral : '"' + Strings.convertToJavaString(expression.value, true) + '"'
+			XNumberLiteral : numberLiterals.toJavaLiteral(expression)
+			XBooleanLiteral: expression.isTrue.toString
+			XNullLiteral :  "null"
+		}
+		)
 	}
 
 	private def appendTraceEnd(ITreeAppendable it, EObject object) {

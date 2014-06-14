@@ -91,6 +91,13 @@ class StrategyCompilationTest {
 		'''.assertCompilesToFile(testName)
 	}	
 	
+	@Test def withBigInteger() {
+		'''
+			strategy first
+				let x be 0x1#bi
+		'''.assertCompilesToFile(testName)
+	}	
+	
 	@Test def withBuildTriggers() {
 		'''
 			strategy first

@@ -13,12 +13,14 @@ public class MyFile {
 
 File 2 : _MyFile_first_StrategyFactory.java
 
+import java.math.BigInteger;
 import org.dpolivaev.testgeneration.engine.coverage.CoverageEntry;
 import org.dpolivaev.testgeneration.engine.coverage.RequirementBasedStrategy;
 import org.dpolivaev.testgeneration.engine.ruleengine.PropertyContainer;
 import org.dpolivaev.testgeneration.engine.ruleengine.RuleBuilder;
 import org.dpolivaev.testgeneration.engine.ruleengine.Strategy;
 import org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider;
+import org.dpolivaev.testgeneration.engine.ruleengine.ValueProviderHelper;
 
 @SuppressWarnings("all")
 class _MyFile_first_StrategyFactory {
@@ -26,11 +28,17 @@ class _MyFile_first_StrategyFactory {
   
   private int _instanceId = _instanceCounter++;
   
+  private BigInteger _value1(final PropertyContainer propertyContainer) {
+    return BigInteger.ONE;
+  }
+  
   RequirementBasedStrategy first() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
     Strategy _strategy = new Strategy();
     _strategy.addRule(RuleBuilder.Factory.iterate("x").over(new ValueProvider(){
-      @Override public Object value(PropertyContainer propertyContainer) {return "line1\r\nline2\r\nline3\r\n";
+      @Override public Object value(PropertyContainer propertyContainer) {
+        Object _value = ValueProviderHelper.toValue(_value1(propertyContainer), propertyContainer);
+        return _value;
     }}));
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }

@@ -7,7 +7,6 @@ import org.dpolivaev.testgeneration.dsl.testspec.PropertyCall
 import org.dpolivaev.testgeneration.engine.coverage.CoverageTracker
 import org.eclipse.xtext.common.types.JvmDeclaredType
 import org.eclipse.xtext.common.types.JvmPrimitiveType
-import org.eclipse.xtext.common.types.JvmTypeReference
 import org.eclipse.xtext.common.types.util.Primitives
 import org.eclipse.xtext.util.Strings
 import org.eclipse.xtext.xbase.XCastedExpression
@@ -16,9 +15,12 @@ import org.eclipse.xtext.xbase.XNumberLiteral
 import org.eclipse.xtext.xbase.XStringLiteral
 import org.eclipse.xtext.xbase.compiler.XbaseCompiler
 import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
+import org.eclipse.xtext.xbase.typesystem.references.LightweightTypeReference
+import org.eclipse.xtext.common.types.util.TypeReferences
 
 class StrategyCompiler extends XbaseCompiler {
 	@Inject Primitives primitives
+	@Inject TypeReferences typeReferences
 	override protected doInternalToJavaStatement(XExpression expr, ITreeAppendable it, boolean isReferenced) {
 		switch expr {
 			PropertyCall: _internalToJavaStatement(expr, it, isReferenced)
@@ -27,13 +29,13 @@ class StrategyCompiler extends XbaseCompiler {
 		}
 	}
 
-	override protected JvmTypeReference getTypeForVariableDeclaration(XExpression expr){
+	override protected LightweightTypeReference getTypeForVariableDeclaration(XExpression expr){
 		if(expr instanceof PropertyCall){
 			val container = expr.eContainer
 			if(container instanceof XCastedExpression){
-					val type = container.type
-					if (primitives.isPrimitive(type))
-						return primitives.asWrapperTypeIfPrimitive(type)
+					val type = container.type.toLightweight(expr)
+					if (type.primitive)
+						return type.wrapperTypeIfPrimitive
 			}
 		}
 		return super.getTypeForVariableDeclaration(expr)
@@ -57,7 +59,7 @@ class StrategyCompiler extends XbaseCompiler {
 				append("get(new StringBuilder()")
 				for(expr : propertyName.nameExpressions){
 					append('.append(')
-					internalToConvertedExpression(expr, it, expr.type)
+					internalToJavaExpression(expr, it)
 					append(')')
 				}
 				append('.toString());')
@@ -100,7 +102,7 @@ class StrategyCompiler extends XbaseCompiler {
 			append('if(coverageTracker != null) coverageTracker.reach("') append(labeledExpression.label) append('", ')
 			if(labeledExpression.reason != null){
 				append('String.valueOf(')
-				internalToConvertedExpression(labeledExpression.reason, it, labeledExpression.reason.type)
+				internalToJavaExpression(labeledExpression.reason, it)
 				append(')')
 				}
 			else
@@ -115,7 +117,7 @@ class StrategyCompiler extends XbaseCompiler {
 					internalToJavaStatement(labeledExpression.expr, it, canBeReferenced);
 					newLine
 					append(getVarName(labeledExpression, it)).append(" = ")
-					internalToConvertedExpression(labeledExpression.expr, it, labeledExpression.type);
+					internalToJavaExpression(labeledExpression.expr, it)
 					append(";")
 				}
 			}
@@ -159,9 +161,9 @@ class StrategyCompiler extends XbaseCompiler {
 	override public void _toJavaExpression(XStringLiteral expr, ITreeAppendable b) {
 		val type = getType(expr);
 		val javaString = convertToJavaString(expr.getValue());
-		if (getTypeReferences().is(type, Character.TYPE)) 
+		if (typeReferences.is(type, Character.TYPE)) 
 			b.append("'").append(javaString).append("'")
-		else if (getTypeReferences().is(type, Character))
+		else if (typeReferences.is(type, Character))
 			b.append("Character.valueOf('").append(javaString).append("')")
 		else 
 			b.append("\"").append(javaString).append("\"")
@@ -190,18 +192,20 @@ class StrategyCompiler extends XbaseCompiler {
 		return output
 	}
 
-	override protected JvmTypeReference getType(XExpression expr) {
+	override protected LightweightTypeReference getLightweightType(XExpression expr) {
 		if(expr instanceof PropertyCall){
 			val container = expr.eContainer
-			if(container instanceof XCastedExpression)
-				if(primitives.isPrimitive(container.type))
-					return primitives.asWrapperTypeIfPrimitive(container.type)
+			if(container instanceof XCastedExpression){
+				val castedType = container.type.toLightweight(container)
+				if(castedType.primitive)
+					return castedType.wrapperTypeIfPrimitive
+			}
 		}
-		val type = typeProvider.getType(expr)
+		val type = super.getLightweightType(expr)
 		if(type != null)
 			return type
 		if (expr instanceof XNumberLiteral && (expr as XNumberLiteral).value.toLowerCase.endsWith("#bi"))
-			return 	typeReferences.getTypeForName(BigInteger, expr)
+			return 	typeReferences.getTypeForName(BigInteger, expr).toLightweight(expr)
 		return null
 	}
 	
