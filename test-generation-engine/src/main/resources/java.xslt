@@ -182,7 +182,7 @@ import org.dpolivaev.testgeneration.engine.java.GoalCoverage;
 	<xsl:template match="TestCase"/> 
 	
 	<xsl:template match="TestCase[@id]">
-		<xsl:variable name="method" select="java:lower-first-camel-case-id(@id)"/>
+		<xsl:variable name="method" select="java:camel-case-id(@id)"/>
 		<xsl:apply-templates select="Description"/>
 		<xsl:call-template name="Coverage"/>	
 		<xsl:call-template name="eol1"/>
