@@ -33,6 +33,7 @@ public class RuleBuilder{
 	private boolean asDefaultRule;
 	private String name;
 	private ValueProvider nameProvider;
+	private String oneTimeTriggeringPropertyName;
 
     public RuleBuilder when(
         String... triggeringProperties) {
@@ -131,9 +132,16 @@ public class RuleBuilder{
     				ruleValues());
         if (triggeringProperties.isEmpty())
             this.triggeringProperties = Utils.set();
-        return new TriggeredStatefulRule(name, triggeringProperties, this.condition, this.targetedPropertyName, //
+        final Set<String> ruleTriggeringProperties;
+        if(oneTimeTriggeringPropertyName != null && ! triggeringProperties.contains(oneTimeTriggeringPropertyName)){
+        	ruleTriggeringProperties = new HashSet<>(triggeringProperties);
+        	ruleTriggeringProperties.add(oneTimeTriggeringPropertyName);
+        }
+        else
+        	ruleTriggeringProperties = triggeringProperties;
+        oneTimeTriggeringPropertyName = null;
+		return new TriggeredStatefulRule(name, ruleTriggeringProperties, this.condition, this.targetedPropertyName, //
             ruleValues());
-    	
     }
     
     public Collection<RuleBuilder> asRules(){
@@ -234,6 +242,10 @@ public class RuleBuilder{
 		for(ValueProvider valueProvider : triggeringPropertyNameProviders)
 			addTriggeringProperty(valueProvider.value(propertyContainer).toString());
 		return create();
+	}
+
+	public void setOneTimeTriggeringProperty(String oneTimeTriggeringPropertyName) {
+		this.oneTimeTriggeringPropertyName = oneTimeTriggeringPropertyName;
 	}
 
 }

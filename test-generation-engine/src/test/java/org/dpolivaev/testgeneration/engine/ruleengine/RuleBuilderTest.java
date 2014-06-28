@@ -75,4 +75,24 @@ public class RuleBuilderTest {
 		final Rule rule = new RuleBuilder().when(nameProvider).iterate("y").over("a").create(propertyContainer);
 		assertThat(rule.getTriggeringProperties(), equalTo(Utils.set("x")));
 	}
+
+
+	@Test
+	public void addsOneTimeTriggeredProperty(){
+		PropertyContainer propertyContainer = mock(PropertyContainer.class);
+		RuleBuilder ruleBuilder = new RuleBuilder().iterate("y").over("a");
+		ruleBuilder.setOneTimeTriggeringProperty("x");
+		final Rule rule = ruleBuilder.create(propertyContainer);
+		assertThat(rule.getTriggeringProperties(), equalTo(Utils.set("x")));
+	}
+
+	@Test
+	public void removesOneTimeTriggeredPropertyAfterRuleCreation(){
+		PropertyContainer propertyContainer = mock(PropertyContainer.class);
+		RuleBuilder ruleBuilder = new RuleBuilder().iterate("y").over("a");
+		ruleBuilder.setOneTimeTriggeringProperty("x");
+		ruleBuilder.create(propertyContainer);
+		final Rule rule = ruleBuilder.create(propertyContainer);
+		assertThat(rule.getTriggeringProperties(), equalTo(Utils.<String>set()));
+	}
 }

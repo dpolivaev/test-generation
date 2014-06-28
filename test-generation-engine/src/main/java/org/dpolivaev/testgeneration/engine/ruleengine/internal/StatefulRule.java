@@ -87,7 +87,7 @@ public abstract class StatefulRule implements Rule {
 	protected void addRules(EngineState engineState) {
 	    Collection<RuleBuilder> rules = valueProviders.currentProvider().rules(engineState);
 	    for (RuleBuilder ruleCreator : rules) {
-		ruleCreator.addTriggeringProperty(targetedPropertyName);
+		ruleCreator.setOneTimeTriggeringProperty(targetedPropertyName);
 		Rule rule = ruleCreator.create(engineState);
 		engineState.addRule(rule);
 	        createdRules.add(rule);
