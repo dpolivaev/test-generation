@@ -395,6 +395,15 @@ class StrategyCompilationTest {
 		'''.assertCompilesToFile(testName)
 	}	
 	
+	@Test def quotedRequirementId() {
+		'''
+			strategy First
+				let "[req1]" be 123
+			
+			run strategy goal First 	
+		'''.assertCompilesToFile(testName)
+	}	
+	
 	@Test def coverageWithReference() {
 		'''
 			strategy First

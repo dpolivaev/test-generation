@@ -61,7 +61,7 @@ class CoverageEntriesInferrer{
 	}
 	
 	def coverageEntries(Rule rule) {
-		val name = rule.propertyName?.name
+		val name = rule.propertyName?.name.unquote
 		if(name != null && name.startsWith("[" )  && name.endsWith("]") && rule.values?.actions != null){
 			val requirementId = name.substring(1, name.length - 1)
 			val entries = new HashSet<CoverageEntry>
@@ -75,5 +75,12 @@ class CoverageEntriesInferrer{
 		}
 		else
 			Collections.<CoverageEntry>emptySet
+	}
+	
+	def unquote(String string){
+		if(string != null && string.length > 2 && string.startsWith('"') && string.endsWith('"'))
+			string.substring(1, string.length - 1) 
+		else 
+			string
 	}
 }
