@@ -47,7 +47,6 @@ public class TestIdProvider implements ValueProvider{
 		if(rule.forcesIteration())
 			return true;
 		final Collection<String> requiredProperties = new HashSet<>(assignment.requiredProperties);
-		requiredProperties.addAll(assignment.triggeringProperties);
 		for(String requiredProperty : requiredProperties){
 			if(assignmentPartitioner.isTestIdRelevant(requiredProperty)|| new AliasedPropertyAccessor(propertyContainer).isPart(requiredProperty))
 				return false;
