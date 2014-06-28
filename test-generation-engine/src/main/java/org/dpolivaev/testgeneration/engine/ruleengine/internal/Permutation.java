@@ -2,19 +2,15 @@ package org.dpolivaev.testgeneration.engine.ruleengine.internal;
 
 import java.util.Random;
 
+import org.dpolivaev.testgeneration.engine.ruleengine.SharedRandomHolder;
+
 public class Permutation {
 
-    final public static long  RANDOM_SEED = -1;
-    private static long initial_seed = 1;
-    private static Random SHARED_RANDOM = new Random(initial_seed);
+    private static Random SHARED_RANDOM = SharedRandomHolder.SHARED_RANDOM;
 
 	public Permutation(int size) {
         this(size, SHARED_RANDOM);
     }
-
-	void setRandom(long seed){
-		SHARED_RANDOM = seed == RANDOM_SEED ? new Random() : new Random(seed);
-	}
 
     public Permutation(int size, Random random) {
         this.random = random;
