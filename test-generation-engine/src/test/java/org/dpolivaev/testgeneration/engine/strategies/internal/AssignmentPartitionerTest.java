@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThat;
 
 import org.dpolivaev.testgeneration.engine.ruleengine.Assignment;
 import org.dpolivaev.testgeneration.engine.ruleengine.Assignments;
+import org.dpolivaev.testgeneration.engine.ruleengine.SpecialValue;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -40,6 +41,14 @@ public class AssignmentPartitionerTest {
 		givenAssignment("name", "value", "");
 		assignmentPartitioner.run();
 		assertThat(assignmentPartitioner.isTestIdRelevant("name"), equalTo(false));
+
+	}
+
+	@Test
+	public void ignoresUndefinedProperties(){
+		givenAssignment("when", SpecialValue.UNDEFINED, "");
+		assignmentPartitioner.run();
+		assertThat(assignmentPartitioner.isTestIdRelevant("when"), equalTo(false));
 
 	}
 

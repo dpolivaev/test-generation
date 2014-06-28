@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.dpolivaev.testgeneration.engine.ruleengine.Assignment;
 import org.dpolivaev.testgeneration.engine.ruleengine.PropertyContainer;
+import org.dpolivaev.testgeneration.engine.ruleengine.SpecialValue;
 import org.dpolivaev.testgeneration.engine.scriptwriter.AliasedPropertyAccessor;
 import org.dpolivaev.testgeneration.engine.scriptwriter.OutputConfiguration;
 import org.dpolivaev.testgeneration.engine.scriptwriter.internal.PartValueParser;
@@ -40,20 +41,21 @@ class AssignmentPartitioner {
 
 	public void addTestPartAssignments(Set<String> testPartProperties, String targetedPropertyName) {
 		testPartAssignments.add(targetedPropertyName);
-		propertyContainer.get(targetedPropertyName);
-		final Assignment assignment = propertyContainer.getAssignment(targetedPropertyName);
-		for(String requiredProperty : assignment.requiredProperties)
-			testPartProperties.add(requiredProperty);
-		final PartValueParser partValueParser = new PartValueParser(assignment.value.toString());
-		testPartProperties.add(targetedPropertyName);
-		final String[] argumentList = partValueParser.getArgumentList();
-		for(String argument:argumentList){
-			if(argument.startsWith(":")){
-				String propertyName = argument.substring(1);
-				if(! testPartProperties.contains(propertyName)) {
-					final Assignment argumentAssignment = propertyContainer.getAssignment(propertyName);
-					if(argumentAssignment != null)
-						testPartProperties.add(propertyName);
+		if (propertyContainer.get(targetedPropertyName) != SpecialValue.UNDEFINED){
+			final Assignment assignment = propertyContainer.getAssignment(targetedPropertyName);
+			for(String requiredProperty : assignment.requiredProperties)
+				testPartProperties.add(requiredProperty);
+			final PartValueParser partValueParser = new PartValueParser(assignment.value.toString());
+			testPartProperties.add(targetedPropertyName);
+			final String[] argumentList = partValueParser.getArgumentList();
+			for(String argument:argumentList){
+				if(argument.startsWith(":")){
+					String propertyName = argument.substring(1);
+					if(! testPartProperties.contains(propertyName)) {
+						final Assignment argumentAssignment = propertyContainer.getAssignment(propertyName);
+						if(argumentAssignment != null)
+							testPartProperties.add(propertyName);
+					}
 				}
 			}
 		}
