@@ -68,11 +68,11 @@ public class TestIdProvider implements ValueProvider{
 		assignments.addAll(forcedProperties);
 		for(String targetedPropertyName : assignments){
 			Assignment assignment = propertyContainer.getAssignment(targetedPropertyName);
-			if(forcedProperties.contains(targetedPropertyName)
+			if(assignment != null && (forcedProperties.contains(targetedPropertyName)
 					|| assignmentPartitioner.isTestIdRelevant(targetedPropertyName)
 					 && (propertyCanHaveDifferentValues(assignment, assignmentPartitioner, propertyContainer)
 							|| targetedPropertyName.equals(new AliasedPropertyAccessor(propertyContainer).getFocusPropertyName()))
-					 && ! excludedAssignmentFilter.matches(assignment)){
+					 && ! excludedAssignmentFilter.matches(assignment))){
 				if(assignmentPartitioner.isTestPartMethodCall(targetedPropertyName)){
 					final PartValueParser partValueParser = new PartValueParser(assignment.value.toString());
 					relevantProperties.add(new Assignment(assignment.rule, partValueParser.getCalledMethod(), assignment.reason, assignment.requiredProperties, assignment.triggeringProperties));
