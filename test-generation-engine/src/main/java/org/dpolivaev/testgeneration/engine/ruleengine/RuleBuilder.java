@@ -1,5 +1,7 @@
 package org.dpolivaev.testgeneration.engine.ruleengine;
 
+import static java.util.Arrays.asList;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -51,6 +53,10 @@ public class RuleBuilder{
 	}
 
 	public RuleBuilder over(Object... valueObjects) {
+		return over(asList(valueObjects));
+	}
+	
+	public RuleBuilder over(Iterable<Object> valueObjects) {
 		rules = null;
         previousValueCount = this.values.size();
         for(Object valueObject : valueObjects)
