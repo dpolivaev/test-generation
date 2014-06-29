@@ -9,8 +9,6 @@ Tutorial : developing tests for a log-in page
 - Login with invalid password,
 - Login with http protocol is rejected, https is required.
 
-(Thanks to Sabine Herrmann for her idea)
-
 The revisions committed to this repository corresponds to the tutorial steps.
 **Check out or compare different revisions to see how the tutorial goes.**
 
