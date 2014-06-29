@@ -321,6 +321,30 @@ class StrategyCompilationTest {
 		'''.assertCompilesToFile(testName)
 	}
 
+	@Test def twoRunsWithValues() {
+		'''
+			strategy first(String string)
+			run
+			val string = "string" 
+			strategy first(string)
+			
+			run
+			strategy first(string)
+		'''.assertCompilesToFile(testName)
+	}
+
+	@Test def twoRunsWithSubs() {
+		'''
+			strategy first(String string)
+			run
+			def string() {"string"} 
+			strategy first(string)
+			
+			run
+			strategy first(string)
+		'''.assertCompilesToFile(testName)
+	}
+
 	@Test def appliesStrategies() {
 		'''
 			strategy first

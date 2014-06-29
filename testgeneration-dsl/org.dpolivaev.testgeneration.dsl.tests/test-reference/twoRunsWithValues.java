@@ -12,15 +12,27 @@ import org.dpolivaev.testgeneration.engine.scriptwriter.WriterFactory;
 @SuppressWarnings("all")
 public class MyFile {
   private static RequirementBasedStrategy _strategy1() {
-    RequirementBasedStrategy _First = MyFile.First();
-    return _First;
+    RequirementBasedStrategy _first = MyFile.first("string");
+    return _first;
   }
   
-  public static RequirementBasedStrategy First() {
-    return new _MyFile_First_StrategyFactory().First();
+  public static RequirementBasedStrategy first(final String string) {
+    return new _MyFile_first_StrategyFactory(string).first();
   }
   
   void run1() {
+    
+    OutputConfiguration _outputConfiguration = new OutputConfiguration();
+    OutputConfiguration _reportConfiguration = new OutputConfiguration();
+    CoverageTracker _coverageTracker = new CoverageTracker();
+    WriterFactory _writerFactory = new WriterFactory(_outputConfiguration, _reportConfiguration);
+    _writerFactory.addCoverageTracker(_coverageTracker);
+    RuleEngine _ruleEngine = new TrackingRuleEngine(_coverageTracker);
+    _writerFactory.configureEngine(_ruleEngine);
+    new RequirementBasedStrategy().with(_strategy1()).run(_ruleEngine);
+  }
+  
+  void run2() {
     
     OutputConfiguration _outputConfiguration = new OutputConfiguration();
     OutputConfiguration _reportConfiguration = new OutputConfiguration();
@@ -38,22 +50,30 @@ public class MyFile {
   
   void runAll() {
     run1();
+    run2();
   }
 }
 
-File 2 : _MyFile_First_StrategyFactory.java
+File 2 : _MyFile_first_StrategyFactory.java
 
 import org.dpolivaev.testgeneration.engine.coverage.CoverageEntry;
 import org.dpolivaev.testgeneration.engine.coverage.RequirementBasedStrategy;
 import org.dpolivaev.testgeneration.engine.ruleengine.Strategy;
 
 @SuppressWarnings("all")
-class _MyFile_First_StrategyFactory {
+class _MyFile_first_StrategyFactory {
   private static int _instanceCounter = 0;
   
   private int _instanceId = _instanceCounter++;
   
-  RequirementBasedStrategy First() {
+  private final String string;
+  
+  public _MyFile_first_StrategyFactory(final String string) {
+    this.string = string;
+    
+  }
+  
+  RequirementBasedStrategy first() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
     Strategy _strategy = new Strategy();
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);

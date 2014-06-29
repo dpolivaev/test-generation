@@ -20,9 +20,14 @@ import org.eclipse.xtext.common.types.JvmVisibility
 import org.eclipse.xtext.xbase.XExpression
 import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
+import java.util.ArrayList
+import org.eclipse.xtext.common.types.JvmFormalParameter
+import org.dpolivaev.testgeneration.dsl.testspec.Run
+import org.dpolivaev.testgeneration.dsl.testspec.MethodDefinition
 
 class GenerationInferrer{
 	@Inject extension JvmTypesBuilder jvmTypesBuilder
+	@Inject ClassInferrer classInferrer
 	val Methods methods
 	var JvmGenericType jvmType
 	var Generation script
@@ -35,10 +40,28 @@ class GenerationInferrer{
 	def void inferGeneration(JvmGenericType jvmType, Generation script){
 		this.script = script
 		this.jvmType = jvmType
+		inferRunVariables()
 		inferExpressions()
 		inferOracles()
 		inferStrategyMethods()
 		inferRunMethods()
+	}
+	
+	private def inferRunVariables(){
+		val vars = new ArrayList<XExpression>()
+		val subs = new ArrayList<MethodDefinition>()
+		val scriptContents = EcoreUtil2.eAllContents(script)
+		for(obj : scriptContents){
+			if (obj instanceof Run){
+				vars.addAll(obj.vars)
+				subs.addAll(obj.subs)
+			}
+		}
+		if(! (vars.empty) ){
+			classInferrer.inferConstructor(jvmType, script, emptyList, vars)
+			classInferrer.inferMemberVariables(jvmType, script, vars, JvmVisibility::PRIVATE)
+		}
+		classInferrer.inferMemberMethods(jvmType, script, subs)
 	}
 	
 	private def inferOracles(){
@@ -96,7 +119,7 @@ class GenerationInferrer{
 						parameters += expr.toParameter("propertyContainer", expr.newTypeRef(PropertyContainer))
 					body = expr
 					visibility = JvmVisibility::PRIVATE
-					static = true
+					static = ! (expr?.eContainer?.eContainer instanceof Run)
 				]
 	}
 
@@ -182,8 +205,7 @@ class GenerationInferrer{
 					combinedStrategy(it, run.strategies) 
 					append('.run(_ruleEngine);')
 				]
-				visibility = JvmVisibility::PUBLIC
-				static = true
+				visibility = JvmVisibility::DEFAULT
 			]
 		}
 	}
@@ -262,6 +284,14 @@ class GenerationInferrer{
 			jvmType.members += script.toMethod("main", script.newTypeRef(Void::TYPE)) [
 				parameters += script.toParameter("args", script.newTypeRef(typeof(String)).addArrayTypeDimension)
 				body = [appendable |
+						val it = appendable.trace(script, false)
+						append('''new «className»().runAll();''')
+				]
+				visibility = JvmVisibility::PUBLIC
+				static = true
+			]
+			jvmType.members += script.toMethod("runAll", script.newTypeRef(Void::TYPE)) [
+				body = [appendable |
 					var counter = 0
 					for (run : script.runs) {
 						val it = appendable.trace(run, true)
@@ -269,11 +299,10 @@ class GenerationInferrer{
 							newLine
 						counter = counter + 1
 						val methodName = "run" + counter
-						append('''«className».«methodName»();''')
+						append('''«methodName»();''')
 						}
 				]
-				visibility = JvmVisibility::PUBLIC
-				static = true
+				visibility = JvmVisibility::DEFAULT
 			]
 		}
 	}

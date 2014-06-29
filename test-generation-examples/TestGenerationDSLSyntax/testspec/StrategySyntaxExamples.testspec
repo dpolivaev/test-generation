@@ -205,4 +205,15 @@ strategy calledStrategy(int a)
 	let z be a + b
 
 run strategy SyntaxExamples
+
+run
+	val parameter = 1 
+	def parameterCall() {parameter}
+	strategy calledStrategy(parameterCall)
+
+run
+	strategy calledStrategy(parameter)
+	
+run
+	strategy calledStrategy(parameterCall)
      

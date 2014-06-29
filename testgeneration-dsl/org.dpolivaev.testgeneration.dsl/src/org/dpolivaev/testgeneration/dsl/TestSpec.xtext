@@ -82,7 +82,9 @@ ValueCondition returns Condition:
 ;
 
 Run:
-	'run' strategies += StrategyReference 
+	'run' 
+	(vars += XVariableDeclaration | subs += MethodDefinition)*
+	strategies += StrategyReference 
 	('with' (strategies += StrategyReference | /* goals += GoalReference | */ oracles += OracleReference) 
 	   (',' (strategies += StrategyReference | /* goals += GoalReference | */ oracles += OracleReference))*
 	)?

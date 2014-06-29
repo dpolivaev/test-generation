@@ -20,7 +20,7 @@ public class MyFile {
     return new _MyFile_First_StrategyFactory().First();
   }
   
-  public static void run1() {
+  void run1() {
     
     OutputConfiguration _outputConfiguration = new OutputConfiguration();
     OutputConfiguration _reportConfiguration = new OutputConfiguration();
@@ -34,7 +34,11 @@ public class MyFile {
   }
   
   public static void main(final String[] args) {
-    MyFile.run1();
+    new MyFile().runAll();
+  }
+  
+  void runAll() {
+    run1();
   }
 }
 
