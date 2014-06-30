@@ -24,6 +24,7 @@ import java.util.ArrayList
 import org.eclipse.xtext.common.types.JvmFormalParameter
 import org.dpolivaev.testgeneration.dsl.testspec.Run
 import org.dpolivaev.testgeneration.dsl.testspec.MethodDefinition
+import org.dpolivaev.testgeneration.dsl.testspec.XsltParameter
 
 class GenerationInferrer{
 	@Inject extension JvmTypesBuilder jvmTypesBuilder
@@ -88,7 +89,9 @@ class GenerationInferrer{
 			val runContents = EcoreUtil2.eAllContents(run)
 			for(obj : runContents){
 				if (obj instanceof StrategyReference)
-					appendStrategyReferences(obj as StrategyReference)
+					appendStrategyReferences(obj)
+				if (obj instanceof XsltParameter)
+					appendXsltParameterValueExpressions(obj)
 			}
 		}
 	}
@@ -96,31 +99,42 @@ class GenerationInferrer{
 	final static val STRATEGY = "_strategy"
 	private def appendStrategyReferences(StrategyReference ref){
 		if(ref.expr != null) {
-			createMethod(ref.expr, STRATEGY, ref.expr.inferredType, false)
+			createMethod(ref.expr, STRATEGY, ref.expr.inferredType)
 		}
 	}
 
 	final static val ORACLE = "_oracle"
 	private def appendOracleReferences(OracleReference ref){
 		if(ref.expr != null) {
-			createMethod(ref.expr, ORACLE, ref.expr.inferredType, false)
+			createMethod(ref.expr, ORACLE, ref.expr.inferredType)
+		}
+	}
+
+	final static val PARAMETER = "_parameter"
+	private def appendXsltParameterValueExpressions(XsltParameter param){
+		if(param.value != null) {
+			createMethod(param.value, PARAMETER, param.value.inferredType)
 		}
 	}
 
 	
-	private def createMethod(XExpression expr, String prefix, JvmTypeReference resultTypeRef, boolean useParameters){
+	private def createMethod(XExpression expr, String prefix, JvmTypeReference resultTypeRef){
 				if(methods.contains(prefix, expr))
 					return
 				val valueProviderCounter = methods.size + 1
 				val name = prefix + valueProviderCounter
 				methods.put(prefix, expr, name)
 				jvmType.members += expr.toMethod(name, resultTypeRef)[
-					if(useParameters)
-						parameters += expr.toParameter("propertyContainer", expr.newTypeRef(PropertyContainer))
 					body = expr
 					visibility = JvmVisibility::PRIVATE
-					static = ! (expr?.eContainer?.eContainer instanceof Run)
+					static = !expr.eContainer.isRunOrAncestor
 				]
+	}
+	
+	private def boolean isRunOrAncestor(EObject obj){
+		if(obj == null) false
+		else if (obj instanceof Run) true
+		else obj.eContainer.isRunOrAncestor
 	}
 
 	private def inferStrategyMethods(){
@@ -232,7 +246,9 @@ class GenerationInferrer{
 			append(';')
 			for(xsltParameter : outputConfiguration.xsltParamerers){
 				newLine
-				append('''_«target»Configuration.putXsltParameter("«xsltParameter.key»", "«xsltParameter.value»");''')
+				append('''_«target»Configuration.putXsltParameter("«xsltParameter.key»",''')
+				appendReference(PARAMETER, xsltParameter.value)
+				append(');')
 			}
 		}
 	}

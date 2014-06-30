@@ -11,9 +11,24 @@ import org.dpolivaev.testgeneration.engine.scriptwriter.WriterFactory;
 
 @SuppressWarnings("all")
 public class MyFile {
-  private static RequirementBasedStrategy _strategy1() {
+  public MyFile() {
+    this.value = _init_value();
+    
+  }
+  
+  private int _init_value() {
+    return 1;
+  }
+  
+  private final int value;
+  
+  private RequirementBasedStrategy _strategy1() {
     RequirementBasedStrategy _First = MyFile.First();
     return _First;
+  }
+  
+  private int _parameter2() {
+    return this.value;
   }
   
   public static RequirementBasedStrategy First() {
@@ -24,7 +39,7 @@ public class MyFile {
     
     OutputConfiguration _outputConfiguration = new OutputConfiguration();
     _outputConfiguration.setXmlDirectory("testoutput").setXmlExtension("xml").setXsltSource("my.xslt").setFileDirectory("testoutput").setFileExtension("java");
-    _outputConfiguration.putXsltParameter("key", "value");
+    _outputConfiguration.putXsltParameter("key",_parameter2());
     OutputConfiguration _reportConfiguration = new OutputConfiguration();
     CoverageTracker _coverageTracker = new CoverageTracker();
     WriterFactory _writerFactory = new WriterFactory(_outputConfiguration, _reportConfiguration);

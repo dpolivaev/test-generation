@@ -11,11 +11,11 @@ import org.dpolivaev.testgeneration.engine.scriptwriter.WriterFactory;
 
 @SuppressWarnings("all")
 public class MyFile {
-  private static MyOracle _oracle1() {
+  private MyOracle _oracle1() {
     return MyFile.myOracle;
   }
   
-  private static RequirementBasedStrategy _strategy2() {
+  private RequirementBasedStrategy _strategy2() {
     RequirementBasedStrategy _s = MyFile.s();
     return _s;
   }

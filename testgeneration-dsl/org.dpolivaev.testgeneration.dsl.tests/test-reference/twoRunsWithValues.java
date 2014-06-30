@@ -11,8 +11,19 @@ import org.dpolivaev.testgeneration.engine.scriptwriter.WriterFactory;
 
 @SuppressWarnings("all")
 public class MyFile {
-  private static RequirementBasedStrategy _strategy1() {
-    RequirementBasedStrategy _first = MyFile.first("string");
+  public MyFile() {
+    this.string = _init_string();
+    
+  }
+  
+  private String _init_string() {
+    return "string";
+  }
+  
+  private final String string;
+  
+  private RequirementBasedStrategy _strategy1() {
+    RequirementBasedStrategy _first = MyFile.first(this.string);
     return _first;
   }
   

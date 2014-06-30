@@ -99,7 +99,7 @@ OutputConfiguration:
 ;
 
 XsltParameter:
-	key = ID '=' value=STRING
+	key = ID '=' value = XExpression
 ;
 
 ReportConfiguration returns OutputConfiguration:

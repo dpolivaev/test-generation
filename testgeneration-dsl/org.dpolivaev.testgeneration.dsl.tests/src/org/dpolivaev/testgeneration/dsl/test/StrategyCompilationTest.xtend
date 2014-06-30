@@ -392,7 +392,10 @@ class StrategyCompilationTest {
 	@Test def runWithXsltParemeters() {
 		'''
 			strategy First
-			run strategy First output "testoutput/xml", apply "my.xslt"(key="value") output "testoutput/java"
+			
+			run
+			val value = 1 
+			strategy First output "testoutput/xml", apply "my.xslt"(key=value) output "testoutput/java"
 		'''.assertCompilesToFile(testName)
 	}
 

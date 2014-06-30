@@ -11,12 +11,12 @@ import org.dpolivaev.testgeneration.engine.scriptwriter.WriterFactory;
 
 @SuppressWarnings("all")
 public class MyFile {
-  private static RequirementBasedStrategy _strategy1() {
+  private RequirementBasedStrategy _strategy1() {
     RequirementBasedStrategy _first = MyFile.first();
     return _first;
   }
   
-  private static RequirementBasedStrategy _strategy2() {
+  private RequirementBasedStrategy _strategy2() {
     RequirementBasedStrategy _second = MyFile.second();
     return _second;
   }

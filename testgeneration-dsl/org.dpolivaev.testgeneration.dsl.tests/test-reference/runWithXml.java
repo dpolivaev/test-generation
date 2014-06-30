@@ -11,7 +11,7 @@ import org.dpolivaev.testgeneration.engine.scriptwriter.WriterFactory;
 
 @SuppressWarnings("all")
 public class MyFile {
-  private static RequirementBasedStrategy _strategy1() {
+  private RequirementBasedStrategy _strategy1() {
     RequirementBasedStrategy _First = MyFile.First();
     return _First;
   }
