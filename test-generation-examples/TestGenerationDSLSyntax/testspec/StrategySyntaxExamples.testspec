@@ -195,14 +195,16 @@ let example be
 		let x be 0xff#BI
     },
     
-    'applying external strategy'{
+    'applying external parameterized strategy'{
     	let x be 1,2,3
     	for each x if (:x as int) < 2 apply calledStrategy(4)
     }
     
 strategy calledStrategy(int a)
 	val b = 2
-	let z be a + b
+	let y be a + b, a - b
+	for each y let ("property" a b) be (:y"-"a"+" b), (:y"-"a"-" b)
+	for each ("property" a b) let z be ("/" "property" a b "=" :("property" a b) "/")
 
 run strategy SyntaxExamples
 
