@@ -24,7 +24,7 @@ public class HandlerFactory {
 	public ContentHandler newHandler(ScriptConfiguration scriptConfiguration) {
 		Result result = resultFactory.newResult(scriptConfiguration);
         try {
-            SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", null);
+            SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
             final OutputConfiguration outputConfiguration = scriptConfiguration.outputConfiguration;
 			Source xsltSource = outputConfiguration.getXsltSource();
             final TransformerHandler xsltHandler = xsltSource != null ? tf.newTransformerHandler(xsltSource) :  tf.newTransformerHandler();
