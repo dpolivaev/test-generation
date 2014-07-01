@@ -14,7 +14,7 @@ public class OutputConfiguration {
 	private String xmlExtension;
 	private String fileDirectory;
 	private String xmlDirectory;
-	final private Map<String, String> xsltParameters;
+	final private Map<String, Object> xsltParameters;
 	public static final int TEST_PART_NUMBER_MAXIMUM = 99;
 	
 	public static final OutputConfiguration OUTPUT_NOTHING = new OutputConfiguration();
@@ -85,11 +85,11 @@ public class OutputConfiguration {
 		return  getFileExtension() != null;
 	}
 
-	public Map<String, String> getXsltParameters() {
+	public Map<String, Object> getXsltParameters() {
 		return xsltParameters;
 	}
 
-	public String putXsltParameter(String key, String value) {
+	public Object putXsltParameter(String key, Object value) {
 		return xsltParameters.put(key, value);
 	}
 

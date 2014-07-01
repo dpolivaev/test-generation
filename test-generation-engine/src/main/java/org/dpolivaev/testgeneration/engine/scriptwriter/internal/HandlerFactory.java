@@ -33,7 +33,7 @@ public class HandlerFactory {
             else{
 		final Transformer transformer = xsltHandler.getTransformer();
 				transformer.setParameter("scriptConfiguration", this);
-				for(Map.Entry<String, String> parameter : outputConfiguration.getXsltParameters().entrySet())
+				for(Map.Entry<String, Object> parameter : outputConfiguration.getXsltParameters().entrySet())
 					transformer.setParameter(parameter.getKey(), parameter.getValue());
             }
             final TransformerHandler closingXsltHandler = autoCloseStream(xsltHandler);
