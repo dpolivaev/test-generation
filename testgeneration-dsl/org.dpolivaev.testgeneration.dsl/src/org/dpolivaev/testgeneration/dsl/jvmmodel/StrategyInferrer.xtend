@@ -581,7 +581,7 @@ class StrategyInferrer{
 	}
 	
 	private def compileAsJavaLiteral(XExpression expression, ITreeAppendable appendable) {
-		appendable.append(
+		appendable.trace(expression, true).append(
 		switch(expression){
 			XStringLiteral : '"' + Strings.convertToJavaString(expression.value, true) + '"'
 			XNumberLiteral : numberLiterals.toJavaLiteral(expression)
