@@ -1,5 +1,8 @@
 package org.dpolivaev.testgeneration.engine.scriptwriter;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.dpolivaev.testgeneration.engine.utils.internal.IdConverter;
 import org.dpolivaev.testgeneration.engine.utils.internal.StringConverter;
 
@@ -48,6 +51,18 @@ public class TransformationHelper {
 			if(lastIndexOfDelimiter <= 0)
 				return input;
 			return input.substring(lastIndexOfDelimiter + 1);
+	}
+	
+	private static Pattern VALID_METHOD_CALL = Pattern.compile("[A-Za-z_]\\w+\\.[A-Za-z_]\\w+");
+	private static Pattern EXPLICIT_DRIVER_AND_CALL = Pattern.compile("(.*?)<<(.*)");
+	
+	public static String methodCall(String defaultDriver, String call){
+		if(VALID_METHOD_CALL.matcher(call).matches())
+			return call;
+		Matcher explicitDriverMatcher = EXPLICIT_DRIVER_AND_CALL.matcher(call);
+		if(explicitDriverMatcher.matches())
+			return camelCaseId(explicitDriverMatcher.group(1).trim()) + '.' + camelCaseId(explicitDriverMatcher.group(2).trim());
+		return camelCaseId(defaultDriver) + '.' + camelCaseId(call);
 	}
 
 }

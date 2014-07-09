@@ -48,4 +48,22 @@ public class TransformationHelperTest {
 		final String substringBeforeLast = TransformationHelper.substringAfterLast(someString, containedString);
 		assertThat(substringBeforeLast, equalTo(""));
 	}
+	
+	@Test 
+	public void validMethodCall(){
+		String methodCall = TransformationHelper.methodCall(null, "Object.Method");
+		assertThat(methodCall, equalTo("Object.Method"));
+	}
+	
+	@Test 
+	public void explicitDriverandCall(){
+		String methodCall = TransformationHelper.methodCall(null, "some object << some method");
+		assertThat(methodCall, equalTo("someObject.someMethod"));
+	}
+	
+	@Test 
+	public void defaultDriverMethodCall(){
+		String methodCall = TransformationHelper.methodCall("default driver", "some method");
+		assertThat(methodCall, equalTo("defaultDriver.someMethod"));
+	}
 }
