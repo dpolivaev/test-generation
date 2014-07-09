@@ -25,6 +25,7 @@ import org.eclipse.xtext.common.types.JvmFormalParameter
 import org.dpolivaev.testgeneration.dsl.testspec.Run
 import org.dpolivaev.testgeneration.dsl.testspec.MethodDefinition
 import org.dpolivaev.testgeneration.dsl.testspec.XsltParameter
+import org.eclipse.xtext.xbase.XVariableDeclaration
 
 class GenerationInferrer{
 	@Inject extension JvmTypesBuilder jvmTypesBuilder
@@ -41,12 +42,36 @@ class GenerationInferrer{
 	def void inferGeneration(JvmGenericType jvmType, Generation script){
 		this.script = script
 		this.jvmType = jvmType
+		inferGlobalVariables()
+		inferGlobalSubs()
 		inferRunVariables()
 		inferExpressions()
 		inferOracles()
 		inferStrategyMethods()
 		inferRunMethods()
 	}
+	
+	private def inferGlobalVariables(){
+		for(expr : script.vars){
+			val variable = expr as XVariableDeclaration
+			jvmType.members += variable.toField(variable.name, variable.right.inferredType)[
+				initializer = variable.right
+				visibility = JvmVisibility::PUBLIC
+				static = true
+			]
+		}
+	}
+	
+	private def inferGlobalSubs(){
+		for(methodDefinition : script.subs){
+			jvmType.members += methodDefinition.toMethod(methodDefinition.name, methodDefinition.body.inferredType)[
+				body = methodDefinition.body
+				visibility = JvmVisibility::PUBLIC
+				static = true
+			]
+		}
+	}
+	
 	
 	private def inferRunVariables(){
 		val vars = new ArrayList<XExpression>()

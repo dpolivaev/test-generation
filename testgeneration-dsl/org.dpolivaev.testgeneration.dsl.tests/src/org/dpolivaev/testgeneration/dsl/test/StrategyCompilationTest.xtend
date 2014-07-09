@@ -501,4 +501,20 @@ class StrategyCompilationTest {
 				let (:x) be "y"
 		'''.assertCompilesToFile(testName)
 	}
+
+	@Test def withGlobalVals() {
+		'''
+			global val value1 = 1 
+			strategy first
+				let x be value1
+		'''.assertCompilesToFile(testName)
+	}	
+
+	@Test def withGlobalSubss() {
+		'''
+			global def sub1() {1} 
+			strategy first
+				let x be sub1
+		'''.assertCompilesToFile(testName)
+	}	
 }
