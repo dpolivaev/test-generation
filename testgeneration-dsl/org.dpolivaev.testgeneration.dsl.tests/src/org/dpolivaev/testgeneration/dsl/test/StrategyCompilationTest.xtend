@@ -520,9 +520,9 @@ class StrategyCompilationTest {
 
 	@Test def withGlobalSubs() {
 		'''
-			global def sub1() {1} 
+			global def sub1(int i) {i} 
 			strategy first
-				let x be sub1
+				let x be sub1(1)
 		'''.assertCompilesToFile(testName)
 	}	
 }

@@ -68,6 +68,8 @@ class GenerationInferrer{
 		for(global:script.globals){
 			for(methodDefinition : global.subs){
 				jvmType.members += methodDefinition.toMethod(methodDefinition.name, methodDefinition.body.inferredType)[
+					for(parameter:methodDefinition.parameters) 
+						parameters += parameter.toParameter(parameter.name, parameter.parameterType)
 					body = methodDefinition.body
 					visibility = JvmVisibility::PUBLIC
 					static = true

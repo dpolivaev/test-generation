@@ -6,8 +6,8 @@ import org.dpolivaev.testgeneration.engine.coverage.RequirementBasedStrategy;
 
 @SuppressWarnings("all")
 public class MyFile {
-  public static int sub1() {
-    return 1;
+  public static int sub1(final int i) {
+    return i;
   }
   
   public static RequirementBasedStrategy first() {
@@ -32,7 +32,7 @@ class _MyFile_first_StrategyFactory {
   private int _instanceId = _instanceCounter++;
   
   private int _value1(final PropertyContainer propertyContainer) {
-    int _sub1 = MyFile.sub1();
+    int _sub1 = MyFile.sub1(1);
     return _sub1;
   }
   
