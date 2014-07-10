@@ -179,16 +179,16 @@ class StrategyInferrer{
 		val methodName = strategy.name
 		jvmType.members += strategy.toMethod(methodName, strategy.newTypeRef(RequirementBasedStrategy)) [
 			body = [
-				append(strategy.newTypeRef(CoverageEntry).type)
+				append(CoverageEntry)
 				append('[] _requiredItems = ') injector.getInstance(CoverageEntriesInferrer).appendArrayInitializer(it, strategy) append(';')
 				newLine
-				append(strategy.newTypeRef(Strategy).type)
-				append(' _strategy = new ') append(strategy.newTypeRef(Strategy).type) append('();')
+				append(Strategy)
+				append(' _strategy = new ') append(Strategy) append('();')
 				newLine
 				for(ruleGroup:strategy.ruleGroups){
 					appendRuleGroup(it, ruleGroup)
 				}
-				append('return new ') append(strategy.newTypeRef(RequirementBasedStrategy).type) append('(_requiredItems)')
+				append('return new ') append(RequirementBasedStrategy) append('(_requiredItems)')
 				append('.with(_strategy)')
 				addAppliedStrategyItems(it, strategy)
 				append(';')
@@ -202,7 +202,7 @@ class StrategyInferrer{
 		for(obj : contents){
 			if (obj instanceof StrategyReference){
 				append('.addRequiredItemsFrom(')
-				append(strategy.newTypeRef(StrategyConverter).type) append('.toRequirementBasedStrategy(')
+				append(StrategyConverter) append('.toRequirementBasedStrategy(')
 				appendReference(it, STRATEGY, obj.expr)
 				append('))')
 			}
@@ -211,12 +211,12 @@ class StrategyInferrer{
 
 	def appendConditionDefaultRule(ITreeAppendable it, RuleGroup ruleGroup){
 		val expr = ruleGroup.condition.expr
-		append(strategy.newTypeRef(Factory).type)
+		append(Factory)
 		append('.iterate(')
 		append(defaultConditionPropertyName(expr))
 		append(')')
 		append('.over(')
-			appendImplementationObject(it, expr.newTypeRef(org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider).type, "Object value",
+			appendImplementationObject(it, org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider, "Object value",
 				[appendConditionExpression(it, ruleGroup.condition)])
 		append(')')
 		append('.asDefaultRule()')
@@ -253,7 +253,7 @@ class StrategyInferrer{
 	}
 
 	def private void appendRule(ITreeAppendable it, RuleGroup ruleGroup, boolean temporaryRule) {
-		append(strategy.newTypeRef(Factory).type)
+		append(Factory)
 		appendRuleName(it, ruleGroup)
 		appendTriggers(it, ruleGroup)
 		appendCondition(it, ruleGroup)
@@ -288,7 +288,7 @@ class StrategyInferrer{
 			val expr = ruleGroup?.condition?.expr
 			if(expr != null){
 				append('._if(')
-					appendImplementationObject(it, ruleGroup.newTypeRef(org.dpolivaev.testgeneration.engine.ruleengine.Condition).type, "boolean isSatisfied",
+					appendImplementationObject(it, org.dpolivaev.testgeneration.engine.ruleengine.Condition, "boolean isSatisfied",
 						[
 							newLine
 							append('''return propertyContainer.<Boolean>get(«defaultConditionPropertyName(expr)»);''')
@@ -302,7 +302,7 @@ class StrategyInferrer{
 
 	private def appendStrategyRule(ITreeAppendable it, StrategyReference strategyReference){
 		append('.with(')
-		append(strategyReference.newTypeRef(StrategyConverter).type)
+		append(StrategyConverter)
 		append('.toStrategy(')
 		appendReference(it, STRATEGY, strategyReference.expr)
 		append('))')
@@ -368,7 +368,7 @@ class StrategyInferrer{
 		}
 		else{
 			if(ruleNameExpressions.containsPropertyCall)
-				appendImplementationObject(it, propertyName.newTypeRef(org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider).type, "Object value",
+				appendImplementationObject(it, org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider, "Object value",
 				[
 					append('return ')  appendNameExpressions(it, ruleNameExpressions) append(';')
 				])
@@ -527,14 +527,14 @@ class StrategyInferrer{
 					if(! OPTIMIZE_FOR_DEBUG)
 						compileAsJavaLiteral(expressions.get(0), it)
 					else{
-					appendImplementationObject(it, valueAction.newTypeRef(org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider).type, "Object value",
+					appendImplementationObject(it, org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider, "Object value",
 						[
 							append('return ') compileAsJavaLiteral(expressions.get(0), it) append(';')
 						])
 					}
 				}
 				else
-					appendImplementationObject(it, valueAction.newTypeRef(org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider).type, "Object value",
+					appendImplementationObject(it, org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider, "Object value",
 						[appendValueExpression(it, valueProvider)])
 
 			}
@@ -571,7 +571,7 @@ class StrategyInferrer{
 				compileAsJavaLiteral(expr, it)
 			}
 			else{
-				append(strategy.newTypeRef(ValueProviderHelper).type) append('''.toValue(«methodName»(propertyContainer), propertyContainer)''')
+				append(ValueProviderHelper) append('''.toValue(«methodName»(propertyContainer), propertyContainer)''')
 			}
 			if(concatenation)
 				append(")");
@@ -594,13 +594,13 @@ class StrategyInferrer{
 	private def appendTraceEnd(ITreeAppendable it, EObject object) {
 		newLine
 		append('} finally{ ((')
-		append(object.newTypeRef(CoverageTrackerEnabler).type)
+		append(CoverageTrackerEnabler)
 		append(')propertyContainer).stopTrace();}')
 	}
 
 	private def appendTraceStart(ITreeAppendable it, EObject object) {
 		append('((')
-		append(object.newTypeRef(CoverageTrackerEnabler).type)
+		append(CoverageTrackerEnabler)
 		append(')propertyContainer).startTrace(); try{')
 		newLine
 	}
@@ -613,21 +613,21 @@ class StrategyInferrer{
 				appendTraceStart(it, valueProvider)
 
 			append('''if(!«methodName»(propertyContainer)) return ''')
-			append(valueProvider.newTypeRef(SpecialValue).type) append('.SKIP;')
+			append(SpecialValue) append('.SKIP;')
 			if(valueProvider.condition.trace)
 				appendTraceEnd(it, valueProvider)
 			newLine
 		}
 	}
 
-	private def appendImplementationObject(ITreeAppendable it, JvmType interfaceName, String interfaceMethodName, Later expression) {
+	private def appendImplementationObject(ITreeAppendable it, Class<?> interfaceName, String interfaceMethodName, Later expression) {
 		append('new ')
 		append(interfaceName)
 		append('(){')
 		increaseIndentation
 		newLine
 		append('''@Override public «interfaceMethodName»(''')
-		.append(strategy.newTypeRef(PropertyContainer).type)
+		.append(PropertyContainer)
 		.append(''' propertyContainer) {''')
 		increaseIndentation
 		expression.exec(it)

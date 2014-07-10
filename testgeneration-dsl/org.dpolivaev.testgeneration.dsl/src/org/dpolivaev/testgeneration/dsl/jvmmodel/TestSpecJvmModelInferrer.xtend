@@ -94,7 +94,7 @@ class TestSpecJvmModelInferrer extends AbstractModelInferrer {
 
 			members += oracle.toField("labels", oracle.newTypeRef(List, oracle.newTypeRef(CoverageEntry)))[
 				setInitializer [
-					append(oracle.newTypeRef(Arrays).type)
+					append(Arrays)
 					append('.asList(')
 					injector.getInstance(CoverageEntriesInferrer).appendArrayInitializer(it, oracle)
 					append(')')

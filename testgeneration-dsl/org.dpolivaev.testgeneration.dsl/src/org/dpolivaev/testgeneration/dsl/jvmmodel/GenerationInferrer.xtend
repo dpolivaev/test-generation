@@ -205,15 +205,15 @@ class GenerationInferrer{
 					appendOutputConfiguration(it, "output", run, run.outputConfiguration)
 					appendOutputConfiguration(it, "report", run, run.reportConfiguration)
 					newLine
-					append(run.newTypeRef(CoverageTracker).type)
+					append(CoverageTracker)
 					append(' _coverageTracker = new ')
-					append(run.newTypeRef(CoverageTracker).type)
+					append(CoverageTracker)
 					append('();')
 					
 					newLine
-					append(run.newTypeRef(WriterFactory).type)
+					append(WriterFactory)
 					append(' _writerFactory = new ')
-					append(run.newTypeRef(WriterFactory).type)
+					append(WriterFactory)
 					append('(_outputConfiguration, _reportConfiguration);')
 					newLine
 					append('_writerFactory.addCoverageTracker(_coverageTracker);')
@@ -224,7 +224,7 @@ class GenerationInferrer{
 					}
 					
 					newLine 
-					append(run.newTypeRef(RuleEngine).type) append(' _ruleEngine = new ') append(run.newTypeRef(TrackingRuleEngine).type) append('(_coverageTracker);')
+					append(RuleEngine) append(' _ruleEngine = new ') append(TrackingRuleEngine) append('(_coverageTracker);')
 					for(oracle:run.oracles){
 						newLine
 						append('_ruleEngine.addHandler(')
@@ -240,7 +240,7 @@ class GenerationInferrer{
 						}
 					}
 					newLine append('_writerFactory.configureEngine(_ruleEngine);')
-					newLine append('new ') append(run.newTypeRef(RequirementBasedStrategy).type) append('()')
+					newLine append('new ') append(RequirementBasedStrategy) append('()')
 					combinedStrategy(it, run.strategies) 
 					append('.run(_ruleEngine);')
 				]
@@ -251,9 +251,9 @@ class GenerationInferrer{
 	
 	def private appendOutputConfiguration(ITreeAppendable it, String target, EObject context, OutputConfiguration outputConfiguration) {
 		newLine
-		append(context.newTypeRef(org.dpolivaev.testgeneration.engine.scriptwriter.OutputConfiguration).type)
+		append(org.dpolivaev.testgeneration.engine.scriptwriter.OutputConfiguration)
 		append(''' _«target»Configuration = new ''')
-		append(context.newTypeRef(org.dpolivaev.testgeneration.engine.scriptwriter.OutputConfiguration).type)
+		append(org.dpolivaev.testgeneration.engine.scriptwriter.OutputConfiguration)
 		append('();')
 		
 		if(outputConfiguration != null){

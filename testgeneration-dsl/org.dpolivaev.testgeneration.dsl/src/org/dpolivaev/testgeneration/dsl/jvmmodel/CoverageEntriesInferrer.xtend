@@ -19,7 +19,7 @@ class CoverageEntriesInferrer{
 	@Inject extension JvmTypesBuilder jvmTypesBuilder
 	
 	def appendArrayInitializer(ITreeAppendable it, EObject sourceObject) {
-		append('new ') append(sourceObject.newTypeRef(CoverageEntry).type) append('[]{')
+		append('new ') append(CoverageEntry) append('[]{')
 		val labels = new HashSet<CoverageEntry>
 		val contents = EcoreUtil2.eAllContents(sourceObject)
 		for(obj : contents){
@@ -31,10 +31,10 @@ class CoverageEntriesInferrer{
 		for(label:labels){
 			newLine
 			append('  new ')
-			append(sourceObject.newTypeRef(CoverageEntry).type) 
+			append(CoverageEntry) 
 			append('("') append(label.name) append('", ')
 			if(label.reason == CoverageEntry.ANY)  
-				append(sourceObject.newTypeRef(CoverageEntry).type).append('.ANY')
+				append(CoverageEntry).append('.ANY')
 			else
 				append('"').append(label.reason).append('"')
 					 
