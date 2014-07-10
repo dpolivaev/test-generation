@@ -16,6 +16,9 @@ import org.eclipse.xtext.ui.editor.outline.IOutlineNode
 import org.dpolivaev.testgeneration.dsl.testspec.Rule
 import org.dpolivaev.testgeneration.dsl.testspec.ValueAction
 import org.dpolivaev.testgeneration.dsl.testspec.Run
+import org.dpolivaev.testgeneration.dsl.testspec.Globals
+import org.eclipse.xtext.xbase.XVariableDeclaration
+import org.dpolivaev.testgeneration.dsl.testspec.MethodDefinition
 
 /**
  * Customization of the default outline structure.
@@ -25,6 +28,7 @@ import org.dpolivaev.testgeneration.dsl.testspec.Run
 public class TestSpecOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	protected def _text(Strategy strategy) {return "Strategy " + strategy.name}
 	protected def _text(XExpression expr) { return expr.text}
+	protected def _text(Globals globals) { return "globals"}
 	protected def _text(Rule rule) {
 		return 
 		(if (rule.isDefault) "default :" else ":")
@@ -33,8 +37,12 @@ public class TestSpecOutlineTreeProvider extends DefaultOutlineTreeProvider {
 		+ (rule.propertyName?.name?:"")
 		+ (if (rule.ordered) "(ordered)" else if (rule.shuffled) "(shuffled)" else "")
 	}
-	protected def _text(ValueAction values) { return values.valueProviders.map[text].toString}
-	protected def _isLeaf(ValueAction values) { return values.ruleGroups.empty}
+	protected def _text(ValueAction values) {values.valueProviders.map[text].toString}
+	protected def _isLeaf(ValueAction values) {values.ruleGroups.empty}
+	protected def _isLeaf(XVariableDeclaration variableDeclaration) {true}
+	protected def _text(XVariableDeclaration variableDeclaration) {variableDeclaration.name}
+	protected def _isLeaf(MethodDefinition methodDefinition) {true}
+	protected def _text(MethodDefinition methodDefinition) {methodDefinition.name}
 	
 	protected def _createChildren(IOutlineNode parentNode, ValueAction valueAction){
 		for(group:valueAction.ruleGroups)
