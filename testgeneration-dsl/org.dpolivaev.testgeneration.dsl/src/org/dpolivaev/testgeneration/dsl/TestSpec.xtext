@@ -18,7 +18,7 @@ ID_REST hidden():
 ;
 
 PROPERTY_ID hidden():
-	ID =>ID_REST* | STRING | '['ID =>ID_REST*']' | '[' STRING ']'
+	ID ->ID_REST* | STRING | '['ID ->ID_REST*']' | '[' STRING ']'
 ;
 
 Strategy:
@@ -58,7 +58,7 @@ DisabledRule:
 ;
 
 PropertyValues returns Values:
-	(name=PROPERTY_ID 'with')?  actions += ValueAction (',' actions += ValueAction)*
+	(name=PROPERTY_ID 'with')?  actions += ValueAction =>(',' actions += ValueAction)* ','?
 ;
 
 Trigger:
@@ -70,13 +70,13 @@ Condition: {Condition}
 ;
 
 ValueAction:{ValueAction}
-	valueProviders += ValueProvider (=>',' valueProviders += ValueProvider)*
-	(=>'{' ruleGroups += RuleGroup* '}')?
+	valueProviders += ValueProvider =>(',' valueProviders += ValueProvider)*
+	(->'{' ruleGroups += RuleGroup* '}')?
 ;
 
 ValueProvider:
 	trace ?= 'traced'?  
-	('from' valueReference = [Values] | ( =>'(' expressions += XExpression+ ')' | expressions += XExpression))
+	('from' valueReference = [Values] | ( ->'(' expressions += XExpression+ ')' | expressions += XExpression))
 	condition = ValueCondition?   
 ;
 
@@ -173,5 +173,5 @@ ExpressionInside returns xbase::XExpression  hidden(WS, SL_COMMENT, ML_COMMENT):
 
 LabeledExpression returns xbase::XExpression:
 	=>({LabeledExpression}
-	'[' label = STRING) reason = XExpression?']' (=>expr = XExpression)?
+	'[' label = STRING) reason = XExpression?']' (->expr = XExpression)?
 ;

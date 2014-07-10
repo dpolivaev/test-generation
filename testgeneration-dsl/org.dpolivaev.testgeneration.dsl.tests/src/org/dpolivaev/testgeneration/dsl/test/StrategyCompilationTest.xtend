@@ -36,6 +36,13 @@ class StrategyCompilationTest {
 		'''.assertCompilesToFile(testName)
 	}	
 
+	@Test def withListEndingWithComma() {
+		'''
+			strategy first
+				let x be 1, 2, 3,
+		'''.assertCompilesToFile(testName)
+	}
+		
 	@Test def withSkip() {
 		'''
 			strategy first
