@@ -52,23 +52,27 @@ class GenerationInferrer{
 	}
 	
 	private def inferGlobalVariables(){
-		for(expr : script.vars){
-			val variable = expr as XVariableDeclaration
-			jvmType.members += variable.toField(variable.name, variable.right.inferredType)[
-				initializer = variable.right
-				visibility = JvmVisibility::PUBLIC
-				static = true
-			]
+		for(global:script.globals){
+			for(expr : global.vars){
+				val variable = expr as XVariableDeclaration
+				jvmType.members += variable.toField(variable.name, variable.right.inferredType)[
+					initializer = variable.right
+					visibility = JvmVisibility::PUBLIC
+					static = true
+				]
+			}
 		}
 	}
 	
 	private def inferGlobalSubs(){
-		for(methodDefinition : script.subs){
-			jvmType.members += methodDefinition.toMethod(methodDefinition.name, methodDefinition.body.inferredType)[
-				body = methodDefinition.body
-				visibility = JvmVisibility::PUBLIC
-				static = true
-			]
+		for(global:script.globals){
+			for(methodDefinition : global.subs){
+				jvmType.members += methodDefinition.toMethod(methodDefinition.name, methodDefinition.body.inferredType)[
+					body = methodDefinition.body
+					visibility = JvmVisibility::PUBLIC
+					static = true
+				]
+			}
 		}
 	}
 	

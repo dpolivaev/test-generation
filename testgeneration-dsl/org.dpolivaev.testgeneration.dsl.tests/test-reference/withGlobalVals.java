@@ -8,6 +8,8 @@ import org.dpolivaev.testgeneration.engine.coverage.RequirementBasedStrategy;
 public class MyFile {
   public static int value1 = 1;
   
+  public static int value2 = MyFile.value1;
+  
   public static RequirementBasedStrategy first() {
     return new _MyFile_first_StrategyFactory().first();
   }

@@ -514,10 +514,11 @@ class StrategyCompilationTest {
 			global val value1 = 1 
 			strategy first
 				let x be value1
+			global val value2 = value1
 		'''.assertCompilesToFile(testName)
 	}	
 
-	@Test def withGlobalSubss() {
+	@Test def withGlobalSubs() {
 		'''
 			global def sub1() {1} 
 			strategy first

@@ -8,9 +8,9 @@ Generation: {Generation}
 	('package' package = QualifiedName)?
 	importSection=XImportSection?
 	
-	('global' (vars += XVariableDeclaration | subs += MethodDefinition)+)?
 	
-	(strategies+=Strategy | oracles += Oracle | /* goals += Goal | */ runs += Run)*
+	
+	(globals += Globals | strategies+=Strategy | oracles += Oracle | /* goals += Goal | */ runs += Run)*
 ;
 
 ID_REST hidden():
@@ -19,6 +19,10 @@ ID_REST hidden():
 
 PROPERTY_ID hidden():
 	ID ->ID_REST* | STRING | '['ID ->ID_REST*']' | '[' STRING ']'
+;
+
+Globals:
+	'global' (vars += XVariableDeclaration | subs += MethodDefinition)+
 ;
 
 Strategy:
