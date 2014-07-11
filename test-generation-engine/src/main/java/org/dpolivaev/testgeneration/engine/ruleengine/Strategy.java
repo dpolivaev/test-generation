@@ -106,4 +106,12 @@ public class Strategy {
 	public boolean containsCompatibleRule(Rule rule) {
 		return rulesLike(rule).containsKey(rule.getRuleKey());
 	}
+
+	public void addTemporaryRule(Rule creatingRule, Rule rule) {
+		if(creatingRule == null || rule.isDefaultRule() || triggeredRules.containsKey(rule.getRuleKey()))
+			addRule(rule);
+		else {
+			triggeredRules.insertBefore(creatingRule.getRuleKey(), rule.getRuleKey(), rule);
+		}
+	}
 }

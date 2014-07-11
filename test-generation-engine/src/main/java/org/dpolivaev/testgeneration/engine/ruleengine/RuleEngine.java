@@ -242,7 +242,7 @@ public class RuleEngine implements EngineState {
 	}
 
 	@Override
-	public void addRule(Rule rule) {
-		currentStrategy().addRule(rule);
+	public void addTemporaryRule(Rule creatingRule, Rule rule) {
+		currentStrategy().addTemporaryRule(creatingRule, rule);
 	}
 }

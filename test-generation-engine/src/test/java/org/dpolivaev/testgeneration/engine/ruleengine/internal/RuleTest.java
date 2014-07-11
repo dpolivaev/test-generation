@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
+import static org.mockito.Matchers.eq;
 
 import java.util.Collections;
 import java.util.Set;
@@ -22,7 +23,10 @@ import org.dpolivaev.testgeneration.engine.ruleengine.internal.PropertyAssignedE
 import org.dpolivaev.testgeneration.engine.utils.internal.Utils;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Matchers;
 import org.mockito.Mockito;
+
+import com.sun.org.apache.xerces.internal.impl.xs.identity.Selector.Matcher;
 
 public class RuleTest {
     private EngineState engineState;
@@ -229,7 +233,7 @@ public class RuleTest {
 
         statefulRule.propertyCombinationStarted(engineState);
         statefulRule.propertyValueSet(new PropertyAssignedEvent(engineState, statefulRule, Collections.<String>emptySet(), true));
-        verify(engineState).addRule(argThat(rulePropertyNameMatches("y")));
+        verify(engineState).addTemporaryRule(eq(statefulRule), argThat(rulePropertyNameMatches("y")));
     }
 
     @Test
@@ -240,8 +244,8 @@ public class RuleTest {
 
         statefulRule.propertyCombinationStarted(engineState);
         statefulRule.propertyValueSet(new PropertyAssignedEvent(engineState, statefulRule, Collections.<String>emptySet(), true));
-        verify(engineState).addRule(argThat(rulePropertyNameMatches("y1")));
-        verify(engineState).addRule(argThat(rulePropertyNameMatches("y2")));
+        verify(engineState).addTemporaryRule(eq(statefulRule), argThat(rulePropertyNameMatches("y1")));
+        verify(engineState).addTemporaryRule(eq(statefulRule), argThat(rulePropertyNameMatches("y2")));
     }
 
     @Test

@@ -78,17 +78,17 @@ public class LinkedMapTest {
 	}
 
 	@Test
-	public void addAfterValue() {
+	public void insertBeforeFirstValue() {
 		add(1);
-		linkedMap.insertAfter(1, 2, 2);
-		assertValuesEqualTo(1, 2);
+		linkedMap.insertBefore(1, 2, 2);
+		assertValuesEqualTo(2, 1);
 	}
 
 	@Test
 	public void addBeforeValue() {
 		add(1);
 		add(3);
-		linkedMap.insertAfter(1, 2, 2);
+		linkedMap.insertBefore(3, 2, 2);
 		assertValuesEqualTo(1, 2, 3);
 	}
 
@@ -99,13 +99,13 @@ public class LinkedMapTest {
 
 	@Test(expected = NullPointerException.class)
 	public void addAfterNotExisting() {
-		linkedMap.insertAfter(1, 2, 2);
+		linkedMap.insertBefore(1, 2, 2);
 	}
 
 	@Test(expected = IllegalStateException.class)
 	public void addExisting() {
 		add(1);
-		linkedMap.insertAfter(1, 1, 1);
+		linkedMap.insertBefore(1, 1, 1);
 	}
 
 
@@ -113,7 +113,7 @@ public class LinkedMapTest {
 	public void addExistingInTheMiddle() {
 		add(1);
 		add(2);
-		linkedMap.insertAfter(1, 1, 1);
+		linkedMap.insertBefore(1, 1, 1);
 	}
 
 }

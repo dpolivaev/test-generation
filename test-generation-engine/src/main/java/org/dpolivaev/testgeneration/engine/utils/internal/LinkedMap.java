@@ -40,37 +40,6 @@ public class LinkedMap <K, V>{
 		}
 	}
 
-	final static class LinkedMapEntry<K, V>{
-		K key;
-		V value;
-		LinkedMapEntry<K, V> previous;
-		LinkedMapEntry<K, V> next;
-
-		public LinkedMapEntry(K key, V value){
-			this.key = key;
-			this.value = value;
-			this.previous = null;
-			this.next = null;
-		}
-
-		static public <V> V valueOf(LinkedMapEntry<?, V> entry){
-			return entry == null ? null : entry.value;
-		}
-
-		void insert(LinkedMapEntry<K, V> next){
-			next.next = this.next;
-			this.next = next;
-			next.previous = this;
-		}
-
-		void remove(){
-			if(previous != null)
-				previous.next = this.next;
-			if(next != null)
-				next.previous = previous;
-		}
-
-	}
 	final private Map<K, LinkedMapEntry<K, V>> map = new HashMap<>();
 	LinkedMapEntry<K, V> firstEntry = null;
 	LinkedMapEntry<K, V> lastEntry = null;
@@ -119,26 +88,23 @@ public class LinkedMap <K, V>{
 			firstEntry  = lastEntry = entry;
 		}
 		else{
-			lastEntry.insert(entry);
+			lastEntry.insertAfter(entry);
 			lastEntry = entry;
 		}
 		map.put(key, entry);
 	}
 
-	public void insertAfter(K afterKey, K key, V value) {
+	public void insertBefore(K insertPositionKey, K key, V value) {
 		if(map.containsKey(key))
 			throw new IllegalStateException();
-		LinkedMapEntry<K, V> afterEntry = map.get(afterKey);
+		LinkedMapEntry<K, V> afterEntry = map.get(insertPositionKey);
 		if(afterEntry ==  null)
 			throw new NullPointerException();
-		if(afterEntry == lastEntry)
-			add(key, value);
-		else{
-			LinkedMapEntry<K, V> entry = new LinkedMapEntry<>(key, value);
-			map.put(key, entry);
-			afterEntry.insert(entry);
-		}
-
+		LinkedMapEntry<K, V> entry = new LinkedMapEntry<>(key, value);
+		map.put(key, entry);
+		afterEntry.insertBefore(entry);
+		if(firstEntry.key.equals(insertPositionKey))
+			firstEntry = entry;
 	}
 
 	public void remove(Object key) {
