@@ -72,8 +72,8 @@ class StrategyInferrer{
 		]
 		if(! (strategy.parameters.empty && strategy.vars.empty) )
 			classInferrer.inferConstructor(jvmType, strategy, strategy.parameters, strategy.vars)
-		classInferrer.inferMemberVariables(jvmType, strategy, strategy.vars, JvmVisibility::PRIVATE)
-		classInferrer.inferMemberMethods(jvmType, strategy, strategy.subs)
+		classInferrer.inferMemberVariables(jvmType, strategy.vars, JvmVisibility::PRIVATE)
+		classInferrer.inferMemberMethods(jvmType, strategy.subs, JvmVisibility::PUBLIC, false)
 
 		inferExpressions()
 		inferStrategyMethods()

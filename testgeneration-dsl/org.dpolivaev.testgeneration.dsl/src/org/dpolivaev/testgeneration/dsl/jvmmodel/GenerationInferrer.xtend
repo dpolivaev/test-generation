@@ -53,28 +53,15 @@ class GenerationInferrer{
 	
 	private def inferGlobalVariables(){
 		for(global:script.globals){
-			for(expr : global.vars){
-				val variable = expr as XVariableDeclaration
-				jvmType.members += variable.toField(variable.name, variable.right.inferredType)[
-					initializer = variable.right
-					visibility = JvmVisibility::PUBLIC
-					static = true
-				]
-			}
+			val vars = global.vars
+			classInferrer.inferStaticMemberVariables(jvmType, vars, JvmVisibility::PUBLIC)
 		}
 	}
 	
 	private def inferGlobalSubs(){
 		for(global:script.globals){
-			for(methodDefinition : global.subs){
-				jvmType.members += methodDefinition.toMethod(methodDefinition.name, methodDefinition.body.inferredType)[
-					for(parameter:methodDefinition.parameters) 
-						parameters += parameter.toParameter(parameter.name, parameter.parameterType)
-					body = methodDefinition.body
-					visibility = JvmVisibility::PUBLIC
-					static = true
-				]
-			}
+			val subs = global.subs
+			classInferrer.inferMemberMethods(jvmType, subs, JvmVisibility::PUBLIC, true)
 		}
 	}
 	
@@ -91,9 +78,9 @@ class GenerationInferrer{
 		}
 		if(! (vars.empty) ){
 			classInferrer.inferConstructor(jvmType, script, emptyList, vars)
-			classInferrer.inferMemberVariables(jvmType, script, vars, JvmVisibility::PRIVATE)
+			classInferrer.inferMemberVariables(jvmType, vars, JvmVisibility::PRIVATE)
 		}
-		classInferrer.inferMemberMethods(jvmType, script, subs)
+		classInferrer.inferMemberMethods(jvmType, subs, JvmVisibility::PUBLIC, false)
 	}
 	
 	private def inferOracles(){

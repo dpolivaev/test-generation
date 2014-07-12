@@ -89,8 +89,8 @@ class TestSpecJvmModelInferrer extends AbstractModelInferrer {
 			superTypes += oracle.newTypeRef(PropertyHandler)
 			if(! (oracle.parameters.empty && oracle.vars.empty))
 				classInferrer.inferConstructor(oracleClass, oracle, oracle.parameters, oracle.vars)
-			classInferrer.inferMemberVariables(oracleClass, oracle, oracle.vars, JvmVisibility::PUBLIC)
-			classInferrer.inferMemberMethods(oracleClass, oracle, oracle.subs)
+			classInferrer.inferMemberVariables(oracleClass, oracle.vars, JvmVisibility::PUBLIC)
+			classInferrer.inferMemberMethods(oracleClass, oracle.subs, JvmVisibility::PUBLIC, false)
 
 			members += oracle.toField("labels", oracle.newTypeRef(List, oracle.newTypeRef(CoverageEntry)))[
 				setInitializer [
