@@ -12,22 +12,40 @@ public class PropertyCounter {
 	}
 
 	static public PropertyCounter propertyCounter(String basePropertyName, int startValue) {
-		return new PropertyCounter(basePropertyName, startValue, Integer.MAX_VALUE);
+		return new PropertyCounter(basePropertyName, startValue, Integer.MAX_VALUE, 0);
 	}
 
-	private PropertyCounter(String basePropertyName, int startValue, int bound) {
+	private PropertyCounter(String basePropertyName, int startValue, int bound, int increment) {
 		this.basePropertyName = basePropertyName;
 		this.value = startValue;
-		this.increment = 0;
+		this.increment = increment;
 		this.bound = bound;
 	}
 
 	public PropertyCounter next() {
-		next(1);
+		addIncrement(1);
 		return this;
 	}
 
-	private void next(int increment) {
+	public PropertyCounter copy() {
+		return new PropertyCounter(basePropertyName, value, bound, increment);
+	}
+
+	public PropertyCounter current() {
+		return at(0);
+	}
+
+	public PropertyCounter at(int index) {
+		return subsequence(index, 1);
+	}
+
+	public PropertyCounter subsequence(int begin, int length) {
+		if(begin <= 0 || begin >= value + increment ||length > increment)
+			throw new CounterIndexOutOfBoundsException();
+		return new PropertyCounter(basePropertyName, value + begin, value + begin + length, 0);
+	}
+
+	private void addIncrement(int increment) {
 		value += this.increment;
 		if(value >= bound)
 			throw new CounterIndexOutOfBoundsException();
@@ -44,7 +62,7 @@ public class PropertyCounter {
 	}
 
 	public PropertyCounter nextSubsequence(int increment) {
-		next(increment);
-		return new PropertyCounter(basePropertyName, value, value + increment);
+		addIncrement(increment);
+		return new PropertyCounter(basePropertyName, value, value + increment, 0);
 	}
 }
