@@ -22,11 +22,7 @@ PROPERTY_ID hidden():
 ;
 
 Globals:
-	'global' (vars += XVariableDeclaration | vars += CounterDefinition| subs += MethodDefinition)+
-;
-
-CounterDefinition:
-	'counter' name=ID '=' right = XExpression
+	'global' (vars += XVariableDeclaration | subs += MethodDefinition)+
 ;
 
 Strategy:
@@ -36,7 +32,7 @@ Strategy:
 		)?
 	')')?
 
-	(ruleGroups += RuleGroup | vars += XVariableDeclaration| vars += CounterDefinition | subs += MethodDefinition)*
+	(ruleGroups += RuleGroup | vars += XVariableDeclaration| subs += MethodDefinition)*
 	;
 
 StrategyReference returns StrategyReference: {StrategyReference} 'strategy' goal ?= 'goal'? expr = XExpression;

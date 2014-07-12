@@ -3,7 +3,6 @@ package org.dpolivaev.testgeneration.dsl.jvmmodel
 import com.google.inject.Inject
 import com.google.inject.Singleton
 import java.util.List
-import org.dpolivaev.testgeneration.dsl.testspec.CounterDefinition
 import org.dpolivaev.testgeneration.dsl.testspec.MethodDefinition
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.common.types.JvmFormalParameter
@@ -37,10 +36,6 @@ class ClassInferrer {
 							append('''this.«declaration.name» = _init_«declaration.name»();''')
 							newLine
 						}
-						CounterDefinition: {
-							append('''this.«counterVariableName(declaration)» = _init_«declaration.name»();''')
-							newLine
-						}
 					}
 				}
 			]
@@ -59,15 +54,8 @@ class ClassInferrer {
 
 					jvmType.members += declaration.toField(declaration.name, type) [ final = ! declaration.writeable; visibility = fieldVisibility]
 				}
-				
-				CounterDefinition: {
-					val type = declaration.newTypeRef(int)
-					jvmType.members += declaration.toMethod('_init_' + declaration.name, type) [ body = declaration.right; visibility = JvmVisibility::PRIVATE]
-					jvmType.members += declaration.toField(counterVariableName(declaration), type) [ final = false; visibility = JvmVisibility::PRIVATE]
-				}
 			}
 		}
-		inferCounterMethods(jvmType, vars, fieldVisibility, false)
 	}
 	
 	def inferStaticMemberVariables(JvmGenericType jvmType, List<? extends EObject> vars, JvmVisibility fieldVisibility) {
@@ -79,15 +67,8 @@ class ClassInferrer {
 					val right = declaration.right
 					jvmType.members += declaration.toField(name, type) [ initializer = right;  visibility = fieldVisibility; static = true]
 				}
-				CounterDefinition: {
-					val name = counterVariableName(declaration)
-					val type = declaration.newTypeRef(int)
-					val right = declaration.right
-					jvmType.members += declaration.toField(name, type) [ initializer = right;  visibility = JvmVisibility::PRIVATE; static = true]
-				}
 			}
 		}
-		inferCounterMethods(jvmType, vars, fieldVisibility, true)
 	}
 
 	def inferMemberMethods(JvmGenericType jvmType, List<MethodDefinition> methods,
@@ -101,41 +82,5 @@ class ClassInferrer {
 					visibility = fieldVisibility
 				]
 			}
-	}
-
-	def inferCounterMethods(JvmGenericType jvmType, List<? extends EObject> objects, JvmVisibility fieldVisibility,
-		boolean staticFlag) {
-		for (counter : objects) {
-			switch (counter) {
-				CounterDefinition: {
-					jvmType.members += counter.toMethod(counter.name, counter.newTypeRef(int)) [
-						body = [appendable |
-							val it = appendable.trace(counter)
-							append('''return «counter.name»(1);''')
-						]
-						static = staticFlag
-						visibility = fieldVisibility
-					]
-					jvmType.members += counter.toMethod(counter.name, counter.newTypeRef(int)) [
-						parameters += counter.toParameter("_groupSize", counter.newTypeRef(int))
-						body = [appendable |
-							val it = appendable.trace(counter)
-							val counterVariableName = counterVariableName(counter)
-							append('''int oldCounterValue = «counterVariableName»;''')
-							newLine
-							append('''«counterVariableName» += _groupSize;''')
-							newLine
-							append('return oldCounterValue;')
-						]
-						static = staticFlag
-						visibility = fieldVisibility
-					]
-				}
-			}
-		}
-	}
-	
-	def counterVariableName(CounterDefinition counter) {
-		"_counter_" + counter.name
 	}
 }

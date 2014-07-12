@@ -518,28 +518,6 @@ class StrategyCompilationTest {
 		'''.assertCompilesToFile(testName)
 	}	
 
-	@Test def withGlobalCounter() {
-		'''
-			global counter pre = 1
-			val somePreconditionIndex = pre 
-			val somePreconditionGroupIndex = pre(4)
-			strategy first
-				let ("pre#" somePreconditionIndex) be "precondition 1"
-				let ("pre#" somePreconditionGroupIndex) be "precondition 2"
-		'''.assertCompilesToFile(testName)
-	}	
-
-	@Test def withStrategyCounter() {
-		'''
-			strategy first(int start)
-				counter pre = start
-				val somePreconditionIndex = pre 
-				val somePreconditionGroupIndex = pre(4)
-				let ("pre#" somePreconditionIndex) be "precondition 1"
-				let ("pre#" somePreconditionGroupIndex) be "precondition 2"
-		'''.assertCompilesToFile(testName)
-	}	
-
 	@Test def withGlobalSubs() {
 		'''
 			global def sub1(int i) {i} 
