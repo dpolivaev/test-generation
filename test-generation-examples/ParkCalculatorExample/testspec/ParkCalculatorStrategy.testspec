@@ -1,6 +1,5 @@
 package parkcalculator.testgeneration
-import org.dpolivaev.testgeneration.engine.strategies.StrategyHelper;  
-
+import org.dpolivaev.testgeneration.engine.strategies.StrategyHelper; import org.dpolivaev.testgeneration.engine.strategies.StepCounter
 
 /*
  * Default test part property names 
@@ -49,6 +48,7 @@ strategy parkCostCalculatorTests
 	}
 
 strategy testsForSuccess
+	val precondition = stepCounter("precondition")
 	/*
 	 * In this category define test focus as "calculate parking costs"
 	 */
@@ -57,9 +57,9 @@ strategy testsForSuccess
 		/*
 		 * For this focus define preconditions and assert steps
 		 */		
-		let precondition#1 be "select lot (:parking lot)"
-		let precondition#2 be "set entry time (:entry time)"
-		let precondition#3 be "set parking duration (:weeks, :days, :hours, :minutes)"
+		let (precondition.next) be "select lot (:parking lot)"
+		let (precondition.next) be "set entry time (:entry time)"
+		let (precondition.next) be "set parking duration (:weeks, :days, :hours, :minutes)"
 		
 		/* Keyword "default" means that property “assert” is lasily evaluated 
 		 * and can be redefined adding another value to the rule set.
@@ -210,23 +210,24 @@ strategy economyParkingTests
 
 
 strategy testsForFailure
+	var StepCounter precondition
 	let focus be  
 		"select illegal lot (:wrongValue)"{
 			let wrongValue be "NULL_VALUE", "BAD_VALUE"
 		}, 
 		"use illegal date in calculation"{
-			let precondition#1 be "select lot(:lot)"
+			let (precondition = stepCounter("precondition").next) be "select lot(:lot)"
 			/*
 			 * lot can take values from listOfValidLots defined above
 			 * Default rules do not force iteration.  
 			 */
 			let default lot be listOfValidLots with "VALET_PARKING", "SHORT_TERM_PARKING", "LONG_TERM_GARAGE_PARKING", "LONG_TERM_SURFACE_PARKING", "ECONOMY_LOT_PARKING"
 			let illegalElement be "entry date", "entry time", "entry day part", "leaving date", "leaving time", "leaving day part"
-			let precondition#2 be ("set illegal " :illegalElement "(:wrongValue)")
+			let (precondition.next) be ("set illegal " :illegalElement "(:wrongValue)")
 			let wrongValue be "NULL_VALUE", "BAD_VALUE"
 		},
 		"use leaving date earlier than entry date"{
-			let precondition#1 be "select lot(:lot)"
+			let (precondition = stepCounter("precondition").next) be "select lot(:lot)"
 			let default lot be from listOfValidLots
 		}
 
