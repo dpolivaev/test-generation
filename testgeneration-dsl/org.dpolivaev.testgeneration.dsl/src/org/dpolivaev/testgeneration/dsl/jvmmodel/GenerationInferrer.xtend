@@ -26,6 +26,7 @@ import org.dpolivaev.testgeneration.dsl.testspec.Run
 import org.dpolivaev.testgeneration.dsl.testspec.MethodDefinition
 import org.dpolivaev.testgeneration.dsl.testspec.XsltParameter
 import org.eclipse.xtext.xbase.XVariableDeclaration
+import org.dpolivaev.testgeneration.engine.coverage.StrategyConverter
 
 class GenerationInferrer{
 	@Inject extension JvmTypesBuilder jvmTypesBuilder
@@ -203,6 +204,7 @@ class GenerationInferrer{
 					append(CoverageTracker)
 					append('();')
 					
+					
 					newLine
 					append(WriterFactory)
 					append(' _writerFactory = new ')
@@ -210,11 +212,7 @@ class GenerationInferrer{
 					append('(_outputConfiguration, _reportConfiguration);')
 					newLine
 					append('_writerFactory.addCoverageTracker(_coverageTracker);')
-					if(! run.strategies.empty && run.strategies.get(0).goal){
-						newLine
-						appendReference(it, STRATEGY, run.strategies.get(0).expr)
-						append('.registerRequiredItems(_writerFactory);')
-					}
+					initializeStrategies(it, run.strategies) 
 					
 					newLine 
 					append(RuleEngine) append(' _ruleEngine = new ') append(TrackingRuleEngine) append('(_coverageTracker);')
@@ -234,7 +232,7 @@ class GenerationInferrer{
 					}
 					newLine append('_writerFactory.configureEngine(_ruleEngine);')
 					newLine append('new ') append(RequirementBasedStrategy) append('()')
-					combinedStrategy(it, run.strategies) 
+					withStrategies(it, run.strategies) 
 					append('.run(_ruleEngine);')
 				]
 				visibility = JvmVisibility::DEFAULT
@@ -291,13 +289,27 @@ class GenerationInferrer{
 		}
 	}
 	
-	private def combinedStrategy(ITreeAppendable it, Collection<StrategyReference> strategies){
+	private def initializeStrategies(ITreeAppendable it, Collection<StrategyReference> strategies){
+		for(strategy : strategies){
+			newLine
+			append(RequirementBasedStrategy)
+			val strategyMethodName = methods.get(STRATEGY, strategy.expr)
+			append(''' «strategyMethodName» = ''')
+			append(StrategyConverter)
+			append('''.toRequirementBasedStrategy(«strategyMethodName»());''')
+			if(strategy.goal){
+				newLine
+				append('''«strategyMethodName».registerRequiredItems(_writerFactory);''')
+			}
+		}
+	}
+
+	private def withStrategies(ITreeAppendable it, Collection<StrategyReference> strategies){
 		for(strategy : strategies){
 			append(".with(")
-			appendReference(it, STRATEGY, strategy.expr)
+			append(methods.get(STRATEGY, strategy.expr))
 			append(")")
 		}
-		return it.toString
 	}
 
 	def private appendReference(ITreeAppendable it, String prefix, XExpression expr) {

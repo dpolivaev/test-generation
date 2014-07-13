@@ -4,6 +4,7 @@ File 1 : MyFile.java
 
 import org.dpolivaev.testgeneration.engine.coverage.CoverageTracker;
 import org.dpolivaev.testgeneration.engine.coverage.RequirementBasedStrategy;
+import org.dpolivaev.testgeneration.engine.coverage.StrategyConverter;
 import org.dpolivaev.testgeneration.engine.coverage.TrackingRuleEngine;
 import org.dpolivaev.testgeneration.engine.ruleengine.RuleEngine;
 import org.dpolivaev.testgeneration.engine.scriptwriter.OutputConfiguration;
@@ -36,9 +37,11 @@ public class MyFile {
     CoverageTracker _coverageTracker = new CoverageTracker();
     WriterFactory _writerFactory = new WriterFactory(_outputConfiguration, _reportConfiguration);
     _writerFactory.addCoverageTracker(_coverageTracker);
+    RequirementBasedStrategy _strategy1 = StrategyConverter.toRequirementBasedStrategy(_strategy1());
+    RequirementBasedStrategy _strategy2 = StrategyConverter.toRequirementBasedStrategy(_strategy2());
     RuleEngine _ruleEngine = new TrackingRuleEngine(_coverageTracker);
     _writerFactory.configureEngine(_ruleEngine);
-    new RequirementBasedStrategy().with(_strategy1()).with(_strategy2()).run(_ruleEngine);
+    new RequirementBasedStrategy().with(_strategy1).with(_strategy2).run(_ruleEngine);
   }
   
   public static void main(final String[] args) {
