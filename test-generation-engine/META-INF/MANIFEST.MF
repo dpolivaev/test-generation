@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Test generation engine
 Bundle-SymbolicName: org.dpolivaev.testgeneration.engine
-Bundle-Version: 0.0.8.qualifier
+Bundle-Version: 0.0.9.qualifier
 Export-Package: org.dpolivaev.testgeneration.engine.coverage,
  org.dpolivaev.testgeneration.engine.java,
  org.dpolivaev.testgeneration.engine.ruleengine,
