@@ -31,11 +31,7 @@ public class StepCounter {
 	}
 
 	public StepCounter subsequence(int startValue) {
-		return new StepCounter(basePropertyName, counter.subsequence(startValue));
-	}
-
-	private StepCounter withCounter(Counter counter) {
-		return new StepCounter(basePropertyName, counter);
+		return withCounter(counter.subsequence(startValue));
 	}
 
 	public StepCounter copy() {
@@ -52,6 +48,10 @@ public class StepCounter {
 
 	public StepCounter subsequence(int begin, int length) {
 		return withCounter(counter.subsequence(begin, length));
+	}
+
+	private StepCounter withCounter(Counter counter) {
+		return new StepCounter(basePropertyName, counter);
 	}
 
 	public int getValue() {
