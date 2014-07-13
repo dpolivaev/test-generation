@@ -45,6 +45,7 @@ class _MyFile_first_StrategyFactory {
   
   RequirementBasedStrategy first() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
+    RequirementBasedStrategy _applied_strategy2;
     Strategy _strategy = new Strategy();
     _strategy.addRule(RuleBuilder.Factory.iterate("x").over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {return 1;
@@ -57,8 +58,8 @@ class _MyFile_first_StrategyFactory {
     _strategy.addRules(RuleBuilder.Factory._if(new Condition(){
       @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
         return propertyContainer.<Boolean>get(" _MyFile_first_StrategyFactory.condition1#" +  _instanceId);
-    }}).with(StrategyConverter.toStrategy(_strategy2())).asRules());
-    return new RequirementBasedStrategy(_requiredItems).with(_strategy).addRequiredItemsFrom(StrategyConverter.toRequirementBasedStrategy(_strategy2()));
+    }}).with((_applied_strategy2 = StrategyConverter.toRequirementBasedStrategy(_strategy2())).getStrategy()).asRules());
+    return new RequirementBasedStrategy(_requiredItems).with(_strategy).addRequiredItemsFrom(_applied_strategy2);
   }
 }
 

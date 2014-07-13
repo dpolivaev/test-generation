@@ -32,9 +32,10 @@ class _MyFile_first_StrategyFactory {
   
   RequirementBasedStrategy first() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
+    RequirementBasedStrategy _applied_strategy1;
     Strategy _strategy = new Strategy();
-    _strategy.addRules(RuleBuilder.Factory.with(StrategyConverter.toStrategy(_strategy1())).asRules());
-    return new RequirementBasedStrategy(_requiredItems).with(_strategy).addRequiredItemsFrom(StrategyConverter.toRequirementBasedStrategy(_strategy1()));
+    _strategy.addRules(RuleBuilder.Factory.with((_applied_strategy1 = StrategyConverter.toRequirementBasedStrategy(_strategy1())).getStrategy()).asRules());
+    return new RequirementBasedStrategy(_requiredItems).with(_strategy).addRequiredItemsFrom(_applied_strategy1);
   }
 }
 

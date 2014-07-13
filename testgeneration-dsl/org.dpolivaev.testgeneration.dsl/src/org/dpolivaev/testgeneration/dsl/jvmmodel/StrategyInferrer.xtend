@@ -182,6 +182,7 @@ class StrategyInferrer{
 				append(CoverageEntry)
 				append('[] _requiredItems = ') injector.getInstance(CoverageEntriesInferrer).appendArrayInitializer(it, strategy) append(';')
 				newLine
+				addAppliedStrategyVariables(it, strategy)
 				append(Strategy)
 				append(' _strategy = new ') append(Strategy) append('();')
 				newLine
@@ -197,14 +198,25 @@ class StrategyInferrer{
 		]
 	}
 
+	def private void addAppliedStrategyVariables(ITreeAppendable it, org.dpolivaev.testgeneration.dsl.testspec.Strategy strategy){
+		val contents = EcoreUtil2.eAllContents(strategy)
+		for(obj : contents){
+			if (obj instanceof StrategyReference){
+				append(RequirementBasedStrategy)
+				val strategyMethodName = methods.get(STRATEGY, obj.expr)
+				append(''' _applied«strategyMethodName»''')
+				append(';')
+				newLine
+			}
+		}
+	}
+
 	def private void addAppliedStrategyItems(ITreeAppendable it, org.dpolivaev.testgeneration.dsl.testspec.Strategy strategy){
 		val contents = EcoreUtil2.eAllContents(strategy)
 		for(obj : contents){
 			if (obj instanceof StrategyReference){
-				append('.addRequiredItemsFrom(')
-				append(StrategyConverter) append('.toRequirementBasedStrategy(')
-				appendReference(it, STRATEGY, obj.expr)
-				append('))')
+				val strategyMethodName = methods.get(STRATEGY, obj.expr)
+				append('''.addRequiredItemsFrom(_applied«strategyMethodName»)''')
 			}
 		}
 	}
@@ -302,10 +314,10 @@ class StrategyInferrer{
 
 	private def appendStrategyRule(ITreeAppendable it, StrategyReference strategyReference){
 		append('.with(')
+		val strategyMethodName = methods.get(STRATEGY, strategyReference.expr)
+		append('''(_applied«strategyMethodName» = ''')
 		append(StrategyConverter)
-		append('.toStrategy(')
-		appendReference(it, STRATEGY, strategyReference.expr)
-		append('))')
+		append('''.toRequirementBasedStrategy(«strategyMethodName»())).getStrategy())''')
 	}
 
 	private def appendTriggers(ITreeAppendable it, RuleGroup ruleGroup) {

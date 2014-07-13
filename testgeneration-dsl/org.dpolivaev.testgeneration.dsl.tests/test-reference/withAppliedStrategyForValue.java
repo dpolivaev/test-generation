@@ -38,13 +38,14 @@ class _MyFile_first_StrategyFactory {
   
   RequirementBasedStrategy first() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
+    RequirementBasedStrategy _applied_strategy1;
     Strategy _strategy = new Strategy();
     _strategy.addRule(RuleBuilder.Factory.iterate("x").over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {return 1;
     }}).with(
-      RuleBuilder.Factory.with(StrategyConverter.toStrategy(_strategy1())).asRules()
+      RuleBuilder.Factory.with((_applied_strategy1 = StrategyConverter.toRequirementBasedStrategy(_strategy1())).getStrategy()).asRules()
     ));
-    return new RequirementBasedStrategy(_requiredItems).with(_strategy).addRequiredItemsFrom(StrategyConverter.toRequirementBasedStrategy(_strategy1()));
+    return new RequirementBasedStrategy(_requiredItems).with(_strategy).addRequiredItemsFrom(_applied_strategy1);
   }
 }
 
