@@ -30,7 +30,7 @@ class _MyFile_first_StrategyFactory {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
     Strategy _strategy = new Strategy();
     _strategy.addRule(RuleBuilder.Factory.iterate("x").over(new ValueProvider(){
-      @Override public Object value(PropertyContainer propertyContainer) {return "line1\r\nline2\r\nline3\r\n";
+      @Override public Object value(PropertyContainer propertyContainer) {return "line1\nline2\nline3\n";
     }}));
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }

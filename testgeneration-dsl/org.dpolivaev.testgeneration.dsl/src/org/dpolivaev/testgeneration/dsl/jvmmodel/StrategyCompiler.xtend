@@ -171,7 +171,7 @@ class StrategyCompiler extends XbaseCompiler {
 	}
 
 	static val eolSeparator = System.getProperty("line.separator")
-	def convertToJavaString(String string) {
+	static def convertToJavaString(String string) {
 			Strings.convertToJavaString(string.replace(eolSeparator, "\n"));
 	}
 	
