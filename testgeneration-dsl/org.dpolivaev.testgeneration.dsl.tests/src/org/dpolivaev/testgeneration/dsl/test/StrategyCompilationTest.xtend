@@ -306,6 +306,26 @@ class StrategyCompilationTest {
 		'''.assertCompilesToFile(testName)
 	}
 
+	@Test def strategyWithVal() {
+		'''
+			strategy first
+				val x = 1
+		'''.assertCompilesToFile(testName)
+	}
+
+	@Test def strategyWithVar() {
+		'''
+			strategy first
+				var x = 1
+		'''.assertCompilesToFile(testName)
+	}
+
+	@Test def strategyWithUnassignedVar() {
+		'''
+			strategy first
+				var boolean x
+		'''.assertCompilesToFile(testName)
+	}
 	@Test def concatenatedValues(){
 		'''
 			strategy first

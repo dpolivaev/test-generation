@@ -32,7 +32,7 @@ class ClassInferrer {
 				}
 				for (declaration : vars) {
 					switch (declaration) {
-						XVariableDeclaration: {
+						XVariableDeclaration: if (declaration.right != null) {
 							append('''this.«declaration.name» = _init_«declaration.name»();''')
 							newLine
 						}
