@@ -52,7 +52,7 @@ public class LoginSubmit {
 		}
 	)
 	@Test
-	public void test002_submitHTTPS_VALID_MAIL_VALID_PASSWORD() throws Exception {
+	public void test002_VALID_MAIL_VALID_PASSWORD_submitHTTPS() throws Exception {
 		
 	// Precondition 1
 		driver.goToPage(/* page */ LOGIN_PAGE);
@@ -73,7 +73,7 @@ public class LoginSubmit {
 		}
 	)
 	@Test
-	public void test003_submitHTTPS_VALID_MAIL_INVALID_PASSWORD() throws Exception {
+	public void test003_VALID_MAIL_INVALID_PASSWORD_submitHTTPS() throws Exception {
 		
 	// Precondition 1
 		driver.goToPage(/* page */ LOGIN_PAGE);
@@ -98,7 +98,7 @@ public class LoginSubmit {
 		}
 	)
 	@Test
-	public void test004_submitHTTPS_VALID_MAIL_NOT_ENTERED_PASSWORD() throws Exception {
+	public void test004_VALID_MAIL_NOT_ENTERED_PASSWORD_submitHTTPS() throws Exception {
 		
 	// Precondition 1
 		driver.goToPage(/* page */ LOGIN_PAGE);
@@ -123,7 +123,7 @@ public class LoginSubmit {
 		}
 	)
 	@Test
-	public void test005_submitHTTPS_INVALID_MAIL() throws Exception {
+	public void test005_INVALID_MAIL_submitHTTPS() throws Exception {
 		
 	// Precondition 1
 		driver.goToPage(/* page */ LOGIN_PAGE);
@@ -148,7 +148,7 @@ public class LoginSubmit {
 		}
 	)
 	@Test
-	public void test006_submitHTTPS_NOT_ENTERED_MAIL_VALID_PASSWORD() throws Exception {
+	public void test006_NOT_ENTERED_MAIL_VALID_PASSWORD_submitHTTPS() throws Exception {
 		
 	// Precondition 1
 		driver.goToPage(/* page */ LOGIN_PAGE);
@@ -173,7 +173,7 @@ public class LoginSubmit {
 		}
 	)
 	@Test
-	public void test007_submitHTTPS_NOT_ENTERED_MAIL_NOT_ENTERED_PASSWORD() throws Exception {
+	public void test007_NOT_ENTERED_MAIL_NOT_ENTERED_PASSWORD_submitHTTPS() throws Exception {
 		
 	// Precondition 1
 		driver.goToPage(/* page */ LOGIN_PAGE);
