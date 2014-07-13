@@ -587,3 +587,48 @@ file LoginTestSuite.testspec:
 	run strategy goal loginTests with oracle goal loginOracle
 		apply "/java.xslt" output "generated-tests/java"
 		report  "report/testcoverage.xml"
+
+All strategies are moved to file LoginStrategies.testspec and the oracle goes to file LoginOracles.testspec.
+
+##Step 22. Use test step counters
+
+For keeping track of the test step numbers test step counters can be used.
+
+Declare global test step counters used by strategies.
+
+file LoginStrategies.testspec:
+
+	global 
+		val arrangeSteps=stepCounter("arrange")
+
+Reserve one precondition step for log-in strategy and two precondition steps for submit strategy. 
+
+		val loginArrange = arrangeSteps.nextSubsequence(1)
+		val submitArrange = arrangeSteps.nextSubsequence(2)
+
+Let verification steps for different strategies be counted in parallel.
+	
+		val assertSteps=stepCounter("assert")
+		val submitAssert = LoginStrategies.assertSteps.copy
+		val formatAssert = LoginStrategies.assertSteps.copy
+
+The step counters can now be used as follows:
+
+	strategy loginTests 
+	(...)
+		let (loginArrange.next) be "go to page(:page)"
+	(...)
+
+	strategy submitTest
+	(...)
+		let script be "login/LoginSubmit"
+		let (submitArrange.next) be "enter mail address(:email)"
+		let (submitArrange.next) be "enter password(:password)"
+		let (submitAssert.next) be "checkPage(:pageAfterSubmit)"
+	(...)
+
+	strategy formatTest
+		
+		let script be "login/LoginFormat"
+		let (formatAssert.next) be "entered password is not visible"
+		let [R2] be :(formatAssert)
