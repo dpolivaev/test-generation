@@ -1,4 +1,4 @@
-package org.dpolivaev.testgeneration.engine.strategies;
+package org.dpolivaev.testgeneration.engine.strategies.internal;
 
 @SuppressWarnings("serial")
 public class CounterIndexOutOfBoundsException extends IndexOutOfBoundsException {

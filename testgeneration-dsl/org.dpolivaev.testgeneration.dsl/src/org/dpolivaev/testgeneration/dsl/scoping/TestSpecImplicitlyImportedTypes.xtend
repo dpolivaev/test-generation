@@ -7,7 +7,7 @@ import org.eclipse.xtext.common.types.JvmType
 import org.eclipse.emf.ecore.resource.Resource
 import com.google.common.collect.Lists
 import org.dpolivaev.testgeneration.engine.ruleengine.SpecialValue
-import org.dpolivaev.testgeneration.engine.strategies.PropertyCounter
+import org.dpolivaev.testgeneration.engine.strategies.StepCounter
 
 @Singleton
 class TestSpecImplicitlyImportedTypes extends ImplicitlyImportedTypes {
@@ -24,6 +24,6 @@ class TestSpecImplicitlyImportedTypes extends ImplicitlyImportedTypes {
 
 	override protected List<Class<?>> getStaticImportClasses() {
 		return Lists.<Class<?>> newArrayList(
-			ArrayLiterals, CollectionLiterals, InputOutput, SpecialValue, PropertyCounter);
+			ArrayLiterals, CollectionLiterals, InputOutput, SpecialValue, StepCounter);
 	}
 }
