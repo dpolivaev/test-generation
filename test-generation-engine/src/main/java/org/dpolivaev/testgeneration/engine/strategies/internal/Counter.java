@@ -20,7 +20,7 @@ public class Counter {
 	private void addIncrement(int nextIncrement) {
 		value += this.nextIncrement;
 		if(value >= bound)
-			throw new CounterIndexOutOfBoundsException();
+			throw new CounterIndexOutOfBoundsException("value " + value + " exceeds bound " + bound);
 		this.nextIncrement = nextIncrement;
 	}
 	
@@ -49,8 +49,10 @@ public class Counter {
 	public Counter subsequence(int begin, int length) {
 		int subsequenceBegin = value + begin;
 		int subsequenceBound = subsequenceBegin + length;
-		if(subsequenceBegin < 0 || subsequenceBound >= bound)
-			throw new CounterIndexOutOfBoundsException();
+		if(subsequenceBegin <= 0)
+			throw new CounterIndexOutOfBoundsException("non positive new sequence bound " + subsequenceBound);
+		if(subsequenceBound > bound)
+			throw new CounterIndexOutOfBoundsException("new sequence bound " + subsequenceBound + " greater than own bound " + bound);
 		return new Counter(subsequenceBegin, subsequenceBound, 0);
 	}
 
