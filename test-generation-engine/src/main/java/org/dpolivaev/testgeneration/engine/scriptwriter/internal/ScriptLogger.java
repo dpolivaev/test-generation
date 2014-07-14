@@ -37,23 +37,16 @@ public class ScriptLogger implements PropertyHandler, ErrorHandler {
 
 	@Override
 	public void handleError(Exception error, PropertyContainer propertyContainer) {
-		boolean appendsReasons = assignmentFormatter.appendsReasons();
-		String propertySeparator = assignmentFormatter.getPropertySeparator();
-		try{
-			assignmentFormatter.appendReasons(true);
-			assignmentFormatter.setPropertySeparator("\n");
-			try {
-				log.append(error.getMessage() + '\n');
-				log.append(propertyContainer.getCombinationCounter() + " : "
-						+ assignmentFormatter.format(propertyContainer) + '\n');
-				log.flush();
-			} catch (IOException e) {
-				throw Utils.runtimeException(e);
-			}
-		}
-		finally{
-			assignmentFormatter.appendReasons(appendsReasons);
-			assignmentFormatter.setPropertySeparator(propertySeparator);
+		AssignmentFormatter assignmentFormatter = AssignmentFormatter.create("=", "\n");
+		assignmentFormatter.appendReasons(true);
+		assignmentFormatter.excludeUndefined(false);
+		try {
+			log.append(error.getMessage() + '\n');
+			log.append(propertyContainer.getCombinationCounter() + " : "
+					+ assignmentFormatter.format(propertyContainer) + '\n');
+			log.flush();
+		} catch (IOException e) {
+			throw Utils.runtimeException(e);
 		}
 	}
 

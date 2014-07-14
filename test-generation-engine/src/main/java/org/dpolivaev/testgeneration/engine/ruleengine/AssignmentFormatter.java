@@ -22,7 +22,7 @@ public class AssignmentFormatter {
         patternBasedIncludingAssignmentFilter = new PatternBasedIncludingAssignmentFilter();
         shouldFormatIteratingRulesOnly = false;
         excludeUndefined = false;
-        excludeUndefined = false;
+        includesHidden = false;
     }
     
     public AssignmentFormatter(String propertySeparator,
