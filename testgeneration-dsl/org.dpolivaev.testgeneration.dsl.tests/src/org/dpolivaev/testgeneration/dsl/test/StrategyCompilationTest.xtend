@@ -248,6 +248,16 @@ class StrategyCompilationTest {
 		'''.assertCompilesToFile(testName)
 	}
 
+	@Test def withStrategyAppliedTwice() {
+		'''
+			strategy other
+			strategy first
+				apply other
+				apply other
+			run strategy goal first
+		'''.assertCompilesToFile(testName)
+	}
+
 	@Test def withAppliedStrategyAndConditions() {
 		'''
 			strategy other

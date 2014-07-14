@@ -42,6 +42,7 @@ import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 import static extension org.dpolivaev.testgeneration.dsl.jvmmodel.StrategyCompiler.*
 import org.eclipse.xtext.util.Strings
 import org.eclipse.xtext.xbase.typesystem.computation.NumberLiterals
+import java.util.HashSet
 
 class StrategyInferrer{
 	static val OPTIMIZE_FOR_DEBUG = true
@@ -200,23 +201,28 @@ class StrategyInferrer{
 
 	def private void addAppliedStrategyVariables(ITreeAppendable it, org.dpolivaev.testgeneration.dsl.testspec.Strategy strategy){
 		val contents = EcoreUtil2.eAllContents(strategy)
+		val firstTimeAddedStrategies = new HashSet<String>
 		for(obj : contents){
 			if (obj instanceof StrategyReference){
-				append(RequirementBasedStrategy)
 				val strategyMethodName = methods.get(STRATEGY, obj.expr)
-				append(''' _applied«strategyMethodName»''')
-				append(';')
-				newLine
+				if (firstTimeAddedStrategies.add(strategyMethodName)) {
+					append(RequirementBasedStrategy)
+					append(''' _applied«strategyMethodName»''')
+					append(';')
+					newLine
+				}
 			}
 		}
 	}
 
 	def private void addAppliedStrategyItems(ITreeAppendable it, org.dpolivaev.testgeneration.dsl.testspec.Strategy strategy){
 		val contents = EcoreUtil2.eAllContents(strategy)
+		val firstTimeAddedStrategies = new HashSet<String>
 		for(obj : contents){
 			if (obj instanceof StrategyReference){
 				val strategyMethodName = methods.get(STRATEGY, obj.expr)
-				append('''.addRequiredItemsFrom(_applied«strategyMethodName»)''')
+				if(firstTimeAddedStrategies.add(strategyMethodName))
+					append('''.addRequiredItemsFrom(_applied«strategyMethodName»)''')
 			}
 		}
 	}
