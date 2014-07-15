@@ -7,15 +7,15 @@ import org.dpolivaev.testgeneration.engine.coverage.RequirementBasedStrategy;
 @SuppressWarnings("all")
 public class MyFile {
   public static RequirementBasedStrategy other() {
-    return new _MyFile_other_StrategyFactory().other();
+    return new _MyFile_other_StrategyFactory0().other();
   }
   
   public static RequirementBasedStrategy first() {
-    return new _MyFile_first_StrategyFactory().first();
+    return new _MyFile_first_StrategyFactory1().first();
   }
 }
 
-File 2 : _MyFile_first_StrategyFactory.java
+File 2 : _MyFile_first_StrategyFactory1.java
 
 import com.google.common.base.Objects;
 import org.dpolivaev.testgeneration.engine.coverage.CoverageEntry;
@@ -28,7 +28,7 @@ import org.dpolivaev.testgeneration.engine.ruleengine.Strategy;
 import org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider;
 
 @SuppressWarnings("all")
-class _MyFile_first_StrategyFactory {
+class _MyFile_first_StrategyFactory1 {
   private static int _instanceCounter = 0;
   
   private int _instanceId = _instanceCounter++;
@@ -50,20 +50,20 @@ class _MyFile_first_StrategyFactory {
     _strategy.addRule(RuleBuilder.Factory.iterate("x").over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {return 1;
     }}));
-    _strategy.addRule(RuleBuilder.Factory.iterate(" _MyFile_first_StrategyFactory.condition1#" +  _instanceId).over(new ValueProvider(){
+    _strategy.addRule(RuleBuilder.Factory.iterate(" _MyFile_first_StrategyFactory1.condition1#" +  _instanceId).over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {
         Boolean _condition = condition1(propertyContainer);
         return _condition;
     }}).asDefaultRule());
     _strategy.addRules(RuleBuilder.Factory._if(new Condition(){
       @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
-        return propertyContainer.<Boolean>get(" _MyFile_first_StrategyFactory.condition1#" +  _instanceId);
+        return propertyContainer.<Boolean>get(" _MyFile_first_StrategyFactory1.condition1#" +  _instanceId);
     }}).with((_applied_strategy2 = StrategyConverter.toRequirementBasedStrategy(_strategy2())).getStrategy()).asRules());
     return new RequirementBasedStrategy(_requiredItems).with(_strategy).addRequiredItemsFrom(_applied_strategy2);
   }
 }
 
-File 3 : _MyFile_other_StrategyFactory.java
+File 3 : _MyFile_other_StrategyFactory0.java
 
 import org.dpolivaev.testgeneration.engine.coverage.CoverageEntry;
 import org.dpolivaev.testgeneration.engine.coverage.RequirementBasedStrategy;
@@ -73,7 +73,7 @@ import org.dpolivaev.testgeneration.engine.ruleengine.Strategy;
 import org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider;
 
 @SuppressWarnings("all")
-class _MyFile_other_StrategyFactory {
+class _MyFile_other_StrategyFactory0 {
   private static int _instanceCounter = 0;
   
   private int _instanceId = _instanceCounter++;

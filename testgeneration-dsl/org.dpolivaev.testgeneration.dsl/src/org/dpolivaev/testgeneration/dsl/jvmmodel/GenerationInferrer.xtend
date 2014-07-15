@@ -164,7 +164,7 @@ class GenerationInferrer{
 					parameters += parameter.toParameter(parameter.name, parameter.parameterType)
 				body = [appendable |
 					val it = appendable.trace(strategy)
-					val className = StrategyInferrer.strategyClassName(jvmType.simpleName, strategy.name)
+					val className = StrategyInferrer.strategyClassName(jvmType.simpleName, strategy)
 					append('''return new «className»(''')
 					var firstParameter = true
 					for(parameter:strategy.parameters){

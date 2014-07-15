@@ -7,15 +7,15 @@ import org.dpolivaev.testgeneration.engine.coverage.RequirementBasedStrategy;
 @SuppressWarnings("all")
 public class MyFile {
   public static RequirementBasedStrategy other() {
-    return new _MyFile_other_StrategyFactory().other();
+    return new _MyFile_other_StrategyFactory0().other();
   }
   
   public static RequirementBasedStrategy first() {
-    return new _MyFile_first_StrategyFactory().first();
+    return new _MyFile_first_StrategyFactory1().first();
   }
 }
 
-File 2 : _MyFile_first_StrategyFactory.java
+File 2 : _MyFile_first_StrategyFactory1.java
 
 import org.dpolivaev.testgeneration.engine.coverage.CoverageEntry;
 import org.dpolivaev.testgeneration.engine.coverage.RequirementBasedStrategy;
@@ -26,7 +26,7 @@ import org.dpolivaev.testgeneration.engine.ruleengine.Strategy;
 import org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider;
 
 @SuppressWarnings("all")
-class _MyFile_first_StrategyFactory {
+class _MyFile_first_StrategyFactory1 {
   private static int _instanceCounter = 0;
   
   private int _instanceId = _instanceCounter++;
@@ -49,7 +49,7 @@ class _MyFile_first_StrategyFactory {
   }
 }
 
-File 3 : _MyFile_other_StrategyFactory.java
+File 3 : _MyFile_other_StrategyFactory0.java
 
 import org.dpolivaev.testgeneration.engine.coverage.CoverageEntry;
 import org.dpolivaev.testgeneration.engine.coverage.RequirementBasedStrategy;
@@ -59,7 +59,7 @@ import org.dpolivaev.testgeneration.engine.ruleengine.Strategy;
 import org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider;
 
 @SuppressWarnings("all")
-class _MyFile_other_StrategyFactory {
+class _MyFile_other_StrategyFactory0 {
   private static int _instanceCounter = 0;
   
   private int _instanceId = _instanceCounter++;

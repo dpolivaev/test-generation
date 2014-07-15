@@ -75,7 +75,7 @@ class TestSpecJvmModelInferrer extends AbstractModelInferrer {
 	}
 	
 	private def inferStrategy(IJvmDeclaredTypeAcceptor acceptor, String classPackage, String factoryName, Strategy strategy) {
-		val qualifiedClassName = qualifiedClassName(classPackage, StrategyInferrer.strategyClassName(factoryName, strategy.name))
+		val qualifiedClassName = qualifiedClassName(classPackage, StrategyInferrer.strategyClassName(factoryName, strategy))
 		acceptor.accept(strategy.toClass(qualifiedClassName)).initializeLater([
 			visibility = JvmVisibility::DEFAULT
 			injector.getInstance(StrategyInferrer).inferStrategy(it, strategy)

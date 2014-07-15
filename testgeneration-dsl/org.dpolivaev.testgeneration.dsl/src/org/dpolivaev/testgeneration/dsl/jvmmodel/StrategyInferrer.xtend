@@ -27,7 +27,6 @@ import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.common.types.JvmGenericType
-import org.eclipse.xtext.common.types.JvmType
 import org.eclipse.xtext.common.types.JvmTypeReference
 import org.eclipse.xtext.common.types.JvmVisibility
 import org.eclipse.xtext.xbase.XBooleanLiteral
@@ -40,9 +39,9 @@ import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 
 import static extension org.dpolivaev.testgeneration.dsl.jvmmodel.StrategyCompiler.*
-import org.eclipse.xtext.util.Strings
 import org.eclipse.xtext.xbase.typesystem.computation.NumberLiterals
 import java.util.HashSet
+import org.dpolivaev.testgeneration.dsl.testspec.Generation
 
 class StrategyInferrer{
 	static val OPTIMIZE_FOR_DEBUG = true
@@ -657,21 +656,10 @@ class StrategyInferrer{
 		append('}')
 	}
 
-
-	def private appendReference(ITreeAppendable it, String prefix, XExpression expr) {
-		if(expr != null){
-			val methodName = methods.get(prefix, expr)
-			if(methodName != null){
-				append(methodName)
-				append('()')
-			}
-			else
-				append(expr.toString)
-		}
-	}
-
-	static def strategyClassName(String factoryName, String strategyName) {
-		"_" + factoryName + "_" + strategyName + "_StrategyFactory"
+	static def strategyClassName(String factoryName, org.dpolivaev.testgeneration.dsl.testspec.Strategy strategy) {
+		val script = strategy.eContainer as Generation
+		val strategyNumber = Math.max(0, script.strategies.indexOf(strategy))
+		"_" + factoryName + "_" + strategy.name + "_StrategyFactory" + strategyNumber
 	}
 
 }

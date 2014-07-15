@@ -23,7 +23,7 @@ public class MyFile {
   }
   
   public static RequirementBasedStrategy first(final String string) {
-    return new _MyFile_first_StrategyFactory(string).first();
+    return new _MyFile_first_StrategyFactory0(string).first();
   }
   
   void run1() {
@@ -62,21 +62,21 @@ public class MyFile {
   }
 }
 
-File 2 : _MyFile_first_StrategyFactory.java
+File 2 : _MyFile_first_StrategyFactory0.java
 
 import org.dpolivaev.testgeneration.engine.coverage.CoverageEntry;
 import org.dpolivaev.testgeneration.engine.coverage.RequirementBasedStrategy;
 import org.dpolivaev.testgeneration.engine.ruleengine.Strategy;
 
 @SuppressWarnings("all")
-class _MyFile_first_StrategyFactory {
+class _MyFile_first_StrategyFactory0 {
   private static int _instanceCounter = 0;
   
   private int _instanceId = _instanceCounter++;
   
   private final String string;
   
-  public _MyFile_first_StrategyFactory(final String string) {
+  public _MyFile_first_StrategyFactory0(final String string) {
     this.string = string;
     
   }

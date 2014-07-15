@@ -491,6 +491,15 @@ class StrategyCompilationTest {
 		'''.assertCompilesToFile(testName)
 	}
 
+	@Test def withOverloadedParameter() {
+		'''
+			strategy first
+				apply first(1)
+			strategy first(int p)
+				let default x be p
+		'''.assertCompilesToFile(testName)
+	}
+
 	@Test def withParameterizedRuleName() {
 		'''
 			strategy first(int p)
