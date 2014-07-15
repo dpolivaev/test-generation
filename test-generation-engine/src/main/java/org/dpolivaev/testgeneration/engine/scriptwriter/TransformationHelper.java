@@ -38,6 +38,10 @@ public class TransformationHelper {
 	public static String literal(String input){
 		return new IdConverter().literal(input);
 	}
+	
+	public static String replaceAll(String input, String regex, String replacement){
+		return input.replaceAll(regex, replacement);
+	}
 
 	public static String substringBeforeLast(String input, String delimiter){
 		final int lastIndexOfDelimiter = input.lastIndexOf(delimiter);

@@ -122,7 +122,7 @@ import org.dpolivaev.testgeneration.engine.java.GoalCoverage;
 
 </xsl:text>
 		<xsl:if test="Parameter[@name='imports']">
-			<xsl:value-of select="Parameter[@name='imports']"/>
+			<xsl:value-of select="java:replace-all(Parameter[@name='imports'], '&#xa;\s+', '&#xa;')"/>
 			<xsl:call-template name="eol"/>
 		</xsl:if>
 		<xsl:call-template name="driverPackage" />
@@ -222,7 +222,7 @@ import org.dpolivaev.testgeneration.engine.java.GoalCoverage;
 		<xsl:text>/* </xsl:text>
 		<xsl:value-of select="@name"/>
 		<xsl:text> */ </xsl:text>
-		<xsl:value-of select="text()"/>
+		<xsl:value-of select="java:literal(text())"/>
 	</xsl:template>
 	
 	<xsl:template match="Description">
