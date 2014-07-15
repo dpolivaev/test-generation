@@ -98,6 +98,14 @@ class StrategyCompilationTest {
 		'''.assertCompilesToFile(testName)
 	}	
 	
+	@Test def withExplicitTriggeredRuleAndExpressionInForEach() {
+		'''
+			strategy first
+				let "x y" be 1
+				for each ("x" " " "y") let z be 2
+		'''.assertCompilesToFile(testName)
+	}	
+	
 	@Test def withBigInteger() {
 		'''
 			strategy first

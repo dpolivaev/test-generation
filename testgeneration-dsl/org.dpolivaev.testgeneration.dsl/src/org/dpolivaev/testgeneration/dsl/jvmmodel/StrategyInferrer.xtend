@@ -87,8 +87,11 @@ class StrategyInferrer{
 				appendMethodsForValueProviders(obj)
 			if (obj instanceof RuleGroup)
 				appendRuleNameProviders(obj)
-			if (obj instanceof Rule)
-				appendRulePropertyNameProviders(obj)
+			if (obj instanceof PropertyName){
+				val handledByStrategyCompiler = obj.eContainer instanceof PropertyCall
+				if (! handledByStrategyCompiler)
+					appendPropertyNameProviders(obj)
+			}
 			else if (obj instanceof Condition)
 				appendConditions(obj)
 			if (obj instanceof StrategyReference)
@@ -113,9 +116,7 @@ class StrategyInferrer{
 	}
 
 	final static val NAME = "_name"
-	private def appendRulePropertyNameProviders(Rule rule){
-		val propertyName = rule.propertyName
-		if (propertyName != null)
+	private def appendPropertyNameProviders(PropertyName propertyName){
 			for(expr:propertyName.nameExpressions)
 				if(shouldCreateMethodFor(expr))
 					createMethod(expr, NAME, expr.inferredType, containsPropertyCall(expr))
