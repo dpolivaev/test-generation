@@ -4,7 +4,6 @@ File 1 : MyFile.java
 
 @SuppressWarnings("all")
 public class MyFile {
-  public final static MyOracle myOracle = new MyOracle();
 }
 
 File 2 : MyOracle.java

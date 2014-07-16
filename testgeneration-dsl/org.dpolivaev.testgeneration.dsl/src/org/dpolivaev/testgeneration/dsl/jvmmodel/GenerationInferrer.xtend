@@ -86,16 +86,17 @@ class GenerationInferrer{
 	
 	private def inferOracles(){
 		for(oracle:script.oracles)
-			jvmType.members += oracle.toField(oracle.name, oracle.newTypeRef(TestSpecJvmModelInferrer.qualifiedClassName(
-				script.package, oracle.name.toFirstUpper
-			))) [
-				setInitializer [
-					append('''new «oracle.name.toFirstUpper»()''')
+			if (oracle.parameters.empty)
+				jvmType.members += oracle.toField(oracle.name, oracle.newTypeRef(TestSpecJvmModelInferrer.qualifiedClassName(
+					script.package, oracle.name.toFirstUpper
+				))) [
+					setInitializer [
+						append('''new «oracle.name.toFirstUpper»()''')
+					]
+					final = true
+					visibility = JvmVisibility::PUBLIC
+					static = true
 				]
-				final = true
-				visibility = JvmVisibility::PUBLIC
-				static = true
-			]
 	}
 
 	private def inferExpressions(){
