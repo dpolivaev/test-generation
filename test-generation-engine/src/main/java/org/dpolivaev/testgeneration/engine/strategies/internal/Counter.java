@@ -38,15 +38,7 @@ public class Counter {
 		return new Counter(value, bound, nextIncrement);
 	}
 
-	public Counter current() {
-		return at(0);
-	}
-
-	public Counter at(int index) {
-		return subsequence(index, 1);
-	}
-
-	public Counter subsequence(int begin, int length) {
+	private Counter subsequence(int begin, int length) {
 		int subsequenceBegin = value + begin;
 		int subsequenceBound = subsequenceBegin + length;
 		if(subsequenceBegin <= 0)
@@ -54,11 +46,6 @@ public class Counter {
 		if(subsequenceBound > bound)
 			throw new CounterIndexOutOfBoundsException("new sequence bound " + subsequenceBound + " greater than own bound " + bound);
 		return new Counter(subsequenceBegin, subsequenceBound, 0);
-	}
-
-	public Counter subsequence(int begin) {
-		int subsequenceBegin = value + begin;
-		return subsequence(begin, bound-subsequenceBegin);
 	}
 
 	public int getValue() {

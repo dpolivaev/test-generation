@@ -30,24 +30,8 @@ public class StepCounter {
 		return withCounter(counter.nextSubsequence(length));
 	}
 
-	public StepCounter subsequence(int startValue) {
-		return withCounter(counter.subsequence(startValue));
-	}
-
 	public StepCounter copy() {
 		return withCounter(counter.copy());
-	}
-
-	public StepCounter current() {
-		return withCounter(counter.current());
-	}
-
-	public StepCounter at(int index) {
-		return withCounter(counter.at(index));
-	}
-
-	public StepCounter subsequence(int begin, int length) {
-		return withCounter(counter.subsequence(begin, length));
 	}
 
 	private StepCounter withCounter(Counter counter) {
