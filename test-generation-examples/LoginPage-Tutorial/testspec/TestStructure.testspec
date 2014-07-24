@@ -9,5 +9,5 @@ strategy structure
 	let testcase.verification.alias be "assert"
 	let testcase.postprocessing.alias be "after"
 
-	let default testcase be StrategyHelper.idProvider
-	let default testcase.description be StrategyHelper.descriptionProvider
+	let lazy testcase be StrategyHelper.idProvider
+	let lazy testcase.description be StrategyHelper.descriptionProvider

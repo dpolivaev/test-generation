@@ -31,8 +31,8 @@ strategy loginTests
 
 	let (loginArrange.next) be "go to page(:page)"
 	let page be LOGIN_PAGE
-	let default password be VALID_PASSWORD
-	let default email be VALID_MAIL
+	let lazy password be VALID_PASSWORD
+	let lazy email be VALID_MAIL
 
 	let act be "submit(:protocol)"{
 		apply submitTest

@@ -14,8 +14,8 @@ strategy structure
 	let testcase.verification.alias be "assert"
 	let testcase.postprocessing.alias be "postprocessing"
 	
-	let default testcase be StrategyHelper.idProvider
-	let default testcase.description be StrategyHelper.descriptionProvider
+	let lazy testcase be StrategyHelper.idProvider
+	let lazy testcase.description be StrategyHelper.descriptionProvider
 
 
 /* 
@@ -61,10 +61,10 @@ strategy testsForSuccess
 		let (precondition.next) be "set entry time (:entry time)"
 		let (precondition.next) be "set parking duration (:weeks, :days, :hours, :minutes)"
 		
-		/* Keyword "default" means that property “assert” is lasily evaluated 
+		/* Keyword "lazy" means that property “assert” is lasily evaluated 
 		 * and can be redefined adding another value to the rule set.
 		 */
-		let default assert be "verify parking costs (:expectedCosts)"
+		let lazy assert be "verify parking costs (:expectedCosts)"
 		
 		/* 
 		 * Define multiple values for parameter “entryTime” of the second precondition.
@@ -182,7 +182,7 @@ strategy economyParkingTests
 	/*
 	 * In this example the dayCosts and expectedCosts are calculated completely by the strategy.
 	 */
-	let default dayCosts be :weeks as int * 54 + :days as int * 9
+	let lazy dayCosts be :weeks as int * 54 + :days as int * 9
 	let "parking time" be
 		"0 hours"{
 			let hours be 0
@@ -221,14 +221,14 @@ strategy testsForFailure
 			 * lot can take values from listOfValidLots defined above
 			 * Default rules do not force iteration.  
 			 */
-			let default lot be listOfValidLots with "VALET_PARKING", "SHORT_TERM_PARKING", "LONG_TERM_GARAGE_PARKING", "LONG_TERM_SURFACE_PARKING", "ECONOMY_LOT_PARKING"
+			let lazy lot be listOfValidLots with "VALET_PARKING", "SHORT_TERM_PARKING", "LONG_TERM_GARAGE_PARKING", "LONG_TERM_SURFACE_PARKING", "ECONOMY_LOT_PARKING"
 			let illegalElement be "entry date", "entry time", "entry day part", "leaving date", "leaving time", "leaving day part"
 			let (precondition.next) be ("set illegal " :illegalElement "(:wrongValue)")
 			let wrongValue be "NULL_VALUE", "BAD_VALUE"
 		},
 		"use leaving date earlier than entry date"{
 			let (precondition = stepCounter("precondition").next) be "select lot(:lot)"
-			let default lot be from listOfValidLots
+			let lazy lot be from listOfValidLots
 		}
 
 

@@ -36,8 +36,8 @@ file LoginTestSuite.testspec:
 		let testcase.verification.alias be "assert"
 		let testcase.postprocessing.alias be "after"
 
-		let default testcase be StrategyHelper.idProvider
-		let default testcase.description be StrategyHelper.descriptionProvider
+		let lazy testcase be StrategyHelper.idProvider
+		let lazy testcase.description be StrategyHelper.descriptionProvider
 
 	strategy loginTests
 		apply structure
@@ -75,8 +75,8 @@ file TestStructure.testspec:
 		let testcase.verification.alias be "assert"
 		let testcase.postprocessing.alias be "after"
 
-		let default testcase be StrategyHelper.idProvider
-		let default testcase.description be StrategyHelper.descriptionProvider
+		let lazy testcase be StrategyHelper.idProvider
+		let lazy testcase.description be StrategyHelper.descriptionProvider
 
 
 file LoginTestSuite.testspec:
@@ -383,15 +383,15 @@ The driver:
 	public void passwordFieldIsEmpty() {}
 	public void emailFieldEqualsTo(EMail notEnteredMail) {}
 
-##Step 15. Eliminating duplication by defining default values
+##Step 15. Eliminating duplication by defining lazy values
 
-Defining default property values allows to avoid duplication and to focus on the relevant test aspects.
-Here default values for properties `password` and `email` are set:
+Defining lazy property values allows to avoid duplication and to focus on the relevant test aspects.
+Here lazy values for properties `password` and `email` are set:
 
 	let arrange#1 be "go to page(:page)"
 	let page be LOGIN_PAGE
-	let default password be VALID_PASSWORD
-	let default email be VALID_MAIL
+	let lazy password be VALID_PASSWORD
+	let lazy email be VALID_MAIL
 
 	let act be
 	"submit(:protocol)"{
@@ -451,8 +451,8 @@ Strategies can include rules defined in other strategies defined in the same fil
 
 		let arrange#1 be "go to page(:page)"
 		let page be LOGIN_PAGE
-		let default password be VALID_PASSWORD
-		let default email be VALID_MAIL
+		let lazy password be VALID_PASSWORD
+		let lazy email be VALID_MAIL
 
 		let act be "submit(:protocol)"{
 			apply submitTest

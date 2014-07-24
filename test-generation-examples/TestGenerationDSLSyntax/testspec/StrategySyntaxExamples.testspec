@@ -92,7 +92,7 @@ let example be
     },
     
     /*
-     * Values for y are given by default rules.
+     * Values for y are given by lazy rules.
      * They are lazily evaluated when value of property y is requested. 
      */
 	'defaults' {
@@ -101,8 +101,8 @@ let example be
 	        'd'{
 				let y be 'A', 'B'
 	        }
-	   let default y be 'C'
-	   if :x != 'b' let default y be 'D', 'E'
+	   let lazy y be 'C'
+	   if :x != 'b' let lazy y be 'D', 'E'
 	   let z be :y
 	   },
 	   
@@ -115,15 +115,15 @@ let example be
             'd'{
                 let y be 'A', 'B'
             },
-            'e' { let default y be 'E'}
-       let default y be 'C'
-       let default y be 'C'
-       if :x != 'b' let default y be 'D', 'E'
+            'e' { let lazy y be 'E'}
+       let lazy y be 'C'
+       let lazy y be 'C'
+       if :x != 'b' let lazy y be 'D', 'E'
        let z be :y
 	},
 	
 	/*
-	 * Default rules can reference properties set by other default rules
+	 * Default rules can reference properties set by other lazy rules
 	 * which are evaluated in backward chaining 
 	 */
 	'chained defaults'{
@@ -132,11 +132,11 @@ let example be
             'd'{
                 let y be 'A', 'B'
             },
-            'e' { let default y be 'E'}
-       let default y be :z
-       if :z != 'b' let default y be :z
-       let default z be :x
-       if :x != 'b' let default y be 'D', 'E'
+            'e' { let lazy y be 'E'}
+       let lazy y be :z
+       if :z != 'b' let lazy y be :z
+       let lazy z be :x
+       if :x != 'b' let lazy y be 'D', 'E'
        let w be :y
 	},
 	
@@ -167,9 +167,9 @@ let example be
 	 */
 	"new rules override old rule's content and keep rule evaluation order" {
 	    rule x let x be "a"
-	    let default y be "A"
-	    let default y be "B"
-	    let default y be "C"
+	    let lazy y be "A"
+	    let lazy y be "B"
+	    let lazy y be "C"
 	    let z be :y
 	    rule x let x be "b"
 	    rule x let x be "c"
@@ -186,7 +186,7 @@ let example be
     
      "named value lists can be reused globally " {
     	let x be from namedListOfXValues
-    	let shuffled default y be from namedListOfXValues
+    	let shuffled lazy y be from namedListOfXValues
     	let z be :y
     		
     },
