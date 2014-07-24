@@ -332,7 +332,13 @@ class GenerationInferrer{
 				parameters += script.toParameter("args", script.newTypeRef(typeof(String)).addArrayTypeDimension)
 				body = [appendable |
 						val it = appendable.trace(script, false)
-						append('''new «className»().runAll();''')
+						append('''try{
+	new «className»().runAll();
+}
+catch(Exception e){
+	e.printStackTrace();
+	System.exit(1);
+}''')
 				]
 				visibility = JvmVisibility::PUBLIC
 				static = true

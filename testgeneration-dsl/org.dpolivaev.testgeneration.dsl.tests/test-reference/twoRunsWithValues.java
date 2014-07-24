@@ -59,7 +59,13 @@ public class MyFile {
   }
   
   public static void main(final String[] args) {
-    new MyFile().runAll();
+    try{
+    	new MyFile().runAll();
+    }
+    catch(Exception e){
+    	e.printStackTrace();
+    	System.exit(1);
+    }
   }
   
   void runAll() {
