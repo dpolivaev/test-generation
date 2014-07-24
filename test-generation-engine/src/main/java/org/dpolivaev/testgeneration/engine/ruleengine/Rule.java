@@ -4,11 +4,11 @@ import java.util.Set;
 
 import org.dpolivaev.testgeneration.engine.ruleengine.internal.PropertyAssignedEvent;
 
-// triggered A <- default B
-// default B <- default A
+// triggered A <- lazy B
+// lazy B <- lazy A
 // => triggered A can not be assigned!
 
-// triggered A -> default B
+// triggered A -> lazy B
 
 public interface Rule {
 
@@ -34,7 +34,7 @@ public interface Rule {
 
     void propertyRequired(EngineState engineState);
 
-    boolean isDefaultRule();
+    boolean isLazyRule();
 
     boolean forcesIteration();
 

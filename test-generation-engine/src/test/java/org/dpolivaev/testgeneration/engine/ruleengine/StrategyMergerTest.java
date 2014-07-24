@@ -44,12 +44,12 @@ public class StrategyMergerTest {
 	}
 
 	@Test
-	public void addsDefaultRuleToTarget() {
-		RuleBuilder defaultRule = RuleBuilder.Factory.iterate("a").over(1).asDefaultRule();
-		source.addRule(defaultRule);
+	public void addsLazyRuleToTarget() {
+		RuleBuilder lazyRule = RuleBuilder.Factory.iterate("a").over(1).asLazyRule();
+		source.addRule(lazyRule);
 		new StrategyMerger().moveRuleFrom(source).to(target);
 		target.initialize(null);
-		assertRulesContainRuleForProperty(target.defaultRules(), "a");
+		assertRulesContainRuleForProperty(target.lazyRules(), "a");
 	}
 
 	@Test
@@ -69,9 +69,9 @@ public class StrategyMergerTest {
 	}
 
 	@Test
-	public void addsNoTriggersToDefaultRules() {
-		RuleBuilder defaultRule = RuleBuilder.Factory.iterate("a").over(1).asDefaultRule();
-		source.addRule(defaultRule);
+	public void addsNoTriggersToLazyRules() {
+		RuleBuilder lazyRule = RuleBuilder.Factory.iterate("a").over(1).asLazyRule();
+		source.addRule(lazyRule);
 		new StrategyMerger().withTrigger("b").moveRuleFrom(source).to(target);
 	}
 

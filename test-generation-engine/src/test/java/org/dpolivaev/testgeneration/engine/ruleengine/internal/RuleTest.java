@@ -130,22 +130,22 @@ public class RuleTest {
     }
     
     @Test
-    public void defaultRuleWithTwoValues_doesNotforceIteration() {
-        Rule rule = iterate("name").over("1", "2").asDefaultRule().create();
+    public void lazyRuleWithTwoValues_doesNotforceIteration() {
+        Rule rule = iterate("name").over("1", "2").asLazyRule().create();
         assertThat(rule.forcesIteration(), equalTo(false));
     }
     
     @Test
-    public void ifTriggeringPropertiesAreNotSet_triggeredDefaultRuleIsNotFired() {
-        Rule rule = iterate("name").over("1", "2").when("x").asDefaultRule().create();
+    public void ifTriggeringPropertiesAreNotSet_triggeredLazyRuleIsNotExecuted() {
+        Rule rule = iterate("name").over("1", "2").when("x").asLazyRule().create();
         when(engineState.containsTriggeringPropertyValue("x")).thenReturn(false);
         rule.propertyRequired(engineState);
         verify(engineState, Mockito.never()).setPropertyValue(Mockito.<Rule>any(), Mockito.any(), Mockito.anyBoolean());
     }
     
     @Test
-    public void ifTriggeringPropertiesAreSet_triggeredDefaultRuleIsFired() {
-        Rule rule = iterate("name").over("1", "2").when("x").asDefaultRule().create();
+    public void ifTriggeringPropertiesAreSet_triggeredLazyRuleIsFired() {
+        Rule rule = iterate("name").over("1", "2").when("x").asLazyRule().create();
         when(engineState.containsTriggeringPropertyValue("x")).thenReturn(true);
         rule.propertyRequired(engineState);
         verify(engineState).setPropertyValue(Mockito.eq(rule), Mockito.any(), Mockito.anyBoolean());
@@ -266,19 +266,19 @@ public class RuleTest {
     @Test
     public void topRule_canTriggerOtherRules() {
         Rule topRule = iterate("x").over("1").create();
-        assertThat(topRule.isDefaultRule(), equalTo(false));
+        assertThat(topRule.isLazyRule(), equalTo(false));
     }
 
     @Test
     public void triggeredRule_canTriggerOtherRules() {
         Rule triggeredRule = iterate("x").over("1").when("y").create();
-        assertThat(triggeredRule.isDefaultRule(), equalTo(false));
+        assertThat(triggeredRule.isLazyRule(), equalTo(false));
     }
 
     @Test
-    public void defaultRule_canNotTriggerOtherRules() {
-        Rule defaultRule = iterate("x").over("1").asDefaultRule().create();
-        assertThat(defaultRule.isDefaultRule(), equalTo(true));
+    public void lazyRule_canNotTriggerOtherRules() {
+        Rule lazyRule = iterate("x").over("1").asLazyRule().create();
+        assertThat(lazyRule.isLazyRule(), equalTo(true));
     }
 
 }

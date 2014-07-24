@@ -142,20 +142,20 @@ public class AlternatingRuleTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void combinedRuleForDefaultRuleAndTriggeringRuleAreNotAllowed() {
-        new AlternatingRule(iterate("a").create(), iterate("a").asDefaultRule().create());
+    public void combinedRuleForLazyRuleAndTriggeringRuleAreNotAllowed() {
+        new AlternatingRule(iterate("a").create(), iterate("a").asLazyRule().create());
     }
 
     @Test(expected = InconsistentRuleException.class)
     public void conflictingTopRules() {
         Rule rule1 = mock(Rule.class);
         when(rule1.getTargetedPropertyName()).thenReturn("x");
-        when(rule1.isDefaultRule()).thenReturn(false);
+        when(rule1.isLazyRule()).thenReturn(false);
         when(rule1.isValueAddedToCurrentCombination()).thenReturn(true);
         when(rule1.blocksRequiredProperties()).thenReturn(true);
         Rule rule2 = mock(Rule.class);
         when(rule2.getTargetedPropertyName()).thenReturn("x");
-        when(rule1.isDefaultRule()).thenReturn(false);
+        when(rule1.isLazyRule()).thenReturn(false);
         when(rule2.isValueAddedToCurrentCombination()).thenReturn(false).thenReturn(true);
         when(rule2.blocksRequiredProperties()).thenReturn(true);
         EngineState state = mock(EngineState.class);

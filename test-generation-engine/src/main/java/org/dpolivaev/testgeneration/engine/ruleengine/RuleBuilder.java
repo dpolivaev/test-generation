@@ -13,7 +13,7 @@ import java.util.Set;
 
 import org.dpolivaev.testgeneration.engine.ruleengine.internal.ConjunctCondition;
 import org.dpolivaev.testgeneration.engine.ruleengine.internal.ConstantValue;
-import org.dpolivaev.testgeneration.engine.ruleengine.internal.DefaultStatefulRule;
+import org.dpolivaev.testgeneration.engine.ruleengine.internal.LazyStatefulRule;
 import org.dpolivaev.testgeneration.engine.ruleengine.internal.OrderedValueProviders;
 import org.dpolivaev.testgeneration.engine.ruleengine.internal.ShuffledValueProviders;
 import org.dpolivaev.testgeneration.engine.ruleengine.internal.TriggeredStatefulRule;
@@ -32,7 +32,7 @@ public class RuleBuilder{
     private Condition condition = Condition.TRUE;
     private Order order = Order.defaultOrder;
     private int previousValueCount;
-	private boolean asDefaultRule;
+	private boolean asLazyRule;
 	private String name;
 	private ValueProvider nameProvider;
 	private String oneTimeTriggeringPropertyName;
@@ -122,19 +122,19 @@ public class RuleBuilder{
         return this;
     }
 
-    public RuleBuilder asDefaultRule() {
-    	asDefaultRule = true;
+    public RuleBuilder asLazyRule() {
+    	asLazyRule = true;
     	return this;
     }
     
     public RuleBuilder asTriggeredRule() {
-    	asDefaultRule = false;
+    	asLazyRule = false;
     	return this;
     }
     
     public Rule create(){
-    	if(asDefaultRule)
-    		return new DefaultStatefulRule(triggeringProperties, this.condition, this.targetedPropertyName, //
+    	if(asLazyRule)
+    		return new LazyStatefulRule(triggeringProperties, this.condition, this.targetedPropertyName, //
     				ruleValues());
         if (triggeringProperties.isEmpty())
             this.triggeringProperties = Utils.set();

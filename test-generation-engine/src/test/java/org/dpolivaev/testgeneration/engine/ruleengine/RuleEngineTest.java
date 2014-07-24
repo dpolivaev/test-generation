@@ -33,8 +33,8 @@ public class RuleEngineTest {
 	}
 
 	@Test
-	public void containsAllDefaultProperties() {
-		Mockito.when(strategy.availableDefaultProperties()).thenReturn(Utils.set("name"));
+	public void containsAllLazyProperties() {
+		Mockito.when(strategy.availableLazyProperties()).thenReturn(Utils.set("name"));
 		ruleEngine.addHandler(new PropertyCombinationHandler() {
 			
 			@Override

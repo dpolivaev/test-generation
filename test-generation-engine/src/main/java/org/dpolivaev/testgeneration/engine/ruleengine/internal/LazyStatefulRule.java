@@ -1,16 +1,13 @@
 package org.dpolivaev.testgeneration.engine.ruleengine.internal;
 
-import java.util.Collection;
 import java.util.Set;
 
 import org.dpolivaev.testgeneration.engine.ruleengine.Condition;
 import org.dpolivaev.testgeneration.engine.ruleengine.EngineState;
-import org.dpolivaev.testgeneration.engine.ruleengine.Rule;
-import org.dpolivaev.testgeneration.engine.ruleengine.RuleBuilder;
 
-public class DefaultStatefulRule extends StatefulRule {
+public class LazyStatefulRule extends StatefulRule {
 
-	public DefaultStatefulRule(Set<String> triggeredBy, Condition condition, String targetedPropertyName, ValueProviders ruleValues) {
+	public LazyStatefulRule(Set<String> triggeredBy, Condition condition, String targetedPropertyName, ValueProviders ruleValues) {
         super(triggeredBy, condition, targetedPropertyName, ruleValues);
     }
 
@@ -26,7 +23,7 @@ public class DefaultStatefulRule extends StatefulRule {
 	}
 
 	@Override
-    public boolean isDefaultRule() {
+    public boolean isLazyRule() {
         return true;
     }
 

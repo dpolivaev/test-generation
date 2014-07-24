@@ -40,10 +40,10 @@ public class StrategyTest {
     }
 
     @Test
-    public void afterAddingTopRule_doesNotReturnDefaultRule(){
+    public void afterAddingTopRule_doesNotReturnLazyRule(){
         Rule rule = iterate("x").over("a").create();
         strategy.addRule(rule);
-        assertThat(strategy.defaultRules(), not(hasItem(rule)));
+        assertThat(strategy.lazyRules(), not(hasItem(rule)));
     }
 
     @Test
@@ -56,15 +56,15 @@ public class StrategyTest {
     }
 
     @Test
-    public void afterAddingDefaultRule_returnsDefaultRule(){
-        Rule rule = iterate("x").over("a").asDefaultRule().create();
+    public void afterAddingLazyRule_returnsLazyRule(){
+        Rule rule = iterate("x").over("a").asLazyRule().create();
         strategy.addRule(rule);
-        assertThat(strategy.defaultRules(), hasItem(rule));
+        assertThat(strategy.lazyRules(), hasItem(rule));
     }
 
     @Test
-    public void afterAddingDefaultRule_doesNotReturnTopRule(){
-        Rule rule = iterate("x").over("a").asDefaultRule().create();
+    public void afterAddingLazyRule_doesNotReturnTopRule(){
+        Rule rule = iterate("x").over("a").asLazyRule().create();
         strategy.addRule(rule);
         assertThat(strategy.triggeredRules(), not(hasItem(rule)));
     }
@@ -80,8 +80,8 @@ public class StrategyTest {
     }
     
     @Test
-    public void requestedUnknownDefaultProperty_returnsSpecialRule(){
-        assertThat(strategy.getDefaultRulesForProperty("unknownProperty"), notNullValue());
+    public void requestedUnknownLazyProperty_returnsSpecialRule(){
+        assertThat(strategy.getLazyRulesForProperty("unknownProperty"), notNullValue());
     }
     
     @Test
@@ -89,8 +89,8 @@ public class StrategyTest {
         Strategy strategy2 = new Strategy();
         RuleBuilder ruleP = iterate("p").over("a");
         strategy.addRule(ruleP);
-        RuleBuilder defaultRuleP = iterate("p").over("a").asDefaultRule();
-        strategy2.addRule(defaultRuleP);
+        RuleBuilder lazyRuleP = iterate("p").over("a").asLazyRule();
+        strategy2.addRule(lazyRuleP);
         RuleBuilder ruleQ = iterate("x").over("a").when("q");
         strategy2.addRule(ruleQ);
         
@@ -98,6 +98,6 @@ public class StrategyTest {
         combinedStrategy.initialize(null);
         assertThat(combinedStrategy.triggeredRules(), hasItem(rulePropertyNameMatches("p")));
         assertThat(combinedStrategy.triggeredRules(), hasItem(rulePropertyNameMatches("x")));
-        assertThat(combinedStrategy.defaultRules(), hasItem(rulePropertyNameMatches("p")));
+        assertThat(combinedStrategy.lazyRules(), hasItem(rulePropertyNameMatches("p")));
     }
 }

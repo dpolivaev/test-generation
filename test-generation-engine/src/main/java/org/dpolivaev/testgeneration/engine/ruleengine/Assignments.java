@@ -92,6 +92,6 @@ public class Assignments implements PropertyContainer {
 	@Override
 	public boolean containsTriggeringPropertyValue(String name) {
 		Assignment assignment = assignments.get(name);
-		return assignment != null && assignment.rule.isDefaultRule() == false;
+		return assignment != null && assignment.rule.isLazyRule() == false;
 	}
 }

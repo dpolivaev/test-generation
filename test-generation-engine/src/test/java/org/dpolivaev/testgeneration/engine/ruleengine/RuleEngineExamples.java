@@ -222,8 +222,8 @@ public class RuleEngineExamples {
             .followedBy("x", "c", "y", "A").followedBy("x", "c", "y", "B"));
     }
     @Test
-    public void defaults() {
-//'defaults'
+    public void lazy() {
+//'lazy'
 //    $x
 //        :
 //            'a', 'b', 'c'
@@ -234,7 +234,7 @@ public class RuleEngineExamples {
 //                $y
 //                    :
 //                        'A', 'B'
-//        defaults
+//        lazy
 //            $y
 //                =
 //                    'C'
@@ -253,14 +253,14 @@ public class RuleEngineExamples {
             .over("d").with(iterate("y").over("A", "B"))
         );
         
-        strategy.addRule(iterate("y").over("C").asDefaultRule());
+        strategy.addRule(iterate("y").over("C").asLazyRule());
         strategy.addRule(iterate("y").over("D", "E")._if(new Condition() {
             
             @Override
             public boolean isSatisfied(PropertyContainer propertyContainer) {
                 return ! "b".equals(propertyContainer.get("x"));
             }
-        }).asDefaultRule());
+        }).asLazyRule());
         
         generateCombinationsForStrategy();
         expect(combination("x", "a", "y", "D", "y1", "D")
@@ -270,9 +270,9 @@ public class RuleEngineExamples {
             .followedBy("x", "d", "y", "B"));
     }
     @Test
-    public void branchedDefaults() {
+    public void branchedLazy() {
         
-//'branched defaults'
+//'branched lazy'
 //    $x
 //        :
 //            'a'
@@ -281,11 +281,11 @@ public class RuleEngineExamples {
 //                    :
 //                        'A'
 //            'c'
-//                defaults
+//                lazy
 //                    $y
 //                        =
 //                            'B'
-//        defaults
+//        lazy
 //            $y
 //                =
 //                    'C'
@@ -302,7 +302,7 @@ public class RuleEngineExamples {
                 }
             }))
             .over("b").with(iterate("y").over("A"))
-            .over("c").with(iterate("y").over("B").asDefaultRule(), 
+            .over("c").with(iterate("y").over("B").asLazyRule(), 
                 iterate("y'").over(new ValueProvider() {
 				    @Override
 				    public Object value(PropertyContainer propertyContainer) {
@@ -311,14 +311,14 @@ public class RuleEngineExamples {
 				}))
         );
         
-        strategy.addRule(iterate("y").over("C").asDefaultRule());
+        strategy.addRule(iterate("y").over("C").asLazyRule());
         strategy.addRule(iterate("y").over("D", "E")._if(new Condition() {
             
             @Override
             public boolean isSatisfied(PropertyContainer propertyContainer) {
                 return ! "b".equals(propertyContainer.get("x"));
             }
-        }).asDefaultRule());
+        }).asLazyRule());
         
         generateCombinationsForStrategy();
         expect(combination("x", "a", "y", "D", "y'", "D")
@@ -326,8 +326,8 @@ public class RuleEngineExamples {
             .followedBy("x", "c", "y", "B", "y'", "B"));
     }
     @Test
-    public void chainedDefaults() {
-//'chained defaults'
+    public void chainedLazy() {
+//'chained lazy'
 //    $x
 //        :
 //            'a', 'b'
@@ -335,7 +335,7 @@ public class RuleEngineExamples {
 //                $y
 //                    :
 //                        'A', 'B'
-//        defaults
+//        lazy
 //            $y
 //                =
 //                    $z
@@ -361,21 +361,21 @@ public class RuleEngineExamples {
             public Object value(PropertyContainer propertyContainer) {
                 return propertyContainer.get("z");
             }
-        }).asDefaultRule());
+        }).asLazyRule());
 
         strategy.addRule(iterate("y").over("D", "E")._if(new Condition() {
             @Override
             public boolean isSatisfied(PropertyContainer propertyContainer) {
                 return ! "b".equals(propertyContainer.get("z"));
             }
-        }).asDefaultRule());
+        }).asLazyRule());
         
         strategy.addRule(iterate("z").over(new ValueProvider() {
             @Override
             public Object value(PropertyContainer propertyContainer) {
                 return propertyContainer.get("x");
             }
-        }).asDefaultRule());
+        }).asLazyRule());
         
         generateCombinationsForStrategy();
         

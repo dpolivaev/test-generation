@@ -197,7 +197,7 @@ public abstract class StatefulRule implements Rule {
     
     @Override
     public void checkRuleCompatibility(Rule rule){
-    	if (isDefaultRule() != rule.isDefaultRule())
+    	if (isLazyRule() != rule.isLazyRule())
     		throw new IllegalArgumentException("triggering and not triggering rules can not be combined");
     	String targetedPropertyName = getTargetedPropertyName();
     	String otherTargetedPropertyName = rule.getTargetedPropertyName();

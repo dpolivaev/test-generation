@@ -60,7 +60,7 @@ public class TriggeredStatefulRule extends StatefulRule {
     }
 
     @Override
-    public boolean isDefaultRule() {
+    public boolean isLazyRule() {
         return false;
     }
 

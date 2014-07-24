@@ -115,8 +115,8 @@ public class RuleEngine implements EngineState {
 
     private void fireNextCombinationFinishedEvent() {
         for (Rule rule : assignments.firedRules())
-        	if(rule.isDefaultRule())
-        		strategy.getDefaultRulesForProperty(rule.getTargetedPropertyName()).propertyCombinationFinished(this);
+        	if(rule.isLazyRule())
+        		strategy.getLazyRulesForProperty(rule.getTargetedPropertyName()).propertyCombinationFinished(this);
         for (Rule rule : strategy.triggeredRules())
             rule.propertyCombinationFinished(this);
 	}
@@ -133,7 +133,7 @@ public class RuleEngine implements EngineState {
 		assignments.add(new Assignment(rule, value, assignmentReason, dependencies, rule.getTriggeringProperties()));
         PropertyAssignedEvent event = new PropertyAssignedEvent(this, rule, dependencies, valueChanged);
         firePropertyAssignedEvent(assignments.firedRules(), event);
-        if (!rule.isDefaultRule()) {
+        if (!rule.isLazyRule()) {
             firePropertyAssignedEvent(strategy.triggeredRules(), event);
         }
 	}
@@ -175,7 +175,7 @@ public class RuleEngine implements EngineState {
     @Override
     public <T> T get(String name) {
         if (!assignments.containsProperty(name)) {
-            executeDefaultRulesForProperty(name);
+            executeLazyRulesForProperty(name);
             
         }
         dependencies.add(name);
@@ -189,9 +189,9 @@ public class RuleEngine implements EngineState {
 	}
 
 
-    private void executeDefaultRulesForProperty(String name) {
-        Rule defaultRule = strategy.getDefaultRulesForProperty(name);
-        if(defaultRule == null)
+    private void executeLazyRulesForProperty(String name) {
+        Rule lazyRule = strategy.getLazyRulesForProperty(name);
+        if(lazyRule == null)
             return;
         Set<String> oldDependencies = dependencies;
         dependencies = new HashSet<>();
@@ -199,7 +199,7 @@ public class RuleEngine implements EngineState {
         String oldProcessedProperty = processedProperty;
         assignmentReason = processedProperty + "<-";
         processedProperty = name;
-        defaultRule.propertyRequired(this);
+        lazyRule.propertyRequired(this);
         assignmentReason = oldAssignmentReason;
         processedProperty = oldProcessedProperty;
         dependencies = oldDependencies;
@@ -212,7 +212,7 @@ public class RuleEngine implements EngineState {
 
     @Override
     public boolean isPropertyAvailable(String name) {
-        return assignments.isPropertyAvailable(name) || strategy.availableDefaultProperties().contains(name);
+        return assignments.isPropertyAvailable(name) || strategy.availableLazyProperties().contains(name);
     }
 
     @Override
@@ -223,7 +223,7 @@ public class RuleEngine implements EngineState {
     @Override
     public Set<String> availableProperties(String startWith) {
         Set<String> availableProperties = assignments.availableProperties(startWith); 
-        Utils.addMatchingStrings(availableProperties, startWith, strategy.availableDefaultProperties());
+        Utils.addMatchingStrings(availableProperties, startWith, strategy.availableLazyProperties());
         return availableProperties;
     }
 

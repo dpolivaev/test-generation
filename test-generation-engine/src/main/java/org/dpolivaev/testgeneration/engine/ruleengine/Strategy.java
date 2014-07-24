@@ -9,12 +9,12 @@ import org.dpolivaev.testgeneration.engine.utils.internal.LinkedMap;
 
 
 public class Strategy {
-    private LinkedMap<String, Rule> defaultRules = new LinkedMap<>();
+    private LinkedMap<String, Rule> lazyRules = new LinkedMap<>();
     private LinkedMap<String, Rule> triggeredRules = new LinkedMap<>();
     private Collection<RuleBuilder> ruleBuilders = new ArrayList<RuleBuilder>();
     
     public void initialize(PropertyContainer propertyContainer){
-    	defaultRules.clear();
+    	lazyRules.clear();
     	triggeredRules.clear();
     	for(RuleBuilder ruleBuilder : ruleBuilders)
 		addRule(ruleBuilder.create(propertyContainer));
@@ -24,8 +24,8 @@ public class Strategy {
     	ruleBuilders.add(builder);
     }
 
-    public void addDefaultRule(RuleBuilder builder) {
-    	ruleBuilders.add(builder.asDefaultRule());
+    public void addLazyRule(RuleBuilder builder) {
+    	ruleBuilders.add(builder.asLazyRule());
     }
 
 	public void addRule(Rule rule) {
@@ -35,8 +35,8 @@ public class Strategy {
 
 	private LinkedMap<String, Rule> rulesLike(Rule newRule) {
 		final LinkedMap<String, Rule> rules;
-        if (newRule.isDefaultRule())
-			rules = defaultRules;
+        if (newRule.isLazyRule())
+			rules = lazyRules;
 		else
 			rules = triggeredRules;
 		return rules;
@@ -51,10 +51,10 @@ public class Strategy {
             rules.add(key, rule);
     }
 
-    public Rule getDefaultRulesForProperty(String propertyName) {
-        Rule rule = defaultRules.get(propertyName);
+    public Rule getLazyRulesForProperty(String propertyName) {
+        Rule rule = lazyRules.get(propertyName);
         if(rule == null)
-            return RuleBuilder.Factory.iterate(propertyName).over(SpecialValue.UNDEFINED).asDefaultRule().create();
+            return RuleBuilder.Factory.iterate(propertyName).over(SpecialValue.UNDEFINED).asLazyRule().create();
         return rule;
     }
 
@@ -73,8 +73,8 @@ public class Strategy {
             rules.put(key, reducedRule);
     }
 
-    public Iterable<Rule> defaultRules() {
-        return defaultRules.iterable();
+    public Iterable<Rule> lazyRules() {
+        return lazyRules.iterable();
     }
 
     public Iterable<Rule> triggeredRules() {
@@ -93,8 +93,8 @@ public class Strategy {
             addRule(rule);
 	}
 
-	public Set<String> availableDefaultProperties() {
-        return defaultRules.keySet();
+	public Set<String> availableLazyProperties() {
+        return lazyRules.keySet();
     }
 
 	public Collection<RuleBuilder> giveBuilders() {
@@ -108,7 +108,7 @@ public class Strategy {
 	}
 
 	public void addTemporaryRule(Rule creatingRule, Rule rule) {
-		if(creatingRule == null || rule.isDefaultRule() || triggeredRules.containsKey(rule.getRuleKey()))
+		if(creatingRule == null || rule.isLazyRule() || triggeredRules.containsKey(rule.getRuleKey()))
 			addRule(rule);
 		else {
 			triggeredRules.insertBefore(creatingRule.getRuleKey(), rule.getRuleKey(), rule);

@@ -42,7 +42,7 @@ public class TestIdProvider implements ValueProvider{
 	
 	private boolean propertyCanHaveDifferentValues(Assignment assignment, AssignmentPartitioner assignmentPartitioner, PropertyContainer propertyContainer) {
 		final Rule rule = assignment.rule;
-		if(rule.isDefaultRule())
+		if(rule.isLazyRule())
 			return false;
 		if(rule.forcesIteration())
 			return true;

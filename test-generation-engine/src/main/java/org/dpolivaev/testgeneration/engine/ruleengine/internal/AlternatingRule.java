@@ -114,8 +114,8 @@ public class AlternatingRule implements Rule {
     }
 
     @Override
-    public boolean isDefaultRule() {
-        return firstRule().isDefaultRule();
+    public boolean isLazyRule() {
+        return firstRule().isLazyRule();
     }
 
     @Override

@@ -330,17 +330,17 @@ public class RuleEngineAcceptanceTest {
     }
 
     @Test
-    public void ruleEngineWithOneDefaultRule_doesNotIterateOverItsValueIfPropertyIsNotRequested() {
-        strategy.addRule(iterate("property").over("value").asDefaultRule());
+    public void ruleEngineWithOneLazyRule_doesNotIterateOverItsValueIfPropertyIsNotRequested() {
+        strategy.addRule(iterate("property").over("value").asLazyRule());
         generateCombinationsForStrategy();
 
         expect(combination());
     }
 
     @Test
-    public void ruleEngineWithOneDefaultRule_iteratesOverItsValuesWhenPropertyIsRequested() {
+    public void ruleEngineWithOneLazyRule_iteratesOverItsValuesWhenPropertyIsRequested() {
         strategy.addRule(iterate("x").over("1", "2"));
-        strategy.addRule(iterate("y").over("1", "2", "3").asDefaultRule());
+        strategy.addRule(iterate("y").over("1", "2", "3").asLazyRule());
         initializeRuleEngine(new CollectingScriptProducer() {
 
             @Override
@@ -356,8 +356,8 @@ public class RuleEngineAcceptanceTest {
     }
 
     @Test
-    public void defaultRule_doesNotTriggerOtherIterations() {
-        strategy.addRule(iterate("x").over("1", "2").asDefaultRule());
+    public void lazyRule_doesNotTriggerOtherIterations() {
+        strategy.addRule(iterate("x").over("1", "2").asLazyRule());
         strategy.addRule(iterate("y").over("1", "2").when("x"));
         initializeRuleEngine(new CollectingScriptProducer() {
 
@@ -439,9 +439,9 @@ public class RuleEngineAcceptanceTest {
     }
 
     @Test
-    public void triggeringAndDefaultRules() {
+    public void triggeringAndLazyRules() {
         scriptProducerMock.appendReasons(true);
-        strategy.addRule(iterate("x").over("a").asDefaultRule());
+        strategy.addRule(iterate("x").over("a").asLazyRule());
         strategy.addRule(iterate("askingX").over(new ValueProvider(){
 
 			@Override
@@ -458,8 +458,8 @@ public class RuleEngineAcceptanceTest {
     }
 
     @Test
-    public void defaultRuleCalledFromScriptProducerWithReason() {
-        strategy.addRule(iterate("x").over("1").asDefaultRule());
+    public void lazyRuleCalledFromScriptProducerWithReason() {
+        strategy.addRule(iterate("x").over("1").asLazyRule());
         CollectingScriptProducer loggingScriptProducerMock = new CollectingScriptProducer() {
 
             @Override
@@ -477,9 +477,9 @@ public class RuleEngineAcceptanceTest {
     }
 
     @Test
-    public void defaultRuleCalledFromTriggeredRuleWithReason() {
+    public void lazyRuleCalledFromTriggeredRuleWithReason() {
         scriptProducerMock.appendReasons(true);
-        strategy.addRule(iterate("x").over("1").asDefaultRule());
+        strategy.addRule(iterate("x").over("1").asLazyRule());
         strategy.addRule(iterate("y").over(new ValueProvider() {
 		    @Override
 		    public Object value(PropertyContainer propertyContainer) {
@@ -507,10 +507,10 @@ public class RuleEngineAcceptanceTest {
     }
     
     @Test
-    public void returnsNamesOfAssignedAndDefaultProperties(){
+    public void returnsNamesOfAssignedAndLazyProperties(){
         strategy.addRule(iterate("x1").over("1"));
-        strategy.addRule(iterate("x2").over("2").asDefaultRule());
-        strategy.addRule(iterate("y").over("2").asDefaultRule());
+        strategy.addRule(iterate("x2").over("2").asLazyRule());
+        strategy.addRule(iterate("y").over("2").asLazyRule());
         PropertyHandler scriptProducer = mock(PropertyHandler.class);
         final RuleEngine ruleEngine = new RuleEngine().addHandler(scriptProducer);
         doAnswer(new Answer<Object>() {
