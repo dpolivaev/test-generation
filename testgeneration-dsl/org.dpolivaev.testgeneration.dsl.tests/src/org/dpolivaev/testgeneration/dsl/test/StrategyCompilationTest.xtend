@@ -223,7 +223,7 @@ class StrategyCompilationTest {
 	@Test def withOneDefaultRule() {
 		'''
 			strategy first
-				let default x be 1, 2, 3
+				let lazy x be 1, 2, 3
 		'''.assertCompilesToFile(testName)
 	}
 
@@ -306,7 +306,7 @@ class StrategyCompilationTest {
 		'''
 			strategy First
 			let a be listA with 1 {let b be 2}, 3 {}
-			let default d be from listA
+			let lazy d be from listA
 		'''.assertCompilesToFile(testName)
 	}
 
@@ -479,7 +479,7 @@ class StrategyCompilationTest {
 	@Test def coverageWithReference() {
 		'''
 			strategy First
-				let default a be 123
+				let lazy a be 123
 				let [req1] be :a
 		'''.assertCompilesToFile(testName)
 	}
@@ -487,7 +487,7 @@ class StrategyCompilationTest {
 	@Test def withOneParameter() {
 		'''
 			strategy first(int p)
-				let default x be p
+				let lazy x be p
 		'''.assertCompilesToFile(testName)
 	}
 
@@ -496,28 +496,28 @@ class StrategyCompilationTest {
 			strategy first
 				apply first(1)
 			strategy first(int p)
-				let default x be p
+				let lazy x be p
 		'''.assertCompilesToFile(testName)
 	}
 
 	@Test def withParameterizedRuleName() {
 		'''
 			strategy first(int p)
-				let default ("x#" p) be p
+				let lazy ("x#" p) be p
 		'''.assertCompilesToFile(testName)
 	}
 
 	@Test def withParameterizedRuleValue() {
 		'''
 			strategy first(boolean p)
-				let default x be if (p) 1 else 0
+				let lazy x be if (p) 1 else 0
 		'''.assertCompilesToFile(testName)
 	}
 
 	@Test def withParameterizedRuleNameReference() {
 		'''
 			strategy first(int p)
-				let default y be :("x#"  p)
+				let lazy y be :("x#"  p)
 		'''.assertCompilesToFile(testName)
 	}
 

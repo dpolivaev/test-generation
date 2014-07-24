@@ -35,7 +35,7 @@ class _MyFile_first_StrategyFactory0 {
       @Override public Object value(PropertyContainer propertyContainer) {return 2;
     }}, new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {return 3;
-    }}).shuffled().asDefaultRule());
+    }}).shuffled().asLazyRule());
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }
 }

@@ -44,8 +44,8 @@ class TestSpecValidator extends AbstractTestSpecValidator {
 				error("name without rule", ruleGroup,  feature)			
 				return;
 			}
-			if(ruleGroup.rule.^default){
-				error("named default rule", ruleGroup, feature)			
+			if(ruleGroup.rule.^lazy){
+				error("named lazy rule", ruleGroup, feature)			
 				return;
 			}
 			if(ruleGroup.rule.specialValue != null){

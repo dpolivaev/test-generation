@@ -53,12 +53,12 @@ class _MyFile_first_StrategyFactory1 {
       @Override public Object value(PropertyContainer propertyContainer) {
         Boolean _condition = condition1(propertyContainer);
         return _condition;
-    }}).asDefaultRule());
+    }}).asLazyRule());
     _strategy.addRule(RuleBuilder.Factory.iterate(" _MyFile_first_StrategyFactory1.condition2#" +  _instanceId).over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {
         Boolean _condition = propertyContainer.<Boolean>get(" _MyFile_first_StrategyFactory1.condition1#" +  _instanceId) && condition2(propertyContainer);
         return _condition;
-    }}).asDefaultRule());
+    }}).asLazyRule());
     _strategy.addRule(RuleBuilder.Factory.when("z", "z2")._if(new Condition(){
       @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
         return propertyContainer.<Boolean>get(" _MyFile_first_StrategyFactory1.condition2#" +  _instanceId);

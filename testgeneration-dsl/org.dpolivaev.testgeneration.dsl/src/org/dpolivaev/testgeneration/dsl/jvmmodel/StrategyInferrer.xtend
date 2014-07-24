@@ -237,7 +237,7 @@ class StrategyInferrer{
 			appendImplementationObject(it, org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider, "Object value",
 				[appendConditionExpression(it, ruleGroup.condition)])
 		append(')')
-		append('.asDefaultRule()')
+		append('.asLazyRule()')
 	}
 
 	def private defaultConditionPropertyName(XExpression expr) {
@@ -292,8 +292,8 @@ class StrategyInferrer{
 					appendRuleOrder(it, rule)
 				}
 			}
-			if(rule.isDefault)
-				append('.shuffled().asDefaultRule()')
+			if(rule.isLazy)
+				append('.shuffled().asLazyRule()')
 		}
 		else if(ruleGroup.strategy !=null){
 			appendStrategyRule(it, ruleGroup.strategy)

@@ -37,7 +37,7 @@ class _MyFile_First_StrategyFactory0 {
     Strategy _strategy = new Strategy();
     _strategy.addRule(RuleBuilder.Factory.iterate("a").over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {return 123;
-    }}).shuffled().asDefaultRule());
+    }}).shuffled().asLazyRule());
     _strategy.addRule(RuleBuilder.Factory.iterate("[req1]").over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {
         Object _value = ValueProviderHelper.toValue(_value1(propertyContainer), propertyContainer);

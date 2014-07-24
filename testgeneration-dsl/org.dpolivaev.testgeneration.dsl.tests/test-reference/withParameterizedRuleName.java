@@ -49,7 +49,7 @@ class _MyFile_first_StrategyFactory0 {
       @Override public Object value(PropertyContainer propertyContainer) {
         Object _value = ValueProviderHelper.toValue(_value2(propertyContainer), propertyContainer);
         return _value;
-    }}).shuffled().asDefaultRule());
+    }}).shuffled().asLazyRule());
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }
 }

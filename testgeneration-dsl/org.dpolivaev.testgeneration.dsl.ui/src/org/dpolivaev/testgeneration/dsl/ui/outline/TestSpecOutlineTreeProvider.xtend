@@ -31,7 +31,7 @@ public class TestSpecOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	protected def _text(Globals globals) { return "globals"}
 	protected def _text(Rule rule) {
 		return 
-		(if (rule.isDefault) "default :" else ":")
+		(if (rule.isLazy) "default :" else ":")
 		+ (rule.specialValue?:"")
 		+ (if(rule.specialValue!= null) " " else "")
 		+ (rule.propertyName?.name?:"")

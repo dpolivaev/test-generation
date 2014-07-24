@@ -129,7 +129,7 @@ class _MyFile_s_StrategyFactory0 {
         Boolean _condition = condition1(propertyContainer);
         return _condition;
         } finally{ ((CoverageTrackerEnabler)propertyContainer).stopTrace();}
-    }}).asDefaultRule());
+    }}).asLazyRule());
     _strategy.addRule(RuleBuilder.Factory._if(new Condition(){
       @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
         return propertyContainer.<Boolean>get(" _MyFile_s_StrategyFactory0.condition1#" +  _instanceId);

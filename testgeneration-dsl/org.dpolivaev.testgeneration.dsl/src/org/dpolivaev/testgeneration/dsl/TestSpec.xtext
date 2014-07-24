@@ -50,7 +50,7 @@ PropertyName:
 
 Rule returns Rule:
 	(
-		'let' (ordered ?= 'ordered' | shuffled ?= 'shuffled')? default ?= 'default'?
+		'let' (ordered ?= 'ordered' | shuffled ?= 'shuffled')? lazy ?= ('lazy'|'default')?
 		propertyName=PropertyName 'be' values = PropertyValues
 	)
 	| specialValue = 'skip'
