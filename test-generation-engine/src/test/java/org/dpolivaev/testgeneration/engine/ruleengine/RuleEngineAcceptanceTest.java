@@ -652,4 +652,27 @@ public class RuleEngineAcceptanceTest {
         generateCombinationsForStrategy();
         expect(combination("askingX<-x", "UNDEFINED", "->askingX", "UNDEFINED", "->askingXAgain", "UNDEFINED"));
     }
+    
+    @Test(expected=PropertyAlreadyAssignedException.class)
+    public void triggeredLazyRuleConflictAlreadySatisfiedLazyRule() {
+        scriptProducerMock.appendReasons(true);
+        strategy.addRule(iterate("x").over("a").asLazyRule());
+        strategy.addRule(when("askingX").iterate("x").over("a").asLazyRule());
+        strategy.addRule(iterate("askingX").over(new ValueProvider(){
+			@Override
+			public Object value(PropertyContainer propertyContainer) {
+				return propertyContainer.get("x");
+			}
+
+        }));
+        strategy.addRule(iterate("askingXAgain").over(new ValueProvider(){
+			@Override
+			public Object value(PropertyContainer propertyContainer) {
+				return propertyContainer.get("x");
+			}
+
+        }).with(iterate("x").over("a").asLazyRule()));
+
+        generateCombinationsForStrategy();
+    }
 }
