@@ -81,6 +81,24 @@ class StrategyCompilationTest {
 		'''.assertCompilesToFile(testName)
 	}
 
+	@Test def withConditionForSingleValueInsideNotOrderedRule() {
+		'''
+			strategy first
+				let x be 'a', 'b'{
+					let y be 'A' only if :x=='a', 'B'
+				}
+		'''.assertCompilerThrowsException(IllegalStateException)
+	}
+
+	@Test def withConditionForSingleValueAtLastPosition() {
+		'''
+			strategy first
+				let x be 'a', 'b'{
+					let ordered y be 'A', 'B'  only if :x=='a'
+				}
+		'''.assertCompilerThrowsException(IllegalStateException)
+	}
+
 	@Test def withValueProvider() {
 		'''
 			import org.dpolivaev.testgeneration.engine.strategies.StrategyHelper;

@@ -15,6 +15,9 @@ import org.eclipse.xtext.xbase.XExpression
 import org.eclipse.xtext.xbase.jvmmodel.IJvmModelAssociations
 import org.eclipse.xtext.xbase.XCastedExpression
 import org.dpolivaev.testgeneration.dsl.testspec.PropertyCall
+import org.dpolivaev.testgeneration.dsl.testspec.ValueProvider
+import org.eclipse.xtext.EcoreUtil2
+import org.dpolivaev.testgeneration.dsl.testspec.Rule
 
 //import org.eclipse.xtext.validation.Check
 
@@ -74,6 +77,22 @@ class TestSpecValidator extends AbstractTestSpecValidator {
 	override checkCasts(XCastedExpression cast) {
 		if(! (cast.target instanceof PropertyCall))
 			super.checkCasts(cast);
+	}
+	
+	@Check
+	def checkConditionedValues(ValueProvider valueProvider){
+		if(valueProvider.condition != null) {
+			val rule = EcoreUtil2.getContainerOfType(valueProvider, Rule)
+			if(! rule.lazy && ! rule.ordered)
+			error("Condition inside triggered not ordered rule", valueProvider,  TestspecPackage.Literals.VALUE_PROVIDER__CONDITION)			
+		}
+	}
+	
+	@Check
+	def checkConditionedValues(Rule rule){
+		val valueProvider = rule?.values?.actions?.last?.valueProviders?.last
+		if(valueProvider.condition != null)
+			error("Condition in the last value", valueProvider,  TestspecPackage.Literals.VALUE_PROVIDER__CONDITION)			
 	}
 
 }

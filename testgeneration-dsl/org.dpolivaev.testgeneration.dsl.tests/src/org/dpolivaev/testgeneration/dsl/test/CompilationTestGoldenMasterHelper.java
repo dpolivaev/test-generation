@@ -18,6 +18,16 @@ import com.google.common.io.Resources;
 public class CompilationTestGoldenMasterHelper extends CompilationTestHelper{
 
 	private static final String REFERENCES_FOLDER = "test-reference/";
+	
+	public void assertCompilerThrowsException(CharSequence source, final Class<? extends Throwable> exception)throws Exception{
+		try {
+			compile(source, null);
+			throw new AssertionError("Expected exception " + exception.getClass() + "not thrown");
+		} catch (RuntimeException cause) {
+			if(! exception.isAssignableFrom(cause.getCause().getClass()))
+				throw new AssertionError("Unexpected exception", cause);
+		}
+	}
 
 	public void assertCompilesToFile(CharSequence source, final TestName testName) throws IOException {
 		new File(REFERENCES_FOLDER).mkdirs();
