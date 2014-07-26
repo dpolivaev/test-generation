@@ -52,10 +52,7 @@ public class Strategy {
     }
 
     public Rule getLazyRulesForProperty(String propertyName) {
-        Rule rule = lazyRules.get(propertyName);
-        if(rule == null)
-            return RuleBuilder.Factory.iterate(propertyName).over(SpecialValue.UNDEFINED).asLazyRule().create();
-        return rule;
+        return lazyRules.get(propertyName);
     }
 
     public void removeRule(Rule rule) {

@@ -13,9 +13,9 @@ public class LazyStatefulRule extends StatefulRule {
 
     @Override
     public void propertyRequired(EngineState engineState) {
-        if (isSatisfied(engineState)) {
-            addValue(engineState);
-        }
+    	if(! isValueAddedToCurrentCombination())
+    		if (isSatisfied(engineState))
+    			addValue(engineState);
     }
 
 	private boolean isSatisfied(EngineState engineState) {

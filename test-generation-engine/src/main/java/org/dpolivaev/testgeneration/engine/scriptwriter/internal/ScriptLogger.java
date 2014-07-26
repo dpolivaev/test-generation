@@ -61,4 +61,8 @@ public class ScriptLogger implements PropertyHandler, ErrorHandler {
 			throw Utils.runtimeException(e);
 		}
 	}
+
+	public void excludeUndefined(boolean excludeUndefined) {
+		assignmentFormatter.excludeUndefined(excludeUndefined);
+	}
 }

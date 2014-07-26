@@ -6,6 +6,7 @@ import static org.dpolivaev.testgeneration.engine.testutils.TestUtils.ruleProper
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
 
@@ -13,6 +14,8 @@ import org.dpolivaev.testgeneration.engine.ruleengine.Rule;
 import org.dpolivaev.testgeneration.engine.ruleengine.RuleBuilder;
 import org.dpolivaev.testgeneration.engine.ruleengine.Strategy;
 import org.dpolivaev.testgeneration.engine.ruleengine.internal.AlternatingRule;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.core.IsNull;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -80,8 +83,8 @@ public class StrategyTest {
     }
     
     @Test
-    public void requestedUnknownLazyProperty_returnsSpecialRule(){
-        assertThat(strategy.getLazyRulesForProperty("unknownProperty"), notNullValue());
+    public void requestedUnknownLazyProperty_returnsNull(){
+        assertThat(strategy.getLazyRulesForProperty("unknownProperty"), nullValue());
     }
     
     @Test

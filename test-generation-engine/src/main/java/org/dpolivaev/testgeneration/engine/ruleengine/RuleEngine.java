@@ -115,10 +115,23 @@ public class RuleEngine implements EngineState {
 
     private void fireNextCombinationFinishedEvent() {
         for (Rule rule : assignments.firedRules())
-        	if(rule.isLazyRule())
-        		strategy.getLazyRulesForProperty(rule.getTargetedPropertyName()).propertyCombinationFinished(this);
+        	if(rule.isLazyRule()) {
+				String name = rule.getTargetedPropertyName();
+				getLazyRulesForProperty(name).propertyCombinationFinished(this);
+			}
         for (Rule rule : strategy.triggeredRules())
             rule.propertyCombinationFinished(this);
+	}
+
+	private Rule getLazyRulesForProperty(String name) {
+		Rule lazyRule = strategy.getLazyRulesForProperty(name);
+		if(lazyRule != null)
+			return lazyRule;
+		Assignment assignment = assignments.getAssignment(name);
+		if(assignment != null && assignment.rule.isLazyRule())
+			return assignment.rule;
+		else
+			return RuleBuilder.Factory.iterate(name).over(SpecialValue.UNDEFINED).asLazyRule().create();
 	}
 
 	private void fireNextCombinationStartedEvent() {
@@ -174,7 +187,8 @@ public class RuleEngine implements EngineState {
 	@SuppressWarnings("unchecked")
     @Override
     public <T> T get(String name) {
-        if (!assignments.containsProperty(name)) {
+        Assignment oldAssignment = assignments.getAssignment(name);
+		if (oldAssignment == null || oldAssignment.rule.isLazyRule()) {
             executeLazyRulesForProperty(name);
             
         }
@@ -190,7 +204,7 @@ public class RuleEngine implements EngineState {
 
 
     private void executeLazyRulesForProperty(String name) {
-        Rule lazyRule = strategy.getLazyRulesForProperty(name);
+        Rule lazyRule = getLazyRulesForProperty(name);
         if(lazyRule == null)
             return;
         Set<String> oldDependencies = dependencies;

@@ -32,4 +32,9 @@ public class CollectingScriptProducer extends PropertyCombinationHandler{
 	public void appendReasons(boolean appendReasons) {
 		loggingScriptProducer.appendReasons(appendReasons);
 	}
+
+	public void excludeUndefined(boolean excludeUndefined) {
+		loggingScriptProducer.excludeUndefined(false);
+		
+	}
 }

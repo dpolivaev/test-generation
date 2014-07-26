@@ -61,6 +61,7 @@ public class RuleEngineAcceptanceTest {
     @Before
     public void setup() {
         CollectingScriptProducer loggingScriptProducerMock = new CollectingScriptProducer();
+        loggingScriptProducerMock.excludeUndefined(false);
         initializeRuleEngine(loggingScriptProducerMock);
         strategy = new Strategy();
     }
@@ -537,4 +538,118 @@ public class RuleEngineAcceptanceTest {
         expect(combination("->x", "y", "x->y", "1"));
     }
 
+    @Test(expected=PropertyAlreadyAssignedException.class)
+    public void newSatisfiedLazyRules() {
+        scriptProducerMock.appendReasons(true);
+        strategy.addRule(iterate("x").over("a").asLazyRule());
+        strategy.addRule(iterate("askingX").over(new ValueProvider(){
+			@Override
+			public Object value(PropertyContainer propertyContainer) {
+				return propertyContainer.get("x");
+			}
+
+        }).with(iterate("x").over("a").asLazyRule()));
+        strategy.addRule(iterate("askingXAgain").over(new ValueProvider(){
+			@Override
+			public Object value(PropertyContainer propertyContainer) {
+				return propertyContainer.get("x");
+			}
+
+        }).with(iterate("x").over("a").asLazyRule()));
+
+        generateCombinationsForStrategy();
+    }
+
+    @Test
+    public void alreadySatisfiedLazyRules() {
+        scriptProducerMock.appendReasons(true);
+        strategy.addRule(iterate("x").over("a").asLazyRule());
+        strategy.addRule(iterate("askingX").over(new ValueProvider(){
+			@Override
+			public Object value(PropertyContainer propertyContainer) {
+				return propertyContainer.get("x");
+			}
+
+        }));
+        strategy.addRule(iterate("askingXAgain").over(new ValueProvider(){
+			@Override
+			public Object value(PropertyContainer propertyContainer) {
+				return propertyContainer.get("x");
+			}
+
+        }).with(iterate("x").over("a").asLazyRule()));
+
+        generateCombinationsForStrategy();
+        expect(combination("askingX<-x", "a", "->askingX", "a", "->askingXAgain", "a"));
+    }
+
+
+    @Test
+    public void alreadySatisfiedLazyRulesWithAlternatingRules() {
+        scriptProducerMock.appendReasons(true);
+        strategy.addRule(iterate("x").over("a").asLazyRule());
+        strategy.addRule(iterate("x").over("a").asLazyRule());
+        strategy.addRule(iterate("askingX").over(new ValueProvider(){
+			@Override
+			public Object value(PropertyContainer propertyContainer) {
+				return propertyContainer.get("x");
+			}
+
+        }));
+        strategy.addRule(iterate("askingXAgain").over(new ValueProvider(){
+			@Override
+			public Object value(PropertyContainer propertyContainer) {
+				return propertyContainer.get("x");
+			}
+
+        }).with(iterate("x").over("a").asLazyRule()));
+
+        generateCombinationsForStrategy();
+        expect(combination("askingX<-x", "a", "->askingX", "a", "->askingXAgain", "a"));
+    }
+    
+    @Test
+    public void alreadySatisfiedTriggeredRuleWithLazyRules() {
+        scriptProducerMock.appendReasons(true);
+        strategy.addRule(iterate("x").over("a"));
+        strategy.addRule(iterate("x").over("a").asLazyRule());
+        strategy.addRule(iterate("askingX").over(new ValueProvider(){
+			@Override
+			public Object value(PropertyContainer propertyContainer) {
+				return propertyContainer.get("x");
+			}
+
+        }));
+        strategy.addRule(iterate("askingXAgain").over(new ValueProvider(){
+			@Override
+			public Object value(PropertyContainer propertyContainer) {
+				return propertyContainer.get("x");
+			}
+
+        }).with(iterate("x").over("a").asLazyRule()));
+
+        generateCombinationsForStrategy();
+        expect(combination("->x", "a", "->askingX", "a", "->askingXAgain", "a"));
+    }
+    @Test
+    public void alreadyAskedUndefinedProperties() {
+        scriptProducerMock.appendReasons(true);
+        strategy.addRule(iterate("askingX").over(new ValueProvider(){
+			@Override
+			public Object value(PropertyContainer propertyContainer) {
+				return propertyContainer.get("x");
+			}
+
+        }));
+        strategy.addRule(iterate("askingXAgain").over(new ValueProvider(){
+			@Override
+			public Object value(PropertyContainer propertyContainer) {
+				return propertyContainer.get("x");
+			}
+
+        }).with(iterate("x").over("a").asLazyRule()));
+
+        generateCombinationsForStrategy();
+        expect(combination("askingX<-x", "UNDEFINED", "->askingX", "UNDEFINED", "->askingXAgain", "UNDEFINED"));
+    }
 }
