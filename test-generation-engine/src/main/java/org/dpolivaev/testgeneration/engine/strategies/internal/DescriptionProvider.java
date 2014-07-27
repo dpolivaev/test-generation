@@ -38,7 +38,7 @@ public class DescriptionProvider  implements ValueProvider{
 		final String scriptProperty = aliasedPropertyAccessor.getAlias(DEFAULT_SCRIPT_PROPERTY_NAME);
 		excludedAssignmentFilter.addPattern("(?:" + scriptProperty + ")(?:\\..+)?");
 		excludedAssignmentFilter.addPattern("(" + DEFAULT_SCRIPT_PROPERTY_NAME + "|" + DEFAULT_TESTCASE_PROPERTY + ")\\.alias");
-		final String testcaseProperty = aliasedPropertyAccessor.getAlias(DEFAULT_TESTCASE_PROPERTY);
+		final String testcaseProperty = aliasedPropertyAccessor.getAlias(DEFAULT_TESTCASE_PROPERTY) + "\\.name";
 		formatter.exclude(testcaseProperty);
 		formatter.excludeUndefined(true);
 		formatter.appendReasons(false);

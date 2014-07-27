@@ -33,30 +33,30 @@ public class XmlScriptWriterTest {
 
     @Test
     public void oneTestcase() {
-        givenProperty("script", "scriptName");
-        givenProperty("testcase", "testcase 1");
+        givenProperty("script.name", "scriptName");
+        givenProperty("testcase.name", "testcase 1");
         final DOMResult dom = createScript();
-        checkOutput(dom, "<Script id='scriptName'>" +
-                "<TestCase id='testcase 1'/>" +
+        checkOutput(dom, "<Script name='scriptName'>" +
+                "<TestCase name='testcase 1'/>" +
         "</Script>");
     }
 
     @Test
     public void explicitDriverTestcase() {
-        givenProperty("script", "scriptName");
-        givenProperty("testcase", "testcase 1");
+        givenProperty("script.name", "scriptName");
+        givenProperty("testcase.name", "testcase 1");
         givenProperty("script.driver", "driver1");
         final DOMResult dom = createScript();
-        checkOutput(dom, "<Script id='scriptName'>"
+        checkOutput(dom, "<Script name='scriptName'>"
         		+ "<Parameter type='java.lang.String' name='driver'>driver1</Parameter>" +
-                "<TestCase id='testcase 1'/>" +
+                "<TestCase name='testcase 1'/>" +
         		"</Script>");
     }
 
     @Test
     public void twoTestcases() {
-    	givenProperty("script", "scriptName");
-    	givenProperty("testcase", "testcase 1");
+    	givenProperty("script.name", "scriptName");
+    	givenProperty("testcase.name", "testcase 1");
         ResultFactory resultFactory = Mockito.mock(ResultFactory.class);
         final DOMResult dom = new DOMResult();
         final ScriptConfiguration scriptConfiguration = new ScriptConfiguration(OutputConfiguration.OUTPUT_NOTHING, "scriptName");
@@ -67,14 +67,14 @@ public class XmlScriptWriterTest {
         producer.handlePropertyCombination(propertyContainer);
         
         propertyContainer.startNewCombination();
-        givenProperty("script", "scriptName");
-        givenProperty("testcase", "testcase 2");
+        givenProperty("script.name", "scriptName");
+        givenProperty("testcase.name", "testcase 2");
         producer.handlePropertyCombination(propertyContainer);
         producer.generationFinished();
         
-        checkOutput(dom, "<Script id='scriptName'>" +
-		            "<TestCase id='testcase 1'/>" +
-		            "<TestCase id='testcase 2'/>" +
+        checkOutput(dom, "<Script name='scriptName'>" +
+		            "<TestCase name='testcase 1'/>" +
+		            "<TestCase name='testcase 2'/>" +
 		        "</Script>");
     }
 
@@ -83,25 +83,25 @@ public class XmlScriptWriterTest {
 	}
 
     @Test
-    public void implicitScriptName() {
-    	givenProperty("testcase", "testcase 1");
+    public void noScriptName() {
+    	givenProperty("testcase.name", "testcase 1");
     	final DOMResult dom = createScript();
-    	checkOutput(dom, "<Script id='script'>" +
-                "<TestCase id='testcase 1'/>" +
+    	checkOutput(dom, "<Script>" +
+                "<TestCase name='testcase 1'/>" +
         "</Script>");
     }
 
     @Test
     public void createsScriptWithAllPartsAndContent() throws Exception{
-        givenProperty("script", "scriptName");
+        givenProperty("script.name", "scriptName");
         givenProperty("script.precondition#2", "global precondition");
         givenProperty("script.postprocessing", "global postprocessing");
-        givenProperty("testcase", "testcase 1");
+        givenProperty("testcase.name", "testcase 1");
         final DOMResult dom = createScript();
-        checkOutput(dom, "<Script id='scriptName'>" +
-                "<ScriptPrecondition id='global precondition'/>" +
-                "<ScriptPostprocessing id='global postprocessing'/>" +
-                "<TestCase id='testcase 1'/>" +
+        checkOutput(dom, "<Script name='scriptName'>" +
+                "<ScriptPrecondition step='global precondition'/>" +
+                "<ScriptPostprocessing step='global postprocessing'/>" +
+                "<TestCase name='testcase 1'/>" +
         "</Script>");
     	
     }

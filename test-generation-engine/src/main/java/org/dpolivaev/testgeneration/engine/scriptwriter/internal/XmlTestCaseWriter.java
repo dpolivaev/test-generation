@@ -39,7 +39,7 @@ public class XmlTestCaseWriter implements PropertyHandler {
 		xmlWriter.beginElement(testcaseElementAlias);
 		calculateParts(propertyContainer, aliasedPropertyAccessor);
         final String testcaseProperty = aliasedPropertyAccessor.getAlias(AliasedPropertyAccessor.DEFAULT_TESTCASE_PROPERTY);
-		addAttribute(propertyContainer, testcaseProperty, "id");
+		addAttribute(propertyContainer, testcaseProperty + ".name", "name");
 		addParameters(propertyContainer, testcaseProperty);
 		addParts(propertyContainer, aliasedPropertyAccessor.getTestCaseParts());
         addDescription(propertyContainer, testcaseProperty);
@@ -132,7 +132,7 @@ public class XmlTestCaseWriter implements PropertyHandler {
         String value = propertyContainer.get(property).toString().trim();
         final PartValueParser partValueParser = new PartValueParser(value);
         if (xmlWriter != null) {
-		xmlWriter.setAttribute("id", partValueParser.getCalledMethod());
+		xmlWriter.setAttribute("step", partValueParser.getCalledMethod());
 		addDescription(propertyContainer, property);
         }
         addPartComment(propertyContainer, partValueParser.getComment());
@@ -177,7 +177,7 @@ public class XmlTestCaseWriter implements PropertyHandler {
 	}
 
     public void addAttributes(PropertyContainer propertyContainer, String property) {
-        addAttribute(propertyContainer, property, "id");
+        addAttribute(propertyContainer, property + ".name", "name");
         addDescription(propertyContainer, property);
         addParameters(propertyContainer, property);
     }
@@ -188,7 +188,9 @@ public class XmlTestCaseWriter implements PropertyHandler {
 		final String prefix = property + '.';
         List<String> sortedProperties = new PropertyAccessor(propertyContainer).sortedPropertiesForPrefix(prefix);
         for(String attributeProperty : sortedProperties){
-        	if(! attributeProperty.equals(aliasedPropertyAccessor.getAlias(property + ".description")) && isParameter(propertyContainer, attributeProperty)){
+        	if(! attributeProperty.equals(aliasedPropertyAccessor.getAlias(property + ".description")) 
+        			&& ! attributeProperty.equals(aliasedPropertyAccessor.getAlias(property + ".name"))
+        			&& isParameter(propertyContainer, attributeProperty)){
         		Object attributeValue = propertyContainer.get(attributeProperty);
 			if(attributeValue != SpecialValue.UNDEFINED && xmlWriter != null){
         			String attributeName = attributeProperty.substring(prefix.length());

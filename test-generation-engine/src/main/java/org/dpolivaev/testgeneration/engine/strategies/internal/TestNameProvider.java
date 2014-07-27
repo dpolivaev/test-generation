@@ -20,7 +20,7 @@ import org.dpolivaev.testgeneration.engine.scriptwriter.AliasedPropertyAccessor;
 import org.dpolivaev.testgeneration.engine.scriptwriter.internal.PartValueParser;
 
 
-public class TestIdProvider implements ValueProvider{
+public class TestNameProvider implements ValueProvider{
 	
 	final private String propertySeparator;
 	final private String valueNameSeparator;
@@ -28,11 +28,11 @@ public class TestIdProvider implements ValueProvider{
 	private Set<String> forcedProperties;
 
 	
-	public TestIdProvider() {
+	public TestNameProvider() {
 		this("=", " ");
 	}
 
-	public TestIdProvider(String valueNameSeparator, String propertySeparator) {
+	public TestNameProvider(String valueNameSeparator, String propertySeparator) {
 		super();
 		this.valueNameSeparator = valueNameSeparator;
 		this.propertySeparator = propertySeparator;
@@ -118,14 +118,14 @@ public class TestIdProvider implements ValueProvider{
 		return values.trim();
 	}
 
-	public TestIdProvider exclude(String... propertyNames) {
+	public TestNameProvider exclude(String... propertyNames) {
 		excludedAssignmentFilter.addPatterns(asList(propertyNames));
 		return this;
 	}
 
 
 
-	public TestIdProvider include(String... propertyNames) {
+	public TestNameProvider include(String... propertyNames) {
 		forcedProperties = new LinkedHashSet<>(asList(propertyNames));
 		return this;
 	}

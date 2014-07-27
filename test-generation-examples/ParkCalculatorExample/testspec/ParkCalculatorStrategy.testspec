@@ -14,8 +14,8 @@ strategy structure
 	let testcase.verification.alias be "assert"
 	let testcase.postprocessing.alias be "postprocessing"
 	
-	let lazy testcase be StrategyHelper.idProvider
-	let lazy testcase.description be StrategyHelper.descriptionProvider
+	let lazy testcase.name be StrategyHelper.testcaseName
+	let lazy testcase.description be StrategyHelper.testcaseDescription
 
 
 /* 
@@ -29,7 +29,7 @@ strategy parkCostCalculatorTests
 	 * its imports and the test driver class.
 	 * Their values remains the same all the time.
 	 */
-	let script be "parkcalculator/ParkCalculatorTest"
+	let script.name be "parkcalculator/ParkCalculatorTest"
 	let script.imports be "import static parkcalculator.Lots.*;
 	import static parkcalculator.BadValues.*;
 	import parkcalculator.testgeneration.LongTermGarageParkingCalculator;"

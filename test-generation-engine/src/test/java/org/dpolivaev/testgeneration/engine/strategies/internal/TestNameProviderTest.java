@@ -6,14 +6,14 @@ import static org.junit.Assert.assertThat;
 
 import org.dpolivaev.testgeneration.engine.ruleengine.Assignment;
 import org.dpolivaev.testgeneration.engine.ruleengine.Assignments;
-import org.dpolivaev.testgeneration.engine.strategies.internal.TestIdProvider;
+import org.dpolivaev.testgeneration.engine.strategies.internal.TestNameProvider;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-public class TestIdProviderTest {
+public class TestNameProviderTest {
 	private Assignments assignments;
-	private TestIdProvider testIdProvider;
+	private TestNameProvider testIdProvider;
 	
 	private void givenAssignment(String name, Object value) {
 		givenAssignment(name, value, "");
@@ -32,7 +32,7 @@ public class TestIdProviderTest {
 		givenAssignment("testcase.focus.alias", "when");
 		givenAssignment("testcase.verification.alias", "verification");
 		givenAssignment("testcase.postprocessing.alias", "postprocessing");
-		testIdProvider = new TestIdProvider("=", " ");
+		testIdProvider = new TestNameProvider("=", " ");
 	}
 
 	@Test
@@ -44,7 +44,7 @@ public class TestIdProviderTest {
 
 	@Test
 	public void includesSpecificProperties(){
-		testIdProvider = new TestIdProvider("=", " ").include("name");
+		testIdProvider = new TestNameProvider("=", " ").include("name");
 		givenAssignment("name", "value", "");
 		assertThat((String)testIdProvider.value(assignments), equalTo("value"));
 
@@ -52,7 +52,7 @@ public class TestIdProviderTest {
 
 	@Test
 	public void includesNonIteratingSpecificProperties(){
-		testIdProvider = new TestIdProvider("=", " ").include("name");
+		testIdProvider = new TestNameProvider("=", " ").include("name");
 		givenAssignment("name", "value", "");
 		Mockito.when(assignments.getAssignment("name").rule.forcesIteration()).thenReturn(false);
 		assertThat((String)testIdProvider.value(assignments), equalTo("value"));

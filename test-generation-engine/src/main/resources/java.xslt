@@ -101,7 +101,7 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.testgeneratio
 	</xsl:template>
 	
 	<xsl:template name="package">
-		<xsl:variable name="package" select="java:substring-before-last(@id, '/')"/>
+		<xsl:variable name="package" select="java:substring-before-last(@name, '/')"/>
 		<xsl:if test="$package != ''">
 			<xsl:text>package </xsl:text>
 			<xsl:value-of select="$package"/>
@@ -160,9 +160,9 @@ import org.dpolivaev.testgeneration.engine.java.GoalCoverage;
 		</xsl:if>
 	</xsl:template>	
 	
-	<xsl:template match="Script">
+	<xsl:template match="Script[@name]">
 		<xsl:call-template name="package" />
-		<xsl:variable name="class" select="java:upper-first-camel-case-id(java:substring-after-last(@id, '/'))"/>
+		<xsl:variable name="class" select="java:upper-first-camel-case-id(java:substring-after-last(@name, '/'))"/>
 		<xsl:call-template name="imports" />
 		<xsl:text>@SuppressWarnings("unused")</xsl:text>
 		<xsl:call-template name="eol"/>
@@ -173,7 +173,7 @@ import org.dpolivaev.testgeneration.engine.java.GoalCoverage;
 		<xsl:call-template name="driverReference"/>
 		<xsl:call-template name="scriptPrecondition"/>
 		<xsl:call-template name="scriptPostcondition"/>
-		<xsl:apply-templates select="TestCase[@id]"/>
+		<xsl:apply-templates select="TestCase[@name]"/>
 		<xsl:text>
 }
 </xsl:text>
@@ -181,8 +181,8 @@ import org.dpolivaev.testgeneration.engine.java.GoalCoverage;
 	
 	<xsl:template match="TestCase"/> 
 	
-	<xsl:template match="TestCase[@id]">
-		<xsl:variable name="method" select="java:camel-case-id(@id)"/>
+	<xsl:template match="TestCase[@name]">
+		<xsl:variable name="method" select="java:camel-case-id(@name)"/>
 		<xsl:apply-templates select="Description"/>
 		<xsl:call-template name="Coverage"/>	
 		<xsl:call-template name="eol1"/>
@@ -200,7 +200,7 @@ import org.dpolivaev.testgeneration.engine.java.GoalCoverage;
 	</xsl:template>
 	
 	<xsl:template match="ScriptPrecondition|Precondition|Focus|Verification|Postprocessing|ScriptPostprocessing">
-		<xsl:variable name="method" select="java:lower-first-camel-case-id(@id)"/>
+		<xsl:variable name="method" select="java:lower-first-camel-case-id(@step)"/>
 		<xsl:call-template name="eol1"/>
 		<xsl:text>// </xsl:text>
 		<xsl:value-of select="name()"/>

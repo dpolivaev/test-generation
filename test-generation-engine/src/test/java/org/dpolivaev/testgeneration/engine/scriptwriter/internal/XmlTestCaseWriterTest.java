@@ -80,9 +80,9 @@ public class XmlTestCaseWriterTest {
 
     @Test
     public void createsTestCaseElementWithContent() throws Exception{
-        givenProperty("testcase", "id");
+        givenProperty("testcase.name", "name");
         createScript();
-        checkOutput("<TestCase id='id'/>");
+        checkOutput("<TestCase name='name'/>");
     }
 
      @Test
@@ -103,19 +103,19 @@ public class XmlTestCaseWriterTest {
     
     @Test
     public void createsTestCaseElementWithFocusPart() throws Exception{
-        givenProperty("testcase", "testcase");
+        givenProperty("testcase.name", "testcase");
         givenProperty("testcase.focus", "focus");
         createScript();
-        checkOutput("<TestCase id='testcase'><Focus id='focus'/></TestCase>");
+        checkOutput("<TestCase name='testcase'><Focus step='focus'/></TestCase>");
     }
 
     @Test
     public void createsTestCaseElementWithCommentedFocusPart() throws Exception{
-        givenProperty("testcase", "testcase");
+        givenProperty("testcase.name", "testcase");
         givenProperty("testcase.focus", "focus ; comment");
         createScript();
-        checkOutput("<TestCase id='testcase'>"
-			+ "<Focus id='focus'>"
+        checkOutput("<TestCase name='testcase'>"
+			+ "<Focus step='focus'>"
 			+ "<Comment>comment</Comment>"
 			+ "</Focus>"
 			+ "</TestCase>");
@@ -123,70 +123,70 @@ public class XmlTestCaseWriterTest {
 
     @Test
     public void createsTestCaseElementWithFocusElementAlias() throws Exception{
-        givenProperty("testcase", "testcase");
+        givenProperty("testcase.name", "testcase");
         givenProperty("Focus.alias", "Alias");
         givenProperty("testcase.focus", "focus");
         createScript();
-        checkOutput("<TestCase id='testcase'><Alias id='focus'/></TestCase>");
+        checkOutput("<TestCase name='testcase'><Alias step='focus'/></TestCase>");
     }
     @Test
     public void createsTestCaseElementWithTestCaseElementAlias() throws Exception{
-        givenProperty("testcase", "testcase");
+        givenProperty("testcase.name", "testcase");
         givenProperty("TestCase.alias", "Alias");
         createScript();
-        checkOutput("<Alias id='testcase'/>");
+        checkOutput("<Alias name='testcase'/>");
     }
 
     @Test
     public void createsTestCaseElementWithTestCaseAlias() throws Exception{
         givenProperty("testcase.alias", "scenario");
         givenProperty("TestCase.alias", "Scenario");
-        givenProperty("scenario", "scenario");
+        givenProperty("scenario.name", "scenario");
         createScript();
-        checkOutput("<Scenario id='scenario'/>");
+        checkOutput("<Scenario name='scenario'/>");
     }
 
     @Test
     public void ignoredTestPartAlias() throws Exception{
         givenProperty("testcase.focus.alias", "focus");
-        givenProperty("testcase", "testcase");
+        givenProperty("testcase.name", "testcase");
         createScript();
-        checkOutput("<TestCase id='testcase'/>");
+        checkOutput("<TestCase name='testcase'/>");
     }
 
     @Test
     public void createsTestCaseElementWithTwoFocusParts() throws Exception{
-        givenProperty("testcase", "testcase");
+        givenProperty("testcase.name", "testcase");
         givenProperty("testcase.focus", "focus");
         givenProperty("testcase.focus#1", "focus1");
         createScript();
-        checkOutput("<TestCase id='testcase'><Focus id='focus'/><Focus id='focus1'/></TestCase>");
+        checkOutput("<TestCase name='testcase'><Focus step='focus'/><Focus step='focus1'/></TestCase>");
     }
 
     @Test
     public void createsTestCaseElementWithThreeFocusPartsAndContent() throws Exception{
-        givenProperty("testcase", "testcase");
+        givenProperty("testcase.name", "testcase");
         givenProperty("testcase.focus", "focus");
         givenProperty("testcase.focus#1", "focus1");
         givenProperty("testcase.focus#3", "focus3");
         createScript();
-        checkOutput("<TestCase id='testcase'><Focus id='focus'/><Focus id='focus1'/><Focus id='focus3'/></TestCase>");
+        checkOutput("<TestCase name='testcase'><Focus step='focus'/><Focus step='focus1'/><Focus step='focus3'/></TestCase>");
     }
 
 
     @Test
     public void createsTestCaseElementWithAllPartsAndContent() throws Exception{
-        givenProperty("testcase", "testcase");
+        givenProperty("testcase.name", "testcase");
         givenProperty("testcase.precondition", "precondition");
         givenProperty("testcase.focus", "focus");
         givenProperty("testcase.verification", "verification");
         givenProperty("testcase.postprocessing", "postprocessing");
         createScript();
-        checkOutput("<TestCase id='testcase'>" +
-                "<Precondition id='precondition'/>" +
-                "<Focus id='focus'/>" +
-                "<Verification id='verification'/>" +
-                "<Postprocessing id='postprocessing'/>" +
+        checkOutput("<TestCase name='testcase'>" +
+                "<Precondition step='precondition'/>" +
+                "<Focus step='focus'/>" +
+                "<Verification step='verification'/>" +
+                "<Postprocessing step='postprocessing'/>" +
         	"</TestCase>");
     }
     @Test
@@ -210,19 +210,19 @@ public class XmlTestCaseWriterTest {
 
     @Test
     public void createsTestCaseElementWithZeroFocusParameters() throws Exception{
-        givenProperty("testcase", "testcase");
+        givenProperty("testcase.name", "testcase");
         givenProperty("testcase.focus", "focus ()");
         createScript();
-        checkOutput("<TestCase id='testcase'><Focus id='focus'>"
+        checkOutput("<TestCase name='testcase'><Focus step='focus'>"
         		+ "</Focus></TestCase>");
     }
     
     @Test
     public void createsTestCaseElementWithUndefinedFocusParameters() throws Exception{
-        givenProperty("testcase", "testcase");
+        givenProperty("testcase.name", "testcase");
         givenProperty("testcase.focus", "focus (:x)");
         createScript();
-        checkOutput("<TestCase id='testcase'><Focus id='focus'>"
+        checkOutput("<TestCase name='testcase'><Focus step='focus'>"
         		+ "<Parameter name='x'  type='org.dpolivaev.testgeneration.engine.ruleengine.SpecialValue'>UNDEFINED</Parameter>"
         		+ "</Focus></TestCase>");
     }
@@ -230,30 +230,30 @@ public class XmlTestCaseWriterTest {
 
     @Test
     public void createsTestCaseElementWithNamedFocusParameters() throws Exception{
-        givenProperty("testcase", "testcase");
+        givenProperty("testcase.name", "testcase");
         givenProperty("testcase.focus", "focus (x:y)");
         createScript();
-        checkOutput("<TestCase id='testcase'><Focus id='focus'>"
+        checkOutput("<TestCase name='testcase'><Focus step='focus'>"
 			+ "<Parameter type='' name='x'>y</Parameter>"
 			+ "</Focus></TestCase>");
     }
 
     @Test
     public void createsTestCaseElementWithLiteralFocusParameter() throws Exception{
-        givenProperty("testcase", "testcase");
+        givenProperty("testcase.name", "testcase");
         givenProperty("testcase.focus", "focus (x)");
         createScript();
-        checkOutput("<TestCase id='testcase'><Focus id='focus'>"
+        checkOutput("<TestCase name='testcase'><Focus step='focus'>"
 			+ "<Parameter type='' name='x'>x</Parameter>"
 			+ "</Focus></TestCase>");
     }
     @Test
     public void createsTestCaseElementWithOneFocusParameter() throws Exception{
-        givenProperty("testcase", "testcase");
+        givenProperty("testcase.name", "testcase");
         givenProperty("testcase.focus", "focus (:x)");
         givenProperty("x", 1);
         createScript();
-        checkOutput("<TestCase id='testcase'><Focus id='focus'>"
+        checkOutput("<TestCase name='testcase'><Focus step='focus'>"
         		+ "<Parameter type='java.lang.Integer' name='x'>1</Parameter>"
         		+ "</Focus></TestCase>");
     }
@@ -261,12 +261,12 @@ public class XmlTestCaseWriterTest {
     
     @Test
     public void createsTestCaseElementWithTwoFocusParameters() throws Exception{
-        givenProperty("testcase", "testcase");
+        givenProperty("testcase.name", "testcase");
         givenProperty("testcase.focus", "focus (:x, :y)");
         givenProperty("x", "1");
         givenProperty("y", "2");
         createScript();
-        checkOutput("<TestCase id='testcase'><Focus id='focus'>"
+        checkOutput("<TestCase name='testcase'><Focus step='focus'>"
         		+ "<Parameter type='java.lang.String' name='x'>1</Parameter>"
         		+ "<Parameter type='java.lang.String' name='y'>2</Parameter>"
         		+ "</Focus></TestCase>");

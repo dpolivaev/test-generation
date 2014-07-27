@@ -29,11 +29,6 @@ public class SingleScriptWriter implements PropertyHandler {
         xmlWriter.beginElement(scriptElementPropertyName);
 		final String scriptPropertyName = aliasedPropertyAccessor.getAlias(AliasedPropertyAccessor.DEFAULT_SCRIPT_PROPERTY_NAME);
 
-        Object scriptValue = propertyContainer.get(scriptPropertyName);
-        if(scriptValue.equals(SpecialValue.UNDEFINED)){
-        	scriptValue = scriptPropertyName;
-        	xmlWriter.setAttribute("id", scriptPropertyName);
-        }
         testCaseProducer.addAttributes(propertyContainer, scriptPropertyName);
         testCaseProducer.addParts(propertyContainer, new AliasedPropertyAccessor(propertyContainer).getScriptParts());
         scriptProducer = testCaseProducer;

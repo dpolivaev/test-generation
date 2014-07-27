@@ -21,7 +21,7 @@ import org.dpolivaev.testgeneration.engine.ruleengine.Strategy;
 import org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider;
 import org.dpolivaev.testgeneration.engine.ruleengine.ValueProviderHelper;
 import org.dpolivaev.testgeneration.engine.strategies.StrategyHelper;
-import org.dpolivaev.testgeneration.engine.strategies.internal.TestIdProvider;
+import org.dpolivaev.testgeneration.engine.strategies.internal.TestNameProvider;
 
 @SuppressWarnings("all")
 class _MyFile_first_StrategyFactory0 {
@@ -29,9 +29,9 @@ class _MyFile_first_StrategyFactory0 {
   
   private int _instanceId = _instanceCounter++;
   
-  private TestIdProvider _value1(final PropertyContainer propertyContainer) {
-    TestIdProvider _idProvider = StrategyHelper.idProvider();
-    return _idProvider;
+  private TestNameProvider _value1(final PropertyContainer propertyContainer) {
+    TestNameProvider _testcaseName = StrategyHelper.testcaseName();
+    return _testcaseName;
   }
   
   RequirementBasedStrategy first() {

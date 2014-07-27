@@ -9,9 +9,9 @@ import org.dpolivaev.testgeneration.engine.java.Coverage;
 import org.dpolivaev.testgeneration.engine.java.GoalCoverage;
 
 import static login.LoginTestDriver.Page.*;
-						   import static login.LoginTestDriver.EMail.*;
-						   import static login.LoginTestDriver.Password.*;
-						   import static login.LoginTestDriver.Protocol.*;
+import static login.LoginTestDriver.EMail.*;
+import static login.LoginTestDriver.Password.*;
+import static login.LoginTestDriver.Protocol.*;
 import login.LoginTestDriver;
 import static login.LoginTestDriver.*;
 

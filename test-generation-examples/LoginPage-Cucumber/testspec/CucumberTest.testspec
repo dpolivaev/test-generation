@@ -8,10 +8,10 @@ let testcase.alias be "scenario"
 let scenario.precondition.alias be "given"
 let scenario.focus.alias be "when"
 let scenario.verification.alias be "then"
-let lazy scenario be StrategyHelper.idProvider
-let lazy scenario.description be StrategyHelper.descriptionProvider
+let lazy scenario be StrategyHelper.testcaseName
+let lazy scenario.description be StrategyHelper.testcaseDescription
 
-let script be "login/LoginTest"	
+let script.name be "login/LoginTest"	
 let script.feature be "Log in"
 let script.description be "I want to be logged if after 
 submitting correct credentials" 
@@ -35,7 +35,7 @@ submitting correct credentials"
  rule pageAfterSubmit let pageAfterSubmit be :page
  rule pageAfterSubmit if(:email == "valid" && :password == "valid") let pageAfterSubmit be "loggedIn"
  
- let lazy testcase be (:password  " password and " :email " email entered")
+ let lazy testcase.name be (:password  " password and " :email " email entered")
  
 run strategy goal loginPageTests 
 	output "output/xml" , apply "/cucumber.xslt" output "generated-tests/feature"

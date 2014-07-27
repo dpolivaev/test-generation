@@ -103,7 +103,7 @@ class StrategyCompilationTest {
 		'''
 			import org.dpolivaev.testgeneration.engine.strategies.StrategyHelper;
 			strategy first
-				let testcase be StrategyHelper.idProvider
+				let testcase be StrategyHelper.testcaseName
 		'''.assertCompilesToFile(testName)
 	}
 

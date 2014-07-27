@@ -9,8 +9,8 @@ import org.dpolivaev.testgeneration.engine.java.Coverage;
 import org.dpolivaev.testgeneration.engine.java.GoalCoverage;
 
 import static parkcalculator.Lots.*;
-	import static parkcalculator.BadValues.*;
-	import parkcalculator.testgeneration.LongTermGarageParkingCalculator;
+import static parkcalculator.BadValues.*;
+import parkcalculator.testgeneration.LongTermGarageParkingCalculator;
 import parkcalculator.ParkCalculatorTestDriver;
 import static parkcalculator.ParkCalculatorTestDriver.*;
 

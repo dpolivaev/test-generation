@@ -36,7 +36,7 @@ public class MultipleScriptsWriter implements PropertyHandler{
     public void handlePropertyCombination(PropertyContainer propertyContainer) {
     	
         final AliasedPropertyAccessor aliasedPropertyAccessor = new AliasedPropertyAccessor(propertyContainer);
-		final String scriptPropertyName = aliasedPropertyAccessor.getAlias(AliasedPropertyAccessor.DEFAULT_SCRIPT_PROPERTY_NAME);
+		final String scriptPropertyName = aliasedPropertyAccessor.getAlias(AliasedPropertyAccessor.DEFAULT_SCRIPT_PROPERTY_NAME)+ ".name";
 		Object scriptValue = propertyContainer.get(scriptPropertyName);
         String scriptName;
         if(scriptValue == SpecialValue.UNDEFINED)

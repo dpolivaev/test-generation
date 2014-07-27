@@ -70,7 +70,8 @@ public class DescriptionProviderTest {
 		givenAssignment("testcase.verification", "verification","");
 		givenAssignment("testcase.postprocessing", "postprocessing","");
 		givenAssignment("script.postprocessing", "script postprocessing","");
-		givenAssignment("script", "script","");
+		givenAssignment("script.name", "script","");
+		givenAssignment("testcase.name", "testcase","");
 
 		String description = new DescriptionProvider(": ", "\n")
 				.describe((PropertyContainer) assignments);
@@ -86,10 +87,11 @@ public class DescriptionProviderTest {
 		givenAssignment("focus", "focus(:x)","");
 		givenAssignment("x", "x","");
 		givenAssignment("focus#1", "focus1","");
+		givenAssignment("mytestcase.name", "name","");
 		givenAssignment("mytestcase.verification", "verification","");
 		givenAssignment("mytestcase.postprocessing", "postprocessing","");
 		givenAssignment("myscript.postprocessing", "myscript postprocessing","");
-		givenAssignment("myscript", "myscript","");
+		givenAssignment("myscript.name", "myscript","");
 
 		String description = new DescriptionProvider(": ", "\n")
 				.describe((PropertyContainer) assignments);

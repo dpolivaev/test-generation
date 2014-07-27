@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Script id="tests/call price">
+<Script name="tests/call price">
   <Parameter name="driver">testdriver/call price driver</Parameter>
   <Parameter name="imports">import somepackage.subpackage.Class1;
 import somepackage.subpackage.Class2;
 </Parameter>
-   <ScriptPrecondition id=" script precondition">
+   <ScriptPrecondition step=" script precondition">
    	  <Parameter name="some parameter">"12345"</Parameter>
    </ScriptPrecondition>
-  <TestCase id="isCallValid destination=&quot;National&quot; foc.country=&quot;Motherland&quot; tariff=&quot;Standard&quot; foc.callBeginTime=&quot;0:00:00&quot; dayOfTheWeek=&quot;Monday&quot; foc.callDuration=&quot;0:00:01&quot;">
+  <TestCase name='isCallValid destination="National" foc.country="Motherland" tariff="Standard" foc.callBeginTime="0:00:00" dayOfTheWeek="Monday" foc.callDuration="0:00:01"'>
     <Description>-&gt;script: CallPrice
 -&gt;isCallValid: true
 isCallValid-&gt;destination: "National"
@@ -21,7 +21,7 @@ destination-&gt;foc.callDuration: "0:00:01"
       <Item name="req123" count="1" firstTime="true">"National"</Item>
       <Item name="req123" count="1" firstTime="true">bla</Item>
     </Goal>
-    <Focus id="calculate">
+    <Focus step="calculate">
       <Parameter name="callBeginTime">"0:00:00"</Parameter>
       <Parameter name="callDuration">"0:00:01"</Parameter>
       <Parameter name="cheapCallActiveForCall">false</Parameter>
@@ -31,7 +31,7 @@ destination-&gt;foc.callDuration: "0:00:01"
       <Parameter name="phoneNumber">"valid"</Parameter>
     </Focus>
   </TestCase>
-  <TestCase id="isCallValid destination=&quot;National&quot; foc.country=&quot;Motherland&quot; tariff=&quot;Standard&quot; foc.callBeginTime=&quot;0:00:01&quot; dayOfTheWeek=&quot;Tuesday&quot; foc.callDuration=&quot;0:00:59&quot;">
+  <TestCase name="isCallValid destination=&quot;National&quot; foc.country=&quot;Motherland&quot; tariff=&quot;Standard&quot; foc.callBeginTime=&quot;0:00:01&quot; dayOfTheWeek=&quot;Tuesday&quot; foc.callDuration=&quot;0:00:59&quot;">
     <Description>-&gt;script: CallPrice
 -&gt;isCallValid: true
 isCallValid-&gt;destination: "National"
@@ -45,7 +45,7 @@ destination-&gt;foc.callDuration: "0:00:59"
       <Item name="req123" count="2" firstTime="false">"National"</Item>
       <Item name="req123" count="2" firstTime="false">bla</Item>
     </Goal>
-    <Focus id="calculate">
+    <Focus step="calculate">
       <Parameter name="callBeginTime">"0:00:01"</Parameter>
       <Parameter name="callDuration">"0:00:59"</Parameter>
       <Parameter name="cheapCallActiveForCall">false</Parameter>
@@ -55,7 +55,7 @@ destination-&gt;foc.callDuration: "0:00:59"
       <Parameter name="phoneNumber">"valid"</Parameter>
     </Focus>
   </TestCase>
-  <TestCase id="multipleGoals">
+  <TestCase name="multipleGoals">
     <Description>description</Description>
     <Goal name="requirements1">
       <Item name="req123" count="2" firstTime="false">"National"</Item>
@@ -65,6 +65,6 @@ destination-&gt;foc.callDuration: "0:00:59"
       <Item name="req123" count="2" firstTime="true">"National"</Item>
       <Item name="req123" count="2" firstTime="false">bla</Item>
     </Goal>
-    <Focus id="focus"/>
+    <Focus step="focus"/>
   </TestCase>
 </Script>

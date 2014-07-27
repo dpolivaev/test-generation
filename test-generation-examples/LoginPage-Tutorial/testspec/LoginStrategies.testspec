@@ -44,7 +44,7 @@ strategy loginTests
 strategy submitTest
 	
 	
-	let script be "login/LoginSubmit"
+	let script.name be "login/LoginSubmit"
 	let (submitArrange.next) be "enter mail address(:email)"
 	let (submitArrange.next) be "enter password(:password)"
 	let (submitAssert.next) be "checkPage(:pageAfterSubmit)"
@@ -68,7 +68,7 @@ strategy submitTest
 		let pageAfterSubmit be LOGIN_SUCCESS_PAGE
 
 strategy formatTest
-	let script be "login/LoginFormat"
+	let script.name be "login/LoginFormat"
 	let (formatAssert.next) be "entered password is not visible"
 	let [R2] be :(formatAssert)
 

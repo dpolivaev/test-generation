@@ -85,8 +85,8 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.testgeneratio
 		<xsl:apply-templates/>
 	</xsl:template>
 	
-	<xsl:template match="Script">
-	<xsl:variable name="file" select="java:snake-lower-case-id(@id)"/>
+	<xsl:template match="Script[@name]">
+	<xsl:variable name="file" select="java:snake-lower-case-id(@name)"/>
 	<xsl:text>#include &lt;stdarg.h&gt;
 #include &lt;stddef.h&gt;
 #include &lt;setjmp.h&gt;
@@ -111,13 +111,13 @@ static void global_postprocessing(){</xsl:text>
 }
 
 </xsl:text>
-	<xsl:apply-templates select="TestCase[@id]"/>
+	<xsl:apply-templates select="TestCase[@name]"/>
 	<xsl:call-template name="eol"/>
 	<xsl:call-template name="eol"/>
 	<xsl:text>int main(void) {
     int rc;
     const UnitTest tests[] = {</xsl:text>
-    <xsl:for-each select="TestCase[@id]">    
+    <xsl:for-each select="TestCase[@name]">    
 	    <xsl:call-template name="eol2"/>   
 	    <xsl:text>unit_test(</xsl:text>
 	    <xsl:call-template name="testCaseName"/>
@@ -136,14 +136,14 @@ static void global_postprocessing(){</xsl:text>
 	<xsl:template match="TestCase"/> 
 	
 	<xsl:template name="testCaseName">
-		<xsl:variable name="method" select="java:snake-lower-case-id(@id)"/>
+		<xsl:variable name="method" select="java:snake-lower-case-id(@name)"/>
 		<xsl:text>test</xsl:text>
 		<xsl:number format="001"/>
 		<xsl:text>_</xsl:text>
 		<xsl:value-of select="$method"/>
 	</xsl:template>
 	
-	<xsl:template match="TestCase[@id]">
+	<xsl:template match="TestCase[@name]">
 		<xsl:text>/*!</xsl:text>
 		<xsl:call-template name="eol"/>
 		<xsl:apply-templates select="Description"/>
@@ -160,7 +160,7 @@ static void global_postprocessing(){</xsl:text>
 	</xsl:template>
 	
 	<xsl:template match="ScriptPrecondition|Precondition|Focus|Verification|Postprocessing|ScriptPostprocessing">
-		<xsl:variable name="method" select="java:snake-lower-case-id(@id)"/>
+		<xsl:variable name="method" select="java:snake-lower-case-id(@step)"/>
 		<xsl:call-template name="eol1"/>
 		<xsl:text>// </xsl:text>
 		<xsl:value-of select="name()"/>
