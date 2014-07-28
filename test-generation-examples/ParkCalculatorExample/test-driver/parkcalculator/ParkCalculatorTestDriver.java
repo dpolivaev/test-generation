@@ -199,7 +199,7 @@ public class ParkCalculatorTestDriver {
 		assertThat(calculatedCosts, equalTo(expectedCosts));
 	}
 
-	public void verifyParkingCostsForLotLONG_TERM_SURFACE_PARKING() {
+	public void verifyParkingCostsForLotLongTermSurfaceParking() {
 		int expectedCosts = weeks * 60 + days * 10;
 		int partialDayCosts = hours * 2;
 		if(minutes > 0)

@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PartValueParser {
-	private static final String METHOD_PATTERN = "([^(;]+)";
+	private static final String METHOD_PATTERN = "([^\"(;]+)";
 	private static final String ARGLIST_PATTERN = "(?:\\(([^;]*)\\))?";
 	private static final String COMMENT_PATTERN = "(?:;(.*))?";
 	private final static Pattern METHOD_CALL = Pattern.compile(METHOD_PATTERN + ARGLIST_PATTERN + COMMENT_PATTERN + "\\s*", Pattern.DOTALL);

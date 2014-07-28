@@ -64,7 +64,7 @@ strategy testsForSuccess
 		/* Keyword "lazy" means that property “assert” is lasily evaluated 
 		 * and can be redefined adding another value to the rule set.
 		 */
-		let lazy assert be "verify parking costs (:expectedCosts)"
+		let lazy assert be ('"driver.verifyParkingCosts(':expectedCosts');"')
 		
 		/* 
 		 * Define multiple values for parameter “entryTime” of the second precondition.
@@ -90,10 +90,10 @@ strategy testsForSuccess
 		 * It allows to use this list in definitions of other rules and reduce duplication.
 		 */
 		let "parking lot" be
-			"VALET_PARKING"{
+			"valet parking"{
 				apply valetParkingTests
 			}, 
-			"SHORT_TERM_PARKING"{
+			"short term parking"{
 				let hours be 0, 1, 11, 12, 23 {
 					let minutes be 0, 30, 31, 59
 				}
@@ -104,7 +104,7 @@ strategy testsForSuccess
 				 */
 				let expectedCosts be traced ShortTermParkingCalculator.calculateCosts(:weeks as int, :days as int, :hours as int, :minutes as int)
 			},  
-			"LONG_TERM_GARAGE_PARKING"{
+			"long term garage parking"{
 				let hours be 0, 1, 5, 6, 23 {
 					let minutes be 0, 30, 31, 59
 				}
@@ -115,7 +115,7 @@ strategy testsForSuccess
 				 */
 				let expectedCosts be ("new LongTermGarageParkingCalculator().calculateCosts(":weeks", ":days", ":hours" ,":minutes")") 
 			}, 
-			"LONG_TERM_SURFACE_PARKING"{
+			"long term surface parking"{
 				// verification performed by driver
 				let assert be ("verify parking costs for lot ":"parking lot")
 				let hours be 0, 4, 5, 23 {
@@ -126,7 +126,7 @@ strategy testsForSuccess
 				if (:hours as int) >= 5 let [Req13] be (:hours" hours " :minutes" minutes")
 				if :days  == 0 let [Req14] be (:"parking lot"" ":weeks" weeks " :days" days")
 			}, 
-			"ECONOMY_LOT_PARKING"{
+			"economy lot parking"{
 				apply economyParkingTests
 			}
 	}
