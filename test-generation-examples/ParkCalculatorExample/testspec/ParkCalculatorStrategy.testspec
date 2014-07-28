@@ -1,6 +1,19 @@
 package parkcalculator.testgeneration
 import org.dpolivaev.testgeneration.engine.strategies.StrategyHelper; import org.dpolivaev.testgeneration.engine.strategies.StepCounter
 
+strategy scriptConfiguration
+	/*
+	 * Set properties used by the writer as generated test class,
+	 * its imports and the test driver class.
+	 * Their values remains the same all the time.
+	 */
+	let script.name be "parkcalculator/ParkCalculatorTest"
+	let script.imports be "import static parkcalculator.Lots.*;
+	import static parkcalculator.BadValues.*;
+	import parkcalculator.testgeneration.LongTermGarageParkingCalculator;"
+	let script.driver be "parkcalculator/ParkCalculatorTestDriver"
+
+
 /*
  * Default test part property names 
  * (script.precondition, precondition, focus, verification, postcondition, script.postcondition) 
@@ -24,17 +37,7 @@ strategy structure
  * available as StrategyHelper method
  */
 strategy parkCostCalculatorTests
-	/*
-	 * Set properties used by the writer as generated test class,
-	 * its imports and the test driver class.
-	 * Their values remains the same all the time.
-	 */
-	let script.name be "parkcalculator/ParkCalculatorTest"
-	let script.imports be "import static parkcalculator.Lots.*;
-	import static parkcalculator.BadValues.*;
-	import parkcalculator.testgeneration.LongTermGarageParkingCalculator;"
-	let script.driver be "parkcalculator/ParkCalculatorTestDriver"
-
+	apply scriptConfiguration
 	apply structure
 
 	/*
@@ -46,90 +49,83 @@ strategy parkCostCalculatorTests
 	"failure"{
 		apply testsForFailure
 	}
-
+	
 strategy testsForSuccess
+	// Define test steps
 	val precondition = stepCounter("precondition")
-	/*
-	 * In this category define test focus as "calculate parking costs"
+	let (precondition.next) be "select lot (:parking lot)"
+	let (precondition.next) be "set entry time (:entry time)"
+	let (precondition.next) be "set parking duration (:weeks, :days, :hours, :minutes)"
+	let focus be "calculate parking costs"
+	/* Keyword "lazy" means that property “assert” is lasily evaluated 
+	 * and can be redefined adding another value to the rule set.
 	 */
-	let focus be "calculate parking costs"{
-
-		/*
-		 * For this focus define preconditions and assert steps
-		 */		
-		let (precondition.next) be "select lot (:parking lot)"
-		let (precondition.next) be "set entry time (:entry time)"
-		let (precondition.next) be "set parking duration (:weeks, :days, :hours, :minutes)"
+	let lazy assert be ('"driver.verifyParkingCosts(':expectedCosts');"')
 		
-		/* Keyword "lazy" means that property “assert” is lasily evaluated 
-		 * and can be redefined adding another value to the rule set.
-		 */
-		let lazy assert be ('"driver.verifyParkingCosts(':expectedCosts');"')
-		
-		/* 
-		 * Define multiple values for parameter “entryTime” of the second precondition.
-		 */
-		let "entry time" be '"01/1/1970 12:00 am"', '"12/31/1999 12:00 pm"', '"02/28/2016 23:59 pm"'
-		
-		/*
-		 * Leaving time is calculated as entry time plus parking weeks, days, hours and minutes. 
-		 * For each value of parameter "lot" used in the first precondition
-		 * there are eight values of weeks and days which must be tried by the test.
-		 */
-		
-		for each "parking lot" {
-			let weeks be 
-				0  { let days be 0, 1, 6}, 
-				1  { let days be 1, 6},
-				6  { let days be 0, 6},
-				26 { let days be 4}
-		}
-		/*
-		 * "parking lot" iterates over values "VALET_PARKING", "SHORT_TERM_PARKING" and so on.
-		 * This value list is given a name listOfValidLots.
-		 * It allows to use this list in definitions of other rules and reduce duplication.
-		 */
-		let "parking lot" be
-			"valet parking"{
-				apply valetParkingTests
-			}, 
-			"short term parking"{
-				let hours be 0, 1, 11, 12, 23 {
-					let minutes be 0, 30, 31, 59
-				}
-				/*
-				 * Calculation of expected costs here makes use of a oracle ShortTermParkingCalculator defined right after the strategy.
-				 * It demonstrates that use of separate models makes strategy more concise because 
-				 * it does not have to implement the calculations itself. 
-				 */
-				let expectedCosts be traced ShortTermParkingCalculator.calculateCosts(:weeks as int, :days as int, :hours as int, :minutes as int)
-			},  
-			"long term garage parking"{
-				let hours be 0, 1, 5, 6, 23 {
-					let minutes be 0, 30, 31, 59
-				}
-				// call oracle just for coverage
-				let modelCallResult be traced LongTermGarageParkingCalculator.calculateCosts(:weeks as int, :days as int, :hours as int, :minutes as int) 
-				/*
-				 * Calculation of expected costs here makes use of a oracle called by driver. 
-				 */
-				let expectedCosts be ("new LongTermGarageParkingCalculator().calculateCosts(":weeks", ":days", ":hours" ,":minutes")") 
-			}, 
-			"long term surface parking"{
-				// verification performed by driver
-				let assert be ("verify parking costs for lot ":"parking lot")
-				let hours be 0, 4, 5, 23 {
-					let minutes be 0,1, 59
-				}
-				let [Req11] be (:"parking lot"" ":hours" hours " :minutes" minutes")
-				if (:hours as int) < 5 let [Req12] be (:hours" hours " :minutes" minutes")
-				if (:hours as int) >= 5 let [Req13] be (:hours" hours " :minutes" minutes")
-				if :days  == 0 let [Req14] be (:"parking lot"" ":weeks" weeks " :days" days")
-			}, 
-			"economy lot parking"{
-				apply economyParkingTests
-			}
+	/* 
+	 * Define multiple values for parameter “entryTime” of the second precondition.
+	 */
+	let "entry time" be '"01/1/1970 12:00 am"', '"12/31/1999 12:00 pm"', '"02/28/2016 23:59 pm"'
+	
+	/*
+	 * Leaving time is calculated as entry time plus parking weeks, days, hours and minutes. 
+	 * For each value of parameter "lot" used in the first precondition
+	 * there are eight values of weeks and days which must be tried by the test.
+	 */
+	
+	for each "parking lot" {
+		let weeks be 
+			0  { let days be 0, 1, 6}, 
+			1  { let days be 1, 6},
+			6  { let days be 0, 6},
+			26 { let days be 4}
 	}
+	/*
+	 * "parking lot" iterates over values "VALET_PARKING", "SHORT_TERM_PARKING" and so on.
+	 * This value list is given a name listOfValidLots.
+	 * It allows to use this list in definitions of other rules and reduce duplication.
+	 */
+	let "parking lot" be
+		"valet parking"{
+			apply valetParkingTests
+		}, 
+		"short term parking"{
+			let hours be 0, 1, 11, 12, 23 {
+				let minutes be 0, 30, 31, 59
+			}
+			/*
+			 * Calculation of expected costs here makes use of a oracle ShortTermParkingCalculator defined right after the strategy.
+			 * It demonstrates that use of separate models makes strategy more concise because 
+			 * it does not have to implement the calculations itself. 
+			 */
+			let expectedCosts be traced ShortTermParkingCalculator.calculateCosts(:weeks as int, :days as int, :hours as int, :minutes as int)
+		},  
+		"long term garage parking"{
+			let hours be 0, 1, 5, 6, 23 {
+				let minutes be 0, 30, 31, 59
+			}
+			// call oracle just for coverage
+			let modelCallResult be traced LongTermGarageParkingCalculator.calculateCosts(:weeks as int, :days as int, :hours as int, :minutes as int) 
+			/*
+			 * Calculation of expected costs here makes use of a oracle called by driver. 
+			 */
+			let expectedCosts be ("new LongTermGarageParkingCalculator().calculateCosts(":weeks", ":days", ":hours" ,":minutes")") 
+		}, 
+		"long term surface parking"{
+			// verification performed by driver
+			let assert be ("verify parking costs for lot ":"parking lot")
+			let hours be 0, 4, 5, 23 {
+				let minutes be 0,1, 59
+			}
+			let [Req11] be (:"parking lot"" ":hours" hours " :minutes" minutes")
+			if (:hours as int) < 5 let [Req12] be (:hours" hours " :minutes" minutes")
+			if (:hours as int) >= 5 let [Req13] be (:hours" hours " :minutes" minutes")
+			if :days  == 0 let [Req14] be (:"parking lot"" ":weeks" weeks " :days" days")
+		}, 
+		"economy lot parking"{
+			apply economyParkingTests
+		}
+	
 
 strategy valetParkingTests
 	/*
@@ -211,6 +207,7 @@ strategy economyParkingTests
 
 strategy testsForFailure
 	var StepCounter precondition
+	// Let preconditions depend on focus
 	let focus be  
 		"select illegal lot (:wrongValue)"{
 			let wrongValue be "NULL_VALUE", "BAD_VALUE"
