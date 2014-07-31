@@ -35,7 +35,7 @@ class _MyFile_first_StrategyFactory0 {
   RequirementBasedStrategy first() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
     Strategy _strategy = new Strategy();
-    _strategy.addRule(RuleBuilder.Factory.iterate(" _MyFile_first_StrategyFactory0.condition1#" +  _instanceId).over(new ValueProvider(){
+    _strategy.addRule(RuleBuilder.Factory.iterate(" _MyFile_first_StrategyFactory0.ConditionAtOffset27#" +  _instanceId).over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {
         ((CoverageTrackerEnabler)propertyContainer).startTrace(); try{
         Boolean _condition = condition1(propertyContainer);
@@ -44,7 +44,7 @@ class _MyFile_first_StrategyFactory0 {
     }}).asLazyRule());
     _strategy.addRule(RuleBuilder.Factory._if(new Condition(){
       @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
-        return propertyContainer.<Boolean>get(" _MyFile_first_StrategyFactory0.condition1#" +  _instanceId);
+        return propertyContainer.<Boolean>get(" _MyFile_first_StrategyFactory0.ConditionAtOffset27#" +  _instanceId);
     }}).iterate("y").over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {return 3;
     }}));

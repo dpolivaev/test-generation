@@ -50,14 +50,14 @@ class _MyFile_first_StrategyFactory1 {
     _strategy.addRule(RuleBuilder.Factory.iterate("x").over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {return 1;
     }}));
-    _strategy.addRule(RuleBuilder.Factory.iterate(" _MyFile_first_StrategyFactory1.condition1#" +  _instanceId).over(new ValueProvider(){
+    _strategy.addRule(RuleBuilder.Factory.iterate(" _MyFile_first_StrategyFactory1.ConditionAtOffset63#" +  _instanceId).over(new ValueProvider(){
       @Override public Object value(PropertyContainer propertyContainer) {
         Boolean _condition = condition1(propertyContainer);
         return _condition;
     }}).asLazyRule());
     _strategy.addRules(RuleBuilder.Factory._if(new Condition(){
       @Override public boolean isSatisfied(PropertyContainer propertyContainer) {
-        return propertyContainer.<Boolean>get(" _MyFile_first_StrategyFactory1.condition1#" +  _instanceId);
+        return propertyContainer.<Boolean>get(" _MyFile_first_StrategyFactory1.ConditionAtOffset63#" +  _instanceId);
     }}).with((_applied_strategy2 = StrategyConverter.toRequirementBasedStrategy(_strategy2())).getStrategy()).asRules());
     return new RequirementBasedStrategy(_requiredItems).with(_strategy).addRequiredItemsFrom(_applied_strategy2);
   }

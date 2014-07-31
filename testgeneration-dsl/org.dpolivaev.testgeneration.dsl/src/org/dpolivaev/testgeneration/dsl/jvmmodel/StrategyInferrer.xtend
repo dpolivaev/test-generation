@@ -38,6 +38,8 @@ import org.eclipse.xtext.xbase.compiler.Later
 import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 
+ import static extension org.eclipse.xtext.nodemodel.util.NodeModelUtils.*
+
 import static extension org.dpolivaev.testgeneration.dsl.jvmmodel.StrategyCompiler.*
 import org.eclipse.xtext.xbase.typesystem.computation.NumberLiterals
 import java.util.HashSet
@@ -241,7 +243,7 @@ class StrategyInferrer{
 	}
 
 	def private defaultConditionPropertyName(XExpression expr) {
-		'" ' + jvmType.getQualifiedName() + '.' + methods.get(CONDITION, expr) + '#" +  _instanceId'
+		'" ' + jvmType.getQualifiedName() + '.ConditionAtOffset' + expr.node.offset + '#" +  _instanceId'
 	}
 
 	def private appendConditionExpression(ITreeAppendable it, Condition condition) {
