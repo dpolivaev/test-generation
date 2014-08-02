@@ -3,6 +3,8 @@ package org.dpolivaev.testgeneration.engine.scriptwriter.internal;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.dpolivaev.testgeneration.engine.ruleengine.PropertyContainer;
+
 public class PartValueParser {
 	private static final String METHOD_PATTERN = "([^\"(;]+)";
 	private static final String ARGLIST_PATTERN = "(?:\\(([^;]*)\\))?";
@@ -12,7 +14,7 @@ public class PartValueParser {
 	final private String argumentList;
 	final private String comment;
 
-	public PartValueParser(String value) {
+	public PartValueParser(PropertyContainer propertyContainer, String value) {
 		final Matcher matcher = METHOD_CALL.matcher(value);
 		if(matcher.matches()){
 			calledMethod = matcher.group(1).trim();

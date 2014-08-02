@@ -1,44 +1,29 @@
 package org.dpolivaev.testgeneration.engine.strategies.internal;
 
-import static org.dpolivaev.testgeneration.engine.testutils.TestUtils.assignmentMock;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import org.dpolivaev.testgeneration.engine.ruleengine.Assignment;
-import org.dpolivaev.testgeneration.engine.ruleengine.Assignments;
 import org.dpolivaev.testgeneration.engine.ruleengine.SpecialValue;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 public class AssignmentPartitionerTest {
-	private Assignments assignments;
 	private AssignmentPartitioner assignmentPartitioner;
-
-	private void givenAssignment(String name, Object value) {
-		givenAssignment(name, value, "");
-	}
-
-	private void givenAssignment(String name, Object value, String reason) {
-		final Assignment assignmentMock = assignmentMock(name, value, reason);
-		Mockito.when(assignmentMock.rule.forcesIteration()).thenReturn(true);
-		assignments.add(assignmentMock);
-	}
-
+	private GivenAssignments assignments;
 
 	@Before
 	public void setup(){
-		assignments = new Assignments();
-		givenAssignment("testcase.precondition.alias", "precondition");
-		givenAssignment("testcase.focus.alias", "when");
-		givenAssignment("testcase.verification.alias", "verification");
-		givenAssignment("testcase.postprocessing.alias", "postprocessing");
-		assignmentPartitioner = new AssignmentPartitioner(assignments);
+		assignments = new GivenAssignments();
+		assignments.given("testcase.precondition.alias", "precondition");
+		assignments.given("testcase.focus.alias", "when");
+		assignments.given("testcase.verification.alias", "verification");
+		assignments.given("testcase.postprocessing.alias", "postprocessing");
+		assignmentPartitioner = new AssignmentPartitioner(assignments.getAssignments());
 	}
 
 	@Test
 	public void ignoresNonSpecificProperties(){
-		givenAssignment("name", "value", "");
+		assignments.given("name", "value", "");
 		assignmentPartitioner.run();
 		assertThat(assignmentPartitioner.isTestIdRelevant("name"), equalTo(false));
 
@@ -46,7 +31,7 @@ public class AssignmentPartitionerTest {
 
 	@Test
 	public void ignoresUndefinedProperties(){
-		givenAssignment("when", SpecialValue.UNDEFINED, "");
+		assignments.given("when", SpecialValue.UNDEFINED, "");
 		assignmentPartitioner.run();
 		assertThat(assignmentPartitioner.isTestIdRelevant("when"), equalTo(false));
 
@@ -54,14 +39,14 @@ public class AssignmentPartitionerTest {
 
 	@Test
 	public void includesFoc(){
-		givenAssignment("when", "value", "");
+		assignments.given("when", "value", "");
 		assignmentPartitioner.run();
 		assertThat(assignmentPartitioner.isTestIdRelevant("when"), equalTo(true));
 
 	}
 	@Test
 	public void foc1IsTestIdRelevant(){
-		givenAssignment("when#1", "value", "");
+		assignments.given("when#1", "value", "");
 		assignmentPartitioner.run();
 		assertThat(assignmentPartitioner.isTestIdRelevant("when#1"), equalTo(true));
 
@@ -69,7 +54,7 @@ public class AssignmentPartitionerTest {
 
 	@Test
 	public void foc1IsTestPartMethodCall(){
-		givenAssignment("when#1", "value", "");
+		assignments.given("when#1", "value", "");
 		assignmentPartitioner.run();
 		assertThat(assignmentPartitioner.isTestPartMethodCall("when#1"), equalTo(true));
 
@@ -77,7 +62,7 @@ public class AssignmentPartitionerTest {
 
 	@Test
 	public void includesFoc1(){
-		givenAssignment("when#1", "value", "");
+		assignments.given("when#1", "value", "");
 		assignmentPartitioner.run();
 		assertThat(assignmentPartitioner.isTestIdRelevant("when#1"), equalTo(true));
 
@@ -85,21 +70,21 @@ public class AssignmentPartitionerTest {
 
 	@Test
 	public void includesPre(){
-		givenAssignment("precondition", "value", "");
+		assignments.given("precondition", "value", "");
 		assignmentPartitioner.run();
 		assertThat(assignmentPartitioner.isTestIdRelevant("precondition"), equalTo(true));
 
 	}
 	@Test
 	public void includesVeri(){
-		givenAssignment("verification", "value", "");
+		assignments.given("verification", "value", "");
 		assignmentPartitioner.run();
 		assertThat(assignmentPartitioner.isTestIdRelevant("verification"), equalTo(true));
 
 	}
 	@Test
 	public void includesPost(){
-		givenAssignment("postprocessing", "value", "");
+		assignments.given("postprocessing", "value", "");
 		assignmentPartitioner.run();
 		assertThat(assignmentPartitioner.isTestIdRelevant("postprocessing"), equalTo(true));
 	}

@@ -73,7 +73,7 @@ public class TestNameProvider implements ValueProvider{
 							|| targetedPropertyName.equals(new AliasedPropertyAccessor(propertyContainer).getFocusPropertyName()))
 					 && ! excludedAssignmentFilter.matches(assignment))){
 				if(assignmentPartitioner.isTestPartMethodCall(targetedPropertyName)){
-					final PartValueParser partValueParser = new PartValueParser(assignment.value.toString());
+					final PartValueParser partValueParser = new PartValueParser(propertyContainer, assignment.value.toString());
 					relevantProperties.add(new Assignment(assignment.rule, partValueParser.getCalledMethod(), assignment.reason, assignment.requiredProperties, assignment.triggeringProperties));
 				}
 				else

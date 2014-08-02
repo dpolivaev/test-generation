@@ -45,7 +45,7 @@ class AssignmentPartitioner {
 			final Assignment assignment = propertyContainer.getAssignment(targetedPropertyName);
 			for(String requiredProperty : assignment.requiredProperties)
 				testPartProperties.add(requiredProperty);
-			final PartValueParser partValueParser = new PartValueParser(assignment.value.toString());
+			final PartValueParser partValueParser = new PartValueParser(propertyContainer, assignment.value.toString());
 			testPartProperties.add(targetedPropertyName);
 			final String[] argumentList = partValueParser.getArgumentList();
 			for(String argument:argumentList){

@@ -130,7 +130,7 @@ public class XmlTestCaseWriter implements PropertyHandler {
 
      public void addPartAttributes(PropertyContainer propertyContainer, String property) {
         String value = propertyContainer.get(property).toString().trim();
-        final PartValueParser partValueParser = new PartValueParser(value);
+        final PartValueParser partValueParser = new PartValueParser(propertyContainer, value);
         if (xmlWriter != null) {
 		xmlWriter.setAttribute("step", partValueParser.getCalledMethod());
 		addDescription(propertyContainer, property);
