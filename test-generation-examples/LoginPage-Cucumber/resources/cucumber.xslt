@@ -42,14 +42,14 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.scriptw
 	<xsl:template match="Script">
 		<xsl:apply-templates select="Parameter[@name='feature']"/>
 		<xsl:call-template name="scriptPrecondition"/>
-		<xsl:apply-templates select="TestCase[@id]"/>
+		<xsl:apply-templates select="TestCase[@name]"/>
 	</xsl:template>
 	
 	<xsl:template match="TestCase"/> 
 	
-	<xsl:template match="TestCase[@id]">
+	<xsl:template match="TestCase[@name]">
 		<xsl:text>Scenario: </xsl:text>
-		<xsl:value-of select="@id"/>
+		<xsl:value-of select="@name"/>
 		<xsl:call-template name="eol1"/>
 		<xsl:apply-templates/>
 		<xsl:call-template name="eol1"/>
@@ -82,7 +82,7 @@ xmlns:java="http://www.oracle.com/XSL/Transform/java/org.dpolivaev.tsgen.scriptw
 		</xsl:choose>
 		<xsl:text> </xsl:text>
 		<xsl:call-template name="substituteParameters">
-			<xsl:with-param name="parameterizedString" select="@id"/>
+			<xsl:with-param name="parameterizedString" select="@step"/>
 		</xsl:call-template>
 		<xsl:call-template name="eol1"/>
 	</xsl:template>
