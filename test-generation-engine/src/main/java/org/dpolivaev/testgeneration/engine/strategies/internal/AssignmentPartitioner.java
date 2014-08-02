@@ -47,15 +47,20 @@ class AssignmentPartitioner {
 				testPartProperties.add(requiredProperty);
 			final PartValueParser partValueParser = new PartValueParser(propertyContainer, assignment.value.toString());
 			testPartProperties.add(targetedPropertyName);
-			final String[] argumentList = partValueParser.getArgumentList();
-			for(String argument:argumentList){
-				if(argument.startsWith(":")){
-					String propertyName = argument.substring(1);
-					if(! testPartProperties.contains(propertyName)) {
-						final Assignment argumentAssignment = propertyContainer.getAssignment(propertyName);
-						if(argumentAssignment != null)
-							testPartProperties.add(propertyName);
-					}
+			addTestPartAssignments(testPartProperties, partValueParser.getMethodPropertyList());
+			addTestPartAssignments(testPartProperties, partValueParser.getArgumentList());
+		}
+	}
+
+	private void addTestPartAssignments(Set<String> testPartProperties,
+			final String[] propertyList) {
+		for(String argument:propertyList){
+			if(argument.startsWith(":")){
+				String propertyName = argument.substring(1);
+				if(! testPartProperties.contains(propertyName)) {
+					final Assignment argumentAssignment = propertyContainer.getAssignment(propertyName);
+					if(argumentAssignment != null)
+						testPartProperties.add(propertyName);
 				}
 			}
 		}

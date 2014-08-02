@@ -88,4 +88,20 @@ public class AssignmentPartitionerTest {
 		assignmentPartitioner.run();
 		assertThat(assignmentPartitioner.isTestIdRelevant("postprocessing"), equalTo(true));
 	}
+
+	@Test
+	public void includesMethodArgument(){
+		assignments.given("property", "value)", "");
+		assignments.given("when#1", "method(:property)", "");
+		assignmentPartitioner.run();
+		assertThat(assignmentPartitioner.isTestIdRelevant("property"), equalTo(true));
+	}
+
+	@Test
+	public void includesMethodNamePart(){
+		assignments.given("property", "value)", "");
+		assignments.given("when#1", "method :property", "");
+		assignmentPartitioner.run();
+		assertThat(assignmentPartitioner.isTestIdRelevant("property"), equalTo(true));
+	}
 }
