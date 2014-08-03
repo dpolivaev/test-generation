@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.dpolivaev.testgeneration.engine.ruleengine.AssignmentFormatter;
+import org.dpolivaev.testgeneration.engine.ruleengine.AssignmentFormatterFactory;
 import org.dpolivaev.testgeneration.engine.ruleengine.ErrorHandler;
 import org.dpolivaev.testgeneration.engine.ruleengine.PropertyContainer;
 import org.dpolivaev.testgeneration.engine.ruleengine.PropertyHandler;
@@ -13,11 +14,13 @@ public class ScriptLogger implements PropertyHandler, ErrorHandler {
 	final private Writer log;
 	final private AssignmentFormatter assignmentFormatter;
 
-	public ScriptLogger(Writer writer) {
+	public ScriptLogger(Writer writer, AssignmentFormatter assignmentFormatter) {
 		log = writer;
-		assignmentFormatter = AssignmentFormatter.create("=", ", ");
-		assignmentFormatter.appendReasons(false);
-		assignmentFormatter.excludeUndefined(true);
+		this.assignmentFormatter = assignmentFormatter;
+	}
+	
+	public ScriptLogger(Writer writer) {
+		this(writer, new AssignmentFormatterFactory().createShortAssignmentFormatter());
 	}
 
 	@Override
@@ -37,9 +40,7 @@ public class ScriptLogger implements PropertyHandler, ErrorHandler {
 
 	@Override
 	public void handleError(Exception error, PropertyContainer propertyContainer) {
-		AssignmentFormatter assignmentFormatter = AssignmentFormatter.create("=", "\n");
-		assignmentFormatter.appendReasons(true);
-		assignmentFormatter.excludeUndefined(false);
+		AssignmentFormatter assignmentFormatter = new AssignmentFormatterFactory().createDetailedAssignmentFormatter();
 		try {
 			log.append(error.getMessage() + '\n');
 			log.append(propertyContainer.getCombinationCounter() + " : "
