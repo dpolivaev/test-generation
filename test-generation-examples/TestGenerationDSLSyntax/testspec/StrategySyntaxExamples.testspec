@@ -1,6 +1,6 @@
 strategy SyntaxExamples
 
-let example be 
+let CASE be 
 	/*
 	 * generate three property combinations with x='a', x='b' and x='c'
 	 */
@@ -95,7 +95,7 @@ let example be
      * Values for y are given by lazy rules.
      * They are lazily evaluated when value of property y is requested. 
      */
-	'defaults' {
+	'lazy rules' {
 	    let x be 
 	    	'a', 'b', 'c'{},
 	        'd'{
@@ -109,7 +109,7 @@ let example be
 	 /*
 	  * Default rules can be defined only for parts of the strategies.
 	  */  
-	'branched defaults'{
+	'branched lazy rules'{
     	let x be 
     		'a', 'b', 'c'{},
             'd'{
@@ -126,7 +126,7 @@ let example be
 	 * Default rules can reference properties set by other lazy rules
 	 * which are evaluated in backward chaining 
 	 */
-	'chained defaults'{
+	'chained lazy rules'{
     	let x be 
     		'a', 'b', 'c'{},
             'd'{
@@ -154,7 +154,7 @@ let example be
 	/*
 	 * Conditionally skip some values.
 	 */
-	'value conditions'{
+	'conditionally skip values'{
 	    let x be 'a', 'b', 'c'{
 	       let ordered y be 'A' only if :x=='a', 
 	       			'B' only if :x=='b', 
@@ -178,13 +178,13 @@ let example be
     /*
      * Named value lists can be defined and used at any place
      */
-    "named value lists can be defined " {
+    'named value lists' {
     	let x be namedListOfXValues with 'a', 'b', 'c' {
     		let y be 'A', 'B'
     	}
     },
     
-     "named value lists can be reused globally " {
+     'value list references' {
     	let x be from namedListOfXValues
     	let shuffled lazy y be from namedListOfXValues
     	let z be :y
