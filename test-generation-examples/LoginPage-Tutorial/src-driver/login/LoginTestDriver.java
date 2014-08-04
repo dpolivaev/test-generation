@@ -5,7 +5,6 @@ public class LoginTestDriver {
 	public enum EMail{VALID_MAIL, INVALID_MAIL, NOT_ENTERED_MAIL}
 	public enum Password{VALID_PASSWORD, INVALID_PASSWORD, NOT_ENTERED_PASSWORD}
 	public enum Protocol{HTTP, HTTPS}
-
 	public void submit(Protocol protocol){}
 	public void checkPage(Page loginSuccessPage) {}
 	public void enterMailAddress(EMail validMail) {}

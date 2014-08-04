@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><Report>
   <Goal name="requirement coverage" required="4" achieved="4" total="4">
-    <Item name="R1" reached="1">logging in with protocol HTTP not allowed</Item>
-    <Item name="R2" reached="1">entered password is not visible</Item>
+    <Item name="R2" reached="1">logging in with protocol HTTP not allowed</Item>
+    <Item name="R3" reached="6">check email and password fields after failed log-in</Item>
     <Item name="R3" reached="1">log in successful</Item>
-    <Item name="R4" reached="6">check email and password fields after failed log-in</Item>
+    <Item name="R4" reached="1">entered password is not visible</Item>
   </Goal>
 </Report>

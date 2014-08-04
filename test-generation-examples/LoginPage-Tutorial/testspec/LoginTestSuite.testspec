@@ -1,8 +1,82 @@
 package login.testgeneration
 
-import static login.testgeneration.LoginOracles.*;
-import static login.testgeneration.LoginStrategies.*;
+import login.LoginTestDriver.EMail;
+import login.LoginTestDriver.Password;
+import login.LoginTestDriver.Protocol;
 
-run strategy goal loginTests with oracle goal loginOracle
-	apply "/java.xslt" output "generated-tests/java"
-	report  "report/testcoverage.xml"
+import static login.LoginTestDriver.EMail.*;
+import static login.LoginTestDriver.Password.*;
+import static login.LoginTestDriver.Page.*;
+import static login.LoginTestDriver.Protocol.*;
+
+	global 
+		val arrangeSteps=stepCounter("arrange")
+		val loginArrange = arrangeSteps.nextSubsequence(1)
+		val submitArrange = arrangeSteps.nextSubsequence(2)
+		val assertSteps=stepCounter("assert")
+		val submitAssert = assertSteps.copy
+		val formatAssert = assertSteps.copy
+
+
+	strategy loginTests
+		apply TestSteps.structure
+	
+		let script.driver be "login/LoginTestDriver"
+		let script.imports be "import static login.LoginTestDriver.Page.*;
+							   import static login.LoginTestDriver.EMail.*;
+							   import static login.LoginTestDriver.Password.*;
+							   import static login.LoginTestDriver.Protocol.*;"
+	
+		let (loginArrange.next) be "go to page(:page)"
+		let page be LOGIN_PAGE
+		let lazy password be VALID_PASSWORD
+		let lazy email be VALID_MAIL
+	
+		let testPurpose be
+		"check data processing"{ apply submitTest },
+		"check formatting"{ apply formatTest}
+		
+		strategy submitTest
+			let script.name be "login/LoginSubmit"
+			let (submitArrange.next) be "enter mail address(:email)"
+			let (submitArrange.next) be "enter password(:password)"
+			let act be "submit(:protocol)"
+			let (submitAssert.next) be "checkPage(:pageAfterSubmit)"
+	
+			let protocol be HTTP{
+				let [R2] be "logging in with protocol HTTP not allowed"
+			},
+			HTTPS {
+				let email be VALID_MAIL { let password be VALID_PASSWORD, INVALID_PASSWORD, NOT_ENTERED_PASSWORD},
+				INVALID_MAIL { let password be VALID_PASSWORD},
+				NOT_ENTERED_MAIL { let password be VALID_PASSWORD, NOT_ENTERED_PASSWORD}
+			}
+	
+			let pageAfterSubmit be traced
+				if (loginOracle.isLoginSuccessful(:protocol as Protocol, :email as EMail, :password as Password)) LOGIN_SUCCESS_PAGE 
+				else LOGIN_PAGE 
+				
+			if :pageAfterSubmit == LOGIN_PAGE {
+				let assert#2 be "password field is empty"
+				let assert#3 be "email field equals to (:email)"
+				let [R3] be "check email and password fields after failed log-in"
+			}
+		
+		strategy formatTest
+			let script.name be "login/LoginFormat"
+			let act be "enter password(:password)"
+			let (formatAssert.next) be "entered password is not visible"
+			let [R4] be :(formatAssert)
+		
+	
+	oracle loginOracle
+		def boolean isLoginSuccessful(Protocol protocol, EMail email, Password password){
+			return :protocol == HTTPS && :email == VALID_MAIL
+				&& :password == VALID_PASSWORD && ["R3" "log in successful"] true;
+		}
+
+	run strategy goal loginTests with oracle goal loginOracle
+		apply "/java.xslt" output "generated-tests/java"
+		report  "report/testcoverage.xml"
+
+

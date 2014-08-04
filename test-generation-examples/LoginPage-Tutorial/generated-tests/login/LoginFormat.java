@@ -19,10 +19,10 @@ import static login.LoginTestDriver.*;
 public class LoginFormat {
 	LoginTestDriver driver = new LoginTestDriver();
 	
-	@Description("")
+	@Description("testPurpose: check formatting")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirement coverage", item="R2", coverage={"entered password is not visible"})
+			@GoalCoverage(goal = "requirement coverage", item="R4", coverage={"entered password is not visible"})
 		}
 	)
 	@Test

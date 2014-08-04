@@ -16,7 +16,7 @@ import login.LoginTestDriver;
 import static login.LoginTestDriver.*;
 
 @SuppressWarnings("unused")
-public class LoginSubmit {
+public class LoginTest {
 	LoginTestDriver driver = new LoginTestDriver();
 	
 	@Description("testPurpose: check data processing")
@@ -48,7 +48,7 @@ public class LoginSubmit {
 	@Description("testPurpose: check data processing")
 	@Coverage(
 		first = {
-			@GoalCoverage(goal = "requirement coverage", item="R3", coverage={"log in successful"})
+			@GoalCoverage(goal = "requirement coverage", item="R1", coverage={"log in successful"})
 		}
 	)
 	@Test
@@ -189,6 +189,23 @@ public class LoginSubmit {
 		driver.passwordFieldIsEmpty();
 	// Verification 3
 		driver.emailFieldEqualsTo(/* email */ NOT_ENTERED_MAIL);
+	}
+	
+	@Description("testPurpose: check formatting")
+	@Coverage(
+		first = {
+			@GoalCoverage(goal = "requirement coverage", item="R4", coverage={"entered password is not visible"})
+		}
+	)
+	@Test
+	public void test008_enterPassword() throws Exception {
+		
+	// Precondition 1
+		driver.goToPage(/* page */ LOGIN_PAGE);
+	// Focus 1
+		driver.enterPassword(/* password */ VALID_PASSWORD);
+	// Verification 1
+		driver.enteredPasswordIsNotVisible();
 	}
 	
 }
