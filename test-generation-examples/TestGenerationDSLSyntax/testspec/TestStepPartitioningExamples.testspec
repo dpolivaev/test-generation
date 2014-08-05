@@ -1,4 +1,4 @@
-oracle PartitionedSteps
+class PartitionedSteps
 	val steps = stepCounter("step")
 	val firstTwoSteps = steps.nextSubsequence(2)
 	val nextTwoSteps = steps.nextSubsequence(2)

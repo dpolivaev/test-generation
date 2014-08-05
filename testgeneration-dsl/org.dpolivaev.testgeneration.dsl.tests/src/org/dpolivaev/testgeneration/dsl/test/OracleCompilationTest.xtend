@@ -46,6 +46,14 @@ class OracleCompilationTest {
 				var y = 2
 		'''.assertCompilesToFile(testName)
 	}
+	
+	@Test def classWithFields() {
+		'''
+			class MyClass
+				val x = 0
+				var y = 2
+		'''.assertCompilesToFile(testName)
+	}
 
 	@Test def registeredOracle() {
 		'''

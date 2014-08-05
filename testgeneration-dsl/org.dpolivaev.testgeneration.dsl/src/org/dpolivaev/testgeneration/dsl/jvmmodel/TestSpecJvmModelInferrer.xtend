@@ -4,7 +4,6 @@ import com.google.inject.Inject
 import com.google.inject.Injector
 import java.util.List
 import org.dpolivaev.testgeneration.dsl.testspec.Generation
-import org.dpolivaev.testgeneration.dsl.testspec.Oracle
 import org.dpolivaev.testgeneration.engine.coverage.CoverageEntry
 import org.dpolivaev.testgeneration.engine.coverage.CoverageTracker
 import org.dpolivaev.testgeneration.engine.ruleengine.PropertyContainer
@@ -16,6 +15,7 @@ import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 import java.util.Arrays
 import org.dpolivaev.testgeneration.engine.scriptwriter.WriterFactory
 import org.dpolivaev.testgeneration.dsl.testspec.Strategy
+import org.dpolivaev.testgeneration.dsl.testspec.TestSpecClass
 
 /**
  * <p>Infers a JVM model from the source model.</p> 
@@ -66,7 +66,7 @@ class TestSpecJvmModelInferrer extends AbstractModelInferrer {
 		])
 		for(strategy:script.strategies)
 			inferStrategy(acceptor, script.package, type.simpleName, strategy)
-		for(oracle:script.oracles)
+		for(oracle:script.classes)
 			inferOracle(acceptor, script.package, oracle)
 	}
 	
@@ -82,74 +82,78 @@ class TestSpecJvmModelInferrer extends AbstractModelInferrer {
 		])
 	}
 
-	private def inferOracle(IJvmDeclaredTypeAcceptor acceptor, String classPackage, Oracle oracle) {
-		val qualifiedClassName = qualifiedClassName(classPackage, oracle.name.toFirstUpper)
-		val oracleClass =oracle.toClass(qualifiedClassName)
+	private def inferOracle(IJvmDeclaredTypeAcceptor acceptor, String classPackage, TestSpecClass testSpecClass) {
+		val qualifiedClassName = qualifiedClassName(classPackage, testSpecClass.name.toFirstUpper)
+		val oracleClass =testSpecClass.toClass(qualifiedClassName)
 		acceptor.accept(oracleClass).initializeLater([
-			superTypes += oracle.newTypeRef(PropertyHandler)
-			if(! (oracle.parameters.empty && oracle.vars.empty))
-				classInferrer.inferConstructor(oracleClass, oracle, oracle.parameters, oracle.vars)
-			classInferrer.inferMemberVariables(oracleClass, oracle.vars, JvmVisibility::PUBLIC)
-			classInferrer.inferMemberMethods(oracleClass, oracle.subs, JvmVisibility::PUBLIC, false)
+			if(testSpecClass.isOracle)
+				superTypes += testSpecClass.newTypeRef(PropertyHandler)
+			if(! (testSpecClass.parameters.empty && testSpecClass.vars.empty))
+				classInferrer.inferConstructor(oracleClass, testSpecClass, testSpecClass.parameters, testSpecClass.vars)
+			classInferrer.inferMemberVariables(oracleClass, testSpecClass.vars, JvmVisibility::PUBLIC)
+			classInferrer.inferMemberMethods(oracleClass, testSpecClass.subs, JvmVisibility::PUBLIC, false)
 
-			members += oracle.toField("labels", oracle.newTypeRef(List, oracle.newTypeRef(CoverageEntry)))[
-				setInitializer [
-					append(Arrays)
-					append('.asList(')
-					injector.getInstance(CoverageEntriesInferrer).appendArrayInitializer(it, oracle)
-					append(')')
+			if(testSpecClass.isOracle) {
+				members += testSpecClass.toField("labels", testSpecClass.newTypeRef(List, testSpecClass.newTypeRef(CoverageEntry)))[
+					setInitializer [
+						append(Arrays)
+						append('.asList(')
+						injector.getInstance(CoverageEntriesInferrer).appendArrayInitializer(it, testSpecClass)
+						append(')')
+					]
+					final = true
+					visibility = JvmVisibility::PUBLIC
+					static = true			
 				]
-				final = true
-				visibility = JvmVisibility::PUBLIC
-				static = true			
-			]
-			
-			members += oracle.toField("propertyContainer", oracle.newTypeRef(PropertyContainer))
-			members += oracle.toField("coverageTracker", oracle.newTypeRef(CoverageTracker))[
-				setInitializer [
-					append('''null''')
+				
+				members += testSpecClass.toField("propertyContainer", testSpecClass.newTypeRef(PropertyContainer))
+				members += testSpecClass.toField("coverageTracker", testSpecClass.newTypeRef(CoverageTracker))[
+					setInitializer [
+						append('''null''')
+					]
 				]
-			]
-			
-			members += oracle.toMethod("setCoverageTracker", oracle.newTypeRef(Void::TYPE)) [
-				parameters += oracle.toParameter("coverageTracker", oracle.newTypeRef(CoverageTracker))
-				body = [
-						trace(oracle).append('this.coverageTracker = coverageTracker;')
+				
+				members += testSpecClass.toMethod("setCoverageTracker", testSpecClass.newTypeRef(Void::TYPE)) [
+					parameters += testSpecClass.toParameter("coverageTracker", testSpecClass.newTypeRef(CoverageTracker))
+					body = [
+							trace(testSpecClass).append('this.coverageTracker = coverageTracker;')
+					]
+					visibility = JvmVisibility::PUBLIC
 				]
-				visibility = JvmVisibility::PUBLIC
-			]
-			
-			members += oracle.toMethod("registerRequiredItems", oracle.newTypeRef(Void::TYPE)) [
-				parameters += oracle.toParameter("writerFactory", oracle.newTypeRef(WriterFactory))
-				body = [
-						trace(oracle).append('writerFactory.registerRequiredItems(labels);')
+				
+				members += testSpecClass.toMethod("registerRequiredItems", testSpecClass.newTypeRef(Void::TYPE)) [
+					parameters += testSpecClass.toParameter("writerFactory", testSpecClass.newTypeRef(WriterFactory))
+					body = [
+							trace(testSpecClass).append('writerFactory.registerRequiredItems(labels);')
+					]
+					visibility = JvmVisibility::PUBLIC
 				]
-				visibility = JvmVisibility::PUBLIC
-			]
-			
-			members += oracle.toMethod("generationStarted", oracle.newTypeRef(Void::TYPE)) [
-				annotations += oracle.toAnnotation(Override)
-				parameters += oracle.toParameter("propertyContainer", oracle.newTypeRef(PropertyContainer))
-				body = [
-						trace(oracle).append('this.propertyContainer=propertyContainer;')
+				
+				members += testSpecClass.toMethod("generationStarted", testSpecClass.newTypeRef(Void::TYPE)) [
+					annotations += testSpecClass.toAnnotation(Override)
+					parameters += testSpecClass.toParameter("propertyContainer", testSpecClass.newTypeRef(PropertyContainer))
+					body = [
+							trace(testSpecClass).append('this.propertyContainer=propertyContainer;')
+					]
+					visibility = JvmVisibility::PUBLIC
 				]
-				visibility = JvmVisibility::PUBLIC
-			]
-			
-			members += oracle.toMethod("handlePropertyCombination", oracle.newTypeRef(Void::TYPE)) [
-				annotations += oracle.toAnnotation(Override)
-				parameters += oracle.toParameter("propertyContainer", oracle.newTypeRef(PropertyContainer))
-				body = []
-				visibility = JvmVisibility::PUBLIC
-			]
-			
-			members += oracle.toMethod("generationFinished", oracle.newTypeRef(Void::TYPE)) [
-				annotations += oracle.toAnnotation(Override)
-				body = [
-						trace(oracle).append('this.propertyContainer=null;')
+				
+				members += testSpecClass.toMethod("handlePropertyCombination", testSpecClass.newTypeRef(Void::TYPE)) [
+					annotations += testSpecClass.toAnnotation(Override)
+					parameters += testSpecClass.toParameter("propertyContainer", testSpecClass.newTypeRef(PropertyContainer))
+					body = []
+					visibility = JvmVisibility::PUBLIC
 				]
-				visibility = JvmVisibility::PUBLIC
-			]
+				
+				members += testSpecClass.toMethod("generationFinished", testSpecClass.newTypeRef(Void::TYPE)) [
+					annotations += testSpecClass.toAnnotation(Override)
+					body = [
+							trace(testSpecClass).append('this.propertyContainer=null;')
+					]
+					visibility = JvmVisibility::PUBLIC
+				]
+			
+			}
 			
 		])
 	}

@@ -85,8 +85,8 @@ class GenerationInferrer{
 	}
 	
 	private def inferOracles(){
-		for(oracle:script.oracles)
-			if (oracle.parameters.empty)
+		for(oracle:script.classes)
+			if (oracle.isOracle && oracle.parameters.empty)
 				jvmType.members += oracle.toField(oracle.name, oracle.newTypeRef(TestSpecJvmModelInferrer.qualifiedClassName(
 					script.package, oracle.name.toFirstUpper
 				))) [

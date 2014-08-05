@@ -10,7 +10,7 @@ Generation: {Generation}
 	
 	
 	
-	(globals += Globals | strategies+=Strategy | oracles += Oracle | /* goals += Goal | */ runs += Run)*
+	(globals += Globals | strategies+=Strategy | classes += TestSpecClass | /* goals += Goal | */ runs += Run)*
 ;
 
 ID_REST hidden():
@@ -118,7 +118,7 @@ ReportConfiguration returns OutputConfiguration:
 // GoalReference : 'goal' expr = XExpression;
 OracleReference : 'oracle' goal ?= 'goal'? expr = XExpression;
 
-Oracle:'oracle' name = ValidID('('
+TestSpecClass:(oracle ?= 'oracle'|'class') name = ValidID('('
 		(parameters+=FullJvmFormalParameter
 			(',' parameters+=FullJvmFormalParameter)*
 		)?
