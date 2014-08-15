@@ -201,24 +201,34 @@ import org.dpolivaev.testgeneration.engine.java.GoalCoverage;
 	
 	<xsl:template match="ScriptPrecondition|Precondition|Focus|Verification|Postprocessing|ScriptPostprocessing">
 		<xsl:call-template name="eol1"/>
-		<xsl:choose>
-			<xsl:when test="starts-with(@step, '&quot;') and '&quot;' = substring(@step, string-length(@step))">
-				<xsl:value-of select="substring(@step, 2, string-length(@step)-2)"/>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:variable name="method" select="java:lower-first-camel-case-id(@step)"/>
-				<xsl:text>// </xsl:text>
-				<xsl:value-of select="name()"/>
-				<xsl:text> </xsl:text>
-				<xsl:number/>
-				<xsl:call-template name="eol2"/>
-				<xsl:text>driver.</xsl:text>
-				<xsl:value-of select="$method"/>
-				<xsl:text>(</xsl:text>
-				<xsl:apply-templates select="Parameter"/>
-				<xsl:text>);</xsl:text>
-			</xsl:otherwise>
-		</xsl:choose>
+		<xsl:text>// </xsl:text>
+		<xsl:value-of select="name()"/>
+		<xsl:text> </xsl:text>
+		<xsl:number/>
+		<xsl:apply-templates select="Comment"/>
+		<xsl:if test="@step!=''">
+			<xsl:call-template name="eol2"/>
+			<xsl:choose>
+				<xsl:when test="starts-with(@step, '&quot;') and '&quot;' = substring(@step, string-length(@step))">
+					<xsl:value-of select="substring(@step, 2, string-length(@step)-2)"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:variable name="method" select="java:lower-first-camel-case-id(@step)"/>
+					<xsl:text>driver.</xsl:text>
+					<xsl:value-of select="$method"/>
+					<xsl:text>(</xsl:text>
+					<xsl:apply-templates select="Parameter"/>
+					<xsl:text>);</xsl:text>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:if>
+	</xsl:template>
+	
+	<xsl:template match="Comment">
+		<xsl:call-template name="eol1"/>
+		<xsl:text>/* </xsl:text>
+		<xsl:value-of select="text()"/>
+		<xsl:text> */</xsl:text>
 	</xsl:template>
 	
 	<xsl:template match="Parameter">
