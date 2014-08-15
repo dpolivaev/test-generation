@@ -37,6 +37,18 @@ public class PartValueParserTest {
 	}
 
 	@Test
+	public void onlyComment() {
+		final PartValueParser parser = new PartValueParser(assignments(), " ; comment");
+		assertThat(parser.getCalledMethod(), equalTo(""));
+	}
+
+	@Test
+	public void onlyCommentComment() {
+		final PartValueParser parser = new PartValueParser(assignments(), "; comment");
+		assertThat(parser.getComment(), equalTo("comment"));
+	}
+
+	@Test
 	public void methodContainingProperty() {
 		givenAssignments.given("property", "content");
 		final PartValueParser parser = new PartValueParser(assignments(), "method :property");

@@ -10,7 +10,7 @@ public class PartValueParser {
 	private static final String METHOD_PATTERN = "([^\"(;]+)";
 	private static final String ARGLIST_PATTERN = "(?:\\(([^;]*)\\))?";
 	private static final String COMMENT_PATTERN = "(?:;(.*))?";
-	private final static Pattern METHOD_CALL = Pattern.compile(METHOD_PATTERN + ARGLIST_PATTERN + COMMENT_PATTERN + "\\s*", Pattern.DOTALL);
+	private final static Pattern METHOD_CALL = Pattern.compile("(?:" + METHOD_PATTERN + ARGLIST_PATTERN + ")?" + COMMENT_PATTERN + "\\s*", Pattern.DOTALL);
 	final private String calledMethod;
 	final private String argumentList;
 	final private ArrayList<String> methodPropertyList;
@@ -22,7 +22,7 @@ public class PartValueParser {
 		methodPropertyList = new ArrayList<>();
 		final Matcher matcher = METHOD_CALL.matcher(value);
 		if(matcher.matches()){
-			calledMethod = method(matcher.group(1));
+			calledMethod = method(notNull(matcher.group(1)));
 			argumentList = notNull(matcher.group(2)).trim();
 			comment = notNull(matcher.group(3)).trim();
 		}
