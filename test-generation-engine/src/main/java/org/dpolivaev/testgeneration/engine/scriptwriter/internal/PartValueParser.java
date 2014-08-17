@@ -12,6 +12,7 @@ public class PartValueParser {
 	private static final String ARGLIST_PATTERN = "(?:\\(([^;]*)\\))?";
 	private static final String COMMENT_PATTERN = "(?:\\s*;(.*))?";
 	private final static Pattern METHOD_CALL = Pattern.compile("(?:" + METHOD_PATTERN + ARGLIST_PATTERN + ")?" + COMMENT_PATTERN + "\\s*", Pattern.DOTALL);
+	private final static Pattern CODE_FRAGMENT = Pattern.compile("\".*\"", Pattern.DOTALL);
 	final private String calledMethod;
 	final private String argumentList;
 	final private ArrayList<String> methodPropertyList;
@@ -28,7 +29,15 @@ public class PartValueParser {
 			comment = notNull(matcher.group(3)).trim();
 		}
 		else{
-			throw new IllegalStepValueException(value);
+			Matcher codeFragmentMatcher = CODE_FRAGMENT.matcher(value);
+			if(codeFragmentMatcher.matches()){
+				calledMethod = value;
+				argumentList = "";
+				comment = "";
+				
+			}
+			else
+				throw new IllegalStepValueException(value);
 		}
 	}
 

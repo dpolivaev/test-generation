@@ -93,4 +93,9 @@ public class PartValueParserTest {
 		new PartValueParser(assignments(), "method(;)");
 		
 	}
+	@Test
+	public void codeFragmentStepValue(){
+		PartValueParser parser = new PartValueParser(assignments(), "\"method\"");
+		assertThat(parser.getCalledMethod(), equalTo("\"method\""));
+	}
 }
