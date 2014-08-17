@@ -25,11 +25,35 @@ public class PartValueParserTest {
 	}
 
 	@Test
+	public void methodWithParametersName() {
+		final PartValueParser parser = new PartValueParser(assignments(), "method(x:1)");
+		assertThat(parser.getCalledMethod(), equalTo("method"));
+	}
+
+	@Test
+	public void methodWithParametersParameters() {
+		final PartValueParser parser = new PartValueParser(assignments(), "method(x:1)");
+		assertThat(parser.getArgumentList(), equalTo(new String[]{"x:1"}));
+	}
+
+	@Test
 	public void commentedMethodName() {
 		final PartValueParser parser = new PartValueParser(assignments(), "method ; comment");
 		assertThat(parser.getCalledMethod(), equalTo("method"));
 	}
 
+	@Test
+	public void commentedMethodWithParametersName() {
+		final PartValueParser parser = new PartValueParser(assignments(), "method(parameter:1) ; comment");
+		assertThat(parser.getCalledMethod(), equalTo("method"));
+	}
+	
+	@Test
+	public void commentedMethodWithParametersComment() {
+		final PartValueParser parser = new PartValueParser(assignments(), "method(parameter:1) ; comment");
+		assertThat(parser.getComment(), equalTo("comment"));
+	}
+	
 	@Test
 	public void commentedMethodComment() {
 		final PartValueParser parser = new PartValueParser(assignments(), "method ; comment");
