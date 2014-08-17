@@ -8,7 +8,7 @@ strategy generateSteps
 	let testcase.focus.alias be "step"
 	let script.name be "TestScript"
 	for each exampleCategory let testcase.name be :exampleCategory
-	let exampleCategory be "testGroups" {apply stepGroups},
+	let exampleCategory be "stepGroups" {apply stepGroups},
 	"stepDefinitions" {apply stepDefinitions}
 		
 strategy stepGroups

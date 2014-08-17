@@ -11,7 +11,7 @@ public class TestScript {
 	 driver = new ();
 	
 	@Test
-	public void test001_testGroups() throws Exception {
+	public void test001_stepGroups() throws Exception {
 		
 	// Focus 1
 		driver.step1();
