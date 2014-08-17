@@ -1,0 +1,50 @@
+class PartitionedSteps
+	val steps = stepCounter("step")
+	val firstTwoSteps = steps.nextSubsequence(2)
+	val nextTwoSteps = steps.nextSubsequence(2)
+	
+
+strategy generateSteps
+	let testcase.focus.alias be "step"
+	let script.name be "TestScript"
+	for each exampleCategory let testcase.name be :exampleCategory
+	let exampleCategory be "testGroups" {apply stepGroups},
+	"stepDefinitions" {apply stepDefinitions}
+		
+strategy stepGroups
+	val partitionedSteps = new PartitionedSteps	
+	val alternativeNextTwoSteps = partitionedSteps.nextTwoSteps.copy
+	
+	let (partitionedSteps.firstTwoSteps.next) be "step 1"	
+	let lazy (partitionedSteps.nextTwoSteps.next) be "step 3"
+
+	let lazy (partitionedSteps.firstTwoSteps.next) be "step 2"	
+	let lazy (partitionedSteps.nextTwoSteps.next) be "step 4"
+
+	let (partitionedSteps.firstTwoSteps) be "another step 2"
+	let (alternativeNextTwoSteps.next) be "another step 3"
+	
+strategy stepDefinitions
+	val steps = stepCounter("step")
+	let (steps.next) be "test step without parameters"
+	let (steps.next) be "commented test step without parameters ; some comment"
+	let (steps.next) be 'test step with fix string parameter(parameter:"string parameter")'
+	let (steps.next) be 'test step with fix number parameter(parameter:12345)'
+	let (steps.next) be 'test step with fix identifier parameter(parameter:fix parameter value)'
+	let (steps.next) be 'test step with property as parameter(:property)'
+	let (steps.next) be 'commented test step with property as parameter(:property) ; some comment'
+	let (steps.next) be 'commented test step with property as parameter(:property) 
+	; some comment distributed
+	over multiple lines'
+	let (steps.next) be 'test step with multiple parameters(parameter:fix parameter value, string:"string" :property)'
+	let (steps.next) be 'test step with property :property as a step name part'
+	let (steps.next) be '; only comment, the step does nothing'
+	
+	let (steps.next) be '"// embedded code fragment
+	    	codeFragmentTestStep();"'
+	
+	let property be "property value"	
+
+run strategy generateSteps
+	output "generated-tests/xml" , 
+	apply "/java.xslt" output "generated-tests/java"		

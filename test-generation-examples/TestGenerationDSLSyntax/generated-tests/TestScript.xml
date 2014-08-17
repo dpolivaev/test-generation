@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><Script name="TestScript">
+  <TestCase name="testGroups">
+    <Focus step="step 1"/>
+    <Focus step="another step 2"/>
+    <Focus step="another step 3"/>
+    <Focus step="step 4"/>
+  </TestCase>
+  <TestCase name="stepDefinitions">
+    <Focus step="test step without parameters"/>
+    <Focus step="commented test step without parameters">
+      <Comment>some comment</Comment>
+    </Focus>
+    <Focus step="test step with fix string parameter">
+      <Parameter type="" name="parameter">"string parameter"</Parameter>
+    </Focus>
+    <Focus step="test step with fix number parameter">
+      <Parameter type="" name="parameter">12345</Parameter>
+    </Focus>
+    <Focus step="test step with fix identifier parameter">
+      <Parameter type="" name="parameter">fix parameter value</Parameter>
+    </Focus>
+    <Focus step="test step with property as parameter">
+      <Parameter type="java.lang.String" name="property">property value</Parameter>
+    </Focus>
+    <Focus step="commented test step with property as parameter">
+      <Comment>some comment</Comment>
+      <Parameter type="java.lang.String" name="property">property value</Parameter>
+    </Focus>
+    <Focus step="commented test step with property as parameter">
+      <Comment>some comment distributed
+	over multiple lines</Comment>
+      <Parameter type="java.lang.String" name="property">property value</Parameter>
+    </Focus>
+    <Focus step="test step with multiple parameters">
+      <Parameter type="" name="parameter">fix parameter value</Parameter>
+      <Parameter type="" name="string">"string" :property</Parameter>
+    </Focus>
+    <Focus step="test step with property property value as a step name part"/>
+    <Focus step="">
+      <Comment>only comment, the step does nothing</Comment>
+    </Focus>
+    <Focus step="&quot;// embedded code fragment&#10;&#9;    &#9;codeFragmentTestStep();&quot;"/>
+  </TestCase>
+</Script>
