@@ -1,10 +1,12 @@
-package org.dpolivaev.testgeneration.engine.strategies.internal;
+package org.dpolivaev.testgeneration.engine.scriptwriter.internal;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 
 import org.dpolivaev.testgeneration.engine.ruleengine.PropertyContainer;
+import org.dpolivaev.testgeneration.engine.scriptwriter.IllegalStepValueException;
 import org.dpolivaev.testgeneration.engine.scriptwriter.internal.PartValueParser;
+import org.dpolivaev.testgeneration.engine.strategies.internal.GivenAssignments;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -84,5 +86,11 @@ public class PartValueParserTest {
 		givenAssignments.given("property", "content");
 		final PartValueParser parser = new PartValueParser(assignments(), "method :property");
 		assertThat(new String[]{":property"}, equalTo(parser.getMethodPropertyList()));
+	}
+	
+	@Test(expected=IllegalStepValueException.class)
+	public void illegalStepValue(){
+		new PartValueParser(assignments(), "method(;)");
+		
 	}
 }

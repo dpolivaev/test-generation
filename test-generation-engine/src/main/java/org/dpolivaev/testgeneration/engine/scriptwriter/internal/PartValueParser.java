@@ -5,6 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.dpolivaev.testgeneration.engine.ruleengine.PropertyContainer;
+import org.dpolivaev.testgeneration.engine.scriptwriter.IllegalStepValueException;
 
 public class PartValueParser {
 	private static final String METHOD_PATTERN = "([^\"(;]+)";
@@ -27,9 +28,7 @@ public class PartValueParser {
 			comment = notNull(matcher.group(3)).trim();
 		}
 		else{
-			calledMethod = value.trim();
-			argumentList = "";
-			comment = "";
+			throw new IllegalStepValueException(value);
 		}
 	}
 
