@@ -1,5 +1,6 @@
 package org.dpolivaev.testgeneration.engine.ruleengine;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -259,4 +260,12 @@ public class RuleEngine implements EngineState {
 	public void addTemporaryRule(Rule creatingRule, Rule rule) {
 		currentStrategy().addTemporaryRule(creatingRule, rule);
 	}
+
+	@Override
+	public String toString() {
+		AssignmentFormatter assignmentFormatter = new AssignmentFormatterFactory().createDetailedAssignmentFormatter();
+		return "Combination " + getCombinationCounter() + ":\n" + assignmentFormatter.format(this) + '\n';
+	}
+	
+	
 }
