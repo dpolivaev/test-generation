@@ -27,6 +27,12 @@ public class PartValueParserTest {
 	}
 
 	@Test
+	public void onlyMethodWithQuotes() {
+		final PartValueParser parser = new PartValueParser(assignments(), "method \"with quotes\"");
+		assertThat(parser.getCalledMethod(), equalTo("method \"with quotes\""));
+	}
+
+	@Test
 	public void methodWithParametersName() {
 		final PartValueParser parser = new PartValueParser(assignments(), "method(x:1)");
 		assertThat(parser.getCalledMethod(), equalTo("method"));

@@ -8,7 +8,7 @@ import org.dpolivaev.testgeneration.engine.ruleengine.PropertyContainer;
 import org.dpolivaev.testgeneration.engine.scriptwriter.IllegalStepValueException;
 
 public class PartValueParser {
-	private static final String METHOD_PATTERN = "([^\"(;]+)";
+	private static final String METHOD_PATTERN = "([^(;]+)";
 	private static final String ARGLIST_PATTERN = "(?:\\(([^;]*)\\))?";
 	private static final String COMMENT_PATTERN = "(?:\\s*;(.*))?";
 	private final static Pattern METHOD_CALL = Pattern.compile("(?:" + METHOD_PATTERN + ARGLIST_PATTERN + ")?" + COMMENT_PATTERN + "\\s*", Pattern.DOTALL);
