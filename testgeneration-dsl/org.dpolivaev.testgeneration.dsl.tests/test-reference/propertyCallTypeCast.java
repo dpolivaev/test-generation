@@ -29,7 +29,8 @@ class _MyFile_first_StrategyFactory0 {
   
   private Boolean condition1(final PropertyContainer propertyContainer) {
     Integer _propertycall = null;
-    _propertycall = propertyContainer.<Integer>get(new StringBuilder().append("x").toString());
+    String _propertycall_name = new StringBuilder().append("x").toString();
+    _propertycall = propertyContainer.<Integer>get(_propertycall_name);
     boolean _greaterThan = (((int) ((Integer) _propertycall).intValue()) > 0);
     return Boolean.valueOf(_greaterThan);
   }

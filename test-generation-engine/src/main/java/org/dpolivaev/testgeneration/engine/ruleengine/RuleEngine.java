@@ -194,7 +194,8 @@ public class RuleEngine implements EngineState {
             
         }
         dependencies.add(name);
-		return (T) assignments.get(name);
+		T value = (T) assignments.get(name);
+		return value;
 	}
 	
 

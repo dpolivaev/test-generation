@@ -36,7 +36,8 @@ class _MyFile_first_StrategyFactory0 {
   
   private Object _value1(final PropertyContainer propertyContainer) {
     Object _propertycall = null;
-    _propertycall = propertyContainer.get(new StringBuilder().append("x#").append(this.p).toString());
+    String _propertycall_name = new StringBuilder().append("x#").append(this.p).toString();
+    _propertycall = propertyContainer.get(_propertycall_name);
     return _propertycall;
   }
   

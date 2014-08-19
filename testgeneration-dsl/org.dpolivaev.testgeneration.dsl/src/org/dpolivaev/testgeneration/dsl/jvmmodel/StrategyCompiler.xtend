@@ -17,6 +17,7 @@ import org.eclipse.xtext.xbase.compiler.XbaseCompiler
 import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
 import org.eclipse.xtext.xbase.typesystem.references.LightweightTypeReference
 import org.eclipse.xtext.common.types.util.TypeReferences
+import org.eclipse.xtext.util.Tuples
 
 class StrategyCompiler extends XbaseCompiler {
 	@Inject Primitives primitives
@@ -41,44 +42,61 @@ class StrategyCompiler extends XbaseCompiler {
 		return super.getTypeForVariableDeclaration(expr)
 	}
 	
-	def _internalToJavaStatement(PropertyCall propertyCall, ITreeAppendable it, boolean isReferenced) {
+	def _internalToJavaStatement(PropertyCall propertyCall, ITreeAppendable b, boolean isReferenced) {
 		val propertyName = propertyCall.propertyName
 		if(propertyName == null)
-			return it
+			return b
 		if(propertyName.name != null)
-			generateComment(propertyCall, it, isReferenced)
+			generateComment(propertyCall, b, isReferenced)
 		else{
 			for(expr : propertyName.nameExpressions){
-				internalToJavaStatement(expr, it, isReferenced)
+				internalToJavaStatement(expr, b, isReferenced)
 			}
 			if(isReferenced){
-				declareSyntheticVariable(propertyCall, it);
-				newLine
-				append(getVarName(propertyCall, it)) append(" = propertyContainer.")
+				val it = b.trace(propertyCall, true)
+				declarePropertyCallVariables(propertyCall, it)
+				append('''«getVarName(propertyCall, it)» = propertyContainer.''')
 				addTypeCastForPrimitive(propertyCall, it)
-				append("get(new StringBuilder()")
-				for(expr : propertyName.nameExpressions){
-					append('.append(')
-					internalToJavaExpression(expr, it)
-					append(')')
-				}
-				append('.toString());')
+				append('''get(«getVarName(getPropertyCallPropertyNameKey(propertyCall), it)»);''')
 			}
 
 		}
 	}
+	
+	private def getPropertyCallPropertyNameKey(PropertyCall propertyCall) {
+		Tuples.pair(propertyCall, "_name")
+	}
+	
+	private def declarePropertyCallVariables(PropertyCall propertyCall, ITreeAppendable it){
+				declareSyntheticVariable(propertyCall, it);
+				newLine
+				val propertyVarName = getVarName(propertyCall, it)
+				val propertyCallPropertyNameKey = getPropertyCallPropertyNameKey(propertyCall)
+				val propertyCallPropertyName = declareSyntheticVariable(propertyCallPropertyNameKey, propertyVarName + "_name")
+				append('''String «propertyCallPropertyName» = new StringBuilder()''')
+				for(expr : propertyCall.propertyName.nameExpressions){
+					append('.append(')
+					internalToJavaExpression(expr, it)
+					append(')')
+				}
+				append('.toString();')
+				newLine
+	}
 
-	protected def _internalToConvertedExpression(PropertyCall propertyCall, ITreeAppendable it) {
+	protected def _internalToConvertedExpression(PropertyCall propertyCall, ITreeAppendable b) {
 		val propertyName = propertyCall.propertyName
 		if(propertyName == null)
-			return it
+			return b
 		if(propertyName.name != null) {
+ 	    	val it = b.trace(propertyCall, true)			
 			append('propertyContainer.')
 			addTypeCastForPrimitive(propertyCall, it)
 			append('''get("«propertyName.name.escapeQuotes»")''')
 		}
-		else
-			trace(propertyCall, false).append(getVarName(propertyCall, it))
+		else{
+			val it = b.trace(propertyCall, false)
+			append(getVarName(propertyCall, b))
+		}
 	}
 
 	protected def addTypeCastForPrimitive(PropertyCall expr, ITreeAppendable it) {
