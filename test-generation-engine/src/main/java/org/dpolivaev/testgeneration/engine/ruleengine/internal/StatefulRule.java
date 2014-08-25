@@ -23,6 +23,7 @@ public abstract class StatefulRule implements Rule {
     private Set<String> triggeringProperties;
 
     private boolean valueAlreadyAddedToCurrentCombination;
+    private Object currentValue;
     private boolean blocksRequiredProperties;
 
     public StatefulRule(Set<String> triggeredBy, Condition condition, String targetedPropertyName, ValueProviders ruleValues) {
@@ -32,6 +33,7 @@ public abstract class StatefulRule implements Rule {
         this.valueProviders = ruleValues;
         this.blocksRequiredProperties = false;
         this.valueAlreadyAddedToCurrentCombination = false;
+        currentValue = null;
         dependentRules = new HashSet<>();
         createdRules = new HashSet<>();
     }
@@ -80,6 +82,7 @@ public abstract class StatefulRule implements Rule {
         		break;
         }
         this.valueAlreadyAddedToCurrentCombination = true;
+        currentValue = value;
         if(value != SpecialValue.DISABLED_RULE)
         	engineState.setPropertyValue(this, value, useNextValue);
     }
@@ -128,6 +131,7 @@ public abstract class StatefulRule implements Rule {
                     setBlocksRequiredProperties(false);
             }
             this.valueAlreadyAddedToCurrentCombination = false;
+            currentValue = null;
         }
     }
 
@@ -163,7 +167,9 @@ public abstract class StatefulRule implements Rule {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder(getClass().getSimpleName()).append(" [");
         appendTriggeringPropertyList(stringBuilder);
-        stringBuilder.append(targetedPropertyName).append("]").append(valueProviders);
+        stringBuilder.append(targetedPropertyName).append("]");
+        if(valueAlreadyAddedToCurrentCombination)
+        	stringBuilder.append(" = ").append(currentValue);
         return stringBuilder.toString();
     }
 
