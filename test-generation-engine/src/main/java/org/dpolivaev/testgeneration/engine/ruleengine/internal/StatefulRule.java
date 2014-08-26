@@ -62,7 +62,7 @@ public abstract class StatefulRule implements Rule {
 
     @Override
     public boolean blocksRequiredProperties() {
-        return blocksRequiredProperties;
+        return blocksRequiredProperties || isBlockedBy(dependentRules);
     }
 
     protected void addValue(EngineState engineState) {
