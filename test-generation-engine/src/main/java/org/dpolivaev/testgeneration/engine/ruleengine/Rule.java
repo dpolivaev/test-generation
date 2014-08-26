@@ -47,4 +47,6 @@ public interface Rule {
 	String getRuleKey();
 
 	public Set<String> getTriggeringProperties();
+
+	boolean valueHasChangedNow();
 }

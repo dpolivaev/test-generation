@@ -14,6 +14,7 @@ import static org.mockito.Matchers.eq;
 import java.util.Collections;
 import java.util.Set;
 
+import org.dpolivaev.testgeneration.engine.ruleengine.Assignment;
 import org.dpolivaev.testgeneration.engine.ruleengine.EngineState;
 import org.dpolivaev.testgeneration.engine.ruleengine.PropertyContainer;
 import org.dpolivaev.testgeneration.engine.ruleengine.Rule;
@@ -175,6 +176,7 @@ public class RuleTest {
         Rule triggeringRule = iterate("triggeredBy").over("value1").create();
         Rule triggeredRule = iterate("name").over("value2").when("triggeredBy").create();
         Mockito.when(engineState.containsTriggeringPropertyValue("triggeredBy")).thenReturn(true);
+        Mockito.when(engineState.getAssignment("triggeredBy")).thenReturn(new Assignment(triggeringRule, "value1", "", Collections.<String> emptySet(), Collections.<String> emptySet()));
         triggeredRule.propertyValueSet( //
             new PropertyAssignedEvent(engineState, triggeringRule, Collections.<String> emptySet(), true));
         verify(engineState).setPropertyValue(triggeredRule, "value2", true);
@@ -195,7 +197,8 @@ public class RuleTest {
         Rule triggeringRule = iterate("triggeredBy").over("value1").create();
         Rule triggeredRule = iterate("name").over("value2").when("triggeredBy").create();
         Mockito.when(engineState.containsTriggeringPropertyValue("triggeredBy")).thenReturn(true);
-        triggeredRule.propertyValueSet(new PropertyAssignedEvent(engineState, triggeringRule, Collections
+        Mockito.when(engineState.getAssignment("triggeredBy")).thenReturn(new Assignment(triggeringRule, "value1", "", Collections.<String> emptySet(), Collections.<String> emptySet()));
+       triggeredRule.propertyValueSet(new PropertyAssignedEvent(engineState, triggeringRule, Collections
             .<String> emptySet(), true));
 
         triggeredRule.propertyCombinationFinished(engineState);

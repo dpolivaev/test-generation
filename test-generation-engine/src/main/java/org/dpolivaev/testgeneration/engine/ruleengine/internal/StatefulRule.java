@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.dpolivaev.testgeneration.engine.ruleengine.Condition;
 import org.dpolivaev.testgeneration.engine.ruleengine.EngineState;
+import org.dpolivaev.testgeneration.engine.ruleengine.InvalidCombinationException;
 import org.dpolivaev.testgeneration.engine.ruleengine.Rule;
 import org.dpolivaev.testgeneration.engine.ruleengine.RuleBuilder;
 import org.dpolivaev.testgeneration.engine.ruleengine.SpecialValue;
@@ -24,7 +25,8 @@ public abstract class StatefulRule implements Rule {
 
     private boolean valueAlreadyAddedToCurrentCombination;
     private Object currentValue;
-    private boolean blocksRequiredPropertiesItself;
+    protected boolean blocksRequiredPropertiesItself;
+	private boolean valueHasChangedNow;
 
     public StatefulRule(Set<String> triggeredBy, Condition condition, String targetedPropertyName, ValueProviders ruleValues) {
         this.triggeringProperties = triggeredBy;
@@ -69,6 +71,7 @@ public abstract class StatefulRule implements Rule {
         boolean useNextValue = dependentRules.isEmpty();
         if (useNextValue) {
             valueProviders.next();
+            valueHasChangedNow = true;
         }
         Object value;
         for (;;){
@@ -77,6 +80,10 @@ public abstract class StatefulRule implements Rule {
                 if (valueProviders.allValuesUsed())
                     setBlocksRequiredPropertiesItself(false);
                 valueProviders.next();
+        	}
+        	else if(value == SpecialValue.SKIP_COMBINATION){
+        		setBlocksRequiredPropertiesItself(false);
+				throw new InvalidCombinationException();
         	}
         	else
         		break;
@@ -100,7 +107,7 @@ public abstract class StatefulRule implements Rule {
 
 	@Override
     public void propertyValueSet(PropertyAssignedEvent event) {
-		if(event.getWorkingRule() == this && event.isValueChanged() && createdRules.isEmpty())
+		if(event.getWorkingRule() == this && valueHasChangedNow() && createdRules.isEmpty())
 			addRules(event.getState());
 		if (isValueAddedToCurrentCombination())
             addDependencies(event);
@@ -123,6 +130,7 @@ public abstract class StatefulRule implements Rule {
     @Override
     public void propertyCombinationFinished(EngineState engineState) {
         if (isValueAddedToCurrentCombination()) {
+        	valueHasChangedNow = false;
             for (Rule rule : dependentRules)
                 rule.propertyCombinationFinished(engineState);
             if (!isBlockedBy(dependentRules)) {
@@ -135,7 +143,12 @@ public abstract class StatefulRule implements Rule {
         }
     }
 
-    public void clearDependentRules(EngineState engineState) {
+    @Override
+	public boolean valueHasChangedNow() {
+		return valueHasChangedNow;
+	}
+
+	public void clearDependentRules(EngineState engineState) {
         for (Rule dependentRule : dependentRules){
         	dependentRule.clearDependentRules(engineState);
         }

@@ -149,4 +149,8 @@ public class AlternatingRule implements Rule {
 		return activeRule.getTriggeringProperties();
 	}
 
+	public boolean valueHasChangedNow() {
+		return activeRule.valueHasChangedNow();
+	}
+
 }

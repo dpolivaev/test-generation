@@ -3,6 +3,7 @@ package org.dpolivaev.testgeneration.engine.ruleengine.internal;
 import java.util.Collection;
 import java.util.Set;
 
+import org.dpolivaev.testgeneration.engine.ruleengine.Assignment;
 import org.dpolivaev.testgeneration.engine.ruleengine.Condition;
 import org.dpolivaev.testgeneration.engine.ruleengine.EngineState;
 import org.dpolivaev.testgeneration.engine.ruleengine.Rule;
@@ -48,13 +49,20 @@ public class TriggeredStatefulRule extends StatefulRule {
     	if (isValueAddedToCurrentCombination())
 		super.propertyValueSet(event);
     	else if (! isTopRule() 
-			&& getTriggeringProperties().contains(event.getTargetedPropertyName())
-			&& event.containsTriggeredProperties(getTriggeringProperties())) {
+    			&& getTriggeringProperties().contains(event.getTargetedPropertyName())
+    			&& event.containsTriggeredProperties(getTriggeringProperties())) {
     		EngineState engineState = event.getState();
     		if (getCondition().isSatisfied(engineState)) {
-			addValue(engineState);
-    			if (event.isValueChanged())
-    				setBlocksRequiredPropertiesItself(true);
+    			if(! blocksRequiredPropertiesItself && ! isLazyRule())
+    				for(String trigger : getTriggeringProperties()){
+    					final Assignment assignment = engineState.getAssignment(trigger);
+    					final Rule rule = assignment.rule;
+    					if(rule.valueHasChangedNow() && rule.blocksRequiredProperties()) {
+    						setBlocksRequiredPropertiesItself(true);
+    						break;
+    					}
+    				}
+    			addValue(engineState);
     		}
     	}
     }

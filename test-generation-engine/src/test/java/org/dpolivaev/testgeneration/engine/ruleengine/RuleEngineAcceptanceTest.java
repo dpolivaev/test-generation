@@ -188,6 +188,21 @@ public class RuleEngineAcceptanceTest {
     }
 
     @Test
+    public void twoTriggeringAndTriggeredRules() {
+        strategy.addRule(iterate("x1").over("a", "b").ordered());
+        strategy.addRule(when("x1").iterate("x2").over("c").ordered());
+        strategy.addRule(when("x1", "x2").iterate("y").over("c", "d").ordered());
+
+        generateCombinationsForStrategy();
+
+        expect(combination("x1", "a", "x2", "c", "y", "c")
+            .followedBy("x1", "a", "x2", "c", "y", "d")
+            .followedBy("x1", "b", "x2", "c", "y", "c")
+            .followedBy("x1", "b", "x2", "c", "y", "d"));
+
+    }
+
+    @Test
     public void triggeringValueAndConditionallyTriggeredValues() {
         strategy.addRule(iterate("x").over("a", "b", "c"));
         strategy.addRule(when("x").iterate("y").over("A", "B")._if( //

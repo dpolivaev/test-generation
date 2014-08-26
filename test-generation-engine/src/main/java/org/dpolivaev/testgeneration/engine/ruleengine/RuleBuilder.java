@@ -208,7 +208,7 @@ public class RuleBuilder{
 			
 			@Override
 			public Object value(PropertyContainer propertyContainer) {
-				throw new InvalidCombinationException();
+				return SpecialValue.SKIP_COMBINATION;
 			}
 		});
 	}
