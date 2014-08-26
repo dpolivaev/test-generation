@@ -60,6 +60,10 @@ The test-driven implementation of the parking costs calculator with developer te
 For compiling and running the tests the project build path should be added library "Test generation library" which is installed with the framework plug-ins.
 
 
+Eclipse plug-in installation and update site
+=========================================
+To install the eclipse plug-in use eclipse update site `https://sourceforge.net/projects/testgeneration/files/updatesite/v0.0.9` and add also Xtext update site `http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases` to the eclipse configuration.
+
 Framework and eclipse plug-in compilation from the source code
 =========================================
 1. Install the latest eclipse with XText sdk plugin and maven
