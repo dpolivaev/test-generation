@@ -22,21 +22,19 @@ public class PartValueParser {
 	public PartValueParser(PropertyContainer propertyContainer, String value) {
 		this.propertyContainer = propertyContainer;
 		methodPropertyList = new ArrayList<>();
-		final Matcher matcher = METHOD_CALL.matcher(value);
-		if(matcher.matches()){
-			calledMethod = method(notNull(matcher.group(1)));
-			argumentList = notNull(matcher.group(2)).trim();
-			comment = notNull(matcher.group(3)).trim();
-		}
-		else{
-			Matcher codeFragmentMatcher = CODE_FRAGMENT.matcher(value);
-			if(codeFragmentMatcher.matches()){
-				calledMethod = value;
-				argumentList = "";
-				comment = "";
-				
-			}
-			else
+		Matcher codeFragmentMatcher = CODE_FRAGMENT.matcher(value);
+		if (codeFragmentMatcher.matches()) {
+			calledMethod = value;
+			argumentList = "";
+			comment = "";
+
+		} else {
+			final Matcher matcher = METHOD_CALL.matcher(value);
+			if (matcher.matches()) {
+				calledMethod = method(notNull(matcher.group(1)));
+				argumentList = notNull(matcher.group(2)).trim();
+				comment = notNull(matcher.group(3)).trim();
+			} else
 				throw new IllegalStepValueException(value);
 		}
 	}
