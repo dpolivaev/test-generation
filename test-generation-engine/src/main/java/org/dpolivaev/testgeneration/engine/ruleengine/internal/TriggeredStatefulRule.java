@@ -30,12 +30,12 @@ public class TriggeredStatefulRule extends StatefulRule {
     	if(! isTopRule())
     		return;
         if(engineState.getCombinationCounter() == 1)
-            setBlocksRequiredProperties(true);
+            setBlocksRequiredPropertiesItself(true);
         if (getCondition().isSatisfied(engineState)) {
             addValue(engineState);
         }
         else
-            setBlocksRequiredProperties(false);
+            setBlocksRequiredPropertiesItself(false);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class TriggeredStatefulRule extends StatefulRule {
     		if (getCondition().isSatisfied(engineState)) {
 			addValue(engineState);
     			if (event.isValueChanged())
-    				setBlocksRequiredProperties(true);
+    				setBlocksRequiredPropertiesItself(true);
     		}
     	}
     }

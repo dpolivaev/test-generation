@@ -84,8 +84,8 @@ public class AlternatingRule implements Rule {
     }
 
     @Override
-    public void setBlocksRequiredProperties(boolean block) {
-        activeRule.setBlocksRequiredProperties(block);
+    public void setBlocksRequiredPropertiesItself(boolean block) {
+        activeRule.setBlocksRequiredPropertiesItself(block);
     }
 
     @Override

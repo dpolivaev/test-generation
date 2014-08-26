@@ -26,7 +26,7 @@ public interface Rule {
 
     boolean isValueAddedToCurrentCombination();
 
-    void setBlocksRequiredProperties(boolean block);
+    void setBlocksRequiredPropertiesItself(boolean block);
 
     Rule combineWith(Rule rule);
 

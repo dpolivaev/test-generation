@@ -184,8 +184,8 @@ public class RuleTest {
 	public void triggeringRule_whenTriggeredPropertyIsBlockes_isBlockedItself() {
         Rule triggeringRule = iterate("triggeredBy").over("value1").create();
         Rule triggeredRule = iterate("name").over("value2").when("triggeredBy").create();
-        triggeringRule.setBlocksRequiredProperties(false);
-        triggeredRule.setBlocksRequiredProperties(true);
+        triggeringRule.setBlocksRequiredPropertiesItself(false);
+        triggeredRule.setBlocksRequiredPropertiesItself(true);
         ((StatefulRule)triggeringRule).addDependencies(new PropertyAssignedEvent(engineState, triggeredRule, Collections.<String> emptySet(), false));
         assertThat(triggeringRule.blocksRequiredProperties(), equalTo(true));
 	}

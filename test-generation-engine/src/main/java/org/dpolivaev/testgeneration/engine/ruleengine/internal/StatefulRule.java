@@ -24,14 +24,14 @@ public abstract class StatefulRule implements Rule {
 
     private boolean valueAlreadyAddedToCurrentCombination;
     private Object currentValue;
-    private boolean blocksRequiredProperties;
+    private boolean blocksRequiredPropertiesItself;
 
     public StatefulRule(Set<String> triggeredBy, Condition condition, String targetedPropertyName, ValueProviders ruleValues) {
         this.triggeringProperties = triggeredBy;
 		this.condition = condition;
         this.targetedPropertyName = targetedPropertyName;
         this.valueProviders = ruleValues;
-        this.blocksRequiredProperties = false;
+        this.blocksRequiredPropertiesItself = false;
         this.valueAlreadyAddedToCurrentCombination = false;
         currentValue = null;
         dependentRules = new HashSet<>();
@@ -62,7 +62,7 @@ public abstract class StatefulRule implements Rule {
 
     @Override
     public boolean blocksRequiredProperties() {
-        return blocksRequiredProperties || isBlockedBy(dependentRules);
+        return blocksRequiredPropertiesItself || isBlockedBy(dependentRules);
     }
 
     protected void addValue(EngineState engineState) {
@@ -75,7 +75,7 @@ public abstract class StatefulRule implements Rule {
         	value = valueProviders.currentProvider().value(engineState);
         	if(value == SpecialValue.SKIP && useNextValue){
                 if (valueProviders.allValuesUsed())
-                    setBlocksRequiredProperties(false);
+                    setBlocksRequiredPropertiesItself(false);
                 valueProviders.next();
         	}
         	else
@@ -128,7 +128,7 @@ public abstract class StatefulRule implements Rule {
             if (!isBlockedBy(dependentRules)) {
                 clearDependentRules(engineState);
                 if (valueProviders.allValuesUsed())
-                    setBlocksRequiredProperties(false);
+                    setBlocksRequiredPropertiesItself(false);
             }
             this.valueAlreadyAddedToCurrentCombination = false;
             currentValue = null;
@@ -146,8 +146,8 @@ public abstract class StatefulRule implements Rule {
     }
 
     @Override
-    public void setBlocksRequiredProperties(boolean block) {
-        this.blocksRequiredProperties = block;
+    public void setBlocksRequiredPropertiesItself(boolean block) {
+        this.blocksRequiredPropertiesItself = block;
     }
 
     @Override
