@@ -17,9 +17,14 @@ For calculation of expected results and evaluation of code coverage separate tes
 
 Separate implementation of test oracles, test strategies, test script writers and test drivers allows clear and clean design and high reuse of the test specification elements. It offers natural ways to distribute the work among different people.
 
+Eclipse plug-in installation and update site
+=========================================
+The test generation framework can be either installed from update site archive or compiled from the source code licensed under LGPL 3 or later. Compilation from the source is explained later.
+
+To install the eclipse plug-in use eclipse update site `https://sourceforge.net/projects/testgeneration/files/updatesite/v0.0.9` and add also Xtext update site `http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases` to the eclipse configuration.
+
 Getting started
 ===============
-The test generation framework can be either installed from update site archive or compiled from the source code licensed under LGPL 3 or later. Compilation from the source is explained later.
 
 1. Run eclipse with the test generation plugin and  import project from folder test-generation-examples into the eclipse workspace.
 2. Open file /ParkCalculatorExample/testspec/ParkCalculatorStrategy.testspec` in editor. Make sure it is the special editor for the strategy dsl files with syntax highlighting and outline.
@@ -59,10 +64,6 @@ The test-driven implementation of the parking costs calculator with developer te
 
 For compiling and running the tests the project build path should be added library "Test generation library" which is installed with the framework plug-ins.
 
-
-Eclipse plug-in installation and update site
-=========================================
-To install the eclipse plug-in use eclipse update site `https://sourceforge.net/projects/testgeneration/files/updatesite/v0.0.9` and add also Xtext update site `http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases` to the eclipse configuration.
 
 Framework and eclipse plug-in compilation from the source code
 =========================================
