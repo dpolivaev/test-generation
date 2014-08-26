@@ -53,7 +53,7 @@ public class TriggeredStatefulRule extends StatefulRule {
     			&& event.containsTriggeredProperties(getTriggeringProperties())) {
     		EngineState engineState = event.getState();
     		if (getCondition().isSatisfied(engineState)) {
-    			if(! blocksRequiredPropertiesItself && ! isLazyRule())
+    			if(! blocksRequiredPropertiesItself)
     				for(String trigger : getTriggeringProperties()){
     					final Assignment assignment = engineState.getAssignment(trigger);
     					final Rule rule = assignment.rule;
