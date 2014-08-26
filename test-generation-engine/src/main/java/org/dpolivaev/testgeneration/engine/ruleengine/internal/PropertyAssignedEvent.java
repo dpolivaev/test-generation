@@ -10,19 +10,11 @@ public class PropertyAssignedEvent {
     private final EngineState engineState;
 	private final Rule workingRule;
 	private final Set<String> requiredProperties;
-    private final boolean valueChanged;
 
-    public boolean isValueChanged() {
-        return valueChanged;
-    }
-
-    public PropertyAssignedEvent(EngineState engineState, Rule workingRule,
- Set<String> dependencies,
-        boolean valueChanged) {
+    public PropertyAssignedEvent(EngineState engineState, Rule workingRule, Set<String> dependencies) {
 		super();
 		this.engineState = engineState;
 		this.workingRule = workingRule;
-        this.valueChanged = valueChanged;
         this.requiredProperties = workingRule.calculateRequiredProperties(dependencies);
 	}
 

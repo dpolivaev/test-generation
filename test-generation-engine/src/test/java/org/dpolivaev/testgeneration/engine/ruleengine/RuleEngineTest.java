@@ -54,7 +54,7 @@ public class RuleEngineTest {
 			public void handlePropertyCombination(PropertyContainer propertyContainer) {
 				Rule triggeredRule = iterate("name").over("value2").when("triggeredBy").create();
 				RuleEngine ruleEngine = (RuleEngine) propertyContainer;
-				ruleEngine.setPropertyValue(triggeredRule, "value2", true);
+				ruleEngine.setPropertyValue(triggeredRule, "value2");
 				assertThat(ruleEngine.getAssignmentReason(), equalTo("->"));
 				
 			}

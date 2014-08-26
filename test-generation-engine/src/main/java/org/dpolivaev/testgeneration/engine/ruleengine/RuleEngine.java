@@ -142,10 +142,10 @@ public class RuleEngine implements EngineState {
 	}
 
 	@Override
-    public void setPropertyValue(Rule rule, Object value, boolean valueChanged) {
+    public void setPropertyValue(Rule rule, Object value) {
 
 		assignments.add(new Assignment(rule, value, assignmentReason, dependencies, rule.getTriggeringProperties()));
-        PropertyAssignedEvent event = new PropertyAssignedEvent(this, rule, dependencies, valueChanged);
+        PropertyAssignedEvent event = new PropertyAssignedEvent(this, rule, dependencies);
         firePropertyAssignedEvent(assignments.firedRules(), event);
         if (!rule.isLazyRule()) {
             firePropertyAssignedEvent(strategy.triggeredRules(), event);

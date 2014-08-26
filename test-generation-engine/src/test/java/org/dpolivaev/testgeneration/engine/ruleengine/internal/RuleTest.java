@@ -61,7 +61,7 @@ public class RuleTest {
         Rule statefulRule = iterate("name").over("value").create();
 
         statefulRule.propertyCombinationStarted(engineState);
-        verify(engineState).setPropertyValue(statefulRule, "value", true);
+        verify(engineState).setPropertyValue(statefulRule, "value");
     }
 
     @Test
@@ -109,7 +109,7 @@ public class RuleTest {
 
         iterationWith(statefulRule);
         statefulRule.propertyCombinationStarted(engineState);
-        verify(engineState).setPropertyValue(statefulRule, "2", true);
+        verify(engineState).setPropertyValue(statefulRule, "2");
 	}
 
     @Test
@@ -141,7 +141,7 @@ public class RuleTest {
         Rule rule = iterate("name").over("1", "2").when("x").asLazyRule().create();
         when(engineState.containsTriggeringPropertyValue("x")).thenReturn(false);
         rule.propertyRequired(engineState);
-        verify(engineState, Mockito.never()).setPropertyValue(Mockito.<Rule>any(), Mockito.any(), Mockito.anyBoolean());
+        verify(engineState, Mockito.never()).setPropertyValue(Mockito.<Rule>any(), Mockito.any());
     }
     
     @Test
@@ -149,7 +149,7 @@ public class RuleTest {
         Rule rule = iterate("name").over("1", "2").when("x").asLazyRule().create();
         when(engineState.containsTriggeringPropertyValue("x")).thenReturn(true);
         rule.propertyRequired(engineState);
-        verify(engineState).setPropertyValue(Mockito.eq(rule), Mockito.any(), Mockito.anyBoolean());
+        verify(engineState).setPropertyValue(Mockito.eq(rule), Mockito.any());
     }
     
 	@Test
@@ -160,7 +160,7 @@ public class RuleTest {
         statefulRule.propertyCombinationFinished(engineState1);
         EngineState engineState2 = mock(EngineState.class);
         statefulRule.propertyCombinationStarted(engineState2);
-        verify(engineState2).setPropertyValue(statefulRule, "value", true);
+        verify(engineState2).setPropertyValue(statefulRule, "value");
 	}
 
 	@Test
@@ -178,8 +178,8 @@ public class RuleTest {
         Mockito.when(engineState.containsTriggeringPropertyValue("triggeredBy")).thenReturn(true);
         Mockito.when(engineState.getAssignment("triggeredBy")).thenReturn(new Assignment(triggeringRule, "value1", "", Collections.<String> emptySet(), Collections.<String> emptySet()));
         triggeredRule.propertyValueSet( //
-            new PropertyAssignedEvent(engineState, triggeringRule, Collections.<String> emptySet(), true));
-        verify(engineState).setPropertyValue(triggeredRule, "value2", true);
+            new PropertyAssignedEvent(engineState, triggeringRule, Collections.<String> emptySet()));
+        verify(engineState).setPropertyValue(triggeredRule, "value2");
 	}
 
     @Test
@@ -188,7 +188,7 @@ public class RuleTest {
         Rule triggeredRule = iterate("name").over("value2").when("triggeredBy").create();
         triggeringRule.setBlocksRequiredPropertiesItself(false);
         triggeredRule.setBlocksRequiredPropertiesItself(true);
-        ((StatefulRule)triggeringRule).addDependencies(new PropertyAssignedEvent(engineState, triggeredRule, Collections.<String> emptySet(), false));
+        ((StatefulRule)triggeringRule).addDependencies(new PropertyAssignedEvent(engineState, triggeredRule, Collections.<String> emptySet()));
         assertThat(triggeringRule.blocksRequiredProperties(), equalTo(true));
 	}
 
@@ -199,7 +199,7 @@ public class RuleTest {
         Mockito.when(engineState.containsTriggeringPropertyValue("triggeredBy")).thenReturn(true);
         Mockito.when(engineState.getAssignment("triggeredBy")).thenReturn(new Assignment(triggeringRule, "value1", "", Collections.<String> emptySet(), Collections.<String> emptySet()));
        triggeredRule.propertyValueSet(new PropertyAssignedEvent(engineState, triggeringRule, Collections
-            .<String> emptySet(), true));
+            .<String> emptySet()));
 
         triggeredRule.propertyCombinationFinished(engineState);
 
@@ -233,8 +233,7 @@ public class RuleTest {
         when(triggeredRule.blocksRequiredProperties()).thenReturn(true);
 
         topRule.propertyCombinationStarted(engineState);
-        topRule.propertyValueSet(new PropertyAssignedEvent(engineState, triggeredRule, Collections.<String> emptySet(),
-            true));
+        topRule.propertyValueSet(new PropertyAssignedEvent(engineState, triggeredRule, Collections.<String> emptySet()));
         topRule.propertyCombinationFinished(engineState);
         assertThat(topRule.blocksRequiredProperties(), equalTo(true));
 	}
@@ -245,7 +244,7 @@ public class RuleTest {
         Rule statefulRule = iterate("x").over("a").with(temporaryRule).create();
 
         statefulRule.propertyCombinationStarted(engineState);
-        statefulRule.propertyValueSet(new PropertyAssignedEvent(engineState, statefulRule, Collections.<String>emptySet(), true));
+        statefulRule.propertyValueSet(new PropertyAssignedEvent(engineState, statefulRule, Collections.<String>emptySet()));
         verify(engineState).addTemporaryRule(eq(statefulRule), argThat(rulePropertyNameMatches("y")));
     }
 
@@ -256,7 +255,7 @@ public class RuleTest {
         Rule statefulRule = iterate("x").over("a").with(temporaryRule1).with(temporaryRule2).create();
 
         statefulRule.propertyCombinationStarted(engineState);
-        statefulRule.propertyValueSet(new PropertyAssignedEvent(engineState, statefulRule, Collections.<String>emptySet(), true));
+        statefulRule.propertyValueSet(new PropertyAssignedEvent(engineState, statefulRule, Collections.<String>emptySet()));
         verify(engineState).addTemporaryRule(eq(statefulRule), argThat(rulePropertyNameMatches("y1")));
         verify(engineState).addTemporaryRule(eq(statefulRule), argThat(rulePropertyNameMatches("y2")));
     }
@@ -270,7 +269,7 @@ public class RuleTest {
 
         Rule statefulRule = iterate("x").over("a").with(temporaryRuleCreator).create();
         statefulRule.propertyCombinationStarted(engineState);
-        statefulRule.propertyValueSet(new PropertyAssignedEvent(engineState, statefulRule, Collections.<String>emptySet(), true));
+        statefulRule.propertyValueSet(new PropertyAssignedEvent(engineState, statefulRule, Collections.<String>emptySet()));
         statefulRule.propertyCombinationFinished(engineState);
 
         verify(strategy).removeRule(temporaryRule);
