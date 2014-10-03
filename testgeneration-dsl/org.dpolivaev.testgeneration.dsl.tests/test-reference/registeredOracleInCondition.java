@@ -1,6 +1,6 @@
 MULTIPLE FILES WERE GENERATED
 
-File 1 : MyFile.java
+File 1 : /myProject/src-gen/MyFile.java
 
 import org.dpolivaev.testgeneration.engine.coverage.CoverageTracker;
 import org.dpolivaev.testgeneration.engine.coverage.RequirementBasedStrategy;
@@ -58,7 +58,7 @@ public class MyFile {
   }
 }
 
-File 2 : MyOracle.java
+File 2 : /myProject/src-gen/MyOracle.java
 
 import java.util.Arrays;
 import java.util.List;
@@ -104,7 +104,7 @@ public class MyOracle implements PropertyHandler {
   }
 }
 
-File 3 : _MyFile_s_StrategyFactory0.java
+File 3 : /myProject/src-gen/_MyFile_s_StrategyFactory0.java
 
 import org.dpolivaev.testgeneration.engine.coverage.CoverageEntry;
 import org.dpolivaev.testgeneration.engine.coverage.CoverageTrackerEnabler;
@@ -122,8 +122,8 @@ class _MyFile_s_StrategyFactory0 {
   private int _instanceId = _instanceCounter++;
   
   private Boolean condition1(final PropertyContainer propertyContainer) {
-    Boolean _calculate = MyFile.myOracle.calculate();
-    return _calculate;
+    Object _calculate = MyFile.myOracle.calculate();
+    return ((Boolean)_calculate);
   }
   
   RequirementBasedStrategy s() {

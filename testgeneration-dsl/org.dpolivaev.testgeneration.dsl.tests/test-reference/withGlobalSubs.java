@@ -1,6 +1,6 @@
 MULTIPLE FILES WERE GENERATED
 
-File 1 : MyFile.java
+File 1 : /myProject/src-gen/MyFile.java
 
 import org.dpolivaev.testgeneration.engine.coverage.RequirementBasedStrategy;
 
@@ -15,7 +15,7 @@ public class MyFile {
   }
 }
 
-File 2 : _MyFile_first_StrategyFactory0.java
+File 2 : /myProject/src-gen/_MyFile_first_StrategyFactory0.java
 
 import org.dpolivaev.testgeneration.engine.coverage.CoverageEntry;
 import org.dpolivaev.testgeneration.engine.coverage.RequirementBasedStrategy;

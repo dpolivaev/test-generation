@@ -87,7 +87,7 @@ class StrategyCompilationTest {
 				let x be 'a', 'b'{
 					let y be 'A' only if :x=='a', 'B'
 				}
-		'''.assertCompilerThrowsException(IllegalStateException)
+		'''.assertCompilesToFile(testName)
 	}
 
 	@Test def withConditionForSingleValueAtLastPosition() {
@@ -96,7 +96,7 @@ class StrategyCompilationTest {
 				let x be 'a', 'b'{
 					let ordered y be 'A', 'B'  only if :x=='a'
 				}
-		'''.assertCompilerThrowsException(IllegalStateException)
+		'''.assertCompilesToFile(testName)
 	}
 
 	@Test def withValueProvider() {

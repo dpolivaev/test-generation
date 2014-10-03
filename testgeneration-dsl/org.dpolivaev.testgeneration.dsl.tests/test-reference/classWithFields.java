@@ -1,6 +1,6 @@
 MULTIPLE FILES WERE GENERATED
 
-File 1 : MyClass.java
+File 1 : /myProject/src-gen/MyClass.java
 
 @SuppressWarnings("all")
 public class MyClass {
@@ -23,7 +23,7 @@ public class MyClass {
   public int y;
 }
 
-File 2 : MyFile.java
+File 2 : /myProject/src-gen/MyFile.java
 
 @SuppressWarnings("all")
 public class MyFile {

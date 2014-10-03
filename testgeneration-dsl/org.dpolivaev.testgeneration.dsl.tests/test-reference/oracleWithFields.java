@@ -1,13 +1,13 @@
 MULTIPLE FILES WERE GENERATED
 
-File 1 : MyFile.java
+File 1 : /myProject/src-gen/MyFile.java
 
 @SuppressWarnings("all")
 public class MyFile {
   public final static MyOracle myOracle = new MyOracle();
 }
 
-File 2 : MyOracle.java
+File 2 : /myProject/src-gen/MyOracle.java
 
 import java.util.Arrays;
 import java.util.List;

@@ -1,6 +1,6 @@
 MULTIPLE FILES WERE GENERATED
 
-File 1 : MyFile.java
+File 1 : /myProject/src-gen/MyFile.java
 
 @SuppressWarnings("all")
 public class MyFile {
@@ -9,7 +9,7 @@ public class MyFile {
   public final static MyOracle2 myOracle2 = new MyOracle2();
 }
 
-File 2 : MyOracle1.java
+File 2 : /myProject/src-gen/MyOracle1.java
 
 import java.util.Arrays;
 import java.util.List;
@@ -55,7 +55,7 @@ public class MyOracle1 implements PropertyHandler {
   }
 }
 
-File 3 : MyOracle2.java
+File 3 : /myProject/src-gen/MyOracle2.java
 
 import java.util.Arrays;
 import java.util.List;

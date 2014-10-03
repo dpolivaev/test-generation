@@ -13,13 +13,14 @@ public class MyFile {
 
 File 2 : /myProject/src-gen/_MyFile_first_StrategyFactory0.java
 
+import com.google.common.base.Objects;
 import org.dpolivaev.testgeneration.engine.coverage.CoverageEntry;
 import org.dpolivaev.testgeneration.engine.coverage.RequirementBasedStrategy;
 import org.dpolivaev.testgeneration.engine.ruleengine.PropertyContainer;
 import org.dpolivaev.testgeneration.engine.ruleengine.RuleBuilder;
+import org.dpolivaev.testgeneration.engine.ruleengine.SpecialValue;
 import org.dpolivaev.testgeneration.engine.ruleengine.Strategy;
 import org.dpolivaev.testgeneration.engine.ruleengine.ValueProvider;
-import org.dpolivaev.testgeneration.engine.ruleengine.ValueProviderHelper;
 
 @SuppressWarnings("all")
 class _MyFile_first_StrategyFactory0 {
@@ -27,36 +28,30 @@ class _MyFile_first_StrategyFactory0 {
   
   private int _instanceId = _instanceCounter++;
   
-  public _MyFile_first_StrategyFactory0() {
-    this.b = _init_b();
-    
-  }
-  
-  private int _init_b() {
-    return 2;
-  }
-  
-  private final int b;
-  
-  public int a() {
-    return 1;
-  }
-  
-  private int _value1(final PropertyContainer propertyContainer) {
-    int _a = this.a();
-    int _plus = (_a + this.b);
-    return _plus;
+  private Boolean condition1(final PropertyContainer propertyContainer) {
+    boolean _equals = Objects.equal(propertyContainer.get("x"), "a");
+    return Boolean.valueOf(_equals);
   }
   
   RequirementBasedStrategy first() {
     CoverageEntry[] _requiredItems = new CoverageEntry[]{};
     Strategy _strategy = new Strategy();
     _strategy.addRule(RuleBuilder.Factory.iterate("x").over(new ValueProvider(){
-      @Override public Object value(PropertyContainer propertyContainer) {
-        Object _value = ValueProviderHelper.toValue(_value1(propertyContainer), propertyContainer);
-        return _value;
-    }}));
+      @Override public Object value(PropertyContainer propertyContainer) {return "a";
+    }}, new ValueProvider(){
+      @Override public Object value(PropertyContainer propertyContainer) {return "b";
+    }}).with(
+      RuleBuilder.Factory.iterate("y").over(new ValueProvider(){
+        @Override public Object value(PropertyContainer propertyContainer) {return "A";
+      }}, new ValueProvider(){
+        @Override public Object value(PropertyContainer propertyContainer) {
+          if(!condition1(propertyContainer)) return SpecialValue.SKIP;
+          Object _value = "B";
+          return _value;
+      }}).ordered()
+    ));
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }
 }
 
+ERROR:Condition in the last value (MyFile.testspec line : 3)

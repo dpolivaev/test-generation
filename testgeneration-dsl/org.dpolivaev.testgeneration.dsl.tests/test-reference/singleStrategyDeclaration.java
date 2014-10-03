@@ -1,6 +1,6 @@
 MULTIPLE FILES WERE GENERATED
 
-File 1 : packagename/MyFile.java
+File 1 : /myProject/src-gen/packagename/MyFile.java
 
 package packagename;
 
@@ -13,7 +13,7 @@ public class MyFile {
   }
 }
 
-File 2 : packagename/_MyFile_first_StrategyFactory0.java
+File 2 : /myProject/src-gen/packagename/_MyFile_first_StrategyFactory0.java
 
 package packagename;
 
