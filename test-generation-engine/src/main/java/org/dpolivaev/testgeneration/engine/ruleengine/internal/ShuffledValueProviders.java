@@ -11,19 +11,32 @@ public class ShuffledValueProviders implements ValueProviders {
     public ShuffledValueProviders(OrderedValueProviders orderedValueProviders, Permutation permutation, Order order) {
         this.orderedValueProviders = orderedValueProviders;
         this.permutation = permutation;
-		this.order = order;
+		this.order = order(order);
     }
+
+	private Order order(Order order) {
+		if(order == Order.SHUFFLED_FIX_LAST)
+			return Order.SHUFFLED;
+		else
+			return order;
+	}
     
     public ShuffledValueProviders(OrderedValueProviders orderedValueProviders, Permutation permutation) {
     	this(orderedValueProviders, permutation, Order.ORDERED_THEN_SHUFFLED);
     }
 
     public ShuffledValueProviders(OrderedValueProviders orderedValueProviders, Order order) {
-        this(orderedValueProviders, new Permutation(orderedValueProviders.size()), order);
+        this(orderedValueProviders, permutation(orderedValueProviders, order), order);
     }
 
+	private static Permutation permutation(
+			OrderedValueProviders orderedValueProviders, Order order) {
+		int valueNumber = orderedValueProviders.size();
+		return new Permutation(order.permutationSize(valueNumber));
+	}
+
     public ShuffledValueProviders(OrderedValueProviders orderedValueProviders) {
-        this(orderedValueProviders, new Permutation(orderedValueProviders.size()));
+        this(orderedValueProviders, permutation(orderedValueProviders, Order.ORDERED_THEN_SHUFFLED));
     }
 
     @Override
@@ -46,7 +59,7 @@ public class ShuffledValueProviders implements ValueProviders {
         if (orderedValueProviders.valueIndex() == 0) {
 			if (order == Order.SHUFFLED)
 				permutation.shuffle();
-			else if(order == Order.ORDERED_THEN_SHUFFLED)
+			else if(order == Order.ORDERED_THEN_SHUFFLED || order == Order.ORDERED_THEN_SHUFFLED_FIX_LAST)
 				order = Order.SHUFFLED;
 		}
     }

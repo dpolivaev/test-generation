@@ -37,7 +37,7 @@ public class Permutation {
     }
 
     public int at(int valueIndex) {
-        return permutationArray[valueIndex];
+        return valueIndex < permutationArray.length ?  permutationArray[valueIndex] : valueIndex;
     }
 
 }

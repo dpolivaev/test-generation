@@ -16,6 +16,13 @@ public class PermutationTest {
 		for(int i = 0; i < size; i++)
 			assertThat(permutation.at(i), equalTo(i));
 	}
+	
+	@Test
+	public void permutationForBigNumbersIsNumberItself() {
+		Permutation permutation = new Permutation(size);
+		assertThat(permutation.at(size), equalTo(size));
+	}
+
 	@Test
 	public void permutationIsNotOrderedAfterShuffle() {
 		Permutation permutation = new Permutation(size);

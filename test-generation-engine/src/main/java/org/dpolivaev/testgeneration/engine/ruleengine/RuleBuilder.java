@@ -122,6 +122,16 @@ public class RuleBuilder{
         return this;
     }
 
+    public RuleBuilder orderedThenShuffledFixLast() {
+        order = Order.ORDERED_THEN_SHUFFLED_FIX_LAST;
+        return this;
+    }
+
+    public RuleBuilder shuffledFixLast() {
+        order = Order.SHUFFLED_FIX_LAST;
+        return this;
+    }
+
     public RuleBuilder asLazyRule() {
     	asLazyRule = true;
     	return this;

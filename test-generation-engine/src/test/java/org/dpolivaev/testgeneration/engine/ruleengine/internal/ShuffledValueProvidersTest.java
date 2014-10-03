@@ -20,8 +20,13 @@ public class ShuffledValueProvidersTest {
 	}
 
 	private void checkShuffled(ShuffledValueProviders shuffledValueProviders) {
+		checkShuffled(shuffledValueProviders, 1, 10);
+	}
+
+	private void checkShuffled(ShuffledValueProviders shuffledValueProviders,
+			final int from, final int to) {
 		int movedNumberCounter = 0;
-		for(int i = 1; i <= 10; i++){
+		for(int i = from; i <= to; i++){
 			shuffledValueProviders.next();
 			if(i != (Integer)shuffledValueProviders.currentProvider().value(null))
 				movedNumberCounter++;
@@ -30,12 +35,22 @@ public class ShuffledValueProvidersTest {
 	}
 
 	private void checkOrdered(ShuffledValueProviders shuffledValueProviders) {
-		for(int i = 1; i <= 10; i++){
+		checkOrdered(shuffledValueProviders, 1, 10);
+	}
+
+	private void checkOrdered(ShuffledValueProviders shuffledValueProviders,
+			final int from, final int to) {
+		for(int i = from; i <= to; i++){
 			shuffledValueProviders.next();
 			assertThat((Integer)shuffledValueProviders.currentProvider().value(null), equalTo(i));
 		}
 	}
 
+	private void checkShuffledFixLast(
+			ShuffledValueProviders shuffledValueProviders) {
+		checkShuffled(shuffledValueProviders, 1, 9);
+		checkOrdered(shuffledValueProviders, 10, 10);
+	}
 
 	@Test
 	public void orderedValuesNeverGetShuffled() {
@@ -52,10 +67,25 @@ public class ShuffledValueProvidersTest {
 	}
 
 	@Test
+	public void shuffledValuesWithFixLastValue() {
+		ShuffledValueProviders shuffledValueProviders = shuffledProviders(Order.SHUFFLED_FIX_LAST);
+		checkShuffledFixLast(shuffledValueProviders);
+		checkShuffledFixLast(shuffledValueProviders);
+	}
+
+	@Test
 	public void orderedThenShuffledValuesGetShuffledAfterFirstIteration() {
 		ShuffledValueProviders shuffledValueProviders = shuffledProviders(Order.ORDERED_THEN_SHUFFLED);
 		checkOrdered(shuffledValueProviders);
 		checkShuffled(shuffledValueProviders);
+	}
+
+
+	@Test
+	public void orderedThenShuffledWithFixLastValue() {
+		ShuffledValueProviders shuffledValueProviders = shuffledProviders(Order.ORDERED_THEN_SHUFFLED_FIX_LAST);
+		checkOrdered(shuffledValueProviders);
+		checkShuffledFixLast(shuffledValueProviders);
 	}
 
 }
