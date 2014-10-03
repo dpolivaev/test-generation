@@ -1,6 +1,6 @@
 package org.dpolivaev.testgeneration.dsl.scoping
 
-import org.eclipse.xtext.xbase.scoping.batch.ImplicitlyImportedTypes
+import org.eclipse.xtext.xbase.scoping.batch.ImplicitlyImportedFeatures
 import com.google.inject.Singleton
 import java.util.List
 import org.eclipse.xtext.common.types.JvmType
@@ -10,7 +10,7 @@ import org.dpolivaev.testgeneration.engine.ruleengine.SpecialValue
 import org.dpolivaev.testgeneration.engine.strategies.StepCounter
 
 @Singleton
-class TestSpecImplicitlyImportedTypes extends ImplicitlyImportedTypes {
+class TestSpecImplicitlyImportedTypes extends ImplicitlyImportedFeatures {
 	override List<JvmType> getStaticImportClasses(Resource context){
 		val types = super.getStaticImportClasses(context);
 		val objectsInContext = context.contents

@@ -1,14 +1,14 @@
 package org.dpolivaev.testgeneration.dsl.typesystem
 
+import com.google.inject.Inject
+import org.dpolivaev.testgeneration.dsl.testspec.LabeledExpression
 import org.dpolivaev.testgeneration.dsl.testspec.PropertyCall
+import org.eclipse.xtext.common.types.JvmPrimitiveType
+import org.eclipse.xtext.common.types.util.Primitives
+import org.eclipse.xtext.xbase.XCastedExpression
 import org.eclipse.xtext.xbase.XExpression
 import org.eclipse.xtext.xbase.typesystem.computation.ITypeComputationState
 import org.eclipse.xtext.xbase.typesystem.computation.XbaseTypeComputer
-import org.eclipse.xtext.xbase.XCastedExpression
-import org.eclipse.xtext.common.types.JvmPrimitiveType
-import com.google.inject.Inject
-import org.eclipse.xtext.common.types.util.Primitives
-import org.dpolivaev.testgeneration.dsl.testspec.LabeledExpression
 import org.eclipse.xtext.xbase.typesystem.references.AnyTypeReference
 
 class StrategyTypeComputer extends XbaseTypeComputer {
@@ -29,7 +29,7 @@ class StrategyTypeComputer extends XbaseTypeComputer {
 			val type = (container as XCastedExpression).type
 			if(type.type instanceof JvmPrimitiveType){
 				val wrapperType = primitives.asWrapperTypeIfPrimitive(type)
-				state.acceptActualType(state.converter.toLightweightReference(wrapperType))
+				state.acceptActualType(state.getReferenceOwner().toLightweightTypeReference(wrapperType))
 				return
 			}
 		}

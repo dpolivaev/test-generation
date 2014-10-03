@@ -2,12 +2,12 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: org.dpolivaev.testgeneration.dsl
 Bundle-Vendor: My Company
-Bundle-Version: 0.0.9.qualifier
+Bundle-Version: 0.0.10.qualifier
 Bundle-SymbolicName: org.dpolivaev.testgeneration.dsl;singleton:=true
 Bundle-ActivationPolicy: lazy
-Require-Bundle: org.eclipse.xtext;bundle-version="2.6.1";visibility:=reexport,
- org.eclipse.xtext.xbase;bundle-version="2.6.1";visibility:=reexport,
- org.eclipse.xtext.generator;bundle-version="2.6.1";resolution:=optional,
+Require-Bundle: org.eclipse.xtext;bundle-version="2.7.2";visibility:=reexport,
+ org.eclipse.xtext.xbase;bundle-version="2.7.2";visibility:=reexport,
+ org.eclipse.xtext.generator;bundle-version="2.7.2";resolution:=optional,
  org.apache.commons.logging;bundle-version="1.0.4";resolution:=optional,
  org.eclipse.emf.codegen.ecore;resolution:=optional,
  org.eclipse.emf.mwe.utils;resolution:=optional,

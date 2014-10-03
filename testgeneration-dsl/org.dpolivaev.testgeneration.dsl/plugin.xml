@@ -3,13 +3,13 @@
 
 <plugin>
 
-  <extension point="org.eclipse.emf.ecore.generated_package">
+   <extension point="org.eclipse.emf.ecore.generated_package">
     <package 
-       uri = "http://www.dpolivaev.org/testgeneration/dsl/TsGenDsl" 
-       class = "org.dpolivaev.testgeneration.dsl.testspec.StrategydslPackage"
-       genModel = "org/dpolivaev/testgeneration/dsl/TsGenDsl.genmodel" /> 
-	
+       uri = "http://www.dpolivaev.org/testgeneration/dsl/testspec" 
+       class = "org.dpolivaev.testgeneration.dsl.testspec.TestspecPackage"
+       genModel = "model/generated/TestSpec.genmodel" /> 
   </extension>
+  
   <extension
         point="org.eclipse.jdt.core.classpathContainerInitializer">
      <classpathContainerInitializer
@@ -17,8 +17,5 @@
            id="org.dpolivaev.testgeneration.dsl.TESTGENERATION_CONTAINER">
      </classpathContainerInitializer>
   </extension>
-
-
-
 
 </plugin>

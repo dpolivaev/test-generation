@@ -5,12 +5,12 @@ package org.dpolivaev.testgeneration.dsl;
 
 import org.dpolivaev.testgeneration.dsl.jvmmodel.StrategyCompiler;
 import org.dpolivaev.testgeneration.dsl.jvmmodel.StrategyEarlyExitComputer;
+import org.dpolivaev.testgeneration.dsl.naming.ValuesXBaseNameProvider;
 import org.dpolivaev.testgeneration.dsl.scoping.TestSpecImplicitlyImportedTypes;
 import org.dpolivaev.testgeneration.dsl.typesystem.StrategyTypeComputer;
-import org.dpolivaev.testgeneration.dsl.naming.ValuesXBaseNameProvider;
 import org.eclipse.xtext.xbase.compiler.XbaseCompiler;
 import org.eclipse.xtext.xbase.controlflow.IEarlyExitComputer;
-import org.eclipse.xtext.xbase.scoping.batch.ImplicitlyImportedTypes;
+import org.eclipse.xtext.xbase.scoping.batch.ImplicitlyImportedFeatures;
 import org.eclipse.xtext.xbase.typesystem.computation.ITypeComputer;
 
 /**
@@ -39,7 +39,7 @@ public class TestSpecRuntimeModule extends org.dpolivaev.testgeneration.dsl.Abst
 		return StrategyEarlyExitComputer.class;
 	}
 
-	public Class<? extends ImplicitlyImportedTypes> bindImplicitlyImportedTypes() {
+	public Class<? extends ImplicitlyImportedFeatures> bindImplicitlyImportedFeatures() {
 		return TestSpecImplicitlyImportedTypes.class;
 	}
 
