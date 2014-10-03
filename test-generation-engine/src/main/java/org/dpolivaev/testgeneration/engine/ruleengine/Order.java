@@ -1,7 +1,7 @@
 package org.dpolivaev.testgeneration.engine.ruleengine;
 
 public enum Order {
-	ORDERED, SHUFFLED, ORDERED_THEN_SHUFFLED, SHUFFLED_FIX_LAST(1), ORDERED_THEN_SHUFFLED_FIX_LAST(1);
+	ORDERED, SHUFFLED, ORDERED_THEN_SHUFFLED, SHUFFLED_KEEP_LAST_ELEMENT_POSITION(1), ORDERED_THEN_SHUFFLED_KEEP_LAST_ELEMENT_POSITION(1);
 	public static Order defaultOrder = ORDERED_THEN_SHUFFLED;
 
 	final private int fixElementCount;

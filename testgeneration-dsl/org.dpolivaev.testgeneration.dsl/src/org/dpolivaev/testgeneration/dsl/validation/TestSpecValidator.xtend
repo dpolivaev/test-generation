@@ -79,14 +79,6 @@ class TestSpecValidator extends AbstractTestSpecValidator {
 			super.checkCasts(cast);
 	}
 	
-	@Check
-	def checkConditionedValues(ValueProvider valueProvider){
-		if(valueProvider.condition != null) {
-			val rule = EcoreUtil2.getContainerOfType(valueProvider, Rule)
-			if(! rule.lazy && ! rule.ordered)
-			error("Condition inside triggered not ordered rule", valueProvider,  TestspecPackage.Literals.VALUE_PROVIDER__CONDITION)			
-		}
-	}
 	
 	@Check
 	def checkConditionedValues(Rule rule){

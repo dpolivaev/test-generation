@@ -15,7 +15,7 @@ public class ShuffledValueProviders implements ValueProviders {
     }
 
 	private Order order(Order order) {
-		if(order == Order.SHUFFLED_FIX_LAST)
+		if(order == Order.SHUFFLED_KEEP_LAST_ELEMENT_POSITION)
 			return Order.SHUFFLED;
 		else
 			return order;
@@ -59,7 +59,7 @@ public class ShuffledValueProviders implements ValueProviders {
         if (orderedValueProviders.valueIndex() == 0) {
 			if (order == Order.SHUFFLED)
 				permutation.shuffle();
-			else if(order == Order.ORDERED_THEN_SHUFFLED || order == Order.ORDERED_THEN_SHUFFLED_FIX_LAST)
+			else if(order == Order.ORDERED_THEN_SHUFFLED || order == Order.ORDERED_THEN_SHUFFLED_KEEP_LAST_ELEMENT_POSITION)
 				order = Order.SHUFFLED;
 		}
     }

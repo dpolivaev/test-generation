@@ -90,6 +90,15 @@ class StrategyCompilationTest {
 		'''.assertCompilesToFile(testName)
 	}
 
+	@Test def withConditionForSingleValueInsideShuffledRule() {
+		'''
+			strategy first
+				let x be 'a', 'b'{
+					let shuffled y be 'A' only if :x=='a', 'B'
+				}
+		'''.assertCompilesToFile(testName)
+	}
+
 	@Test def withConditionForSingleValueAtLastPosition() {
 		'''
 			strategy first

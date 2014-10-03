@@ -1,5 +1,7 @@
 package org.dpolivaev.testgeneration.dsl.jvmmodel
 
+import static extension com.google.common.collect.Iterables.tryFind
+
 import com.google.inject.Injector
 import java.util.ArrayList
 import java.util.Collection
@@ -38,12 +40,13 @@ import org.eclipse.xtext.xbase.compiler.Later
 import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 
- import static extension org.eclipse.xtext.nodemodel.util.NodeModelUtils.*
+import static extension org.eclipse.xtext.nodemodel.util.NodeModelUtils.*
 
 import static extension org.dpolivaev.testgeneration.dsl.jvmmodel.StrategyCompiler.*
 import org.eclipse.xtext.xbase.typesystem.computation.NumberLiterals
 import java.util.HashSet
 import org.dpolivaev.testgeneration.dsl.testspec.Generation
+import com.google.common.base.Predicate
 
 class StrategyInferrer{
 	static val OPTIMIZE_FOR_DEBUG = true
@@ -295,7 +298,7 @@ class StrategyInferrer{
 				}
 			}
 			if(rule.isLazy)
-				append('.shuffled().asLazyRule()')
+				append('.asLazyRule()')
 		}
 		else if(ruleGroup.strategy !=null){
 			appendStrategyRule(it, ruleGroup.strategy)
@@ -430,8 +433,29 @@ class StrategyInferrer{
 	private def appendRuleOrder(ITreeAppendable it, Rule rule) {
 		if(rule.ordered)
 				append('.ordered()')
-		else if(rule.shuffled)
+		else if (rule.lazy)
+			append('.shuffled()')
+		else{
+			val valueProviderContainsCondition = rule.values.actions.tryFind(new Predicate<ValueAction>(){
+				override apply(ValueAction action) {
+					return action.valueProviders.tryFind(new Predicate<ValueProvider>(){
+						
+						override apply(ValueProvider provider) {
+							return provider.condition != null
+						}
+						}).present;
+				}
+				}).present;
+				
+			if(valueProviderContainsCondition){
+				if(rule.shuffled)
+					append('.shuffledKeepLastElementPosition()')
+				else
+					append('.orderedThenShuffledKeepLastElementPosition()')
+			}
+			else if(rule.shuffled)
 				append('.shuffled()')
+		}
 	}
 
 	 def private appendActionRuleGroups(ITreeAppendable it, ValueAction valueAction){

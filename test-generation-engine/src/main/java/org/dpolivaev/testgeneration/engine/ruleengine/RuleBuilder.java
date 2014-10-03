@@ -122,13 +122,13 @@ public class RuleBuilder{
         return this;
     }
 
-    public RuleBuilder orderedThenShuffledFixLast() {
-        order = Order.ORDERED_THEN_SHUFFLED_FIX_LAST;
+    public RuleBuilder orderedThenShuffledKeepLastElementPosition() {
+        order = Order.ORDERED_THEN_SHUFFLED_KEEP_LAST_ELEMENT_POSITION;
         return this;
     }
 
-    public RuleBuilder shuffledFixLast() {
-        order = Order.SHUFFLED_FIX_LAST;
+    public RuleBuilder shuffledKeepLastElementPosition() {
+        order = Order.SHUFFLED_KEEP_LAST_ELEMENT_POSITION;
         return this;
     }
 

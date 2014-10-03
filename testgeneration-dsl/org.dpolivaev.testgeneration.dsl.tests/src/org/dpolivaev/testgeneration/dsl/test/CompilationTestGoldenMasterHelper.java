@@ -74,6 +74,7 @@ public class CompilationTestGoldenMasterHelper extends CompilationTestHelper{
 		StringBuilder actual = new StringBuilder (r.getSingleGeneratedCode());
 	    for(Issue issue : r.getErrorsAndWarnings()){
 	    	actual.append(stringOf(issue));
+	    	actual.append("\n");
 	    }
 		return actual.toString();
 	}

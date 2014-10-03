@@ -68,7 +68,7 @@ public class ShuffledValueProvidersTest {
 
 	@Test
 	public void shuffledValuesWithFixLastValue() {
-		ShuffledValueProviders shuffledValueProviders = shuffledProviders(Order.SHUFFLED_FIX_LAST);
+		ShuffledValueProviders shuffledValueProviders = shuffledProviders(Order.SHUFFLED_KEEP_LAST_ELEMENT_POSITION);
 		checkShuffledFixLast(shuffledValueProviders);
 		checkShuffledFixLast(shuffledValueProviders);
 	}
@@ -83,7 +83,7 @@ public class ShuffledValueProvidersTest {
 
 	@Test
 	public void orderedThenShuffledWithFixLastValue() {
-		ShuffledValueProviders shuffledValueProviders = shuffledProviders(Order.ORDERED_THEN_SHUFFLED_FIX_LAST);
+		ShuffledValueProviders shuffledValueProviders = shuffledProviders(Order.ORDERED_THEN_SHUFFLED_KEEP_LAST_ELEMENT_POSITION);
 		checkOrdered(shuffledValueProviders);
 		checkShuffledFixLast(shuffledValueProviders);
 	}

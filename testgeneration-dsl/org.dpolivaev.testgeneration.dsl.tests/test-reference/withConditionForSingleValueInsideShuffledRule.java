@@ -48,7 +48,7 @@ class _MyFile_first_StrategyFactory0 {
           return _value;
       }}, new ValueProvider(){
         @Override public Object value(PropertyContainer propertyContainer) {return "B";
-      }}).orderedThenShuffledKeepLastElementPosition()
+      }}).shuffledKeepLastElementPosition()
     ));
     return new RequirementBasedStrategy(_requiredItems).with(_strategy);
   }
