@@ -26,6 +26,19 @@ public class StringWithNumbersComparatorTest {
 		assertThat(StringWithNumbersComparator.compare("10A", "10B"), equalTo("A".compareTo("B")));
 	}
 
+	@Test
+	public void comparesNumbersWithMoreLeadingZeros() {
+		assertThat(StringWithNumbersComparator.compare("0001", "01"), equalTo("1".compareTo("0")));
+	}
+	@Test
+	public void comparesNumbersWithLessLeadingZeros() {
+		assertThat(StringWithNumbersComparator.compare("01", "0001"), equalTo("0".compareTo("1")));
+	}
+	@Test
+	public void comparesNumbersWithLeadingZerosFollowedByStrings() {
+		assertThat(StringWithNumbersComparator.compare("000001q", "1q"), equalTo("1".compareTo("0")));
+	}
+
 
 	@Test
 	public void comparesNumbersStringsNumbers() {

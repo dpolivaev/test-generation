@@ -21,6 +21,9 @@ public class StringWithNumbersComparator{
 			if(numberComparisonResult != 0)
 				return numberComparisonResult;
 			comparedCharacterNumber = numberMatcher1.end();
+			int comparedCharacterNumber2 = numberMatcher2.end();
+			if(comparedCharacterNumber != comparedCharacterNumber2)
+				return Integer.valueOf(comparedCharacterNumber).compareTo(comparedCharacterNumber2);
 		}
 		return o1.substring(comparedCharacterNumber).compareTo(o2.substring(comparedCharacterNumber));
 	}
